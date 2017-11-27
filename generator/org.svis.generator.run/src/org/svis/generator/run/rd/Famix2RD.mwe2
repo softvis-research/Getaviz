@@ -1,0 +1,70 @@
+module org.svis.generator.run.rd
+
+var projectName = "org.svis.generator.run"
+var inputPath = "./input/famix"
+var outputPath = "./output/rd/famix"
+var runtimeProject = "../${projectName}"
+
+Workflow {
+
+	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
+    	platformUri = "${runtimeProject}/.."
+    	registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
+	}
+	
+	component = org.svis.generator.ReaderWithConfig {
+		path = "${inputPath}"
+		register = org.svis.xtext.FamixStandaloneSetupGenerated {}
+		loadResource = {
+			slot = "famix"
+		}
+	}
+
+	// support lazy loading of textual models
+	component = org.svis.generator.ResolveLazyComponent {}
+	
+	// delete unnecessary objects
+	component = org.svis.generator.famix.Famix2Famix {
+		modelSlot = "famix"
+	}
+		
+	// transform famix into disks (s2m)
+	component = org.svis.generator.rd.s2m.Famix2RD {
+		modelSlot = "famix"
+	}
+	
+	// write metaData
+	component = org.eclipse.xtext.generator.GeneratorComponent {
+		register = org.svis.generator.famix.Famix2JSONStandaloneSetup {}
+		slot = 'metadata'
+		outlet = {
+			path = "${outputPath}"
+		}
+	}
+
+	// write out resulting model (rd)
+	component = org.eclipse.emf.mwe.utils.Writer {
+		modelSlot = "rdwriter"
+		uri = "${outputPath}/rd.xml"	
+	}
+
+	// calculate rd layout (m2m)
+	component = org.svis.generator.rd.m2m.RD2RD {
+		modelSlot = "rd"
+	}
+	
+	component = org.eclipse.emf.mwe.utils.Writer {
+		modelSlot = "rdextendedwriter"
+		uri = "${outputPath}/rdextended.xml"
+		cloneSlotContents = true
+	}
+
+	// rd2x3d (m2t)
+	component = org.eclipse.xtext.generator.GeneratorComponent {
+		register = org.svis.generator.rd.m2t.RDOutputStandaloneSetup {}
+		slot = 'rdextended'
+		outlet = {
+			path = "${outputPath}"
+		}
+	}
+}

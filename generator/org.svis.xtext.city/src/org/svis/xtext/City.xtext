@@ -1,0 +1,247 @@
+grammar org.svis.xtext.City with org.eclipse.xtext.common.Terminals
+
+generate city "http://www.svis.org/xtext/City"
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+Root:
+	document=Document?;
+
+Document:
+	{Document} //'Document' equals 'System' from CodeCity
+	'(' entities+=Entity* ')'
+	('(' panelSeparators+=PanelSeparator* ')')?;
+
+Entity:
+	District | Building | BuildingSegment;
+
+District: // no LOC, height has to be static
+	'(District'
+		'(' 'id:' name=INT_ID ')'
+		'(' 'name' value=MSESTRING ')'
+		'(' 'fqn' fqn=MSESTRING ')'
+		'(' 'type' type=MSESTRING ')' //only package
+		'(' 'hash' id=STRING ')'
+		'(' 'width' width=DECIMAL ')' //base area (width x length)
+		'(' 'length' length=DECIMAL ')'
+		'(' 'height' height=DECIMAL ')' //entity's height as staticValue
+		'(' 'level' level=INT ')'
+		('(' 'maxLevel' maxLevel=INT ')')?
+		('(' 'signature' signature=MSESTRING ')')?
+		('(' 'color' color=MSESTRING ')')?
+		('(' 'transparency' transparency=DECIMAL ')')?
+		('(' 'position' position=Position ')')?
+		('(' 'labelPosition' labelPosition=Position ')')?
+		('(' 'data' data+=EntitySegment* ')')? //for CITY: no use yet. but keep it for later additions
+		('(' 'dataCounter' dataCounter=DECIMAL ')')
+		('(' 'methods' methods+=EntitySegment* ')')?
+		('(' 'methodCounter' methodCounter=DECIMAL ')')
+		('(' 'enums' enums+=EntitySegment* ')')?
+		('(' 'references' references+=Reference* ')')? //possibly unreliable, when reference is nested in another entity
+		('(' 'entities' entities+=Entity* ')')?
+		('(' 'instances' instances+=Instance* ')')? //dynamix
+		('(' 'parent' parent=[Entity] ')')?
+	')';
+
+Building:
+	'(Entity'
+		'(' 'id:' name=INT_ID ')'
+		'(' 'name' value=MSESTRING ')'
+		'(' 'fqn' fqn=MSESTRING ')'
+		'(' 'type' type=MSESTRING ')' //for CITY: only classes & packages used
+		'(' 'hash' id=STRING ')'
+		'(' 'width' width=DECIMAL ')' //base area (width x length)
+		'(' 'length' length=DECIMAL ')'
+		'(' 'height' height=DECIMAL ')' //entity's height (#attributes OR staticValue)
+		'(' 'loc' loc=DECIMAL ')' //later used to gradate entity-color
+		'(' 'level' level=INT ')'
+		('(' 'maxLevel' maxLevel=INT ')')?
+		('(' 'signature' signature=MSESTRING ')')?
+		('(' 'color' color=MSESTRING ')')?
+		('(' 'transparency' transparency=DECIMAL ')')?
+		('(' 'position' position=Position ')')?
+		('(' 'labelPosition' labelPosition=Position ')')?
+		('(' 'data' data+=BuildingSegment* ')')?
+		('(' 'dataCounter' dataCounter=INT ')')
+		('(' 'methods' methods+=BuildingSegment* ')')?
+		('(' 'methodCounter' methodCounter=INT ')')
+		('(' 'enums' enums+=EntitySegment* ')')?
+		('(' 'references' references+=Reference* ')')? //possibly unreliable, when reference is nested in another entity
+		('(' 'entities' entities+=Entity* ')')? //for CITY: no use yet. but keep it for later additions
+		('(' 'instances' instances+=Instance* ')')? //dynamix
+		('(' 'invocations' invocations+=Invocation* ')')? // dynamix
+		('(' 'parent' parent=[Entity] ')')?
+		('(' 'sideCapacity' sideCapacity=INT ')')?
+		('(' 'numberOfStatements' numberOfStatements=INT ')')?
+	')';
+
+//Specifies the methods/attributes as blocks (or bricks, panels, segments)
+//as a part of a building
+BuildingSegment:
+	'(BuildingSegment'
+		'(' 'id:' name=INT_ID ')'
+		'(' 'name' value=MSESTRING ')'
+		'(' 'fqn' fqn=MSESTRING ')'
+		'(' 'type' type=MSESTRING ')' // method
+		'(' 'hash' id=STRING ')'
+		'(' 'width' width=DECIMAL ')' //base area (width x length)
+		'(' 'length' length=DECIMAL ')'
+		'(' 'height' height=DECIMAL ')' //entity's height (#attributes OR staticValue)
+		'(' 'level' level=INT ')'
+		('(' 'maxLevel' maxLevel=INT ')')?
+		('(' 'signature' signature=MSESTRING ')')?
+		('(' 'color' color=MSESTRING ')')?
+		('(' 'transparency' transparency=DECIMAL ')')?
+		('(' 'position' position=Position ')')?
+		('(' 'separator'  separator += PanelSeparator ')')?
+		('(' 'labelPosition' labelPosition=Position ')')?
+		('(' 'numberOfStatements' numberOfStatements=INT ')')?
+		('(' 'modifiers' modifiers=STRING ')')? // E.g. public, static, synchronized, etc.
+		('(' 'methodKind' methodKind=STRING ')' )? // Marker for constructor methods
+		('(' 'declaredType' declaredType=DeclaredType ')')? // The return value
+		('(' 'parameters' parameters+=Parameter* ')')? // Currently not used and been left empty
+		('(' 'parameterCounter' parameterCounter=INT ')') // Currently not used and been left empty
+		('(' 'localVariables' localVariables+=LocalVariable* ')')? // Currently not used and been left empty
+		('(' 'localVariableCounter' localVariableCounter=INT ')') // Currently not used and been left empty
+		('(' 'references' references+=Reference* ')')? //possibly unreliable, when reference is nested in another entity
+		('(' 'entities' entities+=Entity* ')')? //no use yet. but keep it for later additions
+		('(' 'parent' parent=[Entity] ')')?
+	')';
+
+Parameter:
+	'(Parameter'
+		'(' 'id:' name=INT_ID ')'
+		'(' 'name' value=MSESTRING ')'
+		'(' 'fqn' fqn=MSESTRING ')'
+		'(' 'type' type=MSESTRING ')'
+		'(' 'hash' id=STRING ')'
+		'(' 'width' width=DECIMAL ')'
+		'(' 'length' length=DECIMAL ')'
+		'(' 'height' height=DECIMAL ')'
+		'(' 'level' level=INT ')'
+		('(' 'maxLevel' maxLevel=INT ')')?
+		('(' 'color' color=MSESTRING ')')?
+		('(' 'transparency' transparency=DECIMAL ')')?
+		('(' 'position' position=Position ')')?
+		('(' 'labelPosition' labelPosition=Position ')')?
+		('(' 'declaredType' declaredType=DeclaredType ')')?
+		('(' 'references' references+=Reference* ')')?
+		('(' 'parent' parent=[Entity] ')')?
+	')';
+
+LocalVariable:
+	'(LocalVariable'
+		'(' 'id:' name=INT_ID ')'
+		'(' 'name' value=MSESTRING ')'
+		'(' 'fqn' fqn=MSESTRING ')'
+		'(' 'type' type=MSESTRING ')'
+		'(' 'hash' id=STRING ')'
+		'(' 'width' width=DECIMAL ')'
+		'(' 'length' length=DECIMAL ')'
+		'(' 'height' height=DECIMAL ')'
+		'(' 'level' level=INT ')'
+		('(' 'maxLevel' maxLevel=INT ')')?
+		('(' 'color' color=MSESTRING ')')?
+		('(' 'transparency' transparency=DECIMAL ')')?
+		('(' 'position' position=Position ')')?
+		('(' 'labelPosition' labelPosition=Position ')')?
+		('(' 'declaredType' declaredType=DeclaredType ')')?
+		('(' 'parent' parent=[Entity] ')')?
+	')';
+
+DeclaredType:
+	'(DeclaredType'
+		'(' 'id:' name=INT_ID ')'
+		'(' 'name:' value=MSESTRING ')'
+		'(' 'fqn' fqn=MSESTRING ')'
+		'(' 'hash' id=STRING ')'
+		'(' 'type:' type=MSESTRING ')'
+		'(' 'isPrimitiveType:' isPrimitiveType=BOOLEAN ')'
+		('(' 'arguments:' arguments=MSESTRING ')')?
+	')';
+
+PanelSeparator:
+	PanelSeparatorBox | PanelSeparatorCylinder;
+
+PanelSeparatorBox:
+	'(PanelSeparatorBox'
+		'(' 'position' position=Position ')'
+		'(' 'width' width=DECIMAL ')'
+		'(' 'length' length=DECIMAL ')'
+	')';
+
+PanelSeparatorCylinder:
+	'(PanelSeparatorCylinder'
+		'(' 'position' position=Position ')'
+		'(' 'radius' radius=DECIMAL ')'
+	')';
+
+//EntitySegment currently doesn't have a special layout,
+//because nested segments aren't supposed to be visible, yet. 
+EntitySegment:
+	'(Entity.Segment'
+		'(' 'id:' name=INT_ID ')'
+		'(' 'name' value=MSESTRING ')'
+		'(' 'fqn' fqn=MSESTRING ')'
+		'(' 'size' size=DECIMAL ')' //redundant to height & width. if segment's ever implemented, decide which dimension should be used (toEntitySegment-functions currently use "size")
+		'(' 'height' height=DECIMAL ')'
+		'(' 'width' width=DECIMAL ')'
+		'(' 'loc' loc=DECIMAL ')'
+		('(' 'position' position=Position ')')?
+		('(' 'length' length=DECIMAL ')')? //ggf als PflichtElement
+		('(' 'signature' signature=MSESTRING ')')? // temporary for dynamix->resolve it via fqn
+		('(' 'invocations' invocations+=Invocation* ')')? // dynamix
+		('(' 'color' color=MSESTRING ')')?
+		('(' 'labelPosition' labelPosition=Position ')')?
+	')';
+
+Position:
+	'\'' x=DECIMAL '_' y=DECIMAL '_' z=DECIMAL '\'';
+
+Reference:
+	'(' 'ref:' name=INT_ID ')' '(' 'fqn:' fqn=MSESTRING ')' '(' 'type' type=MSESTRING ')';
+
+INT_ID returns ecore::EString:
+	'^'? INT;
+
+DECIMAL returns ecore::EDouble:
+	'-'? INT '.' INT;
+
+	// dynamix
+//Invocation:
+//	'(' 'ref:' name=INT_ID ')' '(' 'index' index=INT ')';
+	
+Invocation: 
+	'(' 'id:' name=INT_ID ')'
+	'(' 'fqn' fqn=MSESTRING ')'
+	'(' 'start' start=Timestamp ')'
+	'(' 'stop' stop=Timestamp ')'
+	('(' 'length' length=INT ')')?
+	('(' 'position' position=Position ')')?
+	('(' 'caller' caller=INT_ID ')')?;
+
+Instance:
+	'(' 'ref:' name=INT_ID ')' '(' 'index' index=INT ')';
+	// dynamix
+	
+Timestamp returns ecore::ELong:
+	INT
+;	
+
+//terminal MSENAME:
+//	'^'? ('a'..'z' | 'A'..'Z') ('a'..'z' | 'A'..'Z' | '.' | '_')*;
+// Added for FAMIX:  ':', '?', '$', ';', '[', ']'
+
+terminal BOOLEAN:
+	'true'|'false';
+//BOOLEAN returns ecore::EBoolean: 'true' | 'false';
+
+//	'\'' ('a'..'z' | 'A'..'Z' | '.' | '_' | '\\' | '/' | '0'..'9' | '<'| '?' | '$'| '{'| '!'| WS) ('a'..'z' | 'A'..'Z' | '.' | '_' | '\\' | '/' |
+//	'0'..'9' | '(' | ')' | '[' | ']' | ',' | ';' | '*' | WS | '>' | '<' | '@' | ':' | '?' | '&' | '!' | '{' | '}'| '\"' | '-' | '+' |
+//	'=' | '$' | '#' | '~' | '^' | '%' | '|' |'\'\'' | '`')* '\'';
+terminal MSESTRING:
+	("'"->"'")*;
+//	"'" ( '\\'('b'|'t'|'n'|'f'|'r'|'u'|'"'|"'"|'\\') | !('\\'|"'") )* "'";
+//	'^'?'\''('a'..'z' | 'A'..'Z' | '.' | '_' | '\\' | '/' | '0'..'9' ) ('a'..'z' | 'A'..'Z' | '.' | '_' | '\\' | '/' | '0'..'9' | '(' | ')'|',')*'\'';
+//	'\'' ('a'..'z' | 'A'..'Z' | '.' | '_' | '\\' | '/' | '0'..'9' | '<'| '?' | '$'| '{'| '!') ('a'..'z' | 'A'..'Z' | '.' | '_' | '\\' | '/' |
+//	'0'..'9' | '(' | ')' | '[' | ']' | ',' | ';' | '*' | WS | '>' | '<' | '@' | ':' | '?' | '&' | '!' | '{' | '}'| '\"' | '-' | '+' |
+//	'=' | '$' | '#' | '~' | '^' | '%' | '|' |'\'\'' | '`')* '\'';

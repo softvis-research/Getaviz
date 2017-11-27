@@ -1,0 +1,8 @@
+[ {"time" : 500, "action" : "changeColor", "parameters":{"node_id": "ID_799c03292c871a7ff14500277723cf926201ffa4_MATERIAL", "count": 1, "duration": "250", "target_value": "1.0 1.0 1.0" }},
+{"time" : 1003, "action" : "changeColor", "parameters":{"node_id": "ID_02f379aab42ed442fbea36a88efea4757e20aa45_MATERIAL", "count": 1, "duration": "250", "target_value": "1.0 1.0 1.0" }},
+{"time" : 1506, "action" : "changeColor", "parameters":{"node_id": "ID_3bbccd6f85cad15e28b9fbce32a0950411c814f0_MATERIAL", "count": 1, "duration": "250", "target_value": "1.0 1.0 1.0" }},
+{"time" : 1760, "action" : "changeColor", "parameters":{"node_id": "ID_3bbccd6f85cad15e28b9fbce32a0950411c814f0_MATERIAL", "count": 1, "duration": "250", "target_value": "0.0784313725490196 0.5215686274509804 0.8" }},
+{"time" : 2513, "action" : "changeColor", "parameters":{"node_id": "ID_080469152fd2aec45e143ac19eab76a5c9912a28_MATERIAL", "count": 1, "duration": "250", "target_value": "1.0 1.0 1.0" }},
+{"time" : 2766, "action" : "changeColor", "parameters":{"node_id": "ID_080469152fd2aec45e143ac19eab76a5c9912a28_MATERIAL", "count": 1, "duration": "250", "target_value": "0.0784313725490196 0.5215686274509804 0.8" }},
+{"time" : 3269, "action" : "changeColor", "parameters":{"node_id": "ID_02f379aab42ed442fbea36a88efea4757e20aa45_MATERIAL", "count": 1, "duration": "250", "target_value": "0.0784313725490196 0.5215686274509804 0.8" }},
+{"time" : 3773, "action" : "changeColor", "parameters":{"node_id": "ID_799c03292c871a7ff14500277723cf926201ffa4_MATERIAL", "count": 1, "duration": "250", "target_value": "0.0784313725490196 0.5215686274509804 0.8" }} ]

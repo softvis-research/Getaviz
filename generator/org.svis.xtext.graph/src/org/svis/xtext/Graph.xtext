@@ -1,0 +1,40 @@
+grammar org.svis.xtext.Graph with org.eclipse.xtext.common.Terminals
+
+generate graph "http://www.svis.org/xtext/graph"
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+Model:
+	elements+=Element*;
+
+Element:
+	Node | Edge;
+
+Node:
+	'Node' name=ID '{'
+	'label' label=MSESTRING
+	'id' id=MSESTRING
+	('xPosition' xPosition=DECIMAL)?
+	('yPosition' yPosition=DECIMAL)?
+	('zPosition' zPosition=DECIMAL)?
+	('xSize' xSize=DECIMAL)?
+	('ySize' ySize=DECIMAL)?
+	('zSize' zSize=DECIMAL)?
+	('type' type=MSESTRING)?
+	('color' color=MSESTRING)?
+	('transparency' transparency=DECIMAL)?
+	('childNodes' childNodes+=Node*)?
+	'}';
+
+Edge:
+	'Edge' name=ID '{'
+	'source' sourceNode=[Node]
+	'target' targetNode=[Node]
+	'}';
+
+DECIMAL returns ecore::EDouble:
+	'-'? INT '.' INT;
+
+terminal MSESTRING:
+	("'"->"'")*;
+//	'^'?'\''('a'..'z' | 'A'..'Z' | '.' | '_' | '\\' | '/' | '0'..'9' ) ('a'..'z' | 'A'..'Z' | '.' | '_' | '\\' | '/' | '0'..'9' )*'\'';
+	

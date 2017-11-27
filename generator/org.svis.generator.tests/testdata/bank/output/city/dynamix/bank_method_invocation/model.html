@@ -1,0 +1,426 @@
+<html> 
+<head> 
+<title>X3DOM-SVIS</title> 			
+<script type='text/javascript' src='http://x3dom.org/release/x3dom-full.js'> </script> 
+<link rel='stylesheet' type='text/css' href='http://www.x3dom.org/download/x3dom.css'></link> 
+<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type='text/javascript' src='./anifra-minified.js'> </script>
+<style>
+#x3droot {
+width: 100%;
+height: 100%;
+}
+</style>
+</head> 
+<body> 	
+ <x3d showLog='false' id='x3droot'> 
+ <scene id="scene"> 
+<AnimationFramework id="framework" eventsUrl="./events.js">
+	  <NodeEventHandler></NodeEventHandler>
+	  <EdgeEventHandler></EdgeEventHandler>
+	  <NodePropertyChangeHandler></NodePropertyChangeHandler>
+	  <MoveNodeHandler></MoveNodeHandler>
+	  <LabelEventHandler></LabelEventHandler>
+	</AnimationFramework>
+<Group DEF='Viewpoints'>
+	<Viewpoint description='Initial' position='-33.0 17.5 -37.0' orientation='0 1 0 4' centerOfRotation='33.0 0 37.0'/>
+	<Viewpoint description='Opposite Side' position='99.0 17.5 111.0' orientation='0 1 0 0.8' centerOfRotation='33.0 0 37.0'/>
+	<Viewpoint description='Screenshot' position='-33.0 52.5 -37.0' orientation='0.1 0.95 0.25 3.8' centerOfRotation='33.0 0 37.0'/>
+	<Viewpoint description='Screenshot Opposite Side' position='99.0 52.5 111.0' orientation='-0.5 0.85 0.2 0.8' centerOfRotation='33.0 0 37.0'/>
+</Group>
+<Transform id='ID_a94a8fe5ccb19ba61c4c0873d391e987982fbbd3' translation='34.5 1.5 38.5'>
+	<Shape>
+		<Box size='63.0 1.0 71.0'></Box>
+		<Appearance>
+			<Material diffuseColor='0.13725490196078433 0.5254901960784314 0.17254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_ccdcd10d5e0a7d37ef21283cbd89f6765fb69b01' translation='34.5 2.5 38.5'>
+	<Shape>
+		<Box size='57.0 1.0 65.0'></Box>
+		<Appearance>
+			<Material diffuseColor='0.30980392156862746 0.6647058823529411 0.3627450980392157'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_289974bd6fbf185ebfebe34687310f1d9d32aa91' translation='52.5 3.5 16.5'>
+	<Shape>
+		<Box size='15.0 1.0 15.0'></Box>
+		<Appearance>
+			<Material id='ID_289974bd6fbf185ebfebe34687310f1d9d32aa91_MATERIAL' diffuseColor='0.9908496732026143 0.661437908496732 0.4549019607843137'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_3d78a6cb5a07e10316d7c0f950ca5673b6b50436' translation='56.5 4.5 20.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_3d78a6cb5a07e10316d7c0f950ca5673b6b50436_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_43fbec632dd4c12dfd674d18b798a16620a3dcf1' translation='56.5 4.5 16.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_43fbec632dd4c12dfd674d18b798a16620a3dcf1_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_251c2137448eaa1c9dec7ffc09039bc7296cdc3c' translation='56.5 4.5 12.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_251c2137448eaa1c9dec7ffc09039bc7296cdc3c_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_3bbccd6f85cad15e28b9fbce32a0950411c814f0' translation='52.5 4.5 20.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_3bbccd6f85cad15e28b9fbce32a0950411c814f0_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_080469152fd2aec45e143ac19eab76a5c9912a28' translation='48.5 4.5 20.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_080469152fd2aec45e143ac19eab76a5c9912a28_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_24068241294de604ba119ab2f2a94ebd95578779' translation='52.5 4.5 16.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_24068241294de604ba119ab2f2a94ebd95578779_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_2bd8a249b6aec23dc35b29aee11f0e1c7a8412ca' translation='52.5 4.5 12.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_2bd8a249b6aec23dc35b29aee11f0e1c7a8412ca_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_02f379aab42ed442fbea36a88efea4757e20aa45' translation='48.5 4.5 16.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_02f379aab42ed442fbea36a88efea4757e20aa45_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_799c03292c871a7ff14500277723cf926201ffa4' translation='48.5 4.5 12.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_799c03292c871a7ff14500277723cf926201ffa4_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_853f6ee324281b696675cb98d2fca3fe0157b803' translation='48.5 3.5 30.5'>
+	<Shape>
+		<Box size='7.0 1.0 7.0'></Box>
+		<Appearance>
+			<Material id='ID_853f6ee324281b696675cb98d2fca3fe0157b803_MATERIAL' diffuseColor='0.9908496732026143 0.661437908496732 0.4549019607843137'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_614d3c2bfee1511d7f5ac7cbe6395c4525166de1' translation='48.5 4.5 30.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_614d3c2bfee1511d7f5ac7cbe6395c4525166de1_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_548291a3c17c76b2433becc71ce00a1351868752' translation='24.5 3.5 57.5'>
+	<Shape>
+		<Box size='31.0 1.0 21.0'></Box>
+		<Appearance>
+			<Material diffuseColor='0.4823529411764706 0.803921568627451 0.5529411764705883'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_e2fbc3946eb3073d1f159323fee1db7219388140' translation='31.5 4.5 55.5'>
+	<Shape>
+		<Box size='11.0 1.0 11.0'></Box>
+		<Appearance>
+			<Material id='ID_e2fbc3946eb3073d1f159323fee1db7219388140_MATERIAL' diffuseColor='0.996078431372549 0.6980392156862745 0.5019607843137255'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_1ad80ec0b5f71265a17445f327e91e2230bffd27' translation='33.5 5.5 57.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_1ad80ec0b5f71265a17445f327e91e2230bffd27_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_3be4faf7de29846cbdc610b344d888a152271de1' translation='33.5 5.5 53.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_3be4faf7de29846cbdc610b344d888a152271de1_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_80449ffb021911bdebeb01d00db081a45f3e15dc' translation='29.5 5.5 57.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_80449ffb021911bdebeb01d00db081a45f3e15dc_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_39fb6a8022353cfc7e70ead4a3c13bb8592273a6' translation='29.5 5.5 53.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_39fb6a8022353cfc7e70ead4a3c13bb8592273a6_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_9cdffda978d6e09f94d32563818b085bb00a2e40' translation='17.5 4.5 57.5'>
+	<Shape>
+		<Box size='11.0 1.0 15.0'></Box>
+		<Appearance>
+			<Material id='ID_9cdffda978d6e09f94d32563818b085bb00a2e40_MATERIAL' diffuseColor='0.996078431372549 0.6980392156862745 0.5019607843137255'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_826855cb01e44d1ac5921983a7c33ff1a096efee' translation='19.5 5.5 61.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_826855cb01e44d1ac5921983a7c33ff1a096efee_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_ace64ba041ad1499e07f49008d4269fe8667517d' translation='15.5 5.5 61.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_ace64ba041ad1499e07f49008d4269fe8667517d_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_d204a8223e350339906de4e77cf9802bd674dd26' translation='19.5 5.5 57.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_d204a8223e350339906de4e77cf9802bd674dd26_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_d103c660825d1b5dde70658047d5a3d0b19d55b7' translation='19.5 5.5 53.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_d103c660825d1b5dde70658047d5a3d0b19d55b7_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_d973c8034a6d05464d3c46efc1952e00ad88bef2' translation='15.5 5.5 57.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_d973c8034a6d05464d3c46efc1952e00ad88bef2_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_aa8043a095164ebe3e3d84ba4626e92376758a9a' translation='15.5 5.5 53.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_aa8043a095164ebe3e3d84ba4626e92376758a9a_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_f1ea94a793f14d01bbaf65b79196c248df48d652' translation='25.5 3.5 26.5'>
+	<Shape>
+		<Box size='33.0 1.0 35.0'></Box>
+		<Appearance>
+			<Material diffuseColor='0.4823529411764706 0.803921568627451 0.5529411764705883'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_e6f6d527f602dc3168f56bc74ebf12ee1edb9048' translation='17.5 4.5 19.5'>
+	<Shape>
+		<Box size='11.0 1.0 15.0'></Box>
+		<Appearance>
+			<Material id='ID_e6f6d527f602dc3168f56bc74ebf12ee1edb9048_MATERIAL' diffuseColor='0.996078431372549 0.6980392156862745 0.5019607843137255'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_a4cc9f771d787c2c5523e24c5696c72f1113b053' translation='19.5 5.5 23.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_a4cc9f771d787c2c5523e24c5696c72f1113b053_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_454d5e80cae72c18e23829f110c53078749ddfc8' translation='15.5 5.5 23.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_454d5e80cae72c18e23829f110c53078749ddfc8_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_374181fa4d86b0c17469238521d020181477f738' translation='19.5 5.5 19.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_374181fa4d86b0c17469238521d020181477f738_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_641ecbda032608474104f14f7b690ba16097e0d9' translation='19.5 5.5 15.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_641ecbda032608474104f14f7b690ba16097e0d9_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_bd10519242f6232794a27c48377e8b2cc016d85d' translation='15.5 5.5 19.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_bd10519242f6232794a27c48377e8b2cc016d85d_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_adf6eb6a5e5f8700d134299f66d0a5042bfbfedf' translation='15.5 5.5 15.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_adf6eb6a5e5f8700d134299f66d0a5042bfbfedf_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_62a05ad478d868de82d247616ef718090f12622a' translation='35.5 4.5 35.5'>
+	<Shape>
+		<Box size='7.0 1.0 11.0'></Box>
+		<Appearance>
+			<Material id='ID_62a05ad478d868de82d247616ef718090f12622a_MATERIAL' diffuseColor='0.996078431372549 0.6980392156862745 0.5019607843137255'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_b22633c98d237f238c12721efe20005835f4df32' translation='35.5 5.5 37.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_b22633c98d237f238c12721efe20005835f4df32_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_54c2d341d1558eee41848b80aa80a8e3cf322517' translation='35.5 5.5 33.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_54c2d341d1558eee41848b80aa80a8e3cf322517_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_36c327de191bdaf34b50ba0dfe08eb1c4882a0aa' translation='25.5 4.5 35.5'>
+	<Shape>
+		<Box size='7.0 1.0 11.0'></Box>
+		<Appearance>
+			<Material id='ID_36c327de191bdaf34b50ba0dfe08eb1c4882a0aa_MATERIAL' diffuseColor='0.996078431372549 0.6980392156862745 0.5019607843137255'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_d59a0ec5c9724aaed80ef6cd5b5f48db2778c29c' translation='25.5 5.5 37.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_d59a0ec5c9724aaed80ef6cd5b5f48db2778c29c_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_8eef90e368bb2450e0bb09147bc55dbb14fa9cd7' translation='25.5 5.5 33.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_8eef90e368bb2450e0bb09147bc55dbb14fa9cd7_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_34d0009cd3dbe40d195ae041c673e11e0c9717c5' translation='15.5 4.5 35.5'>
+	<Shape>
+		<Box size='7.0 1.0 11.0'></Box>
+		<Appearance>
+			<Material id='ID_34d0009cd3dbe40d195ae041c673e11e0c9717c5_MATERIAL' diffuseColor='0.996078431372549 0.6980392156862745 0.5019607843137255'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_50b165cb7bc39ed157792ce1bb62f70b67979947' translation='15.5 5.5 37.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_50b165cb7bc39ed157792ce1bb62f70b67979947_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_95b98a1a99e211be17f03da847df89b4a0d583fa' translation='15.5 5.5 33.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_95b98a1a99e211be17f03da847df89b4a0d583fa_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_7416ae16892396a2401ec63895b8d4922869494d' translation='31.5 4.5 17.5'>
+	<Shape>
+		<Box size='11.0 1.0 11.0'></Box>
+		<Appearance>
+			<Material id='ID_7416ae16892396a2401ec63895b8d4922869494d_MATERIAL' diffuseColor='0.996078431372549 0.6980392156862745 0.5019607843137255'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_30cfb82a6768a29eb509a30ecc571ac8baa33576' translation='33.5 5.5 19.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_30cfb82a6768a29eb509a30ecc571ac8baa33576_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_e7117ef9ed9c64ad0012f67e1210af3c3571500d' translation='33.5 5.5 15.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_e7117ef9ed9c64ad0012f67e1210af3c3571500d_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_85fdfd2812812efdd9f3f98fcc39a094e7979275' translation='29.5 5.5 19.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_85fdfd2812812efdd9f3f98fcc39a094e7979275_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+<Transform id='ID_b745600c666db9ff4cdef0d7fe5c2446dc688a46' translation='29.5 5.5 15.5'>
+	<Shape>
+		<Box size='1.0 1.0 1.0'></Box>
+		<Appearance>
+			<Material id='ID_b745600c666db9ff4cdef0d7fe5c2446dc688a46_MATERIAL' diffuseColor='0.45098039215686275 0.3686274509803922 0.7254901960784313'></Material>
+		</Appearance>
+	</Shape>
+</Transform>
+</scene> 
+</x3d> 
+</body> 
+</html>    

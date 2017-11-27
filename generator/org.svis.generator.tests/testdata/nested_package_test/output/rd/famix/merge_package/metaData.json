@@ -1,0 +1,86 @@
+[{"id":            "ID_881b4c2d9709012d406a9d47d303bfc54dfa09f3",
+"qualifiedName": "PackageOneoOne.Packagetwootwo",
+"name":          "PackageOneoOne.Packagetwootwo",
+"type":          "FAMIX.Namespace",
+"belongsTo":     "root"
+},{
+"id":            "ID_6eb61200a20ae42f11b03b5f9910f38a35687a23",
+"qualifiedName": "PackageOneoOne.Packagetwootwo.PackageThreeoThree.PackageFouroFour.PackageFiveoFive",
+"name":          "PackageThreeoThree.PackageFouroFour.PackageFiveoFive",
+"type":          "FAMIX.Namespace",
+"belongsTo":     "ID_881b4c2d9709012d406a9d47d303bfc54dfa09f3"
+},{
+"id":            "ID_c0e9d0e280889bde49789686c98848f7221f3538",
+"qualifiedName": "packageOne",
+"name":          "packageOne",
+"type":          "FAMIX.Namespace",
+"belongsTo":     "root"
+},{
+"id":            "ID_e6eaa85d988ccdb20784352ac915323a70329d38",
+"qualifiedName": "packageOne.packageTwo.packagethree",
+"name":          "packageTwo.packagethree",
+"type":          "FAMIX.Namespace",
+"belongsTo":     "ID_c0e9d0e280889bde49789686c98848f7221f3538"
+},{
+"id":            "ID_17c9c5b38a6dbb71d36b64f4d5d33567e57a4490",
+"qualifiedName": "packageOne.packageTwo.packagethree.packagefour.packagefive",
+"name":          "packagefour.packagefive",
+"type":          "FAMIX.Namespace",
+"belongsTo":     "ID_e6eaa85d988ccdb20784352ac915323a70329d38"
+},{
+"id":            "ID_c22afd5ca0dfea117c9d967816570e570364159a",
+"qualifiedName": "PackageOneoOne.Packagetwootwo.PackageThreeoThree.PackageFouroFour.PackageFiveoFive.TestFile_Two",
+"name":          "TestFile_Two",
+"type":          "FAMIX.Class",
+"modifiers":     "",
+"subClassOf":    "",
+"superClassOf":  "",
+"belongsTo":     "ID_6eb61200a20ae42f11b03b5f9910f38a35687a23"
+},{
+"id":            "ID_39ec4ec2089641c61ce264c3994d446dda2735ae",
+"qualifiedName": "PackageOneoOne.Packagetwootwo.hey",
+"name":          "hey",
+"type":          "FAMIX.Class",
+"modifiers":     "",
+"subClassOf":    "",
+"superClassOf":  "",
+"belongsTo":     "ID_881b4c2d9709012d406a9d47d303bfc54dfa09f3"
+},{
+"id":            "ID_716e07d9f864b32757ac996d3940f94c21d28faa",
+"qualifiedName": "packageOne.Test",
+"name":          "Test",
+"type":          "FAMIX.Class",
+"modifiers":     "",
+"subClassOf":    "",
+"superClassOf":  "",
+"belongsTo":     "ID_c0e9d0e280889bde49789686c98848f7221f3538"
+},{
+"id":            "ID_878ff7b24bc0c2472c78a760653e8a7a7b76feae",
+"qualifiedName": "packageOne.packageTwo.packagethree.packagefour.packagefive.testFile",
+"name":          "testFile",
+"type":          "FAMIX.Class",
+"modifiers":     "",
+"subClassOf":    "",
+"superClassOf":  "",
+"belongsTo":     "ID_17c9c5b38a6dbb71d36b64f4d5d33567e57a4490"
+},{
+"id":            "ID_b1d4b49af5ab49f60a02a27372cda5ee97babe96",
+"qualifiedName": "packageOne.packageTwo.packagethree.test",
+"name":          "test",
+"type":          "FAMIX.Class",
+"modifiers":     "",
+"subClassOf":    "",
+"superClassOf":  "",
+"belongsTo":     "ID_e6eaa85d988ccdb20784352ac915323a70329d38"
+},{
+"id":            "ID_a1accf990f30c8327aefa3f0d26602b3126f5fec",
+"qualifiedName": "packageOne.Test.main()",
+"name":          "main",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"signature":  	 "void main(String[])",
+"calls":		 "",
+"calledBy":		 "",
+"accesses":	 	 "",
+"belongsTo":     "ID_716e07d9f864b32757ac996d3940f94c21d28faa"
+}]

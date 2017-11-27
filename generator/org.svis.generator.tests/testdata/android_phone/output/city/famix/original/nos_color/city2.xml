@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="ASCII"?>
+<city:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:city="http://www.svis.org/xtext/City" xsi:schemaLocation="http://www.svis.org/xtext/City java://org.svis.xtext.city.CityPackage">
+  <document>
+    <entities xsi:type="city:District" name="28864" value="com" fqn="com" type="FAMIX.Namespace" id="ID_5fb552a76ef3c7ee67681d80e9797e088a6c9859" width="277.0" length="308.0" height="1.0" level="1" color="0.5882352941176471 0.5882352941176471 0.5882352941176471">
+      <position x="141.5" y="1.5" z="157.0"/>
+      <entities xsi:type="city:District" name="4937" value="android" fqn="com.android" type="FAMIX.Namespace" id="ID_501b14856c0c2da26a2072a19a7020303aeb654a" width="271.0" length="302.0" height="1.0" level="2" color="0.7647058823529411 0.7647058823529411 0.7647058823529411">
+        <position x="141.5" y="2.5" z="157.0"/>
+        <entities xsi:type="city:District" name="8807" value="phone" fqn="com.android.phone" type="FAMIX.Namespace" id="ID_fa5a869f00e096e9671eaf38761b29e7e6fba832" width="265.0" length="296.0" height="1.0" level="3" color="0.9411764705882353 0.9411764705882353 0.9411764705882353">
+          <position x="141.5" y="3.5" z="157.0"/>
+          <entities xsi:type="city:Building" name="13380" value="ADNList" fqn="com.android.phone.ADNList" type="FAMIX.Class" id="ID_d4107e8a97712c5a9bf2352dd61e11ff484b3dc3" width="16.0" length="16.0" height="10.0" level="4" color="0.07279122822886203 0.10734967487763941 0.08045346277926854" numberOfStatements="45">
+            <position x="252.0" y="9.0" z="80.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="25185" value="BluetoothAtPhonebook" fqn="com.android.phone.BluetoothAtPhonebook" type="FAMIX.Class" id="ID_478d37d978e3dcf6507d87a6ac6c0dce086e177c" width="13.0" length="13.0" height="9.0" level="4" color="0.07091989025235927 0.13029818795790998 0.07838514185787078" numberOfStatements="94">
+            <position x="200.5" y="8.5" z="135.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="19821" value="BluetoothCmeError" fqn="com.android.phone.BluetoothCmeError" type="FAMIX.Class" id="ID_4ad9afc7abd20532477a315ecf737165ad37d3ea" width="22.0" length="22.0" height="1.0" level="4" color="0.07450980392156863 0.08627450980392157 0.08235294117647059">
+            <position x="143.0" y="4.5" z="254.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="14886" value="BluetoothHandsfree" fqn="com.android.phone.BluetoothHandsfree" type="FAMIX.Class" id="ID_da3856ad38bd47499a8ec588c55c5334c577ba12" width="76.0" length="76.0" height="42.0" level="4" color="0.057553190420196784 0.29421613853127104 0.06361142099074381" numberOfStatements="444">
+            <position x="147.0" y="25.0" z="184.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="14349" value="BluetoothHeadsetService" fqn="com.android.phone.BluetoothHeadsetService" type="FAMIX.Class" id="ID_af9311014985431be87f7f46712037fc38a62920" width="35.0" length="35.0" height="13.0" level="4" color="0.06965960141104109 0.14575330901196973 0.07699219103325594" numberOfStatements="127">
+            <position x="163.5" y="10.5" z="108.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="4672" value="ButtonGridLayout" fqn="com.android.phone.ButtonGridLayout" type="FAMIX.Class" id="ID_db717d54361c6ee8f329f50c16042d2cfab9a158" width="7.0" length="7.0" height="6.0" level="4" color="0.07344046793499563 0.09938794584979047 0.08117104350710043" numberOfStatements="28">
+            <position x="255.5" y="7.0" z="216.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="29321" value="CLIRListPreference" fqn="com.android.phone.CLIRListPreference" type="FAMIX.Class" id="ID_dfed8481b6d00b1fd31eff586c59ed44721d952f" width="6.0" length="6.0" height="5.0" level="4" color="0.07282941879981106 0.10688133787600125 0.08049567341031749" numberOfStatements="44">
+            <position x="160.0" y="6.5" z="228.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="1231" value="CallCard" fqn="com.android.phone.CallCard" type="FAMIX.Class" id="ID_4c141df147f212f9d24fca5c9e3b9126fd6192ac" width="31.0" length="31.0" height="36.0" level="4" color="0.048845740243816646 0.4009969749047748 0.05398739711158682" numberOfStatements="672">
+            <position x="233.5" y="22.0" z="106.5"/>
+            <references name="1068" fqn="com.android.phone.CallTime.OnTickListener" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="27191" value="CallFeaturesSetting" fqn="com.android.phone.CallFeaturesSetting" type="FAMIX.Class" id="ID_657604c8d4b7671a8c237667c6f9c54b0bbb0f06" width="131.0" length="131.0" height="51.0" level="4" color="0.039145335222761576 0.5199545733208711 0.04326589682515754" numberOfStatements="926">
+            <position x="77.5" y="29.5" z="77.5"/>
+            <references name="15645" fqn="com.android.phone.EditPhoneNumberPreference.GetDefaultNumberListener" type="Inheritance"/>
+            <references name="27910" fqn="com.android.phone.EditPhoneNumberPreference.OnDialogClosedListener" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="2005" value="CallForwardEditPreference" fqn="com.android.phone.CallForwardEditPreference" type="FAMIX.Class" id="ID_619658f0d43cebec6066e97d7b1db38a04204d41" width="11.0" length="11.0" height="7.0" level="4" color="0.07233294137747359 0.11296971889729751 0.07994693520668134" numberOfStatements="57">
+            <position x="243.5" y="7.5" z="134.5"/>
+            <references name="4271" fqn="com.android.phone.EditPhoneNumberPreference" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="15209" value="CallNotifier" fqn="com.android.phone.CallNotifier" type="FAMIX.Class" id="ID_a07ab82d150fc9043d45e22cba032b718548b2dd" width="59.0" length="59.0" height="35.0" level="4" color="0.04735630797680425 0.4192621179686636 0.05234118250067838" numberOfStatements="711">
+            <position x="41.5" y="21.5" z="272.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="8870" value="CallTime" fqn="com.android.phone.CallTime" type="FAMIX.Class" id="ID_7a586f5e0972ab4f7b73087665edc8fc6184bc52" width="13.0" length="13.0" height="13.0" level="4" color="0.07141636767469674 0.1242098069366137 0.07893388006150691" numberOfStatements="81">
+            <position x="184.5" y="10.5" z="135.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="26697" value="CallWaitingCheckBoxPreference" fqn="com.android.phone.CallWaitingCheckBoxPreference" type="FAMIX.Class" id="ID_044d0bc64dd78487623b709b92efad549d841a3f" width="5.0" length="5.0" height="5.0" level="4" color="0.07386056421543502 0.09423623883177053 0.08163536044863871" numberOfStatements="17">
+            <position x="125.5" y="6.5" z="270.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="21403" value="CarrierLogo" fqn="com.android.phone.CarrierLogo" type="FAMIX.Class" id="ID_31547cb3f4b6be63442b560f074994f21f686d02" width="1.0" length="1.0" height="3.0" level="4" color="0.0741660887830273 0.09048954281866514 0.08197304549703018" numberOfStatements="9">
+            <position x="240.5" y="5.5" z="298.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="27644" value="CdmaCallOptions" fqn="com.android.phone.CdmaCallOptions" type="FAMIX.Class" id="ID_7aa108ac57d521eaabb1e7bdd2e85c8505d6de30" width="4.0" length="4.0" height="2.0" level="4" color="0.07397513592828213 0.09283122782685602 0.08176199234178551" numberOfStatements="14">
+            <position x="175.0" y="5.0" z="270.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="4143" value="CdmaDisplayInfo" fqn="com.android.phone.CdmaDisplayInfo" type="FAMIX.Class" id="ID_81aeba89898b792643572e42809937a7ab9e5214" width="3.0" length="3.0" height="3.0" level="4" color="0.07359323021879177 0.09751459784323775 0.08133988603129617" numberOfStatements="24">
+            <position x="199.5" y="5.5" z="269.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="16990" value="CdmaOptions" fqn="com.android.phone.CdmaOptions" type="FAMIX.Class" id="ID_403be91f730905f4c30280caafa16bf992f007d0" width="2.0" length="2.0" height="2.0" level="4" color="0.07397513592828213 0.09283122782685602 0.08176199234178551" numberOfStatements="14">
+            <position x="120.0" y="5.0" z="239.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="21873" value="CdmaPhoneCallState" fqn="com.android.phone.CdmaPhoneCallState" type="FAMIX.Class" id="ID_4e038567f7e15dda4e0603fd55a4ab22f051e09f" width="4.0" length="4.0" height="9.0" level="4" color="0.07378418307353696 0.09517291283504688 0.08155093918654084" numberOfStatements="19">
+            <position x="168.0" y="8.5" z="270.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="18412" value="CdmaRoamingListPreference" fqn="com.android.phone.CdmaRoamingListPreference" type="FAMIX.Class" id="ID_01ac0e3c70146b6ef43aeee83529e15a5b1f6e22" width="4.0" length="4.0" height="4.0" level="4" color="0.07317313393835237 0.10266630486125769 0.08087556908975789" numberOfStatements="35">
+            <position x="161.0" y="6.0" z="270.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="19196" value="CdmaVoicePrivacyCheckBoxPreference" fqn="com.android.phone.CdmaVoicePrivacyCheckBoxPreference" type="FAMIX.Class" id="ID_a59a8f50ae6e65dd91156a386f1c3c5fc8e35c46" width="4.0" length="4.0" height="4.0" level="4" color="0.07408970764112924 0.09142621682194148 0.0818886242349323" numberOfStatements="11">
+            <position x="154.0" y="6.0" z="270.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="10295" value="CellBroadcastSms" fqn="com.android.phone.CellBroadcastSms" type="FAMIX.Class" id="ID_4cc8994cd1a49ff0bd8eba602ba4caea2f16bfe5" width="76.0" length="76.0" height="7.0" level="4" color="0.061677772082692636 0.2436357423543482 0.06817016914402871" numberOfStatements="336">
+            <position x="184.0" y="7.5" z="50.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="8878" value="ChangeIccPinScreen" fqn="com.android.phone.ChangeIccPinScreen" type="FAMIX.Class" id="ID_ec747ead44fca3e6ee6b9481b9479db377a7d862" width="24.0" length="24.0" height="8.0" level="4" color="0.07057617511381795 0.13451322097265353 0.07800524617843037" numberOfStatements="103">
+            <position x="113.0" y="8.0" z="288.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="14004" value="DTMFTwelveKeyDialer" fqn="com.android.phone.DTMFTwelveKeyDialer" type="FAMIX.Class" id="ID_fca2619cd34b91182873244167703742bbcbb920" width="20.0" length="20.0" height="35.0" level="4" color="0.06328177606255214 0.22396558828554486 0.06994301564808393" numberOfStatements="294">
+            <position x="237.0" y="21.5" z="253.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="2637" value="DTMFTwelveKeyDialerView" fqn="com.android.phone.DTMFTwelveKeyDialerView" type="FAMIX.Class" id="ID_d32147464c1744d3a296120197ccbb47a2bb7f13" width="4.0" length="4.0" height="7.0" level="4" color="0.07240932251937167 0.11203304489402116 0.08003135646877921" numberOfStatements="55">
+            <position x="147.0" y="7.5" z="270.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="410" value="DeleteFdnContactScreen" fqn="com.android.phone.DeleteFdnContactScreen" type="FAMIX.Class" id="ID_c828dda441a832483654f76d914838e28de62fa0" width="10.0" length="10.0" height="9.0" level="4" color="0.07198922623893228 0.11718475191204109 0.07956703952724094" numberOfStatements="66">
+            <position x="140.0" y="8.5" z="230.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="25169" value="EditFdnContactScreen" fqn="com.android.phone.EditFdnContactScreen" type="FAMIX.Class" id="ID_62a11e7c15c2a2ea9f32476af081983510907d08" width="23.0" length="23.0" height="20.0" level="4" color="0.06778826343453834 0.16870182209224027 0.07492387011185817" numberOfStatements="176">
+            <position x="217.5" y="14.0" z="287.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="4271" value="EditPhoneNumberPreference" fqn="com.android.phone.EditPhoneNumberPreference" type="FAMIX.Class" id="ID_17996fdb364628d400f93fe910128f2ec88b457f" width="22.0" length="22.0" height="30.0" level="4" color="0.06878121827921327 0.15652506004964772 0.07602134651913046" numberOfStatements="150">
+            <position x="118.0" y="19.0" z="254.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="16457" value="EditPinPreference" fqn="com.android.phone.EditPinPreference" type="FAMIX.Class" id="ID_b94aef1398244f37f04605a7cb44ec8daf816a62" width="2.0" length="2.0" height="8.0" level="4" color="0.07366961136068984 0.09657792383996142 0.08142430729339403" numberOfStatements="22">
+            <position x="115.0" y="8.0" z="239.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="6806" value="EmergencyCallHandler" fqn="com.android.phone.EmergencyCallHandler" type="FAMIX.Class" id="ID_b610e9cb6d875050ddce354c6006c11e011ab2be" width="7.0" length="7.0" height="2.0" level="4" color="0.07282941879981106 0.10688133787600125 0.08049567341031749" numberOfStatements="44">
+            <position x="245.5" y="5.0" z="216.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="4537" value="EmergencyCallbackModeExitDialog" fqn="com.android.phone.EmergencyCallbackModeExitDialog" type="FAMIX.Class" id="ID_605cec2938cf5cc931c656f1722464f1b6bc2810" width="20.0" length="20.0" height="8.0" level="4" color="0.07122541481995157 0.12655149194480456 0.07872282690626224" numberOfStatements="86">
+            <position x="214.0" y="8.0" z="253.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="26942" value="EmergencyCallbackModeService" fqn="com.android.phone.EmergencyCallbackModeService" type="FAMIX.Class" id="ID_4c5d23404c95ea7ba91cea3863a0d1a9337a8bf0" width="11.0" length="11.0" height="8.0" level="4" color="0.07260027537411684 0.10969135988583029 0.08024240962402387" numberOfStatements="50">
+            <position x="229.5" y="8.0" z="134.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="25050" value="EmergencyDialer" fqn="com.android.phone.EmergencyDialer" type="FAMIX.Class" id="ID_3eaf1b3087266e0bf42429830621832ef273f084" width="23.0" length="23.0" height="25.0" level="4" color="0.06343453834634828 0.22209224027899216 0.07011185817227968" numberOfStatements="290">
+            <position x="191.5" y="16.5" z="287.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="11564" value="EnableFdnScreen" fqn="com.android.phone.EnableFdnScreen" type="FAMIX.Class" id="ID_cfa3400819b24033b656e7e88d535a61aa90cd56" width="10.0" length="10.0" height="8.0" level="4" color="0.07248570366126973 0.11109637089074482 0.08011577773087708" numberOfStatements="53">
+            <position x="127.0" y="8.0" z="230.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="9529" value="EnableIccPinScreen" fqn="com.android.phone.EnableIccPinScreen" type="FAMIX.Class" id="ID_c18310b235fe576f376629949c867fcd0d16637c" width="10.0" length="10.0" height="7.0" level="4" color="0.07252389423221878 0.11062803388910664 0.080157988361926" numberOfStatements="52">
+            <position x="114.0" y="7.5" z="230.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="28601" value="FakePhoneActivity" fqn="com.android.phone.FakePhoneActivity" type="FAMIX.Class" id="ID_c6cc03c6ab43da368c219548b97415713041491e" width="4.0" length="4.0" height="1.0" level="4" color="0.07389875478638405 0.09376790183013237 0.08167757107968764" numberOfStatements="16">
+            <position x="140.0" y="4.5" z="270.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="7899" value="FdnList" fqn="com.android.phone.FdnList" type="FAMIX.Class" id="ID_47400cfec078b202f1479e33623230898d7e8c20" width="5.0" length="5.0" height="9.0" level="4" color="0.07218017909367745 0.11484306690385021 0.0797780926824856" numberOfStatements="61">
+            <position x="117.5" y="8.5" z="270.5"/>
+            <references name="13380" fqn="com.android.phone.ADNList" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="6192" value="FdnSetting" fqn="com.android.phone.FdnSetting" type="FAMIX.Class" id="ID_20a88e2f36b6b5bef0c107cf365df135835ff4b0" width="24.0" length="24.0" height="14.0" level="4" color="0.06881940885016231 0.15605672304800958 0.07606355715017939" numberOfStatements="149">
+            <position x="86.0" y="11.0" z="288.0"/>
+            <references name="6283" fqn="com.android.phone.EditPinPreference.OnPinEnteredListener" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="20098" value="GetPin2Screen" fqn="com.android.phone.GetPin2Screen" type="FAMIX.Class" id="ID_81be2777b7d185a558ed66cf9dcf15cdaa726e06" width="3.0" length="3.0" height="5.0" level="4" color="0.07359323021879177 0.09751459784323775 0.08133988603129617" numberOfStatements="24">
+            <position x="193.5" y="6.5" z="269.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="20715" value="GsmUmtsAdditionalCallOptions" fqn="com.android.phone.GsmUmtsAdditionalCallOptions" type="FAMIX.Class" id="ID_61aab191883443a4b68294edf496380d21a16cec" width="8.0" length="8.0" height="3.0" level="4" color="0.07309675279645432 0.10360297886453403 0.08079114782766003" numberOfStatements="37">
+            <position x="225.0" y="5.5" z="217.0"/>
+            <references name="10409" fqn="com.android.phone.TimeConsumingPreferenceActivity" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="11620" value="GsmUmtsCallForwardOptions" fqn="com.android.phone.GsmUmtsCallForwardOptions" type="FAMIX.Class" id="ID_3125a48f3d82547240c8c873c65899b58d3c3bab" width="16.0" length="16.0" height="4.0" level="4" color="0.07145455824564577 0.12374146993497553 0.07897609069255586" numberOfStatements="80">
+            <position x="263.0" y="6.0" z="154.0"/>
+            <references name="10409" fqn="com.android.phone.TimeConsumingPreferenceActivity" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="18439" value="GsmUmtsCallOptions" fqn="com.android.phone.GsmUmtsCallOptions" type="FAMIX.Class" id="ID_60bea9e4a9b7ccd277150848c000c8c8bdc8a0e3" width="2.0" length="2.0" height="1.0" level="4" color="0.07424246992492538 0.08955286881538879 0.08205746675912805" numberOfStatements="7">
+            <position x="110.0" y="4.5" z="239.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="22968" value="GsmUmtsOptions" fqn="com.android.phone.GsmUmtsOptions" type="FAMIX.Class" id="ID_39219f4e45b08824ed1608d1f9ebbab7a6041292" width="6.0" length="6.0" height="2.0" level="4" color="0.07374599250258791 0.09564124983668505 0.0815087285554919" numberOfStatements="20">
+            <position x="151.0" y="5.0" z="228.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="13388" value="IccMissingPanel" fqn="com.android.phone.IccMissingPanel" type="FAMIX.Class" id="ID_86774ef3c608babfde9bc1568f0923cc2c8be32d" width="1.0" length="1.0" height="2.0" level="4" color="0.07431885106682345 0.08861619481211244 0.08214188802122592" numberOfStatements="5">
+            <position x="236.5" y="5.0" z="298.5"/>
+            <references name="16756" fqn="com.android.phone.IccPanel" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="23488" value="IccNetworkDepersonalizationPanel" fqn="com.android.phone.IccNetworkDepersonalizationPanel" type="FAMIX.Class" id="ID_06726156c965299a33d4702d614e2109dc266fd5" width="13.0" length="13.0" height="9.0" level="4" color="0.07252389423221878 0.11062803388910664 0.080157988361926" numberOfStatements="52">
+            <position x="168.5" y="8.5" z="135.5"/>
+            <references name="16756" fqn="com.android.phone.IccPanel" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="16756" value="IccPanel" fqn="com.android.phone.IccPanel" type="FAMIX.Class" id="ID_36871de283883bc9f6794a37a8d0f95c7f7a3b27" width="3.0" length="3.0" height="6.0" level="4" color="0.0735168490768937 0.0984512718465141 0.0812554647691983" numberOfStatements="26">
+            <position x="187.5" y="7.0" z="269.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="14947" value="IccPinUnlockPanel" fqn="com.android.phone.IccPinUnlockPanel" type="FAMIX.Class" id="ID_780d8d04c274a8fbe92be9faafa9b9a64d9ae0e5" width="16.0" length="16.0" height="19.0" level="4" color="0.0697741731238882 0.1443482980070552 0.07711882292640275" numberOfStatements="124">
+            <position x="233.0" y="13.5" z="80.0"/>
+            <references name="16756" fqn="com.android.phone.IccPanel" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="21404" value="IccProvider" fqn="com.android.phone.IccProvider" type="FAMIX.Class" id="ID_871b93ccca3eb182c6c3163c6f15aed8529d413a" width="1.0" length="1.0" height="1.0" level="4" color="0.0744716133506196 0.08674284680555974 0.08231073054542166" numberOfStatements="1">
+            <position x="232.5" y="4.5" z="298.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="2188" value="InCallControlState" fqn="com.android.phone.InCallControlState" type="FAMIX.Class" id="ID_d872a5bd3c91f4dbc6fbe4751d09fa4f61801f1d" width="20.0" length="20.0" height="4.0" level="4" color="0.07133998653279866 0.12514648093989006 0.07884945879940905" numberOfStatements="83">
+            <position x="191.0" y="6.0" z="253.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="1059" value="InCallMenu" fqn="com.android.phone.InCallMenu" type="FAMIX.Class" id="ID_4df4f81a4f1d9331ec5a364cc8478f373aa10da9" width="19.0" length="19.0" height="6.0" level="4" color="0.0653822574647491 0.1982070531954453 0.07226460035577532" numberOfStatements="239">
+            <position x="241.5" y="7.0" z="285.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="28309" value="InCallMenuItemView" fqn="com.android.phone.InCallMenuItemView" type="FAMIX.Class" id="ID_e4ffb4d34719515dbe799b0ead4a62e5af9028a9" width="6.0" length="6.0" height="12.0" level="4" color="0.07248570366126973 0.11109637089074482 0.08011577773087708" numberOfStatements="53">
+            <position x="268.0" y="10.0" z="132.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="13274" value="InCallMenuView" fqn="com.android.phone.InCallMenuView" type="FAMIX.Class" id="ID_fdfe858c8349a807145802849954832cfb34a75b" width="17.0" length="17.0" height="13.0" level="4" color="0.06759731057979317 0.17104350710043115 0.0747128169566135" numberOfStatements="181">
+            <position x="233.5" y="10.5" z="60.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="25873" value="InCallScreen" fqn="com.android.phone.InCallScreen" type="FAMIX.Class" id="ID_8219617cb62b6cd3e181f02c21af9f3ed4df68d3" width="94.0" length="94.0" height="115.0" level="4" color="0.0 1.0 0.0" numberOfStatements="1951">
+            <position x="59.0" y="61.5" z="193.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="5806" value="InCallScreenShowActivation" fqn="com.android.phone.InCallScreenShowActivation" type="FAMIX.Class" id="ID_a9e105ae6931d98dfe422d94a466a6e1bbeff711" width="1.0" length="1.0" height="1.0" level="4" color="0.07412789821207827 0.09095787982030332 0.08193083486598125" numberOfStatements="10">
+            <position x="269.5" y="4.5" z="138.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="19240" value="InCallTouchUi" fqn="com.android.phone.InCallTouchUi" type="FAMIX.Class" id="ID_f9ac38488bb293e38a096712883eaf6838c2ae46" width="30.0" length="30.0" height="12.0" level="4" color="0.06465663661671742 0.2071054562265706 0.07146259836584556" numberOfStatements="258">
+            <position x="89.0" y="10.0" z="258.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="22438" value="ManageConferenceUtils" fqn="com.android.phone.ManageConferenceUtils" type="FAMIX.Class" id="ID_ec312eb29f279bf71a419cd2fabb648cb712c0b3" width="10.0" length="10.0" height="13.0" level="4" color="0.07061436568476699 0.13404488397101538 0.0780474568094793" numberOfStatements="102">
+            <position x="257.0" y="10.5" z="134.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="28176" value="NetworkQueryService" fqn="com.android.phone.NetworkQueryService" type="FAMIX.Class" id="ID_9f0a6c90148907ced253ae39e87d3b838f28c992" width="13.0" length="13.0" height="5.0" level="4" color="0.07355503964784274 0.09798293484487593 0.08129767540024724" numberOfStatements="25">
+            <position x="152.5" y="6.5" z="135.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="4908" value="NetworkSetting" fqn="com.android.phone.NetworkSetting" type="FAMIX.Class" id="ID_e3b7bb49fd8ec031e2d7551e46141821f79594b4" width="21.0" length="21.0" height="17.0" level="4" color="0.06973598255293917 0.14481663500869338 0.07707661229535381" numberOfStatements="125">
+            <position x="167.5" y="12.5" z="253.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="23578" value="NotificationMgr" fqn="com.android.phone.NotificationMgr" type="FAMIX.Class" id="ID_00c85f129b0c11173df30f2d264c45e5e3a3c79a" width="31.0" length="31.0" height="26.0" level="4" color="0.06370187234299153 0.21881388126752493 0.07040733258962222" numberOfStatements="283">
+            <position x="199.5" y="17.0" z="106.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="3306" value="OtaStartupReceiver" fqn="com.android.phone.OtaStartupReceiver" type="FAMIX.Class" id="ID_a6026f2b51bc7781bc9065a53dbe6f892fc4da4e" width="5.0" length="5.0" height="2.0" level="4" color="0.07366961136068984 0.09657792383996142 0.08142430729339403" numberOfStatements="22">
+            <position x="109.5" y="5.0" z="270.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="3780" value="OtaUtils" fqn="com.android.phone.OtaUtils" type="FAMIX.Class" id="ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8" width="23.0" length="23.0" height="37.0" level="4" color="0.056369282720776674 0.30873458558205447 0.06230289142822685" numberOfStatements="475">
+            <position x="165.5" y="22.5" z="287.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="9048" value="OutgoingCallBroadcaster" fqn="com.android.phone.OutgoingCallBroadcaster" type="FAMIX.Class" id="ID_0bc354d0c2d59b6d46cf6dce54d90037f5c1e8be" width="6.0" length="6.0" height="2.0" level="4" color="0.07103446196520638 0.12889317695299543 0.07851177375101757" numberOfStatements="91">
+            <position x="265.0" y="5.0" z="216.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="8003" value="PhoneApp" fqn="com.android.phone.PhoneApp" type="FAMIX.Class" id="ID_b7091b41bc7aff3858d55289b293bbd1aa24307a" width="64.0" length="64.0" height="60.0" level="4" color="0.05728585642355353 0.29749449754273827 0.06331594657340127" numberOfStatements="451">
+            <position x="220.0" y="34.0" z="178.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="11072" value="PhoneInterfaceManager" fqn="com.android.phone.PhoneInterfaceManager" type="FAMIX.Class" id="ID_b5946ae8550b36173548318d03aa2be442ba35e8" width="11.0" length="11.0" height="50.0" level="4" color="0.06606968774183174 0.18977698716595814 0.07302439171465613" numberOfStatements="221">
+            <position x="215.5" y="29.0" z="134.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="19835" value="PhoneUtils" fqn="com.android.phone.PhoneUtils" type="FAMIX.Class" id="ID_b493b25346511112f3f467d21bb7a3a442f8864e" width="23.0" length="23.0" height="64.0" level="4" color="0.031201696465362156 0.6173686696616114 0.03448608556697923" numberOfStatements="1134">
+            <position x="139.5" y="36.0" z="287.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="15472" value="ProcessOutgoingCallTest" fqn="com.android.phone.ProcessOutgoingCallTest" type="FAMIX.Class" id="ID_6031e0947c2cf768edc0e09db9da3fcaa5ef75d3" width="7.0" length="7.0" height="1.0" level="4" color="0.0735168490768937 0.0984512718465141 0.0812554647691983" numberOfStatements="26">
+            <position x="235.5" y="4.5" z="216.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="23560" value="Profiler" fqn="com.android.phone.Profiler" type="FAMIX.Class" id="ID_b1441e6446699bbf40be3ddfcb16b69ec795c301" width="8.0" length="8.0" height="11.0" level="4" color="0.07321132450930141 0.1021979678596195 0.08091777972080683" numberOfStatements="34">
+            <position x="214.0" y="9.5" z="217.0"/>
+          </entities>
+          <entities xsi:type="city:Building" name="25163" value="Ringer" fqn="com.android.phone.Ringer" type="FAMIX.Class" id="ID_fdc32b41955a04f39ab604c87266380ce3627f3d" width="17.0" length="17.0" height="11.0" level="4" color="0.07122541481995157 0.12655149194480456 0.07872282690626224" numberOfStatements="86">
+            <position x="233.5" y="9.5" z="40.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="26723" value="Settings" fqn="com.android.phone.Settings" type="FAMIX.Class" id="ID_bdbdfe1cc1eb60ff093162c09b4cc576d49b9b0f" width="17.0" length="17.0" height="9.0" level="4" color="0.06893398056300942 0.15465171204309505 0.07619018904332621" numberOfStatements="146">
+            <position x="233.5" y="8.5" z="20.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="3344" value="SimContacts" fqn="com.android.phone.SimContacts" type="FAMIX.Class" id="ID_86820d9689560b50a6b54ce40b91101a33c771e0" width="8.0" length="8.0" height="11.0" level="4" color="0.06878121827921327 0.15652506004964772 0.07602134651913046" numberOfStatements="150">
+            <position x="203.0" y="9.5" z="217.0"/>
+            <references name="13380" fqn="com.android.phone.ADNList" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="19277" value="SpecialCharSequenceMgr" fqn="com.android.phone.SpecialCharSequenceMgr" type="FAMIX.Class" id="ID_c0d5b8c4764b3562dd3b9024b0061b46b9c5e484" width="3.0" length="3.0" height="12.0" level="4" color="0.07122541481995157 0.12655149194480456 0.07872282690626224" numberOfStatements="86">
+            <position x="181.5" y="10.0" z="269.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="10409" value="TimeConsumingPreferenceActivity" fqn="com.android.phone.TimeConsumingPreferenceActivity" type="FAMIX.Class" id="ID_3fbce74794819dc47b2dde8afbccd565a07ce545" width="8.0" length="8.0" height="7.0" level="4" color="0.07164551110039095 0.12139978492678465 0.07918714384780053" numberOfStatements="75">
+            <position x="192.0" y="7.5" z="217.0"/>
+            <references name="19782" fqn="com.android.phone.TimeConsumingPreferenceListener" type="Inheritance"/>
+          </entities>
+          <entities xsi:type="city:Building" name="19782" value="TimeConsumingPreferenceListener" fqn="com.android.phone.TimeConsumingPreferenceListener" type="FAMIX.Class" id="ID_6eb10a78cff7e308bfa122bf528ab7538c48a2ae" width="1.0" length="1.0" height="3.0" level="4" color="0.07450980392156863 0.08627450980392157 0.08235294117647059">
+            <position x="265.5" y="5.5" z="138.5"/>
+          </entities>
+          <entities xsi:type="city:Building" name="18614" value="Use2GOnlyCheckBoxPreference" fqn="com.android.phone.Use2GOnlyCheckBoxPreference" type="FAMIX.Class" id="ID_1b39b3071c491e283fb97fd895d31abdae344c89" width="4.0" length="4.0" height="4.0" level="4" color="0.07401332649923116 0.09236289082521784 0.08180420297283444" numberOfStatements="13">
+            <position x="133.0" y="6.0" z="270.0"/>
+          </entities>
+        </entities>
+      </entities>
+    </entities>
+  </document>
+</city:Root>

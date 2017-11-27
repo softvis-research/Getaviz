@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ASCII"?>
+<rd:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rd="http://www.svis.org/xtext/RD" xsi:schemaLocation="http://www.svis.org/xtext/RD java://org.svis.xtext.rd.RdPackage">
+  <document>
+    <disks name="MasterRoot" value="MasterRoot" fqn="MasterRoot" id="ID_7e2d8be02692063d2384bb907c4d0d35c8fc911c" height="1.0" type="FAMIX.Namespace" level="1" ringWidth="2.0">
+      <disks name="31" value="PackageOneoOne.Packagetwootwo" fqn="PackageOneoOne.Packagetwootwo" id="ID_881b4c2d9709012d406a9d47d303bfc54dfa09f3" height="1.0" type="FAMIX.Namespace" level="2" ringWidth="2.0">
+        <disks name="20" value="hey" fqn="PackageOneoOne.Packagetwootwo.hey" id="ID_39ec4ec2089641c61ce264c3994d446dda2735ae" height="1.0" type="FAMIX.Class" level="3" color="0.20784313725490197 0.20784313725490197 0.34901960784313724" ringWidth="2.0"/>
+        <disks name="11" value="PackageThreeoThree.PackageFouroFour.PackageFiveoFive" fqn="PackageOneoOne.Packagetwootwo.PackageThreeoThree.PackageFouroFour.PackageFiveoFive" id="ID_6eb61200a20ae42f11b03b5f9910f38a35687a23" height="1.0" type="FAMIX.Namespace" level="3" ringWidth="2.0">
+          <disks name="8" value="TestFile_Two" fqn="PackageOneoOne.Packagetwootwo.PackageThreeoThree.PackageFouroFour.PackageFiveoFive.TestFile_Two" id="ID_c22afd5ca0dfea117c9d967816570e570364159a" height="1.0" type="FAMIX.Class" level="4" color="0.20784313725490197 0.20784313725490197 0.34901960784313724" ringWidth="2.0"/>
+        </disks>
+      </disks>
+      <disks name="21" value="packageOne" fqn="packageOne" id="ID_c0e9d0e280889bde49789686c98848f7221f3538" height="1.0" type="FAMIX.Namespace" level="2" ringWidth="2.0">
+        <disks name="3" value="Test" fqn="packageOne.Test" id="ID_716e07d9f864b32757ac996d3940f94c21d28faa" height="1.0" type="FAMIX.Class" level="3" color="0.20784313725490197 0.20784313725490197 0.34901960784313724" ringWidth="2.0">
+          <methods name="24" value="main" id="ID_a1accf990f30c8327aefa3f0d26602b3126f5fec" fqn="packageOne.Test.main()" size="10.0" signature="main(String[])" color="0.0784313725490196 0.5215686274509804 0.8" height="1.0"/>
+        </disks>
+        <disks name="25" value="packageTwo.packagethree" fqn="packageOne.packageTwo.packagethree" id="ID_e6eaa85d988ccdb20784352ac915323a70329d38" height="1.0" type="FAMIX.Namespace" level="3" ringWidth="2.0">
+          <disks name="10" value="test" fqn="packageOne.packageTwo.packagethree.test" id="ID_b1d4b49af5ab49f60a02a27372cda5ee97babe96" height="1.0" type="FAMIX.Class" level="4" color="0.20784313725490197 0.20784313725490197 0.34901960784313724" ringWidth="2.0"/>
+          <disks name="18" value="packagefour.packagefive" fqn="packageOne.packageTwo.packagethree.packagefour.packagefive" id="ID_17c9c5b38a6dbb71d36b64f4d5d33567e57a4490" height="1.0" type="FAMIX.Namespace" level="4" ringWidth="2.0">
+            <disks name="4" value="testFile" fqn="packageOne.packageTwo.packagethree.packagefour.packagefive.testFile" id="ID_878ff7b24bc0c2472c78a760653e8a7a7b76feae" height="1.0" type="FAMIX.Class" level="5" color="0.20784313725490197 0.20784313725490197 0.34901960784313724" ringWidth="2.0"/>
+          </disks>
+        </disks>
+      </disks>
+    </disks>
+  </document>
+</rd:Root>

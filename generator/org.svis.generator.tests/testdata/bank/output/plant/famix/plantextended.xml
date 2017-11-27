@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="ASCII"?>
+<plant:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:plant="http://www.svis.org/xtext/Plant" xsi:schemaLocation="http://www.svis.org/xtext/Plant java://org.svis.xtext.plant.PlantPackage">
+  <document>
+    <Entity xsi:type="plant:Area" name="208" value="bank" fqn="bank" id="ID_bdd240c8fe7174e6ac1cfdd5282de76eb7ad6815" type="FAMIX.Namespace" level="1" loc="68" height="3.5" width="108.0" length="169.0" texture="&lt;ImageTexture url='pics/ground.png' scale='false' />" shapeID="DEFAULT">
+      <position x="57.0" y="2.75" z="87.5"/>
+      <entities xsi:type="plant:Stem" name="186" value="Bank" fqn="bank.Bank" id="ID_527aa1c76ab5cca95e6dbfcea35a5d2d9f5d737f" type="FAMIX.Class" level="2" loc="68" dataCounter="7.0" methodCounter="11.0" height="35.0" width="3.0" length="3.0" color="&lt;Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />" shapeID="DEFAULT" headColor="&lt;Material diffuseColor='0.545 0.27 0.074' />" headTopPartColor="&lt;Material diffuseColor='1 1 0' />">
+        <position x="74.0" y="19.5" z="111.0"/>
+        <petals name="240" value="accounts" id="ID_378ed8adfffc2de1bfd23cb72bef113d8e2ac58b" fqn="bank.Bank.accounts" type="FAMIX.Attribute" currentPetalAngle="0.5236" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+          <position x="77.0" y="40.0" z="111.0"/>
+        </petals>
+        <petals name="17" value="bankBooks" id="ID_4ece969a895e6ec11e96612d2a45b1a0acc47942" fqn="bank.Bank.bankBooks" type="FAMIX.Attribute" currentPetalAngle="0.5236" angular="1.5708" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+          <position x="74.0" y="40.0" z="114.0"/>
+        </petals>
+        <petals name="29" value="bankName" id="ID_cc266d70c84afda695fa63dd8acbee9624f2092a" fqn="bank.Bank.bankName" type="FAMIX.Attribute" currentPetalAngle="-0.5236" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+          <position x="71.0" y="40.0" z="111.0"/>
+        </petals>
+        <petals name="91" value="businessCustomers" id="ID_e511c29ffb94450ed119cc73fc706d047e45800f" fqn="bank.Bank.businessCustomers" type="FAMIX.Attribute" currentPetalAngle="-0.5236" angular="1.5708" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+          <position x="74.0" y="40.0" z="108.0"/>
+        </petals>
+        <petals name="149" value="credits" id="ID_3eaddf68cce19ade935a238d2ed45cf76b27416e" fqn="bank.Bank.credits" type="FAMIX.Attribute" currentPetalAngle="0.5236" angular="0.7854" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+          <position x="76.4" y="40.0" z="113.4"/>
+        </petals>
+        <petals name="220" value="privateCustomers" id="ID_4862d1a456a6673eb3424c5f0c4248adf01a23cf" fqn="bank.Bank.privateCustomers" type="FAMIX.Attribute" currentPetalAngle="-0.5236" angular="-0.7854" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+          <position x="71.6" y="40.0" z="113.4"/>
+        </petals>
+        <petals name="50" value="transactions" id="ID_26f6f03c78d810161eae7a7ff5534fd588bc80af" fqn="bank.Bank.transactions" type="FAMIX.Attribute" currentPetalAngle="-0.5236" angular="0.7854" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+          <position x="71.6" y="40.0" z="108.6"/>
+        </petals>
+        <pollstems name="189" value="run" id="ID_19fdcf3c56394fcdd0c6179bad9ca8c87b4c8228" fqn="bank.Bank.run()" type="FAMIX.Method" loc="1" currentPollStemAngle="-0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+          <position x="74.3" y="40.0" z="111.0"/>
+          <ballPosition x="74.3" y="40.5" z="111.0"/>
+        </pollstems>
+        <pollstems name="221" value="getCredits" id="ID_3dbf08a296ea12b3d7da059af2c7343c26780d29" fqn="bank.Bank.getCredits()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+          <position x="74.0" y="40.0" z="111.31"/>
+          <ballPosition x="74.0" y="40.5" z="111.32"/>
+        </pollstems>
+        <pollstems name="88" value="getBusinessCustomers" id="ID_61c70ba0ef686b48fead0df0364453c5afb83618" fqn="bank.Bank.getBusinessCustomers()" type="FAMIX.Method" loc="2" currentPollStemAngle="0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+          <position x="73.68" y="40.0" z="111.0"/>
+          <ballPosition x="73.66" y="40.5" z="111.0"/>
+        </pollstems>
+        <pollstems name="201" value="setBankName" id="ID_f734e3036b271f56e1dbb9ca69f4aa920b2f98c2" fqn="bank.Bank.setBankName(java.lang.String)" type="FAMIX.Method" loc="2" currentPollStemAngle="0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+          <position x="74.0" y="40.0" z="110.67"/>
+          <ballPosition x="74.0" y="40.5" z="110.64"/>
+        </pollstems>
+        <pollstems name="218" value="getBankName" id="ID_86d6c1788619dad7ac26b6e15d350d143c7871dc" fqn="bank.Bank.getBankName()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" angular="0.7854" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+          <position x="74.272" y="40.0" z="111.272"/>
+          <ballPosition x="74.304" y="40.5" z="111.304"/>
+        </pollstems>
+        <pollstems name="74" value="getAccounts" id="ID_e73864b238f8e1eb24957648d47fb9c528dd02ff" fqn="bank.Bank.getAccounts()" type="FAMIX.Method" loc="2" currentPollStemAngle="0.05" angular="-0.7854" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+          <position x="73.72" y="40.0" z="111.28"/>
+          <ballPosition x="73.68" y="40.5" z="111.32"/>
+        </pollstems>
+        <pollstems name="14" value="getPrivateCustomers" id="ID_119adb8ccd123c522bc2026f3c4542a65094c714" fqn="bank.Bank.getPrivateCustomers()" type="FAMIX.Method" loc="2" currentPollStemAngle="0.05" angular="0.7854" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+          <position x="73.712" y="40.0" z="110.712"/>
+          <ballPosition x="73.664" y="40.5" z="110.664"/>
+        </pollstems>
+        <pollstems name="256" value="getTransactions" id="ID_994a3789160d04dfc93a3be914f46c023d4f9d20" fqn="bank.Bank.getTransactions()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" angular="-0.7854" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+          <position x="74.296" y="40.0" z="110.704"/>
+          <ballPosition x="74.352" y="40.5" z="110.648"/>
+        </pollstems>
+        <pollstems name="112" value="main" id="ID_e20ab372c6a66256b020d616f2f16f5283df0364" fqn="bank.Bank.main(java.lang.String)" type="FAMIX.Method" loc="6" currentPollStemAngle="-0.05" angular="0.3927" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+          <position x="74.38" y="40.0" z="111.19"/>
+          <ballPosition x="74.46" y="40.5" z="111.23"/>
+        </pollstems>
+        <pollstems name="71" value="getBankBooks" id="ID_a874289371d9f390c9f8b6daccf26dfb5a7ba1cf" fqn="bank.Bank.getBankBooks()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" angular="1.0472" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+          <position x="74.195" y="40.0" z="111.39"/>
+          <ballPosition x="74.24" y="40.5" z="111.48"/>
+        </pollstems>
+        <pollstems name="152" value="Bank" id="ID_4fc014fa15b9c096498e3b0c73e352b1b030875b" fqn="bank.Bank.Bank()" type="FAMIX.Method" loc="8" currentPollStemAngle="0.05" angular="-1.0472" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+          <position x="73.8" y="40.0" z="111.4"/>
+          <ballPosition x="73.75" y="40.5" z="111.5"/>
+        </pollstems>
+      </entities>
+      <entities xsi:type="plant:Area" name="326" value="customer" fqn="bank.customer" id="ID_4481fcdc97864a546f67c76536e0308a3058f75d" type="FAMIX.Namespace" level="2" loc="79" height="3.5" width="40.0" length="79.0" texture="&lt;ImageTexture url='pics/freeGrass.png' scale='false' />" shapeID="DEFAULT">
+        <position x="26.0" y="3.75" z="129.5"/>
+        <entities xsi:type="plant:Stem" name="287" value="BusinessCustomer" fqn="bank.customer.BusinessCustomer" id="ID_26f25e4da4c82dc2370f3bde0201e612dd88c04c" type="FAMIX.Class" level="3" loc="39" dataCounter="3.0" methodCounter="5.0" height="19.0" width="3.0" length="3.0" color="&lt;Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />" shapeID="DEFAULT" headColor="&lt;Material diffuseColor='0.545 0.27 0.074' />" headTopPartColor="&lt;Material diffuseColor='1 1 0' />">
+          <position x="25.0" y="12.5" z="150.0"/>
+          <petals name="205" value="accounts" id="ID_4d08a19b31cdb900d36f69756e8323ca65e9186b" fqn="bank.customer.BusinessCustomer.accounts" type="FAMIX.Attribute" currentPetalAngle="0.5236" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="28.0" y="25.0" z="150.0"/>
+          </petals>
+          <petals name="245" value="credits" id="ID_60e93a9ac46923cab21c9b4ca6bd6b4fdcd2d552" fqn="bank.customer.BusinessCustomer.credits" type="FAMIX.Attribute" currentPetalAngle="0.5236" angular="1.5708" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="25.0" y="25.0" z="153.0"/>
+          </petals>
+          <petals name="125" value="name" id="ID_11629cab6286835bcf468dd158c63816c6bc8b50" fqn="bank.customer.BusinessCustomer.name" type="FAMIX.Attribute" currentPetalAngle="-0.5236" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="22.0" y="25.0" z="150.0"/>
+          </petals>
+          <pollstems name="263" value="getName" id="ID_a3359592b6cf8cc9db859ab29c099f6bac4e7073" fqn="bank.customer.BusinessCustomer.getName()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="25.3" y="25.0" z="150.0"/>
+            <ballPosition x="25.3" y="25.5" z="150.0"/>
+          </pollstems>
+          <pollstems name="253" value="getCredits" id="ID_2ff793ad7485749918f01f511c989ceec094cfc5" fqn="bank.customer.BusinessCustomer.getCredits()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="25.0" y="25.0" z="150.31"/>
+            <ballPosition x="25.0" y="25.5" z="150.32"/>
+          </pollstems>
+          <pollstems name="124" value="setName" id="ID_d2955e64b6776b754f9d69f8f480a62f849584ca" fqn="bank.customer.BusinessCustomer.setName(java.lang.String)" type="FAMIX.Method" loc="2" currentPollStemAngle="0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="24.68" y="25.0" z="150.0"/>
+            <ballPosition x="24.66" y="25.5" z="150.0"/>
+          </pollstems>
+          <pollstems name="228" value="getAccounts" id="ID_10765258b141addc153f07acfb7ed26b00fe22fb" fqn="bank.customer.BusinessCustomer.getAccounts()" type="FAMIX.Method" loc="2" currentPollStemAngle="0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="25.0" y="25.0" z="149.67"/>
+            <ballPosition x="25.0" y="25.5" z="149.64"/>
+          </pollstems>
+          <pollstems name="222" value="BusinessCustomer" id="ID_4c3a759a929fdfc8754f03495aa0d746592eab6a" fqn="bank.customer.BusinessCustomer.BusinessCustomer(java.lang.String)" type="FAMIX.Method" loc="5" currentPollStemAngle="-0.05" angular="0.7854" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="25.272" y="25.0" z="150.272"/>
+            <ballPosition x="25.304" y="25.5" z="150.304"/>
+          </pollstems>
+        </entities>
+        <entities xsi:type="plant:Stem" name="82" value="PrivateCustomer" fqn="bank.customer.PrivateCustomer" id="ID_9fa088272bab165867bfaddcfbf58d6a7d5d45a2" type="FAMIX.Class" level="3" loc="40" dataCounter="4.0" methodCounter="6.0" height="22.0" width="3.0" length="3.0" color="&lt;Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />" shapeID="DEFAULT" headColor="&lt;Material diffuseColor='0.545 0.27 0.074' />" headTopPartColor="&lt;Material diffuseColor='1 1 0' />">
+          <position x="26.0" y="14.0" z="110.0"/>
+          <petals name="39" value="accounts" id="ID_4754aad0f8ca2e5adb39c097f3221eda4c82877d" fqn="bank.customer.PrivateCustomer.accounts" type="FAMIX.Attribute" currentPetalAngle="0.5236" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="29.0" y="28.0" z="110.0"/>
+          </petals>
+          <petals name="239" value="bankBook" id="ID_2f90fe03451cdda1f5129e993c409ab531118027" fqn="bank.customer.PrivateCustomer.bankBook" type="FAMIX.Attribute" currentPetalAngle="0.5236" angular="1.5708" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="26.0" y="28.0" z="113.0"/>
+          </petals>
+          <petals name="156" value="credits" id="ID_0166fed357196a09244efe558dbeb27e6e0d646b" fqn="bank.customer.PrivateCustomer.credits" type="FAMIX.Attribute" currentPetalAngle="-0.5236" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="23.0" y="28.0" z="110.0"/>
+          </petals>
+          <petals name="69" value="name" id="ID_0cf4af5bed915ef9b74c93b2c50852c21f2d5364" fqn="bank.customer.PrivateCustomer.name" type="FAMIX.Attribute" currentPetalAngle="-0.5236" angular="1.5708" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="26.0" y="28.0" z="107.0"/>
+          </petals>
+          <pollstems name="86" value="getAccounts" id="ID_01de56af912219c3217ee6d97c38f3731fb4052c" fqn="bank.customer.PrivateCustomer.getAccounts()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="26.3" y="28.0" z="110.0"/>
+            <ballPosition x="26.3" y="28.5" z="110.0"/>
+          </pollstems>
+          <pollstems name="106" value="setName" id="ID_a9a2c0261fbc4981279fc288ed89617ba4f5acf8" fqn="bank.customer.PrivateCustomer.setName(java.lang.String)" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="26.0" y="28.0" z="110.31"/>
+            <ballPosition x="26.0" y="28.5" z="110.32"/>
+          </pollstems>
+          <pollstems name="38" value="getCredits" id="ID_ca33f0111d29b1cc3827500605a2db32311317ce" fqn="bank.customer.PrivateCustomer.getCredits()" type="FAMIX.Method" loc="2" currentPollStemAngle="0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="25.68" y="28.0" z="110.0"/>
+            <ballPosition x="25.66" y="28.5" z="110.0"/>
+          </pollstems>
+          <pollstems name="254" value="getBankBook" id="ID_ebace4173ecbaaa72dafda3332424aa4a233d1fc" fqn="bank.customer.PrivateCustomer.getBankBook()" type="FAMIX.Method" loc="2" currentPollStemAngle="0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="26.0" y="28.0" z="109.67"/>
+            <ballPosition x="26.0" y="28.5" z="109.64"/>
+          </pollstems>
+          <pollstems name="135" value="getName" id="ID_fc94cf011272f8e738d5600f64861a4a0d2cc6d2" fqn="bank.customer.PrivateCustomer.getName()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" angular="0.7854" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="26.272" y="28.0" z="110.272"/>
+            <ballPosition x="26.304" y="28.5" z="110.304"/>
+          </pollstems>
+          <pollstems name="237" value="PrivateCustomer" id="ID_30d036adadb7267f6f05ca698d5ce93e8bc0a42f" fqn="bank.customer.PrivateCustomer.PrivateCustomer(java.lang.String)" type="FAMIX.Method" loc="7" currentPollStemAngle="0.05" angular="-0.7854" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="25.72" y="28.0" z="110.28"/>
+            <ballPosition x="25.68" y="28.5" z="110.32"/>
+          </pollstems>
+        </entities>
+      </entities>
+      <entities xsi:type="plant:Area" name="319" value="products" fqn="bank.products" id="ID_052028080c3d64381f56397d59113102bf4e5921" type="FAMIX.Namespace" level="2" loc="93" height="3.5" width="102.0" length="77.0" texture="&lt;ImageTexture url='pics/freeGrass.png' scale='false' />" shapeID="DEFAULT">
+        <position x="57.0" y="3.75" z="44.5"/>
+        <entities xsi:type="plant:Stem" name="199" value="AbstractProduct" fqn="bank.products.AbstractProduct" id="ID_ecbec7f0190fc1c903a87797d35427dc7a1f240b" type="FAMIX.Class" level="3" loc="30" dataCounter="4.0" methodCounter="6.0" height="22.0" width="3.0" length="3.0" color="&lt;Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />" shapeID="DEFAULT" headColor="&lt;Material diffuseColor='0.545 0.27 0.074' />" headTopPartColor="&lt;Material diffuseColor='1 1 0' />">
+          <position x="26.0" y="14.0" z="26.0"/>
+          <petals name="90" value="balance" id="ID_dce8b98f162544734c5aacebb0a3731ee104eb77" fqn="bank.products.AbstractProduct.balance" type="FAMIX.Attribute" currentPetalAngle="0.5236" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="29.0" y="28.0" z="26.0"/>
+          </petals>
+          <petals name="314" value="executedTransactions" id="ID_c7bc3b30c85e34e537f5ada76dafa4bb3f77646b" fqn="bank.products.AbstractProduct.executedTransactions" type="FAMIX.Attribute" currentPetalAngle="0.5236" angular="1.5708" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="26.0" y="28.0" z="29.0"/>
+          </petals>
+          <petals name="232" value="inTransaction" id="ID_d000974f136a59142bde8224bcef9590d038eb8a" fqn="bank.products.AbstractProduct.inTransaction" type="FAMIX.Attribute" currentPetalAngle="-0.5236" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="23.0" y="28.0" z="26.0"/>
+          </petals>
+          <petals name="128" value="productNumber" id="ID_37834fec4533797c12daa8509eb11587547caac1" fqn="bank.products.AbstractProduct.productNumber" type="FAMIX.Attribute" currentPetalAngle="-0.5236" angular="1.5708" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="26.0" y="28.0" z="23.0"/>
+          </petals>
+          <pollstems name="73" value="transaction" id="ID_78cd3ffe06ad51757c7facd4bbfdd3130313e03b" fqn="bank.products.AbstractProduct.transaction(bank.products.Transaction)" type="FAMIX.Method" currentPollStemAngle="-0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="26.3" y="28.0" z="26.0"/>
+            <ballPosition x="26.3" y="28.5" z="26.0"/>
+          </pollstems>
+          <pollstems name="42" value="getProductNumber" id="ID_ffec14a7831c9af6e99a59101779abcfbc7be97f" fqn="bank.products.AbstractProduct.getProductNumber()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="26.0" y="28.0" z="26.31"/>
+            <ballPosition x="26.0" y="28.5" z="26.32"/>
+          </pollstems>
+          <pollstems name="10" value="getBalance" id="ID_c0536af5045f9030acfa718623dec662d3f00112" fqn="bank.products.AbstractProduct.getBalance()" type="FAMIX.Method" loc="2" currentPollStemAngle="0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="25.68" y="28.0" z="26.0"/>
+            <ballPosition x="25.66" y="28.5" z="26.0"/>
+          </pollstems>
+          <pollstems name="264" value="getExecutedTransactions" id="ID_500db1187a5b547cb7d799c03f327421766bfc2a" fqn="bank.products.AbstractProduct.getExecutedTransactions()" type="FAMIX.Method" loc="2" currentPollStemAngle="0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="26.0" y="28.0" z="25.67"/>
+            <ballPosition x="26.0" y="28.5" z="25.64"/>
+          </pollstems>
+          <pollstems name="316" value="isInTransaction" id="ID_a113953a4fd76dc7bd442656a08af378baed6667" fqn="bank.products.AbstractProduct.isInTransaction()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" angular="0.7854" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="26.272" y="28.0" z="26.272"/>
+            <ballPosition x="26.304" y="28.5" z="26.304"/>
+          </pollstems>
+          <pollstems name="13" value="executeTransaction" id="ID_61658aef236e200a9ffa30030e7cb0549bef0d4f" fqn="bank.products.AbstractProduct.executeTransaction(bank.products.Transaction)" type="FAMIX.Method" loc="4" currentPollStemAngle="0.05" angular="-0.7854" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="25.72" y="28.0" z="26.28"/>
+            <ballPosition x="25.68" y="28.5" z="26.32"/>
+          </pollstems>
+        </entities>
+        <entities xsi:type="plant:Stem" name="22" value="Account" fqn="bank.products.Account" id="ID_e14c10820a526fde0ea0beee073b947e1ca67a4a" type="FAMIX.Class" level="3" loc="14" methodCounter="2.0" height="10.0" width="3.0" length="3.0" color="&lt;Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />" shapeID="DEFAULT" headColor="&lt;Material diffuseColor='0.545 0.27 0.074' />" headTopPartColor="&lt;Material diffuseColor='1 1 0' />">
+          <position x="92.0" y="8.0" z="63.0"/>
+          <pollstems name="53" value="transaction" id="ID_ef646766f217c78d4a7ce6bd849dc15f9cc6f676" fqn="bank.products.Account.transaction(bank.products.Transaction)" type="FAMIX.Method" loc="4" currentPollStemAngle="-0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="92.3" y="16.0" z="63.0"/>
+            <ballPosition x="92.3" y="16.5" z="63.0"/>
+          </pollstems>
+          <pollstems name="184" value="Account" id="ID_feafc0fa0ada80b19459ccf9116eb24e8a40f9a7" fqn="bank.products.Account.Account(long)" type="FAMIX.Method" loc="3" currentPollStemAngle="-0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="92.0" y="16.0" z="63.31"/>
+            <ballPosition x="92.0" y="16.5" z="63.32"/>
+          </pollstems>
+        </entities>
+        <entities xsi:type="plant:Stem" name="62" value="BankBook" fqn="bank.products.BankBook" id="ID_9e346826c780b8b1975dc8906296cc47974ccd4e" type="FAMIX.Class" level="3" loc="13" methodCounter="2.0" height="10.0" width="3.0" length="3.0" color="&lt;Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />" shapeID="DEFAULT" headColor="&lt;Material diffuseColor='0.545 0.27 0.074' />" headTopPartColor="&lt;Material diffuseColor='1 1 0' />">
+          <position x="59.0" y="8.0" z="63.0"/>
+          <pollstems name="55" value="transaction" id="ID_9ede89834e464def4f7d991a98d3117a8368f701" fqn="bank.products.BankBook.transaction(bank.products.Transaction)" type="FAMIX.Method" loc="4" currentPollStemAngle="-0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="59.3" y="16.0" z="63.0"/>
+            <ballPosition x="59.3" y="16.5" z="63.0"/>
+          </pollstems>
+          <pollstems name="76" value="BankBook" id="ID_b9fc03fe668187e6e2a0df760fec7a785ba7be12" fqn="bank.products.BankBook.BankBook(long)" type="FAMIX.Method" loc="3" currentPollStemAngle="-0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="59.0" y="16.0" z="63.31"/>
+            <ballPosition x="59.0" y="16.5" z="63.32"/>
+          </pollstems>
+        </entities>
+        <entities xsi:type="plant:Stem" name="94" value="Credit" fqn="bank.products.Credit" id="ID_fba940eea4ca7f9002bc529bbb0cbc8fc0423985" type="FAMIX.Class" level="3" loc="15" methodCounter="2.0" height="10.0" width="3.0" length="3.0" color="&lt;Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />" shapeID="DEFAULT" headColor="&lt;Material diffuseColor='0.545 0.27 0.074' />" headTopPartColor="&lt;Material diffuseColor='1 1 0' />">
+          <position x="63.0" y="8.0" z="22.0"/>
+          <pollstems name="26" value="transaction" id="ID_17bd18bd602e8e22b6c1db22c5d32a02542ed1ed" fqn="bank.products.Credit.transaction(bank.products.Transaction)" type="FAMIX.Method" loc="4" currentPollStemAngle="-0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="63.3" y="16.0" z="22.0"/>
+            <ballPosition x="63.3" y="16.5" z="22.0"/>
+          </pollstems>
+          <pollstems name="72" value="Credit" id="ID_862a6bda25d2fa6e5fd13100124371357cb1d769" fqn="bank.products.Credit.Credit(long)" type="FAMIX.Method" loc="3" currentPollStemAngle="-0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="63.0" y="16.0" z="22.31"/>
+            <ballPosition x="63.0" y="16.5" z="22.32"/>
+          </pollstems>
+        </entities>
+        <entities xsi:type="plant:Stem" name="209" value="Transaction" fqn="bank.products.Transaction" id="ID_841936e6f873f49a85e18a4a94df5d7dfe591edf" type="FAMIX.Class" level="3" loc="21" dataCounter="2.0" methodCounter="4.0" height="16.0" width="3.0" length="3.0" color="&lt;Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />" shapeID="DEFAULT" headColor="&lt;Material diffuseColor='0.545 0.27 0.074' />" headTopPartColor="&lt;Material diffuseColor='1 1 0' />">
+          <position x="24.0" y="11.0" z="65.0"/>
+          <petals name="303" value="firstProduct" id="ID_772a992774d132a9f8417a602abf7174e7ef4a94" fqn="bank.products.Transaction.firstProduct" type="FAMIX.Attribute" currentPetalAngle="0.5236" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="27.0" y="22.0" z="65.0"/>
+          </petals>
+          <petals name="65" value="secondProduct" id="ID_dbe90bb7628212f56ef88f4a152bc0fe402f350b" fqn="bank.products.Transaction.secondProduct" type="FAMIX.Attribute" currentPetalAngle="0.5236" angular="1.5708" texture="&lt;ImageTexture url='pics/lilacPetal.png' scale='false' />" shapeID="REALITIC_PETAL">
+            <position x="24.0" y="22.0" z="68.0"/>
+          </petals>
+          <pollstems name="89" value="execute" id="ID_647ebb197e6830e3aa6b55b554cfe16547b5d634" fqn="bank.products.Transaction.execute()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="24.3" y="22.0" z="65.0"/>
+            <ballPosition x="24.3" y="22.5" z="65.0"/>
+          </pollstems>
+          <pollstems name="278" value="getSecondProduct" id="ID_b855b93bf7c9e35b15e205e2fa18853a05d54af0" fqn="bank.products.Transaction.getSecondProduct()" type="FAMIX.Method" loc="2" currentPollStemAngle="-0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="24.0" y="22.0" z="65.31"/>
+            <ballPosition x="24.0" y="22.5" z="65.32"/>
+          </pollstems>
+          <pollstems name="56" value="getFirstProduct" id="ID_c01f09c13775d8d9ba1a4e431bdd87296d4e8a52" fqn="bank.products.Transaction.getFirstProduct()" type="FAMIX.Method" loc="2" currentPollStemAngle="0.05" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="23.68" y="22.0" z="65.0"/>
+            <ballPosition x="23.66" y="22.5" z="65.0"/>
+          </pollstems>
+          <pollstems name="308" value="Transaction" id="ID_bbe92ce041d250f5715b879320bc543d0054e9f7" fqn="bank.products.Transaction.Transaction(int,bank.products.AbstractProduct,bank.products.AbstractProduct)" type="FAMIX.Method" loc="3" currentPollStemAngle="0.05" angular="1.5708" color="&lt;Material diffuseColor='0 1 0' />" ballColor="&lt;Material diffuseColor='1 1 0' />" shapeID="DEFAULT">
+            <position x="24.0" y="22.0" z="64.67"/>
+            <ballPosition x="24.0" y="22.5" z="64.64"/>
+          </pollstems>
+        </entities>
+      </entities>
+    </Entity>
+  </document>
+</plant:Root>

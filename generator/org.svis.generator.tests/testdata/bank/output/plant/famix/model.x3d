@@ -1,0 +1,1894 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.3//EN" "http://www.web3d.org/specifications/x3d-3.3.dtd">
+<X3D profile='Immersive' version='3.3' xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.3.xsd'>
+    <head>
+        <meta content='model.x3d' name='title'/>
+        <meta content='SVIS-Generator' name='creator'/>
+	</head>
+    <ContextSetup zWriteTrans='false'/>
+<Scene>
+<Group DEF='ID_bdd240c8fe7174e6ac1cfdd5282de76eb7ad6815'>
+	<Transform translation='57.0 2.75 87.5'>
+		<Shape>
+			<Box size='108.0 3.5 169.0'></Box>
+			<Appearance>
+				<ImageTexture url='pics/ground.png' scale='false' />
+			</Appearance>
+		</Shape>
+	</Transform>
+</Group>
+<!-- stem -->
+<transform DEF='ID_527aa1c76ab5cca95e6dbfcea35a5d2d9f5d737f'>
+	<Transform translation='74.0 19.5 111.0'>
+		<Shape>
+			
+			<Appearance>
+				<Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />
+			</Appearance>
+			<Box size='3.0 35.0 3.0'></Box>
+		</Shape>
+	</Transform>
+
+	<!-- Head/Kegel/Cone -->
+	<transform DEF='ID_527aa1c76ab5cca95e6dbfcea35a5d2d9f5d737f100' 
+		translation='74.0 37.0 111.0' 
+			scale='2 2.0 2' 
+			rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='0.545 0.27 0.074' />
+			</Appearance>
+			<cone />
+		</Shape>
+	</transform>
+
+	<!-- plant head top part -->
+	<transform DEF='ID_527aa1c76ab5cca95e6dbfcea35a5d2d9f5d737f0'
+		translation='74.0 39.0 111.0»' 
+		rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='1 1 0' />
+			</Appearance>
+			<Cylinder height='0.5' radius='2'/>
+		</Shape>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_378ed8adfffc2de1bfd23cb72bef113d8e2ac58b' translation='77.0 40.0 111.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 0.0'>
+		<transform rotation='0 1 0 0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_4ece969a895e6ec11e96612d2a45b1a0acc47942' translation='74.0 40.0 114.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 1.5708'>
+		<transform rotation='0 1 0 0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_cc266d70c84afda695fa63dd8acbee9624f2092a' translation='71.0 40.0 111.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 0.0'>
+		<transform rotation='0 1 0 -0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_e511c29ffb94450ed119cc73fc706d047e45800f' translation='74.0 40.0 108.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 1.5708'>
+		<transform rotation='0 1 0 -0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_3eaddf68cce19ade935a238d2ed45cf76b27416e' translation='76.4 40.0 113.4' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 0.7854'>
+		<transform rotation='0 1 0 0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_4862d1a456a6673eb3424c5f0c4248adf01a23cf' translation='71.6 40.0 113.4' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 -0.7854'>
+		<transform rotation='0 1 0 -0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_26f6f03c78d810161eae7a7ff5534fd588bc80af' translation='71.6 40.0 108.6' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 0.7854'>
+		<transform rotation='0 1 0 -0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_19fdcf3c56394fcdd0c6179bad9ca8c87b4c82280' 
+translation='74.3 40.0 111.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_19fdcf3c56394fcdd0c6179bad9ca8c87b4c8228' 
+translation='74.3 41.5 111.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_3dbf08a296ea12b3d7da059af2c7343c26780d291' 
+translation='74.0 40.0 111.31' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_3dbf08a296ea12b3d7da059af2c7343c26780d29' 
+translation='74.0 41.5 111.32' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_61c70ba0ef686b48fead0df0364453c5afb836182' 
+translation='73.68 40.0 111.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_61c70ba0ef686b48fead0df0364453c5afb83618' 
+translation='73.66 41.5 111.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_f734e3036b271f56e1dbb9ca69f4aa920b2f98c23' 
+translation='74.0 40.0 110.67' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_f734e3036b271f56e1dbb9ca69f4aa920b2f98c2' 
+translation='74.0 41.5 110.64' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_86d6c1788619dad7ac26b6e15d350d143c7871dc4' 
+translation='74.272 40.0 111.272' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.7854'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_86d6c1788619dad7ac26b6e15d350d143c7871dc' 
+translation='74.304 41.5 111.304' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_e73864b238f8e1eb24957648d47fb9c528dd02ff5' 
+translation='73.72 40.0 111.28' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.7854'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_e73864b238f8e1eb24957648d47fb9c528dd02ff' 
+translation='73.68 41.5 111.32' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_119adb8ccd123c522bc2026f3c4542a65094c7146' 
+translation='73.712 40.0 110.712' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.7854'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_119adb8ccd123c522bc2026f3c4542a65094c714' 
+translation='73.664 41.5 110.664' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_994a3789160d04dfc93a3be914f46c023d4f9d207' 
+translation='74.296 40.0 110.704' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.7854'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_994a3789160d04dfc93a3be914f46c023d4f9d20' 
+translation='74.352 41.5 110.648' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_e20ab372c6a66256b020d616f2f16f5283df03648' 
+translation='74.38 40.0 111.19' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.3927'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_e20ab372c6a66256b020d616f2f16f5283df0364' 
+translation='74.46 41.5 111.23' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_a874289371d9f390c9f8b6daccf26dfb5a7ba1cf9' 
+translation='74.195 40.0 111.39' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.0472'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_a874289371d9f390c9f8b6daccf26dfb5a7ba1cf' 
+translation='74.24 41.5 111.48' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_4fc014fa15b9c096498e3b0c73e352b1b030875b10' 
+translation='73.8 40.0 111.4' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -1.0472'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_4fc014fa15b9c096498e3b0c73e352b1b030875b' 
+translation='73.75 41.5 111.5' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<Group DEF='ID_4481fcdc97864a546f67c76536e0308a3058f75d'>
+	<Transform translation='26.0 3.75 129.5'>
+		<Shape>
+			<Box size='40.0 3.5 79.0'></Box>
+			<Appearance>
+				<ImageTexture url='pics/freeGrass.png' scale='false' />
+			</Appearance>
+		</Shape>
+	</Transform>
+</Group>
+<!-- stem -->
+<transform DEF='ID_26f25e4da4c82dc2370f3bde0201e612dd88c04c'>
+	<Transform translation='25.0 12.5 150.0'>
+		<Shape>
+			
+			<Appearance>
+				<Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />
+			</Appearance>
+			<Box size='3.0 19.0 3.0'></Box>
+		</Shape>
+	</Transform>
+
+	<!-- Head/Kegel/Cone -->
+	<transform DEF='ID_26f25e4da4c82dc2370f3bde0201e612dd88c04c101' 
+		translation='25.0 22.0 150.0' 
+			scale='2 2.0 2' 
+			rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='0.545 0.27 0.074' />
+			</Appearance>
+			<cone />
+		</Shape>
+	</transform>
+
+	<!-- plant head top part -->
+	<transform DEF='ID_26f25e4da4c82dc2370f3bde0201e612dd88c04c1'
+		translation='25.0 24.0 150.0»' 
+		rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='1 1 0' />
+			</Appearance>
+			<Cylinder height='0.5' radius='2'/>
+		</Shape>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_4d08a19b31cdb900d36f69756e8323ca65e9186b' translation='28.0 25.0 150.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 0.0'>
+		<transform rotation='0 1 0 0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_60e93a9ac46923cab21c9b4ca6bd6b4fdcd2d552' translation='25.0 25.0 153.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 1.5708'>
+		<transform rotation='0 1 0 0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_11629cab6286835bcf468dd158c63816c6bc8b50' translation='22.0 25.0 150.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 0.0'>
+		<transform rotation='0 1 0 -0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_a3359592b6cf8cc9db859ab29c099f6bac4e707311' 
+translation='25.3 25.0 150.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_a3359592b6cf8cc9db859ab29c099f6bac4e7073' 
+translation='25.3 26.5 150.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_2ff793ad7485749918f01f511c989ceec094cfc512' 
+translation='25.0 25.0 150.31' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_2ff793ad7485749918f01f511c989ceec094cfc5' 
+translation='25.0 26.5 150.32' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_d2955e64b6776b754f9d69f8f480a62f849584ca13' 
+translation='24.68 25.0 150.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_d2955e64b6776b754f9d69f8f480a62f849584ca' 
+translation='24.66 26.5 150.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_10765258b141addc153f07acfb7ed26b00fe22fb14' 
+translation='25.0 25.0 149.67' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_10765258b141addc153f07acfb7ed26b00fe22fb' 
+translation='25.0 26.5 149.64' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_4c3a759a929fdfc8754f03495aa0d746592eab6a15' 
+translation='25.272 25.0 150.272' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.7854'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_4c3a759a929fdfc8754f03495aa0d746592eab6a' 
+translation='25.304 26.5 150.304' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- stem -->
+<transform DEF='ID_9fa088272bab165867bfaddcfbf58d6a7d5d45a2'>
+	<Transform translation='26.0 14.0 110.0'>
+		<Shape>
+			
+			<Appearance>
+				<Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />
+			</Appearance>
+			<Box size='3.0 22.0 3.0'></Box>
+		</Shape>
+	</Transform>
+
+	<!-- Head/Kegel/Cone -->
+	<transform DEF='ID_9fa088272bab165867bfaddcfbf58d6a7d5d45a2102' 
+		translation='26.0 25.0 110.0' 
+			scale='2 2.0 2' 
+			rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='0.545 0.27 0.074' />
+			</Appearance>
+			<cone />
+		</Shape>
+	</transform>
+
+	<!-- plant head top part -->
+	<transform DEF='ID_9fa088272bab165867bfaddcfbf58d6a7d5d45a22'
+		translation='26.0 27.0 110.0»' 
+		rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='1 1 0' />
+			</Appearance>
+			<Cylinder height='0.5' radius='2'/>
+		</Shape>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_4754aad0f8ca2e5adb39c097f3221eda4c82877d' translation='29.0 28.0 110.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 0.0'>
+		<transform rotation='0 1 0 0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_2f90fe03451cdda1f5129e993c409ab531118027' translation='26.0 28.0 113.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 1.5708'>
+		<transform rotation='0 1 0 0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_0166fed357196a09244efe558dbeb27e6e0d646b' translation='23.0 28.0 110.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 0.0'>
+		<transform rotation='0 1 0 -0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_0cf4af5bed915ef9b74c93b2c50852c21f2d5364' translation='26.0 28.0 107.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 1.5708'>
+		<transform rotation='0 1 0 -0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_01de56af912219c3217ee6d97c38f3731fb4052c16' 
+translation='26.3 28.0 110.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_01de56af912219c3217ee6d97c38f3731fb4052c' 
+translation='26.3 29.5 110.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_a9a2c0261fbc4981279fc288ed89617ba4f5acf817' 
+translation='26.0 28.0 110.31' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_a9a2c0261fbc4981279fc288ed89617ba4f5acf8' 
+translation='26.0 29.5 110.32' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_ca33f0111d29b1cc3827500605a2db32311317ce18' 
+translation='25.68 28.0 110.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_ca33f0111d29b1cc3827500605a2db32311317ce' 
+translation='25.66 29.5 110.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_ebace4173ecbaaa72dafda3332424aa4a233d1fc19' 
+translation='26.0 28.0 109.67' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_ebace4173ecbaaa72dafda3332424aa4a233d1fc' 
+translation='26.0 29.5 109.64' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_fc94cf011272f8e738d5600f64861a4a0d2cc6d220' 
+translation='26.272 28.0 110.272' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.7854'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_fc94cf011272f8e738d5600f64861a4a0d2cc6d2' 
+translation='26.304 29.5 110.304' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_30d036adadb7267f6f05ca698d5ce93e8bc0a42f21' 
+translation='25.72 28.0 110.28' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.7854'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_30d036adadb7267f6f05ca698d5ce93e8bc0a42f' 
+translation='25.68 29.5 110.32' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<Group DEF='ID_052028080c3d64381f56397d59113102bf4e5921'>
+	<Transform translation='57.0 3.75 44.5'>
+		<Shape>
+			<Box size='102.0 3.5 77.0'></Box>
+			<Appearance>
+				<ImageTexture url='pics/freeGrass.png' scale='false' />
+			</Appearance>
+		</Shape>
+	</Transform>
+</Group>
+<!-- stem -->
+<transform DEF='ID_ecbec7f0190fc1c903a87797d35427dc7a1f240b'>
+	<Transform translation='26.0 14.0 26.0'>
+		<Shape>
+			
+			<Appearance>
+				<Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />
+			</Appearance>
+			<Box size='3.0 22.0 3.0'></Box>
+		</Shape>
+	</Transform>
+
+	<!-- Head/Kegel/Cone -->
+	<transform DEF='ID_ecbec7f0190fc1c903a87797d35427dc7a1f240b103' 
+		translation='26.0 25.0 26.0' 
+			scale='2 2.0 2' 
+			rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='0.545 0.27 0.074' />
+			</Appearance>
+			<cone />
+		</Shape>
+	</transform>
+
+	<!-- plant head top part -->
+	<transform DEF='ID_ecbec7f0190fc1c903a87797d35427dc7a1f240b3'
+		translation='26.0 27.0 26.0»' 
+		rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='1 1 0' />
+			</Appearance>
+			<Cylinder height='0.5' radius='2'/>
+		</Shape>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_dce8b98f162544734c5aacebb0a3731ee104eb77' translation='29.0 28.0 26.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 0.0'>
+		<transform rotation='0 1 0 0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_c7bc3b30c85e34e537f5ada76dafa4bb3f77646b' translation='26.0 28.0 29.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 1.5708'>
+		<transform rotation='0 1 0 0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_d000974f136a59142bde8224bcef9590d038eb8a' translation='23.0 28.0 26.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 0.0'>
+		<transform rotation='0 1 0 -0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_37834fec4533797c12daa8509eb11587547caac1' translation='26.0 28.0 23.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 1.5708'>
+		<transform rotation='0 1 0 -0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_78cd3ffe06ad51757c7facd4bbfdd3130313e03b22' 
+translation='26.3 28.0 26.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_78cd3ffe06ad51757c7facd4bbfdd3130313e03b' 
+translation='26.3 29.5 26.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_ffec14a7831c9af6e99a59101779abcfbc7be97f23' 
+translation='26.0 28.0 26.31' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_ffec14a7831c9af6e99a59101779abcfbc7be97f' 
+translation='26.0 29.5 26.32' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_c0536af5045f9030acfa718623dec662d3f0011224' 
+translation='25.68 28.0 26.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_c0536af5045f9030acfa718623dec662d3f00112' 
+translation='25.66 29.5 26.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_500db1187a5b547cb7d799c03f327421766bfc2a25' 
+translation='26.0 28.0 25.67' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_500db1187a5b547cb7d799c03f327421766bfc2a' 
+translation='26.0 29.5 25.64' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_a113953a4fd76dc7bd442656a08af378baed666726' 
+translation='26.272 28.0 26.272' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.7854'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_a113953a4fd76dc7bd442656a08af378baed6667' 
+translation='26.304 29.5 26.304' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_61658aef236e200a9ffa30030e7cb0549bef0d4f27' 
+translation='25.72 28.0 26.28' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.7854'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_61658aef236e200a9ffa30030e7cb0549bef0d4f' 
+translation='25.68 29.5 26.32' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- stem -->
+<transform DEF='ID_e14c10820a526fde0ea0beee073b947e1ca67a4a'>
+	<Transform translation='92.0 8.0 63.0'>
+		<Shape>
+			
+			<Appearance>
+				<Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />
+			</Appearance>
+			<Box size='3.0 10.0 3.0'></Box>
+		</Shape>
+	</Transform>
+
+	<!-- Head/Kegel/Cone -->
+	<transform DEF='ID_e14c10820a526fde0ea0beee073b947e1ca67a4a104' 
+		translation='92.0 13.0 63.0' 
+			scale='2 2.0 2' 
+			rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='0.545 0.27 0.074' />
+			</Appearance>
+			<cone />
+		</Shape>
+	</transform>
+
+	<!-- plant head top part -->
+	<transform DEF='ID_e14c10820a526fde0ea0beee073b947e1ca67a4a4'
+		translation='92.0 15.0 63.0»' 
+		rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='1 1 0' />
+			</Appearance>
+			<Cylinder height='0.5' radius='2'/>
+		</Shape>
+	</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_ef646766f217c78d4a7ce6bd849dc15f9cc6f67628' 
+translation='92.3 16.0 63.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_ef646766f217c78d4a7ce6bd849dc15f9cc6f676' 
+translation='92.3 17.5 63.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_feafc0fa0ada80b19459ccf9116eb24e8a40f9a729' 
+translation='92.0 16.0 63.31' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_feafc0fa0ada80b19459ccf9116eb24e8a40f9a7' 
+translation='92.0 17.5 63.32' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- stem -->
+<transform DEF='ID_9e346826c780b8b1975dc8906296cc47974ccd4e'>
+	<Transform translation='59.0 8.0 63.0'>
+		<Shape>
+			
+			<Appearance>
+				<Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />
+			</Appearance>
+			<Box size='3.0 10.0 3.0'></Box>
+		</Shape>
+	</Transform>
+
+	<!-- Head/Kegel/Cone -->
+	<transform DEF='ID_9e346826c780b8b1975dc8906296cc47974ccd4e105' 
+		translation='59.0 13.0 63.0' 
+			scale='2 2.0 2' 
+			rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='0.545 0.27 0.074' />
+			</Appearance>
+			<cone />
+		</Shape>
+	</transform>
+
+	<!-- plant head top part -->
+	<transform DEF='ID_9e346826c780b8b1975dc8906296cc47974ccd4e5'
+		translation='59.0 15.0 63.0»' 
+		rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='1 1 0' />
+			</Appearance>
+			<Cylinder height='0.5' radius='2'/>
+		</Shape>
+	</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_9ede89834e464def4f7d991a98d3117a8368f70130' 
+translation='59.3 16.0 63.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_9ede89834e464def4f7d991a98d3117a8368f701' 
+translation='59.3 17.5 63.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_b9fc03fe668187e6e2a0df760fec7a785ba7be1231' 
+translation='59.0 16.0 63.31' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_b9fc03fe668187e6e2a0df760fec7a785ba7be12' 
+translation='59.0 17.5 63.32' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- stem -->
+<transform DEF='ID_fba940eea4ca7f9002bc529bbb0cbc8fc0423985'>
+	<Transform translation='63.0 8.0 22.0'>
+		<Shape>
+			
+			<Appearance>
+				<Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />
+			</Appearance>
+			<Box size='3.0 10.0 3.0'></Box>
+		</Shape>
+	</Transform>
+
+	<!-- Head/Kegel/Cone -->
+	<transform DEF='ID_fba940eea4ca7f9002bc529bbb0cbc8fc0423985106' 
+		translation='63.0 13.0 22.0' 
+			scale='2 2.0 2' 
+			rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='0.545 0.27 0.074' />
+			</Appearance>
+			<cone />
+		</Shape>
+	</transform>
+
+	<!-- plant head top part -->
+	<transform DEF='ID_fba940eea4ca7f9002bc529bbb0cbc8fc04239856'
+		translation='63.0 15.0 22.0»' 
+		rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='1 1 0' />
+			</Appearance>
+			<Cylinder height='0.5' radius='2'/>
+		</Shape>
+	</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_17bd18bd602e8e22b6c1db22c5d32a02542ed1ed32' 
+translation='63.3 16.0 22.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_17bd18bd602e8e22b6c1db22c5d32a02542ed1ed' 
+translation='63.3 17.5 22.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_862a6bda25d2fa6e5fd13100124371357cb1d76933' 
+translation='63.0 16.0 22.31' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_862a6bda25d2fa6e5fd13100124371357cb1d769' 
+translation='63.0 17.5 22.32' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- stem -->
+<transform DEF='ID_841936e6f873f49a85e18a4a94df5d7dfe591edf'>
+	<Transform translation='24.0 11.0 65.0'>
+		<Shape>
+			
+			<Appearance>
+				<Material diffuseColor='0.20392156862745098 0.4 0.23137254901960785' />
+			</Appearance>
+			<Box size='3.0 16.0 3.0'></Box>
+		</Shape>
+	</Transform>
+
+	<!-- Head/Kegel/Cone -->
+	<transform DEF='ID_841936e6f873f49a85e18a4a94df5d7dfe591edf107' 
+		translation='24.0 19.0 65.0' 
+			scale='2 2.0 2' 
+			rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='0.545 0.27 0.074' />
+			</Appearance>
+			<cone />
+		</Shape>
+	</transform>
+
+	<!-- plant head top part -->
+	<transform DEF='ID_841936e6f873f49a85e18a4a94df5d7dfe591edf7'
+		translation='24.0 21.0 65.0»' 
+		rotation='1 0 0 3.14'>
+			<Shape>
+			<Appearance>
+				<Material diffuseColor='1 1 0' />
+			</Appearance>
+			<Cylinder height='0.5' radius='2'/>
+		</Shape>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_772a992774d132a9f8417a602abf7174e7ef4a94' translation='27.0 22.0 65.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 0.0'>
+		<transform rotation='0 1 0 0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pental -->
+<transform DEF='ID_dbe90bb7628212f56ef88f4a152bc0fe402f350b' translation='24.0 22.0 68.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+	<transform rotation='0 0 1 1.5708'>
+		<transform rotation='0 1 0 0.5236'>
+			<transform rotation='1 0 0 1.57' scale="4 2 1" > 
+			<Shape>				
+				<Appearance>
+					<ImageTexture url='pics/lilacPetal.png' scale='false' />
+				</Appearance>
+				<Cylinder height="0.1" radius="0.25"/>
+			</Shape>
+			</transform>				
+		</transform>
+	</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_647ebb197e6830e3aa6b55b554cfe16547b5d63434' 
+translation='24.3 22.0 65.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_647ebb197e6830e3aa6b55b554cfe16547b5d634' 
+translation='24.3 23.5 65.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_b855b93bf7c9e35b15e205e2fa18853a05d54af035' 
+translation='24.0 22.0 65.31' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 -0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_b855b93bf7c9e35b15e205e2fa18853a05d54af0' 
+translation='24.0 23.5 65.32' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 -0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_c01f09c13775d8d9ba1a4e431bdd87296d4e8a5236' 
+translation='23.68 22.0 65.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.0'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_c01f09c13775d8d9ba1a4e431bdd87296d4e8a52' 
+translation='23.66 23.5 65.0' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+<!-- pollstem -->
+<transform 
+DEF='ID_bbe92ce041d250f5715b879320bc543d0054e9f737' 
+translation='24.0 22.0 64.67' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 1.5708'>	
+	<transform rotation='0 1 0 0.05'>
+		<Shape>
+		<Appearance>
+			<Material diffuseColor='0 1 0' />
+		</Appearance>
+		<box size='0.05 0.05 1.5'  />
+		</Shape>
+	</transform>
+	</transform>
+</transform>
+
+<!-- poll ball -->
+<transform DEF='ID_bbe92ce041d250f5715b879320bc543d0054e9f7' 
+translation='24.0 23.5 64.64' 
+scale='2 2 2' 
+rotation='1 0 0 1.57' > 
+<transform rotation='0 0 1 0.05'>
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1 1 0' />
+		</Appearance>
+		<box size='0.15 0.15 0.15'  />
+	</Shape>
+</transform>
+</transform>
+	<Background DEF="_Background" groundColor='1.0000000 1.0000000 1.0000000' skyColor='1.0000000 1.0000000 1.0000000'/>
+	</Scene>
+</X3D>
