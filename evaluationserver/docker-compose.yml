@@ -1,0 +1,25 @@
+#version: "3.4"
+#services:
+db:
+    image: mysql
+    ports:
+       - "3306:3306"
+    
+    environment:
+        - MYSQL_DATABASE=some-mariadb
+        - MYSQL_USER=test2
+        - MYSQL_PASSWORD=my-secret-pw
+        - MYSQL_ROOT_PASSWORD=secret
+
+app:
+    build: .
+    command: rails server -p 8081 -b '0.0.0.0'
+    volumes:
+    - ./:/usr/src/app
+    ports:
+        - "8081:8081" 
+    links:
+        - db:mysql
+        
+#docker compose build
+#docker compose up
