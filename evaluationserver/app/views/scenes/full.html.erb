@@ -1,0 +1,15 @@
+<% if @scene.scene_type == :html %>
+  <%= File.read(@scene.scenefile.path).html_safe %>
+<% else %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>X3D-Scene</title>
+	 <link rel="stylesheet" type="text/css" href="http://x3dom.org/release/x3dom.css" />
+    <!--Script-->
+    <script type="text/javascript" src="http://x3dom.org/release/x3dom-full.js"></script>
+</head>
+<body style="width:90%;height:100%;">
+  <%= @scene.x3d_scene.to_s.html_safe %>
+</html>
+<% end %>

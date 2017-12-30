@@ -1,0 +1,7 @@
+<% content_for :sidebar do %>
+<%= render :partial => 'texts/static_warning' %>
+<% end %>
+<%= form_for @experiment, :url => finish_step_url(@experiment.id_hash, @participant.id_hash, @step.id_hash), :html => { :class => 'form-horizontal' } do |s| %>
+<%= @object.html.html_safe %>
+<%= s.submit t(:proceed), :class => 'btn btn-primary' %>
+<% end %>

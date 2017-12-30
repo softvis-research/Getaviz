@@ -1,0 +1,20 @@
+<div class="page-header">
+  <h1><%= t(:question, scope: :questions) %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= t(:question_text, scope: :questions) %>:</strong></dt>
+  <dd><%= @question.question_text %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t(:back),
+              questions_path, :class => 'btn btn-default'  %>
+  <%= link_to t(:edit),
+              edit_question_path(@question), :class => 'btn btn-default' %>
+  <%= link_to t(:destroy),
+              question_path(@question),
+              :method => 'delete',
+              :data => { :confirm => t(:confirm) },
+              :class => 'btn btn-danger' %>
+</div>

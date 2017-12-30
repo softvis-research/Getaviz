@@ -1,0 +1,22 @@
+<script type="text/javascript">
+    jQuery(window).bind('beforeunload', function(){
+      return "Bitte laden Sie die Seite während des Experiments nicht neu.";
+	 });
+
+	 
+</script>
+
+<% if @participant_experiment_step.has_scene? %>
+<%############ Szene anzeigen ################ %>
+<%= render :partial => 'scene_step' %>
+<% else %>
+<%############ Keine anzeigen ################ %>
+<%= render :partial => 'textual_step' %>
+<% end %>
+
+
+
+
+
+
+

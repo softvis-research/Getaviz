@@ -1,0 +1,46 @@
+<div class="page-header">
+  <h1><%= t(:experiments, scope: :experiments) %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= t(:id, scope: :experiments) %></th>
+      <th><%= t(:title, scope: :experiments) %></th>
+      <th><%= t(:description, scope: :experiments) %></th>
+      <th><%= t(:created_at, scope: :experiments) %></th>
+      <th><%= t(:actions) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @experiments.each do |experiment| %>
+      <tr>
+        <td><%= link_to_if session[:admin], experiment.id, experiment_path(experiment) %></td>
+        <td><%= experiment.title %></td>
+        <td><%= experiment.description %></td>
+        <td><%=l experiment.created_at %></td>
+        <td>
+			 <% if session[:admin] %>
+          <%= link_to t(:edit), edit_experiment_path(experiment), :class => 'btn btn-default' %>
+          <% end %>
+			 <%= link_to t(:conduct, scope: :experiments), start_path(experiment.id_hash), :class => 'btn btn-default' %>
+          <% if session[:admin] %>
+			 <%= link_to t(:results, scope: :experiments), results_experiment_path(experiment), :class => 'btn btn-default' %>
+			 <%= link_to t(:destroy),
+                      experiment_path(experiment),
+                      :method => :delete,
+                      :data => { :confirm => t(:confirm) },
+                      :class => 'btn btn-default btn-danger' %>
+			 <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% if session[:admin] %>
+<%= link_to t(:new),
+            new_experiment_path,
+    :class => 'btn btn-primary' %>
+<%= link_to t(:import),
+            import_experiment_path,
+            :class => 'btn btn-primary' %>
+<% end %>

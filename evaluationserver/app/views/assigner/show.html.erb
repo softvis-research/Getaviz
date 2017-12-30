@@ -1,0 +1,22 @@
+<div class="page-header">
+  <h1><%= t(:assigner, scope: :assigners) %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= t(:name, scope: :assigners) %>:</strong></dt>
+  <dd><%= @assigner.name %></dd>
+  <dt><strong><%= t(:description, scope: :assigners) %>:</strong></dt>
+  <dd><%= @assigner.description %></dd>
+</dl>
+
+<div class="form-actions">
+  <%= link_to t(:back),
+              assigner_path, :class => 'btn btn-default'  %>
+  <%= link_to t(:edit),
+              edit_assigner_path(@assigner), :class => 'btn btn-default' %>
+  <%= link_to t(:destroy),
+              assigner_path(@assigner),
+              :method => 'delete',
+              :data => { :confirm => t(:confirm) },
+              :class => 'btn btn-danger' %>
+</div>

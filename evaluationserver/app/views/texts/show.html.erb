@@ -1,0 +1,25 @@
+<div class="page-header">
+  <h1><%= t(:text, scope: :texts) %></h1>
+</div>
+
+
+<dl class="dl-horizontal">
+  <dt><strong><%= t(:title, scope: :texts) %>:</strong></dt>
+  <dd><%= @text.title %></dd>
+</dl>
+
+<div>Rendering start</div>
+<%= @text.html.html_safe %>
+<div>Rendering end</div>
+
+<div class="form-actions">
+  <%= link_to t(:back),
+              texts_path, :class => 'btn btn-default'  %>
+  <%= link_to t(:edit),
+              edit_text_path(@text), :class => 'btn btn-default' %>
+  <%= link_to t(:destroy),
+              text_path(@text),
+              :method => 'delete',
+              :data => { :confirm => t(:confirm) },
+              :class => 'btn btn-danger' %>
+</div>

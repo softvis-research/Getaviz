@@ -1,0 +1,32 @@
+<div class="nested-fields">
+  <h2>Answer collection</h2>
+  <div class="form-group">
+	   <%= f.label :timeout, t( "timeout") %>
+      <%= f.number_field :timeout %>
+  </div>
+
+  <div class="form-group">
+	   <%= f.label :max_mistakes, t( "max_mistakes") %>
+      <%= f.number_field :max_mistakes %>
+  </div>
+  
+  <div class="form-group">
+	   <%= f.label :type, t("answer_type") %>
+      <%= f.select :answer_type, options_for_select([["Freitext", "freetext"], ["Slider", "slider"], ["MultipleChoice", "multiplechoice"], ["Choice", "choice"]],f.object.answer_type) %>
+  </div>
+
+  
+
+  <%= f.fields_for :answers do |answer| %>
+  <div class="form-group">
+	   <%= render :partial => 'answer_fields', locals: {answer_form: answer} %>
+  </div>
+  <% end %>
+  <div class="links">
+	 <%= link_to_add_association t(:add_answer), f, :answers, form_name: :answer_form %>
+  </div>
+
+  
+  
+  <%=  link_to_remove_association t(:remove_possibilities), f %>
+</div>

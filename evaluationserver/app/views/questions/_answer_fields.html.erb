@@ -1,0 +1,53 @@
+<div class="nested-fields">
+  <h3>Answer</h3>
+  <div class="form-group">
+	   <%= answer_form.label :answer_text, t( "answer_text") %>
+      <%= answer_form.text_field :answer_text %>
+  </div>
+  <div class="form-group">
+	   <%= answer_form.label :placeholder, t( "placeholder") %>
+      <%= answer_form.text_field :placeholder %>
+  </div>
+    
+  <div class="form-group">
+	   <%= answer_form.label :min, t( "min") %>
+      <%= answer_form.number_field :min %>
+  </div>
+  <div class="form-group">
+	   <%= answer_form.label :max, t( "max") %>
+      <%= answer_form.number_field :max %>
+  </div>
+  <div class="form-group">
+	   <%= answer_form.label :step, t( "step") %>
+      <%= answer_form.number_field :step %>
+  </div>
+  <div class="form-group">
+	   <%= answer_form.label :default, t( "default") %>
+      <%= answer_form.number_field :default %>
+  </div>
+  <div class="form-group">
+	   <%= answer_form.label :correct_answer_string, t( "correct_answer_string") %>
+      <%= answer_form.text_field :correct_answer_string %>
+  </div>
+  <div class="form-group">
+	   <%= answer_form.label :correct_answer_value_min, t( "correct_answer_value_min") %>
+      <%= answer_form.number_field :correct_answer_value_min %>
+  </div>
+  <div class="form-group">
+	   <%= answer_form.label :correct_answer_value_max, t( "correct_answer_value_max") %>
+      <%= answer_form.number_field :correct_answer_value_max %>
+  </div>
+   <div class="form-group">
+	   <%= answer_form.label :is_correct_choice, t( "is_correct_choice") %>
+      <%= answer_form.check_box :is_correct_choice %>
+  </div>
+  <%=  link_to_remove_association t(:remove_answer), answer_form %>
+</div>
+
+
+ 
+   
+                          
+ 
+ 
+                

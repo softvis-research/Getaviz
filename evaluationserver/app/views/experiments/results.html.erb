@@ -1,0 +1,36 @@
+<div class="page-header">
+  <h1><%=t '.title', :default => 'Auswertung' %></h1>
+</div>
+
+<h2>Daten zum Experiment</h2>
+
+
+
+<div>Anzahl der Schritte</div>
+<div><%= @experiment_results[:number_of_steps] %></div>
+
+<div>Anzahl der Szenen</div>
+<div><%= @experiment_results[:number_of_scenes] %></div>
+
+<div>Anzahl der Teilnehmer</div>
+<div><%= @experiment_results[:number_of_participants] %></div>
+
+<h2>Daten zu Einzelschritten</h2>
+
+<%  @experiment.experiment_steps.each_with_index do |experiment_step,index| %>
+
+<% if experiment_step.step.has_questions? or not(experiment_step.step.scenes.empty?) %>
+
+<h3>Daten zu Schritt "<%= experiment_step.step.title %>"</h3>
+
+<%= render :partial => 'step_results', :locals => {:experiment_step => experiment_step} %>
+
+<% end %>
+
+<% end %>
+
+<%= link_to 'Resultate als CSV', experiment_result_csv_path(@experiment), :class => 'btn btn-primary' %>
+<%= link_to 'Interaktionsresultate als CSV', experiment_result_interaction_csv_path(@experiment), :class => 'btn btn-primary' %>
+
+
+

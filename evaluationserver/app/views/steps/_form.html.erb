@@ -1,0 +1,46 @@
+<%= form_for(@step, :as => :step, :url => (@step.new_record? ? {:controller => :steps, :action => :create, :method => :post} : step_url(@step)), :html => { :class => 'form' }) do |f| %>
+
+  <div class="form-group">
+	 <%= f.label t(:type, scope: :steps) %>
+    <%= f.select :type, [['Schritt', 'Step'], ['Gruppierter Schritt', 'GroupedStep']], :class => 'form-control' %>
+  </div>
+
+  <div class="form-group">
+	 <%= f.label t(:step, scope: :steps) %>
+    <%= f.text_field :title, :class => 'form-control' %>
+  </div>
+  <div class="form-group">
+	 <%= f.label t(:description, scope: :steps) %>
+    <%= f.text_field :description, :class => 'form-control' %>
+  </div>
+
+  <!-- <div class="form-group"> -->
+  <!-- 	 <%= f.label t(:use_parent_scene, scope: :steps) %> -->
+  <!--   <%= f.check_box :use_scene_from_parent_group %> Nutze Szene von Gruppe -->
+  <!-- </div> -->
+  
+  <div class="form-group">
+	 <%= f.label t(:scenes, scope: :steps) %>
+    <%= f.collection_select :scene_ids, Scene.all, :id, :name, {}, {:multiple => true, :class => 'multiselect form-control'} %>
+  </div>
+
+  <div class="form-group">
+	 <%= f.label t(:textual_elements, scope: :steps) %>
+    <%= f.collection_select :textual_element_ids, TextualElement.all, :id, :title, {}, {:multiple => true, :class => 'multiselect form-control'} %>
+  </div>
+
+  <div class="form-group">
+	 <%= f.label t(:sub_steps, scope: :steps) %>
+    <%= f.collection_select :sub_step_ids, Step.where(:type => 'Step').all, :id, :title, {}, {:multiple => true, :class => 'multiselect form-control'} %>
+  </div>
+  
+  
+  
+
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t(:cancel),
+                steps_path, :class => 'btn btn-default' %>
+  </div>
+<% end %>

@@ -1,0 +1,35 @@
+<div class="page-header">
+  <h1><%= t(:texts, scope: :texts) %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= t(:id, scope: :texts) %></th>
+      <th><%= t(:title, scope: :texts) %></th>
+      <th><%= t(:created_at, scope: :texts) %></th>
+      <th><%=t :actions %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @texts.each do |text| %>
+      <tr>
+        <td><%= link_to text.id, text_path(text) %></td>
+        <td><%= text.title %></td>
+        <td><%=l text.created_at %></td>
+        <td>
+          <%= link_to t(:edit),
+                      edit_text_path(text), :class => 'btn btn-default' %>
+          <%= link_to t(:destroy),
+                      text_path(text),
+                      :method => :delete,
+                      :data => { :confirm => t(:confirm) },
+                      :class => 'btn btn-default btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t(:new),
+            new_text_path,
+            :class => 'btn btn-primary' %>

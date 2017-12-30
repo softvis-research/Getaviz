@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<% if content_for?(:head)  %>
+    <%= yield(:head) %>
+<% else %>
+<head>
+  <title><%= t(:title, scope: :layout)%></title>
+  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+  
+  <%= csrf_meta_tags %>
+  
+</head>
+<% end %>
+<% if content_for?(:body)  %>
+<%= yield(:body) %>
+<% else %>
+<body style="width:100%;height:100%;">
+  <% if content_for?(:header)  %>
+    <%= yield(:header) %>
+  <% elsif content_for?(:sidebar) %>
+    <%= render partial: "layouts/navbar_header" %>
+  <% else %>
+    <%= render partial: "layouts/blank_header" %>
+  <% end %>
+  <% if content_for?(:fullscreen) %>
+      <%= yield(:fullscreen) %>
+	<% elsif content_for?(:scene) %>
+      <div class="container" style="width: 100%;height: calc(100% - 52px);padding-left:0;padding-right:0;margin-top:-20px"><%= yield(:scene) %></div>
+	<% else %>	
+      <div class="container" style="width: 80%;margin:auto;"><%= yield %></div>
+  <% end %>
+</body>
+<% end %>
+</html>
