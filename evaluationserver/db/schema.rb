@@ -40,13 +40,6 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["answer_possibility_collection_id"], name: "index_answers_on_answer_possibility_collection_id", using: :btree
   end
 
-  create_table "assigners", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "name"
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "experiment_steps", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "position"
     t.integer  "experiment_id"

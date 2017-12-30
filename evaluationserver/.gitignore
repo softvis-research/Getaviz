@@ -19,3 +19,4 @@ public/system/tests/
 /local/
 *.sql
 *.log.before
+source.sh

@@ -1,25 +1,23 @@
 # README #
 
-Der EvaluationsServer ist eine Rails-Applikation um Evaluationen von X3DOM-Dateien zu ermöglichen
+The evaluation server is a rails application capable to support the evaluation of websites. Currently its main use is the evaluation of x3dom software visualizations.  
 
-### Zweck ###
+### features ###
 
-* Verwaltung verschiedener Experimente
-* Erstellung unterschiedlicher Fragetypen
-* Hochladen von X3DOM-Szenen
-* Nutzung einer zufälligen Zuweisung von Probanden zu verschiedenen Szenen
-* Auswertung der Ergebnisse
-* Keine Anmeldung notwendig (außer Adminfunktionen)
+* administration of different experiments
+* creation of different question types
+* random assignment of participants to different scenes
+* export of results
+* login only required fpr administrative functions
 
 ### Setup ###
 
-* Ruby in Version ab 2.0 installieren (mit ruby, bundler, rake-Binaries)
-* mySQL oder äquivalentes Drop-In-Replacement installieren (z.B. MariaDB)
-* mySQL-Benutzer erstellen
-* git checkout in ein Verzeichnis
-* config/database.yml anpassen
+* install Ruby in version 2.0 or above (along with ruby, bundler, rake)
+* install mySQL oder equivalent drop-in-replacement (e.g. MariaDB)
+* create mySQL user
+* git clone
+* create source.sh in main directory with creddentials for mysql-database to for config/database.yml
 * bundle install
 * bundle exec rake db:create
 * bundle exec rake db:migrate
 * bundle exec rails server -p [port]
-* Deployment wahrscheinlich bald mit Capistrano
