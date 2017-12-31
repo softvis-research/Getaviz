@@ -1,4 +1,4 @@
-class CreateExperimentSteps < ActiveRecord::Migration
+class CreateExperimentSteps < ActiveRecord::Migration[4.2]
   def change
     create_table :experiment_steps do |t|
       t.integer :number

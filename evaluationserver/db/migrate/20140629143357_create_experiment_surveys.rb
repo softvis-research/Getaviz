@@ -1,4 +1,4 @@
-class CreateExperimentSurveys < ActiveRecord::Migration
+class CreateExperimentSurveys < ActiveRecord::Migration[4.2]
   def change
     create_table :experiment_surveys do |t|
       t.references :survey, index: true

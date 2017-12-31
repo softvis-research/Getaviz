@@ -1,7 +1,7 @@
 class ScenesController < ApplicationController
   before_action :set_scene, only: [:show, :edit, :update, :destroy, :detail, :full]
 
-  skip_before_filter :http_basic_authenticate, :only => [:full]
+  skip_before_action :http_basic_authenticate, :only => [:full]
 
   # GET /scenes
   # GET /scenes.json

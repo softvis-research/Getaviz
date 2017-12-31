@@ -1,4 +1,4 @@
-class RenameSurveys < ActiveRecord::Migration
+class RenameSurveys < ActiveRecord::Migration[4.2]
   def self.up
     if ActiveRecord::Base.connection.table_exists?('tests')
       drop_table :tests

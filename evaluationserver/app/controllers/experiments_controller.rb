@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 class ExperimentsController < ApplicationController
 
-  skip_before_filter :http_basic_authenticate, :only => [:index, :start, :conduct, :finish_step, :check_answer, :already_done]
+  skip_before_action :http_basic_authenticate, :only => [:index, :start, :conduct, :finish_step, :check_answer, :already_done]
 
   before_action :set_experiment, only: [:show, :edit, :update, :destroy, :results, :csv, :csv_interaction]
   before_action :set_experiment_by_experiment_hash, only: [:start]

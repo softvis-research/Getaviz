@@ -1,4 +1,4 @@
-class ChangeScenes < ActiveRecord::Migration[5.0]
+class ChangeScenes < ActiveRecord::Migration[4.2][5.0]
   def change
     remove_column :scenes, :scenefile_file_name
     remove_column :scenes, :scenefile_content_type

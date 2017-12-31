@@ -1,4 +1,4 @@
-class ParticipantExperimentStepAnswer < ActiveRecord::Base
+class ParticipantExperimentStepAnswer < ApplicationRecord
   belongs_to :participant_experiment_step
   belongs_to :question
 

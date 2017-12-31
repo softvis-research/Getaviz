@@ -1,4 +1,4 @@
-class CreateParticipantAnswers < ActiveRecord::Migration
+class CreateParticipantAnswers < ActiveRecord::Migration[4.2]
   def change
     create_table :participant_answers do |t|
       t.text :answer

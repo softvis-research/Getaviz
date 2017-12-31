@@ -1,4 +1,4 @@
-class CreateFarewells < ActiveRecord::Migration
+class CreateFarewells < ActiveRecord::Migration[4.2]
   def change
     create_table :farewells do |t|
       t.text :text

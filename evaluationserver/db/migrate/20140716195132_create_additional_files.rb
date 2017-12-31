@@ -1,4 +1,4 @@
-class CreateAdditionalFiles < ActiveRecord::Migration
+class CreateAdditionalFiles < ActiveRecord::Migration[4.2]
   def change
     create_table :additional_files do |t|
       t.attachment :file

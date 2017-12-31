@@ -1,4 +1,4 @@
-class CreateStepTextualElements < ActiveRecord::Migration[5.0]
+class CreateStepTextualElements < ActiveRecord::Migration[4.2][5.0]
   def change
     create_table :step_textual_elements do |t|
       t.references :step

@@ -1,4 +1,4 @@
-class CreateTestQuestions < ActiveRecord::Migration
+class CreateTestQuestions < ActiveRecord::Migration[4.2]
   def change
     create_table :test_questions do |t|
       t.references :test, :index => true

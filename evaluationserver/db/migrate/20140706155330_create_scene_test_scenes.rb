@@ -1,4 +1,4 @@
-class CreateSceneTestScenes < ActiveRecord::Migration
+class CreateSceneTestScenes < ActiveRecord::Migration[4.2]
   def change
     create_table :scene_test_scenes do |t|
       t.references :scene_test, index: true

@@ -1,4 +1,4 @@
-class CreateAnswerPossibilityCollections < ActiveRecord::Migration[5.0]
+class CreateAnswerPossibilityCollections < ActiveRecord::Migration[4.2][5.0]
   def change
     create_table :answer_possibility_collections do |t|
       t.references :question, foreign_key: true

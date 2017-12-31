@@ -1,4 +1,4 @@
-class Scene < ActiveRecord::Base
+class Scene < ApplicationRecord
 
   has_many :participant_scenes
   has_many :participants, :through => :participant_scenes

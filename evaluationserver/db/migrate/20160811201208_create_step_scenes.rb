@@ -1,4 +1,4 @@
-class CreateStepScenes < ActiveRecord::Migration[5.0]
+class CreateStepScenes < ActiveRecord::Migration[4.2][5.0]
   def change
     create_table :step_scenes do |t|
       t.references :step

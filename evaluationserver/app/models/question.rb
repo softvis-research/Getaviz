@@ -1,4 +1,4 @@
-class Question < ActiveRecord::Base
+class Question < ApplicationRecord
   #belongs_to :question_type
   has_many :questionaire_questions
   has_many :questionaires, :through => :questionaire_questions

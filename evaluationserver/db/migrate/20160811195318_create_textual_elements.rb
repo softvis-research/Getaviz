@@ -1,4 +1,4 @@
-class CreateTextualElements < ActiveRecord::Migration[5.0]
+class CreateTextualElements < ActiveRecord::Migration[4.2][5.0]
   def change
     create_table :textual_elements do |t|
       t.string :title

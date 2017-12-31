@@ -1,5 +1,5 @@
 # coding: utf-8
-class ParticipantExperimentStep < ActiveRecord::Base
+class ParticipantExperimentStep < ApplicationRecord
   belongs_to :experiment_step
   belongs_to :participant
 

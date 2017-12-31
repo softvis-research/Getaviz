@@ -1,4 +1,4 @@
-class ChangeDoneStep < ActiveRecord::Migration[5.0]
+class ChangeDoneStep < ActiveRecord::Migration[4.2][5.0]
   def change
     rename_table :done_steps, :participant_experiment_steps
     add_column :participant_experiment_steps, :id_hash, :string

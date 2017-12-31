@@ -1,4 +1,4 @@
-class Participant < ActiveRecord::Base
+class Participant < ApplicationRecord
   belongs_to :experiment
   has_many :participant_experiment_steps, :dependent => :destroy
   

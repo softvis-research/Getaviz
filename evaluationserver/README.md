@@ -12,6 +12,13 @@ The evaluation server is a rails application capable to support the evaluation o
 
 ### Setup ###
 
+#### Docker ####
+
+* Run `docker-compose up` in the evaluationserver directory
+* Open `localhost:8081` in your web browser
+
+#### manual setup ####
+
 * install Ruby in version 2.0 or above (along with ruby, bundler, rake)
 * install mySQL oder equivalent drop-in-replacement (e.g. MariaDB)
 * create mySQL user

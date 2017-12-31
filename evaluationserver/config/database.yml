@@ -10,6 +10,7 @@ development:
   pool: 5
   username: "<%=ENV['DEVELOPMENT_MYSQL_DB_USERNAME']%>"
   password: "<%=ENV['DEVELOPMENT_MYSQL_DB_PASSWORD']%>"
+  host: db
 
 
 # Warning: The database defined as "test" will be erased and

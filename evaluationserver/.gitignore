@@ -20,3 +20,4 @@ public/system/tests/
 *.sql
 *.log.before
 source.sh
+.env

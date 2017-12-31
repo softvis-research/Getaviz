@@ -1,25 +1,23 @@
-#version: "3.4"
-#services:
-db:
-    image: mysql
-    ports:
-       - "3306:3306"
-    
-    environment:
-        - MYSQL_DATABASE=some-mariadb
-        - MYSQL_USER=test2
-        - MYSQL_PASSWORD=my-secret-pw
-        - MYSQL_ROOT_PASSWORD=secret
-
-app:
-    build: .
-    command: rails server -p 8081 -b '0.0.0.0'
-    volumes:
-    - ./:/usr/src/app
-    ports:
-        - "8081:8081" 
-    links:
-        - db:mysql
-        
-#docker compose build
-#docker compose up
+version: "3.4"
+services:
+    db:
+        image: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: dbpassword_for_user
+            MYSQL_DATABASE: eval_server_development
+            MYSQL_USER: db_username
+            MYSQL_PASSWORD: dbpassword_for_user
+        restart: always
+    web:
+        build: .
+        env_file: env
+        command: "./bin/wait-for-it.sh db:3306 -s -t 30 -- ./bin/docker_start"
+        volumes:
+        - ./:/usr/src/app
+        ports:
+            - "8081:8081" 
+        depends_on:
+            - db
+volumes:
+  bundle:
+    driver: local
