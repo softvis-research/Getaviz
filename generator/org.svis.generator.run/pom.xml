@@ -12,6 +12,11 @@
 	<artifactId>org.svis.generator.run</artifactId>
 	<name>Generator Run</name>
 	<dependencies>
+		<dependency>
+			<groupId>org.svis.generator</groupId>
+			<artifactId>org.svis.generator</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<packaging>jar</packaging>
 	<build>
