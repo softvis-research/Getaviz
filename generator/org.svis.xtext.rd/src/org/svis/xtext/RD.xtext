@@ -1,0 +1,134 @@
+grammar org.svis.xtext.RD with org.eclipse.xtext.common.Terminals
+
+generate rd "http://www.svis.org/xtext/RD"
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+Root:
+	document=Document?;
+
+Document:
+	{Document}
+	'(' disks+=Disk* ')';
+
+Disk:
+	'(Disk'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	'(' 'fqn' fqn=MSESTRING ')'
+	'(' 'hash' id=STRING ')'
+	'(' 'height' height=Decimal ')'
+	'(' 'radius' radius=Decimal ')'
+	'(' 'type' type=MSESTRING ')'
+	'(' 'level' level=INT ')'
+	('(' 'loc' loc=INT ')')?
+	('(' 'crossSection' crossSection=MSESTRING ')')?
+	('(' 'spine' spine=MSESTRING ')')?
+	('(' 'netArea' netArea=Decimal ')')?
+	('(' 'grossArea' grossArea=Decimal ')')?
+	('(' 'methodArea' methodArea=Decimal ')')?
+	('(' 'dataArea' dataArea=Decimal ')')?
+	('(' 'maxLevel' maxLevel=INT ')')?
+	('(' 'signature' signature=MSESTRING ')')?
+	('(' 'color' color=MSESTRING ')')?
+	('(' 'ringWidth' ringWidth = Decimal ')')?
+	('(' 'transparency' transparency=Decimal ')')?
+	('(' 'position' position=Position ')')?
+	('(' 'data' data+=DiskSegment* ')')?
+	('(' 'methods' methods+=DiskSegment*')')?
+	('(' 'references' references+=Reference* ')')?
+	('(' 'disks' disks+=Disk* ')')?
+	('(' 'instances' instances+=DiskInstance* ')')? // dynamix
+	('(' 'parent' parent=[Disk] ')')?
+	('(' 'diskVersions' diskVersions+=DiskVersion ')')? //hismo
+	('(' 'diskVersion' diskVersion = DiskVersion ')')?
+	')';
+	//TODO add type to DiskSegment	
+	
+DiskSegment:
+	'(Disk.Segment'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	'(' 'hash' id=STRING ')'
+	'(' 'fqn' fqn=MSESTRING ')'
+	('(' 'crossSection' crossSection=MSESTRING ')')?
+	('(' 'spine' spine=MSESTRING ')')?
+	('(' 'size' size=Decimal ')')?
+	('(' 'radius' radius=Decimal ')')?
+	('(' 'innerRadius' innerRadius=Decimal ')')?
+	('(' 'outerRadius' outerRadius=Decimal ')')?
+	('(' 'signature' signature=MSESTRING ')')? // temporary for dynamix->resolve it via fqn
+	('(' 'invocations' invocations+=DiskSegmentInvocation* ')')? // dynamix
+	('(' 'color' color=MSESTRING ')')?
+	('(' 'transparency' transparency=Decimal ')')?
+	('(' 'versions' versions+=Version ')')?
+	('(' 'version'  version = Version ')')?
+	('(' 'height' height=Decimal ')')?
+	('(' 'frequency' frequency=Decimal ')')?
+	('(' 'luminance' luminance=Decimal ')')? 
+	('(' 'anglePosition' anglePosition=Decimal ')')? // for X3DOM; position in the circle as an angle
+	('(' 'angle' angle=Decimal ')')? // for X3DOM; angle of the segment
+	')';
+	
+Position:
+	'\'' x=Decimal y=Decimal z=Decimal '\'';
+
+Reference:
+	'(' 'ref:' name=INT_ID ')'
+	'(' 'fqn:' fqn=MSESTRING ')'
+	'(' 'type' type=MSESTRING ')';
+
+INT_ID returns ecore::EString:
+	'^'? INT;
+
+Decimal returns ecore::EDouble:
+	'-'? INT '.' INT;
+
+// dynamix
+DiskInstance:
+	'(' 'id:' name=INT_ID ')'
+	'(' 'fqn' fqn=MSESTRING ')'
+	'(' 'start' start=Timestamp ')'
+	('(' 'length' length=INT ')')?
+	('(' 'position' position=Position ')')?
+	('(' 'invocations' invocations+=[DiskSegmentInvocation]* ')')?;
+
+DiskSegmentInvocation: 
+	'(' 'id:' name=INT_ID ')'
+	'(' 'fqn' fqn=MSESTRING ')'
+	'(' 'start' start=Timestamp ')'
+	'(' 'stop' stop=Timestamp ')'
+	('(' 'length' length=INT ')')?
+	('(' 'position' position=Position ')')?
+	('(' 'caller' caller=INT_ID ')')?;
+	
+	//hismo
+DiskVersion:
+	'(' 'ref:' name=INT_ID ')'
+	'(' 'level' level=INT ')'
+	('(' 'scale' scale=Decimal ')')?
+	('(' 'height' height=Decimal ')')?
+	('(' 'author' author=MSESTRING ')')?	
+	('(' 'timestamp' timestamp=MSESTRING')')?
+	('(' 'commitId' commitId=MSESTRING ')')?	
+	;
+
+Version:
+	'(' 'ref:' name=INT_ID ')'
+	'(' 'level' level=INT ')'
+	('(' 'scale' scale=Decimal ')')?
+	('(' 'height' height=Decimal ')')?	
+	('(' 'author' author=MSESTRING ')')?	
+	('(' 'timestamp' timestamp=MSESTRING')')?
+	('(' 'commitId' commitId=MSESTRING ')')?
+	;	
+	
+	
+Timestamp returns ecore::ELong:
+	INT
+;	
+	
+	
+	//hismo
+terminal MSESTRING:
+	("'"->"'")*;
+//	'^' ? '\'' ( 'a' .. 'z' | 'A' .. 'Z' | '.' | '_' | '\\' | '/' | '0' .. '9' ) ( 'a' .. 'z' | 'A' .. 'Z' | '.' | '_' | '\\' | '/' | '0' .. '9' | '(' | ')' | ',' ) * '\'' ;

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.0//EN" "http://www.web3d.org/specifications/x3d-3.0.dtd">
+<X3D xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' profile='Full' version='3.0' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>
+  <ContextSetup>
+    <field accessType='inputOutput' name='zWriteTrans' type='SFBool' value='false'/>
+  </ContextSetup>
+  <Scene>
+    <Background DEF='_Background' groundColor='1 1 1' skyColor='1 1 1'/>
+    <Group>
+      <Shape DEF='_G_1'>
+        <Appearance DEF='AOPT_Appearance_1806572960'>
+          <Material diffuseColor='0.0784314 0.521569 0.8'/>
+        </Appearance>
+        <BinaryGeometry DEF='BG_4' vertexCount='98296 3' primType='"TRIANGLESTRIP" "TRIANGLES"' position='194.875 53.815536499 173.524993896' size='262.549987793 99.2310714722 307.25' index='binGeo/BG_4_indexBinary.bin' coord='binGeo/BG_4_coordBinary.bin' normal='binGeo/BG_4_normalBinary.bin' texCoord='binGeo/BG_4_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+      <Shape DEF='_G_2'>
+        <Appearance USE='AOPT_Appearance_1806572960'/>
+        <BinaryGeometry DEF='BG_8' vertexCount='98290 6' primType='"TRIANGLESTRIP" "TRIANGLES"' position='153.850006104 67.5125045776 173.875' size='252.5 125.025009155 292.450012207' index='binGeo/BG_8_indexBinary.bin' coord='binGeo/BG_8_coordBinary.bin' normal='binGeo/BG_8_normalBinary.bin' texCoord='binGeo/BG_8_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+      <Shape DEF='_G_3'>
+        <Appearance USE='AOPT_Appearance_1806572960'/>
+        <BinaryGeometry DEF='BG_13' vertexCount='98290 6' primType='"TRIANGLESTRIP" "TRIANGLES"' position='172.800003052 63.6132240295 224.050003052' size='298.600006104 117.226448059 206.100006104' index='binGeo/BG_13_indexBinary.bin' coord='binGeo/BG_13_coordBinary.bin' normal='binGeo/BG_13_normalBinary.bin' texCoord='binGeo/BG_13_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+      <Shape DEF='_G_4'>
+        <Appearance USE='AOPT_Appearance_1806572960'/>
+        <BinaryGeometry DEF='BG_14' vertexCount='24382 3' primType='"TRIANGLESTRIP" "TRIANGLES"' position='159.975006104 39.1222190857 255.899993896' size='264.25 68.2444381714 142.400009155' index='binGeo/BG_14_indexBinary.bin' coord='binGeo/BG_14_coordBinary.bin' normal='binGeo/BG_14_normalBinary.bin' texCoord='binGeo/BG_14_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+    </Group>
+    <Shape DEF='_G_5'>
+      <Appearance>
+        <Material diffuseColor='0.207843 0.207843 0.34902'/>
+      </Appearance>
+      <BinaryGeometry DEF='BG_17' vertexCount='37150' primType='"TRIANGLESTRIP"' position='175 67.8000030518 173.5' size='302 127.600006104 307' index='binGeo/BG_17_indexBinary.bin' coord='binGeo/BG_17_coordBinary.bin' normal='binGeo/BG_17_normalBinary.bin' texCoord='binGeo/BG_17_texCoordBinary.bin' idsPerVertex='true'/>
+    </Shape>
+    <Group>
+      <Shape DEF='_G_6'>
+        <Appearance DEF='AOPT_Appearance_1805712944'>
+          <Material diffuseColor='1 0.988235 0.0980392'/>
+        </Appearance>
+        <BinaryGeometry DEF='BG_9' vertexCount='96781' primType='"TRIANGLESTRIP"' position='240 43.5 161' size='172 77 258' index='binGeo/BG_9_indexBinary.bin' coord='binGeo/BG_9_coordBinary.bin' normal='binGeo/BG_9_normalBinary.bin' texCoord='binGeo/BG_9_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+      <Shape DEF='_G_7'>
+        <Appearance USE='AOPT_Appearance_1805712944'/>
+        <BinaryGeometry DEF='BG_10' vertexCount='96782' primType='"TRIANGLESTRIP"' position='195 55.5 173.5' size='262 101 307' index='binGeo/BG_10_indexBinary.bin' coord='binGeo/BG_10_coordBinary.bin' normal='binGeo/BG_10_normalBinary.bin' texCoord='binGeo/BG_10_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+      <Shape DEF='_G_8'>
+        <Appearance USE='AOPT_Appearance_1805712944'/>
+        <BinaryGeometry DEF='BG_5' vertexCount='96781' primType='"TRIANGLESTRIP"' position='100 36.8000030518 97.5' size='144 62.0000038147 147' index='binGeo/BG_5_indexBinary.bin' coord='binGeo/BG_5_coordBinary.bin' normal='binGeo/BG_5_normalBinary.bin' texCoord='binGeo/BG_5_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+      <Shape DEF='_G_9'>
+        <Appearance USE='AOPT_Appearance_1805712944'/>
+        <BinaryGeometry DEF='BG_19' vertexCount='96782' primType='"TRIANGLESTRIP"' position='153.5 69.2000045776 173.5' size='251 126.800003052 291' index='binGeo/BG_19_indexBinary.bin' coord='binGeo/BG_19_coordBinary.bin' normal='binGeo/BG_19_normalBinary.bin' texCoord='binGeo/BG_19_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+      <Shape DEF='_G_10'>
+        <Appearance USE='AOPT_Appearance_1805712944'/>
+        <BinaryGeometry DEF='BG_20' vertexCount='96781' primType='"TRIANGLESTRIP"' position='172.5 42.7999992371 157' size='297 74 258' index='binGeo/BG_20_indexBinary.bin' coord='binGeo/BG_20_coordBinary.bin' normal='binGeo/BG_20_normalBinary.bin' texCoord='binGeo/BG_20_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+      <Shape DEF='_G_11'>
+        <Appearance USE='AOPT_Appearance_1805712944'/>
+        <BinaryGeometry DEF='BG_18' vertexCount='96780 3' primType='"TRIANGLESTRIP" "TRIANGLES"' position='70 25.7999992371 232.5' size='92 40 95' index='binGeo/BG_18_indexBinary.bin' coord='binGeo/BG_18_coordBinary.bin' normal='binGeo/BG_18_normalBinary.bin' texCoord='binGeo/BG_18_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+      <Shape DEF='_G_12'>
+        <Appearance USE='AOPT_Appearance_1805712944'/>
+        <BinaryGeometry DEF='BG_15' vertexCount='96789' primType='"TRIANGLESTRIP"' position='128.5 65.3000030518 224.5' size='209 119 203' index='binGeo/BG_15_indexBinary.bin' coord='binGeo/BG_15_coordBinary.bin' normal='binGeo/BG_15_normalBinary.bin' texCoord='binGeo/BG_15_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+      <Shape DEF='_G_13'>
+        <Appearance USE='AOPT_Appearance_1805712944'/>
+        <BinaryGeometry DEF='BG_16' vertexCount='96789' primType='"TRIANGLESTRIP"' position='230 65.3000030518 218' size='180 119 190' index='binGeo/BG_16_indexBinary.bin' coord='binGeo/BG_16_coordBinary.bin' normal='binGeo/BG_16_normalBinary.bin' texCoord='binGeo/BG_16_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+      <Shape DEF='_G_14'>
+        <Appearance USE='AOPT_Appearance_1805712944'/>
+        <BinaryGeometry DEF='BG_6' vertexCount='77643' primType='"TRIANGLESTRIP"' position='171.5 36.8000030518 254.5' size='287 62.0000038147 139' index='binGeo/BG_6_indexBinary.bin' coord='binGeo/BG_6_coordBinary.bin' normal='binGeo/BG_6_normalBinary.bin' texCoord='binGeo/BG_6_texCoordBinary.bin' idsPerVertex='true'/>
+      </Shape>
+    </Group>
+    <Shape DEF='_G_15'>
+      <Appearance>
+        <Material diffuseColor='0.588235 0.588235 0.588235'/>
+      </Appearance>
+      <BinaryGeometry DEF='BG_7' vertexCount='34' primType='"TRIANGLESTRIP"' position='173 1.29999995232 176.5' size='338 1 345' index='binGeo/BG_7_indexBinary.bin' coord='binGeo/BG_7_coordBinary.bin' normal='binGeo/BG_7_normalBinary.bin' texCoord='binGeo/BG_7_texCoordBinary.bin' idsPerVertex='true'/>
+    </Shape>
+    <Shape DEF='_G_16'>
+      <Appearance>
+        <Material diffuseColor='0.705882 0.705882 0.705882'/>
+      </Appearance>
+      <BinaryGeometry DEF='BG_11' vertexCount='34' primType='"TRIANGLESTRIP"' position='173 2.90000009537 176.5' size='322 1 329' index='binGeo/BG_11_indexBinary.bin' coord='binGeo/BG_11_coordBinary.bin' normal='binGeo/BG_11_normalBinary.bin' texCoord='binGeo/BG_11_texCoordBinary.bin' idsPerVertex='true'/>
+    </Shape>
+    <Shape DEF='_G_17'>
+      <Appearance>
+        <Material diffuseColor='0.764706 0.764706 0.764706'/>
+      </Appearance>
+      <BinaryGeometry DEF='BG_12' vertexCount='34' primType='"TRIANGLESTRIP"' position='173 3.69999980927 176.5' size='314 0.999999761581 321' index='binGeo/BG_12_indexBinary.bin' coord='binGeo/BG_12_coordBinary.bin' normal='binGeo/BG_12_normalBinary.bin' texCoord='binGeo/BG_12_texCoordBinary.bin' idsPerVertex='true'/>
+    </Shape>
+    <Shape DEF='_G_18'>
+      <Appearance>
+        <Material diffuseColor='0.647059 0.647059 0.647059'/>
+      </Appearance>
+      <BinaryGeometry DEF='BG_0' vertexCount='34' primType='"TRIANGLESTRIP"' position='173 2.09999990463 176.5' size='330 1 337' index='binGeo/BG_0_indexBinary.bin' coord='binGeo/BG_0_coordBinary.bin' normal='binGeo/BG_0_normalBinary.bin' texCoord='binGeo/BG_0_texCoordBinary.bin' idsPerVertex='true'/>
+    </Shape>
+    <Shape DEF='_G_19'>
+      <Appearance>
+        <Material diffuseColor='0.823529 0.823529 0.823529'/>
+      </Appearance>
+      <BinaryGeometry DEF='BG_2' vertexCount='1186' primType='"TRIANGLESTRIP"' position='173 4.5 176.5' size='306 1 313' index='binGeo/BG_2_indexBinary.bin' coord='binGeo/BG_2_coordBinary.bin' normal='binGeo/BG_2_normalBinary.bin' texCoord='binGeo/BG_2_texCoordBinary.bin' idsPerVertex='true'/>
+    </Shape>
+    <Shape DEF='_G_20'>
+      <Appearance>
+        <Material diffuseColor='0.882353 0.882353 0.882353'/>
+      </Appearance>
+      <BinaryGeometry DEF='BG_3' vertexCount='790' primType='"TRIANGLESTRIP"' position='152 5.30000019073 176.5' size='256 1 305' index='binGeo/BG_3_indexBinary.bin' coord='binGeo/BG_3_coordBinary.bin' normal='binGeo/BG_3_normalBinary.bin' texCoord='binGeo/BG_3_texCoordBinary.bin' idsPerVertex='true'/>
+    </Shape>
+    <Shape DEF='_G_21'>
+      <Appearance>
+        <Material diffuseColor='0.941176 0.941176 0.941176'/>
+      </Appearance>
+      <BinaryGeometry DEF='BG_1' vertexCount='70' primType='"TRIANGLESTRIP"' position='212 6.09999990463 61' size='46 1 66' index='binGeo/BG_1_indexBinary.bin' coord='binGeo/BG_1_coordBinary.bin' normal='binGeo/BG_1_normalBinary.bin' texCoord='binGeo/BG_1_texCoordBinary.bin' idsPerVertex='true'/>
+    </Shape>
+    <Viewpoint DEF='AOPT_CAM' centerOfRotation='173 66.7 176.5' position='173 66.7 757.002'/>
+  </Scene>
+</X3D>

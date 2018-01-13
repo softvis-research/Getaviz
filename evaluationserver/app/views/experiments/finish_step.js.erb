@@ -1,0 +1,4 @@
+jQuery('#question-<%=@apc.question.id %>').after('<%= escape_javascript(render :partial => 'proceed_form') %>');
+<% if @answered_partial %>
+jQuery('#answer-collection-<%=@apc.id %>').replaceWith('<%= escape_javascript(render :partial => @answered_partial) %>');
+<% end %>

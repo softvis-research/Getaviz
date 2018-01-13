@@ -1,0 +1,4 @@
+<%= form_for @participant_experiment_step, :url => finish_step_url(@participant_experiment_step.id_hash), :html => { :class => 'form-horizontal', :onsubmit => 'jQuery(window).unbind("beforeunload");' } do |s| %>
+<%= render :partial => 'scene_form_fields' %>
+<%= s.submit t(:proceed), :class => 'btn btn-primary' %>
+<% end %>

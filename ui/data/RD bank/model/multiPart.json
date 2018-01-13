@@ -1,0 +1,2401 @@
+{
+"numberOfIDs":69,
+"maxGeoCount":4,
+"appearance": [ 
+{
+"name": "__App_0",
+"material": { 
+"diffuseColor": "0.207843 0.207843 0.34902",
+"specularColor": "0 0 0",
+"emissiveColor": "0 0 0",
+"ambientIntensity": "0.2",
+"shininess": "0.2",
+"transparency": "0"
+}},
+{
+"name": "__App_1",
+"material": { 
+"diffuseColor": "1 0.988235 0.0980392",
+"specularColor": "0 0 0",
+"emissiveColor": "0 0 0",
+"ambientIntensity": "0.2",
+"shininess": "0.2",
+"transparency": "0"
+}},
+{
+"name": "__App_2",
+"material": { 
+"diffuseColor": "0.0784314 0.521569 0.8",
+"specularColor": "0 0 0",
+"emissiveColor": "0 0 0",
+"ambientIntensity": "0.2",
+"shininess": "0.2",
+"transparency": "0"
+}},
+{
+"name": "__App_3",
+"material": { 
+"diffuseColor": "0.588235 0.588235 0.588235",
+"specularColor": "0 0 0",
+"emissiveColor": "0 0 0",
+"ambientIntensity": "0.2",
+"shininess": "0.2",
+"transparency": "0"
+}}],
+"mapping": [
+{
+"name": "bank_Bank",
+"min": "-19.3783, 7.73881, -0.666667",
+"max": "-2.14321, 25.006, 0.666667",
+"appearance": "__App_0",
+"usage": ["_G_1"]
+},
+{
+"name": "bank_products_Account",
+"min": "-9.63572, -10.8222, -0.666667",
+"max": "-0.600106, -1.77075, 0.666667",
+"appearance": "__App_0",
+"usage": ["_G_1"]
+},
+{
+"name": "bank_products_BankBook",
+"min": "-7.11298, -19.5096, -0.666667",
+"max": "1.92263, -10.4581, 0.666667",
+"appearance": "__App_0",
+"usage": ["_G_1"]
+},
+{
+"name": "bank_products_Credit",
+"min": "-11.6879, -27.3138, -0.666667",
+"max": "-2.65227, -18.2623, 0.666667",
+"appearance": "__App_0",
+"usage": ["_G_1"]
+},
+{
+"name": "bank_products_AbstractProduct",
+"min": "-20.8596, -20.494, -0.666667",
+"max": "-7.03888, -6.64801, 0.666667",
+"appearance": "__App_0",
+"usage": ["_G_1"]
+},
+{
+"name": "bank_products_Transaction",
+"min": "-19.8511, -6.65622, -0.666667",
+"max": "-8.04736, 5.16883, 0.666667",
+"appearance": "__App_0",
+"usage": ["_G_1"]
+},
+{
+"name": "bank_customer_PrivateCustomer",
+"min": "6.24513, 0.130156, -0.666667",
+"max": "20.0658, 13.9762, 0.666667",
+"appearance": "__App_0",
+"usage": ["_G_1"]
+},
+{
+"name": "bank_customer_BusinessCustomer",
+"min": "6.72063, 13.9675, -0.666667",
+"max": "19.5903, 26.8606, 0.666667",
+"appearance": "__App_0",
+"usage": ["_G_1"]
+},
+{
+"name": "bank_Bank_bankBooks",
+"min": "-13.0536, 16.3644, -0.666667",
+"max": "-10.7467, 19.3606, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_Bank_bankName",
+"min": "-13.7467, 15.7795, -0.666667",
+"max": "-10.752, 18.2332, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_Bank_transactions",
+"min": "-13.6738, 13.7187, -0.666667",
+"max": "-10.7503, 16.3871, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_Bank_businessCustomers",
+"min": "-12.066, 13.387, -0.666667",
+"max": "-9.54294, 16.3795, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_Bank_credits",
+"min": "-10.7735, 13.6748, -0.666667",
+"max": "-7.87211, 16.3847, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_Bank_privateCustomers",
+"min": "-10.7683, 15.6855, -0.666667",
+"max": "-7.77394, 18.1565, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_Bank_accounts",
+"min": "-10.7725, 16.3623, -0.666667",
+"max": "-8.40668, 19.3569, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_products_AbstractProduct_balance",
+"min": "-16.2055, -13.5789, -0.666667",
+"max": "-13.9386, -11.3115, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_products_AbstractProduct_productNumber",
+"min": "-16.2077, -15.8263, -0.666667",
+"max": "-13.9404, -13.5594, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_products_AbstractProduct_inTransaction",
+"min": "-13.9599, -15.8285, -0.666667",
+"max": "-11.6929, -13.5612, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_products_AbstractProduct_executedTransactions",
+"min": "-13.9581, -13.5807, -0.666667",
+"max": "-11.6907, -11.3147, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_products_Transaction_secondProduct",
+"min": "-15.5463, -2.33816, -0.666667",
+"max": "-13.9417, 0.854307, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_products_Transaction_firstProduct",
+"min": "-13.9568, -2.33972, -0.666667",
+"max": "-12.3522, 0.852057, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_customer_PrivateCustomer_accounts",
+"min": "10.8992, 7.04527, -0.666667",
+"max": "13.1661, 9.31266, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_customer_PrivateCustomer_name",
+"min": "10.897, 4.79783, -0.666667",
+"max": "13.1643, 7.0648, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_customer_PrivateCustomer_credits",
+"min": "13.1448, 4.79562, -0.666667",
+"max": "15.4118, 7.06301, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_customer_PrivateCustomer_bankBook",
+"min": "13.1466, 7.04348, -0.666667",
+"max": "15.414, 9.30948, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_customer_BusinessCustomer_name",
+"min": "11.2003, 19.4803, -0.666667",
+"max": "13.1647, 22.371, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_customer_BusinessCustomer_accounts",
+"min": "11.4601, 18.4593, -0.666667",
+"max": "14.8179, 20.4231, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_customer_BusinessCustomer_credits",
+"min": "13.147, 19.4253, -0.666667",
+"max": "15.1114, 22.3682, 0.666667",
+"appearance": "__App_1",
+"usage": ["_G_2"]
+},
+{
+"name": "bank_Bank_getPrivateCustomers__",
+"min": "-14.2095, 18.9114, -0.666667",
+"max": "-10.7412, 23.0038, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_Bank_getBankBooks__",
+"min": "-16.7053, 17.6752, -0.666667",
+"max": "-12.3439, 21.9664, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_Bank_getAccounts__",
+"min": "-17.3891, 15.6625, -0.666667",
+"max": "-13.4538, 19.1877, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_Bank_getBusinessCustomers__",
+"min": "-17.3377, 12.2425, -0.666667",
+"max": "-13.0821, 16.0186, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_Bank_main_String___",
+"min": "-15.8634, 10.1084, -0.666667",
+"max": "-11.7158, 14.4855, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_Bank_Bank__",
+"min": "-12.8005, 9.74445, -0.666667",
+"max": "-9.22974, 13.5401, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_Bank_run__",
+"min": "-10.0373, 9.95372, -0.666667",
+"max": "-6.01287, 14.3055, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_Bank_setBankName_String_",
+"min": "-8.59786, 11.8417, -0.666667",
+"max": "-4.27418, 15.7803, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_Bank_getBankName__",
+"min": "-7.97407, 15.1403, -0.666667",
+"max": "-4.1312, 18.7005, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_Bank_getCredits__",
+"min": "-8.97881, 17.4542, -0.666667",
+"max": "-4.59958, 21.6634, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_Bank_getTransactions__",
+"min": "-10.6794, 18.7772, -0.666667",
+"max": "-6.87143, 22.9973, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_Account_transaction_Transaction_",
+"min": "-7.64305, -8.81813, -0.666667",
+"max": "-5.10599, -3.7704, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_Account_Account_long_",
+"min": "-5.12983, -8.8206, -0.666667",
+"max": "-2.59277, -3.77396, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_BankBook_transaction_Transaction_",
+"min": "-5.12031, -17.5055, -0.666667",
+"max": "-2.58325, -12.4578, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_BankBook_BankBook_long_",
+"min": "-2.60709, -17.508, -0.666667",
+"max": "-0.0700333, -12.4613, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_Credit_transaction_Transaction_",
+"min": "-9.69522, -25.3097, -0.666667",
+"max": "-7.15816, -20.262, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_Credit_Credit_long_",
+"min": "-7.182, -25.3122, -0.666667",
+"max": "-4.64494, -20.2655, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_AbstractProduct_getBalance__",
+"min": "-18.1365, -12.3998, -0.666667",
+"max": "-13.9349, -8.64824, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_AbstractProduct_executeTransaction_Transaction_",
+"min": "-18.8695, -15.8607, -0.666667",
+"max": "-15.8844, -11.0714, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_AbstractProduct_getProductNumber__",
+"min": "-18.2582, -18.4824, -0.666667",
+"max": "-14.046, -14.6447, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_AbstractProduct_transaction_Transaction_",
+"min": "-14.0972, -18.4918, -0.666667",
+"max": "-9.84507, -14.8002, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_AbstractProduct_getExecutedTransactions__",
+"min": "-12.0514, -16.2005, -0.666667",
+"max": "-9.02902, -11.4171, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_AbstractProduct_isInTransaction__",
+"min": "-13.888, -12.5583, -0.666667",
+"max": "-9.56769, -8.65437, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_Transaction_getFirstProduct__",
+"min": "-17.8574, -0.726731, -0.666667",
+"max": "-13.937, 3.16919, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_Transaction_execute__",
+"min": "-17.8611, -4.65085, -0.666667",
+"max": "-13.9652, -0.730514, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_Transaction_getSecondProduct__",
+"min": "-13.9614, -4.6546, -0.666667",
+"max": "-10.0411, -0.758685, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_products_Transaction_Transaction_AbstractProduct_AbstractProduct_int_",
+"min": "-13.9082, -0.754903, -0.666667",
+"max": "-10.0373, 3.16383, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_customer_PrivateCustomer_getCredits__",
+"min": "8.9682, 8.2244, -0.666667",
+"max": "13.1698, 11.9759, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_customer_PrivateCustomer_getAccounts__",
+"min": "8.23516, 4.76343, -0.666667",
+"max": "11.2203, 9.55276, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_customer_PrivateCustomer_setName_String_",
+"min": "8.84653, 2.14172, -0.666667",
+"max": "13.0587, 5.97951, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_customer_PrivateCustomer_getName__",
+"min": "13.0075, 2.13238, -0.666667",
+"max": "17.2596, 5.82396, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_customer_PrivateCustomer_PrivateCustomer_String_",
+"min": "15.0533, 4.42362, -0.666667",
+"max": "18.0757, 9.20706, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_customer_PrivateCustomer_getBankBook__",
+"min": "13.2167, 8.06591, -0.666667",
+"max": "17.537, 11.9698, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_customer_BusinessCustomer_setName_String_",
+"min": "8.95625, 21.0389, -0.666667",
+"max": "13.1688, 24.8608, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_customer_BusinessCustomer_BusinessCustomer_String_",
+"min": "8.71022, 16.8693, -0.666667",
+"max": "11.9909, 21.7821, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_customer_BusinessCustomer_getAccounts__",
+"min": "10.5487, 15.9706, -0.666667",
+"max": "15.7006, 18.8417, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_customer_BusinessCustomer_getCredits__",
+"min": "14.2935, 16.8233, -0.666667",
+"max": "17.5989, 21.7111, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank_customer_BusinessCustomer_getName__",
+"min": "13.2076, 21.0064, -0.666667",
+"max": "17.381, 24.8549, 0.666667",
+"appearance": "__App_2",
+"usage": ["_G_3"]
+},
+{
+"name": "bank",
+"min": "-36.3648, -36.4365, -0.666667",
+"max": "36.3648, 36.4346, 0.666667",
+"appearance": "__App_3",
+"usage": ["_G_4"]
+},
+{
+"name": "bank_products",
+"min": "-29.5861, -29.9644, -0.666667",
+"max": "8.06457, 7.75866, 0.666667",
+"appearance": "__App_3",
+"usage": ["_G_4"]
+},
+{
+"name": "bank_customer",
+"min": "-2.28724, -1.97663, -0.666667",
+"max": "28.5982, 28.9678, 0.666667",
+"appearance": "__App_3",
+"usage": ["_G_4"]
+}],
+"tree":
+{
+"name":"",
+"type":"Group",
+"render":"true",
+"meta": {},
+"children":[
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_bankBooks",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_bankBooks",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_bankBooks",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_bankName",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_bankName",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_bankName",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_transactions",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_transactions",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_transactions",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_businessCustomers",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_businessCustomers",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_businessCustomers",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_credits",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_credits",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_credits",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_privateCustomers",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_privateCustomers",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_privateCustomers",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_accounts",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_accounts",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_accounts",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_getPrivateCustomers__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_getPrivateCustomers__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_getPrivateCustomers__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_getBankBooks__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_getBankBooks__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_getBankBooks__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_getAccounts__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_getAccounts__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_getAccounts__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_getBusinessCustomers__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_getBusinessCustomers__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_getBusinessCustomers__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_main_String___",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_main_String___",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_main_String___",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_Bank__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_Bank__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_Bank__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_run__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_run__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_run__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_setBankName_String_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_setBankName_String_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_setBankName_String_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_getBankName__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_getBankName__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_getBankName__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_getCredits__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_getCredits__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_getCredits__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_Bank_getTransactions__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_Bank_getTransactions__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_Bank_getTransactions__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Account",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Account",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Account",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Account_transaction_Transaction_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Account_transaction_Transaction_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Account_transaction_Transaction_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Account_Account_long_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Account_Account_long_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Account_Account_long_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_BankBook",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_BankBook",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_BankBook",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_BankBook_transaction_Transaction_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_BankBook_transaction_Transaction_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_BankBook_transaction_Transaction_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_BankBook_BankBook_long_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_BankBook_BankBook_long_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_BankBook_BankBook_long_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Credit",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Credit",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Credit",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Credit_transaction_Transaction_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Credit_transaction_Transaction_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Credit_transaction_Transaction_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Credit_Credit_long_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Credit_Credit_long_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Credit_Credit_long_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_AbstractProduct",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_AbstractProduct",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_AbstractProduct",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_AbstractProduct_balance",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_AbstractProduct_balance",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_AbstractProduct_balance",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_AbstractProduct_productNumber",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_AbstractProduct_productNumber",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_AbstractProduct_productNumber",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_AbstractProduct_inTransaction",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_AbstractProduct_inTransaction",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_AbstractProduct_inTransaction",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_AbstractProduct_executedTransactions",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_AbstractProduct_executedTransactions",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_AbstractProduct_executedTransactions",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_AbstractProduct_getBalance__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_AbstractProduct_getBalance__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_AbstractProduct_getBalance__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_AbstractProduct_executeTransaction_Transaction_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_AbstractProduct_executeTransaction_Transaction_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_AbstractProduct_executeTransaction_Transaction_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_AbstractProduct_getProductNumber__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_AbstractProduct_getProductNumber__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_AbstractProduct_getProductNumber__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_AbstractProduct_transaction_Transaction_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_AbstractProduct_transaction_Transaction_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_AbstractProduct_transaction_Transaction_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_AbstractProduct_getExecutedTransactions__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_AbstractProduct_getExecutedTransactions__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_AbstractProduct_getExecutedTransactions__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_AbstractProduct_isInTransaction__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_AbstractProduct_isInTransaction__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_AbstractProduct_isInTransaction__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Transaction",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Transaction",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Transaction",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Transaction_secondProduct",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Transaction_secondProduct",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Transaction_secondProduct",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Transaction_firstProduct",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Transaction_firstProduct",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Transaction_firstProduct",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Transaction_getFirstProduct__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Transaction_getFirstProduct__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Transaction_getFirstProduct__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Transaction_execute__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Transaction_execute__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Transaction_execute__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Transaction_getSecondProduct__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Transaction_getSecondProduct__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Transaction_getSecondProduct__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_products_Transaction_Transaction_AbstractProduct_AbstractProduct_int_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_products_Transaction_Transaction_AbstractProduct_AbstractProduct_int_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_products_Transaction_Transaction_AbstractProduct_AbstractProduct_int_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_PrivateCustomer",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_PrivateCustomer",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_PrivateCustomer",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_PrivateCustomer_accounts",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_PrivateCustomer_accounts",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_PrivateCustomer_accounts",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_PrivateCustomer_name",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_PrivateCustomer_name",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_PrivateCustomer_name",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_PrivateCustomer_credits",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_PrivateCustomer_credits",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_PrivateCustomer_credits",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_PrivateCustomer_bankBook",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_PrivateCustomer_bankBook",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_PrivateCustomer_bankBook",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_PrivateCustomer_getCredits__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_PrivateCustomer_getCredits__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_PrivateCustomer_getCredits__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_PrivateCustomer_getAccounts__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_PrivateCustomer_getAccounts__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_PrivateCustomer_getAccounts__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_PrivateCustomer_setName_String_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_PrivateCustomer_setName_String_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_PrivateCustomer_setName_String_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_PrivateCustomer_getName__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_PrivateCustomer_getName__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_PrivateCustomer_getName__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_PrivateCustomer_PrivateCustomer_String_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_PrivateCustomer_PrivateCustomer_String_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_PrivateCustomer_PrivateCustomer_String_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_PrivateCustomer_getBankBook__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_PrivateCustomer_getBankBook__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_PrivateCustomer_getBankBook__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_BusinessCustomer",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_BusinessCustomer",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_BusinessCustomer",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_BusinessCustomer_name",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_BusinessCustomer_name",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_BusinessCustomer_name",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_BusinessCustomer_accounts",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_BusinessCustomer_accounts",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_BusinessCustomer_accounts",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_BusinessCustomer_credits",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_BusinessCustomer_credits",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_BusinessCustomer_credits",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_BusinessCustomer_setName_String_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_BusinessCustomer_setName_String_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_BusinessCustomer_setName_String_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_BusinessCustomer_BusinessCustomer_String_",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_BusinessCustomer_BusinessCustomer_String_",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_BusinessCustomer_BusinessCustomer_String_",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_BusinessCustomer_getAccounts__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_BusinessCustomer_getAccounts__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_BusinessCustomer_getAccounts__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_BusinessCustomer_getCredits__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_BusinessCustomer_getCredits__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_BusinessCustomer_getCredits__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+},
+{
+	"name":"",
+	"type":"Group",
+	"render":"true",
+	"meta": {},
+	"children":[
+	{
+		"name":"bank_customer_BusinessCustomer_getName__",
+		"type":"Transform",
+		"render":"true",
+		"meta": {},
+		"children":[
+		{
+			"name":"bank_customer_BusinessCustomer_getName__",
+			"type":"MaterialGroup",
+			"render":"true",
+			"meta": {},
+			"children":[
+			{
+				"name":"bank_customer_BusinessCustomer_getName__",
+				"type":"Geometry",
+				"render":"true",
+				"meta": {}
+			}]
+		}]
+	}]
+}]
+}
+}
+

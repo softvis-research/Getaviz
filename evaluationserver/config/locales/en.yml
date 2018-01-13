@@ -1,0 +1,211 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t 'hello'
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t('hello') %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# To learn more, please read the Rails Internationalization guide
+# available at http://guides.rubyonrails.org/i18n.html.
+
+en:
+  hello: "Hello World"
+  save: "Save"
+  back: "Back"
+  edit: "Edit"
+  show: "Show"
+  cancel: "Cancel"
+  title: "Title"
+  description: "Description"
+  actions: "Actions"
+  destroy: "Delete"
+  confirm: "Are you sure?"
+  new: "New"
+  proceed: "Proceed"
+  save_and_proceed: "Save and proceed"
+  your_answer: "Your answer"
+  reload_warning_heading: "Notice"
+  reload_warning_text: "The pages of the experiment cannot be loaded twice. Please refrain from reloading the page."
+  activerecord:
+    models:
+      test: Test
+      experiment_test: Experiment test
+      participant: participant
+      question: Question
+      scene: Scene
+      scene_test: Scenen test
+      test: Test
+      text: Text
+      experiment: Experiment
+      assigner: Assigner
+  experiment_test:
+    successful_updated: "Experiment test successfully created"
+    successful_created: "Experiment test successfully actualized"
+  participants:
+    successful_updated: "Participant successfully created"
+    successful_created: "Participant successfully actualized"
+    participant: "Participant"
+    edit: "Edit participant"
+    new: "Create participant"
+    name: "Name"
+    description: "Description"
+    id: "ID"
+    created_at: "Created at"
+  questions:
+    successful_created: "Question successfully created"
+    successful_updated: "Question successfully actualized"
+    questions: "Questions"
+    question: "Question"
+    edit: "Edit question"
+    new: "Created question"
+    name: "Name"
+    description: "Description"
+    id: "ID"
+    created_at: "Created at"
+    question_text: "Question text"
+    question_type: "Question type"
+    option: "Option"
+    from: "from"
+    to: "to"
+    granularity: "Granularity"
+  scenes:
+    successful_created: "Scene successfully created"
+    successful_updated: "Scene successfully actualized"
+    scenes: "Scenen"
+    scene: "Scene"
+    edit: "Edit Scene"
+    new: "New Scene"
+    use_url: "Use URL"
+    url: "URL"
+    goto_url: "Goto Scene-URL"
+    scene_file: "Scene file"
+    scenefile_file_name: "Scene file"
+    scene_file_file_name: "Scene file name"
+    scene_file_file_size: "File size"
+    scene_file_content_type: "Content type"
+    name: "Name"
+    description: "Description"
+    id: "ID"
+    created_at: "Created at"
+    scene_file_updated_at: "Updated at"
+    dummy_text: "Dummy Text"
+    detailed_scene: "Detailed Scene"
+    scene_start: "Scene start ->"
+    scene_end: "<- Scene ende"
+    remarks: "Remarks"
+    mapping: "Mapping"
+  scene_tests:
+    successful_created: "Scene test successfully created"
+    successful_updated: "Scenen test successfully actualized"
+    scene_test: "Scene test"
+    scene_tests: "Scene tests"
+    assigner: "Assigner"
+    scenes: "Scenes"
+    tests: "Tests"
+    test: "Test"
+    edit: "Edit Scene test"
+    new: "New Scene test"
+    title: "Name"
+    name: "Name"
+    description: "Description"
+    id: "ID"
+    created_at: "Created at"
+    scene_file_updated_at: "Changed at"
+    dummy_text: "Dummy text"
+  tests:
+    name: "Name"
+    description: "Descriptions"
+    tests: "Tests"
+    id: "ID"
+    created_at: "Created at"
+    new: "New test"
+    test: "Test"
+    questions: "Question"
+    metadata: "Metadata"
+    edit: "Edit test"
+    selected_questions: "Selected questions"
+    not_selected_questions: "Not selected questions"
+    successful_created: "Test successfully created"
+    successful_updated: "Test successfully actualized"
+  steps:
+    type: "Type"
+    step: "Name"
+    description: "Description"
+    scenes: "Scenes"
+    textual_elements: "Textual Elements"
+    sub_steps: "Substeps"
+    created_at: "created at"
+    new: "New text"
+    text: "Text"
+    successful_created: "Text successfully created"
+    successful_updated: "Text successfully actualized"
+  texts:
+    title: "Name"
+    name: "Name"
+    html: "HTML"
+    edit: "Edit text"
+    texts: "texts"
+    id: "ID"
+    created_at: "created at"
+    new: "New text"
+    text: "Text"
+    successful_created: "Text successfully created"
+    successful_updated: "Text successfully actualized"
+  experiments:
+    successful_updated: "Experiment successfully created"
+    successful_created: "Experiment successfully actualized"
+    already_done: "Step was already done"
+    overview: "Experiment overview"
+    choosen_steps: "Choosen Steps"
+    possible_steps: "Possible Steps"
+    static_texts: "Static Texts"
+    tests: "Tests"
+    scene_tests: "Scene tests"
+    experiment: "Experiment"
+    experiments: "Experiments"
+    id: "ID"
+    title: "Title"
+    description: "Description"
+    created_at: "Created at"
+    conduct: "Conduct"
+    results: "Results"
+    new: "New experiment"
+    participant_viewed: "Participant viewed the followin scenes: "
+    experiment_id: "ID"
+    scene: "Scene"
+    no_scenes: "No scenes"
+    question: "Question"
+    answer: "Answer"
+    time_needed: "Time needed"
+    metadata: "Metadata"
+    steps: "Steps"
+  assigners:
+    assigner: "Assigner"
+    name: "Name"
+    description: "Description"
+    id: "ID"
+    created_at: "Created at"
+  layout:
+    experiments: "Experiments"
+    scenes: "Scenes"
+    tests: "Tests"
+    scene_tests: "Scene tests"
+    other: "Other"
+    questions: "Questions"
+    static_texts: "Static texts"
+    admin_off: "Admin-Mode off"
+    title: "EvalServer"
+    sidebar: "Sidebar"
+    title_long: "Evaluation server"
+    admin_on: "Admin-Mode on"

@@ -1,0 +1,7 @@
+<% if @participant_experiment_step_answer.answered_correctly %>
+jQuery('#answer-collection-<%=@apc.id%>').replaceWith('<%= escape_javascript(render :partial => 'correct_answer') %>');
+<% elsif @next_apc %>
+jQuery('#answer-collection-<%=@apc.id%>').replaceWith('<%= escape_javascript(render :partial => 'answer_collection', :locals => {:answer_collection => @next_apc}) %>');
+<% else %>
+jQuery('#answer-collection-<%=@apc.id%>').replaceWith('<%= escape_javascript(render :partial => 'incorrect_answer') %>');
+<% end %>

@@ -1,0 +1,51 @@
+module org.svis.generator.run.multisphere
+
+var projectName = "org.svis.generator.run"
+var runtimeProject = "../${projectName}"
+var inputPath = "./input/famix"
+var outputPath = "./output/multisphere/rings"
+
+Workflow {
+	
+
+	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
+		platformUri = "${runtimeProject}/.."
+		registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"		
+	}
+	
+	// reader Famix
+	component = org.svis.generator.ReaderWithConfig {
+		path = "${inputPath}"
+		register = org.svis.xtext.FamixStandaloneSetup {}
+		loadResource = {
+			slot = "famix"
+		}
+	}
+	
+	// support lazy loading of textual models
+	component = org.svis.generator.ResolveLazyComponent {}
+	
+	// delete unnecessary objects
+	component = org.svis.generator.famix.Famix2Famix {
+		modelSlot = "famix"
+	}
+
+	// transform famix (m2m) Famix2Graph
+	component = org.svis.generator.multisphere.s2m.Famix2Graph {
+		modelSlot = "famixModel"
+	}
+	
+	// transform famix (m2m) Graph2SphereLayout
+	component = org.svis.generator.multisphere.m2m.Graph2MultiSphereRings {
+		modelSlot = "famixModel"
+	}
+			
+	// graph x3d
+	component = org.eclipse.xtext.generator.GeneratorComponent {
+		register = org.svis.generator.multisphere.m2t.MultiSphere2X3DStandaloneSetup {}
+		slot = 'graphwriter'
+		outlet = {
+			path = "${outputPath}"
+		}
+	}
+}

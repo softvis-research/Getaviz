@@ -1,0 +1,663 @@
+[
+  	{
+	"id":            "bank",
+	"qualifiedName": "bank",
+	"name":          "bank",
+	"type":          "FAMIX.Namespace"
+	}
+,{
+"id":            "bank_products",
+"qualifiedName": "bank.products",
+"name":          "products",
+"type":          "FAMIX.Namespace",
+"belongsTo":     "bank"
+}
+,{
+"id":            "bank_customer",
+"qualifiedName": "bank.customer",
+"name":          "customer",
+"type":          "FAMIX.Namespace",
+"belongsTo":     "bank"
+}
+,{
+"id":            "bank_Bank",
+"qualifiedName": "bank.Bank",
+"name":          "Bank",
+"type":          "FAMIX.Class",
+"modifiers":     "public",
+"subClassOf":    "",
+"superClassOf":  "",
+"belongsTo":     "bank"
+}
+,{
+"id":            "bank_products_Account",
+"qualifiedName": "bank.products.Account",
+"name":          "Account",
+"type":          "FAMIX.Class",
+"modifiers":     "public",
+"subClassOf":    "bank_products_AbstractProduct",
+"superClassOf":  "",
+"belongsTo":     "bank_products"
+}
+,{
+"id":            "bank_products_BankBook",
+"qualifiedName": "bank.products.BankBook",
+"name":          "BankBook",
+"type":          "FAMIX.Class",
+"modifiers":     "public",
+"subClassOf":    "bank_products_AbstractProduct",
+"superClassOf":  "",
+"belongsTo":     "bank_products"
+}
+,{
+"id":            "bank_products_Credit",
+"qualifiedName": "bank.products.Credit",
+"name":          "Credit",
+"type":          "FAMIX.Class",
+"modifiers":     "public",
+"subClassOf":    "bank_products_AbstractProduct",
+"superClassOf":  "",
+"belongsTo":     "bank_products"
+}
+,{
+"id":            "bank_products_AbstractProduct",
+"qualifiedName": "bank.products.AbstractProduct",
+"name":          "AbstractProduct",
+"type":          "FAMIX.Class",
+"modifiers":     "abstract, public",
+"subClassOf":    "",
+"superClassOf":  "bank_products_Account, bank_products_BankBook, bank_products_Credit",
+"belongsTo":     "bank_products"
+    
+}
+,{
+"id":            "bank_products_Transaction",
+"qualifiedName": "bank.products.Transaction",
+"name":          "Transaction",
+"type":          "FAMIX.Class",
+"modifiers":     "public",
+"subClassOf":    "",
+"superClassOf":  "",
+"belongsTo":     "bank_products"
+}
+,{
+"id":            "bank_customer_PrivateCustomer",
+"qualifiedName": "bank.customer.PrivateCustomer",
+"name":          "PrivateCustomer",
+"type":          "FAMIX.Class",
+"modifiers":     "public",
+"subClassOf":    "",
+"superClassOf":  "",
+"belongsTo":     "bank_customer"
+}
+,{
+"id":            "bank_customer_BusinessCustomer",
+"qualifiedName": "bank.customer.BusinessCustomer",
+"name":          "BusinessCustomer",
+"type":          "FAMIX.Class",
+"modifiers":     "public",
+"subClassOf":    "",
+"superClassOf":  "",
+"belongsTo":     "bank_customer"
+}
+,{
+"id":            "bank_Bank_bankBooks",
+"qualifiedName": "bank.Bank.bankBooks",
+"name":          "bankBooks",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "List<BankBook>",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_bankName",
+"qualifiedName": "bank.Bank.bankName",
+"name":          "bankName",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "String",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_transactions",
+"qualifiedName": "bank.Bank.transactions",
+"name":          "transactions",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "List<Transaction>",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_businessCustomers",
+"qualifiedName": "bank.Bank.businessCustomers",
+"name":          "businessCustomers",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "List<BusinessCustomer>",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_credits",
+"qualifiedName": "bank.Bank.credits",
+"name":          "credits",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "List<Credit>",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_privateCustomers",
+"qualifiedName": "bank.Bank.privateCustomers",
+"name":          "privateCustomers",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "List<PrivateCustomer>",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_accounts",
+"qualifiedName": "bank.Bank.accounts",
+"name":          "accounts",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "List<Account>",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_products_AbstractProduct_balance",
+"qualifiedName": "bank.products.AbstractProduct.balance",
+"name":          "balance",
+"type":          "FAMIX.Attribute",
+"modifiers":     "protected",
+"declaredType":  "int",
+"belongsTo":     "bank_products_AbstractProduct"
+}
+,{
+"id":            "bank_products_AbstractProduct_productNumber",
+"qualifiedName": "bank.products.AbstractProduct.productNumber",
+"name":          "productNumber",
+"type":          "FAMIX.Attribute",
+"modifiers":     "protected",
+"declaredType":  "long",
+"belongsTo":     "bank_products_AbstractProduct"
+}
+,{
+"id":            "bank_products_AbstractProduct_inTransaction",
+"qualifiedName": "bank.products.AbstractProduct.inTransaction",
+"name":          "inTransaction",
+"type":          "FAMIX.Attribute",
+"modifiers":     "protected",
+"declaredType":  "boolean",
+"belongsTo":     "bank_products_AbstractProduct"
+}
+,{
+"id":            "bank_products_AbstractProduct_executedTransactions",
+"qualifiedName": "bank.products.AbstractProduct.executedTransactions",
+"name":          "executedTransactions",
+"type":          "FAMIX.Attribute",
+"modifiers":     "protected",
+"declaredType":  "List<Transaction>",
+"belongsTo":     "bank_products_AbstractProduct"
+}
+,{
+"id":            "bank_products_Transaction_secondProduct",
+"qualifiedName": "bank.products.Transaction.secondProduct",
+"name":          "secondProduct",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "AbstractProduct",
+"belongsTo":     "bank_products_Transaction"
+}
+,{
+"id":            "bank_products_Transaction_firstProduct",
+"qualifiedName": "bank.products.Transaction.firstProduct",
+"name":          "firstProduct",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "AbstractProduct",
+"belongsTo":     "bank_products_Transaction"
+}
+,{
+"id":            "bank_customer_PrivateCustomer_accounts",
+"qualifiedName": "bank.customer.PrivateCustomer.accounts",
+"name":          "accounts",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "List<Account>",
+"belongsTo":     "bank_customer_PrivateCustomer"
+}
+,{
+"id":            "bank_customer_PrivateCustomer_name",
+"qualifiedName": "bank.customer.PrivateCustomer.name",
+"name":          "name",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "String",
+"belongsTo":     "bank_customer_PrivateCustomer"
+}
+,{
+"id":            "bank_customer_PrivateCustomer_credits",
+"qualifiedName": "bank.customer.PrivateCustomer.credits",
+"name":          "credits",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "List<Credit>",
+"belongsTo":     "bank_customer_PrivateCustomer"
+}
+,{
+"id":            "bank_customer_PrivateCustomer_bankBook",
+"qualifiedName": "bank.customer.PrivateCustomer.bankBook",
+"name":          "bankBook",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "List<BankBook>",
+"belongsTo":     "bank_customer_PrivateCustomer"
+}
+,{
+"id":            "bank_customer_BusinessCustomer_name",
+"qualifiedName": "bank.customer.BusinessCustomer.name",
+"name":          "name",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "String",
+"belongsTo":     "bank_customer_BusinessCustomer"
+}
+,{
+"id":            "bank_customer_BusinessCustomer_accounts",
+"qualifiedName": "bank.customer.BusinessCustomer.accounts",
+"name":          "accounts",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "List<Account>",
+"belongsTo":     "bank_customer_BusinessCustomer"
+}
+,{
+"id":            "bank_customer_BusinessCustomer_credits",
+"qualifiedName": "bank.customer.BusinessCustomer.credits",
+"name":          "credits",
+"type":          "FAMIX.Attribute",
+"modifiers":     "private",
+"declaredType":  "List<Credit>",
+"belongsTo":     "bank_customer_BusinessCustomer"
+}
+,{
+"id":            "bank_Bank_getPrivateCustomers__",
+"qualifiedName": "bank.Bank.getPrivateCustomers__",
+"name":          "getPrivateCustomers",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<PrivateCustomer>",
+"signature":     "getPrivateCustomers()",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_getBankBooks__",
+"qualifiedName": "bank.Bank.getBankBooks__",
+"name":          "getBankBooks",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<BankBook>",
+"signature":     "getBankBooks()",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_getAccounts__",
+"qualifiedName": "bank.Bank.getAccounts__",
+"name":          "getAccounts",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<Account>",
+"signature":     "getAccounts()",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_getBusinessCustomers__",
+"qualifiedName": "bank.Bank.getBusinessCustomers__",
+"name":          "getBusinessCustomers",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<BusinessCustomer>",
+"signature":     "getBusinessCustomers()",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_main_String___",
+"qualifiedName": "bank.Bank.main_String___",
+"name":          "main",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "main(String[])",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_Bank__",
+"qualifiedName": "bank.Bank.Bank__",
+"name":          "Bank",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "Bank()",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_run__",
+"qualifiedName": "bank.Bank.run__",
+"name":          "run",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "run()",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_setBankName_String_",
+"qualifiedName": "bank.Bank.setBankName_String_",
+"name":          "setBankName",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "setBankName(String)",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_getBankName__",
+"qualifiedName": "bank.Bank.getBankName__",
+"name":          "getBankName",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "String",
+"signature":     "getBankName()",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_getCredits__",
+"qualifiedName": "bank.Bank.getCredits__",
+"name":          "getCredits",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<Credit>",
+"signature":     "getCredits()",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_Bank_getTransactions__",
+"qualifiedName": "bank.Bank.getTransactions__",
+"name":          "getTransactions",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<Transaction>",
+"signature":     "getTransactions()",
+"belongsTo":     "bank_Bank"
+}
+,{
+"id":            "bank_products_Account_transaction_Transaction_",
+"qualifiedName": "bank.products.Account.transaction_Transaction_",
+"name":          "transaction",
+"type":          "FAMIX.Method",
+"modifiers":     "protected",
+"declaredType":  "void",
+"signature":     "transaction(Transaction)",
+"belongsTo":     "bank_products_Account"
+}
+,{
+"id":            "bank_products_Account_Account_long_",
+"qualifiedName": "bank.products.Account.Account_long_",
+"name":          "Account",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "Account(long)",
+"belongsTo":     "bank_products_Account"
+}
+,{
+"id":            "bank_products_BankBook_transaction_Transaction_",
+"qualifiedName": "bank.products.BankBook.transaction_Transaction_",
+"name":          "transaction",
+"type":          "FAMIX.Method",
+"modifiers":     "protected",
+"declaredType":  "void",
+"signature":     "transaction(Transaction)",
+"belongsTo":     "bank_products_BankBook"
+}
+,{
+"id":            "bank_products_BankBook_BankBook_long_",
+"qualifiedName": "bank.products.BankBook.BankBook_long_",
+"name":          "BankBook",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "BankBook(long)",
+"belongsTo":     "bank_products_BankBook"
+}
+,{
+"id":            "bank_products_Credit_transaction_Transaction_",
+"qualifiedName": "bank.products.Credit.transaction_Transaction_",
+"name":          "transaction",
+"type":          "FAMIX.Method",
+"modifiers":     "protected",
+"declaredType":  "void",
+"signature":     "transaction(Transaction)",
+"belongsTo":     "bank_products_Credit"
+}
+,{
+"id":            "bank_products_Credit_Credit_long_",
+"qualifiedName": "bank.products.Credit.Credit_long_",
+"name":          "Credit",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "Credit(long)",
+"belongsTo":     "bank_products_Credit"
+}
+,{
+"id":            "bank_products_AbstractProduct_getBalance__",
+"qualifiedName": "bank.products.AbstractProduct.getBalance__",
+"name":          "getBalance",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "int",
+"signature":     "getBalance()",
+"belongsTo":     "bank_products_AbstractProduct"
+}
+,{
+"id":            "bank_products_AbstractProduct_executeTransaction_Transaction_",
+"qualifiedName": "bank.products.AbstractProduct.executeTransaction_Transaction_",
+"name":          "executeTransaction",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "executeTransaction(Transaction)",
+"belongsTo":     "bank_products_AbstractProduct"
+}
+,{
+"id":            "bank_products_AbstractProduct_getProductNumber__",
+"qualifiedName": "bank.products.AbstractProduct.getProductNumber__",
+"name":          "getProductNumber",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "long",
+"signature":     "getProductNumber()",
+"belongsTo":     "bank_products_AbstractProduct"
+}
+,{
+"id":            "bank_products_AbstractProduct_transaction_Transaction_",
+"qualifiedName": "bank.products.AbstractProduct.transaction_Transaction_",
+"name":          "transaction",
+"type":          "FAMIX.Method",
+"modifiers":     "abstract, protected",
+"declaredType":  "void",
+"signature":     "transaction(Transaction)",
+"belongsTo":     "bank_products_AbstractProduct"
+}
+,{
+"id":            "bank_products_AbstractProduct_getExecutedTransactions__",
+"qualifiedName": "bank.products.AbstractProduct.getExecutedTransactions__",
+"name":          "getExecutedTransactions",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<Transaction>",
+"signature":     "getExecutedTransactions()",
+"belongsTo":     "bank_products_AbstractProduct"
+}
+,{
+"id":            "bank_products_AbstractProduct_isInTransaction__",
+"qualifiedName": "bank.products.AbstractProduct.isInTransaction__",
+"name":          "isInTransaction",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "boolean",
+"signature":     "isInTransaction()",
+"belongsTo":     "bank_products_AbstractProduct"
+}
+,{
+"id":            "bank_products_Transaction_getFirstProduct__",
+"qualifiedName": "bank.products.Transaction.getFirstProduct__",
+"name":          "getFirstProduct",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "AbstractProduct",
+"signature":     "getFirstProduct()",
+"belongsTo":     "bank_products_Transaction"
+}
+,{
+"id":            "bank_products_Transaction_execute__",
+"qualifiedName": "bank.products.Transaction.execute__",
+"name":          "execute",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "execute()",
+"belongsTo":     "bank_products_Transaction"
+}
+,{
+"id":            "bank_products_Transaction_getSecondProduct__",
+"qualifiedName": "bank.products.Transaction.getSecondProduct__",
+"name":          "getSecondProduct",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "AbstractProduct",
+"signature":     "getSecondProduct()",
+"belongsTo":     "bank_products_Transaction"
+}
+,{
+"id":            "bank_products_Transaction_Transaction_AbstractProduct_AbstractProduct_int_",
+"qualifiedName": "bank.products.Transaction.Transaction_AbstractProduct_AbstractProduct_int_",
+"name":          "Transaction",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "Transaction(AbstractProduct,AbstractProduct,int)",
+"belongsTo":     "bank_products_Transaction"
+}
+,{
+"id":            "bank_customer_PrivateCustomer_getCredits__",
+"qualifiedName": "bank.customer.PrivateCustomer.getCredits__",
+"name":          "getCredits",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<Credit>",
+"signature":     "getCredits()",
+"belongsTo":     "bank_customer_PrivateCustomer"
+}
+,{
+"id":            "bank_customer_PrivateCustomer_getAccounts__",
+"qualifiedName": "bank.customer.PrivateCustomer.getAccounts__",
+"name":          "getAccounts",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<Account>",
+"signature":     "getAccounts()",
+"belongsTo":     "bank_customer_PrivateCustomer"
+}
+,{
+"id":            "bank_customer_PrivateCustomer_setName_String_",
+"qualifiedName": "bank.customer.PrivateCustomer.setName_String_",
+"name":          "setName",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "setName(String)",
+"belongsTo":     "bank_customer_PrivateCustomer"
+}
+,{
+"id":            "bank_customer_PrivateCustomer_getName__",
+"qualifiedName": "bank.customer.PrivateCustomer.getName__",
+"name":          "getName",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "String",
+"signature":     "getName()",
+"belongsTo":     "bank_customer_PrivateCustomer"
+}
+,{
+"id":            "bank_customer_PrivateCustomer_PrivateCustomer_String_",
+"qualifiedName": "bank.customer.PrivateCustomer.PrivateCustomer_String_",
+"name":          "PrivateCustomer",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "PrivateCustomer(String)",
+"belongsTo":     "bank_customer_PrivateCustomer"
+}
+,{
+"id":            "bank_customer_PrivateCustomer_getBankBook__",
+"qualifiedName": "bank.customer.PrivateCustomer.getBankBook__",
+"name":          "getBankBook",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<BankBook>",
+"signature":     "getBankBook()",
+"belongsTo":     "bank_customer_PrivateCustomer"
+}
+,{
+"id":            "bank_customer_BusinessCustomer_setName_String_",
+"qualifiedName": "bank.customer.BusinessCustomer.setName_String_",
+"name":          "setName",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "setName(String)",
+"belongsTo":     "bank_customer_BusinessCustomer"
+}
+,{
+"id":            "bank_customer_BusinessCustomer_BusinessCustomer_String_",
+"qualifiedName": "bank.customer.BusinessCustomer.BusinessCustomer_String_",
+"name":          "BusinessCustomer",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "void",
+"signature":     "BusinessCustomer(String)",
+"belongsTo":     "bank_customer_BusinessCustomer"
+}
+,{
+"id":            "bank_customer_BusinessCustomer_getAccounts__",
+"qualifiedName": "bank.customer.BusinessCustomer.getAccounts__",
+"name":          "getAccounts",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<Account>",
+"signature":     "getAccounts()",
+"belongsTo":     "bank_customer_BusinessCustomer"
+}
+,{
+"id":            "bank_customer_BusinessCustomer_getCredits__",
+"qualifiedName": "bank.customer.BusinessCustomer.getCredits__",
+"name":          "getCredits",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "List<Credit>",
+"signature":     "getCredits()",
+"belongsTo":     "bank_customer_BusinessCustomer"
+}
+,{
+"id":            "bank_customer_BusinessCustomer_getName__",
+"qualifiedName": "bank.customer.BusinessCustomer.getName__",
+"name":          "getName",
+"type":          "FAMIX.Method",
+"modifiers":     "public",
+"declaredType":  "String",
+"signature":     "getName()",
+"belongsTo":     "bank_customer_BusinessCustomer"
+}
+]

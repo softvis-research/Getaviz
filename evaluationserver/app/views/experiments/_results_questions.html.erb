@@ -1,0 +1,88 @@
+<div>Typ: Fragebogen</div>
+
+<% for question_result in step_result[:result] %>
+<h4>Frage <%= question_result[:question_id] %></h4>
+
+<div>Fragestellung: <%= question_result[:question_text] %></div>
+<% if question_result[:question_has_correct_answer] %>
+<div>Korrekt beantwortet: <%= question_result[:answered_correct] %></div>
+<div>Korrekt beantwortet in Prozent: <%= question_result[:percent_correct] %></div>
+<% else %>
+<div>Frage hatte keine falschen Antworten</div>
+
+<% end %>
+
+<div style="display:table:">
+  <div style="display:table-row;">
+	 <div class="tablecell"></div>
+	 <div class="tablecell">Minimal</div>
+	 <div class="tablecell">Maximal</div>
+	 <div class="tablecell">Durchschnitt</div>
+	 </div>
+	 <div style="display:table-row;">
+		<div class="tablecell">Zeit bis zur Beantwortung</div>
+		<div class="tablecell"><%= question_result[:time_needed_min] %></div>
+		<div class="tablecell"><%= question_result[:time_needed_max] %></div>
+		<div class="tablecell"><%= question_result[:time_needed_avg] %></div>
+	 </div>
+	 <% if question_result[:question_has_correct_answer] %>
+	 <div style="display:table-row;">
+		<div class="tablecell">Zeit bis zur Beantwortung (korrekte Antwort)</div>
+		<div class="tablecell"><%= question_result[:time_needed_min_correct] %></div>
+		<div class="tablecell"><%= question_result[:time_needed_max_correct] %></div>
+		<div class="tablecell"><%= question_result[:time_needed_avg_correct] %></div>
+	 </div>
+	 <div style="display:table-row;">
+		<div class="tablecell">Zeit bis zur Beantwortung (falsche Antwort)</div>
+		<div class="tablecell"><%= question_result[:time_needed_min_incorrect] %></div>
+		<div class="tablecell"><%= question_result[:time_needed_max_incorrect] %></div>
+		<div class="tablecell"><%= question_result[:time_needed_avg_incorrect] %></div>
+	 </div>
+	 <div style="display:table-row;">
+		<div class="tablecell">Fehleranzahl</div>
+		<div class="tablecell"><%= question_result[:min_mistakes] %></div>
+		<div class="tablecell"><%= question_result[:max_mistakes] %></div>
+		<div class="tablecell"><%= question_result[:avg_mistakes] %></div>
+	 </div>
+	 <div style="display:table-row;">
+		<div class="tablecell">Fehleranzahl (korrekte Antwort)</div>
+		<div class="tablecell"><%= question_result[:min_mistakes_correct] %></div>
+		<div class="tablecell"><%= question_result[:max_mistakes_correct] %></div>
+		<div class="tablecell"><%= question_result[:avg_mistakes_correct] %></div>
+	 </div>
+	 <% end %>
+</div>
+
+
+<h5>Probanden</h5>
+
+<div style="display:table:">
+  <div style="display:table-row;">
+	 <div class="tablecell">Proband</div>
+	 <div class="tablecell">finale Antwort</div>
+	 <% if question_result[:question_has_correct_answer] %>
+	 <div class="tablecell">Korrekt?</div>
+	 <div class="tablecell">benötigte Zeit</div>
+	 <div class="tablecell">Anzahl Fehler</div>
+	 <% end %>
+  </div>
+<% for participant_answer in question_result[:participants_answers] %>
+  <div style="display:table-row;">
+	 <div class="tablecell"><%= participant_answer[:participant_id] %></div>
+	 <div class="tablecell"><%= participant_answer[:answer] %></div>
+	 <% if question_result[:question_has_correct_answer] %>
+	 <div class="tablecell"><%= participant_answer[:correct] ? "Ja" : "Nein" %></div>
+	 <div class="tablecell"><%= participant_answer[:time_needed] %></div>
+	 <div class="tablecell"><%= participant_answer[:mistakes] %></div>
+	 <% end %>
+  </div>
+<% end %>
+</div>
+<% end %>
+
+
+
+
+  
+
+

@@ -1,0 +1,19 @@
+<%= tinymce_assets %>
+
+<%= form_for @text, :html => { :class => 'form' } do |f| %>
+  <div class="form-group">
+	 <%= f.label t(:title, scope: :texts), :class => 'control-label' %>
+    <%= f.text_field :title, :class => 'form-control' %>
+  </div>
+  <div class="form-group">
+	 <%= f.label t(:html, scope: :texts), :class => 'control-label' %>
+    <%= f.text_area :html, :class => 'form-control tinymce' %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t(:cancel),
+                texts_path, :class => 'btn btn-default' %>
+  </div>
+<%= tinymce %>
+<% end %>

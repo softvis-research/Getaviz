@@ -1,0 +1,891 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.3//EN" "http://www.web3d.org/specifications/x3d-3.3.dtd">
+<X3D profile='Immersive' version='3.3' xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.3.xsd'>
+    <head>
+        <meta content='sphere.x3d' name='title'/>
+        <meta content='SVIS-Generator' name='creator'/>
+    </head>	      
+    
+    <Scene>
+    	<Transform scale = '1.6176 1.6176 1.6176 ' >   			    	
+      
+<Transform DEF='ID_bdd240c8fe7174e6ac1cfdd5282de76eb7ad6815' translation='6.415408432079827 3.7039377852226845 3.92830470078475E-16' scale ='0.9549274255156608 0.9549274255156608 0.9549274255156608'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 0.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_527aa1c76ab5cca95e6dbfcea35a5d2d9f5d737f' translation='13.889808432079828 7.013337785222685 -4.9366' scale ='5.729564553093965 5.729564553093965 5.729564553093965'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_378ed8adfffc2de1bfd23cb72bef113d8e2ac58b' translation='13.889808432079828 12.742937785222685 -4.9366' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_4ece969a895e6ec11e96612d2a45b1a0acc47942' translation='13.889808432079828 11.975237785222685 -2.0717999999999996' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_cc266d70c84afda695fa63dd8acbee9624f2092a' translation='13.889808432079828 9.878137785222684 0.02540000000000039' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_e511c29ffb94450ed119cc73fc706d047e45800f' translation='18.608808432079826 9.878137785222684 -3.4030999999999993' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_3eaddf68cce19ade935a238d2ed45cf76b27416e' translation='16.806308432079827 9.878137785222684 -8.951' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_4862d1a456a6673eb3424c5f0c4248adf01a23cf' translation='10.973308432079827 9.878137785222684 -8.9509' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_26f6f03c78d810161eae7a7ff5534fd588bc80af' translation='9.170608432079828 9.878137785222684 -3.4034999999999997' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_19fdcf3c56394fcdd0c6179bad9ca8c87b4c8228' translation='13.889808432079828 7.013337785222685 0.7930000000000005' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_3dbf08a296ea12b3d7da059af2c7343c26780d29' translation='18.851808432079828 7.013337785222685 -2.0717999999999996' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_61c70ba0ef686b48fead0df0364453c5afb83618' translation='18.851708432079825 7.013337785222685 -7.8014' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_f734e3036b271f56e1dbb9ca69f4aa920b2f98c2' translation='13.889808432079828 7.013337785222685 -10.6662' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_86d6c1788619dad7ac26b6e15d350d143c7871dc' translation='8.927808432079827 7.013337785222685 -7.8013' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_e73864b238f8e1eb24957648d47fb9c528dd02ff' translation='8.927908432079828 7.013337785222685 -2.0717999999999996' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_119adb8ccd123c522bc2026f3c4542a65094c714' translation='13.889808432079828 4.148537785222684 0.02530000000000039' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_994a3789160d04dfc93a3be914f46c023d4f9d20' translation='18.186908432079825 4.148537785222684 -7.4176' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_e20ab372c6a66256b020d616f2f16f5283df0364' translation='9.592608432079828 4.148537785222684 -7.4175' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_a874289371d9f390c9f8b6daccf26dfb5a7ba1cf' translation='13.889808432079828 2.0513377852226844 -2.0717999999999996' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_4fc014fa15b9c096498e3b0c73e352b1b030875b' translation='13.889808432079828 1.2837377852226846 -4.9366' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_4481fcdc97864a546f67c76536e0308a3058f75d' translation='0.0 -3.703937785222682 6.415408432079828' scale ='0.6181998021760633 0.6181998021760633 0.6181998021760633'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 0.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_26f25e4da4c82dc2370f3bde0201e612dd88c04c' translation='-4.2523 -6.599137785222682 9.843608432079828' scale ='3.1133250311332503 3.1133250311332503 3.1133250311332503'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_4d08a19b31cdb900d36f69756e8323ca65e9186b' translation='-2.4074 -4.104137785222682 9.590208432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_60e93a9ac46923cab21c9b4ca6bd6b4fdcd2d552' translation='-3.9366 -5.527837785222681 6.937508432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_11629cab6286835bcf468dd158c63816c6bc8b50' translation='-1.1479 -6.654537785222682 10.073108432079827' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_a3359592b6cf8cc9db859ab29c099f6bac4e7073' translation='-6.3442 -7.557737785222682 11.940608432079827' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_2ff793ad7485749918f01f511c989ceec094cfc5' translation='-2.9855 -9.323437785222682 10.660008432079827' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_d2955e64b6776b754f9d69f8f480a62f849584ca' translation='-2.9895 -8.433337785222681 7.6679084320798285' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_10765258b141addc153f07acfb7ed26b00fe22fb' translation='-3.6456 -6.434237785222682 12.892808432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_4c3a759a929fdfc8754f03495aa0d746592eab6a' translation='-5.3968 -3.8699377852226817 8.877008432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_9fa088272bab165867bfaddcfbf58d6a7d5d45a2' translation='4.3358 -0.7602377852226816 3.136308432079828' scale ='3.7091988130563798 3.7091988130563798 3.7091988130563798'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_4754aad0f8ca2e5adb39c097f3221eda4c82877d' translation='7.2382 -3.058937785222682 3.360508432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_2f90fe03451cdda1f5129e993c409ab531118027' translation='7.1562 -0.966037785222682 5.536608432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_0166fed357196a09244efe558dbeb27e6e0d646b' translation='5.0027 -3.099237785222682 5.936808432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_0cf4af5bed915ef9b74c93b2c50852c21f2d5364' translation='5.3129 0.15956221477731836 -0.32159156792017196' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_01de56af912219c3217ee6d97c38f3731fb4052c' translation='2.3088 1.7429622147773185 1.2970084320798279' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_a9a2c0261fbc4981279fc288ed89617ba4f5acf8' translation='3.9095 -3.580637785222682 0.765308432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_ca33f0111d29b1cc3827500605a2db32311317ce' translation='6.9097 1.9059622147773179 3.292708432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_ebace4173ecbaaa72dafda3332424aa4a233d1fc' translation='5.1668 1.1397622147773183 6.211608432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_fc94cf011272f8e738d5600f64861a4a0d2cc6d2' translation='0.8485 -0.718337785222682 1.8733084320798286' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_30d036adadb7267f6f05ca698d5ce93e8bc0a42f' translation='2.1155 -3.6493377852226816 3.830208432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_052028080c3d64381f56397d59113102bf4e5921' translation='7.856609401569501E-16 -3.703937785222682 -6.415408432079828' scale ='0.7784802322071596 0.7784802322071596 0.7784802322071596'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 0.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_ecbec7f0190fc1c903a87797d35427dc7a1f240b' translation='2.488900000000001 1.5273622147773183 -11.615608432079828' scale ='3.7091988130563798 3.7091988130563798 3.7091988130563798'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_dce8b98f162544734c5aacebb0a3731ee104eb77' translation='5.391300000000001 -0.7713377852226819 -11.391408432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_c7bc3b30c85e34e537f5ada76dafa4bb3f77646b' translation='5.309300000000001 1.3215622147773183 -9.215308432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_d000974f136a59142bde8224bcef9590d038eb8a' translation='3.155800000000001 -0.8116377852226817 -8.815108432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_37834fec4533797c12daa8509eb11587547caac1' translation='3.466000000000001 2.4471622147773178 -15.073508432079826' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_78cd3ffe06ad51757c7facd4bbfdd3130313e03b' translation='0.46190000000000075 4.0305622147773175 -13.45490843207983' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_ffec14a7831c9af6e99a59101779abcfbc7be97f' translation='2.062600000000001 -1.293037785222682 -13.986608432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_c0536af5045f9030acfa718623dec662d3f00112' translation='5.062800000000001 4.193562214777318 -11.459208432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_500db1187a5b547cb7d799c03f327421766bfc2a' translation='3.319900000000001 3.4273622147773186 -8.540308432079827' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_a113953a4fd76dc7bd442656a08af378baed6667' translation='-0.9983999999999992 1.5692622147773183 -12.878608432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_61658aef236e200a9ffa30030e7cb0549bef0d4f' translation='0.2686000000000008 -1.3617377852226817 -10.921708432079829' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_e14c10820a526fde0ea0beee073b947e1ca67a4a' translation='5.117400000000001 -9.501337785222681 -7.312808432079828' scale ='1.6666666666666667 1.6666666666666667 1.6666666666666667'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_ef646766f217c78d4a7ce6bd849dc15f9cc6f676' translation='3.971000000000001 -10.281937785222683 -6.388608432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_feafc0fa0ada80b19459ccf9116eb24e8a40f9a7' translation='6.286300000000001 -8.707737785222681 -8.196808432079829' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_9e346826c780b8b1975dc8906296cc47974ccd4e' translation='-3.962099999999999 -7.027537785222682 -12.234208432079829' scale ='1.6666666666666667 1.6666666666666667 1.6666666666666667'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_9ede89834e464def4f7d991a98d3117a8368f701' translation='-5.108499999999999 -7.808137785222682 -11.310008432079828' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_b9fc03fe668187e6e2a0df760fec7a785ba7be12' translation='-2.7931999999999992 -6.233937785222682 -13.118208432079829' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_fba940eea4ca7f9002bc529bbb0cbc8fc0423985' translation='-7.158699999999999 -2.3654377852226816 -3.665008432079828' scale ='1.6666666666666667 1.6666666666666667 1.6666666666666667'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_17bd18bd602e8e22b6c1db22c5d32a02542ed1ed' translation='-8.3051 -3.1460377852226817 -2.7408084320798283' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_862a6bda25d2fa6e5fd13100124371357cb1d769' translation='-5.989799999999999 -1.571837785222682 -4.5490084320798285' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_841936e6f873f49a85e18a4a94df5d7dfe591edf' translation='2.811200000000001 -3.820737785222682 0.8431915679201722' scale ='2.475656048852946 2.475656048852946 2.475656048852946'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='1.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_772a992774d132a9f8417a602abf7174e7ef4a94' translation='2.249000000000001 -6.026737785222682 -0.12960843207982808' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_dbe90bb7628212f56ef88f4a152bc0fe402f350b' translation='0.7687000000000008 -4.541737785222682 2.0420915679201714' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_647ebb197e6830e3aa6b55b554cfe16547b5d634' translation='2.2419000000000007 -1.416137785222682 0.6932915679201717' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_b855b93bf7c9e35b15e205e2fa18853a05d54af0' translation='3.395400000000001 -4.833637785222682 3.0252915679201715' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_c01f09c13775d8d9ba1a4e431bdd87296d4e8a52' translation='2.749200000000001 -3.660237785222682 -1.6265084320798282' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='ID_bbe92ce041d250f5715b879320bc543d0054e9f7' translation='4.854800000000001 -2.5814377852226817 0.19779156792017183' scale ='1.0 1.0 1.0'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 1.0 0.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Box/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+<Transform DEF='' translation='0.0 7.407875570445367 0.0' scale ='13.4364 13.4364 13.4364'>
+					
+	<Shape>
+		<Appearance>
+			<Material diffuseColor='0.0 0.0 1.0' transparency='	0.0 '/>
+		</Appearance>		
+		<Sphere/>				             
+	</Shape>
+	
+									
+		
+</Transform>	
+
+	
+	<Transform translation='3.2077042160399136 1.3322676295501878E-15 3.2077042160399145' scale='1.0 11.712879712863236 1.0' rotation='6.415408432079828 0.0 6.415408432079827 2.2555155297971794'>      
+	      <Shape>
+	        <Appearance>
+	          <Material transparency="0.0" diffuseColor='1 0 0' />	              
+	        </Appearance>
+	        <Cylinder height="1" radius ='0.30909990108803165' />
+	      </Shape>		         
+	</Transform>
+
+
+	
+	<Transform translation='3.207704216039914 1.3322676295501878E-15 -3.2077042160399136' scale='1.0 11.712879712863236 1.0' rotation='-6.415408432079828 0.0 6.415408432079826 2.2555155297971794'>      
+	      <Shape>
+	        <Appearance>
+	          <Material transparency="0.0" diffuseColor='1 0 0' />	              
+	        </Appearance>
+	        <Cylinder height="1" radius ='0.3892401161035798' />
+	      </Shape>		         
+	</Transform>
+
+
+	
+	<Transform translation='3.2077042160399136 5.555906677834026 1.964152350392375E-16' scale='1.0 7.407875570445366 1.0' rotation='3.92830470078475E-16 0.0 -6.415408432079827 2.0943951023931953'>      
+	      <Shape>
+	        <Appearance>
+	          <Material transparency="0.0" diffuseColor='1 0 0' />	              
+	        </Appearance>
+	        <Cylinder height="1" radius ='0.4774637127578304' />
+	      </Shape>		         
+	</Transform>
+
+<Viewpoint DEF='Initial' description='Overview' position='0 0 188.51808432079827 '/>
+
+</Transform>	
+<Background DEF='_Background' groundColor='1.0000000 1.0000000 1.0000000' skyColor='1.0000000 1.0000000 1.0000000'/>
+
+   	</Scene>
+</X3D>

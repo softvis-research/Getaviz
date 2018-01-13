@@ -1,0 +1,5 @@
+jQuery('#question-<%=@apc.question.id %>').after('<%= escape_javascript(render :partial => 'questionaire') %>');
+<% if @answered_partial %>
+jQuery('#answer-collection-<%=@apc.id %>').replaceWith('<%= escape_javascript(render :partial => @answered_partial) %>');
+<% end %>
+resetTimer();

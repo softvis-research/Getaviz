@@ -1,0 +1,6 @@
+C:\Users\philipp\Desktop\Csharp Famix Generator\Famix\bin\Debug\Famix.dll.config
+C:\Users\philipp\Desktop\Csharp Famix Generator\Famix\bin\Debug\Famix.dll
+C:\Users\philipp\Desktop\Csharp Famix Generator\Famix\bin\Debug\Famix.pdb
+C:\Users\philipp\Desktop\Csharp Famix Generator\Famix\obj\x86\Debug\Famix.csprojResolveAssemblyReference.cache
+C:\Users\philipp\Desktop\Csharp Famix Generator\Famix\obj\x86\Debug\Famix.dll
+C:\Users\philipp\Desktop\Csharp Famix Generator\Famix\obj\x86\Debug\Famix.pdb

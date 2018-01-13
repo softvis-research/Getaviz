@@ -1,0 +1,19 @@
+<% @show_next = true %>
+<%#das soll die Texte nach oben verschieben %>
+<% for textual_element in @participant_experiment_step.experiment_step.step.textual_elements.sort_by{|te|
+	[((te.class.to_s == "Text") ? 0 : 1), te.id]}
+	%>
+<% if textual_element.class.to_s.strip == 'Text' %>
+<%= render :partial => 'text', :locals => {:text => textual_element} %>
+<% elsif textual_element.is_a?(Questionaire) %>
+<% @questionaire = textual_element %>
+<%= render :partial => 'questionaire' %>
+<% else %>
+<div>FEHLER <%= textual_element.to_yaml %></div>
+<% end %>
+<% end %>
+
+
+<% if @show_next %>
+<%= render :partial => 'proceed_form' %>
+<% end %>

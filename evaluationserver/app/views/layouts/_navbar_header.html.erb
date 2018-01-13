@@ -1,0 +1,64 @@
+<% if content_for?(:sidebar)  %>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="<%= root_path %>">Evaluation Server</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+		  <% if content_for?(:remarks) %>
+		  <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Remarks<span class="caret"></span></a>
+			 <ul class="dropdown-menu" role="menu">
+				<li>
+				  <div class="dropdown-notice">
+				  <%= yield(:remarks) %>
+				  </div>
+				</li>
+				</ul>
+        </li>
+		  <% end %>
+
+
+		  <% if content_for?(:mapping) %>
+		  <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mapping-Info<span class="caret"></span></a>
+			 <ul class="dropdown-menu" role="menu">
+				<li>
+				  <div class="dropdown-notice">
+				  <%= yield(:mapping) %>
+				  </div>
+				</li>
+				</ul>
+        </li>
+		  <% end %>
+
+
+
+
+
+		  
+        <li class="dropdown<% if content_for?(:sidebar_title)  %> open<% end %>">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><% if content_for?(:sidebar_title)  %><%= yield(:sidebar_title) %><% else %>Hinweis<% end %><span class="caret"></span></a>
+			 <ul class="dropdown-menu" role="menu">
+				<li>
+				  <div class="dropdown-notice">
+				  <%= yield(:sidebar) %>
+				  </div>
+				</li>
+				</ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<% end %>

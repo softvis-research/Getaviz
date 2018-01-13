@@ -1,0 +1,138 @@
+<div>Typ: Szene mit Fragen</div>
+
+
+<h6>Szeneninformationen</h6>
+
+<div style="display:table:">
+  <div style="display:table-row;">
+	 <div class="tablecell">Szenenname</div>
+	 <div class="tablecell">Szenenurl</div>
+	 <div class="tablecell">Gesehen von</div>
+	 <div class="tablecell">gesehen von in %</div>
+	 <div class="tablecell">minimale Anzahl Klicks</div>
+	 <div class="tablecell">maximale Anzahl Klicks</div>
+	 <div class="tablecell">Durchschnitt Anzahl Klicks</div>
+	 <div class="tablecell">minimale Zeit Mousedown</div>
+	 <div class="tablecell">maximale Zeit Mousedown</div>
+	 <div class="tablecell">Durchschnitt Zeit Mousedown</div>
+  </div>
+
+  <% for scene_result in step_result[:result][:scenes] %>
+  <div style="display:table-row;">
+	 <div class="tablecell"><%= scene_result[:scene_name] %></div>
+	 <div class="tablecell"><%= scene_result[:scene_url] %></div>
+	 <div class="tablecell"><%= scene_result[:viewed_by_number_of_participants] %></div>
+	 <div class="tablecell"><%= scene_result[:viewed_by_percentage_of_participants] %></div>
+	 <div class="tablecell"><%= scene_result[:min_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= scene_result[:max_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= scene_result[:avg_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= scene_result[:min_time_mouse_down] %></div>
+	 <div class="tablecell"><%= scene_result[:max_time_mouse_down] %></div>
+	 <div class="tablecell"><%= scene_result[:avg_time_mouse_down] %></div>
+  </div>
+  <% end %>
+  <% sum_result = step_result[:sum_result][:scenes] %>
+  <div style="display:table-row;margin-top:5pt;font-weight:bold;">
+	 <div class="tablecell">Allgemein</div>
+	 <div class="tablecell"></div>
+	 <div class="tablecell"></div>
+	 <div class="tablecell"><%= sum_result[:sum_participants] %></div>
+	 <div class="tablecell"><%= sum_result[:min_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= sum_result[:max_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= sum_result[:avg_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= sum_result[:min_time_mouse_down] %></div>
+	 <div class="tablecell"><%= sum_result[:max_time_mouse_down] %></div>
+	 <div class="tablecell"><%= sum_result[:avg_time_mouse_down] %></div>
+  </div>
+  
+</div>
+
+
+<h6>Fragen</h6>
+
+<% for question_result in step_result[:result][:questions] %>
+<% has_correct_answer = question_result[:question_has_correct_answer]%>
+<h4>Frage <%= question_result[:question_id] %></h4>
+
+<div>Fragestellung: <%= question_result[:question_text] %></div>
+
+
+<table>
+  <tr>
+	 <th rowspan="3">Szene</th>
+	 <% if has_correct_answer %>
+	 <th colspan="3">beantwortet</th>
+	 <% else %>
+	 <th>beantwortet</th>
+	 <% end %>
+	 <% if has_correct_answer %>
+	 <th colspan="9">Zeit bis Beantwortung</th>
+	 <th colspan="6">Fehleranzahl</th>
+	 <% else %>
+	 <th colspan="3">Zeit bis Beantwortung</th>
+	 <% end %>
+	 
+  </tr>
+  <tr>
+
+	 <th rowspan="2">Anzahl</th>
+	 <% if has_correct_answer %>
+	 <th rowspan="2">korrekt</th>
+	 <th rowspan="2">inkorrekt %</th>
+	 <% end %>
+	 <th colspan="3">Gesamt</th>
+	 <% if has_correct_answer %>
+	 <th colspan="3">korrekte Antwort</th>
+	 <th colspan="3">falsche Antwort</th>
+	 <th colspan="3">Gesamt</th>
+	 <th colspan="3">korrekte Antwort</th>
+	 <% end %>
+  </tr>
+  <tr>
+	 <th>min</th>
+	 <th>max</th>
+	 <th>avg</th>
+	 <% if has_correct_answer %>
+	 <th>min</th>
+	 <th>max</th>
+	 <th>avg</th>
+	 <th>min</th>
+	 <th>max</th>
+	 <th>avg</th>
+	 <th>min</th>
+	 <th>max</th>
+	 <th>avg</th>
+	 <th>min</th>
+	 <th>max</th>
+	 <th>avg</th>
+	 <% end %>
+  </tr>
+
+
+  <% for question_result_per_scene_key in question_result[:per_scene].keys %>
+  <% next if question_result_per_scene_key == :all %>
+  <%= render :partial => 'result_question_per_scene', :locals => {:has_correct_answer => question_result[:question_has_correct_answer], :key => question_result_per_scene_key, :question_result_per_scene => question_result[:per_scene][question_result_per_scene_key]} %>
+  <% end %>
+  <%= render :partial => 'result_question_per_scene', :locals => {:has_correct_answer => question_result[:question_has_correct_answer], :key => :all, :question_result_per_scene => question_result[:per_scene][:all]} %>
+</table>
+
+<div>Antworten</div>
+
+
+<% for question_result_per_scene_key in question_result[:per_scene].keys %>
+<% next if question_result_per_scene_key == :all %>
+<div>Bei Szene <%= Scene.find(question_result_per_scene_key).name %></div>
+<% for participant_answer in question_result[:per_scene][question_result_per_scene_key][:participants_answers] %>
+<div><%= participant_answer[:answer] %>
+<% end %>
+
+<% end %>
+
+<% end %>
+
+
+
+
+
+
+

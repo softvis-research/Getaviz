@@ -1,0 +1,50 @@
+html, body {
+    font-family: 'Segoe UI';
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    position: absolute;
+    top: 0px;
+    overflow: hidden;
+}
+
+#ui{
+	font-family: 'Segoe UI';
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    position: absolute;
+    top: 0px;
+    overflow: hidden;
+}
+
+#canvas {
+    float: left;
+    width: 100%;
+    height: 100%;
+}
+#x3dElement {
+    width: 100%;
+    height: 100%;
+    border-style: none;
+}
+
+table {
+    table-layout: fixed;
+    width: 99%;
+    font-size: 12px;
+    white-space: nowrap;
+}
+td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#placeHolder{   
+    margin: auto;
+    width: 50%;
+    padding: 400px;
+    text-align: center;
+}

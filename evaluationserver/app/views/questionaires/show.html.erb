@@ -1,0 +1,45 @@
+<div class="page-header">
+  <h1><%= t(:questionaire, scope: :questionaires) %></h1>
+</div>
+
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#home" data-target="#home" role="tab" data-toggle="tab"><%= t(:metadata, scope: :questionaires)%></a></li>
+        <li><a href="#profile" data-target="#profile" role="tab" data-toggle="tab"><%= t(:questions, scope: :questionaires)%></a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="home">
+			 <div class="row" style="margin-top:15px;">
+				<div class="col-md-12">
+				<dl class="dl-horizontal">
+				  <dt><strong><%= t(:name, scope: :questionaires) %>:</strong></dt>
+				  <dd><%= @questionaire.title %></dd>
+				  <dt><strong><%= t(:description, scope: :questionaires) %>:</strong></dt>
+				  <dd><%= @questionaire.description %></dd>
+			 </dl>
+			 </div>
+				</div>
+		  </div>
+        <div class="tab-pane" id="profile">
+			 <%= render :partial => 'choose_questions' %>
+		  </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="form-actions">
+  <%= link_to t(:back),
+              questionaires_path, :class => 'btn btn-default'  %>
+  <%= link_to t(:edit),
+              edit_questionaire_path(@questionaire), :class => 'btn btn-default' %>
+  <%= link_to t(:destroy),
+              questionaire_path(@questionaire),
+              :method => 'delete',
+              :data => { :confirm => t(:confirm) },
+              :class => 'btn btn-danger' %>
+</div>

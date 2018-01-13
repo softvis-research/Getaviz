@@ -1,0 +1,126 @@
+grammar org.svis.xtext.Dynamix with org.eclipse.xtext.common.Terminals
+
+generate dynamix "http://www.svis.org/dynamix"
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+Root:
+	document=Document?;
+
+Document:{Document}
+	'(Moose.Model'(WS)*
+		'(entity'
+	elements+=DYNAMIXElement*
+	')' ')';
+
+DYNAMIXElement:
+	DYNAMIXTrace | DYNAMIXInstance | DYNAMIXActivation | DYNAMIXAlias | DYNAMIXReturnAlias | DYNAMIXArgumentAlias |
+	DYNAMIXFieldAlias |
+	DYNAMIXFieldReadAlias | FAMIXClass | FAMIXMethod | FAMIXAttribute | FAMIXFormalParameter;
+
+DYNAMIXTrace:
+	'(DynaMoose.Trace'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	')';
+
+DYNAMIXInstance:
+	'(DynaMoose.Instance'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'instanceOf' instanceOf=IntegerReference ')'
+	')';
+
+DYNAMIXActivation:
+	'(DynaMoose.Activation'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'trace' trace=IntegerReference ')'
+	'(' 'method' method=IntegerReference ')'
+	('(' 'receiver' receiver=IntegerReference ')')?
+	('(' 'parent' parent=IntegerReference ')')?
+	('(' 'return' return=IntegerReference ')')?
+	'(' 'start' start=Timestamp ')'
+	'(' 'stop' stop=Timestamp ')'
+	')';
+
+DYNAMIXAlias:
+	'(DynaMoose.Alias'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'creator' creator=IntegerReference ')'
+	'(' 'subject' subject=IntegerReference ')'
+	')';
+
+DYNAMIXReturnAlias:
+	'(DynaMoose.ReturnAlias'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'subject' subject=IntegerReference ')'
+	('(' 'creator' creator=IntegerReference ')')?
+	')';
+
+DYNAMIXArgumentAlias:
+	'(DynaMoose.ArgumentAlias'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'variable' variable=IntegerReference ')'
+	('(' 'subject' subject=IntegerReference ')')?
+	'(' 'creator' creator=IntegerReference ')'
+	')';
+
+DYNAMIXFieldAlias:
+	'(DynaMoose.FieldAlias'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'variable' variable=IntegerReference ')'
+	'(' 'creator' creator=IntegerReference ')'
+	('(' 'holder' holder=IntegerReference ')')?
+	('(' 'subject' subject=IntegerReference ')')?
+	'(' 'timestamp' timestamp=Timestamp ')'
+	')';
+
+DYNAMIXFieldReadAlias:
+	'(DynaMoose.FieldReadAlias'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'variable' variable=IntegerReference ')'
+	'(' 'creator' creator=IntegerReference ')'
+	('(' 'holder' holder=IntegerReference ')')?
+	('(' 'subject' subject=IntegerReference ')')?
+	'(' 'timestamp' timestamp=Timestamp ')'
+	')';
+
+FAMIXClass:
+	'(FAMIX.Class'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	('(' 'hash' id = STRING ')')?
+	')';
+
+FAMIXMethod:
+	'(FAMIX.Method'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	'(' 'belongsTo' belongsTo=IntegerReference ')'
+	('(' 'signature' signature=MSESTRING ')')?
+	')';
+
+FAMIXAttribute:
+	'(FAMIX.Attribute'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	'(' 'belongsTo' belongsTo=IntegerReference ')'
+	')';
+
+FAMIXFormalParameter:
+	'(FAMIX.FormalParameter'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'position' position=MSESTRING ')'
+	'(' 'belongsTo' belongsTo=IntegerReference ')'
+	')';
+
+IntegerReference:
+	'(' 'idref:' idref=[DYNAMIXElement|INT_ID] ')';
+
+INT_ID returns ecore::EString:
+	'^'? INT;
+
+Timestamp returns ecore::ELong:
+	INT
+;
+
+terminal MSESTRING:
+	("'"->"'")*;

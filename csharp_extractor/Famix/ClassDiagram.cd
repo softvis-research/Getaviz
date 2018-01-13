@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Famix.FamixNameType" Collapsed="true">
+    <Position X="10.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQQAAAAQAIAAIAAAAACAAQAACAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>FamixNameType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.Method" Collapsed="true">
+    <Position X="8.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAEAABIBAAAQAAAAAAAAAAAAAAAAAYAAAAgAAAA=</HashCode>
+      <FileName>Method.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.Namespace" Collapsed="true">
+    <Position X="13" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>Namespace.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.ParameterizedClass" Collapsed="true">
+    <Position X="8.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>ParameterizedClass.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.ParameterizedType" Collapsed="true">
+    <Position X="11.25" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAIAAAAAgAAAA=</HashCode>
+      <FileName>ParameterizedType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.PrimitiveType" Collapsed="true">
+    <Position X="13" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>PrimitiveType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.TypeBase" Collapsed="true">
+    <Position X="11" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAIAAIAAAAAAAAAAA=</HashCode>
+      <FileName>TypeBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.Class" Collapsed="true">
+    <Position X="10.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAEAABAAAAAAAAAAAAAQAAAAAAAAAAAAAQgAAEA=</HashCode>
+      <FileName>Class.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.Attribute" Collapsed="true">
+    <Position X="15.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAEAAAAAAAAQAAAAgAAAA=</HashCode>
+      <FileName>Attribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.Anchor" Collapsed="true">
+    <Position X="17" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAIAAAEAAAAAhAAAA=</HashCode>
+      <FileName>Anchor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.Enum" Collapsed="true">
+    <Position X="15.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAgAAAA=</HashCode>
+      <FileName>Enum.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.EnumValue" Collapsed="true">
+    <Position X="17.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAgAAAA=</HashCode>
+      <FileName>EnumValue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.FamixType" Collapsed="true">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>FamixType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.Access" Collapsed="true">
+    <Position X="12.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAACAAAAAAAAAAAQAAAgAAAA=</HashCode>
+      <FileName>Access.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Famix.Invocation" Collapsed="true">
+    <Position X="14.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgIAAA=</HashCode>
+      <FileName>Invocation.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

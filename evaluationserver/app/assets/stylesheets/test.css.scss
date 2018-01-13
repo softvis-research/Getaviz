@@ -1,0 +1,22 @@
+
+.floating-sidebar{
+  position:absolute;
+  top: 68px;
+  right: 12px;
+  background-color: white;
+  border: solid 1px black;
+  border-radius: 15px;
+  padding:0.5em;
+  z-index:1000000;
+}
+
+.floating-sidebar-content {
+	 clear:both;
+	 cursor:pointer;
+	 width: 400px;
+}
+
+.floating-sidebar-toggler {
+	 float:right;
+	 cursor:pointer;
+}

@@ -1,0 +1,50 @@
+module org.svis.generator.run.rd
+
+var path = "./input/famix"
+var configPath = "config.json"
+
+Workflow {
+
+	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
+    	platformUri = "../org.svis.generator.run/.."
+    	registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
+	}
+	
+	component = org.svis.generator.ReaderWithConfig {
+		path = "${path}"
+		register = org.svis.xtext.FamixStandaloneSetupGenerated {}
+		loadResource = {
+			slot = "famix"
+		}
+	}
+
+	// support lazy loading of textual models
+	component = org.svis.generator.ResolveLazyComponent {}
+	
+	// delete unnecessary objects
+	component = org.svis.generator.famix.Famix2Famix {
+		modelSlot = "famix"
+		config = configPath
+	}
+		
+	// transform famix into disks (s2m)
+	component = org.svis.generator.rd.s2m.Famix2RD {
+		modelSlot = "famix"
+		config = configPath
+	}
+	
+	component = org.svis.generator.famix.Famix2DB {
+		modelSlot = "famix"
+		config = configPath
+	}
+
+	// calculate rd layout (m2m)
+	component = org.svis.generator.rd.m2m.RD2RD {
+		modelSlot = "rd"
+	}
+
+	component = org.svis.generator.rd.m2t.RD2DB {
+		modelSlot = 'rdextended'
+		config = configPath
+	}
+}

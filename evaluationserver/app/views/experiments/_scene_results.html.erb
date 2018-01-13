@@ -1,0 +1,9 @@
+<% results = experiment_step.scene_results %>
+
+<div>Mögliche Szenen: <%= results[:scenes].pluck(:name).join(", ") %></div>
+<div>Anzahl der möglichen Szenen: <%= results[:scenes].length %></div>
+
+
+
+
+

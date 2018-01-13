@@ -1,0 +1,192 @@
+grammar org.svis.xtext.Plant with org.eclipse.xtext.common.Terminals
+
+generate plant "http://www.svis.org/xtext/Plant"
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+/* -----------------------------------------------------------------------------------------------
+ * Important files for this project are:
+ * /org.svis.generator/src/org/svis/generator/plant/PlantSettings.java
+ * /org.svis.generator/src/org/svis/generator/plant/s2m/Famix2Plant.xtend
+ * /org.svis.generator/src/org/svis/generator/plant/m2m/Plant2Plant.xtend
+ * /org.svis.generator/src/org/svis/generator/plant/m2t/Plant2X3D.xtend
+ * /org.svis.generator.run/src/org/svis/generator/run/plant/Famix2Plant.mwe2
+ */
+
+
+/*
+ * Wherefore stands the meta model elements?
+ * Area 				- Package
+ * Plant 				- Class
+ * Junction 			- Inner Class
+ * Petal 				- Methode
+ * PollStem 			- Attribute
+ */
+
+Root:
+	document=Document?;
+
+Document:
+	{Document}
+	'(' Entity+=Entity* ')';
+
+Entity:
+	Area | Stem | Junction;
+
+// following attributes are required, cause they are from famix,dynamix etc.:
+// id, name, fqn, hash, type, level, loc
+
+// Stands for a package:
+Area:
+	'(Area'
+	'(' 'id:' name=INT_ID ')' 
+	'(' 'name' value=MSESTRING ')' 
+	'(' 'fqn' fqn=MSESTRING ')' // full qualified name 
+	'(' 'hash' id=STRING ')' 
+	'(' 'type' type=MSESTRING ')'
+	'(' 'level' level=INT ')'
+	('(' 'loc' loc=INT ')')?
+	('(' 'dataCounter' dataCounter=Decimal ')') 
+	('(' 'methodCounter' methodCounter=Decimal ')') 
+	('(' 'position' position=Position ')')? // area position x, y, z
+	('(' 'height' height=Decimal ')')? // height of the area 
+	('(' 'width' width=Decimal ')')?  // width  of the area
+	('(' 'length' length=Decimal ')')?  // length  of the area
+	('(' 'entities' entities+=Entity* ')')? // a package can have packages or classes
+    ('(' 'parent' parent=[Entity] ')')? // a package can be a part of another package AND a class can be a Part of a class
+    // Configuration content: ---------------------------------------------
+    ('(' 'texture' texture=MSESTRING ')')?
+    ('(' 'color' color=MSESTRING ')')?   
+    ('(' 'shapeID' shapeID=MSESTRING ')')? // The look of a petal
+//	('(' 'manifestType' manifestType=MSESTRING ')')? // mapping to software part like: attribute or method  
+	')';
+
+// Stands for a class:
+Stem:
+	'(Stem'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	'(' 'fqn' fqn=MSESTRING ')' // full qualified name 
+	'(' 'hash' id=STRING ')' 
+	'(' 'type' type=MSESTRING ')' 
+	'(' 'level' level=INT ')' 
+	('(' 'loc' loc=INT ')')?
+	('(' 'dataCounter' dataCounter=Decimal ')') 
+	('(' 'methodCounter' methodCounter=Decimal ')') 
+	('(' 'position' position=Position ')')? // stem position x, y, z
+	('(' 'height' height=Decimal ')')? // stem height
+	('(' 'width' width=Decimal ')')? // stem width (is just for position calculation)
+	('(' 'length' length=Decimal ')')? // stem length  (is just for position calculation)
+	('(' 'junctions' junctions+=Junction* ')')? // a class can have subclasses
+	('(' 'petals' petals+=Petal* ')')? // a class can have Methods/Attributes
+	('(' 'pollstems' pollstems+=PollStem* ')')? // a class can have Methods/Attributes
+	// Configuration content: ---------------------------------------------
+	('(' 'texture' texture=MSESTRING ')')? 
+	('(' 'color' color=MSESTRING ')')?
+	('(' 'headTexture' headTexture=MSESTRING ')')? 
+	('(' 'headColor' headColor=MSESTRING ')')? 
+	('(' 'headTopPartTexture' headTopPartTexture=MSESTRING ')')? 
+	('(' 'headTopPartColor' headTopPartColor=MSESTRING ')')? 
+	('(' 'shapeID' shapeID=MSESTRING ')')? // The look of a petal
+//	('(' 'manifestType' manifestType=MSESTRING ')')? // mapping to software part like: attribute or method
+	')';
+
+// Stands for an inner class:	
+Junction:
+	'(Junction'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	'(' 'fqn' fqn=MSESTRING ')'
+	'(' 'hash' id=STRING ')' 
+	'(' 'type' type=MSESTRING ')' 
+	'(' 'level' level=INT ')' 
+	('(' 'loc' loc=INT ')')?
+	('(' 'dataCounter' dataCounter=Decimal ')') 
+	('(' 'methodCounter' methodCounter=Decimal ')') 
+	('(' 'position' position=Position ')')? // Junction position x, y, z
+	('(' 'height' height=Decimal ')')? // Junction height
+	('(' 'width' width=Decimal ')')? // Junction width
+	('(' 'length' length=Decimal ')')? // stem length  (is just for position calculation)
+	('(' 'junctions' junctions+=Junction* ')')? // a sub class can have subclasses
+	('(' 'petals' petals+=Petal* ')')? // a class can have Methods/Attributes
+	('(' 'pollstems' pollstems+=PollStem* ')')? 
+	('(' 'currenJunctionAngle' currentJunctionAngle=Decimal ')')? // global for all junctions
+	('(' 'angular' angular=Decimal ')')? // single junction angular
+	('(' 'headPosition' headPosition=Position ')')? // junction head position x, y, z
+	// Configuration content: ---------------------------------------------
+	('(' 'texture' texture=MSESTRING ')')?
+	('(' 'color' color=MSESTRING ')')?
+	('(' 'headTexture' headTexture=MSESTRING ')')? 
+	('(' 'headColor' headColor=MSESTRING ')')? 
+	('(' 'headTopPartTexture' headTopPartTexture=MSESTRING ')')? 
+	('(' 'headTopPartColor' headTopPartColor=MSESTRING ')')?  
+	('(' 'shapeID' shapeID=MSESTRING ')')? // The look of a petal
+//	('(' 'manifestType' manifestType=MSESTRING ')')? // mapping to software part like: attribute or method
+	')';
+	
+// Stands for a method oder optional for an attribute:
+Petal:
+	'(Petal'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	'(' 'hash' id=STRING ')'
+	'(' 'fqn' fqn=MSESTRING ')'
+	'(' 'type' type=MSESTRING ')' 
+	('(' 'loc' loc=INT ')')?
+	('(' 'dataCounter' dataCounter=Decimal ')') 
+	('(' 'methodCounter' methodCounter=Decimal ')') 
+	('(' 'position' position=Position ')')? // petal position x, y, z
+	('(' 'height' height=Decimal ')')? // stem height
+	('(' 'width' width=Decimal ')')? // stem width
+	('(' 'currenPetalAngle' currentPetalAngle=Decimal ')')? // global for all petals
+	('(' 'angular' angular=Decimal ')')? // single petal angular
+	// Configuration content: ---------------------------------------------
+	('(' 'texture' texture=MSESTRING ')')? 
+	('(' 'color' color=MSESTRING ')')?
+	('(' 'shapeID' shapeID=MSESTRING ')')? // The look of a petal
+//	('(' 'manifestType' manifestType=MSESTRING ')')? // mapping to software part like: attribute or method
+	')';
+	
+// Stands for a method oder optional for an attribute:
+PollStem:
+	'(PollStem'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	'(' 'hash' id=STRING ')'
+	'(' 'fqn' fqn=MSESTRING ')'
+	'(' 'type' type=MSESTRING ')' 
+	('(' 'loc' loc=INT ')')?
+	('(' 'position' position=Position ')')? // pollStem position x, y, z
+	('(' 'height' height=Decimal ')')? // stem height
+	('(' 'width' width=Decimal ')')? // stem width
+	('(' 'ballPosition' ballPosition=Position ')')? // pollStem position x, y, z
+	('(' 'currentPollStemAngle' currentPollStemAngle=Decimal ')')? // global angle for all poll stems
+	('(' 'angular' angular=Decimal ')')? // angle for a single poll stem
+	// Configuration content: ---------------------------------------------
+	('(' 'texture' texture=MSESTRING ')')? 
+	('(' 'color' color=MSESTRING ')')? 
+	('(' 'ballTexture' ballTexture=MSESTRING ')')? 
+	('(' 'ballColor' ballColor=MSESTRING ')')?
+	('(' 'shapeID' shapeID=MSESTRING ')')? // The look of a petal
+//	('(' 'manifestType' manifestType=MSESTRING ')')? // mapping to software part like: attribute or method
+	')';	
+
+// Data type conforms to double:
+Decimal returns ecore::EDouble:
+	'-'? INT '.' INT;
+
+// Data type conforms to integer:
+INT_ID returns ecore::EString:
+	'^'? INT;
+
+// Data type conforms to boolean:
+Boolean returns ecore::EBoolean:
+	'true' | 'false' | 'TRUE' | 'FALSE'
+;
+
+// Data type for the coordinates:
+Position:
+	'\'' x=Decimal y=Decimal z=Decimal '\'';
+
+// Data type conforms to String:
+terminal MSESTRING:
+	("'"->"'")*;

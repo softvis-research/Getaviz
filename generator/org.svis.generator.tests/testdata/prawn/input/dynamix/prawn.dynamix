@@ -1,0 +1,2014 @@
+(Moose.Model 
+(entity 
+(DynaMoose.Trace 
+(id: 1)
+(name 'main')
+)
+
+(FAMIX.Class 
+(id: 2)
+(name 'Prawn::Document')
+)
+
+(FAMIX.Method 
+(id: 3)
+(name 'initialize(options ,  &block)')
+(belongsTo (idref: 2))
+(signature 'def initialize(options = {}, &block)') )
+
+(DynaMoose.Instance 
+(id: 4) (instanceOf ( idref: 2 ) ) )
+
+(DynaMoose.Activation 
+(id: 5)
+(trace (idref: 1) )
+(method (idref: 3) )
+(start 1471896697253008)
+(stop 1471896697398838)
+)
+
+(FAMIX.Class 
+(id: 6)
+(name 'Prawn::__dummy__')
+)
+
+(FAMIX.Method 
+(id: 7)
+(name 'verify_options(accepted,  actual) # @private')
+(belongsTo (idref: 6))
+(signature 'def verify_options(accepted, actual) # @private') )
+
+(DynaMoose.Activation 
+(id: 8)
+(trace (idref: 1) )
+(method (idref: 7) )
+(parent (idref: 5) )
+(start 1471896697253032)
+(stop 1471896697253038)
+)
+
+(FAMIX.Method 
+(id: 9)
+(name 'self.extensions')
+(belongsTo (idref: 2))
+(signature 'def self.extensions') )
+
+(DynaMoose.Activation 
+(id: 10)
+(trace (idref: 1) )
+(method (idref: 9) )
+(parent (idref: 5) )
+(start 1471896697253049)
+(stop 1471896697253055)
+)
+
+(FAMIX.Method 
+(id: 11)
+(name 'initialize_first_page(options)')
+(belongsTo (idref: 2))
+(signature 'def initialize_first_page(options)') )
+
+(DynaMoose.Activation 
+(id: 12)
+(trace (idref: 1) )
+(method (idref: 11) )
+(parent (idref: 5) )
+(start 1471896697253362)
+(stop 1471896697254596)
+)
+
+(FAMIX.Method 
+(id: 13)
+(name 'start_new_page(options )')
+(belongsTo (idref: 2))
+(signature 'def start_new_page(options = {})') )
+
+(DynaMoose.Activation 
+(id: 14)
+(trace (idref: 1) )
+(method (idref: 13) )
+(parent (idref: 12) )
+(start 1471896697253411)
+(stop 1471896697254593)
+)
+
+(FAMIX.Class 
+(id: 15)
+(name 'Prawn::Document::Internals::__dummy__')
+)
+
+(FAMIX.Method 
+(id: 16)
+(name 'renderer')
+(belongsTo (idref: 15))
+(signature 'def renderer') )
+
+(DynaMoose.Activation 
+(id: 17)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 14) )
+(start 1471896697253471)
+(stop 1471896697253502)
+)
+
+(DynaMoose.Activation 
+(id: 18)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 14) )
+(start 1471896697253705)
+(stop 1471896697253709)
+)
+
+(FAMIX.Method 
+(id: 19)
+(name 'apply_margin_options(options)')
+(belongsTo (idref: 2))
+(signature 'def apply_margin_options(options)') )
+
+(DynaMoose.Activation 
+(id: 20)
+(trace (idref: 1) )
+(method (idref: 19) )
+(parent (idref: 14) )
+(start 1471896697253814)
+(stop 1471896697253862)
+)
+
+(FAMIX.Method 
+(id: 21)
+(name 'generate_margin_box')
+(belongsTo (idref: 2))
+(signature 'def generate_margin_box') )
+
+(DynaMoose.Activation 
+(id: 22)
+(trace (idref: 1) )
+(method (idref: 21) )
+(parent (idref: 14) )
+(start 1471896697253867)
+(stop 1471896697254033)
+)
+
+(FAMIX.Class 
+(id: 23)
+(name 'Prawn::Document::BoundingBox')
+)
+
+(FAMIX.Method 
+(id: 24)
+(name 'initialize')
+(belongsTo (idref: 23))
+(signature 'initialize') )
+
+(DynaMoose.Instance 
+(id: 25) (instanceOf ( idref: 23 ) ) )
+
+(DynaMoose.Activation 
+(id: 26)
+(trace (idref: 1) )
+(method (idref: 24) )
+(parent (idref: 22) )
+(start 1471896697254016)
+(stop 1471896697254027)
+)
+
+(FAMIX.Method 
+(id: 27)
+(name 'use_graphic_settings(override_settings )')
+(belongsTo (idref: 2))
+(signature 'def use_graphic_settings(override_settings = false)') )
+
+(DynaMoose.Activation 
+(id: 28)
+(trace (idref: 1) )
+(method (idref: 27) )
+(parent (idref: 14) )
+(start 1471896697254039)
+(stop 1471896697254462)
+)
+
+(FAMIX.Class 
+(id: 29)
+(name 'Prawn::Graphics::Color::__dummy__')
+)
+
+(FAMIX.Method 
+(id: 30)
+(name 'current_fill_color')
+(belongsTo (idref: 29))
+(signature 'def current_fill_color') )
+
+(DynaMoose.Activation 
+(id: 31)
+(trace (idref: 1) )
+(method (idref: 30) )
+(parent (idref: 28) )
+(start 1471896697254045)
+(stop 1471896697254128)
+)
+
+(DynaMoose.Activation 
+(id: 32)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 31) )
+(start 1471896697254056)
+(stop 1471896697254060)
+)
+
+(FAMIX.Method 
+(id: 33)
+(name 'current_stroke_color')
+(belongsTo (idref: 29))
+(signature 'def current_stroke_color') )
+
+(DynaMoose.Activation 
+(id: 34)
+(trace (idref: 1) )
+(method (idref: 33) )
+(parent (idref: 28) )
+(start 1471896697254135)
+(stop 1471896697254168)
+)
+
+(DynaMoose.Activation 
+(id: 35)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 34) )
+(start 1471896697254141)
+(stop 1471896697254145)
+)
+
+(FAMIX.Class 
+(id: 36)
+(name 'Prawn::Graphics::__dummy__')
+)
+
+(FAMIX.Method 
+(id: 37)
+(name 'line_width(width )')
+(belongsTo (idref: 36))
+(signature 'def line_width(width = nil)') )
+
+(DynaMoose.Activation 
+(id: 38)
+(trace (idref: 1) )
+(method (idref: 37) )
+(parent (idref: 28) )
+(start 1471896697254174)
+(stop 1471896697254256)
+)
+
+(FAMIX.Method 
+(id: 39)
+(name 'current_line_width')
+(belongsTo (idref: 36))
+(signature 'def current_line_width') )
+
+(DynaMoose.Activation 
+(id: 40)
+(trace (idref: 1) )
+(method (idref: 39) )
+(parent (idref: 38) )
+(start 1471896697254180)
+(stop 1471896697254253)
+)
+
+(DynaMoose.Activation 
+(id: 41)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 40) )
+(start 1471896697254187)
+(stop 1471896697254190)
+)
+
+(FAMIX.Class 
+(id: 42)
+(name 'Prawn::Graphics::CapStyle::__dummy__')
+)
+
+(FAMIX.Method 
+(id: 43)
+(name 'cap_style(style )')
+(belongsTo (idref: 42))
+(signature 'def cap_style(style = nil)') )
+
+(DynaMoose.Activation 
+(id: 44)
+(trace (idref: 1) )
+(method (idref: 43) )
+(parent (idref: 28) )
+(start 1471896697254262)
+(stop 1471896697254305)
+)
+
+(FAMIX.Method 
+(id: 45)
+(name 'current_cap_style')
+(belongsTo (idref: 42))
+(signature 'def current_cap_style') )
+
+(DynaMoose.Activation 
+(id: 46)
+(trace (idref: 1) )
+(method (idref: 45) )
+(parent (idref: 44) )
+(start 1471896697254269)
+(stop 1471896697254301)
+)
+
+(DynaMoose.Activation 
+(id: 47)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 46) )
+(start 1471896697254276)
+(stop 1471896697254280)
+)
+
+(FAMIX.Class 
+(id: 48)
+(name 'Prawn::Graphics::JoinStyle::__dummy__')
+)
+
+(FAMIX.Method 
+(id: 49)
+(name 'join_style(style )')
+(belongsTo (idref: 48))
+(signature 'def join_style(style = nil)') )
+
+(DynaMoose.Activation 
+(id: 50)
+(trace (idref: 1) )
+(method (idref: 49) )
+(parent (idref: 28) )
+(start 1471896697254313)
+(stop 1471896697254396)
+)
+
+(FAMIX.Method 
+(id: 51)
+(name 'current_join_style')
+(belongsTo (idref: 48))
+(signature 'def current_join_style') )
+
+(DynaMoose.Activation 
+(id: 52)
+(trace (idref: 1) )
+(method (idref: 51) )
+(parent (idref: 50) )
+(start 1471896697254320)
+(stop 1471896697254393)
+)
+
+(DynaMoose.Activation 
+(id: 53)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 52) )
+(start 1471896697254326)
+(stop 1471896697254330)
+)
+
+(FAMIX.Class 
+(id: 54)
+(name 'Prawn::Graphics::Dash::__dummy__')
+)
+
+(FAMIX.Method 
+(id: 55)
+(name 'dashed?')
+(belongsTo (idref: 54))
+(signature 'def dashed?') )
+
+(DynaMoose.Activation 
+(id: 56)
+(trace (idref: 1) )
+(method (idref: 55) )
+(parent (idref: 28) )
+(start 1471896697254405)
+(stop 1471896697254459)
+)
+
+(FAMIX.Method 
+(id: 57)
+(name 'current_dash_state')
+(belongsTo (idref: 54))
+(signature 'def current_dash_state') )
+
+(DynaMoose.Activation 
+(id: 58)
+(trace (idref: 1) )
+(method (idref: 57) )
+(parent (idref: 56) )
+(start 1471896697254410)
+(stop 1471896697254442)
+)
+
+(DynaMoose.Activation 
+(id: 59)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 58) )
+(start 1471896697254417)
+(stop 1471896697254420)
+)
+
+(FAMIX.Method 
+(id: 60)
+(name 'undashed_setting')
+(belongsTo (idref: 54))
+(signature 'def undashed_setting') )
+
+(DynaMoose.Activation 
+(id: 61)
+(trace (idref: 1) )
+(method (idref: 60) )
+(parent (idref: 56) )
+(start 1471896697254446)
+(stop 1471896697254450)
+)
+
+(FAMIX.Method 
+(id: 62)
+(name 'absolute_top')
+(belongsTo (idref: 23))
+(signature 'absolute_top') )
+
+(DynaMoose.Activation 
+(id: 63)
+(trace (idref: 1) )
+(method (idref: 62) )
+(parent (idref: 14) )
+(start 1471896697254543)
+(stop 1471896697254548)
+)
+
+(FAMIX.Method 
+(id: 64)
+(name 'float')
+(belongsTo (idref: 2))
+(signature 'def float') )
+
+(DynaMoose.Activation 
+(id: 65)
+(trace (idref: 1) )
+(method (idref: 64) )
+(parent (idref: 14) )
+(start 1471896697254552)
+(stop 1471896697254590)
+)
+
+(FAMIX.Method 
+(id: 66)
+(name 'y=(new_y)')
+(belongsTo (idref: 2))
+(signature 'def y=(new_y)') )
+
+(DynaMoose.Activation 
+(id: 67)
+(trace (idref: 1) )
+(method (idref: 66) )
+(parent (idref: 65) )
+(start 1471896697254566)
+(stop 1471896697254587)
+)
+
+(FAMIX.Method 
+(id: 68)
+(name 'bounds')
+(belongsTo (idref: 2))
+(signature 'def bounds') )
+
+(DynaMoose.Activation 
+(id: 69)
+(trace (idref: 1) )
+(method (idref: 68) )
+(parent (idref: 67) )
+(start 1471896697254574)
+(stop 1471896697254577)
+)
+
+(FAMIX.Method 
+(id: 70)
+(name 'height')
+(belongsTo (idref: 23))
+(signature 'height') )
+
+(DynaMoose.Activation 
+(id: 71)
+(trace (idref: 1) )
+(method (idref: 70) )
+(parent (idref: 67) )
+(start 1471896697254581)
+(stop 1471896697254584)
+)
+
+(FAMIX.Class 
+(id: 72)
+(name 'Prawn::Text::__dummy__')
+)
+
+(FAMIX.Method 
+(id: 73)
+(name 'draw_text(text,  options)')
+(belongsTo (idref: 72))
+(signature 'def draw_text(text, options)') )
+
+(DynaMoose.Activation 
+(id: 74)
+(trace (idref: 1) )
+(method (idref: 73) )
+(parent (idref: 5) )
+(start 1471896697254611)
+(stop 1471896697397591)
+)
+
+(FAMIX.Method 
+(id: 75)
+(name 'inspect_options_for_draw_text(options)')
+(belongsTo (idref: 72))
+(signature 'def inspect_options_for_draw_text(options)') )
+
+(DynaMoose.Activation 
+(id: 76)
+(trace (idref: 1) )
+(method (idref: 75) )
+(parent (idref: 74) )
+(start 1471896697254624)
+(stop 1471896697254688)
+)
+
+(DynaMoose.Activation 
+(id: 77)
+(trace (idref: 1) )
+(method (idref: 7) )
+(parent (idref: 76) )
+(start 1471896697254680)
+(stop 1471896697254685)
+)
+
+(FAMIX.Method 
+(id: 78)
+(name 'save_font')
+(belongsTo (idref: 2))
+(signature 'def save_font') )
+
+(DynaMoose.Activation 
+(id: 79)
+(trace (idref: 1) )
+(method (idref: 78) )
+(parent (idref: 74) )
+(start 1471896697254699)
+(stop 1471896697397588)
+)
+
+(FAMIX.Method 
+(id: 80)
+(name 'find_font(name,  options ) #:nodoc:')
+(belongsTo (idref: 2))
+(signature 'def find_font(name, options = {}) #:nodoc:') )
+
+(DynaMoose.Activation 
+(id: 81)
+(trace (idref: 1) )
+(method (idref: 80) )
+(parent (idref: 79) )
+(start 1471896697254705)
+(stop 1471896697395837)
+)
+
+(FAMIX.Method 
+(id: 82)
+(name 'font_families')
+(belongsTo (idref: 2))
+(signature 'def font_families') )
+
+(DynaMoose.Activation 
+(id: 83)
+(trace (idref: 1) )
+(method (idref: 82) )
+(parent (idref: 81) )
+(start 1471896697254709)
+(stop 1471896697254720)
+)
+
+(DynaMoose.Activation 
+(id: 84)
+(trace (idref: 1) )
+(method (idref: 82) )
+(parent (idref: 81) )
+(start 1471896697254726)
+(stop 1471896697254730)
+)
+
+(FAMIX.Method 
+(id: 85)
+(name 'font_registry #:nodoc:')
+(belongsTo (idref: 2))
+(signature 'def font_registry #:nodoc:') )
+
+(DynaMoose.Activation 
+(id: 86)
+(trace (idref: 1) )
+(method (idref: 85) )
+(parent (idref: 81) )
+(start 1471896697254745)
+(stop 1471896697254750)
+)
+
+(FAMIX.Class 
+(id: 87)
+(name 'Prawn::Font')
+)
+
+(FAMIX.Method 
+(id: 88)
+(name 'self.load(document,  src,  options )')
+(belongsTo (idref: 87))
+(signature 'def self.load(document, src, options = {})') )
+
+(DynaMoose.Activation 
+(id: 89)
+(trace (idref: 1) )
+(method (idref: 88) )
+(parent (idref: 81) )
+(start 1471896697254802)
+(stop 1471896697395826)
+)
+
+(FAMIX.Method 
+(id: 90)
+(name 'self.font_format(src,  options)')
+(belongsTo (idref: 87))
+(signature 'def self.font_format(src, options)') )
+
+(DynaMoose.Activation 
+(id: 91)
+(trace (idref: 1) )
+(method (idref: 90) )
+(parent (idref: 89) )
+(start 1471896697254808)
+(stop 1471896697254842)
+)
+
+(FAMIX.Class 
+(id: 92)
+(name 'Prawn::Font::AFM')
+)
+
+(FAMIX.Method 
+(id: 93)
+(name 'initialize(document,  name,  options ) #:nodoc:')
+(belongsTo (idref: 92))
+(signature 'def initialize(document, name, options = {}) #:nodoc:') )
+
+(DynaMoose.Instance 
+(id: 94) (instanceOf ( idref: 92 ) ) )
+
+(DynaMoose.Activation 
+(id: 95)
+(trace (idref: 1) )
+(method (idref: 93) )
+(parent (idref: 89) )
+(start 1471896697254850)
+(stop 1471896697395821)
+)
+
+(FAMIX.Method 
+(id: 96)
+(name 'initialize(document,  name,  options ) #:nodoc:')
+(belongsTo (idref: 87))
+(signature 'def initialize(document, name, options = {}) #:nodoc:') )
+
+(DynaMoose.Instance 
+(id: 97) (instanceOf ( idref: 87 ) ) )
+
+(DynaMoose.Activation 
+(id: 98)
+(trace (idref: 1) )
+(method (idref: 96) )
+(parent (idref: 95) )
+(start 1471896697254861)
+(stop 1471896697255120)
+)
+
+(FAMIX.Method 
+(id: 99)
+(name 'generate_unique_id')
+(belongsTo (idref: 87))
+(signature 'def generate_unique_id') )
+
+(DynaMoose.Activation 
+(id: 100)
+(trace (idref: 1) )
+(method (idref: 99) )
+(parent (idref: 98) )
+(start 1471896697254871)
+(stop 1471896697255116)
+)
+
+(DynaMoose.Activation 
+(id: 101)
+(trace (idref: 1) )
+(method (idref: 85) )
+(parent (idref: 100) )
+(start 1471896697254876)
+(stop 1471896697254879)
+)
+
+(FAMIX.Method 
+(id: 102)
+(name 'key_is_unique?(test_key)')
+(belongsTo (idref: 87))
+(signature 'def key_is_unique?(test_key)') )
+
+(DynaMoose.Activation 
+(id: 103)
+(trace (idref: 1) )
+(method (idref: 102) )
+(parent (idref: 100) )
+(start 1471896697254983)
+(stop 1471896697255111)
+)
+
+(DynaMoose.Activation 
+(id: 104)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 103) )
+(start 1471896697255053)
+(stop 1471896697255057)
+)
+
+(DynaMoose.Activation 
+(id: 105)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 103) )
+(start 1471896697255089)
+(stop 1471896697255093)
+)
+
+(FAMIX.Class 
+(id: 106)
+(name 'Prawn::SynchronizedCache')
+)
+
+(FAMIX.Method 
+(id: 107)
+(name 'initialize')
+(belongsTo (idref: 106))
+(signature 'def initialize') )
+
+(DynaMoose.Instance 
+(id: 108) (instanceOf ( idref: 106 ) ) )
+
+(DynaMoose.Activation 
+(id: 109)
+(trace (idref: 1) )
+(method (idref: 107) )
+(parent (idref: 95) )
+(start 1471896697255128)
+(stop 1471896697255138)
+)
+
+(FAMIX.Method 
+(id: 110)
+(name 'find_font(file)')
+(belongsTo (idref: 92))
+(signature 'def find_font(file)') )
+
+(DynaMoose.Activation 
+(id: 111)
+(trace (idref: 1) )
+(method (idref: 110) )
+(parent (idref: 95) )
+(start 1471896697255194)
+(stop 1471896697255249)
+)
+
+(FAMIX.Method 
+(id: 112)
+(name 'self.metrics_path')
+(belongsTo (idref: 92))
+(signature 'def self.metrics_path') )
+
+(DynaMoose.Activation 
+(id: 113)
+(trace (idref: 1) )
+(method (idref: 112) )
+(parent (idref: 111) )
+(start 1471896697255201)
+(stop 1471896697255214)
+)
+
+(FAMIX.Method 
+(id: 114)
+(name '[](key)')
+(belongsTo (idref: 106))
+(signature 'def [](key)') )
+
+(DynaMoose.Activation 
+(id: 115)
+(trace (idref: 1) )
+(method (idref: 114) )
+(parent (idref: 95) )
+(start 1471896697255255)
+(stop 1471896697255263)
+)
+
+(FAMIX.Method 
+(id: 116)
+(name 'parse_afm(file_name)')
+(belongsTo (idref: 92))
+(signature 'def parse_afm(file_name)') )
+
+(DynaMoose.Activation 
+(id: 117)
+(trace (idref: 1) )
+(method (idref: 116) )
+(parent (idref: 95) )
+(start 1471896697255267)
+(stop 1471896697395717)
+)
+
+(FAMIX.Method 
+(id: 118)
+(name 'parse_generic_afm_attribute(line,  hash)')
+(belongsTo (idref: 92))
+(signature 'def parse_generic_afm_attribute(line, hash)') )
+
+(DynaMoose.Activation 
+(id: 119)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255381)
+(stop 1471896697255402)
+)
+
+(DynaMoose.Activation 
+(id: 120)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255422)
+(stop 1471896697255437)
+)
+
+(DynaMoose.Activation 
+(id: 121)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255469)
+(stop 1471896697255480)
+)
+
+(DynaMoose.Activation 
+(id: 122)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255499)
+(stop 1471896697255509)
+)
+
+(DynaMoose.Activation 
+(id: 123)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255535)
+(stop 1471896697255545)
+)
+
+(DynaMoose.Activation 
+(id: 124)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255565)
+(stop 1471896697255575)
+)
+
+(DynaMoose.Activation 
+(id: 125)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255605)
+(stop 1471896697255615)
+)
+
+(DynaMoose.Activation 
+(id: 126)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255634)
+(stop 1471896697255643)
+)
+
+(DynaMoose.Activation 
+(id: 127)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255675)
+(stop 1471896697255685)
+)
+
+(DynaMoose.Activation 
+(id: 128)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255703)
+(stop 1471896697255713)
+)
+
+(DynaMoose.Activation 
+(id: 129)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255742)
+(stop 1471896697255752)
+)
+
+(DynaMoose.Activation 
+(id: 130)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255772)
+(stop 1471896697255782)
+)
+
+(DynaMoose.Activation 
+(id: 131)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255813)
+(stop 1471896697255823)
+)
+
+(DynaMoose.Activation 
+(id: 132)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255849)
+(stop 1471896697255860)
+)
+
+(DynaMoose.Activation 
+(id: 133)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255888)
+(stop 1471896697255899)
+)
+
+(DynaMoose.Activation 
+(id: 134)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255920)
+(stop 1471896697255934)
+)
+
+(DynaMoose.Activation 
+(id: 135)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255963)
+(stop 1471896697255974)
+)
+
+(DynaMoose.Activation 
+(id: 136)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697255994)
+(stop 1471896697256005)
+)
+
+(DynaMoose.Activation 
+(id: 137)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697256032)
+(stop 1471896697256042)
+)
+
+(DynaMoose.Activation 
+(id: 138)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697256061)
+(stop 1471896697256071)
+)
+
+(DynaMoose.Activation 
+(id: 139)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697256098)
+(stop 1471896697256109)
+)
+
+(DynaMoose.Activation 
+(id: 140)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697256128)
+(stop 1471896697256137)
+)
+
+(DynaMoose.Activation 
+(id: 141)
+(trace (idref: 1) )
+(method (idref: 118) )
+(parent (idref: 117) )
+(start 1471896697256176)
+(stop 1471896697256186)
+)
+
+(FAMIX.Method 
+(id: 142)
+(name '[]=(key,  value)')
+(belongsTo (idref: 106))
+(signature 'def []=(key, value)') )
+
+(DynaMoose.Activation 
+(id: 143)
+(trace (idref: 1) )
+(method (idref: 142) )
+(parent (idref: 95) )
+(start 1471896697395729)
+(stop 1471896697395739)
+)
+
+(FAMIX.Method 
+(id: 144)
+(name 'bbox')
+(belongsTo (idref: 92))
+(signature 'def bbox') )
+
+(DynaMoose.Activation 
+(id: 145)
+(trace (idref: 1) )
+(method (idref: 144) )
+(parent (idref: 95) )
+(start 1471896697395761)
+(stop 1471896697395804)
+)
+
+(DynaMoose.Activation 
+(id: 146)
+(trace (idref: 1) )
+(method (idref: 144) )
+(parent (idref: 95) )
+(start 1471896697395808)
+(stop 1471896697395812)
+)
+
+(FAMIX.Method 
+(id: 147)
+(name 'font(name ,  options )')
+(belongsTo (idref: 2))
+(signature 'def font(name = nil, options = {})') )
+
+(DynaMoose.Activation 
+(id: 148)
+(trace (idref: 1) )
+(method (idref: 147) )
+(parent (idref: 79) )
+(start 1471896697395856)
+(stop 1471896697395883)
+)
+
+(FAMIX.Method 
+(id: 149)
+(name 'has_kerning_data?')
+(belongsTo (idref: 92))
+(signature 'def has_kerning_data?') )
+
+(DynaMoose.Activation 
+(id: 150)
+(trace (idref: 1) )
+(method (idref: 149) )
+(parent (idref: 79) )
+(start 1471896697395887)
+(stop 1471896697395896)
+)
+
+(FAMIX.Method 
+(id: 151)
+(name 'font_size(points)')
+(belongsTo (idref: 2))
+(signature 'def font_size(points=nil)') )
+
+(DynaMoose.Activation 
+(id: 152)
+(trace (idref: 1) )
+(method (idref: 151) )
+(parent (idref: 79) )
+(start 1471896697395901)
+(stop 1471896697395905)
+)
+
+(DynaMoose.Activation 
+(id: 153)
+(trace (idref: 1) )
+(method (idref: 147) )
+(parent (idref: 79) )
+(start 1471896697395910)
+(stop 1471896697395915)
+)
+
+(FAMIX.Method 
+(id: 154)
+(name 'normalize_encoding!(str)')
+(belongsTo (idref: 87))
+(signature 'def normalize_encoding!(str)') )
+
+(DynaMoose.Activation 
+(id: 155)
+(trace (idref: 1) )
+(method (idref: 154) )
+(parent (idref: 79) )
+(start 1471896697395919)
+(stop 1471896697396267)
+)
+
+(FAMIX.Method 
+(id: 156)
+(name 'normalize_encoding(text)')
+(belongsTo (idref: 92))
+(signature 'def normalize_encoding(text)') )
+
+(DynaMoose.Activation 
+(id: 157)
+(trace (idref: 1) )
+(method (idref: 156) )
+(parent (idref: 155) )
+(start 1471896697395923)
+(stop 1471896697396261)
+)
+
+(DynaMoose.Activation 
+(id: 158)
+(trace (idref: 1) )
+(method (idref: 151) )
+(parent (idref: 79) )
+(start 1471896697396274)
+(stop 1471896697397575)
+)
+
+(FAMIX.Method 
+(id: 159)
+(name 'draw_text!(text,  options)')
+(belongsTo (idref: 72))
+(signature 'def draw_text!(text, options)') )
+
+(DynaMoose.Activation 
+(id: 160)
+(trace (idref: 1) )
+(method (idref: 159) )
+(parent (idref: 158) )
+(start 1471896697396289)
+(stop 1471896697397570)
+)
+
+(DynaMoose.Activation 
+(id: 161)
+(trace (idref: 1) )
+(method (idref: 147) )
+(parent (idref: 160) )
+(start 1471896697396312)
+(stop 1471896697396318)
+)
+
+(FAMIX.Method 
+(id: 162)
+(name 'unicode?')
+(belongsTo (idref: 92))
+(signature 'def unicode?') )
+
+(DynaMoose.Activation 
+(id: 163)
+(trace (idref: 1) )
+(method (idref: 162) )
+(parent (idref: 160) )
+(start 1471896697396322)
+(stop 1471896697396325)
+)
+
+(DynaMoose.Activation 
+(id: 164)
+(trace (idref: 1) )
+(method (idref: 147) )
+(parent (idref: 160) )
+(start 1471896697396328)
+(stop 1471896697396334)
+)
+
+(FAMIX.Method 
+(id: 165)
+(name 'map_to_absolute(*point)')
+(belongsTo (idref: 36))
+(signature 'def map_to_absolute(*point)') )
+
+(DynaMoose.Activation 
+(id: 166)
+(trace (idref: 1) )
+(method (idref: 165) )
+(parent (idref: 160) )
+(start 1471896697396342)
+(stop 1471896697396377)
+)
+
+(FAMIX.Method 
+(id: 167)
+(name 'absolute_left')
+(belongsTo (idref: 23))
+(signature 'absolute_left') )
+
+(DynaMoose.Activation 
+(id: 168)
+(trace (idref: 1) )
+(method (idref: 167) )
+(parent (idref: 166) )
+(start 1471896697396353)
+(stop 1471896697396358)
+)
+
+(FAMIX.Method 
+(id: 169)
+(name 'absolute_bottom')
+(belongsTo (idref: 23))
+(signature 'absolute_bottom') )
+
+(DynaMoose.Activation 
+(id: 170)
+(trace (idref: 1) )
+(method (idref: 169) )
+(parent (idref: 166) )
+(start 1471896697396362)
+(stop 1471896697396372)
+)
+
+(DynaMoose.Activation 
+(id: 171)
+(trace (idref: 1) )
+(method (idref: 70) )
+(parent (idref: 170) )
+(start 1471896697396366)
+(stop 1471896697396370)
+)
+
+(DynaMoose.Activation 
+(id: 172)
+(trace (idref: 1) )
+(method (idref: 147) )
+(parent (idref: 160) )
+(start 1471896697396386)
+(stop 1471896697396412)
+)
+
+(FAMIX.Method 
+(id: 173)
+(name 'encode_text(text,  options )')
+(belongsTo (idref: 92))
+(signature 'def encode_text(text, options = {})') )
+
+(DynaMoose.Activation 
+(id: 174)
+(trace (idref: 1) )
+(method (idref: 173) )
+(parent (idref: 160) )
+(start 1471896697396415)
+(stop 1471896697396631)
+)
+
+(FAMIX.Method 
+(id: 175)
+(name 'kern(string)')
+(belongsTo (idref: 92))
+(signature 'def kern(string)') )
+
+(DynaMoose.Activation 
+(id: 176)
+(trace (idref: 1) )
+(method (idref: 175) )
+(parent (idref: 174) )
+(start 1471896697396420)
+(stop 1471896697396628)
+)
+
+(DynaMoose.Activation 
+(id: 177)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 160) )
+(start 1471896697396641)
+(stop 1471896697396651)
+)
+
+(DynaMoose.Activation 
+(id: 178)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 160) )
+(start 1471896697396799)
+(stop 1471896697396803)
+)
+
+(DynaMoose.Activation 
+(id: 179)
+(trace (idref: 1) )
+(method (idref: 147) )
+(parent (idref: 160) )
+(start 1471896697396869)
+(stop 1471896697396875)
+)
+
+(FAMIX.Method 
+(id: 180)
+(name 'add_to_current_page(subset)')
+(belongsTo (idref: 87))
+(signature 'def add_to_current_page(subset)') )
+
+(DynaMoose.Activation 
+(id: 181)
+(trace (idref: 1) )
+(method (idref: 180) )
+(parent (idref: 160) )
+(start 1471896697396879)
+(stop 1471896697397109)
+)
+
+(FAMIX.Method 
+(id: 182)
+(name 'register(subset)')
+(belongsTo (idref: 92))
+(signature 'def register(subset)') )
+
+(DynaMoose.Activation 
+(id: 183)
+(trace (idref: 1) )
+(method (idref: 182) )
+(parent (idref: 181) )
+(start 1471896697396884)
+(stop 1471896697396977)
+)
+
+(FAMIX.Method 
+(id: 184)
+(name 'symbolic?')
+(belongsTo (idref: 92))
+(signature 'def symbolic?') )
+
+(DynaMoose.Activation 
+(id: 185)
+(trace (idref: 1) )
+(method (idref: 184) )
+(parent (idref: 183) )
+(start 1471896697396895)
+(stop 1471896697396901)
+)
+
+(DynaMoose.Activation 
+(id: 186)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 183) )
+(start 1471896697396931)
+(stop 1471896697396935)
+)
+
+(DynaMoose.Activation 
+(id: 187)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 181) )
+(start 1471896697397019)
+(stop 1471896697397024)
+)
+
+(DynaMoose.Activation 
+(id: 188)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 181) )
+(start 1471896697397050)
+(stop 1471896697397054)
+)
+
+(DynaMoose.Activation 
+(id: 189)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 181) )
+(start 1471896697397082)
+(stop 1471896697397086)
+)
+
+(FAMIX.Method 
+(id: 190)
+(name 'identifier_for(subset) #:nodoc:')
+(belongsTo (idref: 87))
+(signature 'def identifier_for(subset) #:nodoc:') )
+
+(DynaMoose.Activation 
+(id: 191)
+(trace (idref: 1) )
+(method (idref: 190) )
+(parent (idref: 181) )
+(start 1471896697397096)
+(stop 1471896697397103)
+)
+
+(DynaMoose.Activation 
+(id: 192)
+(trace (idref: 1) )
+(method (idref: 147) )
+(parent (idref: 160) )
+(start 1471896697397112)
+(stop 1471896697397118)
+)
+
+(DynaMoose.Activation 
+(id: 193)
+(trace (idref: 1) )
+(method (idref: 190) )
+(parent (idref: 160) )
+(start 1471896697397121)
+(stop 1471896697397144)
+)
+
+(DynaMoose.Activation 
+(id: 194)
+(trace (idref: 1) )
+(method (idref: 151) )
+(parent (idref: 160) )
+(start 1471896697397147)
+(stop 1471896697397151)
+)
+
+(DynaMoose.Activation 
+(id: 195)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 160) )
+(start 1471896697397158)
+(stop 1471896697397161)
+)
+
+(DynaMoose.Activation 
+(id: 196)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 160) )
+(start 1471896697397413)
+(stop 1471896697397417)
+)
+
+(DynaMoose.Activation 
+(id: 197)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 160) )
+(start 1471896697397486)
+(stop 1471896697397491)
+)
+
+(FAMIX.Method 
+(id: 198)
+(name 'set_font(font,  size ) # :nodoc:')
+(belongsTo (idref: 2))
+(signature 'def set_font(font, size = nil) # :nodoc:') )
+
+(DynaMoose.Activation 
+(id: 199)
+(trace (idref: 1) )
+(method (idref: 198) )
+(parent (idref: 79) )
+(start 1471896697397580)
+(stop 1471896697397585)
+)
+
+(DynaMoose.Activation 
+(id: 200)
+(trace (idref: 1) )
+(method (idref: 13) )
+(parent (idref: 5) )
+(start 1471896697397596)
+(stop 1471896697398834)
+)
+
+(DynaMoose.Activation 
+(id: 201)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 200) )
+(start 1471896697397775)
+(stop 1471896697397779)
+)
+
+(DynaMoose.Activation 
+(id: 202)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 200) )
+(start 1471896697397940)
+(stop 1471896697397944)
+)
+
+(DynaMoose.Activation 
+(id: 203)
+(trace (idref: 1) )
+(method (idref: 19) )
+(parent (idref: 200) )
+(start 1471896697398042)
+(stop 1471896697398099)
+)
+
+(DynaMoose.Activation 
+(id: 204)
+(trace (idref: 1) )
+(method (idref: 21) )
+(parent (idref: 200) )
+(start 1471896697398104)
+(stop 1471896697398219)
+)
+
+(DynaMoose.Instance 
+(id: 205) (instanceOf ( idref: 23 ) ) )
+
+(DynaMoose.Activation 
+(id: 206)
+(trace (idref: 1) )
+(method (idref: 24) )
+(parent (idref: 204) )
+(start 1471896697398181)
+(stop 1471896697398191)
+)
+
+(FAMIX.Method 
+(id: 207)
+(name 'add_left_padding')
+(belongsTo (idref: 23))
+(signature 'add_left_padding') )
+
+(DynaMoose.Activation 
+(id: 208)
+(trace (idref: 1) )
+(method (idref: 207) )
+(parent (idref: 204) )
+(start 1471896697398197)
+(stop 1471896697398204)
+)
+
+(FAMIX.Method 
+(id: 209)
+(name 'add_right_padding')
+(belongsTo (idref: 23))
+(signature 'add_right_padding') )
+
+(DynaMoose.Activation 
+(id: 210)
+(trace (idref: 1) )
+(method (idref: 209) )
+(parent (idref: 204) )
+(start 1471896697398209)
+(stop 1471896697398214)
+)
+
+(DynaMoose.Activation 
+(id: 211)
+(trace (idref: 1) )
+(method (idref: 27) )
+(parent (idref: 200) )
+(start 1471896697398239)
+(stop 1471896697398621)
+)
+
+(DynaMoose.Activation 
+(id: 212)
+(trace (idref: 1) )
+(method (idref: 30) )
+(parent (idref: 211) )
+(start 1471896697398245)
+(stop 1471896697398302)
+)
+
+(DynaMoose.Activation 
+(id: 213)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 212) )
+(start 1471896697398277)
+(stop 1471896697398281)
+)
+
+(DynaMoose.Activation 
+(id: 214)
+(trace (idref: 1) )
+(method (idref: 33) )
+(parent (idref: 211) )
+(start 1471896697398308)
+(stop 1471896697398362)
+)
+
+(DynaMoose.Activation 
+(id: 215)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 214) )
+(start 1471896697398314)
+(stop 1471896697398318)
+)
+
+(DynaMoose.Activation 
+(id: 216)
+(trace (idref: 1) )
+(method (idref: 37) )
+(parent (idref: 211) )
+(start 1471896697398368)
+(stop 1471896697398405)
+)
+
+(DynaMoose.Activation 
+(id: 217)
+(trace (idref: 1) )
+(method (idref: 39) )
+(parent (idref: 216) )
+(start 1471896697398373)
+(stop 1471896697398402)
+)
+
+(DynaMoose.Activation 
+(id: 218)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 217) )
+(start 1471896697398380)
+(stop 1471896697398383)
+)
+
+(DynaMoose.Activation 
+(id: 219)
+(trace (idref: 1) )
+(method (idref: 43) )
+(parent (idref: 211) )
+(start 1471896697398411)
+(stop 1471896697398471)
+)
+
+(DynaMoose.Activation 
+(id: 220)
+(trace (idref: 1) )
+(method (idref: 45) )
+(parent (idref: 219) )
+(start 1471896697398418)
+(stop 1471896697398468)
+)
+
+(DynaMoose.Activation 
+(id: 221)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 220) )
+(start 1471896697398425)
+(stop 1471896697398428)
+)
+
+(DynaMoose.Activation 
+(id: 222)
+(trace (idref: 1) )
+(method (idref: 49) )
+(parent (idref: 211) )
+(start 1471896697398479)
+(stop 1471896697398536)
+)
+
+(DynaMoose.Activation 
+(id: 223)
+(trace (idref: 1) )
+(method (idref: 51) )
+(parent (idref: 222) )
+(start 1471896697398485)
+(stop 1471896697398533)
+)
+
+(DynaMoose.Activation 
+(id: 224)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 223) )
+(start 1471896697398491)
+(stop 1471896697398494)
+)
+
+(DynaMoose.Activation 
+(id: 225)
+(trace (idref: 1) )
+(method (idref: 55) )
+(parent (idref: 211) )
+(start 1471896697398544)
+(stop 1471896697398618)
+)
+
+(DynaMoose.Activation 
+(id: 226)
+(trace (idref: 1) )
+(method (idref: 57) )
+(parent (idref: 225) )
+(start 1471896697398550)
+(stop 1471896697398579)
+)
+
+(DynaMoose.Activation 
+(id: 227)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 226) )
+(start 1471896697398556)
+(stop 1471896697398559)
+)
+
+(DynaMoose.Activation 
+(id: 228)
+(trace (idref: 1) )
+(method (idref: 60) )
+(parent (idref: 225) )
+(start 1471896697398584)
+(stop 1471896697398610)
+)
+
+(DynaMoose.Activation 
+(id: 229)
+(trace (idref: 1) )
+(method (idref: 62) )
+(parent (idref: 200) )
+(start 1471896697398658)
+(stop 1471896697398662)
+)
+
+(DynaMoose.Activation 
+(id: 230)
+(trace (idref: 1) )
+(method (idref: 64) )
+(parent (idref: 200) )
+(start 1471896697398667)
+(stop 1471896697398831)
+)
+
+(DynaMoose.Activation 
+(id: 231)
+(trace (idref: 1) )
+(method (idref: 66) )
+(parent (idref: 230) )
+(start 1471896697398715)
+(stop 1471896697398828)
+)
+
+(DynaMoose.Activation 
+(id: 232)
+(trace (idref: 1) )
+(method (idref: 68) )
+(parent (idref: 231) )
+(start 1471896697398721)
+(stop 1471896697398725)
+)
+
+(DynaMoose.Activation 
+(id: 233)
+(trace (idref: 1) )
+(method (idref: 70) )
+(parent (idref: 231) )
+(start 1471896697398728)
+(stop 1471896697398824)
+)
+
+(FAMIX.Method 
+(id: 234)
+(name 'render(*a,  &b)')
+(belongsTo (idref: 2))
+(signature 'def render(*a, &b)') )
+
+(DynaMoose.Activation 
+(id: 235)
+(trace (idref: 1) )
+(method (idref: 234) )
+(start 1471896697398843)
+(stop 1471896697410625)
+)
+
+(FAMIX.Method 
+(id: 236)
+(name 'page_count')
+(belongsTo (idref: 2))
+(signature 'def page_count') )
+
+(DynaMoose.Activation 
+(id: 237)
+(trace (idref: 1) )
+(method (idref: 236) )
+(parent (idref: 235) )
+(start 1471896697398849)
+(stop 1471896697398858)
+)
+
+(FAMIX.Method 
+(id: 238)
+(name 'go_to_page(k)')
+(belongsTo (idref: 2))
+(signature 'def go_to_page(k)') )
+
+(DynaMoose.Activation 
+(id: 239)
+(trace (idref: 1) )
+(method (idref: 238) )
+(parent (idref: 235) )
+(start 1471896697398865)
+(stop 1471896697399012)
+)
+
+(DynaMoose.Activation 
+(id: 240)
+(trace (idref: 1) )
+(method (idref: 21) )
+(parent (idref: 239) )
+(start 1471896697398873)
+(stop 1471896697399002)
+)
+
+(DynaMoose.Instance 
+(id: 241) (instanceOf ( idref: 23 ) ) )
+
+(DynaMoose.Activation 
+(id: 242)
+(trace (idref: 1) )
+(method (idref: 24) )
+(parent (idref: 240) )
+(start 1471896697398950)
+(stop 1471896697398959)
+)
+
+(DynaMoose.Activation 
+(id: 243)
+(trace (idref: 1) )
+(method (idref: 207) )
+(parent (idref: 240) )
+(start 1471896697398964)
+(stop 1471896697398990)
+)
+
+(DynaMoose.Activation 
+(id: 244)
+(trace (idref: 1) )
+(method (idref: 209) )
+(parent (idref: 240) )
+(start 1471896697398993)
+(stop 1471896697398998)
+)
+
+(DynaMoose.Activation 
+(id: 245)
+(trace (idref: 1) )
+(method (idref: 62) )
+(parent (idref: 239) )
+(start 1471896697399006)
+(stop 1471896697399009)
+)
+
+(FAMIX.Method 
+(id: 246)
+(name 'repeaters')
+(belongsTo (idref: 2))
+(signature 'def repeaters') )
+
+(DynaMoose.Activation 
+(id: 247)
+(trace (idref: 1) )
+(method (idref: 246) )
+(parent (idref: 235) )
+(start 1471896697399017)
+(stop 1471896697399022)
+)
+
+(DynaMoose.Activation 
+(id: 248)
+(trace (idref: 1) )
+(method (idref: 238) )
+(parent (idref: 235) )
+(start 1471896697399027)
+(stop 1471896697399163)
+)
+
+(DynaMoose.Activation 
+(id: 249)
+(trace (idref: 1) )
+(method (idref: 21) )
+(parent (idref: 248) )
+(start 1471896697399032)
+(stop 1471896697399153)
+)
+
+(DynaMoose.Instance 
+(id: 250) (instanceOf ( idref: 23 ) ) )
+
+(DynaMoose.Activation 
+(id: 251)
+(trace (idref: 1) )
+(method (idref: 24) )
+(parent (idref: 249) )
+(start 1471896697399102)
+(stop 1471896697399130)
+)
+
+(DynaMoose.Activation 
+(id: 252)
+(trace (idref: 1) )
+(method (idref: 207) )
+(parent (idref: 249) )
+(start 1471896697399135)
+(stop 1471896697399141)
+)
+
+(DynaMoose.Activation 
+(id: 253)
+(trace (idref: 1) )
+(method (idref: 209) )
+(parent (idref: 249) )
+(start 1471896697399145)
+(stop 1471896697399149)
+)
+
+(DynaMoose.Activation 
+(id: 254)
+(trace (idref: 1) )
+(method (idref: 62) )
+(parent (idref: 248) )
+(start 1471896697399157)
+(stop 1471896697399160)
+)
+
+(DynaMoose.Activation 
+(id: 255)
+(trace (idref: 1) )
+(method (idref: 246) )
+(parent (idref: 235) )
+(start 1471896697399167)
+(stop 1471896697399170)
+)
+
+(DynaMoose.Activation 
+(id: 256)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 235) )
+(start 1471896697399175)
+(stop 1471896697399179)
+)
+
+(DynaMoose.Activation 
+(id: 257)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 235) )
+(start 1471896697399379)
+(stop 1471896697399383)
+)
+
+(DynaMoose.Activation 
+(id: 258)
+(trace (idref: 1) )
+(method (idref: 16) )
+(parent (idref: 235) )
+(start 1471896697399522)
+(stop 1471896697399526)
+)
+
+
+)
+)

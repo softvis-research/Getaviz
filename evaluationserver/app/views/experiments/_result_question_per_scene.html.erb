@@ -1,0 +1,26 @@
+<tr>
+  <td><%= key == :all ? "gesamt" : Scene.find(key).name %></td>
+  <td><%= question_result_per_scene[:answered_by_number_of_participants] %></td>
+  <% if has_correct_answer %>
+  <td><%= question_result_per_scene[:answered_correct] %></td>
+  <td><%= question_result_per_scene[:percent_correct] %></td>
+  <% end %>
+  <td><%= question_result_per_scene[:time_needed_min] %></td>
+  <td><%= question_result_per_scene[:time_needed_max] %></td>
+  <td><%= question_result_per_scene[:time_needed_avg] %></td>
+  <% if has_correct_answer %>
+  <td><%= question_result_per_scene[:time_needed_max_correct] %></td>
+  <td><%= question_result_per_scene[:time_needed_min_correct] %></td>
+  <td><%= question_result_per_scene[:time_needed_avg_correct] %></td>
+  <td><%= question_result_per_scene[:time_needed_max_incorrect] %></td>
+  <td><%= question_result_per_scene[:time_needed_min_incorrect] %></td>
+  <td><%= question_result_per_scene[:time_needed_avg_incorrect] %></td>
+  <td><%= question_result_per_scene[:min_mistakes] %></td>
+  <td><%= question_result_per_scene[:max_mistakes] %></td>
+  <td><%= question_result_per_scene[:avg_mistakes] %></td>
+  <td><%= question_result_per_scene[:min_mistakes_correct] %></td>
+  <td><%= question_result_per_scene[:max_mistakes_correct] %></td>
+  <td><%= question_result_per_scene[:avg_mistakes_correct] %></td>
+  <% end %>
+</tr>
+

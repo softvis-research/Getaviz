@@ -1,0 +1,31 @@
+<div class="page-header">
+  <h1><%= t(:step, scope: :steps) %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= t(:title, scope: :steps) %>:</strong></dt>
+  <dd><%= @step.title %></dd>
+  <dt><strong><%= t(:description, scope: :steps) %>:</strong></dt>
+  <dd><%= @step.description %></dd>
+  <dt><strong><%= t(:scenes, scope: :steps) %>:</strong></dt>
+  <dd><%= @step.scenes.collect{|scene| scene.name}.join("<br/>").html_safe %></dd>
+  <dt><strong><%= t(:scenes, scope: :steps) %>:</strong></dt>
+  <dd><%= @step.textual_elements.collect{|textual_element| textual_element.title}.join("<br/>").html_safe %></dd>
+</dl>
+
+
+
+
+
+
+<div class="form-actions">
+  <%= link_to t(:back),
+              steps_path, :class => 'btn btn-default'  %>
+  <%= link_to t(:edit),
+              edit_step_path(@step), :class => 'btn btn-default' %>
+  <%= link_to t(:destroy),
+              step_path(@step),
+              :method => 'delete',
+              :data => { :confirm => t(:confirm) },
+              :class => 'btn btn-danger' %>
+</div>

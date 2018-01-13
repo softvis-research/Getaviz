@@ -1,0 +1,54 @@
+<div class="page-header">
+  <h1><%= t(:experiment, scope: :experiments) %></h1>
+</div>
+
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <ul class="nav nav-tabs">
+        <li class="active"> <a href="#home" data-target="#home" data-toggle="tab"><%= t(:metadata, scope: :experiments) %></a>
+			 
+        </li>
+        <li><a href="#profile" data-target="#profile" data-toggle="tab"><%= t(:steps, scope: :experiments) %></a>
+			 
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active fade in" id="home">
+			 <div class="row" style="margin-top:15px;">
+				<div class="col-md-12">
+				  <dl class="dl-horizontal">
+					 <dt><strong><%= t(:title, scope: :experiments) %>:</strong></dt>
+					 <dd><%= @experiment.title %></dd>
+					 <dt><strong><%= t(:description, scope: :experiments) %>:</strong></dt>
+					 <dd><%= @experiment.description %></dd>
+				  </dl>
+				</div>
+			 </div>
+		  </div>
+        <div class="tab-pane" id="profile">
+			 <%= render :partial => 'steps' %>
+		  </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div class="form-actions">
+  <%= link_to t(:back),
+              experiments_path, :class => 'btn btn-default'  %>
+  <%= link_to t(:edit),
+              edit_experiment_path(@experiment), :class => 'btn btn-default' %>
+  <%= link_to t(:destroy),
+              experiment_path(@experiment),
+              :method => 'delete',
+              :data => { :confirm => t(:confirm) },
+              :class => 'btn btn-danger' %>
+</div>

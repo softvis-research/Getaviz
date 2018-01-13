@@ -1,0 +1,25 @@
+<div class="row">
+<div class="col-xs-6">
+  <h4><%= t(:selected_questions, scope: :questionaires) %></h4>
+  <%= form_for @questionaire do |f| %>
+  <div style="border:solid 1px green;padding:1em;margin-bottom:1em;">
+	 <ol class="sortable vertical" style="min-height:24px;">
+		
+		<% for question in @choosen_questions %>
+		  <li><a class="btn btn-primary disabled"><%= question.question_text %><%= hidden_field_tag 'questionaire[question_ids][]', question.id, :multiple => true %></a></li>
+		<% end %>
+	 </ol>
+  </div>
+  <%= hidden_field_tag 'questionaire[question_ids][]', nil, :multiple => true %>
+  <%= f.submit t(:save), :class => 'btn btn-primary'  %>
+  <% end %>
+</div>
+<div class="col-xs-6">
+  <h4><%= t(:not_selected_questions, scope: :questionaires) %></h4>
+  <ul class="list-group sortable" style="min-height:24px;">
+	 <% for question in @possible_questions %>
+	   <li><a class="btn btn-primary disabled"><%= question.question_text %><%= hidden_field_tag 'questionaire[question_ids][]', question.id, :multiple => true %></a></li>
+	 <% end %>
+  </ul>
+</div>
+</div>

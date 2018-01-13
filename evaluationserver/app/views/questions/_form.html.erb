@@ -1,0 +1,23 @@
+<%= form_for @question, :html => { :class => 'form' } do |question_form| %>
+  <div class="form-group">
+	 <%= question_form.label t(:question_text, scope: :questions), :class => 'control-label' %>
+    <%= question_form.text_area :question_text, :class => 'form-control' %>
+  </div>
+
+  
+  <%= question_form.fields_for :answer_possibility_collections do |answer_possibility_collection_form| %>
+  <div class="form-group">
+	   <%= render :partial => 'answer_possibility_collection_fields', locals: {f: answer_possibility_collection_form} %>
+  </div>
+  <% end %>
+  <div class="links">
+	 <%= link_to_add_association t(:add_possibilities), question_form, :answer_possibility_collections %>
+  </div>
+
+  
+  <div class="form-actions">
+    <%= question_form.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t(:cancel),
+                questions_path, :class => 'btn btn-default' %>
+  </div>
+<% end %>

@@ -1,0 +1,25 @@
+<div class="page-header">
+  <h1><%= t(:scene, scope: :scenes) %></h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= t(:name, scope: :scenes) %>:</strong></dt>
+  <dd><%= @scene.name %></dd>
+  <dt><strong><%= t(:description, scope: :scenes) %>:</strong></dt>
+  <dd><%= @scene.description %></dd>
+  <dt><strong><%= t(:url, scope: :scenes) %>:</strong></dt>
+  <dd><%= @scene.url %></dd>
+</dl>
+
+<%= link_to t(:goto_url, scope: :scenes), @scene.url, :class => 'btn btn-default' %>
+<div class="form-actions">
+  <%= link_to t(:back),
+              scenes_path, :class => 'btn btn-default'  %>
+  <%= link_to t(:edit),
+              edit_scene_path(@scene), :class => 'btn btn-default' %>
+  <%= link_to t(:destroy),
+              scene_path(@scene),
+              :method => 'delete',
+              :data => { :confirm => t(:confirm) },
+              :class => 'btn btn-danger' %>
+</div>

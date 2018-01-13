@@ -1,0 +1,48 @@
+module org.svis.generator.run.city
+
+var inputPath = "./input/famix"
+var configPath = "config.json"
+
+Workflow {
+
+	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
+		platformUri = "../org.svis.generator.run/.."
+		registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
+	}
+
+	//input for reader
+	component = org.svis.generator.ReaderWithConfig {
+		path = "${inputPath}"
+		register = org.svis.xtext.FamixStandaloneSetup {}
+		loadResource = {
+			slot = "famix"
+		}
+	}
+
+	//lazy loading for model
+	component = org.svis.generator.ResolveLazyComponent {}
+	
+	// delete unnecessary objects
+	component = org.svis.generator.famix.Famix2Famix {
+		modelSlot = "famix"
+	}
+
+	//transformation 1: from FAMIX to CITY
+	component = org.svis.generator.city.s2m.Famix2City {
+		modelSlot = "famix"
+	}
+	
+	component = org.svis.generator.famix.Famix2DB {
+		modelSlot = 'metadata'
+		config = configPath
+	}
+
+	//transformation 2: from City to City
+	component = org.svis.generator.city.m2m.City2City {
+		modelSlot = "CITY"
+	}
+	
+	component = org.svis.generator.city.m2t.City2DB {
+		modelSlot = 'CITYv2'
+	}
+}

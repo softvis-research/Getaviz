@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+
+
+echo "Bundling gems"
+bundle binstubs bundler --force
+bundle install --jobs 4 --retry 3
+
+echo "Clearing logs"
+bin/rake log:clear
+
+echo "Setting up new db if one doesn't exist"
+bundle exec rake db:migrate
+
+
+echo "Removing contents of tmp dirs"
+bin/rake tmp:clear
+
+echo "Removing server pid if needed"
+rm -f tmp/pids/server.pid 
+
+
+echo "Starting app server"
+bundle exec rails s -p 8081 -b 0.0.0.0

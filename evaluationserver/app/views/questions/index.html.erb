@@ -1,0 +1,37 @@
+<div class="page-header">
+  <h1><%= t(:questions, scope: :questions) %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= t(:id, scope: :questions) %></th>
+      <th><%= t(:question_text, scope: :questions) %></th>
+		<th><%= t(:question_type, scope: :questions) %></th>
+      <th><%= t(:created_at, scope: :questions) %></th>
+      <th><%= t(:actions) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @questions.each do |question| %>
+      <tr>
+        <td><%= link_to question.id, question_path(question) %></td>
+        <td><%= question.question_text %></td>
+		  <td><%= question.class.name %></td>
+        <td><%=l question.created_at %></td>
+        <td>
+          <%= link_to t(:edit),
+                      edit_question_path(question), :class => 'btn btn-default' %>
+          <%= link_to t(:destroy),
+                      question_path(question),
+                      :method => :delete,
+                      :data => { :confirm => t(:confirm) },
+                      :class => 'btn btn-default btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t(:new),
+            new_question_path,
+            :class => 'btn btn-primary' %>

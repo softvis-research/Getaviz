@@ -1,0 +1,94 @@
+module org.svis.generator.run.city
+
+var inputPath = "./input/famix"
+var outputPath = "./output/city/famix"
+var dynamixPath = "./input/dynamix"
+
+//var projectName = "org.svis.generator.run"
+//var runtimeProject = "../${projectName}"
+
+Workflow {
+
+	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
+		platformUri = "../org.svis.generator.run/.."
+		registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
+	}
+
+	//input for reader
+	component = org.svis.generator.ReaderWithConfig {
+		path = "${inputPath}"
+		register = org.svis.xtext.FamixStandaloneSetup {}
+		loadResource = {
+			slot = "famix"
+		}
+	}
+	
+	component = org.svis.generator.ReaderWithConfig {
+		path = "${dynamixPath}"
+		register = org.svis.xtext.DynamixStandaloneSetup {}
+		loadResource = {
+			slot = "dynamix"
+		}
+	}
+
+	//lazy loading for model
+	component = org.svis.generator.ResolveLazyComponent {}
+	
+	// delete unnecessary objects
+	component = org.svis.generator.famix.Famix2Famix {
+		modelSlot = "famix"
+	}
+
+	//transformation 1: from FAMIX to CITY
+	component = org.svis.generator.city.s2m.Famix2City {
+		modelSlot = "famix"
+	}
+	
+	// write metaData
+	component = org.eclipse.xtext.generator.GeneratorComponent {
+		register = org.svis.generator.famix.Famix2JSONStandaloneSetup {}
+		slot = 'metadata'
+		outlet = {
+			path = "${outputPath}"
+		}
+	}
+	
+	//output 1b: model as *.xml
+	component = org.eclipse.emf.mwe.utils.Writer {
+		modelSlot = "CITYwriter"
+		uri = "${outputPath}/city1.xml"
+		//cloneSlotContents = true //see http://www.openarchitectureware.org/forum/viewtopic.php?showtopic=5677
+	}
+
+	//transformation 2: from City to City
+	component = org.svis.generator.city.m2m.City2City {
+		modelSlot = "CITY"
+	}
+
+	// transform dynamix into city (s2m)
+	component = org.svis.generator.city.s2m.Dynamix2City {
+		modelSlot = "dynamix"
+	}
+	
+	// calculate rd layout for dynamix (m2m)
+	component = org.svis.generator.city.m2m.City2City4Dynamix {
+		modelSlot = "CITYv2"
+	}
+	
+	
+	//output 2: model as *.xml
+	component = org.eclipse.emf.mwe.utils.Writer {
+		modelSlot = "CITYv2writer"
+		uri = "${outputPath}/city2.xml"
+		cloneSlotContents = true				//see http://www.openarchitectureware.org/forum/viewtopic.php?showtopic=5677
+	}
+
+	//transformation 3: from City to X3D
+	component = org.eclipse.xtext.generator.GeneratorComponent {
+		register = org.svis.generator.city.m2t.CityOutputStandaloneSetup {}
+		slot = 'CITYv2'
+		outlet = {
+			path = "${outputPath}"
+		}
+	}
+}

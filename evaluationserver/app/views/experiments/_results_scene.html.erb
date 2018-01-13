@@ -1,0 +1,46 @@
+<div>Typ: Szene ohne Fragen</div>
+
+<div style="display:table:">
+  <div style="display:table-row;">
+	 <div class="tablecell">Szenenname</div>
+	 <div class="tablecell">Szenenurl</div>
+	 <div class="tablecell">Gesehen von</div>
+	 <div class="tablecell">gesehen von in %</div>
+	 <div class="tablecell">minimale Anzahl Klicks</div>
+	 <div class="tablecell">maximale Anzahl Klicks</div>
+	 <div class="tablecell">Durchschnitt Anzahl Klicks</div>
+	 <div class="tablecell">minimale Zeit Mousedown</div>
+	 <div class="tablecell">maximale Zeit Mousedown</div>
+	 <div class="tablecell">Durchschnitt Zeit Mousedown</div>
+  </div>
+
+  <% for scene_result in step_result[:result] %>
+  <div style="display:table-row;">
+	 <div class="tablecell"><%= scene_result[:scene_name] %></div>
+	 <div class="tablecell"><%= scene_result[:scene_url] %></div>
+	 <div class="tablecell"><%= scene_result[:viewed_by_number_of_participants] %></div>
+	 <div class="tablecell"><%= scene_result[:viewed_by_percentage_of_participants] %></div>
+	 <div class="tablecell"><%= scene_result[:min_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= scene_result[:max_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= scene_result[:avg_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= scene_result[:min_time_mouse_down] %></div>
+	 <div class="tablecell"><%= scene_result[:max_time_mouse_down] %></div>
+	 <div class="tablecell"><%= scene_result[:avg_time_mouse_down] %></div>
+  </div>
+  <% end %>
+  <% sum_result = step_result[:sum_result] %>
+  <div style="display:table-row;margin-top:5pt;font-weight:bold;">
+	 <div class="tablecell">Allgemein</div>
+	 <div class="tablecell"></div>
+	 <div class="tablecell"></div>
+	 <div class="tablecell"><%= sum_result[:sum_participants] %></div>
+	 <div class="tablecell"><%= sum_result[:min_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= sum_result[:max_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= sum_result[:avg_number_mouseclicks] %></div>
+	 <div class="tablecell"><%= sum_result[:min_time_mouse_down] %></div>
+	 <div class="tablecell"><%= sum_result[:max_time_mouse_down] %></div>
+	 <div class="tablecell"><%= sum_result[:avg_time_mouse_down] %></div>
+  </div>
+  
+</div>
+

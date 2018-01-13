@@ -1,0 +1,37 @@
+<div class="page-header">
+  <h1><%= t(:steps, scope: :steps) %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= t(:id, scope: :steps) %></th>
+      <th><%= t(:title, scope: :steps) %></th>
+      <th><%= t(:description, scope: :steps) %></th>
+      <th><%= t(:created_at, scope: :steps) %></th>
+      <th><%= t(:actions) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @steps.each do |step| %>
+      <tr>
+        <td><%= link_to step.id, step_path(step) %></td>
+        <td><%= step.title %></td>
+        <td><%= step.description %></td>
+        <td><%=l step.created_at %></td>
+        <td>
+          <%= link_to t(:edit),
+                      edit_step_path(step), :class => 'btn btn-default' %>
+          <%= link_to t(:destroy),
+                      step_path(step),
+                      :method => :delete,
+                      :data => { :confirm => t(:confirm) },
+                      :class => 'btn btn-default btn-danger' %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t(:new),
+            new_step_path,
+            :class => 'btn btn-primary' %>

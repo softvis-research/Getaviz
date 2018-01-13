@@ -1,0 +1,30 @@
+<div class="page-header">
+  <h1><%= t(:scenes, scope: :scenes) %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th><%= t(:id, scope: :scenes) %></th>
+      <th><%= t(:name, scope: :scenes) %></th>
+      <th><%= t(:description, scope: :scenes) %></th>
+      <th><%= t(:actions) %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @scenes.each do |scene| %>
+      <tr>
+        <td><%= scene.id %></td>
+        <td><%= scene.name %></td>
+        <td><%= scene.description %></td>
+        <td>
+			 <%= link_to t(:show), scene, :class => 'btn btn-default' %>
+			 <%= link_to t(:edit), edit_scene_path(scene), :class => 'btn btn-default' %>
+			 <%= link_to t(:destroy), scene, method: :delete, data: { confirm: t(:confirm) }, :class => 'btn btn-default btn-danger' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to t(:new, scope: :scenes), new_scene_path, :class => 'btn btn-primary' %>

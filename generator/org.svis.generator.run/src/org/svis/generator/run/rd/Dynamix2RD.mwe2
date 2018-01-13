@@ -1,0 +1,90 @@
+module org.svis.generator.run.rd
+
+var projectName = "org.svis.generator.run"
+var famixPath = "./input/famix"
+var dynamixPath = "./input/dynamix"
+var outputPath = "./output/rd/dynamix"
+var runtimeProject = "../${projectName}"
+
+Workflow {
+	//resourceSet = org.eclipse.xtext.resource.XtextResourceSet:theResourceSet {}
+	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
+    	platformUri = "${runtimeProject}/.."
+	}
+	
+	component = org.svis.generator.ReaderWithConfig{
+		path = "${famixPath}"
+		register = org.svis.xtext.FamixStandaloneSetup {}
+		loadResource = {
+			slot = "famix"
+		}
+	}
+	
+	component = org.svis.generator.ReaderWithConfig {
+		path = "${dynamixPath}"
+		register = org.svis.xtext.DynamixStandaloneSetup {}
+		loadResource = {
+			slot = "dynamix"
+		}
+	}
+
+	// support lazy loading of textual models
+	component = org.svis.generator.ResolveLazyComponent {}
+	
+	// delete unnecessary objects
+	component = org.svis.generator.famix.Famix2Famix {
+		modelSlot = "famix"
+	}
+	
+	// transform famix into disks (s2m)
+	component = org.svis.generator.rd.s2m.Famix2RD {
+		modelSlot = "famix"
+	}
+	
+	// write metaData
+	component = org.eclipse.xtext.generator.GeneratorComponent {
+		register = org.svis.generator.famix.Famix2JSONStandaloneSetup {}
+		slot = 'metadata'
+		outlet = {
+			path = "${outputPath}"
+		}
+	}
+
+	// write out resulting model (rd)
+//	component = org.eclipse.emf.mwe.utils.Writer {
+//		modelSlot = "rdwriter"
+//		uri = "${outputPath}/rd.xml"	
+//	}	
+	
+	// calculate rd layout (m2m)
+	component = org.svis.generator.rd.m2m.RD2RD {
+		modelSlot = "rd"
+	}
+	
+
+	// transform dynamix into disks (s2m)
+	component = org.svis.generator.rd.s2m.Dynamix2RD {
+		modelSlot = "dynamix"
+	}
+
+
+//	component = org.eclipse.emf.mwe.utils.Writer {
+//		modelSlot = "rdextendedwriter"
+//		uri = "${outputPath}/dynamix/rdextended.xml"
+//		cloneSlotContents = true
+//	}
+
+	// calculate rd layout for dynamix (m2m)
+	component = org.svis.generator.rd.m2m.RD2RD4Dynamix {
+		modelSlot = "rdextended"
+	}
+
+	// dynamix23d (m2t)
+	component = org.eclipse.xtext.generator.GeneratorComponent {
+		register = org.svis.generator.rd.m2t.RDOutputStandaloneSetup{}
+		slot = 'rdextended'
+		outlet = {
+			path = "${outputPath}"
+		}
+	}
+}

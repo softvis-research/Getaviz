@@ -1,0 +1,39 @@
+<% content_for :header do %>
+
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="<%= root_path %>">Evaluation Server</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+		  <li><%= link_to t(:experiments, scope: :layout), experiments_path %></li>
+        <li><%= link_to t(:steps, scope: :layout), steps_path %></li>
+        <li><%= link_to t(:scenes, scope: :layout), scenes_path %></li>
+		  <li><%= link_to t(:questionaires, scope: :layout), questionaires_path %></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= t(:other, scope: :layout)%> <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+				<li><%= link_to t(:questions, scope: :layout), questions_path %></li>
+            <li><%= link_to t(:static_texts, scope: :layout), texts_path %></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to t(:admin_off, scope: :layout), admin_mode_off_path %></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+<% end %>
