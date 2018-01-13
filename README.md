@@ -6,7 +6,12 @@ Getaviz is a toolset for designing and generating software visualizations in 2D 
 * Supported languages: Java, Ruby, and C#  
 * Supported version control systems: git and svn  
 * Supported output formats: X3D, X3DOM, A-Frame  
-* Supported visualization metaphors: Recursive Disk, City, Plant, and MultiSphere including several variants
+* Supported visualization metaphors: 
+  * Recursive Disk
+  * City, City Bricks, City Floors, City Panels
+  * Plant
+  * MultiSphere
+  * …
 
 ## Build Status
 
