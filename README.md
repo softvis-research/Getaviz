@@ -22,7 +22,7 @@ Getaviz is a toolset for designing and generating software visualizations in 2D 
 
 Getaviz is developed by the research group [Softwarevisualization In 3D And Virtual Reality](https://home.uni-leipzig.de/svis/) of Leipzig University. It has been developed over several years and is the basic for many scientific publications. In 2018 we released Getaviz as open source to simplify collaboration and practical use of our research prototype. 
 
-Currently, four developers are contributung actively to Getavip:
+Currently, four developers are contributung actively to Getaviz:
 * Dr. Richard Müller
 * Dr. Jan Schilbach
 * Pascal Kovacs
