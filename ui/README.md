@@ -38,7 +38,7 @@ You find a hosted version at [https://home.uni-leipzig.de/svis/getaviz/Index.htm
 * Model, View, Controllers
 * Actions and Events
 
-*Files, folders and meaning*
+### Files, folders and meaning
 
 * root
 * data
