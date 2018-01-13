@@ -1,6 +1,6 @@
 # Getaviz
 
-Getaviz is a toolset for designing and generating software visualizations in 2D and 3D, supporting structural, behavioral and evolutional visualizations. An online demo of Getaviz you can find [here](https://home.uni-leipzig.de/svis/getaviz/Index.html).
+Getaviz is a toolset for designing and generating software visualizations in 2D and 3D, supporting structural, behavioral and evolutional visualizations. An **online demo** of Getaviz you can find [here](https://home.uni-leipzig.de/svis/getaviz/Index.html).
 
 ## Features
 * Supported languages: Java, Ruby, and C#  
