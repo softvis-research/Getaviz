@@ -16,7 +16,7 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
 ## Build Status
 
 * Master branch  
-![master](https://codeship.com/projects/409e3130-0a2e-0133-98c2-269fed99bda5/status?branch=master)
+![master](https://app.codeship.com/projects/f2dddd10-dab6-0135-41df-0efc1b114958/status?branch=master)
 
 ## Development Team
 
