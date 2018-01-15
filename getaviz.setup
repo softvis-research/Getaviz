@@ -146,7 +146,7 @@
     <setupTask
         xsi:type="git:GitCloneTask"
         id="git.clone.generator"
-        remoteURI="https://github.com/getaviz/Getaviz/invitations"
+        remoteURI="https://github.com/getaviz/Getaviz.git"
         pushURI=""
         checkoutBranch="master">
       <description>
