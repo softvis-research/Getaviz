@@ -32,9 +32,9 @@ Have a look at our [website](https://home.uni-leipzig.de/svis/) for more informa
 
 ## How do I get set up? ###
 
-The recommended way is **not** to clone this repository, but to follow the instructions under [Oomph Setup](../wiki/Oomph%20Setup).
+The recommended way is **not** to clone this repository, but to follow the instructions under [Oomph Setup](/wiki/Oomph%20Setup).
 Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.MD with further instructions and documentation.
 
 ## Wiki
 
-Please have a look at our [Wiki](../wiki/Home) which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
+Please have a look at our [Wiki](/wiki/Home) which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
