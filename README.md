@@ -44,7 +44,7 @@ Many thanks to all the contributors who have improved Getaviz by implementing ne
 ## How do I get set up? ###
 
 The recommended way is **not** to clone this repository, but to follow the instructions under [Oomph Setup](../../wiki/Oomph%20Setup).
-Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.MD with further instructions and documentation.
+Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.md with further instructions and documentation.
 
 ## Wiki
 
