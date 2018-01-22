@@ -34,7 +34,7 @@ Have a look at our [website](https://home.uni-leipzig.de/svis/) for more informa
 
 ### Further Contributors
 
-Many thanks to all the contributors who have improved Getaviz by implementing new featurer or fixing bugs, especially:
+Many thanks to all the contributors who have improved Getaviz by implementing new features or fixing bugs, especially:
 
 * Denise Zilch
 * André Naumann
