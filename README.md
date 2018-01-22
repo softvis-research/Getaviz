@@ -12,6 +12,8 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
   * Plant
   * MultiSphere
   * …
+  
+An academic publication about Getaviz you can find [here](https://www.researchgate.net/publication/320083290_GETAVIZ_Generating_Structural_Behavioral_and_Evolutionary_Views_of_Software_Systems_for_Empirical_Evaluation).
 
 ## Build Status
 
