@@ -40,6 +40,7 @@ Many thanks to all the contributors who have improved Getaviz by implementing ne
 
 * Denise Zilch
 * André Naumann
+* Stefan Faulhaber
 
 ## How do I get set up? ###
 
