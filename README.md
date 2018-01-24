@@ -41,6 +41,7 @@ Many thanks to all the contributors who have improved Getaviz by implementing ne
 * Denise Zilch
 * André Naumann
 * Stefan Faulhaber
+* [Dan Häberlein](https://github.com/dhaeb)
 
 ## How do I get set up? ###
 
