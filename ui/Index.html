@@ -5,7 +5,7 @@
 	TODO in application auslagern
 -->
 <script type="text/javascript">  
-	var modelUrl = "data/RD bank/model";
+	var modelUrl = "data/antlr-3.1.3-hismo/model";
 
 	var multipartX3dUrl  = modelUrl + "/multiPart.x3d";
 	var multipartJsonUrl = modelUrl + "/multiPart.json";
@@ -41,11 +41,20 @@
     <script type="text/javascript" src="libs/jqwidgets/jqxnavigationbar.js"></script>
     <script type="text/javascript" src="libs/jqwidgets/jqxwindow.js"></script>
     <script type="text/javascript" src="libs/jqwidgets/jqxnotification.js"></script>
-	<script type="text/javascript" src="libs/jqwidgets/jqxtextarea.js"></script>
-	<script type="text/javascript" src="libs/jqwidgets/jqxswitchbutton.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxtextarea.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxswitchbutton.js"></script>
+	<script type="text/javascript" src="libs/jqwidgets/jqxslider.js"></script>
+	<script type="text/javascript" src="libs/jqwidgets/jqxcheckbox.js"></script>
 	
     <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.base.css" type="text/css" />
     <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.metro.css" type="text/css" />
+	
+	<!-- ztree -->
+	<script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.core.js"></script>
+	<script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.exhide.js"></script>
+	<script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.excheck.js"></script>
+	<link rel="stylesheet" href="libs/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<link rel="stylesheet" href="scripts/PackageExplorer/zt.css" type="text/css">
 	
 	<script type="text/javascript" src="scripts/CanvasFilter/CanvasFilterController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasMark/CanvasMarkController.js"></script>
@@ -56,15 +65,24 @@
 	<script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>	
 	<script type="text/javascript" src="scripts/RelationConnector/RelationConnectorController.js"></script>	
 	<script type="text/javascript" src="scripts/RelationTransparency/RelationTransparencyController.js"></script>
+	<script type="text/javascript" src="scripts/PatternTransparency/PatternTransparencyController.js"></script>
 	<script type="text/javascript" src="scripts/RelationHighlight/RelationHighlightController.js"></script>	
 	<script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>	
+	<script type="text/javascript" src="scripts/PatternExplorer/PatternExplorerController.js"></script>
+	<script type="text/javascript" src="scripts/VersionExplorer/VersionExplorerController.js"></script>
 	<script type="text/javascript" src="scripts/Search/SearchController.js"></script>
 	<script type="text/javascript" src="scripts/Experiment/ExperimentController.js"></script>
 	<script type="text/javascript" src="scripts/SourceCode/SourceCodeController.js"></script>
+	<script type="text/javascript" src="scripts/NavigationWASD/NavigationWASDController.js"></script>
+	<script type="text/javascript" src="scripts/NavigationZoomPan/NavigationZoomPanController.js"></script>	
+	<script type="text/javascript" src="scripts/NavigationCam/NavigationCamController.js"></script>		
 	<script type="text/javascript" src="scripts/InteractionLogger/InteractionLogger.js"></script>
 	<script type="text/javascript" src="scripts/Email/EmailController.js"></script>
 	<script type="text/javascript" src="scripts/Menu/MenuController.js"></script>
-	
+	<script type="text/javascript" src="scripts/PatternConnector/PatternConnectorController.js"></script>
+	<script type="text/javascript" src="scripts/EdgeConfigurator/EdgeConfiguratorController.js"></script>
+
+		
 	<!--user interface-->		
 	<script type="text/javascript" src="scripts/DefaultLogger.js"></script>
 	<script type="text/javascript" src="scripts/Model.js"></script>	
@@ -73,11 +91,10 @@
 	<script type="text/javascript" src="scripts/Application.js"></script>		
 	<script type="text/javascript" src="scripts/ActionController.js"></script>		
 	
-	
 	<link rel="stylesheet" href="Style.css" type="text/css" />
 
 	<!--setup-->
-	<script type="text/javascript" src="setups/web/webRD.js"></script>
+	<script type="text/javascript" src="setups/develop/antipattern.js"></script>
 	
 </head>
 <body>    
@@ -87,7 +104,7 @@
 								
 				<Transform id="addedElements"></Transform>
 				
-				<MultiPart id="multiPart" mapDEFToID="true" url="data/RD bank/model/multiPart.x3d" urlIDMap="data/RD bank/model/multiPart.json"></MultiPart>
+				<MultiPart id="multiPart" mapDEFToID="true" url="data/antlr-3.1.3-hismo/model/multiPart.x3d" urlIDMap="data/antlr-3.1.3-hismo/model/multiPart.json"></MultiPart>
 				
 			</scene>
 		</x3d>                    
