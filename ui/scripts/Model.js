@@ -6,17 +6,18 @@ var model = (function() {
 		marked 			: { name: "marked" },
 		hovered 		: { name: "hovered" },
 		filtered 		: { name: "filtered" },
-		added			: { name: "added" }
-	};
-
-
-	
+		added			: { name: "added" },
+		componentSelected : { name: "componentSelected" },
+		antipattern     : { name: "antipattern" },
+		versionSelected : { name: "versionSelected" }
+	};	
 
 	var entitiesById = new Map();
 	var eventEntityMap = new Map();
-	
-	function initialize(famixModel) {
-         
+    var entitiesByVersion = new Map();
+	var selectedVersions = [];
+        
+	function initialize(famixModel) {            
 		//create initial entites from famix elements 
 		famixModel.forEach(function(element) {
 			
@@ -29,13 +30,61 @@ var model = (function() {
 				element.id, 
 				element.name, 
 				element.qualifiedName, 
-				element.belongsTo
+				element.belongsTo,
+                element.antipattern,
+                element.roles,
+				element.isTransparent,
+				element.version
 			);
+			
+			entity.isTransparent = false;
 						
 			switch(entity.type) {
+				case "path":
+					console.log("path found");
+					return;
+				case "component": 
+					entity.components = element.components.split(",");
+					entity.version = element.version;
+					return;
+				case "Namespace":
+					entity.version = element.version;
+					if(entity.version != undefined) {
+						if(entitiesByVersion.has(entity.version)) {
+							var map = entitiesByVersion.get(entity.version);
+							map.push(entity);
+							entitiesByVersion.set(entity.version, map);
+						} else {
+							addVersion(entity.version);
+							var map = [];
+							map.push(entity);
+							entitiesByVersion.set(entity.version, map);
+						}
+					}
+					break;
+                                
 				case "Class":
 					entity.superTypes = element.subClassOf.split(",");
 					entity.subTypes = element.superClassOf.split(",");
+					entity.reaches = element.reaches.split(",");
+					entity.antipattern = element.antipattern.split(",");
+					entity.roles = element.roles.split(",");
+					entity.component = element.component;
+					entity.version = element.version;
+					entity.betweennessCentrality = element.betweennessCentrality;
+					if(entity.version != undefined) {
+						if(entitiesByVersion.has(entity.version)) {
+							var map = entitiesByVersion.get(entity.version);
+							map.push(entity);
+							entitiesByVersion.set(entity.version, map);
+						} else {
+							addVersion(entity.version);
+							var map = [];
+							map.push(entity);
+							entitiesByVersion.set(entity.version, map);
+						}
+					}
+                                        
 					break;
 				case  "ParameterizableClass":
 					entity.superTypes = element.subClassOf.split(",");
@@ -84,11 +133,11 @@ var model = (function() {
 						entity.accesses = [];
 					}
 					break;				
-				default: 				
+				default: 
 					return;
 			}
 						
-			entitiesById.set(element.id, entity);			
+			entitiesById.set(element.id, entity);
 		});
 
 			
@@ -108,6 +157,29 @@ var model = (function() {
 			}	
 			
 			switch(entity.type) {
+                            
+                            case "component":
+                                var components = new Array();
+                                entity.components.forEach(function(componentId) {
+                                   var relatedEntity = entitiesById.get(componentId.trim());
+                                   if(relatedEntity !== undefined) {
+                                       components.push(relatedEntity);
+                                   }
+                                });
+                                entity.components = components;
+								//entity.version = version;
+//                                 var paths = new Array();
+//                                         entity.paths.forEach(function(roleID
+//                                         ) {
+                                            //var role = entitiesById.get(roleID.trim());
+//                                             var role = roleID.trim();
+//                                             if(role !== undefined) {
+//                                                 roles.push(role)
+//                                             }
+//                                         });
+                                break;
+                                
+                                
 				case "Class":
 					var superTypes = new Array();
 					entity.superTypes.forEach(function(superTypeId){
@@ -125,12 +197,42 @@ var model = (function() {
 							subTypes.push(relatedEntity);
 						}
 					});
-					entity.subTypes = subTypes;		
+					entity.subTypes = subTypes;
+                                        
+                                        var reaches = new Array();
+					entity.reaches.forEach(function(reachesId){
+						var relatedEntity = entitiesById.get(reachesId.trim());
+						if(relatedEntity !== undefined){
+							reaches.push(relatedEntity);
+						}
+					});
+					entity.reaches = reaches;
+                                        
+					var antipatterns = [];
+					entity.antipattern.forEach(function(antipatternID
+					) {
+						var antipattern = entitiesById.get(antipatternID.trim());
+						if(antipattern !== undefined) {
+							antipatterns.push(antipattern);
+						}
+					});
+					entity.antipattern = antipatterns;
+					
+					var roles = new Array();
+					entity.roles.forEach(function(roleID
+					) {
+						//var role = entitiesById.get(roleID.trim());
+						var role = roleID.trim();
+						if(role !== undefined) {
+							roles.push(role)
+						}
+					});
+					entity.roles = roles;
 					
 					break;
 				
 				case  "ParameterizableClass":
-					var superTypes = new Array();
+					var superTypes = [];
 					entity.superTypes.forEach(function(superTypeId){
 						var relatedEntity = entitiesById.get(superTypeId.trim());
 						if(relatedEntity !== undefined){
@@ -139,7 +241,7 @@ var model = (function() {
 					});
 					entity.superTypes = superTypes;
 					
-					var subTypes = new Array();
+					var subTypes = [];
 					entity.subTypes.forEach(function(subTypesId){
 						var relatedEntity = entitiesById.get(subTypesId.trim());
 						if(relatedEntity !== undefined){
@@ -151,7 +253,7 @@ var model = (function() {
 					break;			
 				
 				case "Attribute":	
-					var accessedBy = new Array();
+					var accessedBy = [];
 					entity.accessedBy.forEach(function(accessedById){
 						var relatedEntity = entitiesById.get(accessedById.trim());
 						if(relatedEntity !== undefined){
@@ -163,7 +265,7 @@ var model = (function() {
 					break;
 				
 				case "Method":
-					var calls = new Array();
+					var calls = [];
 					entity.calls.forEach(function(callsId){
 						var relatedEntity = entitiesById.get(callsId.trim());
 						if(relatedEntity !== undefined){
@@ -172,7 +274,7 @@ var model = (function() {
 					});
 					entity.calls = calls;
 					
-					var calledBy = new Array();
+					var calledBy = [];
 					entity.calledBy.forEach(function(calledById){
 						var relatedEntity = entitiesById.get(calledById.trim());
 						if(relatedEntity !== undefined){
@@ -181,7 +283,7 @@ var model = (function() {
 					});
 					entity.calledBy = calledBy;
 					
-					var accesses = new Array();
+					var accesses = [];
 					entity.accesses.forEach(function(accessesId){
 						var relatedEntity = entitiesById.get(accessesId.trim());
 						if(relatedEntity !== undefined){
@@ -253,13 +355,13 @@ var model = (function() {
 			qualifiedName: qualifiedName,
 			belongsTo: belongsTo,
 			children: []						
-		};		
+		};
 		
 		var statesArray = Object.keys(states);		
 		statesArray.forEach(function(stateName){
 			entity[stateName] = false;
-		});	
-		
+		});
+                
 		entitiesById.set(id, entity);
 		
 		return entity;
@@ -272,9 +374,9 @@ var model = (function() {
 	
 	
 	function getAllParentsOfEntity(entity){
-		var parents = new Array();
+		var parents = [];
 		
-		if(entity.belongsTo !== undefined){
+		if(entity.belongsTo !== undefined && entity.belongsTo !== ""){
 			var parent = entity.belongsTo;
 			parents.push(parent);
 			
@@ -292,13 +394,60 @@ var model = (function() {
 	
 	function getEntityById(id){
 		return entitiesById.get(id);
-	}	
+	}
+	
+	function getAllVersions() {
+            return entitiesByVersion;
+        }
+	
+	function getEntitiesByComponent(component) {
+            var entities = [];
+            entitiesById.forEach(function(entity) {
+                if(entity.component == component) {
+                    entities.push(entity);
+                }
+            });
+            return entities;
+        }
+
+        function getEntitiesByAntipattern(antipatternID) {
+            var entities = [];
+            entitiesById.forEach(function(entity) {
+                var antipattern = [];
+                if(entity.type == "Class") {
+                    antipattern = entity.antipattern;
+                    for(var i = 0; i < antipattern.length; i++) {
+                        if(antipattern[i].id == antipatternID) {
+                            entities.push(entity);
+                        }
+                    }
+                }
+            })
+            return entities;
+        }
+        
+    function removeVersion(version) {
+        var index = selectedVersions.indexOf(version);
+        if(index > -1) {
+            selectedVersions.splice(index, 1);
+        }
+	}
+        
+    function addVersion(version) {
+        selectedVersions.push(version);
+    }
 	
 	function getEntitiesByState(stateEventObject){
 		return eventEntityMap.get(stateEventObject);
 	}
 	
+	function getEntitiesByVersion(versionid){
+        return entitiesByVersion.get(versionid);
+    }
 	
+	function getSelectedVersions() {
+		return selectedVersions;
+	}
 	
 	return {
         initialize					: initialize,
@@ -308,10 +457,18 @@ var model = (function() {
 		getAllEntities				: getAllEntities,
 		getEntityById				: getEntityById,
 		getEntitiesByState			: getEntitiesByState,
-
+		getEntitiesByComponent		: getEntitiesByComponent,
+		getEntitiesByAntipattern	: getEntitiesByAntipattern,
+		getEntitiesByVersion		: getEntitiesByVersion,
+        getAllParentsOfEntity       : getAllParentsOfEntity,
+        getAllVersions              : getAllVersions,
 
 		createEntity				: createEntity,
-		removeEntity				: removeEntity
+		removeEntity				: removeEntity,
+		
+		addVersion                  : addVersion,
+		removeVersion               : removeVersion,
+		getSelectedVersions			: getSelectedVersions
     };
 	
 })();
