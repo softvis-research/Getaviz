@@ -9,14 +9,13 @@ var canvasSelectController = (function() {
 	//config parameters	
 	var controllerConfig = {
 		setCenterOfRotation : false,
-
+                color: "darkred",
 		selectionMouseKey: 1,
 		selectionMode: SELECTION_MODES.UP,					
 		selectionDurationSeconds: 0.5,
 		selectionMoveAllowed: false,
 		showProgressBar: false,
 	}
-	
 
 	var downActionEventObject;
 
@@ -160,7 +159,7 @@ var canvasSelectController = (function() {
 		}
 		
 		//higlight new selected entity
-		canvasManipulator.highlightEntities([entity], canvasManipulator.colors.darkred);		
+		canvasManipulator.highlightEntities([entity], controllerConfig.color);		
 
 		//center of rotation
 		if(controllerConfig.setCenterOfRotation){
