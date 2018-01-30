@@ -2,15 +2,21 @@ var canvasHoverController = (function() {
     
 	var isInNavigation = false;    
 	
-    function initialize(){ 	
-
+        function initialize(setupConfig){ 	
+		application.transferConfigParams(setupConfig, controllerConfig);
 		var cssLink = document.createElement("link");
 		cssLink.type = "text/css";
 		cssLink.rel = "stylesheet";
 		cssLink.href = "scripts/CanvasHover/ho.css";
-		document.getElementsByTagName("head")[0].appendChild(cssLink);
-        		
-    }
+		document.getElementsByTagName("head")[0].appendChild(cssLink);	
+        }
+	
+	//config parameters	
+	var controllerConfig = {
+		hoverColor: "darkred",
+		showQualifiedName : false,
+		showVersion : true,
+	};
 	
 	function activate(){
 		
@@ -35,13 +41,11 @@ var canvasHoverController = (function() {
 			var unHoverEvent = {					
 					sender: canvasHoverController,
 					entities: [hoveredEntity]
-				}	
+			};
 
-				events.hovered.off.publish(unHoverEvent);	
+			events.hovered.off.publish(unHoverEvent);	
 		});		
 	}
-	
-	
 	
 	function createTooltipContainer(){
 		
@@ -52,15 +56,22 @@ var canvasHoverController = (function() {
 		
 		var namePElement = document.createElement("P");
 		namePElement.id = "tooltipName";
-		
-		var qualifiedNamePElement = document.createElement("P");
-		qualifiedNamePElement.id = "tooltipQualifiedName";
-		
 		tooltipDivElement.appendChild(namePElement);
-		tooltipDivElement.appendChild(qualifiedNamePElement);
+		
+		if(controllerConfig.showQualifiedName) {
+			var qualifiedNamePElement = document.createElement("P");
+			qualifiedNamePElement.id = "tooltipQualifiedName";
+			tooltipDivElement.appendChild(qualifiedNamePElement);
+		}
+		
+		if(controllerConfig.showVersion) {
+			var versionPElement = document.createElement("P");
+			versionPElement.id = "tooltipVersion";
+			tooltipDivElement.appendChild(versionPElement);
+		}
+
 		canvas.appendChild(tooltipDivElement);
 	}
-	
 		
 	function handleOnMousedown(canvasEvent) {
 		isInNavigation = true;
@@ -87,7 +98,7 @@ var canvasHoverController = (function() {
 			entities	: [entity],
 			posX		: multipartEvent.layerX,
 			posY		: multipartEvent.layerY
-		}	
+		};
 		
 		events.hovered.on.publish(applicationEvent);		
 	}
@@ -103,31 +114,35 @@ var canvasHoverController = (function() {
 		var applicationEvent = {			
 			sender		: canvasHoverController,
 			entities	: [entity]			
-		}	
+		};
 		
 		events.hovered.off.publish(applicationEvent);	
 	}
-	
 
-
-
-	
-	
 	function onEntityHover(applicationEvent) {
 		var entity = applicationEvent.entities[0];
 		
 		if(entity == undefined){
 			events.log.error.publish({ text: "Entity is not defined"});
 		}
+		
+		if(entity.isTransparent == true) {
+			return;
+		}
 
 		if(entity.marked && entity.selected){
 			canvasManipulator.unhighlightEntities([entity]);	
 		} else {
-			canvasManipulator.highlightEntities([entity], canvasManipulator.colors.darkred);	
+			canvasManipulator.highlightEntities([entity], controllerConfig.hoverColor);	
 		}
 		        
 		$("#tooltipName").text(getTooltipName(entity));
-		$("#tooltipQualifiedName").text(entity.qualifiedName);
+		if(controllerConfig.showQualifiedName) {
+			$("#tooltipQualifiedName").text(entity.qualifiedName);
+		}
+		if(controllerConfig.showVersion) {
+			$("#tooltipVersion").text("Version: " + entity.version);
+		}
 		
 		var tooltip = $("#tooltip");
         tooltip.css("top", applicationEvent.posY + 50 + "px");
@@ -139,7 +154,7 @@ var canvasHoverController = (function() {
 		var entity = applicationEvent.entities[0];
 		
 		if(entity.marked && entity.selected){
-			canvasManipulator.highlightEntities([entity], canvasManipulator.colors.darkred);	
+			canvasManipulator.highlightEntities([entity], controllerConfig.hoverColor);	
 		} else {
 			if(!entity.selected){
 				canvasManipulator.unhighlightEntities([entity]);			
@@ -148,7 +163,6 @@ var canvasHoverController = (function() {
 		
 		$("#tooltip").css("display", "none");		
 	}
-	
 	
 	function getTooltipName(entity) {
         
@@ -162,7 +176,6 @@ var canvasHoverController = (function() {
         
         return entity.type + ": " + entity.name;        
     }
-	
 
     return {
         initialize: initialize,
