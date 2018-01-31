@@ -58,39 +58,33 @@ var patternExplorerController = (function() {
         entities.forEach(function(entity) {
 			
             if(entity.type == "stk" || entity.type == "component" || entity.type == "Class") {
-    
-                if(entity.belongsTo == undefined){ 
-                    item = { id: entity.id, open: false, checked: true, parentId: "", name: entity.name, icon: iconFiles.packageIcon, iconSkin: "zt"};
-                } else {
-                    //TODO Konstanten für Typen
-                    switch(entity.type) {
-                        case "Class":
-                            for(var i = 0; i < entity.antipattern.length; i++) {
-                                if(entity.antipattern[i].type != "cd") {
-                                    item = { id: entity.id, open: false, parentId: entity.antipattern[i].id, name: entity.name + " <<" + entity.roles[i] + ">>", icon: iconFiles.typeIcon, nocheck: true, iconSkin: "zt"};
-                                    items.push(item);
-                                }
-                            }
-                            if(entity.component != "" && entity.component != undefined) {
-                                item = { id: entity.id, open: false, parentId: entity.component, name: entity.name, icon: iconFiles.typeIcon, nocheck: true, iconSkin: "zt"};
-                                items.push(item);
-                            }
-                            break;
-                        case "stk":
-                       // case "cd":
-                            item = { id: entity.id, open: false, checked: false, parentId: entity.type, name: entity.name, icon: iconFiles.antipatternIcon, iconSkin: "zt"};
-                            items.push(item);
-                            break;
-                        case "component":
-                            item = { id: entity.id, open: false, checked: false, parentId: entity.type, name: entity.name, version: entity.version, icon: iconFiles.antipatternIcon, iconSkin: "zt"};
-                            components.push(item);
-                            break;
-                        default:
-                            return;
-                        }
-                    }
-                }
-            }
+				switch(entity.type) {
+                    case "Class":
+						for(var i = 0; i < entity.antipattern.length; i++) {
+							if(entity.antipattern[i].type != "cd") {
+								item = { id: entity.id, open: false, parentId: entity.antipattern[i].id, name: entity.name + " <<" + entity.roles[i] + ">>", icon: iconFiles.typeIcon, nocheck: true, iconSkin: "zt"};
+								items.push(item);
+							}
+						}
+						if(entity.component != "" && entity.component != undefined) {
+							item = { id: entity.id, open: false, parentId: entity.component, name: entity.name, icon: iconFiles.typeIcon, nocheck: true, iconSkin: "zt"};
+							items.push(item);
+						}
+						break;
+					case "stk":
+				   // case "cd":
+						item = { id: entity.id, open: false, checked: false, parentId: entity.type, name: entity.name, icon: iconFiles.antipatternIcon, iconSkin: "zt"};
+						items.push(item);
+						break;
+					case "component":
+						item = { id: entity.id, open: false, checked: false, parentId: entity.type, name: entity.name, version: entity.version, icon: iconFiles.antipatternIcon, iconSkin: "zt"};
+						components.push(item);
+						break;
+					default:
+						return;
+					}
+				}
+			}
         );
 		
         //Sortierung nach Typ und Alphanumerisch
