@@ -20,7 +20,9 @@
     <!--Main-->
     <script type="text/javascript" src="libs/jquery-1.11.1.js"></script>
     <script type="text/javascript" src="libs/typeahead.bundle.js"></script>
-    <script type="text/javascript" src="libs/handlebars-v2.0.0.js"></script>	
+    <script type="text/javascript" src="libs/handlebars-v2.0.0.js"></script>
+	
+	<!--<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>-->
 	
 	<!--x3dom-->
 	<script type="text/javascript" src="libs/x3dom/x3dom.debug.js"></script>	
@@ -72,10 +74,7 @@
 	<script type="text/javascript" src="scripts/VersionExplorer/VersionExplorerController.js"></script>
 	<script type="text/javascript" src="scripts/Search/SearchController.js"></script>
 	<script type="text/javascript" src="scripts/Experiment/ExperimentController.js"></script>
-	<script type="text/javascript" src="scripts/SourceCode/SourceCodeController.js"></script>
-	<script type="text/javascript" src="scripts/NavigationWASD/NavigationWASDController.js"></script>
-	<script type="text/javascript" src="scripts/NavigationZoomPan/NavigationZoomPanController.js"></script>	
-	<script type="text/javascript" src="scripts/NavigationCam/NavigationCamController.js"></script>		
+	<script type="text/javascript" src="scripts/SourceCode/SourceCodeController.js"></script>	
 	<script type="text/javascript" src="scripts/InteractionLogger/InteractionLogger.js"></script>
 	<script type="text/javascript" src="scripts/Email/EmailController.js"></script>
 	<script type="text/javascript" src="scripts/Menu/MenuController.js"></script>
@@ -101,9 +100,7 @@
 	<div id="canvas">                    
 		<x3d id="x3dElement" showConsole="true">
 			<scene id="scene">
-								
 				<Transform id="addedElements"></Transform>
-				
 				<MultiPart id="multiPart" mapDEFToID="true" url="data/antlr-3.1.3-hismo/model/multiPart.x3d" urlIDMap="data/antlr-3.1.3-hismo/model/multiPart.json"></MultiPart>
 				
 			</scene>
