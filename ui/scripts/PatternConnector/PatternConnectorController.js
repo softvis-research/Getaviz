@@ -231,18 +231,7 @@ var patternConnectorController = function(){
 		});
 		return d3.hierarchy(map[""]);
 	}
-	
-	function computeavg(points) {
-		var x = 0;
-		var y = 0;
-		
-		points.forEach(function(point) {
-			x += point.x;
-			y += point.y;
-		});
-		return [x/points.length, y/points.length];
-	}
-	
+
 	function d3Layout(version, relatedEntities) {
 		d3Nodes = [];
 		callingEntities = [];
@@ -254,7 +243,6 @@ var patternConnectorController = function(){
 		root = packageHierarchy(d3Nodes).sum(function(d) { return d.size; });
 		var height = root.leaves()[0].data.z;
 		var tension = 0.5;
-		console.log("tension: " + tension);
 		cluster = d3.cluster();
 		var line = d3.line()
 			.curve(d3.curveBundle.beta(tension))
@@ -265,22 +253,17 @@ var patternConnectorController = function(){
 		link = svg.append("g").selectAll(".link3");
 
 		cluster(root);
+		var x = 0;
+		var y = 0;
 		root.leaves().forEach(function(el) {
-			//update(el, version);
 			el.x = el.data.x;
 			el.y = el.data.y;
 			el.parent = root;
-			if(version == "2.7.1") {
-				
-			}
+			x += point.x;
+			y += point.y;
 		});
-		//var centroid = computeCentroid(root.leaves());
-		var centroid = computeavg(root.leaves());
-		if(version == "2.7.1") {
-			console.log(centroid)
-		}
-		root.x = centroid[0];
-		root.y = centroid[1];
+		root.x = x/root.leaves().length;
+		root.y = y/root.leaves().length;
 		link = link
 				.data(packageImports(root.leaves()))
 			    .enter().append("path")
