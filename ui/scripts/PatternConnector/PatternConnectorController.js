@@ -17,6 +17,8 @@ var patternConnectorController = function(){
     var finished = false;
 	
 	var minWeight = 0.5;
+	
+	var d3Nodes = [];
 
 	//config parameters
 	var controllerConfig = {
@@ -28,6 +30,7 @@ var patternConnectorController = function(){
 		sourceStartAtBorder: false,
 		targetEndAtBorder: false,
 		createEndpoints : true,
+		bundledEdges: true,
 	};
 
 	function initialize(setupConfig){
@@ -41,6 +44,7 @@ var patternConnectorController = function(){
 		events.antipattern.on.subscribe(onAntipatternSelected);
 		events.versionSelected.off.subscribe(offVersionSelected);
 		events.config.weight.subscribe(onWeightChanged);
+		events.config.bundledEdges.subscribe(onBundledEdgesChanged);
 		events.config.innerClasses.subscribe(onInnerClassesChanged);
 		events.selected.on.subscribe(onRelationsChanged); 
 	}
@@ -103,6 +107,13 @@ var patternConnectorController = function(){
 	function onWeightChanged(applicationEvent) {
 		var value = applicationEvent.entities[0];
 		minWeight = value;
+		onComponentSelected(lastApplicationEvent);
+	}
+	
+	function onBundledEdgesChanged(applicationEvent) {
+		var value = applicationEvent.entities[0];
+		controllerConfig.bundledEdges = value;
+		console.log("value: " + value);
 		onComponentSelected(lastApplicationEvent);
 	}
 
@@ -199,8 +210,183 @@ var patternConnectorController = function(){
 		}            
     }
 	
+	function packageHierarchy(classes) {
+		var map = {};
+
+		function find(name, data) {
+			var node = map[name], i;
+			if (!node) {
+				node = map[name] = data || {name: name, children: []};
+				if (name.length) {
+					node.parent = find(name.substring(0, i = "name".lastIndexOf(".")));
+			        node.parent.children.push(node);
+					node.key = name.substring(i + 1);
+				}
+			}
+		return node;
+		}
+
+		classes.forEach(function(d) {
+			find(d.name, d);
+		});
+		return d3.hierarchy(map[""]);
+	}
+	
+	function computeCentroid(pts) {
+		var nPts = pts.length;
+		var x=0; var y=0;
+		var f;
+		var j=nPts-1;
+		var p1; var p2;
+	
+		for (var i=0;i<nPts;j=i++) {
+			p1=pts[i]; p2=pts[j];
+			f=p1.x*p2.y-p2.x*p1.y;
+			x+=(p1.x+p2.x)*f;
+			y+=(p1.y+p2.y)*f;
+		}
+	
+		f=area(pts)*6;
+		if(f == 0) {
+			f = 1;
+		}
+		return [x/f,y/f];
+	}
+	
+	function area(pts) {
+		var area=0;
+		var nPts = pts.length;
+		var j=nPts-1;
+		var p1; var p2;
+
+		for (var i=0;i<nPts;j=i++) {
+		    p1=pts[i]; p2=pts[j];
+		    area+=p1.x*p2.y;
+		    area-=p1.y*p2.x;
+	    }
+	    area/=2;
+		return area;
+	}
+	
+	/*function update(feld, version) {
+		var id = searchElementsByName(feld.data.key, version);
+		if(id !== undefined) {
+			var position = getObjectPosition(id);
+			feld.x = position[0];
+			feld.y = position[1];
+		}
+	}*/
+	
+	function d3Layout(version, relatedEntities) {
+		d3Nodes = [];
+		callingEntities = [];
+		relatedEntities.forEach(function(entity) {
+			addReaches(entity);
+		});
+		
+		createRelatedConnections();
+		root = packageHierarchy(d3Nodes).sum(function(d) { return d.size; });
+		var height = root.leaves()[0].data.z;
+		var tension = (root.leaves().length)/100;
+		cluster = d3.cluster();
+		var line = d3.line()
+			.curve(d3.curveBundle.beta(tension))
+			.x(function(d) { return d.x; })
+			.y(function(d) { return d.y; });
+    
+		var svg = d3.select("body").append("svg");
+		link = svg.append("g").selectAll(".link3");
+
+		cluster(root);
+		root.leaves().forEach(function(el) {
+			//update(el, version);
+			el.x = el.data.x;
+			el.y = el.data.y;
+			el.parent = root;
+		});
+		var centroid = computeCentroid(root.leaves());
+		root.x = centroid[0];
+		root.y = centroid[1];
+		 link = link
+				.data(packageImports(root.leaves()))
+			    .enter().append("path")
+				.each(function(d) { d.source = d[0], d.target = d[d.length - 1]})
+				.attr("class", "link")
+				.attr("d", line);
+				
+		var  numPoints = 256;
+		var mypaths = document.getElementsByTagName("path");
+		mypaths.forEach(function(mypath) {
+			var  pathLength = mypath.getTotalLength();
+			var  polygonPoints= [];
+			
+			for (var i=0; i<numPoints; i++) {
+				var p = mypath.getPointAtLength(i * pathLength / numPoints);
+				polygonPoints.push(p.x);
+				polygonPoints.push(p.y);
+			}
+			var connector = createPolyline2D("test", polygonPoints.join(","), height);
+			connectors.set(connector, version);
+		});
+		
+		// nemove SVG elements from dom
+		var element = document.getElementsByTagName("svg"), index;
+		for (index = element.length - 1; index >= 0; index--) {
+			element[index].parentNode.removeChild(element[index]);
+		}
+	}
+	
+	function createPolyline2D(name, lineSegments, height) {
+		var transform = document.createElement("transform");
+		transform.setAttribute("render", "true");
+		transform.setAttribute("translation", "0, 0," + (height + 0.55));
+		
+		var shape = document.createElement("Shape");
+		transform.appendChild(shape);
+		var appearance = document.createElement("Appearance");
+		shape.appendChild(appearance);
+		var material = document.createElement("Material");
+		material.setAttribute("diffuseColor", "1 0 0");
+		material.setAttribute("emissiveColor", "1 0 0");
+		material.setAttribute("ambientintensity", "1");
+		material.setAttribute("specularcolor", "1 0 0");
+		material.setAttribute("shininess", "1");
+		material.setAttribute("ambientintensity", "1");
+		appearance.appendChild(material);
+		var polyline2d = document.createElement("Polyline2D");
+		polyline2d.setAttribute("lineSegments", lineSegments);
+
+
+		//transform.setAttribute("class", name);
+
+	
+		var polyline2dGroup = document.getElementById("addedElements");
+
+		polyline2dGroup.appendChild(transform);
+		shape.appendChild(polyline2d);
+		return transform;
+	}
+	
+	function packageImports(nodes) {
+		var map = {},
+		imports = [];
+
+		// Compute a map from name to node.
+		nodes.forEach(function(d) {
+			map[d.data.name] = d;
+		});
+
+		// For each import, construct a link from the source to target node.
+		nodes.forEach(function(d) {
+			if (d.data.imports) d.data.imports.forEach(function(i) {
+				imports.push(map[d.data.name].path(map[i]));
+			});
+		});
+		return imports;
+	}
+	
 	function onComponentSelected (applicationEvent) {
-        events.log.info.publish({ text: "pattern connector - onComponentSelected "});
+        events.log.info.publish({ text: "pattern connector - onComponentSelected"});
 		lastApplicationEvent = applicationEvent;
         removeAllConnectors();
 
@@ -215,32 +401,51 @@ var patternConnectorController = function(){
 			
 		relatedEntities = model.getEntitiesByComponent(sourceEntity.id);
 		var versions = model.getSelectedVersions();
-
+		var relatedEntitiesByVersion = new Map();
+		//var map = [];
 		for(var i = 0; i < sourceEntity.components.length; i++) {
 			var component = sourceEntity.components[i];
 			var version = component.version;
 			for(var j = 0; j < versions.length; ++j) {
 				if(version == versions[j]) {
 					relatedEntities = relatedEntities.concat(model.getEntitiesByComponent(sourceEntity.components[i].id));
-							//events.log.info.publish({text: "yes: " + i + " " + j});
 				}
 			}
 		}
 		
 		for(i = 0; i < relatedEntities.length; ++i) {
-			addReaches(relatedEntities[i]);
+			var map = [];
+			if(controllerConfig.bundledEdges)  {
+				if(relatedEntitiesByVersion.has(relatedEntities[i].version)) {
+					map = relatedEntitiesByVersion.get(relatedEntities[i].version);
+					map.push(relatedEntities[i]);
+					relatedEntitiesByVersion.set(relatedEntities[i].version, map);
+				} else {
+					map.push(relatedEntities[i]);
+					relatedEntitiesByVersion.set(relatedEntities[i].version, map);
+				}
+			} else {
+				addReaches(relatedEntities[i]);
+			}
 		}
 						
 		finished = true;
 			
-		if(callingEntities.length == 0) {
+		if(callingEntities.length == 0 && controllerConfig.bundledEdges == false) {
 			return;
 		}
 
 		if(activated){
-			createRelatedConnections();
+			if(controllerConfig.bundledEdges) {
+				relatedEntitiesByVersion.forEach(callback);
+			} else {
+				createRelatedConnections();
+			}
 		}
-
+	}
+	
+	function callback(entities,version,c) {
+		d3Layout(version, entities);
 	}
 	
 	function offVersionSelected(applicationEvent) {
@@ -279,7 +484,6 @@ var patternConnectorController = function(){
 				return;
 			}
 
-
 			//create scene element
 			var connector = createConnector(relatedPair[0], relatedPair[1]);
 
@@ -301,7 +505,6 @@ var patternConnectorController = function(){
 				relatedPair[0]
 			);
 			
-
 			relation.source = relatedPair[0];
 			relation.target = relatedPair[1];
 			relations.push(relation);
@@ -317,10 +520,9 @@ var patternConnectorController = function(){
 		}
 	}
 
-
 	function createConnector(entity, relatedEntity){
 		var weight = (entity.betweennessCentrality + relatedEntity.betweennessCentrality)/2;
-				
+					
 		//calculate attributes
 		var sourcePosition = calculateSourcePosition(entity, relatedEntity);
 		if( sourcePosition === null ){
@@ -337,24 +539,137 @@ var patternConnectorController = function(){
 		if(connectorSize < 0.1) {
 			connectorSize = 0.1;
 		}
-
+		
+		var sourceKey = entity.name.replace("$", ".");
+		var targetKey = relatedEntity.name.replace("$", ".");
+		var sourceStatus = searchKey(sourceKey);
+		var targetStatus = searchKey(targetKey);
+		var d3SourceNode = {};
+		var d3TargetNode = {};
+		if(isRealInnerClass(entity, relatedEntity)) {
+			if(sourceStatus == undefined) {
+				d3SourceNode = {
+					name : sourceKey,
+					key: sourceKey,
+					size: 1,
+					imports: [targetKey],
+					parent: null,
+					children: [],
+					depth: 2,
+					x: sourcePosition[0],
+					y: sourcePosition[1],
+					z: sourcePosition[2],
+				};
+				d3Nodes.push(d3SourceNode);
+			} else {
+				d3SourceNode = d3Nodes[sourceStatus];
+				d3SourceNode.imports.push(targetKey);
+			}
+			if(targetStatus == undefined){
+				d3TargetNode = {
+					name : targetKey,
+					key: targetKey,
+					size: 1,
+					imports: [],
+					children: [d3SourceNode],
+					parent: null,
+					depth: 1,
+					x: targetPosition[0],
+					y: targetPosition[1],
+					z: targetPosition[2],
+				};
+				d3SourceNode.parent = d3TargetNode;
+				d3Nodes.push(d3TargetNode);
+			}
+			
+		} else if (isRealInnerClass(relatedEntity, entity)) {
+			if(sourceStatus == undefined) {
+				d3SourceNode = {
+					name : sourceKey,
+					key: sourceKey,
+					size: 1,
+					imports: [targetKey],
+					parent: d3TargetNode,
+					children: [],
+					depth: 1,
+					x: sourcePosition[0],
+					y: sourcePosition[1],
+					z: sourcePosition[2],
+				};
+				d3Nodes.push(d3SourceNode);
+			} else {
+				d3SourceNode = d3Nodes[sourceStatus];
+				d3SourceNode.imports.push(targetKey);
+			}
+			if(targetStatus == undefined){
+				d3TargetNode = {
+					name : targetKey,
+					key: targetKey,
+					size: 1,
+					imports: [],
+					children: [],
+					parent: d3SourceNode,
+					depth: 2,
+					x: targetPosition[0],
+					y: targetPosition[1],
+					z: targetPosition[2],
+				};
+				d3Nodes.push(d3TargetNode);
+			}
+		} else {
+			if(sourceStatus == undefined) {
+				d3SourceNode = {
+					name : sourceKey,
+					key: sourceKey,
+					size: 1,
+					imports: [targetKey],
+					children: [],
+					parent: null,
+					depth: 1,
+					x: sourcePosition[0],
+					y: sourcePosition[1],
+					z: sourcePosition[2],
+				};
+				d3Nodes.push(d3SourceNode);
+			} else {
+				d3SourceNode = d3Nodes[sourceStatus];
+				d3SourceNode.imports.push(targetKey);
+			}
+			
+			if(targetStatus == undefined){
+				d3TargetNode = {
+					name : targetKey,
+					key: targetKey,
+					size: 1,
+					imports: [],
+					children: [],
+					parent: null,
+					depth: 1,
+					x: targetPosition[0],
+					y: targetPosition[1],
+					z: targetPosition[2],
+				};
+				d3Nodes.push(d3TargetNode);
+			}
+		}
 		//config
 		if(controllerConfig.fixPositionZ){
 			sourcePosition[2] = controllerConfig.fixPositionZ;
 			targetPosition[2] = controllerConfig.fixPositionZ;
 		}
 
-		//create element
-		var transform = document.createElement('Transform');
-		//events.log.info.publish({text: "color: " + entity.color});
-		transform.appendChild(createLine(sourcePosition, targetPosition, connectorColor, connectorSize));
-
-		//config
-		if(controllerConfig.createEndpoints){
-			transform.appendChild(createEndPoint(sourcePosition, targetPosition, "0 0 0", connectorSize * 2));
+		if(controllerConfig.bundledEdges == false) {
+			//create element
+			var transform = document.createElement('Transform');
+			//events.log.info.publish({text: "color: " + entity.color});
+			transform.appendChild(createLine(sourcePosition, targetPosition, connectorColor, connectorSize));
+	
+			//config
+			if(controllerConfig.createEndpoints){
+				transform.appendChild(createEndPoint(sourcePosition, targetPosition, "0 0 0", connectorSize * 2));
+			}
+			return transform;
 		}
-
-		return transform;
 	}
 
 	function calculateSourcePosition(entity, relatedEntity){
@@ -402,6 +717,14 @@ var patternConnectorController = function(){
 		}
 
 		return targetPosition;
+	}
+	
+	function isRealInnerClass(source, target) {
+		var sourceParent = source.belongsTo;		
+		if(sourceParent == target) {
+			return true;
+		}
+		return false;
 	}
 	
 	function isInnerClass(target, source) {
@@ -536,7 +859,6 @@ var patternConnectorController = function(){
 		return distanceVector;
 	}
 
-
 	function calculatePositionFromParent(sourcePosition, targetPosition, sourceParent){
 		if(controllerConfig.elementShape == "circle"){
 			return calculateCirclePositionFromParent(sourcePosition, targetPosition, sourceParent);
@@ -546,10 +868,6 @@ var patternConnectorController = function(){
 		}
 		return sourcePosition;
 	}
-
-	//function calculateSquarePositionFromParent(sourcePosition, targetPosition, sourceParent){
-	//	//TODO
-	//}
 
 	function calculateCirclePositionFromParent(sourcePosition, targetPosition, sourceParent){
 		//calculation derived from http://www.3d-meier.de/tut6/XPresso53.html
@@ -600,6 +918,17 @@ var patternConnectorController = function(){
 
 		return newSourcePosition;
 	}
+	
+	/*function searchElementsByName(name, version) {
+		var entities = model.getEntitiesByVersion(version);
+		var result;
+		entities.forEach(function(entity) {
+			if(entity.name === name) {
+				result = entity.id;
+			}
+		});
+		return result;
+	}*/
 
 	function getObjectPosition(objectId){
 
@@ -630,6 +959,15 @@ var patternConnectorController = function(){
 		}
 
 		return position;
+	}
+	
+	function searchKey(key) {
+		for(var i = 0; i < d3Nodes.length; i++) {
+			if(d3Nodes[i].key == key) {
+				return i;
+			}
+		}
+		return undefined;
 	}
 
 	function createEndPoint(source, target, color, size){
@@ -713,7 +1051,7 @@ var patternConnectorController = function(){
 
 		translation[0] = source[0]+(target[0]-source[0])/2.0;
 		translation[1] = source[1]+(target[1]-source[1])/2.0;
-		translation[2] = source[2]+(target[2]-source[2])/2.0;
+		translation[2] = source[2]+(target[2]-source[2])/2.0 + 0.5;
 
 		var scale = [];
 		scale[0] = size;
@@ -754,12 +1092,11 @@ var patternConnectorController = function(){
 		return transform;
 	}
 
-
 	return {
-            initialize: initialize,
-            reset: reset,
-            activate: activate,
-            deactivate: deactivate
+        initialize: initialize,
+        reset: reset,
+        activate: activate,
+        deactivate: deactivate
     };
 
 }();

@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-
-
 <!--
 	TODO in application auslagern
 -->
@@ -22,11 +20,12 @@
     <script type="text/javascript" src="libs/typeahead.bundle.js"></script>
     <script type="text/javascript" src="libs/handlebars-v2.0.0.js"></script>
 	
-	<!--<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>-->
+	<script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
 	
 	<!--x3dom-->
 	<script type="text/javascript" src="libs/x3dom/x3dom.debug.js"></script>	
 	<link rel="stylesheet" href="libs/x3dom/x3dom.css" type="text/css"/>
+	<script type="text/javascript" src="libs/x3dom/components/Geometry2D.js"></script>
 	
 	<!--jqwidgets-->	
     <script type="text/javascript" src="libs/jqwidgets/jqxcore.js"></script>
@@ -47,6 +46,10 @@
     <script type="text/javascript" src="libs/jqwidgets/jqxswitchbutton.js"></script>
 	<script type="text/javascript" src="libs/jqwidgets/jqxslider.js"></script>
 	<script type="text/javascript" src="libs/jqwidgets/jqxcheckbox.js"></script>
+	<script type="text/javascript" src="libs/jqwidgets/jqxcombobox.js"></script>
+	<script type="text/javascript" src="libs/jqwidgets/jqxlistbox.js"></script>
+
+
 	
     <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.base.css" type="text/css" />
     <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.metro.css" type="text/css" />
@@ -93,8 +96,7 @@
 	<link rel="stylesheet" href="Style.css" type="text/css" />
 
 	<!--setup-->
-	<script type="text/javascript" src="setups/develop/antipattern.js"></script>
-	
+	<script type="text/javascript" src="setups/develop/antipattern.js"></script>	
 </head>
 <body>    
 	<div id="canvas">                    
@@ -102,9 +104,8 @@
 			<scene id="scene">
 				<Transform id="addedElements"></Transform>
 				<MultiPart id="multiPart" mapDEFToID="true" url="data/antlr-3.1.3-hismo/model/multiPart.x3d" urlIDMap="data/antlr-3.1.3-hismo/model/multiPart.json"></MultiPart>
-				
 			</scene>
-		</x3d>                    
+		</x3d> 
     </div>
 
 </body>

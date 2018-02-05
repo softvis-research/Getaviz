@@ -137,6 +137,7 @@ var events = (function() {
 		weight				: { name: "weight"},
 		innerClasses		: { name: "innerClasses"},
 		parentInnerClasses	: { name: "parentInnerClases"},
+		bundledEdges		: { name: "bundledEdges"},
 	};
 	events.config = {};
 	var configTypeArray = Object.keys(configTypes);

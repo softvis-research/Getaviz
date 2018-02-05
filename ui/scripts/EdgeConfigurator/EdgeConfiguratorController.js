@@ -1,14 +1,72 @@
 var edgeConfiguratorController = (function() {
-
-	var sliderID = "#edgeSlider";
-	var checkboxID = "#checkbox";
 	
 	function initialize(){
 	}
 	
 	function activate(rootDiv){
-		prepareSlider(rootDiv);
-		
+		//prepareSlider(rootDiv);
+		prepareMinimumWeight(rootDiv);
+		prepareRelationsCheckbox(rootDiv);
+		prepareBundledEdgesCheckbox(rootDiv);
+    }
+	
+	function prepareMinimumWeight(rootDiv) {
+		var weightComboBox = "#weightCombobox";
+		var divElement = document.createElement("DIV");
+		divElement.id = "weightCombobox";
+		rootDiv.appendChild(divElement);
+		var source = [
+			"Show all edges",
+		    "Show most edges",
+			"Only show important edges"
+		];
+		$(weightComboBox).jqxComboBox({ source: source, width: "99%"});
+		$(weightComboBox).jqxComboBox({ selectedIndex: 2 });
+		$(weightComboBox).on('change', function (event) {
+			var args = event.args;
+		    if (args) {                       
+				var index = args.index;
+				var weight = 0;
+				switch (index) {
+					case 0: weight = 0; break;
+					case 1: weight = 0.25; break;
+					case 2: weight = 0.5; break;
+				}
+				var applicationEvent = {			 
+					sender: edgeConfiguratorController,
+					entities: [weight]
+				};
+				events.config.weight.publish(applicationEvent);
+			}
+		});
+	}
+	
+	function prepareBundledEdgesCheckbox(rootDiv) {
+		var bundledEdgesCheckboxID = "#bundleCheckbox";
+		var divElement = document.createElement("DIV");
+		var textNode = document.createTextNode("Bundle edges");
+		divElement.id = "bundleCheckbox";
+		divElement.appendChild(textNode);
+		rootDiv.appendChild(divElement);
+		$(bundledEdgesCheckboxID).jqxCheckBox({checked: true});
+		$(bundledEdgesCheckboxID).on('checked', function () {
+			var applicationEvent = {			 
+				sender: edgeConfiguratorController,
+				entities: [true]
+			};
+			events.config.bundledEdges.publish(applicationEvent);
+		});
+		$(bundledEdgesCheckboxID).on('unchecked', function () {
+			var applicationEvent = {			 
+				sender: edgeConfiguratorController,
+				entities: [false]
+			};
+			events.config.bundledEdges.publish(applicationEvent);
+		});
+	}
+	
+	function prepareRelationsCheckbox(rootDiv) {
+		var checkboxID = "#checkbox";
 		var divElement = document.createElement("DIV");
 		var textNode = document.createTextNode("Show inner relations");
 		divElement.id = "checkbox";
@@ -29,9 +87,10 @@ var edgeConfiguratorController = (function() {
 			};
 			events.config.innerClasses.publish(applicationEvent);
 		});
-    }
+	}
 	
 	function prepareSlider(rootDiv) {
+		var sliderID = "#edgeSlider";
 		var myDiv = document.createElement("H3");
 		var newContent = document.createTextNode("Minimal Edge Weight");
 		myDiv.appendChild(newContent);
