@@ -243,52 +243,6 @@ var patternConnectorController = function(){
 		return [x/points.length, y/points.length];
 	}
 	
-	function computeCentroid(pts) {
-		var nPts = pts.length;
-		var x=0; var y=0;
-		var f;
-		var j=nPts-1;
-		var p1; var p2;
-	
-		for (var i=0; i<nPts; j=i++) {
-			p1=pts[i];
-			p2=pts[j];
-			f=p1.x*p2.y-p2.x*p1.y;
-			x+=(p1.x+p2.x)*f;
-			y+=(p1.y+p2.y)*f;
-		}
-	
-		f=area(pts)*6;
-		if(f == 0) {
-			f = 1;
-		}
-		return [x/f,y/f];
-	}
-	
-	function area(pts) {
-		var area=0;
-		var nPts = pts.length;
-		var j=nPts-1;
-		var p1; var p2;
-
-		for (var i=0;i<nPts;j=i++) {
-		    p1=pts[i]; p2=pts[j];
-		    area+=p1.x*p2.y;
-		    area-=p1.y*p2.x;
-	    }
-	    area/=2;
-		return area;
-	}
-	
-	/*function update(feld, version) {
-		var id = searchElementsByName(feld.data.key, version);
-		if(id !== undefined) {
-			var position = getObjectPosition(id);
-			feld.x = position[0];
-			feld.y = position[1];
-		}
-	}*/
-	
 	function d3Layout(version, relatedEntities) {
 		d3Nodes = [];
 		callingEntities = [];
