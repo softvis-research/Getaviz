@@ -232,6 +232,17 @@ var patternConnectorController = function(){
 		return d3.hierarchy(map[""]);
 	}
 	
+	function computeavg(points) {
+		var x = 0;
+		var y = 0;
+		
+		points.forEach(function(point) {
+			x += point.x;
+			y += point.y;
+		});
+		return [x/points.length, y/points.length];
+	}
+	
 	function computeCentroid(pts) {
 		var nPts = pts.length;
 		var x=0; var y=0;
@@ -239,8 +250,9 @@ var patternConnectorController = function(){
 		var j=nPts-1;
 		var p1; var p2;
 	
-		for (var i=0;i<nPts;j=i++) {
-			p1=pts[i]; p2=pts[j];
+		for (var i=0; i<nPts; j=i++) {
+			p1=pts[i];
+			p2=pts[j];
 			f=p1.x*p2.y-p2.x*p1.y;
 			x+=(p1.x+p2.x)*f;
 			y+=(p1.y+p2.y)*f;
@@ -287,7 +299,8 @@ var patternConnectorController = function(){
 		createRelatedConnections();
 		root = packageHierarchy(d3Nodes).sum(function(d) { return d.size; });
 		var height = root.leaves()[0].data.z;
-		var tension = (root.leaves().length)/100;
+		var tension = 0.5;
+		console.log("tension: " + tension);
 		cluster = d3.cluster();
 		var line = d3.line()
 			.curve(d3.curveBundle.beta(tension))
@@ -303,18 +316,25 @@ var patternConnectorController = function(){
 			el.x = el.data.x;
 			el.y = el.data.y;
 			el.parent = root;
+			if(version == "2.7.1") {
+				
+			}
 		});
-		var centroid = computeCentroid(root.leaves());
+		//var centroid = computeCentroid(root.leaves());
+		var centroid = computeavg(root.leaves());
+		if(version == "2.7.1") {
+			console.log(centroid)
+		}
 		root.x = centroid[0];
 		root.y = centroid[1];
-		 link = link
+		link = link
 				.data(packageImports(root.leaves()))
 			    .enter().append("path")
 				.each(function(d) { d.source = d[0], d.target = d[d.length - 1]})
 				.attr("class", "link")
 				.attr("d", line);
 				
-		var  numPoints = 256;
+		var  numPoints = 128;
 		var mypaths = document.getElementsByTagName("path");
 		mypaths.forEach(function(mypath) {
 			var  pathLength = mypath.getTotalLength();
