@@ -6,7 +6,7 @@ $(document).ready(function () {
 	
 	//parse setup if defined
 	if(!window["setup"]){
-		Console.log("No setup definition found!")	
+		console.log("No setup definition found!")	
 		return;
 	}
 
