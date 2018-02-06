@@ -15,6 +15,7 @@ var patternTransparencyController = (function() {
 		noFadeValue : 0.0,
 		startFaded: false,
 	};
+	var lastApplicationEvent = null;
 	
 	function initialize(setupConfig){
         application.transferConfigParams(setupConfig, controllerConfig);	
@@ -47,7 +48,29 @@ var patternTransparencyController = (function() {
 	}
 	
 	function onRelationsChanged(applicationEvent) {
-		unfadeAll(); 
+		relatedEntities = [];
+		if(lastApplicationEvent == null) {
+			unfadeAll();
+			addReaches(applicationEvent.entities[0]);
+			//get parents of releated entities
+			parents = [];
+			relatedEntities.forEach(function(relatedEntity){
+				parents = parents.concat(relatedEntity.allParents);
+				relatedEntity.isTransparent = false;
+			});
+	
+			parents.forEach(function(parent){
+				parent.isTransparent = true;
+			});
+			if(activated){
+				fadeEntities();
+			}
+		} else {
+			if(lastApplicationEvent.entities[0].id != applicationEvent.entities[0].component) {
+				unfadeAll();
+				lastApplicationEvent = null;
+			}
+		}
     } 
 
 	function unfadeAll(){
@@ -66,16 +89,15 @@ var patternTransparencyController = (function() {
 		});
 	}
 	
+	function addReaches (entity) {
+		relatedEntities.push(entity);
+		entity.reaches.forEach(function(element) {
+			relatedEntities.push(element);
+		});           
+    }
+	
 	function onComponentSelected(applicationEvent) {
-        //fade old related entities and parents
-        if(activated){	
-			if(relatedEntities.length != 0){
-            // canvasManipulator.changeTransparencyOfEntities(relatedEntities, controllerConfig.noFadeValue);		
-			}			
-			if(parents.length != 0){
-			//	canvasManipulator.changeTransparencyOfEntities(parents, controllerConfig.noFadeValue);	
-			}	
-		}
+		lastApplicationEvent = applicationEvent;
         unfadeAll();
 
 		//get new related entites
@@ -99,7 +121,9 @@ var patternTransparencyController = (function() {
 
 		//get parents of releated entities
 		parents = [];
+		console.log("a")
 		relatedEntities.forEach(function(relatedEntity){
+			console.log("b")
 			parents = parents.concat(relatedEntity.allParents);
 			relatedEntity.isTransparent = false;
 		});

@@ -46,7 +46,8 @@ var patternConnectorController = function(){
 		events.config.weight.subscribe(onWeightChanged);
 		events.config.bundledEdges.subscribe(onBundledEdgesChanged);
 		events.config.innerClasses.subscribe(onInnerClassesChanged);
-		events.selected.on.subscribe(onRelationsChanged); 
+		events.selected.on.subscribe(onRelationsChanged);
+		events.selected.on.subscribe(onRelationsChanged);
 	}
 
 	function activate(){
@@ -66,8 +67,35 @@ var patternConnectorController = function(){
 	}
 	
 	function onRelationsChanged(applicationEvent) {
-		lastApplicationEvent = null;
-		removeAllConnectors();
+		if(lastApplicationEvent.entities[0].id === applicationEvent.entities[0].component) {
+			if(finished) {
+				full = false;
+				callingEntities = [];
+				visitedEntities = [];
+			}
+			// make all connectors transparent
+			connectors.forEach(function(version, connector){
+				var collection = connector.getElementsByTagName("material");
+				for (var i = 0; i < collection.length; i++) {
+					collection[i].setAttribute("transparency", "0.85");
+					collection[i].setAttribute("emmissivecolor", "1 1 1");
+					collection[i].setAttribute("emissiveColor", "1 1 1");
+					collection[i].setAttribute("specularcolor", "1 1 1");
+				}
+			});
+			var relatedEntity = applicationEvent.entities[0];
+
+			addReaches(relatedEntity);
+			if(activated){
+				if(controllerConfig.bundledEdges) {
+					d3Layout(relatedEntities, "3.1.3");
+				} else {
+					createRelatedConnections();
+				}
+			}
+		} else {
+			removeAllConnectors();
+		}
     }
 	
 	function onInnerClassesChanged(applicationEvent) {
@@ -113,7 +141,6 @@ var patternConnectorController = function(){
 	function onBundledEdgesChanged(applicationEvent) {
 		var value = applicationEvent.entities[0];
 		controllerConfig.bundledEdges = value;
-		console.log("value: " + value);
 		onComponentSelected(lastApplicationEvent);
 	}
 
@@ -259,8 +286,8 @@ var patternConnectorController = function(){
 			el.x = el.data.x;
 			el.y = el.data.y;
 			el.parent = root;
-			x += point.x;
-			y += point.y;
+			x += el.x;
+			y += el.y;
 		});
 		root.x = x/root.leaves().length;
 		root.y = y/root.leaves().length;
@@ -309,6 +336,7 @@ var patternConnectorController = function(){
 		material.setAttribute("specularcolor", "1 0 0");
 		material.setAttribute("shininess", "1");
 		material.setAttribute("ambientintensity", "1");
+		//material.setAttribute("transparency", "0.8");
 		appearance.appendChild(material);
 		var polyline2d = document.createElement("Polyline2D");
 		polyline2d.setAttribute("lineSegments", lineSegments);
@@ -440,6 +468,7 @@ var patternConnectorController = function(){
 			if(weight < minWeight) {
 				return;
 			}
+			
 
 			//create scene element
 			var connector = createConnector(relatedPair[0], relatedPair[1]);
