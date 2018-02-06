@@ -69,7 +69,7 @@ var canvasManipulator = (function() {
 
 	function changeTransparencyOfEntities(entities, value){
 	
-		var entitiyIds = new Array();
+		var entitiyIds = [];
 		entities.forEach(function(entity){			
 			var part = multiPart.getParts([entity.id]);	
 			if(part == null){
