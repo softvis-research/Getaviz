@@ -259,6 +259,9 @@ var patternConnectorController = function(){
 	}
 
 	function d3Layout(version, relatedEntities) {
+		if(!model.getSelectedVersions().includes(version)) {
+			return;
+		}
 		d3Nodes = [];
 		callingEntities = [];
 		relatedEntities.forEach(function(entity) {
