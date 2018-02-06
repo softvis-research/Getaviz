@@ -77,7 +77,7 @@ var patternExplorerController = (function() {
 						items.push(item);
 						break;
 					case "component":
-						item = { id: entity.id, open: false, checked: false, parentId: entity.type, name: entity.name, version: entity.version, icon: iconFiles.antipatternIcon, iconSkin: "zt"};
+						item = { id: entity.id, open: false, checked: false, parentId: entity.type, name: entity.name, version: entity.version, versions: entity.versions, icon: iconFiles.antipatternIcon, iconSkin: "zt"};
 						components.push(item);
 						break;
 					default:
@@ -219,12 +219,29 @@ var patternExplorerController = (function() {
     }
 	
 	function offVersionSelected(applicationEvent) {
-		var nodes = tree.getNodesByParam("version", applicationEvent.entities[0]);		
+		var selectedVersions = model.getSelectedVersions();
+		var nodes = [];
+		tree.getNodesByParam("parentId", "component").forEach(function(node){
+			var hide = true;
+			node.versions.forEach(function(x){
+				if(selectedVersions.includes(x)) {
+					hide = false;
+				}
+			});
+			if(hide) {
+				nodes.push(node);
+			}
+		});
 		tree.hideNodes(nodes);
 	}
 	
 	function onVersionSelected(applicationEvent) {
-		var nodes = tree.getNodesByParam("version", applicationEvent.entities[0]);
+		var nodes = [];
+		tree.getNodesByParam("parentId", "component").forEach(function(node){
+			if(node.versions.includes(applicationEvent.entities[0])) {
+				nodes.push(node);
+			}
+		});
 		tree.showNodes(nodes);
 	}
     

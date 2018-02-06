@@ -71,12 +71,12 @@ var versionExplorerController = (function() {
         };
 		
 		if (treeNode.checked){
+			model.addVersion(treeNode.id);
             events.versionSelected.on.publish(applicationEvent);
             //model.selectedVersions.push(treeNode.id);
-            model.addVersion(treeNode.id);
         } else {
-            events.versionSelected.off.publish(applicationEvent);
 			model.removeVersion(treeNode.id);
+            events.versionSelected.off.publish(applicationEvent);
         }
     }
     

@@ -46,6 +46,7 @@ var model = (function() {
 				case "component": 
 					entity.components = element.components.split(",");
 					entity.version = element.version;
+					entity.versions = element.versions.split(",");
 					return;
 				case "Namespace":
 					entity.version = element.version;
