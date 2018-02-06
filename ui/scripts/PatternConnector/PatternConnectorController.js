@@ -230,11 +230,10 @@ var patternConnectorController = function(){
 	}
 	
 	function addReaches (entity) {
-        var reaches = entity.reaches;
-        for(var i = 0; i < reaches.length; ++i) {
-             var pair = [entity, reaches[i]];
+		entity.reaches.forEach(function(element){
+			var pair = [entity, element];
 			callingEntities.push(pair);
-		}            
+		});
     }
 	
 	function packageHierarchy(classes) {
