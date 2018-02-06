@@ -60,7 +60,16 @@ var patternExplorerController = (function() {
             if(entity.type == "stk" || entity.type == "component" || entity.type == "Class") {
 				switch(entity.type) {
                     case "Class":
-						for(var i = 0; i < entity.antipattern.length; i++) {
+						var duplicate = false;
+						items.forEach(function(existingElement) {
+							if(existingElement.name == entity.name) {
+								duplicate = true;
+							}
+						});
+						if(duplicate) {
+							break;
+						}
+						for	(var i = 0; i < entity.antipattern.length; i++) {
 							if(entity.antipattern[i].type != "cd") {
 								item = { id: entity.id, open: false, parentId: entity.antipattern[i].id, name: entity.name + " <<" + entity.roles[i] + ">>", icon: iconFiles.typeIcon, nocheck: true, iconSkin: "zt"};
 								items.push(item);
