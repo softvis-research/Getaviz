@@ -121,9 +121,7 @@ var patternTransparencyController = (function() {
 
 		//get parents of releated entities
 		parents = [];
-		console.log("a")
 		relatedEntities.forEach(function(relatedEntity){
-			console.log("b")
 			parents = parents.concat(relatedEntity.allParents);
 			relatedEntity.isTransparent = false;
 		});
