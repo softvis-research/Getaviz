@@ -47,7 +47,6 @@ var patternConnectorController = function(){
 		events.config.bundledEdges.subscribe(onBundledEdgesChanged);
 		events.config.innerClasses.subscribe(onInnerClassesChanged);
 		events.selected.on.subscribe(onRelationsChanged);
-		events.selected.on.subscribe(onRelationsChanged);
 	}
 
 	function activate(){
@@ -67,34 +66,80 @@ var patternConnectorController = function(){
 	}
 	
 	function onRelationsChanged(applicationEvent) {
-		if(lastApplicationEvent.entities[0].id === applicationEvent.entities[0].component) {
+		var relatedEntity = applicationEvent.entities[0];
+		var version = applicationEvent.entities[0].version;
+		var myEntities = [];
+		if(lastApplicationEvent == null) {
+			removeAllConnectors();
 			if(finished) {
 				full = false;
 				callingEntities = [];
 				visitedEntities = [];
 			}
-			// make all connectors transparent
-			connectors.forEach(function(version, connector){
-				var collection = connector.getElementsByTagName("material");
-				for (var i = 0; i < collection.length; i++) {
-					collection[i].setAttribute("transparency", "0.85");
-					collection[i].setAttribute("emmissivecolor", "1 1 1");
-					collection[i].setAttribute("emissiveColor", "1 1 1");
-					collection[i].setAttribute("specularcolor", "1 1 1");
+				// make all connectors transparent
+				connectors.forEach(function(version, connector){
+					var collection = connector.getElementsByTagName("material");
+					for (var i = 0; i < collection.length; i++) {
+						collection[i].setAttribute("transparency", "0.85");
+						collection[i].setAttribute("emmissivecolor", "1 1 1");
+						collection[i].setAttribute("emissiveColor", "1 1 1");
+						collection[i].setAttribute("specularcolor", "1 1 1");
+					}
+				});
+				addReachesAndReachedBy(relatedEntity);
+				callingEntities.forEach(function(pair){
+					if(!myEntities.includes(pair[0])) {
+						myEntities.push(pair[0]);
+					}
+					if(!myEntities.includes(pair[1])) {
+						myEntities.push(pair[1]);
+					}
+				});
+				if(activated){
+					if(controllerConfig.bundledEdges) {
+						forceLayout(version, myEntities);
+					} else {
+						createRelatedConnections();
+					}
 				}
-			});
-			var relatedEntity = applicationEvent.entities[0];
-
-			addReaches(relatedEntity);
-			if(activated){
-				if(controllerConfig.bundledEdges) {
-					d3Layout(relatedEntities, "3.1.3");
-				} else {
-					createRelatedConnections();
-				}
-			}
 		} else {
-			removeAllConnectors();
+			if(lastApplicationEvent.entities[0].id === applicationEvent.entities[0].component) {
+				//removeAllConnectors();
+				if(finished) {
+					full = false;
+					callingEntities = [];
+					visitedEntities = [];
+				}
+				// make all connectors transparent
+				connectors.forEach(function(version, connector){
+					var collection = connector.getElementsByTagName("material");
+					for (var i = 0; i < collection.length; i++) {
+						collection[i].setAttribute("transparency", "0.85");
+						collection[i].setAttribute("emmissivecolor", "1 1 1");
+						collection[i].setAttribute("emissiveColor", "1 1 1");
+						collection[i].setAttribute("specularcolor", "1 1 1");
+					}
+				});
+				addReachesAndReachedBy(relatedEntity);
+				callingEntities.forEach(function(pair){
+					if(!myEntities.includes(pair[0])) {
+						myEntities.push(pair[0]);
+					}
+					if(!myEntities.includes(pair[1])) {
+						myEntities.push(pair[1]);
+					}
+				});
+				if(activated){
+					if(controllerConfig.bundledEdges) {
+						//createRelatedConnections();
+						forceLayout(version, myEntities);
+					} else {
+						createRelatedConnections();
+					}
+				}
+			} else {
+				removeAllConnectors();
+			}
 		}
     }
 	
@@ -171,37 +216,6 @@ var patternConnectorController = function(){
 		};
 		events.added.off.publish(applicationEvent);
 	}
-
-	/*function addrelatedEntitiy(method) {
-		events.log.info.publish({text: "pattern connector - addrelatedEntitiy " + method.id});
-		var calls = method.calls;
-		var calledBy = method.calledBy;
-
-		if(calls.length == 0) {
-			if(calledBy.length > 0) {
-				for(j = 0; j < calledBy.length; j++) {
-					if(visitedEntities.includes(calledBy[j])) {
-					} else {
-						addrelatedEntitiy(calledBy[j]);
-					}
-				}
-			}
-			finished = true;
-			return;
-		}
-		
-		if(visitedEntities.includes(method)) {
-			events.log.info.publish({text: "pattern connector - addrelatedEntitiy stop at" + method.name});
-			finished = true;
-		} else {
-			for(i = 0; i < method.calls.length; i++) {
-				var pair = [method, method.calls[i]];
-				callingEntities.push(pair);
-				visitedEntities = visitedEntities.concat(method);
-				addrelatedEntitiy(method.calls[i]);
-			}
-		}
-    }*/
 	
 	function onAntipatternSelected(applicationEvent) {
 
@@ -229,6 +243,34 @@ var patternConnectorController = function(){
 		}
 	}
 	
+	function addReachesAndReachedBy (entity) {
+		entity.reaches.forEach(function(element){
+			var pair = [entity, element];
+			callingEntities.push(pair);
+		});
+		entity.reachedBy.forEach(function(element){
+			var pair = [element, entity];
+			var reversePair = [entity, element];
+			if(callingEntities.includes(reversePair)){
+			} else {
+				callingEntities.push(pair);
+			}
+		});
+	}
+	
+	function addInternalReaches(entities) {
+		entities.forEach(function(entity){
+			entity.reaches.forEach(function(element){
+				if(entities.includes(element)) {
+					var pair = [entity, element];
+					if(!callingEntities.includes(pair)) {
+						callingEntities.push(pair);
+					}
+				}
+			});
+		});
+	}
+	
 	function addReaches (entity) {
 		entity.reaches.forEach(function(element){
 			var pair = [entity, element];
@@ -236,90 +278,75 @@ var patternConnectorController = function(){
 		});
     }
 	
-	function packageHierarchy(classes) {
-		var map = {};
-
-		function find(name, data) {
-			var node = map[name], i;
-			if (!node) {
-				node = map[name] = data || {name: name, children: []};
-				if (name.length) {
-					node.parent = find(name.substring(0, i = "name".lastIndexOf(".")));
-			        node.parent.children.push(node);
-					node.key = name.substring(i + 1);
-				}
-			}
-		return node;
-		}
-
-		classes.forEach(function(d) {
-			find(d.name, d);
-		});
-		return d3.hierarchy(map[""]);
-	}
-
-	function d3Layout(version, relatedEntities) {
+	function forceLayout(version, relatedEntities) {
 		if(!model.getSelectedVersions().includes(version)) {
 			return;
 		}
 		d3Nodes = [];
 		callingEntities = [];
-		relatedEntities.forEach(function(entity) {
-			addReaches(entity);
+		var i = 0;
+		var graph = {
+			links: [],
+			nodes: {},
+		};
+		addInternalReaches(relatedEntities);
+		createRelatedConnections();
+		d3Nodes.forEach(function(d3Node){
+			var node = {
+				id: d3Node.key,
+				name: d3Node.key,
+				group: 1,
+				index: i,
+				x: d3Node.x,
+				y: d3Node.y,
+			};
+			graph.nodes[d3Node.key] = node;
+			i++;
+		});
+		i = 0;
+		callingEntities.forEach(function(relation){
+			var source = relation[0].name.replace("$", ".");
+			var target = relation[1].name.replace("$", ".");
+			
+			var sourceFound = false;
+			var targetFound = false;
+			for(var node in graph.nodes) {
+				if(node == source) {
+					sourceFound = true;
+				}
+				if(node == target) {
+					targetFound = true;
+				}
+			}
+			
+			if(sourceFound && targetFound) {
+				var link = {
+					index: i,
+					source: source,
+					target: target,
+					value: 1
+				};
+				graph.links.push(link);
+				i++;
+			}
 		});
 		
-		createRelatedConnections();
-		root = packageHierarchy(d3Nodes).sum(function(d) { return d.size; });
-		var height = root.leaves()[0].data.z;
-		var tension = 0.5;
-		cluster = d3.cluster();
-		var line = d3.line()
-			.curve(d3.curveBundle.beta(tension))
-			.x(function(d) { return d.x; })
-			.y(function(d) { return d.y; });
-    
-		var svg = d3.select("body").append("svg");
-		link = svg.append("g").selectAll(".link3");
-
-		cluster(root);
-		var x = 0;
-		var y = 0;
-		root.leaves().forEach(function(el) {
-			el.x = el.data.x;
-			el.y = el.data.y;
-			el.parent = root;
-			x += el.x;
-			y += el.y;
-		});
-		root.x = x/root.leaves().length;
-		root.y = y/root.leaves().length;
-		link = link
-				.data(packageImports(root.leaves()))
-			    .enter().append("path")
-				.each(function(d) { d.source = d[0], d.target = d[d.length - 1]})
-				.attr("class", "link")
-				.attr("d", line);
-				
-		var  numPoints = 128;
-		var mypaths = document.getElementsByTagName("path");
-		mypaths.forEach(function(mypath) {
-			var  pathLength = mypath.getTotalLength();
+		var fbundling = d3.ForceEdgeBundling()
+				.step_size(0.1)
+				.compatibility_threshold(0.1)
+				.nodes(graph.nodes)
+				.edges(graph.links);
+		var results   = fbundling();
+		var height = d3Nodes[0].z + 0.5;
+		results.forEach(function(line){
 			var  polygonPoints= [];
-			
-			for (var i=0; i<numPoints; i++) {
-				var p = mypath.getPointAtLength(i * pathLength / numPoints);
-				polygonPoints.push(p.x);
-				polygonPoints.push(p.y);
-			}
+			line.forEach(function(point){
+				polygonPoints.push(point.x);
+				polygonPoints.push(point.y);
+			});
 			var connector = createPolyline2D("test", polygonPoints.join(","), height);
 			connectors.set(connector, version);
 		});
-		
-		// nemove SVG elements from dom
-		var element = document.getElementsByTagName("svg"), index;
-		for (index = element.length - 1; index >= 0; index--) {
-			element[index].parentNode.removeChild(element[index]);
-		}
 	}
 	
 	function createPolyline2D(name, lineSegments, height) {
@@ -342,34 +369,12 @@ var patternConnectorController = function(){
 		appearance.appendChild(material);
 		var polyline2d = document.createElement("Polyline2D");
 		polyline2d.setAttribute("lineSegments", lineSegments);
-
-
-		//transform.setAttribute("class", name);
-
 	
 		var polyline2dGroup = document.getElementById("addedElements");
 
 		polyline2dGroup.appendChild(transform);
 		shape.appendChild(polyline2d);
 		return transform;
-	}
-	
-	function packageImports(nodes) {
-		var map = {},
-		imports = [];
-
-		// Compute a map from name to node.
-		nodes.forEach(function(d) {
-			map[d.data.name] = d;
-		});
-
-		// For each import, construct a link from the source to target node.
-		nodes.forEach(function(d) {
-			if (d.data.imports) d.data.imports.forEach(function(i) {
-				imports.push(map[d.data.name].path(map[i]));
-			});
-		});
-		return imports;
 	}
 	
 	function onComponentSelected (applicationEvent) {
@@ -432,7 +437,7 @@ var patternConnectorController = function(){
 	}
 	
 	function callback(entities,version,c) {
-		d3Layout(version, entities);
+		forceLayout(version, entities);
 	}
 	
 	function offVersionSelected(applicationEvent) {
@@ -457,7 +462,7 @@ var patternConnectorController = function(){
 		callingEntities.forEach(function(relatedPair){
 			if(relatedEntitesMap.has(relatedPair[1])){
 				//events.log.info.publish({ text: "pattern connector - onRelationsChanged - multiple relation"});
-				return;
+				//return;
 			}
 			if(controllerConfig.showInnerRelations === false){
 				if(isInnerClass(relatedPair[1], relatedPair[0])){
@@ -465,13 +470,14 @@ var patternConnectorController = function(){
 					return;
 				}
 			}
-
 			var weight = (relatedPair[0].betweennessCentrality + relatedPair[1].betweennessCentrality)/2;
+			if(weight == 0) {
+				weight = 0.01;
+			}
 			if(weight < minWeight) {
 				return;
 			}
 			
-
 			//create scene element
 			var connector = createConnector(relatedPair[0], relatedPair[1]);
 
@@ -479,7 +485,6 @@ var patternConnectorController = function(){
 			if( connector === undefined){
 				return;
 			}
-
 
 			connectors.set(connector, relatedPair[0].version);
 			canvasManipulator.addElement(connector);
@@ -516,12 +521,10 @@ var patternConnectorController = function(){
 		if( sourcePosition === null ){
 			return;
 		}
-
 		var targetPosition = calculateTargetPosition(entity, relatedEntity);
 		if( targetPosition === null ){
 			return;
 		}
-
 		var connectorColor = "1 0 0";
 		var connectorSize = weight;
 		if(connectorSize < 0.1) {
@@ -756,7 +759,7 @@ var patternConnectorController = function(){
 			return;
 		}
 
-		//TODO Über CanvasController ermitteln (Multipart hat Volume Funktion)
+		//TODO ueber CanvasController ermitteln (Multipart hat Volume Funktion)
 		var min = loadedMin.get(entity.id);
 		var max = loadedMax.get(entity.id);
 

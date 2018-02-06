@@ -51,7 +51,7 @@ var patternTransparencyController = (function() {
 		relatedEntities = [];
 		if(lastApplicationEvent == null) {
 			unfadeAll();
-			addReaches(applicationEvent.entities[0]);
+			addReachesAndReachedBy(applicationEvent.entities[0]);
 			//get parents of releated entities
 			parents = [];
 			relatedEntities.forEach(function(relatedEntity){
@@ -89,12 +89,19 @@ var patternTransparencyController = (function() {
 		});
 	}
 	
-	function addReaches (entity) {
+	function addReachesAndReachedBy (entity) {
 		relatedEntities.push(entity);
 		entity.reaches.forEach(function(element) {
 			relatedEntities.push(element);
-		});           
-    }
+		});  
+		entity.reachedBy.forEach(function(element){
+			if(relatedEntities.includes(element)){
+			} else {
+				relatedEntities.push(element);
+			}
+		});
+
+	}
 	
 	function onComponentSelected(applicationEvent) {
 		lastApplicationEvent = applicationEvent;

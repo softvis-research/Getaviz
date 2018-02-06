@@ -68,6 +68,7 @@ var model = (function() {
 					entity.superTypes = element.subClassOf.split(",");
 					entity.subTypes = element.superClassOf.split(",");
 					entity.reaches = element.reaches.split(",");
+					entity.reachedBy = [];
 					entity.antipattern = element.antipattern.split(",");
 					entity.roles = element.roles.split(",");
 					entity.component = element.component;
@@ -200,15 +201,15 @@ var model = (function() {
 					});
 					entity.subTypes = subTypes;
                                         
-                                        var reaches = new Array();
+                    var reaches = [];
 					entity.reaches.forEach(function(reachesId){
 						var relatedEntity = entitiesById.get(reachesId.trim());
 						if(relatedEntity !== undefined){
 							reaches.push(relatedEntity);
+							relatedEntity.reachedBy.push(entity);
 						}
 					});
 					entity.reaches = reaches;
-                                        
 					var antipatterns = [];
 					entity.antipattern.forEach(function(antipatternID
 					) {
