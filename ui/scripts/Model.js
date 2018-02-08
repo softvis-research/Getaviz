@@ -161,7 +161,7 @@ var model = (function() {
 			switch(entity.type) {
                             
                             case "component":
-                                var components = new Array();
+                                var components = [];
                                 entity.components.forEach(function(componentId) {
                                    var relatedEntity = entitiesById.get(componentId.trim());
                                    if(relatedEntity !== undefined) {
@@ -183,7 +183,7 @@ var model = (function() {
                                 
                                 
 				case "Class":
-					var superTypes = new Array();
+					var superTypes = [];
 					entity.superTypes.forEach(function(superTypeId){
 						var relatedEntity = entitiesById.get(superTypeId.trim());
 						if(relatedEntity !== undefined){
@@ -192,7 +192,7 @@ var model = (function() {
 					});
 					entity.superTypes = superTypes;
 					
-					var subTypes = new Array();
+					var subTypes = [];
 					entity.subTypes.forEach(function(subTypesId){
 						var relatedEntity = entitiesById.get(subTypesId.trim());
 						if(relatedEntity !== undefined){
@@ -220,13 +220,13 @@ var model = (function() {
 					});
 					entity.antipattern = antipatterns;
 					
-					var roles = new Array();
+					var roles = [];
 					entity.roles.forEach(function(roleID
 					) {
 						//var role = entitiesById.get(roleID.trim());
 						var role = roleID.trim();
 						if(role !== undefined) {
-							roles.push(role)
+							roles.push(role);
 						}
 					});
 					entity.roles = roles;
@@ -424,7 +424,7 @@ var model = (function() {
                         }
                     }
                 }
-            })
+            });
             return entities;
         }
         
