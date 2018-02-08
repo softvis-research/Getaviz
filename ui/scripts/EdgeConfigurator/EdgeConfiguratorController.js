@@ -16,9 +16,9 @@ var edgeConfiguratorController = (function() {
 		divElement.id = "weightCombobox";
 		rootDiv.appendChild(divElement);
 		var source = [
-			"Show all edges",
-		    "Show most edges",
-			"Only show important edges"
+			"Show all dependencies",
+		    "Only show critical dependencies",
+			"Only show very critical dependencies"
 		];
 		$(weightComboBox).jqxComboBox({ source: source, width: "99%"});
 		$(weightComboBox).jqxComboBox({ selectedIndex: 2 });
