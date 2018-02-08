@@ -150,18 +150,11 @@ var patternExplorerController = (function() {
         // Sortierung nach Anzahl Kindelementen
         components.sort(
             function(a,b) {
-                var nocA = 0;
-                var nocB = 0;
-                for(var i = 0; i < items.length; i++) {
-                    if(items[i].parentId == a.id) {
-                        nocA++;
-                    }
-                    if(items[i].parentId == b.id) {
-                        nocB++;
-                    }
-                }
-                
-                return nocB - nocA;
+				var n1 = a.name.indexOf(" ") + 1;
+				var n2 = b.name.indexOf(" ") + 1;
+				var v1 = a.name.substring(n1);
+				var v2 = b.name.substring(n2);
+			   return v1 - v2;
             }
         );
         items = items.concat(components);
