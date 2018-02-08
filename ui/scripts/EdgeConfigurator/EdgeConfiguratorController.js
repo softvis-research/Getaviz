@@ -48,7 +48,7 @@ var edgeConfiguratorController = (function() {
 		divElement.id = "bundleCheckbox";
 		divElement.appendChild(textNode);
 		rootDiv.appendChild(divElement);
-		$(bundledEdgesCheckboxID).jqxCheckBox({checked: true});
+		$(bundledEdgesCheckboxID).jqxCheckBox({checked: false});
 		$(bundledEdgesCheckboxID).on('checked', function () {
 			var applicationEvent = {			 
 				sender: edgeConfiguratorController,

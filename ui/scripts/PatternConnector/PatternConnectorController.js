@@ -30,7 +30,7 @@ var patternConnectorController = function(){
 		sourceStartAtBorder: false,
 		targetEndAtBorder: false,
 		createEndpoints : true,
-		bundledEdges: true,
+		bundledEdges: false,
 	};
 
 	function initialize(setupConfig){
