@@ -45,6 +45,7 @@ GEM
       rails (>= 4.0.0)
     bootstrap-sass (3.2.0.2)
       sass (~> 3.2)
+    brakeman (4.1.1)
     builder (3.2.3)
     climate_control (0.2.0)
     cocaine (0.5.8)
@@ -53,8 +54,12 @@ GEM
     commonjs (0.2.7)
     concurrent-ruby (1.0.5)
     crass (1.0.3)
+    diff-lcs (1.3)
+    docile (1.1.5)
     erubi (1.7.0)
     execjs (2.7.0)
+    factory_bot (4.8.2)
+      activesupport (>= 3.0.0)
     ffi (1.9.18)
     font-awesome-rails (4.7.0.2)
       railties (>= 3.2, < 5.2)
@@ -146,6 +151,23 @@ GEM
       ffi (>= 0.5.0, < 2)
     rdoc (4.3.0)
     ref (2.0.0)
+    rspec-core (3.7.1)
+      rspec-support (~> 3.7.0)
+    rspec-expectations (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-mocks (3.7.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.7.0)
+    rspec-rails (3.7.2)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec-core (~> 3.7.0)
+      rspec-expectations (~> 3.7.0)
+      rspec-mocks (~> 3.7.0)
+      rspec-support (~> 3.7.0)
+    rspec-support (3.7.1)
     ruby_dep (1.5.0)
     rubyzip (1.2.1)
     sass (3.5.4)
@@ -162,6 +184,11 @@ GEM
     sdoc (0.4.2)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
+    simplecov (0.15.1)
+      docile (~> 1.1.0)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -196,7 +223,9 @@ DEPENDENCIES
   acts_as_list
   bootstrap-multiselect-rails4
   bootstrap-sass (~> 3.2.0)
+  brakeman
   cocoon
+  factory_bot
   font-awesome-rails
   jbuilder
   jquery-rails
@@ -210,13 +239,15 @@ DEPENDENCIES
   rails
   rails_serve_static_assets
   ranked-model
+  rspec-rails
   rubyzip
   sass-rails
   sdoc
+  simplecov
   therubyracer
   tinymce-rails
   turbolinks
   uglifier
 
 BUNDLED WITH
-   1.15.1
+   1.16.1

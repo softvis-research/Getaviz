@@ -57,6 +57,13 @@ group :development do
   gem 'listen'
 end
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_bot'
+  gem 'simplecov', require: false
+  gem 'brakeman', require: false
+end
+
 gem "font-awesome-rails"
 gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS

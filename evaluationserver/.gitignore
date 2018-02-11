@@ -28,3 +28,4 @@ web-claim0-persistentvolumeclaim.yaml
 web-deployment.yaml
 web-env-configmap.yaml
 web-service.yaml
+coverage
