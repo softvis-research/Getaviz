@@ -82,7 +82,7 @@ var patternExplorerController = (function() {
 						break;
 					case "stk":
 				   // case "cd":
-						item = { id: entity.id, open: false, checked: false, parentId: entity.type, name: entity.name, icon: iconFiles.antipatternIcon, iconSkin: "zt"};
+						item = { id: entity.id, open: false, checked: false, parentId: entity.type, name: entity.name, versions: entity.versions, icon: iconFiles.antipatternIcon, iconSkin: "zt"};
 						items.push(item);
 						break;
 					case "component":
@@ -180,7 +180,7 @@ var patternExplorerController = (function() {
             },
             view:{
                 showLine: false,
-                showIcon: showIconForTree,
+                showIcon: false,
                 selectMulti: false
             }
         };
@@ -235,6 +235,18 @@ var patternExplorerController = (function() {
 			}
 		});
 		tree.hideNodes(nodes);
+        tree.getNodesByParam("parentId", "stk").forEach(function(node){
+            var hide = true;
+            node.versions.forEach(function(x){
+                if(selectedVersions.includes(x)) {
+                    hide = false;
+                }
+            });
+            if(hide) {
+                nodes.push(node);
+            }
+        });
+        tree.hideNodes(nodes);
 	}
 	
 	function onVersionSelected(applicationEvent) {
@@ -244,6 +256,11 @@ var patternExplorerController = (function() {
 				nodes.push(node);
 			}
 		});
+        tree.getNodesByParam("parentId", "stk").forEach(function(node){
+            if(node.versions.includes(applicationEvent.entities[0])) {
+                nodes.push(node);
+            }
+        });
 		tree.showNodes(nodes);
 	}
     
