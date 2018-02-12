@@ -171,7 +171,7 @@
 								collapsible: false,
 								expanders: [{
 									name: "edgeConfigurator",
-									title: "Antipattern Configurator",
+									title: "SCC Configurator",
 									controllers: [{ name: "edgeConfiguratorController"}]
 								}]
 							},
