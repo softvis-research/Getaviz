@@ -231,7 +231,14 @@ var patternConnectorController = function(){
             visitedEntities = [];
         }
 
-        relatedEntities = model.getEntitiesByAntipattern(sourceEntity.id);
+        var allRelatedEntities = model.getEntitiesByAntipattern(sourceEntity.id);
+		var relatedEntities = [];
+        var versions = model.getSelectedVersions();
+        for (var i = 0; i < allRelatedEntities.length; ++i) {
+            if(versions.includes(allRelatedEntities[i].version)){
+				relatedEntities.push(allRelatedEntities[i])
+            }
+		}
 		relatedEntities.forEach(function(entity) {
 			addReaches2(entity, sourceEntity);
 		});
@@ -405,19 +412,15 @@ var patternConnectorController = function(){
 			visitedEntities = [];
 		}
 			
-		relatedEntities = model.getEntitiesByComponent(sourceEntity.id);
-		var versions = model.getSelectedVersions();
+		var allRelatedEntities = model.getEntitiesByComponent(sourceEntity.id);
 		var relatedEntitiesByVersion = new Map();
-		//var map = [];
-		for(var i = 0; i < sourceEntity.components.length; i++) {
-			var component = sourceEntity.components[i];
-			var version = component.version;
-			for(var j = 0; j < versions.length; ++j) {
-				if(version == versions[j]) {
-					relatedEntities = relatedEntities.concat(model.getEntitiesByComponent(sourceEntity.components[i].id));
-				}
-			}
-		}
+        var relatedEntities = [];
+        var versions = model.getSelectedVersions();
+        for (var i = 0; i < allRelatedEntities.length; ++i) {
+            if(versions.includes(allRelatedEntities[i].version)){
+                relatedEntities.push(allRelatedEntities[i])
+            }
+        }
 		
 		for(i = 0; i < relatedEntities.length; ++i) {
 			var map = [];
