@@ -196,10 +196,12 @@ var patternExplorerController = (function() {
 			sender: patternExplorerController,
 			entities: [model.getEntityById(treeNode.id)]
 		};
-		
-		treeNode.checked = true;
-
+        if (applicationEvent.entities[0] === undefined) {
+            return;
+        }
+        
         var type = applicationEvent.entities[0].type;
+
 		switch(type) {
 			case "stk":
 				events.antipattern.on.publish(applicationEvent);
@@ -234,7 +236,6 @@ var patternExplorerController = (function() {
 				nodes.push(node);
 			}
 		});
-		tree.hideNodes(nodes);
         tree.getNodesByParam("parentId", "stk").forEach(function(node){
             var hide = true;
             node.versions.forEach(function(x){
