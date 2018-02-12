@@ -69,13 +69,9 @@ var canvasFlyToController = (function() {
             if(key > max) {
                 result = value;
                 max = key;
-                console.log(value)
-				console.log(key)
             }
         });
         var final = model.getEntityById(result);
-        console.log(final.id)
-		console.log(final.qualifiedName)
         canvasManipulator.flyToEntity(final);
     }
 	
