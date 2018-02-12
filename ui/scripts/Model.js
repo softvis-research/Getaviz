@@ -16,6 +16,7 @@ var model = (function() {
 	var eventEntityMap = new Map();
     var entitiesByVersion = new Map();
 	var selectedVersions = [];
+	var paths = [];
         
 	function initialize(famixModel) {            
 		//create initial entites from famix elements 
@@ -41,8 +42,15 @@ var model = (function() {
 						
 			switch(entity.type) {
 				case "path":
-					console.log("path found");
-					return;
+					entity.start = element.start;
+					entity.end = element.end;
+					paths.push(entity);
+					break;
+                case "stk":
+                    //entity.components = element.components.split(",");
+                    entity.version = element.version;
+                    entity.versions = element.versions.split(",");
+                    return;
 				case "component": 
 					entity.components = element.components.split(",");
 					entity.version = element.version;
@@ -72,7 +80,7 @@ var model = (function() {
 					entity.antipattern = element.antipattern.split(",");
 					entity.roles = element.roles.split(",");
 					entity.component = element.component;
-					entity.version = element.version;
+                    entity.version = element.version;
 					entity.betweennessCentrality = element.betweennessCentrality;
 					if(entity.version != undefined) {
 						if(entitiesByVersion.has(entity.version)) {
@@ -160,26 +168,26 @@ var model = (function() {
 			
 			switch(entity.type) {
                             
-                            case "component":
-                                var components = [];
-                                entity.components.forEach(function(componentId) {
-                                   var relatedEntity = entitiesById.get(componentId.trim());
-                                   if(relatedEntity !== undefined) {
-                                       components.push(relatedEntity);
-                                   }
-                                });
-                                entity.components = components;
-								//entity.version = version;
+                case "component":
+                    var components = [];
+                    entity.components.forEach(function(componentId) {
+                       var relatedEntity = entitiesById.get(componentId.trim());
+                       if(relatedEntity !== undefined) {
+                           components.push(relatedEntity);
+                       }
+                    });
+                    entity.components = components;
+                    //entity.version = version;
 //                                 var paths = new Array();
 //                                         entity.paths.forEach(function(roleID
 //                                         ) {
-                                            //var role = entitiesById.get(roleID.trim());
+                                //var role = entitiesById.get(roleID.trim());
 //                                             var role = roleID.trim();
 //                                             if(role !== undefined) {
 //                                                 roles.push(role)
 //                                             }
 //                                         });
-                                break;
+                    break;
                                 
                                 
 				case "Class":
@@ -412,6 +420,16 @@ var model = (function() {
             return entities;
         }
 
+        function getPaths(start, pattern) {
+			var targets = [];
+			paths.forEach(function(path){
+				if(start == path.start && path.belongsTo.id == pattern) {
+					targets.push((path.end));
+				}
+			});
+			return targets;
+		}
+
         function getEntitiesByAntipattern(antipatternID) {
             var entities = [];
             entitiesById.forEach(function(entity) {
@@ -470,7 +488,8 @@ var model = (function() {
 		
 		addVersion                  : addVersion,
 		removeVersion               : removeVersion,
-		getSelectedVersions			: getSelectedVersions
+		getSelectedVersions			: getSelectedVersions,
+		getPaths					: getPaths
     };
 	
 })();
