@@ -70,8 +70,9 @@ var patternExplorerController = (function() {
 							break;
 						}
 						for	(var i = 0; i < entity.antipattern.length; i++) {
-							if(entity.antipattern[i].type != "cd") {
-								item = { id: entity.id, open: false, parentId: entity.antipattern[i].id, name: entity.name + " <<" + entity.roles[i] + ">>", icon: iconFiles.typeIcon, nocheck: true, iconSkin: "zt"};
+							if(entity.antipattern[i].type == "stk") {
+							   var role =  model.getRole(entity.id, entity.antipattern[i].id);
+								item = { id: entity.id, open: false, parentId: entity.antipattern[i].id, name: entity.name + "  <<" + role + ">>", icon: iconFiles.typeIcon, nocheck: true, iconSkin: "zt"};
 								items.push(item);
 							}
 						}

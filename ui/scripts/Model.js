@@ -44,6 +44,7 @@ var model = (function() {
 				case "path":
 					entity.start = element.start;
 					entity.end = element.end;
+					entity.role = element.role;
 					paths.push(entity);
 					break;
                 case "stk":
@@ -420,6 +421,16 @@ var model = (function() {
             return entities;
         }
 
+        function getRole(start, pattern) {
+	        var result = "";
+            paths.forEach(function(path){
+                if(start == path.start && path.belongsTo.id == pattern) {
+                   result = path.role;
+                }
+            });
+            return result;
+		}
+
         function getPaths(start, pattern) {
 			var targets = [];
 			paths.forEach(function(path){
@@ -448,10 +459,10 @@ var model = (function() {
         
     function removeVersion(version) {
         var index = selectedVersions.indexOf(version);
-        if(index > -1) {
+        if (index > -1) {
             selectedVersions.splice(index, 1);
         }
-	}
+    }
         
     function addVersion(version) {
         selectedVersions.push(version);
@@ -489,7 +500,8 @@ var model = (function() {
 		addVersion                  : addVersion,
 		removeVersion               : removeVersion,
 		getSelectedVersions			: getSelectedVersions,
-		getPaths					: getPaths
+		getPaths					: getPaths,
+        getRole 					: getRole
     };
 	
 })();
