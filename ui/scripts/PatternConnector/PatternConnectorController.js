@@ -99,7 +99,7 @@ var patternConnectorController = function(){
 					if(controllerConfig.bundledEdges) {
 						forceLayout(version, myEntities);
 					} else {
-						createRelatedConnections();
+						createRelatedConnections(minWeight);
 					}
 				}
 		} else {
@@ -134,7 +134,7 @@ var patternConnectorController = function(){
 						//createRelatedConnections();
 						forceLayout(version, myEntities);
 					} else {
-						createRelatedConnections();
+						createRelatedConnections(minWeight);
 					}
 				}
 			} else {
@@ -231,15 +231,20 @@ var patternConnectorController = function(){
             visitedEntities = [];
         }
 
-        callingEntities = model.getEntitiesByAntipattern(sourceEntity.id);
+        relatedEntities = model.getEntitiesByAntipattern(sourceEntity.id);
+		relatedEntities.forEach(function(entity) {
+			addReaches2(entity, sourceEntity);
+		});
 		// TODO: find connected patterns
 
 		if(callingEntities.length == 0) {
             return;
 		}
 
+        finished = true;
+
 		if(activated){
-            createRelatedConnections();
+            createRelatedConnections(0);
 		}
 	}
 	
@@ -270,6 +275,15 @@ var patternConnectorController = function(){
 			});
 		});
 	}
+
+	function addReaches2(entity, pattern) {
+		var result = model.getPaths(entity.id, pattern.id);
+        result.forEach(function(id){
+            var element = model.getEntityById(id)
+            var pair = [entity, element];
+            callingEntities.push(pair);
+        });
+	}
 	
 	function addReaches (entity) {
 		entity.reaches.forEach(function(element){
@@ -290,7 +304,7 @@ var patternConnectorController = function(){
 			nodes: {},
 		};
 		addInternalReaches(relatedEntities);
-		createRelatedConnections();
+		createRelatedConnections(minWeight);
 		d3Nodes.forEach(function(d3Node){
 			var node = {
 				id: d3Node.key,
@@ -431,7 +445,7 @@ var patternConnectorController = function(){
 			if(controllerConfig.bundledEdges) {
 				relatedEntitiesByVersion.forEach(callback);
 			} else {
-				createRelatedConnections();
+				createRelatedConnections(minWeight);
 			}
 		}
 	}
@@ -456,7 +470,7 @@ var patternConnectorController = function(){
 		});
 	}
 
-	function createRelatedConnections(){
+	function createRelatedConnections(minimalWeight){
 		var relatedEntitesMap = new Map();
 
 		callingEntities.forEach(function(relatedPair){
@@ -474,19 +488,18 @@ var patternConnectorController = function(){
 			if(weight == 0) {
 				weight = 0.01;
 			}
-			if(weight < minWeight) {
+			if(weight < minimalWeight) {
 				return;
 			}
-			
-			//create scene element
+
+            //create scene element
 			var connector = createConnector(relatedPair[0], relatedPair[1]);
 
 			//target or source not rendered -> no connector -> remove relatation
 			if( connector === undefined){
 				return;
 			}
-
-			connectors.set(connector, relatedPair[0].version);
+            connectors.set(connector, relatedPair[0].version);
 			canvasManipulator.addElement(connector);
 
 			//create model entity
@@ -497,8 +510,8 @@ var patternConnectorController = function(){
 				relatedPair[0].name + " - " + relatedPair[1].name,
 				relatedPair[0]
 			);
-			
-			relation.source = relatedPair[0];
+
+            relation.source = relatedPair[0];
 			relation.target = relatedPair[1];
 			relations.push(relation);
 			relatedEntitesMap.set(relatedPair[0], relatedPair[1]);
@@ -514,14 +527,14 @@ var patternConnectorController = function(){
 	}
 
 	function createConnector(entity, relatedEntity){
-		var weight = (entity.betweennessCentrality + relatedEntity.betweennessCentrality)/2;
-					
+        var weight = (entity.betweennessCentrality + relatedEntity.betweennessCentrality)/2;
 		//calculate attributes
 		var sourcePosition = calculateSourcePosition(entity, relatedEntity);
 		if( sourcePosition === null ){
 			return;
 		}
-		var targetPosition = calculateTargetPosition(entity, relatedEntity);
+
+        var targetPosition = calculateTargetPosition(entity, relatedEntity);
 		if( targetPosition === null ){
 			return;
 		}
@@ -530,14 +543,14 @@ var patternConnectorController = function(){
 		if(connectorSize < 0.1) {
 			connectorSize = 0.1;
 		}
-		
-		var sourceKey = entity.name.replace("$", ".");
+        var sourceKey = entity.name.replace("$", ".");
 		var targetKey = relatedEntity.name.replace("$", ".");
 		var sourceStatus = searchKey(sourceKey);
 		var targetStatus = searchKey(targetKey);
 		var d3SourceNode = {};
 		var d3TargetNode = {};
-		if(isRealInnerClass(entity, relatedEntity)) {
+
+        if(isRealInnerClass(entity, relatedEntity)) {
 			if(sourceStatus == undefined) {
 				d3SourceNode = {
 					name : sourceKey,
@@ -678,14 +691,14 @@ var patternConnectorController = function(){
 		}
 
 		if(controllerConfig.sourceStartAtBorder){
-			var targetPosition = getObjectPosition(relatedEntity.id);
-			if(targetPosition === null){
+            var targetPosition = getObjectPosition(relatedEntity.id);
+            if(targetPosition === null){
 				return null;
 			}
-			sourcePosition = calculateBorderPosition(sourcePosition, targetPosition, entity);
-		}
+            sourcePosition = calculateBorderPosition(sourcePosition, targetPosition, entity);
+        }
 
-		return sourcePosition;
+        return sourcePosition;
 	}
 
 	function calculateTargetPosition(entity, relatedEntity){
@@ -785,7 +798,6 @@ var patternConnectorController = function(){
 		sourcePosition[1] = deltaY;
 		targetPosition[1] = deltaY;
 
-
 		//calculate distances
 
 		var distances = new Map();
@@ -804,14 +816,15 @@ var patternConnectorController = function(){
 
 		var valueUsedToCalculate;
 		var valueToCalculate;
-		if(nearestPoint1[0] === nearestPoint2[0]){
+
+		if (nearestPoint1[0] === nearestPoint2[0]) {
 			valueUsedToCalculate = 0;
 			valueToCalculate = 2;
-		} else if(nearestPoint1[2] === nearestPoint2[2]){
+		} else if (nearestPoint1[2] === nearestPoint2[2]) {
 			valueUsedToCalculate = 2;
 			valueToCalculate = 0;
 		} else {
-			events.log.error.publish({ text: "border points could not be calcuated" });
+			events.log.error.publish({text: "border points could not be calcuated"});
 			return;
 		}
 

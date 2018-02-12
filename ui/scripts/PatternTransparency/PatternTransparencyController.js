@@ -20,6 +20,7 @@ var patternTransparencyController = (function() {
 	function initialize(setupConfig){
         application.transferConfigParams(setupConfig, controllerConfig);	
         events.componentSelected.on.subscribe(onComponentSelected);
+        events.antipattern.on.subscribe(onAntipatternSelected);
 		events.selected.on.subscribe(onRelationsChanged); 
     }
 	
@@ -106,6 +107,46 @@ var patternTransparencyController = (function() {
 		});
 
 	}
+
+    function onAntipatternSelected(applicationEvent) {
+        lastApplicationEvent = applicationEvent;
+        unfadeAll();
+
+        //get new related entites
+        var entity = applicationEvent.entities[0];
+
+        switch(entity.type) {
+            case "component":
+                relatedEntities = model.getEntitiesByComponent(entity.id);
+                var components = entity.components;
+                for(var i = 0; i < components.length; ++i) {
+                    relatedEntities = relatedEntities.concat(model.getEntitiesByComponent(components[i].id));
+                }
+                break;
+            case "stk":
+                relatedEntities = model.getEntitiesByAntipattern(entity.id);
+        }
+
+        if(relatedEntities.length == 0){
+            return;
+        }
+
+        //get parents of releated entities
+        parents = [];
+        relatedEntities.forEach(function(relatedEntity){
+            parents = parents.concat(relatedEntity.allParents);
+        });
+
+        parents.forEach(function(parent){
+            parent.isTransparent = true;
+        });
+        if(activated){
+            fadeEntities();
+            relatedEntities.forEach(function(relatedEntity){
+                relatedEntity.isTransparent = false;
+            });
+        }
+    }
 	
 	function onComponentSelected(applicationEvent) {
 		lastApplicationEvent = applicationEvent;

@@ -49,7 +49,34 @@ var canvasFlyToController = (function() {
     function onAntipatternSelected(applicationEvent) {
         var entity = applicationEvent.entities[0];
         var classes = model.getEntitiesByAntipattern(entity.id);
-        events.log.info.publish({text: "fly to antipattern"});
+        var parents = new Map();
+        for(var i = 0; i < classes.length; i++) {
+            var cparents = model.getAllParentsOfEntity(classes[i]);
+            parents.set(classes[i].id, 1);
+            for(var j = 0; j < cparents.length; j++) {
+                if(parents.has(cparents[j].id)){
+                    var value = parents.get(cparents[j].id);
+                    parents.set(cparents[j].id, value +1);
+                } else {
+                    parents.set(cparents[j].id, 1);
+                }
+            }
+        }
+        var result = "";
+
+        var max = 0;
+        parents.forEach(function (key, value) {
+            if(key > max) {
+                result = value;
+                max = key;
+                console.log(value)
+				console.log(key)
+            }
+        });
+        var final = model.getEntityById(result);
+        console.log(final.id)
+		console.log(final.qualifiedName)
+        canvasManipulator.flyToEntity(final);
     }
 	
 	function onComponentSelected(applicationEvent) {
