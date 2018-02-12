@@ -13,7 +13,6 @@ import org.eclipse.emf.mwe.core.WorkflowContext
 import org.eclipse.emf.mwe.core.issues.Issues
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor
 import org.eclipse.xtext.EcoreUtil2
-import org.svis.generator.FamixUtils
 import org.svis.generator.rd.RDSettings
 import org.svis.xtext.rd.Disk
 import org.svis.xtext.rd.DiskSegment
@@ -24,6 +23,7 @@ import org.svis.generator.rd.RDSettings.OutputFormat
 import org.svis.generator.rd.RDSettings.MetricRepresentation
 import org.svis.generator.WorkflowComponentWithConfig
 import org.svis.generator.rd.RDSettings.EvolutionRepresentation
+import org.svis.generator.FamixUtils
 
 class RD2RD extends WorkflowComponentWithConfig {
 	// TODO solve it with injection
@@ -74,6 +74,7 @@ class RD2RD extends WorkflowComponentWithConfig {
 			if(diskList.size == 1){
 				val diskRoot = diskList.get(0)
 				ctx.set("rdextendedwriter", diskRoot)
+				
 			}
 		}
 		ctx.set("rdextended", resource)
@@ -96,20 +97,29 @@ class RD2RD extends WorkflowComponentWithConfig {
 	 */
 
 	def private calculateNetArea(Disk disk) {
-		// set sizes of methods and data
-		disk.data.forEach[size = size * RDSettings::DATA_FACTOR]
-		disk.methods.forEach[size = size * RDSettings::METHOD_FACTOR]		
-		disk.netArea = disk.methods.sum + disk.data.sum
+		if(RDSettings::CLASS_SIZE == RDSettings::ClassSize.NONE) {
+			// set sizes of methods and data
+			disk.data.forEach[size = size * RDSettings::DATA_FACTOR]
+			disk.methods.forEach[size = size * RDSettings::METHOD_FACTOR]		
+			disk.netArea = disk.methods.sum + disk.data.sum
 		
-		if (disk.netArea == 0 && (disk.type.equals("FAMIX.Class ") || disk.type.equals("FAMIX.ParameterizableClass"))) {
-			disk.netArea = RDSettings::MIN_AREA
-		// get sizes from nested disks
-		//		if ((!disk.disks.nullOrEmpty) && (disk.type.equals("FAMIX.Namespace") || disk.type.equals("FAMIX.Class") || disk.type.equals("FAMIX.ParameterizableClass"))) {
+			if (disk.netArea == 0 && (disk.type.equals("FAMIX.Class ") || disk.type.equals("FAMIX.ParameterizableClass"))) {
+				disk.netArea = RDSettings::MIN_AREA
+			// get sizes from nested disks
+			// if ((!disk.disks.nullOrEmpty) && (disk.type.equals("FAMIX.Namespace") || disk.type.equals("FAMIX.Class") || disk.type.equals("FAMIX.ParameterizableClass"))) {
+			}
+		}
+		
+		if(RDSettings::CLASS_SIZE == RDSettings::ClassSize.BETWEENNESS_CENTRALITY) {
+			disk.netArea = Math::PI * disk.ringWidth * disk.ringWidth
 		}
 	}
 	
 	def calculateRadius(Disk disk) {
-		disk.radius = Math::sqrt(disk.netArea / Math::PI) + disk.ringWidth
+		switch(RDSettings::CLASS_SIZE) {
+			case RDSettings.ClassSize.NONE: disk.radius = Math::sqrt(disk.netArea / Math::PI) + disk.ringWidth
+			case RDSettings.ClassSize.BETWEENNESS_CENTRALITY: disk.radius = disk.ringWidth
+		}
 	}
 	
 	def private calculateLayout (Document diskDocument) {
@@ -125,7 +135,7 @@ class RD2RD extends WorkflowComponentWithConfig {
 		if(RDSettings::OUTPUT_FORMAT == RDSettings::OutputFormat::AFrame) {
 			namespace.color = RDSettings::NAMESPACE_COLOR_HEX
 		} else {
-			namespace.color =  NS_colors.get(namespace.getLevel()-1).asPercentage
+			namespace.color =  NS_colors.get(namespace.level - 1).asPercentage
 		}
 	}
 
@@ -160,7 +170,6 @@ class RD2RD extends WorkflowComponentWithConfig {
 	}
 
 	def private void calculateRings(Disk disk) {
-		// disk rings
 		if (disk.ringWidth == 0) {
 			calculateCrossSection(disk,disk.ringWidth,0)              
 		} else {
@@ -336,12 +345,12 @@ class RD2RD extends WorkflowComponentWithConfig {
 			}
 		} else if (RDSettings::OUTPUT_FORMAT == OutputFormat::AFrame) {
 			if(!segments.empty) {
-				val separationFactor = 1
+				//val separationFactor = 1
 				var sizeSum = 0.0
 				var position = 0.0
 				
-				var completeSeparation = (360*separationFactor)
-				var separationPerSegment = completeSeparation/(segments.length)
+				//var completeSeparation = (360*separationFactor)
+				//var separationPerSegment = completeSeparation/(segments.length)
 				
 				for (DiskSegment segment: segments) {
 					sizeSum =  sizeSum + segment.size

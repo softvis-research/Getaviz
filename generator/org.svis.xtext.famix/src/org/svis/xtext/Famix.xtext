@@ -15,7 +15,8 @@ FAMIXElement:
 	FAMIXAccess | FAMIXNamespace | FAMIXMethod | FAMIXPrimitiveType | FAMIXComment | FAMIXParameter | FAMIXReference |
 	FAMIXParameterizedType | FAMIXAnnotationInstance | FAMIXAnnotationInstanceAttribute | FAMIXAnnotationTypeAttribute |
 	FAMIXLocalVariable | FAMIXImplicitVariable | FAMIXType | FAMIXParameterType |
-	FAMIXJavaSourceLanguage | FAMIXDeclaredException | FAMIXThrownException | FAMIXCaughtException | FAMIXEnumValue;
+	FAMIXJavaSourceLanguage | FAMIXDeclaredException | FAMIXThrownException | FAMIXCaughtException | FAMIXEnumValue | 
+	FAMIXAntipattern | FAMIXPath | FAMIXRole | FAMIXComponent;
 	
 FAMIXStructure:
 	FAMIXClass | FAMIXParameterizableClass | FAMIXEnum | FAMIXAnnotationType
@@ -58,7 +59,12 @@ FAMIXClass:
 	('(' 'isInterface' isInterface=Boolean ')')?
 	('(' 'isStub' isStub=Boolean ')')?
 	('(' 'modifiers' modifiers+=MSESTRING* ')')?
+	('(' 'antipattern' antipattern+=IntegerReference* ')')?
 	('(' 'sourceAnchor' type=IntegerReference ')')?
+	('(' 'scc' scc=IntegerReference ')')?
+	('(' 'numberOfAntipattern' noa=INT ')')?
+	('(' 'betweennessCentrality' betweennessCentrality = MSESTRING ')')?
+	('(' 'STK-Rank' stkRank = MSESTRING ')')?
 	')';
 
 FAMIXParameterizableClass:
@@ -72,6 +78,10 @@ FAMIXParameterizableClass:
 	('(' 'isStub' isStub=Boolean ')')?
 	('(' 'modifiers' modifiers+=MSESTRING* ')')?
 	('(' 'sourceAnchor' type=IntegerReference ')')?
+	('(' 'numberOfAntipattern' noa = INT ')')?
+	('(' 'antipattern' antipattern+=IntegerReference* ')')?
+	('(' 'betweennessCentrality' betweennessCentrality = MSESTRING ')')?
+	('(' 'STK-Rank' stkRank = MSESTRING ')')?
 	')';
 
 FAMIXMethod:
@@ -80,6 +90,7 @@ FAMIXMethod:
 	'(' 'name' value=MSESTRING ')'
 	('(' 'hash' id = STRING ')')?
 	('(' 'fqn' fqn = MSESTRING ')')?
+	('(' 'antipattern' antipattern = MSESTRING ')')?
 	('(' 'cyclomaticComplexity' cyclomaticComplexity=INT ')')?
 	('(' 'declaredType' declaredType=IntegerReference ')')?
 	('(' 'hasClassScope' hasClassScope=Boolean ')')?
@@ -208,6 +219,10 @@ FAMIXAnnotationType:
 	('(' 'isStub' isStub=Boolean ')')?
 	('(' 'modifiers' modifiers+=MSESTRING* ')')?
 	('(' 'sourceAnchor' sourceAnchor=IntegerReference ')')?
+	('(' 'numberOfAntipattern' noa = INT ')')?
+	('(' 'antipattern' antipattern+=IntegerReference* ')')?
+	('(' 'betweennessCentrality' betweennessCentrality = MSESTRING ')')?
+	('(' 'STK-Rank' stkRank = MSESTRING ')')?
 	')';
 
 FAMIXAnnotationTypeAttribute:
@@ -290,6 +305,10 @@ FAMIXEnum:
 	('(' 'isStub' isStub=Boolean ')')?
 	('(' 'modifiers' modifiers+=MSESTRING* ')')?
 	('(' 'sourceAnchor' sourceAnchor=IntegerReference ')')?
+	('(' 'numberOfAntipattern' noa = INT ')')?
+	('(' 'antipattern' antipattern+=IntegerReference* ')')?
+	('(' 'betweennessCentrality' betweennessCentrality = MSESTRING ')')?
+	('(' 'STK-Rank' stkRank = MSESTRING ')')?
 	')';
 
 FAMIXEnumValue:
@@ -302,14 +321,63 @@ FAMIXEnumValue:
 	'(' 'parentEnum' parentEnum=IntegerReference ')'
 	')';
 	
+FAMIXAntipattern:
+	'(FAMIX.Antipattern'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	('(' 'fqn' fqn = MSESTRING ')')?
+	('(' 'hash' id = STRING ')')?
+	('(' 'type' type = MSESTRING ')')?
+	('(' 'elements' elements+=IntegerReference* ')')?
+	('(' 'components' components+=FutureReference* ')')?
+	('(' 'realcomponents' realcomponents+=IntegerReference* ')')?
+	('(' 'path' path+=IntegerReference* ')')?
+	('(' 'roles' roles+=IntegerReference* ')')?
+	('(' 'version' version = MSESTRING')')?
+	('(' 'versions' versions += MSESTRING* ')')?
+	')';
+
+FAMIXComponent:
+	'(FAMIX.Component'
+	'(' 'id:' name=INT_ID ')'
+	('(' 'hash' id = STRING ')')?
+	'(' 'elements' elements+=IntegerReference* ')'
+	('(' 'fqn' fqn = MSESTRING ')')?
+	('(' 'components' components+=FutureReference* ')')?
+	('(' 'realcomponents' realcomponents+=IntegerReference* ')')?
+	('(' 'path' path+=IntegerReference* ')')?
+	('(' 'version' version = MSESTRING')')?
+	('(' 'versions' versions += MSESTRING* ')')?
+	')';
+
+FAMIXRole:
+	'(FAMIX.Role'
+	'(' 'id:' name = INT_ID')'
+	'(' 'role' role = MSESTRING ')'
+	'(' 'element' element = IntegerReference ')'
+	')';
+
+FAMIXPath:
+	'(FAMIX.Path'
+	'(' 'id:' name=INT_ID ')'
+	('(' 'hash' id = STRING ')')?
+	('(' 'role' role = MSESTRING ')')?
+	'(' 'start' start = IntegerReference ')'
+	'(' 'end' end = IntegerReference ')'
+	('(' 'antipattern' antipattern = IntegerReference ')')?
+	')';
+	
 enum MethodType:
 	Unknown | Setter | Getter | Constructor;	
 
 Boolean:
 	'true' | 'false';
-
+	
 IntegerReference:
 	'(' 'ref:' ref=[FAMIXElement|INT_ID] ')';
+	
+FutureReference:
+	'(' 'ref:' ref= INT_ID ')';
 
 INT_ID returns ecore::EString:
 	'^'? INT;

@@ -83,6 +83,8 @@ HISMONamespaceVersion:
 	'(HISMO.NamespaceVersion'
 	'(id:' name=INT_ID ')'
 	'(name' value=MSESTRING ')'
+	('(' 'container' container=IntegerReference ')')?
+	('(' 'hash' id = STRING ')')?
 	('(parentHistory' parentHistory=IntegerReference ')')?	
 	('(classVersions' classVersions+=IntegerReference* ')')?
 	('(versionEntity' versionEntity=IntegerReference ')')?
@@ -91,25 +93,31 @@ HISMONamespaceVersion:
 	('(commitId' commitId=MSESTRING ')')?	
 	')';
 	
-	
-	
 HISMOClassVersion:
 	'(HISMO.ClassVersion'
 	'(id:' name=INT_ID ')'
 	'(name' value=MSESTRING ')'
+	('(' 'hash' id = STRING ')')?
+	('(container' container=IntegerReference ')')?
 	('(parentHistory' parentHistory=IntegerReference ')')?	
 	('(methodVersions' methodVersions+=IntegerReference* ')')?
 	('(attributeVersions' attributeVersions+=IntegerReference* ')')?
 	('(versionEntity' versionEntity=IntegerReference ')')?
 	('(author' author=MSESTRING ')')?	
 	('(timestamp' timestamp=Timestamp')')?
+	('(scc' scc=IntegerReference ')')?
+	('(antipattern' antipattern +=IntegerReference* ')')?
 	('(commitId' commitId=MSESTRING ')')?	
+	('(betweennessCentrality' betweennessCentrality = MSESTRING ')')?
+	('(' 'STK-Rank' stkRank = MSESTRING ')')?
 	')';
 
 HISMOMethodVersion:
 	'(HISMO.MethodVersion'
 	'(id:' name=INT_ID ')'
 	'(name' value=MSESTRING ')'
+	('(' 'hash' id = STRING ')')?
+	('(' 'container' container=IntegerReference ')')?
 	('(parentHistory' parentHistory=IntegerReference ')')?	
 	('(versionEntity' versionEntity=IntegerReference ')')?
 	('(author' author=MSESTRING ')')?	
@@ -123,6 +131,8 @@ HISMOAttributeVersion:
 	'(HISMO.AttributeVersion'
 	'(id:' name=INT_ID ')'
 	'(name' value=MSESTRING ')'
+	('(' 'hash' id = STRING ')')?
+	('(' 'container' container=IntegerReference ')')?
 	('(parentHistory' parentHistory=IntegerReference ')')?	
 	('(versionEntity' versionEntity=IntegerReference ')')?
 	('(author' author=MSESTRING ')')?	

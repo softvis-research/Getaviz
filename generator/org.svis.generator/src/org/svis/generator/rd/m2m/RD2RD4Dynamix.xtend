@@ -19,7 +19,7 @@ import org.svis.xtext.rd.DiskSegment
 import java.util.List
 
 class RD2RD4Dynamix extends WorkflowComponentWithModelSlot {
-	val rdFactory = new RdFactoryImpl
+	val static rdFactory = new RdFactoryImpl
 	var long invocationStartTime
 	var long invocationStopTime
 	var long absoluteDuration

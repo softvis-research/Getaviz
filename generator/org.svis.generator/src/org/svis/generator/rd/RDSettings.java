@@ -7,6 +7,8 @@ package org.svis.generator.rd;
  */
 
 public enum RDSettings {;
+	public static final boolean SHOW_HISTORIES = false;
+	public static final boolean SHOW_CLASS_MEMBERS = false;
 	public static final double DATA_FACTOR = 4;
 	public static final double METHOD_FACTOR = 1;
 	public static final double HEIGHT = 1;
@@ -56,8 +58,15 @@ public enum RDSettings {;
 	public static OutputFormat OUTPUT_FORMAT = OutputFormat.X3D;
 	
 	public static enum OutputFormat {
-		X3D,X3DOM,SimpleGlyphsJson,X3D_COMPRESSED,AFrame
-	}	
+		X3D,X3DOM,SimpleGlyphsJson,X3D_COMPRESSED,AFrame, D3
+	}
+	
+	public static ClassSize CLASS_SIZE = ClassSize.BETWEENNESS_CENTRALITY;
+	
+	public static enum ClassSize {
+		NONE, BETWEENNESS_CENTRALITY
+	}
+	
 	/**
 	 * Depending on the value set metrics will not represented, by height
 	 * or in a dynamic way which can either be Luminance or Frequency 

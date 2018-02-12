@@ -1,0 +1,51 @@
+module org.svis.extractor.hismo.run.Repo2Hismo
+
+var configPath = "./metadata.json"
+
+/*
+ * Only creates a hismo model, no visualization
+ */
+
+Workflow {
+	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
+		platformUri = "../org.svis.extractor.hismo/.."
+		registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
+		registerGeneratedEPackage = "org.svis.xtext.hismo.HismoPackage"
+	}
+
+	// Loads the repository from configuration to slot "repository"
+	component = org.svis.extractor.hismo.GetRepository {
+		config = configPath
+	}
+
+	// Use VerveineJ to create FAMIX model for every commit
+	component = org.svis.extractor.hismo.Commit2Famix {
+		config = configPath
+	}
+
+	// Reads multiple famix models
+	component = org.svis.generator.ReaderWithConfig {
+		register = org.svis.xtext.FamixStandaloneSetup {}
+		config = configPath
+		loadResource = {
+			slot = "famix"
+		}
+	}
+	
+	component = org.svis.generator.famix.Famix2Famix {
+		//config = configPath
+		modelSlot = "famix"
+	}
+	
+	// Transforms multiple famix models into hismo
+	component = org.svis.extractor.hismo.Famix2Hismo {
+		config = configPath
+		modelSlot = "famix"
+	}
+
+	// Writes out resulting hismo model
+	component = org.svis.extractor.hismo.CustomEMFWriter {
+		config = configPath
+		modelSlot = "hismowriter"
+	}
+}

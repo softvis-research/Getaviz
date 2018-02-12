@@ -25,22 +25,20 @@ import org.svis.xtext.rd.DiskVersion
 import org.svis.xtext.rd.Version
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
 import org.apache.commons.beanutils.BeanComparator
-import org.svis.generator.FamixUtils
 import org.svis.xtext.famix.FAMIXAttribute
 import org.svis.xtext.famix.FAMIXClass
-import org.svis.xtext.famix.FAMIXEnum
 import org.svis.xtext.famix.FAMIXEnumValue
 import org.svis.xtext.famix.FAMIXInheritance
 import org.svis.xtext.famix.FAMIXMethod
 import org.svis.xtext.famix.FAMIXNamespace
-import org.svis.xtext.famix.FAMIXParameterizableClass
-import org.svis.xtext.famix.FAMIXAnnotationType
 import org.svis.xtext.famix.FAMIXStructure
 import org.svis.generator.famix.Famix2Famix
 import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.svis.xtext.famix.FAMIXFileAnchor
 import java.util.ArrayList
+import org.svis.generator.hismo.HismoUtils
+import org.svis.generator.FamixUtils
 
 class Hismo2RD extends WorkflowComponentWithModelSlot {
 	val static diskFactory = new RdFactoryImpl()
@@ -48,7 +46,8 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 	var Document diskDocument
 	val log = LogFactory::getLog(class)
 	val famix = new Famix2Famix
-	extension FamixUtils util = new FamixUtils
+	extension FamixUtils famixUtil = new FamixUtils
+	extension HismoUtils hismoUtil = new HismoUtils
 	val nameComparator = new BeanComparator("name")
 	val Set<HISMONamespaceHistory> hismoPackages = newTreeSet(nameComparator)
 	val Set<HISMONamespaceVersion> hismoPackageVersions = newTreeSet(nameComparator)
@@ -67,8 +66,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 	val List<FAMIXAttribute> attributes = newArrayList
 	val List<FAMIXEnumValue> enumValues = newArrayList
 	val List<FAMIXInheritance> inheritances = newArrayList
-	val Set<String> timestamps = newHashSet;
-	val List<String> sortedtimestamps = newLinkedList;
+	val List<String> sortedtimestamps = newLinkedList
 	// TODO solve it with injection
 	// @Inject extension XtendUtils util
 	
@@ -79,16 +77,19 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		
 		hismoClassVersions += hismoDocument.elements.filter(HISMOClassVersion)
 		hismoPackageVersions += hismoDocument.elements.filter(HISMONamespaceVersion)
-		hismoMethodVersions += hismoDocument.elements.filter(HISMOMethodVersion)
-		hismoAttributeVersions += hismoDocument.elements.filter(HISMOAttributeVersion)
-		
-		hismoAttributeVersions.forEach[v| timestamps += v.timestamp]
-		hismoMethodVersions.forEach[v| timestamps += v.timestamp]
+		val Set<String> timestamps = newHashSet
+		if(RDSettings::SHOW_CLASS_MEMBERS) {
+			hismoMethodVersions += hismoDocument.elements.filter(HISMOMethodVersion)
+			hismoAttributeVersions += hismoDocument.elements.filter(HISMOAttributeVersion)
+			hismoAttributeVersions.forEach[v| timestamps += v.timestamp]
+			hismoMethodVersions.forEach[v| timestamps += v.timestamp]
+		}
 		hismoClassVersions.forEach[v| timestamps += v.timestamp]
 		hismoPackageVersions.forEach[v| timestamps += v.timestamp]
 		hismoMethods.toSet
 				
 		sortedtimestamps.addAll(timestamps.toList.sort)
+		
 		val diskList = newArrayList
 		if(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::TIME_LINE
 			|| RDSettings::EVOLUTION_REPRESENTATION ==EvolutionRepresentation::DYNAMIC_EVOLUTION) {
@@ -105,7 +106,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 				rootPackages.forEach[toDisk(1, timestamp)]
 				removeUnnecessaryHismoElements(hismoRoot)
 				diskList += diskRoot		
-			}	
+			}
 		}
 		val resource = new ResourceImpl()
 		resource.contents += hismoRoot
@@ -118,14 +119,14 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		log.info("Hismo2RD has finished.")
 	}
 	
-	def createRoot() {
+	def private createRoot() {
 		val diskRoot = diskFactory.createRoot
 		diskDocument = diskFactory.createDocument
 		diskRoot.document = diskDocument
 		return diskRoot
 	}	
 	
-	def removeUnnecessaryFamixElements(List<HismoRoot> hismoroot){
+	def private removeUnnecessaryFamixElements(List<HismoRoot> hismoroot){
 		hismoDocument.elements.removeAll(hismoDocument.elements.filter(FAMIXNamespace))
 		hismoDocument.elements.removeAll(hismoDocument.elements.filter(FAMIXClass))
 		hismoDocument.elements.removeAll(hismoDocument.elements.filter(FAMIXMethod))
@@ -133,7 +134,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		hismoDocument.elements.removeAll(hismoDocument.elements.filter(FAMIXFileAnchor))
 	}
 	
-	def removeUnnecessaryHismoElements(List<HismoRoot> hismoroot){
+	def private removeUnnecessaryHismoElements(List<HismoRoot> hismoroot){
 		hismoDocument.elements.removeAll(hismoDocument.elements.filter(HISMONamespaceVersion))
 		hismoDocument.elements.removeAll(hismoDocument.elements.filter(HISMOClassVersion))
 		hismoDocument.elements.removeAll(hismoDocument.elements.filter(HISMOMethodVersion))
@@ -144,14 +145,14 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		hismoDocument.elements.removeAll(hismoDocument.elements.filter(HISMOAttributeHistory))
 	}
 	
-	def fillLists() {
+	def private fillLists() {
 		hismoClasses += hismoDocument.elements.filter(HISMOClassHistory)
 		hismoPackages += hismoDocument.elements.filter(HISMONamespaceHistory)
 		hismoMethods += hismoDocument.elements.filter(HISMOMethodHistory)
 		hismoAttributes += hismoDocument.elements.filter(HISMOAttributeHistory)
 	}
 	
-	def fillLists(String timestamp) {
+	def private fillLists(String timestamp) {
 		rootPackages.clear
 		rootPackages += hismoDocument.elements
 			.filter(FAMIXNamespace)
@@ -178,6 +179,8 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 			.filter[method|hismoMethodVersions.exists[hmv|
 				hmv.timestamp == timestamp && hmv.versionEntity.ref === method  
 			]]
+		println("hismomethods:" + methods.size)
+		println("realsize:" + hismoDocument.elements.filter(FAMIXMethod).size)
 		attributes.clear				
 		attributes += hismoDocument.elements
 			.filter(FAMIXAttribute)
@@ -204,7 +207,8 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		}
 	}
 
-	def private Disk create disk: diskFactory.createDisk toDisk(HISMONamespaceHistory hismoNamespace, int level) {
+	def private Disk toDisk(HISMONamespaceHistory hismoNamespace, int level) {
+		val disk = diskFactory.createDisk
 		disk.name = hismoNamespace.name
 		disk.value = hismoNamespace.name//hismoNamespace.value
 		disk.fqn = hismoNamespace.qualifiedName
@@ -225,25 +229,36 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		].filterNull
 		
 		versions.forEach[v|disk.diskVersions += toDiskVersion(v)]
-			diskDocument.disks += disk
+		diskDocument.disks += disk
+		return disk
 	}
 	
-	def private DiskVersion create diskVersion: diskFactory.createDiskVersion toDiskVersion(HISMONamespaceVersion version) {
+	def private DiskVersion toDiskVersion(HISMONamespaceVersion version) {
+		val diskVersion = diskFactory.createDiskVersion
 		diskVersion.height = sortedtimestamps.indexOf(version.timestamp) * RDSettings::HEIGHT_BOOST
 		diskVersion.level =sortedtimestamps.indexOf(version.timestamp) 
 		diskVersion.commitId = version.commitId
 		diskVersion.author = version.author
 		diskVersion.timestamp = version.timestamp
 		diskVersion.name = version.name
+		diskVersion.scale = 1
+		diskVersion.id = version.id
+		diskVersion.ringWidth = RDSettings::RING_WIDTH
+		diskVersion.color = RDSettings::NAMESPACE_COLOR
+		return diskVersion
 	}
 
-	def private Disk create disk:	diskFactory.createDisk toDisk(HISMOClassHistory hismoClass, int level) {
+	def private Disk toDisk(HISMOClassHistory hismoClass, int level) {
+		val disk = diskFactory.createDisk
 		disk.name = hismoClass.name
 		disk.value = hismoClass.name
 		disk.fqn = hismoClass.qualifiedName
-		disk.type = "FAMIX.Class"
+		disk.type = "FAMIX.ClassH"
 		disk.level = level
-		disk.ringWidth = RDSettings::RING_WIDTH
+		disk.ringWidth = getMaxNOS(hismoClass) * 10
+		if(disk.ringWidth == 0) { 
+			disk.ringWidth = 1
+		}
 		disk.id = famix.createID(disk.fqn)
 		disk.height = RDSettings::HEIGHT
 		disk.color = RDSettings::CLASS_COLOR
@@ -265,61 +280,61 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		}
 		 */
 		hismoClasses.filter[containingNamespaceHistory.ref == hismoClass].forEach[disk.disks += toDisk(level + 1)]
-		hismoAttributes.filter[containingClassHistory.ref === hismoClass].filterNull.forEach[disk.data += toDiskSegment()]	
-		hismoMethods.filter[
-			containingClassHistory.ref === hismoClass
-		].filterNull.forEach[disk.methods += toDiskSegment(disk)]
-
-
-	  	val versions = hismoClassVersions.filter[
-			parentHistory.ref === hismoClass
-		].filterNull
-		//log.info(hismoClass.qualifiedName)
-		//versions.forEach[v|log.info("Version " + v)]
-		versions.forEach[disk.diskVersions += toVersion(it,hismoClass)]
+		if(RDSettings::SHOW_CLASS_MEMBERS) {
+			hismoAttributes.filter[containingClassHistory.ref === hismoClass].forEach[disk.data += toDiskSegment()]
+			hismoMethods.filter[containingClassHistory.ref === hismoClass].forEach[disk.methods += toDiskSegment(disk)]
+		}
+	  	val versions = hismoClassVersions.filter[parentHistory.ref === hismoClass]
+		versions.forEach[disk.diskVersions += toDiskVersion(it,hismoClass)]
+		return disk
 	}
 
-	def private DiskVersion create diskversion: diskFactory.createDiskVersion toVersion(HISMOClassVersion classVersion,HISMOClassHistory history) {
+	def private DiskVersion toDiskVersion(HISMOClassVersion classVersion,HISMOClassHistory history) {
+		val diskversion = diskFactory.createDiskVersion
 		diskversion.height = sortedtimestamps.indexOf(classVersion.timestamp) * RDSettings::HEIGHT_BOOST
 		diskversion.level = sortedtimestamps.indexOf(classVersion.timestamp) 
 		diskversion.commitId = classVersion.commitId
 		diskversion.author = classVersion.author
 		diskversion.timestamp = classVersion.timestamp
 		diskversion.name = classVersion.name
-		if (history.getMaxNOS() > 0) {
-			diskversion.scale = classVersion.getNOS(history)*1.0/history.getMaxNOS();
+		diskversion.id = classVersion.id
+		diskversion.ringWidth = Double.parseDouble(classVersion.betweennessCentrality) * 100
+		diskversion.color = famixUtil.getGradient(Double.parseDouble(classVersion.stkRank)).asPercentage
+		if (history.getMaxNOS() > 0 && classVersion.getNOS(history) > 0) {
+			diskversion.scale = classVersion.getNOS(history) / history.maxNOS
 		} else 	{
 			diskversion.scale = 1
 		}
-		// log.info("classnos: " + classVersion.getNOS(history))
-		// log.info("classscale: " + diskversion.scale)
+		return diskversion
 	}
 	
-	private def int getMaxNOS(HISMOClassHistory history) {
+	def private getMaxNOS(HISMOClassHistory history) {
 		return hismoClassVersions.filter[
 			parentHistory.ref === history
-		].filterNull.maxBy[getNOS(history)].getNOS(history) 
+		].maxBy[getNOS(history)].getNOS(history) 
 	}  
 	
-	private def int getNOS(HISMOClassVersion version, HISMOClassHistory classHistory) {
-		//log.info("Methods for ClassHistory " + classHistory.methodHistories.length)
-		val mhRefs = newLinkedList;
-		classHistory.methodHistories.forEach[mhRefs += ref]
-		
-		val methodVersions = hismoMethodVersions.filter[
+	def private getNOS(HISMOClassVersion version, HISMOClassHistory classHistory) {
+		if(RDSettings::SHOW_CLASS_MEMBERS) {
+			val mhRefs = newLinkedList
+			var sum = 0.0
+			classHistory.methodHistories.forEach[mhRefs += ref]
+			val methodVersions = hismoMethodVersions.filter[
 				timestamp == version.timestamp
 			].filter[
 				mhRefs.contains(parentHistory.ref)
 			]
-		//log.info("methods for " + version.name + ": " + methodVersions.length)
-		var sum = 0;
-		for (methodVersion : methodVersions) {
-			sum += methodVersion.evolutionNumberOfStatements
+			for (methodVersion : methodVersions) {
+				sum += methodVersion.evolutionNumberOfStatements
+			}
+			return sum
+		} else {
+			return Double.parseDouble(version.betweennessCentrality)
 		}
-		return sum;
 	} 
 
-	def private DiskSegment create diskSegment: diskFactory.createDiskSegment toDiskSegment(HISMOMethodHistory hismoMethod, Disk disk) {
+	def private DiskSegment toDiskSegment(HISMOMethodHistory hismoMethod, Disk disk) {
+		val diskSegment = diskFactory.createDiskSegment
 		diskSegment.name = hismoMethod.name
 		diskSegment.value = hismoMethod.name
 		diskSegment.fqn =  hismoMethod.qualifiedName //"AAA"//method.qualifiedName(parameters)
@@ -332,28 +347,29 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		if (hismoMethod.maxNumberOfStatements  <= RDSettings::MIN_AREA) {
 			diskSegment.size = RDSettings::MIN_AREA
 		} else {
-			diskSegment.size = 1//hismoMethod.maxNumberOfStatements//method.numberOfStatements
+			diskSegment.size = hismoMethod.maxNumberOfStatements//method.numberOfStatements
 		}
- 	 	val versions = hismoMethodVersions.filter[
-			parentHistory.ref === hismoMethod
-		].filterNull
-		//log.info(hismoMethod.qualifiedName)
-		//versions.forEach[v|log.info("Version " + v)]
-		versions.forEach[diskSegment.versions += toVersion(hismoMethod)]
+ 	 	hismoMethodVersions.filter[parentHistory.ref === hismoMethod].forEach[
+ 	 		diskSegment.versions += toVersion(hismoMethod)
+ 	 	]
+		return diskSegment
 	}
 	
-	def private Version create version: diskFactory.createVersion toVersion(HISMOMethodVersion methodVersion, HISMOMethodHistory history) {
+	def private Version toVersion(HISMOMethodVersion methodVersion, HISMOMethodHistory history) {
+		val version = diskFactory.createVersion
 		version.height = sortedtimestamps.indexOf(methodVersion.timestamp) * RDSettings::HEIGHT_BOOST
-		
 		version.scale = methodVersion.evolutionNumberOfStatements*1.0/history.maxNumberOfStatements;
 		version.level = sortedtimestamps.indexOf(methodVersion.timestamp)
 		version.commitId = methodVersion.commitId
 		version.author = methodVersion.author
 		version.timestamp = methodVersion.timestamp
 		version.name = methodVersion.name
+		version.id = methodVersion.id
+		return version
 	}
 
-	def private DiskSegment create diskSegment: diskFactory.createDiskSegment toDiskSegment(HISMOAttributeHistory attribute) {
+	def private DiskSegment toDiskSegment(HISMOAttributeHistory attribute) {
+		val diskSegment = diskFactory.createDiskSegment
 		diskSegment.name = attribute.name
 		diskSegment.value = attribute.name //attribute.value
 		diskSegment.fqn = attribute.qualifiedName
@@ -362,16 +378,15 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.height = RDSettings::HEIGHT
 		diskSegment.color = RDSettings::DATA_COLOR
 		diskSegment.transparency = RDSettings::DATA_TRANSPARENCY
-		
-   	val versions = hismoAttributeVersions.filter[
-			parentHistory.ref === attribute
-		].filterNull
-		//versions.forEach[v|log.info("Version " + v)]
-		versions.forEach[diskSegment.versions += toVersion(attribute)]
-		
+
+   		hismoAttributeVersions.filter[parentHistory.ref === attribute].forEach[
+   			diskSegment.versions += toVersion(attribute)
+   		]
+		return diskSegment		
 	}
 
-	def private Version create version: diskFactory.createVersion toVersion(HISMOAttributeVersion attributeVersion, HISMOAttributeHistory history) {
+	def private Version toVersion(HISMOAttributeVersion attributeVersion, HISMOAttributeHistory history) {
+		val version = diskFactory.createVersion
 		version.height = sortedtimestamps.indexOf(attributeVersion.timestamp) * RDSettings::HEIGHT_BOOST
 		version.level = sortedtimestamps.indexOf(attributeVersion.timestamp)
 		version.commitId = attributeVersion.commitId
@@ -379,85 +394,15 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		version.timestamp = attributeVersion.timestamp
 		version.scale = 1
 		version.name = attributeVersion.name
-	}
-
-	def String qualifiedName(HISMOMethodHistory hismoMethodHistory) {
-		val ref = hismoMethodHistory.containingClassHistory.ref as HISMOClassHistory
-		if (hismoMethodHistory.methodVersions.length > 0) {
-			val firstMethodVersion = hismoMethodHistory.methodVersions.get(0).ref as HISMOMethodVersion
-			return qualifiedName(ref) + "." + ("" + firstMethodVersion.value).removeApostrophes + "+++<" + hismoMethodHistory.name + ">+++"
-		} else {
-			return qualifiedName(ref) + "." + hismoMethodHistory.name + "+++"
-		}
-	}
-	
-	def String qualifiedName(HISMOAttributeHistory hismoAttributeHistory) {
-		val ref = hismoAttributeHistory.containingClassHistory.ref as HISMOClassHistory
-		if (hismoAttributeHistory.attributeVersions.length > 0) {
-			val firstAttributeVersion = hismoAttributeHistory.attributeVersions.get(0).ref as HISMOAttributeVersion
-			return qualifiedName(ref) + "." + ("" + firstAttributeVersion.value).removeApostrophes + "+++<" + hismoAttributeHistory.name + ">+++"
-		} else {
-			return qualifiedName(ref) + "." + hismoAttributeHistory.name + "+++"
-		}
-	}
-	
-	def String qualifiedName(HISMONamespaceHistory hismoNamespaceHistory) {
-		if (hismoNamespaceHistory.containingNamespaceHistory !== null) {
-			val ref = hismoNamespaceHistory.containingNamespaceHistory.ref as HISMONamespaceHistory
-			if (hismoNamespaceHistory.namespaceVersions.length > 0) {
-				val firstNamespaceVersion = hismoNamespaceHistory.namespaceVersions.get(0).ref as HISMONamespaceVersion
-				return qualifiedName(ref) + "." + ("" + firstNamespaceVersion.value).removeApostrophes + "+++<" + hismoNamespaceHistory.name + ">+++"
-			}
-			else {
-				return qualifiedName(ref) + "." + hismoNamespaceHistory.name + "+++"
-			}
-				
-		} else {
-			
-			if (hismoNamespaceHistory.namespaceVersions.length > 0) {
-				val firstNamespaceVersion = hismoNamespaceHistory.namespaceVersions.get(0).ref as HISMONamespaceVersion
-				return ("" + firstNamespaceVersion.value).removeApostrophes + "+++<" + hismoNamespaceHistory.name + ">+++"	
-			} else {
-				return "unknown"  + "+++"
-			}
-		}
-	}
-	
-	def String qualifiedName(HISMOClassHistory hismoClassHistory) {
-		// log.info("BB")
-		if (hismoClassHistory.containingNamespaceHistory !== null) {
-			if(hismoClassHistory.containingNamespaceHistory.ref instanceof HISMONamespaceHistory){
-				var ref = hismoClassHistory.containingNamespaceHistory.ref as HISMONamespaceHistory
-				// log.info(ref)
-				if (hismoClassHistory.classVersions.length > 0) {
-				val firstClassVersion = hismoClassHistory.classVersions.get(0).ref as HISMOClassVersion
-				return qualifiedName(ref) + "." + ("" + firstClassVersion.value).removeApostrophes + "+++<" +
-					hismoClassHistory.name + ">+++"
-				} else {
-					return qualifiedName(ref) + "." + hismoClassHistory.name + "+++"
-				}
-			} else if(hismoClassHistory.containingNamespaceHistory.ref instanceof HISMOClassHistory) {
-				var ref = hismoClassHistory.containingNamespaceHistory.ref as HISMOClassHistory
-					// log.info(ref)
-				if (hismoClassHistory.classVersions.length > 0) {
-				val firstClassVersion = hismoClassHistory.classVersions.get(0).ref as HISMOClassVersion
-				return qualifiedName(ref) + "." + ("" + firstClassVersion.value).removeApostrophes + "+++<" +
-					hismoClassHistory.name + ">+++"
-				} else {
-					return qualifiedName(ref) + "." + hismoClassHistory.name + "+++"
-				}
-			} else {
-				return 'root'
-			}
-			
-		}
+		version.id = attributeVersion.id
+		return version
 	}
 
 	def private Disk toDisk(FAMIXNamespace famixNamespace, int level, String timestamp) {
 		val disk = diskFactory.createDisk
 		disk.name = famixNamespace.name
 		disk.value = famixNamespace.value
-		disk.ringWidth = RDSettings::RING_WIDTH
+		disk.ringWidth = RDSettings::RING_WIDTH/2
 		disk.height = RDSettings::HEIGHT
 		disk.position = diskFactory.createPosition
 		disk.position.z = sortedtimestamps.indexOf(timestamp) * RDSettings::HEIGHT_MULTIPLICATOR
@@ -502,6 +447,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.height = RDSettings::HEIGHT
 		disk.transparency = RDSettings::CLASS_TRANSPARENCY
 		disk.color = RDSettings::CLASS_COLOR
+		disk.ringWidth = 0.1
 		
 		val ch = hismoClassVersions.findFirst[hpv|
 			hpv.timestamp == timestamp && hpv.versionEntity.ref === el  
@@ -512,7 +458,6 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.type = el.typeString
 		disk.level = level
 		
-		// references
 		inheritances.filter[subclass.ref === el].forEach[i|
 			val inheritance = diskFactory.createReference
 			inheritance.type = "Inheritance"
@@ -530,27 +475,16 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 			sumCompl += m.cyclomaticComplexity
 		} 
 		
-		val versions = hismoClassVersions.filter[
-			parentHistory.ref === ch
-		].filterNull
+		val versions = hismoClassVersions.filter[parentHistory.ref === ch]
 		versions.forEach[v|
 			if(v.timestamp == timestamp) {
-				disk.diskVersion = toVersion(v,ch)
+				disk.diskVersion = toDiskVersion(v,ch)
 			}
 		]
 		
 		return disk
 	}
 	
-	def private getTypeString(FAMIXStructure el) {
-		switch el {
-			FAMIXClass: return "FAMIX.Class"
-			FAMIXParameterizableClass: return "FAMIX.ParameterizableClass"
-			FAMIXEnum: return "FAMIX.Enum"
-			FAMIXAnnotationType: return "FAMIX.AnnotationType"
-		}
-	}
-
 	def private toDiskSegment(FAMIXMethod method, String timestamp) {
 		val diskSegment = diskFactory.createDiskSegment
 		diskSegment.name = method.name
@@ -572,9 +506,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		} else {
 			diskSegment.size = method.numberOfStatements
 		}
-		val versions = hismoMethodVersions.filter[
-			parentHistory.ref === mh
-		].filterNull
+		val versions = hismoMethodVersions.filter[parentHistory.ref === mh]
 		
 		versions.forEach[v|
 			if(v.timestamp == timestamp){
@@ -598,9 +530,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.fqn = ah.qualifiedNameMultiple
 		diskSegment.id = famix.createID(diskSegment.fqn)
 		diskSegment.size = 1 //attribute.declaredType.ref.attributeSize
-		val versions = hismoAttributeVersions.filter[
-		parentHistory.ref === ah
-		].filterNull
+		val versions = hismoAttributeVersions.filter[parentHistory.ref === ah]
 		
 		versions.forEach[v|
 			if(v.timestamp == timestamp) {
@@ -621,71 +551,5 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.color = RDSettings::DATA_COLOR
 		diskSegment.transparency = RDSettings::DATA_TRANSPARENCY
 		return diskSegment
-	}
-	
-	def private String qualifiedNameMultiple(HISMOMethodHistory hismoMethodHistory) {
-		val ref = hismoMethodHistory.containingClassHistory.ref as HISMOClassHistory
-		if (hismoMethodHistory.methodVersions.length > 0) {
-			val firstMethodVersion = hismoMethodHistory.methodVersions.get(0).ref as HISMOMethodVersion
-			return qualifiedNameMultiple(ref) + "." + ("" + firstMethodVersion.value).removeApostrophes 
-		} else {
-			return qualifiedNameMultiple(ref) + "." + hismoMethodHistory.name 
-		}
-	}
-	
-	def private String qualifiedNameMultiple(HISMOAttributeHistory hismoAttributeHistory) {
-		val ref = hismoAttributeHistory.containingClassHistory.ref as HISMOClassHistory
-		if (hismoAttributeHistory.attributeVersions.length > 0) {
-			val firstAttributeVersion = hismoAttributeHistory.attributeVersions.get(0).ref as HISMOAttributeVersion
-			return qualifiedNameMultiple(ref) + "." + ("" + firstAttributeVersion.value).removeApostrophes
-		} else {
-			return qualifiedNameMultiple(ref) + "." + hismoAttributeHistory.name 
-		}
-	}
-	
-	def String qualifiedNameMultiple(HISMONamespaceHistory hismoNamespaceHistory) {
-		if (hismoNamespaceHistory.containingNamespaceHistory !== null) {
-			val ref = hismoNamespaceHistory.containingNamespaceHistory.ref as HISMONamespaceHistory
-			if (hismoNamespaceHistory.namespaceVersions.length > 0) {
-				val firstNamespaceVersion = hismoNamespaceHistory.namespaceVersions.get(0).ref as HISMONamespaceVersion
-				return qualifiedNameMultiple(ref) + "." + ("" + firstNamespaceVersion.value).removeApostrophes
-			} else {
-				return qualifiedNameMultiple(ref) + "." + hismoNamespaceHistory.name 
-			}	
-		} else {
-			if (hismoNamespaceHistory.namespaceVersions.length > 0) {
-				val firstNamespaceVersion = hismoNamespaceHistory.namespaceVersions.get(0).ref as HISMONamespaceVersion
-				return ("" + firstNamespaceVersion.value).removeApostrophes 	
-			} else {
-				return "unknown"  + "+++"
-			}
-		}
-	}
-	
-	def private String qualifiedNameMultiple(HISMOClassHistory hismoClassHistory) {
-		//log.info("BB")
-		if (hismoClassHistory.containingNamespaceHistory !== null) {
-			if(hismoClassHistory.containingNamespaceHistory.ref instanceof HISMONamespaceHistory) {
-				val ref = hismoClassHistory.containingNamespaceHistory.ref as HISMONamespaceHistory
-				//log.info(ref)
-				if (hismoClassHistory.classVersions.length > 0) {
-					val firstClassVersion = hismoClassHistory.classVersions.get(0).ref as HISMOClassVersion
-					return qualifiedNameMultiple(ref) + "." + ("" + firstClassVersion.value).removeApostrophes 
-				} else {
-					return qualifiedNameMultiple(ref) + "." + hismoClassHistory.name 
-				}
-			} else if(hismoClassHistory.containingNamespaceHistory.ref instanceof HISMOClassHistory) {
-				val ref = hismoClassHistory.containingNamespaceHistory.ref as HISMOClassHistory
-				//log.info(ref)
-				if (hismoClassHistory.classVersions.length > 0) {
-					val firstClassVersion = hismoClassHistory.classVersions.get(0).ref as HISMOClassVersion
-					return qualifiedNameMultiple(ref) + "." + ("" + firstClassVersion.value).removeApostrophes 
-				} else {
-					return qualifiedNameMultiple(ref) + "." + hismoClassHistory.name 
-				}
-			}
-		} else {
-			return 'root'
-		}
 	}
 }

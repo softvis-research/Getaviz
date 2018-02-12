@@ -1,0 +1,20 @@
+module org.svis.extractor.hismo.run.Repo2Famix
+
+var configPath
+
+Workflow {
+	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
+		platformUri = "../org.svis.extractor.hismo/.."
+		registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
+	}
+
+	// Loads the repository from configuration to slot "repository"
+	component = org.svis.extractor.hismo.GetRepository {
+		config = configPath
+	}
+
+	// Use VerveineJ to create FAMIX model for every commit
+	component = org.svis.extractor.hismo.Commit2Famix {
+		config = configPath
+	}
+}

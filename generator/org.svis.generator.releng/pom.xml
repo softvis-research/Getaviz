@@ -24,6 +24,7 @@
 		<module>../org.svis.lib.database</module>
 		<module>../org.svis.generator</module>
 		<module>../org.svis.generator.tests</module>
+                <module>../org.svis.extractor.hismo</module>
 		<module>../org.svis.app.analyzer.metrics</module>
 		<module>../org.svis.generator.run</module>
 	</modules>

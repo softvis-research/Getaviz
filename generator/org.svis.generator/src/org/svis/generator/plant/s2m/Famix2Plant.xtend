@@ -23,13 +23,14 @@ import org.svis.xtext.famix.impl.FAMIXMethodImpl
 import org.svis.generator.plant.WorkflowComponentWithPlantConfig
 import org.svis.generator.plant.PlantConfiguration
 import org.svis.xtext.plant.Junction
+import org.svis.generator.FamixUtils
 
 class Famix2Plant extends WorkflowComponentWithPlantConfig {
 	
 	val log = LogFactory::getLog(class)
 	val static plantFactory = new PlantFactoryImpl()
 	var Document famixDocument
-	var org.svis.generator.FamixUtils fu = new org.svis.generator.FamixUtils();	
+	var FamixUtils fu = new FamixUtils();	
 	var org.svis.xtext.plant.Document document
 	
 	// given stuff from FAMIX:
