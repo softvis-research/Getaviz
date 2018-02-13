@@ -21,7 +21,6 @@ var canvasHoverController = (function() {
 	function activate(){
 		
 		var multiPart = document.getElementById("multiPart");
-		console.log(multiPart);
 		multiPart.addEventListener("mouseenter", handleOnMouseEnter, false);
 		multiPart.addEventListener("mouseleave", handleOnMouseLeave, false);
 		
