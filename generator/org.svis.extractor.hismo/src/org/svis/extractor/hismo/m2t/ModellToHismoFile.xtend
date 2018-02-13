@@ -109,7 +109,7 @@ class ModellToHismoFile {
 	def private toPath(FAMIXPath path) '''
 	(FAMIX.Path ( id: «path.name»)
 		( hash "«path.id»" )
-		( role ' «path.role»')
+		( role '«path.role»')
 		( start (ref: «path.start.ref.name»))
 		( end (ref: «path.end.ref.name»))
 		«IF (path.antipattern !== null)»
