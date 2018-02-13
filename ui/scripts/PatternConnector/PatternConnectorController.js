@@ -10,6 +10,7 @@ var patternConnectorController = function(){
 	var loadedMax		= new Map();
 	var loadedPositions = new Map();
 	var loadedDistances = new Map();
+    var meta = new Map();
 	
 	var lastApplicationEvent = null;
 
@@ -17,7 +18,7 @@ var patternConnectorController = function(){
     var finished = false;
 	
 	var minWeight = 0.5;
-	
+    var index = 0;
 	var d3Nodes = [];
 
 	//config parameters
@@ -51,10 +52,29 @@ var patternConnectorController = function(){
 
 	function activate(){
 		activated = true;
+        createTooltipContainer();
 		if(callingEntities.length != 0){
 			createRelatedConnections();
 		}
 	}
+
+    function createTooltipContainer(){
+
+        var canvas = document.getElementById("canvas");
+
+        var tooltipDivElement = document.createElement("DIV");
+        tooltipDivElement.id = "tooltip";
+
+        var namePElement = document.createElement("P");
+        namePElement.id = "tooltipName";
+        tooltipDivElement.appendChild(namePElement);
+
+        var qualifiedNamePElement = document.createElement("P");
+            qualifiedNamePElement.id = "tooltipQualifiedName";
+            tooltipDivElement.appendChild(qualifiedNamePElement);
+
+        canvas.appendChild(tooltipDivElement);
+    }
 
 	function deactivate(){
 		reset();
@@ -316,6 +336,7 @@ var patternConnectorController = function(){
 			var node = {
 				id: d3Node.key,
 				name: d3Node.key,
+				entityID: d3Node.id,
 				group: 1,
 				index: i,
 				x: d3Node.x,
@@ -361,14 +382,41 @@ var patternConnectorController = function(){
 		var height = d3Nodes[0].z + 0.5;
 		results.forEach(function(line){
 			var  polygonPoints= [];
+            id = "line" + index;
 			line.forEach(function(point){
 				polygonPoints.push(point.x);
 				polygonPoints.push(point.y);
 			});
-			var connector = createPolyline2D("test", polygonPoints.join(","), height);
-			connectors.set(connector, version);
+			var connector = createPolyline2D(id, polygonPoints.join(","), height);
+            canvasManipulator.addElement(connector);
+            connectors.set(connector, version);
+
+            var info = {
+                start: line[0].id,
+				startID: line[0].entityID,
+                end: line[line.length - 1].id,
+				endID: line[line.length - 1].entityID,
+            }
+            meta.set(id, info);
+            index++;
 		});
-	}
+        connectors.forEach(function(version, connector){
+            var collection = connector.getElementsByTagName("Shape")
+            collection[0].addEventListener("mouseover", handleOnMouseEnter, false);
+        });
+    }
+
+    function handleOnMouseEnter(multipartEvent) {
+        var id = multipartEvent.target.id;
+        var info = meta.get(id);
+        var role = model.getRoleBetween(info.startID, info.endID)
+
+        $("#tooltipName").text(info.start + " «" + role + "» " + info.end);
+        var tooltip = $("#tooltip");
+        tooltip.css("top", multipartEvent.layerY + 25 + "px");
+        tooltip.css("left", multipartEvent.layerX + 25 +  "px");
+        tooltip.css("display", "block");
+    }
 	
 	function createPolyline2D(name, lineSegments, height) {
 		var transform = document.createElement("transform");
@@ -376,6 +424,7 @@ var patternConnectorController = function(){
 		transform.setAttribute("translation", "0, 0," + (height + 0.55));
 		
 		var shape = document.createElement("Shape");
+        shape.setAttribute("id", id);
 		transform.appendChild(shape);
 		var appearance = document.createElement("Appearance");
 		shape.appendChild(appearance);
@@ -390,10 +439,6 @@ var patternConnectorController = function(){
 		appearance.appendChild(material);
 		var polyline2d = document.createElement("Polyline2D");
 		polyline2d.setAttribute("lineSegments", lineSegments);
-	
-		var polyline2dGroup = document.getElementById("addedElements");
-
-		polyline2dGroup.appendChild(transform);
 		shape.appendChild(polyline2d);
 		return transform;
 	}
@@ -520,6 +565,11 @@ var patternConnectorController = function(){
 			relatedEntitesMap.set(relatedPair[0], relatedPair[1]);
 		});
 
+		connectors.forEach(function(version, connector){
+		    var collection = connector.getElementsByTagName("Shape")
+            collection[0].addEventListener("mouseover", handleOnMouseEnter, false); // ???
+        });
+
 		if(relatedEntitesMap.size != 0){
 			var applicationEvent = {
 				sender: patternConnectorController,
@@ -558,6 +608,7 @@ var patternConnectorController = function(){
 				d3SourceNode = {
 					name : sourceKey,
 					key: sourceKey,
+					id: entity.id,
 					size: 1,
 					imports: [targetKey],
 					parent: null,
@@ -576,6 +627,7 @@ var patternConnectorController = function(){
 				d3TargetNode = {
 					name : targetKey,
 					key: targetKey,
+                    id: relatedEntity.id,
 					size: 1,
 					imports: [],
 					children: [d3SourceNode],
@@ -594,6 +646,7 @@ var patternConnectorController = function(){
 				d3SourceNode = {
 					name : sourceKey,
 					key: sourceKey,
+                    id: entity.id,
 					size: 1,
 					imports: [targetKey],
 					parent: d3TargetNode,
@@ -612,6 +665,7 @@ var patternConnectorController = function(){
 				d3TargetNode = {
 					name : targetKey,
 					key: targetKey,
+                    id: relatedEntity.id,
 					size: 1,
 					imports: [],
 					children: [],
@@ -628,6 +682,7 @@ var patternConnectorController = function(){
 				d3SourceNode = {
 					name : sourceKey,
 					key: sourceKey,
+                    id: entity.id,
 					size: 1,
 					imports: [targetKey],
 					children: [],
@@ -647,6 +702,7 @@ var patternConnectorController = function(){
 				d3TargetNode = {
 					name : targetKey,
 					key: targetKey,
+                    id: relatedEntity.id,
 					size: 1,
 					imports: [],
 					children: [],
@@ -666,16 +722,25 @@ var patternConnectorController = function(){
 		}
 
 		if(controllerConfig.bundledEdges == false) {
+            var info = {
+                start: sourceKey,
+                startID: entity.id,
+                end: targetKey,
+                endID: relatedEntity.id,
+            }
+            var id = "line" + index;
+            index++;
+            meta.set(id, info)
 			//create element
 			var transform = document.createElement('Transform');
 			//events.log.info.publish({text: "color: " + entity.color});
-			transform.appendChild(createLine(sourcePosition, targetPosition, connectorColor, connectorSize));
+			transform.appendChild(createLine(sourcePosition, targetPosition, connectorColor, connectorSize, id));
 	
 			//config
 			if(controllerConfig.createEndpoints){
 				transform.appendChild(createEndPoint(sourcePosition, targetPosition, "0 0 0", connectorSize * 2));
 			}
-			return transform;
+            return transform;
 		}
 	}
 
@@ -1049,8 +1114,34 @@ var patternConnectorController = function(){
 		return transform;
 	}
 
+    function createPolyline2D(name, lineSegments, height) {
+        var transform = document.createElement("transform");
+        transform.setAttribute("render", "true");
+        transform.setAttribute("translation", "0, 0," + (height + 0.55));
 
-	function createLine(source, target, color, size){
+        var shape = document.createElement("Shape");
+        shape.setAttribute("id", id);
+        transform.appendChild(shape);
+        var appearance = document.createElement("Appearance");
+        shape.appendChild(appearance);
+        var material = document.createElement("Material");
+        material.setAttribute("diffuseColor", "1 0 0");
+        material.setAttribute("emissiveColor", "1 0 0");
+        material.setAttribute("ambientintensity", "1");
+        material.setAttribute("specularcolor", "1 0 0");
+        material.setAttribute("shininess", "1");
+        material.setAttribute("ambientintensity", "1");
+        //material.setAttribute("transparency", "0.8");
+        appearance.appendChild(material);
+        var polyline2d = document.createElement("Polyline2D");
+        polyline2d.setAttribute("lineSegments", lineSegments);
+        shape.appendChild(polyline2d);
+        shape.addEventListener("mouseover", handleOnMouseEnter, false);
+        return transform;
+    }
+
+
+	function createLine(source, target, color, size, id){
 		//calculate attributes
 
 		var betrag = (Math.sqrt( Math.pow(target[0] - source[0], 2) + Math.pow(target[1] - source[1], 2) + Math.pow(target[2] - source[2], 2) ));
@@ -1072,31 +1163,32 @@ var patternConnectorController = function(){
 		rotation[3] = Math.acos((target[1] - source[1])/(Math.sqrt( Math.pow(target[0] - source[0], 2) + Math.pow(target[1] - source[1], 2) + Math.pow(target[2] - source[2], 2) )));
 
 		//create element
-		var transform = document.createElement('Transform');
+		var transform = document.createElement('transform');
 
 		transform.setAttribute("translation", translation.toString());
 		transform.setAttribute("scale", scale.toString());
 		transform.setAttribute("rotation", rotation.toString());
+		transform.setAttribute("render", true);
 
 		var shape = document.createElement('Shape');
-		transform.appendChild(shape);
+        shape.setAttribute("id", id);
+        transform.appendChild(shape);
 
 		var appearance = document.createElement('Appearance');
-		appearance.setAttribute("sortKey", 2);
+        //appearance.setAttribute("sortKey", 2);
 		shape.appendChild(appearance);
+		shape.setAttribute("id", id);
 		var material = document.createElement('Material');
 		material.setAttribute("diffuseColor", color);
 	//	material.setAttribute("transparency", transparency);
 
 		appearance.appendChild(material);
 
-
 		var cylinder = document.createElement('Cylinder');
 		cylinder.setAttribute("radius", "0.25");
 		cylinder.setAttribute("height", "1");
 		shape.appendChild(cylinder);
-
-		return transform;
+        return transform;
 	}
 
 	return {

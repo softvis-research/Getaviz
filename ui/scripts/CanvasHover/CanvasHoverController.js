@@ -1,15 +1,15 @@
 var canvasHoverController = (function() {
     
-	var isInNavigation = false;    
+    var isInNavigation = false;
 	
-        function initialize(setupConfig){ 	
+    function initialize(setupConfig){
 		application.transferConfigParams(setupConfig, controllerConfig);
 		var cssLink = document.createElement("link");
 		cssLink.type = "text/css";
 		cssLink.rel = "stylesheet";
 		cssLink.href = "scripts/CanvasHover/ho.css";
 		document.getElementsByTagName("head")[0].appendChild(cssLink);	
-        }
+    }
 	
 	//config parameters	
 	var controllerConfig = {
@@ -21,8 +21,9 @@ var canvasHoverController = (function() {
 	function activate(){
 		
 		var multiPart = document.getElementById("multiPart");
+		console.log(multiPart);
 		multiPart.addEventListener("mouseenter", handleOnMouseEnter, false);
-		multiPart.addEventListener("mouseleave", handleOnMouseLeave, false);	
+		multiPart.addEventListener("mouseleave", handleOnMouseLeave, false);
 		
 		var canvas = document.getElementById("x3dom-x3dElement-canvas");
 		canvas.addEventListener("mousedown", handleOnMousedown, false);
@@ -82,13 +83,14 @@ var canvasHoverController = (function() {
 	}
 
 	function handleOnMouseEnter(multipartEvent) {
-	
 		if(isInNavigation){
 			return;
 		}        
 
 		var entity = model.getEntityById(multipartEvent.partID); 
 		if(entity == undefined){
+			entity = multipartEvent.target.id;
+			console.log("entity: " + entity);
 			events.log.error.publish({ text: "Entity of partID " + multipartEvent.partID + " not in model data."});
 			return;
 		}
@@ -143,10 +145,10 @@ var canvasHoverController = (function() {
 		if(controllerConfig.showVersion) {
 			$("#tooltipVersion").text("Version: " + entity.version);
 		}
-		
+
 		var tooltip = $("#tooltip");
         tooltip.css("top", applicationEvent.posY + 50 + "px");
-        tooltip.css("left", applicationEvent.posX + 50 +  "px");		
+        tooltip.css("left", applicationEvent.posX + 50 +  "px");
 		tooltip.css("display", "block");
 	}
 	
@@ -180,6 +182,8 @@ var canvasHoverController = (function() {
     return {
         initialize: initialize,
 		activate: activate,
-		reset: reset
+		reset: reset,
+		handleOnMouseEnter: handleOnMouseEnter,
+		handleOnMouseLeave: handleOnMouseLeave
     };    
 })();

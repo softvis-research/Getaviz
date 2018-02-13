@@ -431,6 +431,15 @@ var model = (function() {
             return result;
 		}
 
+    function getRoleBetween(start, end) {
+        for(var i = 0; i < paths.length; ++i) {
+			var path = paths[i]
+            if(path.start == start && path.end == end) {
+                return path.role;
+            }
+        }
+    }
+
         function getPaths(start, pattern) {
 			var targets = [];
 			paths.forEach(function(path){
@@ -501,7 +510,8 @@ var model = (function() {
 		removeVersion               : removeVersion,
 		getSelectedVersions			: getSelectedVersions,
 		getPaths					: getPaths,
-        getRole 					: getRole
+        getRole 					: getRole,
+		getRoleBetween				: getRoleBetween
     };
 	
 })();
