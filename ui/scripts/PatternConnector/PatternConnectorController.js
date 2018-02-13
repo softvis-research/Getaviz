@@ -70,8 +70,8 @@ var patternConnectorController = function(){
         tooltipDivElement.appendChild(namePElement);
 
         var qualifiedNamePElement = document.createElement("P");
-            qualifiedNamePElement.id = "tooltipQualifiedName";
-            tooltipDivElement.appendChild(qualifiedNamePElement);
+        qualifiedNamePElement.id = "tooltipQualifiedName";
+        tooltipDivElement.appendChild(qualifiedNamePElement);
 
         canvas.appendChild(tooltipDivElement);
     }
@@ -409,10 +409,12 @@ var patternConnectorController = function(){
     function handleOnMouseEnter(multipartEvent) {
         var id = multipartEvent.target.id;
         var info = meta.get(id);
+        var entity = model.getEntityById(info.startID)
         var role = model.getRoleBetween(info.startID, info.endID)
 
         $("#tooltipName").text(info.start + " «" + role + "» " + info.end);
         var tooltip = $("#tooltip");
+        $("#tooltipVersion").text("Version: " + entity.version);
         tooltip.css("top", multipartEvent.layerY + 25 + "px");
         tooltip.css("left", multipartEvent.layerX + 25 +  "px");
         tooltip.css("display", "block");
