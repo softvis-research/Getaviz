@@ -403,14 +403,20 @@ var patternConnectorController = function(){
         connectors.forEach(function(version, connector){
             var collection = connector.getElementsByTagName("Shape")
             collection[0].addEventListener("mouseover", handleOnMouseEnter, false);
+            collection[0].addEventListener("mouseout", handleOnMouseOut, false);
         });
     }
 
-    function handleOnMouseEnter(multipartEvent) {
+    function handleOnMouseOut(multipartEvent) {
         var id = multipartEvent.target.id;
         var info = meta.get(id);
         var entity = model.getEntityById(info.startID)
         var role = model.getRoleBetween(info.startID, info.endID)
+
+        var shape = document.getElementById(id + "m");
+        shape.setAttribute("diffuseColor", "1 0 0");
+        shape.setAttribute("emissiveColor", "1 0 0");
+        shape.setAttribute("specularcolor", "1 0 0");
 
         $("#tooltipName").text(info.start + " «" + role + "» " + info.end);
         var tooltip = $("#tooltip");
@@ -419,31 +425,26 @@ var patternConnectorController = function(){
         tooltip.css("left", multipartEvent.layerX + 25 +  "px");
         tooltip.css("display", "block");
     }
-	
-	function createPolyline2D(name, lineSegments, height) {
-		var transform = document.createElement("transform");
-		transform.setAttribute("render", "true");
-		transform.setAttribute("translation", "0, 0," + (height + 0.55));
-		
-		var shape = document.createElement("Shape");
-        shape.setAttribute("id", id);
-		transform.appendChild(shape);
-		var appearance = document.createElement("Appearance");
-		shape.appendChild(appearance);
-		var material = document.createElement("Material");
-		material.setAttribute("diffuseColor", "1 0 0");
-		material.setAttribute("emissiveColor", "1 0 0");
-		material.setAttribute("ambientintensity", "1");
-		material.setAttribute("specularcolor", "1 0 0");
-		material.setAttribute("shininess", "1");
-		material.setAttribute("ambientintensity", "1");
-		//material.setAttribute("transparency", "0.8");
-		appearance.appendChild(material);
-		var polyline2d = document.createElement("Polyline2D");
-		polyline2d.setAttribute("lineSegments", lineSegments);
-		shape.appendChild(polyline2d);
-		return transform;
-	}
+
+    function handleOnMouseEnter(multipartEvent) {
+        var id = multipartEvent.target.id;
+        var info = meta.get(id);
+        var entity = model.getEntityById(info.startID)
+        var role = model.getRoleBetween(info.startID, info.endID)
+
+        var shape = document.getElementById(id + "m");
+        shape.setAttribute("diffuseColor", "0 0 1");
+        shape.setAttribute("emissiveColor", "0 0 1");
+        shape.setAttribute("specularcolor", "0 0 1");
+        //canvasManipulator.highlightEntities([multipartEvent.target], "blue");
+
+        $("#tooltipName").text(info.start + " «" + role + "» " + info.end);
+        var tooltip = $("#tooltip");
+        $("#tooltipVersion").text("Version: " + entity.version);
+        tooltip.css("top", multipartEvent.layerY + 25 + "px");
+        tooltip.css("left", multipartEvent.layerX + 25 + "px");
+        tooltip.css("display", "block");
+    }
 	
 	function onComponentSelected (applicationEvent) {
         events.log.info.publish({ text: "pattern connector - onComponentSelected"});
@@ -569,7 +570,9 @@ var patternConnectorController = function(){
 
 		connectors.forEach(function(version, connector){
 		    var collection = connector.getElementsByTagName("Shape")
-            collection[0].addEventListener("mouseover", handleOnMouseEnter, false); // ???
+            collection[0].addEventListener("mouseover", handleOnMouseEnter, false);
+            collection[0].addEventListener("mouseout", handleOnMouseOut, false);
+
         });
 
 		if(relatedEntitesMap.size != 0){
@@ -1127,6 +1130,7 @@ var patternConnectorController = function(){
         var appearance = document.createElement("Appearance");
         shape.appendChild(appearance);
         var material = document.createElement("Material");
+        material.setAttribute("id", id + "m");
         material.setAttribute("diffuseColor", "1 0 0");
         material.setAttribute("emissiveColor", "1 0 0");
         material.setAttribute("ambientintensity", "1");
@@ -1138,7 +1142,6 @@ var patternConnectorController = function(){
         var polyline2d = document.createElement("Polyline2D");
         polyline2d.setAttribute("lineSegments", lineSegments);
         shape.appendChild(polyline2d);
-        shape.addEventListener("mouseover", handleOnMouseEnter, false);
         return transform;
     }
 
@@ -1181,6 +1184,7 @@ var patternConnectorController = function(){
 		shape.appendChild(appearance);
 		shape.setAttribute("id", id);
 		var material = document.createElement('Material');
+		material.setAttribute("id", id + "m");
 		material.setAttribute("diffuseColor", color);
 	//	material.setAttribute("transparency", transparency);
 
