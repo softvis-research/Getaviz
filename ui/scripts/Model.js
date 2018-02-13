@@ -51,6 +51,9 @@ var model = (function() {
                     //entity.components = element.components.split(",");
                     entity.version = element.version;
                     entity.versions = element.versions.split(",");
+                    for(var i = 0; i < entity.versions.length; ++i) {
+                    	entity.versions[i] = entity.versions[i].trim();
+                    }
                     return;
 				case "component": 
 					entity.components = element.components.split(",");
