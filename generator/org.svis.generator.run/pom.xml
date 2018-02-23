@@ -108,29 +108,11 @@
 						<configuration>
           					<executable>java</executable>
           					<arguments>
-          						<argument>-Xms8g</argument>
-          						<argument>-Xmx8g</argument>
+          						<argument>-Xms4g</argument>
+          						<argument>-Xmx4g</argument>
             					<argument>-classpath</argument>
             					<classpath/>
             					<argument>org.svis.generator.run.WorkflowLoop</argument>
-	          				</arguments>
-    		    		</configuration>
-					</execution>
-					<execution>
-						<id>corpus</id>
-						<goals>
-							<goal>
-								java
-							</goal>
-						</goals>
-						<configuration>
-          					<executable>java</executable>
-          					<arguments>
-          						<argument>-Xms10g</argument>
-          						<argument>-Xmx10g</argument>
-            					<argument>-classpath</argument>
-            					<classpath/>
-            					<argument>org.svis.generator.run.QualitasCorpus</argument>
 	          				</arguments>
     		    		</configuration>
 					</execution>

@@ -43,17 +43,17 @@ class RD2X3D {
 	}
 	
 	def String toRD(List<Disk> disks) '''
-			«FOR disk : disks»
-				«IF(RDSettings::SHOW_HISTORIES)»
-					«toDisk(disk)»
-					«toSegment(disk.data)»
-					«toSegment(disk.methods)»
-					«FOR segment : disk.methods»
-						«segment.invocations.toSegmentInvocation(segment)»
-					«ENDFOR»
-				«ENDIF»
-				«toDiskVersions(disk)»
-			«ENDFOR»
+		«FOR disk : disks»
+			«IF(RDSettings::SHOW_HISTORIES)»
+				«toDisk(disk)»
+				«toSegment(disk.data)»
+				«toSegment(disk.methods)»
+				«FOR segment : disk.methods»
+					«segment.invocations.toSegmentInvocation(segment)»
+				«ENDFOR»
+			«ENDIF»
+			«toDiskVersions(disk)»
+		«ENDFOR»
 	'''
 
 	def String toDisk(Disk disk) '''
@@ -107,7 +107,6 @@ class RD2X3D {
 		«ENDFOR»
 	'''
 
-	// instances
 	def String toInstance(List<DiskInstance> instances) '''
 		«FOR instance : instances»
 		«try {
@@ -157,12 +156,11 @@ class RD2X3D {
 					</Appearance>
 				</Shape>
 			</Transform>
-				
 		«ENDFOR»
 	'''	}
 	
 
-	def String toSegmentInvocation(EList<DiskSegmentInvocation> invocations, DiskSegment segment){'''		
+	def String toSegmentInvocation(EList<DiskSegmentInvocation> invocations, DiskSegment segment) '''		
 		«FOR invocation : invocations»
 			<Transform DEF='«famix.createID(invocation.fqn)»' 
 				translation='«invocation.position.x + " " + invocation.position.y + " " + invocation.position.z»' 
@@ -184,7 +182,7 @@ class RD2X3D {
 				</Shape>
 			</Transform>
 		«ENDFOR»
-	''' }
+	''' 
 
 	def String toDiskVersions(Disk disk) '''
 		«FOR version : disk.diskVersions.sortBy[level]»

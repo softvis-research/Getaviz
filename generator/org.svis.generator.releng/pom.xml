@@ -11,7 +11,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<name>Generator Release Engineering</name>
 	<packaging>pom</packaging>
-	<url>https://bitbucket.org/rimue/generator</url>
+	<url>https://github.com/getaviz/Getaviz</url>
 	<modules>
 		<module>../org.svis.lib.repository</module>
 		<module>../org.svis.xtext.city</module>
@@ -24,7 +24,6 @@
 		<module>../org.svis.lib.database</module>
 		<module>../org.svis.generator</module>
 		<module>../org.svis.generator.tests</module>
-                <module>../org.svis.extractor.hismo</module>
 		<module>../org.svis.app.analyzer.metrics</module>
 		<module>../org.svis.generator.run</module>
 	</modules>

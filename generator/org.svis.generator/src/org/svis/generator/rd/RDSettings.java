@@ -7,7 +7,7 @@ package org.svis.generator.rd;
  */
 
 public enum RDSettings {;
-	public static final boolean SHOW_HISTORIES = false;
+	public static final boolean SHOW_HISTORIES = true;
 	public static final boolean SHOW_CLASS_MEMBERS = false;
 	public static final double DATA_FACTOR = 4;
 	public static final double METHOD_FACTOR = 1;
@@ -58,13 +58,19 @@ public enum RDSettings {;
 	public static OutputFormat OUTPUT_FORMAT = OutputFormat.X3D;
 	
 	public static enum OutputFormat {
-		X3D,X3DOM,SimpleGlyphsJson,X3D_COMPRESSED,AFrame, D3
+		X3D, X3DOM, SimpleGlyphsJson, X3D_COMPRESSED, AFrame, D3
 	}
 	
-	public static ClassSize CLASS_SIZE = ClassSize.BETWEENNESS_CENTRALITY;
+	public static ClassSize CLASS_SIZE = ClassSize.NUMBER_OF_STATEMENTS;
 	
 	public static enum ClassSize {
-		NONE, BETWEENNESS_CENTRALITY
+		NONE, BETWEENNESS_CENTRALITY, NUMBER_OF_STATEMENTS
+	}
+	
+	public static ClassColor CLASS_COLOR_METRIC = ClassColor.STATIC;
+	
+	public static enum ClassColor {
+		STATIC, STK
 	}
 	
 	/**
@@ -84,7 +90,7 @@ public enum RDSettings {;
 	public static InvocationRepresentation INVOCATION_REPRESENTATION = InvocationRepresentation.NONE;
 
 	public static enum InvocationRepresentation {
-		NONE,MOVING_SPHERES,FLASHING_METHODS,MOVING_FLASHING
+		NONE, MOVING_SPHERES, FLASHING_METHODS, MOVING_FLASHING
 	}
 	/**
 	 * Sets in which way the Historic Evolution

@@ -2,7 +2,6 @@ module org.svis.generator.run.rd
 
 var projectName = "org.svis.generator.run"
 var runtimeProject = "../${projectName}"
-var inputPath = "./input/hismo"
 var outputPath = "./output/rd/hismo"
 
 Workflow {
@@ -14,16 +13,13 @@ Workflow {
 		
 	}
 
-	component = org.eclipse.xtext.mwe.Reader {
-		path = "${inputPath}"
-		register = org.svis.xtext.HismoStandaloneSetup {}
-		loadResource = {
-			slot = "hismo"
-		}
-	}
-	
 	// support lazy loading of textual models
 	component = org.svis.generator.ResolveLazyComponent {}
+	
+	// transform famix into rds (s2m)
+	component = org.svis.generator.hismo.s2m.Cassandra2Hismo {
+		modelSlot = "hismo"
+	}
 
 	// transform famix into rds (s2m)
 	component = org.svis.generator.rd.s2m.Hismo2RD {
@@ -38,24 +34,7 @@ Workflow {
 			path = "${outputPath}"
 		}
 	}
-	
-//	// famix stats
-//	component = org.eclipse.xtext.generator.GeneratorComponent {
-//		register = org.svis.generator.FamixStatsStandaloneSetup {}
-//		slot = 'famixstats'
-//		outlet = {
-//			path = "output/rd"
-//		}
-//	}
 
-
-	// write out resulting model (rd)
-	component = org.eclipse.emf.mwe.utils.Writer {
-		modelSlot = "rdwriter"
-		uri = "${outputPath}/rd.xml"	
-	}
-	
-	
 	// calculate rd layout (m2m)
 	component = org.svis.generator.rd.m2m.RD2RD {
 		modelSlot = "rd"

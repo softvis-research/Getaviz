@@ -81,12 +81,11 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		if(RDSettings::SHOW_CLASS_MEMBERS) {
 			hismoMethodVersions += hismoDocument.elements.filter(HISMOMethodVersion)
 			hismoAttributeVersions += hismoDocument.elements.filter(HISMOAttributeVersion)
-			hismoAttributeVersions.forEach[v| timestamps += v.timestamp]
-			hismoMethodVersions.forEach[v| timestamps += v.timestamp]
+			timestamps += hismoAttributeVersions.map[timestamp]
+			timestamps += hismoMethodVersions.map[timestamp]
 		}
-		hismoClassVersions.forEach[v| timestamps += v.timestamp]
-		hismoPackageVersions.forEach[v| timestamps += v.timestamp]
-		hismoMethods.toSet
+		timestamps += hismoClassVersions.map[timestamp]
+		timestamps += hismoPackageVersions.map[timestamp]
 				
 		sortedtimestamps.addAll(timestamps.toList.sort)
 		
@@ -179,8 +178,6 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 			.filter[method|hismoMethodVersions.exists[hmv|
 				hmv.timestamp == timestamp && hmv.versionEntity.ref === method  
 			]]
-		println("hismomethods:" + methods.size)
-		println("realsize:" + hismoDocument.elements.filter(FAMIXMethod).size)
 		attributes.clear				
 		attributes += hismoDocument.elements
 			.filter(FAMIXAttribute)
@@ -200,7 +197,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 				}
 			]
 			if (!SubPacks.empty || !namespace.classHistories.empty) {
-          		hismoRootPackages += namespace 
+          		hismoRootPackages += namespace
       		} 
 		} else {
 			hismoSubPackages += namespace
@@ -245,7 +242,8 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskVersion.id = version.id
 		diskVersion.ringWidth = RDSettings::RING_WIDTH
 		diskVersion.color = RDSettings::NAMESPACE_COLOR
-		return diskVersion
+		
+		return diskVersion		
 	}
 
 	def private Disk toDisk(HISMOClassHistory hismoClass, int level) {
@@ -255,18 +253,16 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.fqn = hismoClass.qualifiedName
 		disk.type = "FAMIX.ClassH"
 		disk.level = level
-		disk.ringWidth = getMaxNOS(hismoClass) * 10
+		disk.ringWidth = getMaxNOS(hismoClass) / 10
 		if(disk.ringWidth == 0) { 
 			disk.ringWidth = 1
 		}
+		
 		disk.id = famix.createID(disk.fqn)
 		disk.height = RDSettings::HEIGHT
 		disk.color = RDSettings::CLASS_COLOR
 		disk.transparency = RDSettings::CLASS_TRANSPARENCY
 		
-		//TODO any side effects?
-		//disk.setLoc(famixClass.loc)
-
 		// references
 		/* TODO: implement
 		for (i : hismoDocument.elements.filter(typeof(FAMIXInheritance)).filter[subclass.ref.equals(famixClass)].
@@ -298,8 +294,14 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskversion.timestamp = classVersion.timestamp
 		diskversion.name = classVersion.name
 		diskversion.id = classVersion.id
-		diskversion.ringWidth = Double.parseDouble(classVersion.betweennessCentrality) * 100
-		diskversion.color = famixUtil.getGradient(Double.parseDouble(classVersion.stkRank)).asPercentage
+		switch(RDSettings::CLASS_SIZE) {
+			case BETWEENNESS_CENTRALITY: diskversion.ringWidth = Double.parseDouble(classVersion.betweennessCentrality) * 100
+			case NUMBER_OF_STATEMENTS: diskversion.ringWidth = 5 //classVersion.evolutionNumberOfStatements
+		}
+		switch(RDSettings::CLASS_COLOR_METRIC) {
+			case STK: diskversion.color = famixUtil.getGradient(Double.parseDouble(classVersion.stkRank)).asPercentage
+			case STATIC: diskversion.color = RDSettings::CLASS_COLOR
+		}
 		if (history.getMaxNOS() > 0 && classVersion.getNOS(history) > 0) {
 			diskversion.scale = classVersion.getNOS(history) / history.maxNOS
 		} else 	{
@@ -329,9 +331,19 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 			}
 			return sum
 		} else {
-			return Double.parseDouble(version.betweennessCentrality)
+			switch(RDSettings::CLASS_SIZE) {
+				case BETWEENNESS_CENTRALITY: return Double.parseDouble(version.betweennessCentrality)
+				case NUMBER_OF_STATEMENTS: {
+					var sum = classHistory.classVersions.map[ref as HISMOClassVersion].filter[v |v.timestamp < version.timestamp]
+						.map[evolutionNumberOfStatements].reduce[ a, b | a + b ]
+					if(sum === null || sum < 0) {
+						sum = 0
+					}
+					return sum + 250
+				}
+			}
 		}
-	} 
+	}
 
 	def private DiskSegment toDiskSegment(HISMOMethodHistory hismoMethod, Disk disk) {
 		val diskSegment = diskFactory.createDiskSegment
@@ -423,14 +435,8 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		subPackages.filter[parentScope.ref === (famixNamespace)]
 			.forEach[disk.disks += toDisk(level + 1, timestamp)]
 
-		val versions = hismoPackageVersions.filter[
-			parentHistory.ref === nsh
-		].filterNull
-		
-		versions.forEach[v|
-			if(v.timestamp == timestamp){
-				disk.diskVersion = toDiskVersion(v)
-			}
+		hismoPackageVersions.filter[parentHistory.ref === nsh].filter[v|v.timestamp == timestamp].forEach[v|
+			disk.diskVersion = toDiskVersion(v)
 		]
 		diskDocument.disks += disk
 		
@@ -470,16 +476,9 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		methods.filter[parentType.ref === el].forEach[disk.methods += toDiskSegment(timestamp)]
 		structures.filter[container.ref === el].forEach[disk.disks += toDisk(level + 1, timestamp)]
 		enumValues.filter[parentEnum.ref === el].forEach[disk.data += toDiskSegment(timestamp)]
-		var sumCompl = 0
-		for (m : methods.filter[parentType.ref === el]) {
-			sumCompl += m.cyclomaticComplexity
-		} 
 		
-		val versions = hismoClassVersions.filter[parentHistory.ref === ch]
-		versions.forEach[v|
-			if(v.timestamp == timestamp) {
-				disk.diskVersion = toDiskVersion(v,ch)
-			}
+		hismoClassVersions.filter[parentHistory.ref === ch].filter[v|v.timestamp == timestamp].forEach[v|
+			disk.diskVersion = toDiskVersion(v,ch)
 		]
 		
 		return disk
@@ -532,10 +531,8 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.size = 1 //attribute.declaredType.ref.attributeSize
 		val versions = hismoAttributeVersions.filter[parentHistory.ref === ah]
 		
-		versions.forEach[v|
-			if(v.timestamp == timestamp) {
-				diskSegment.version = toVersion(v,ah)
-			}
+		versions.filter[v|v.timestamp == timestamp].forEach[v|
+			diskSegment.version = toVersion(v,ah)
 		]
 		return diskSegment
 	}	

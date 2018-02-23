@@ -57,8 +57,8 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	val Map<FAMIXMethod, List<FAMIXParameter>> parameters = newHashMap 
 	val List<FAMIXInvocation> invocations = newArrayList
 	val static famixFactory = new FamixFactoryImpl()
-	var List<FAMIXAntipattern> antipattern = newArrayList
-	var List<FAMIXComponent> components = newArrayList
+	var List<FAMIXAntipattern> antipattern = newArrayList()
+	var List<FAMIXComponent> components = newArrayList()
 	var int i = 0
 	
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {

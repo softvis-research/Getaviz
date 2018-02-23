@@ -10,9 +10,11 @@ import org.svis.xtext.hismo.HISMOAttributeHistory
 import org.svis.xtext.hismo.HISMOAttributeVersion
 import org.svis.xtext.hismo.HISMONamespaceHistory
 import org.svis.generator.FamixUtils
+import org.svis.xtext.famix.impl.FamixFactoryImpl
 
 class HismoUtils {
 	val log = LogFactory::getLog(class)
+	val static famixFactory = new FamixFactoryImpl()
 	extension FamixUtils util = new FamixUtils
 	
 	def String qualifiedNameMultiple(HISMOMethodHistory hismoMethodHistory) {
@@ -148,5 +150,114 @@ class HismoUtils {
 			}
 			
 		}
+	}
+	
+	//Gibt den höchsten vergebenen Rang einer History zurück
+	def getHighestRank(HISMOClassHistory he){
+		if(he.classVersions === null || he.classVersions.length == 0){
+			return 0
+		} else {
+			return he.classVersions.sortBy[(it.ref as HISMOClassVersion).timestamp]			
+		}
+	}
+	 
+	 //gib einen neuen Rang für eine Version zurück (+1)
+	def createAndAddVersionWithHighestRank(HISMOClassHistory he, HISMOClassVersion ve) {
+	 //	val r = hismoFactory.createHISMORank
+	 //	r.rank = he.highestRank + 1	 	
+	 //	r.version = ve.createReference
+	 	he.classVersions += ve.createReference
+	 	return 
+	}
+	
+	def createAndAddVersionWithHighestRank(HISMOMethodHistory me,HISMOMethodVersion ve) {
+		me.methodVersions += ve.createReference
+	}
+	
+	def createAndAddVersionWithHighestRank(HISMOAttributeHistory ae, HISMOAttributeVersion ve) {
+		ae.attributeVersions += ve.createReference
+	}
+	
+	def createReference(HISMOClassVersion ve){
+		if(ve === null){
+			throw new NullPointerException("createReference wurde 'null' übergeben")
+		}
+		val r = famixFactory.createIntegerReference
+		r.ref = ve
+		return r	
+	}
+	
+	def createReference(HISMONamespaceVersion ve){
+		if(ve === null){
+			throw new NullPointerException("createReference wurde 'null' übergeben")
+		}
+		val r = famixFactory.createIntegerReference
+		r.ref = ve
+		return r	
+	}
+	
+	def createReference(HISMOMethodVersion ve) {
+		if(ve === null){
+			throw new NullPointerException("createReference wurde 'null' übergeben")
+		}
+		val r = famixFactory.createIntegerReference
+		r.ref = ve
+		return r
+	}
+	
+	def createReference(HISMOAttributeVersion ve) {
+		if(ve === null){
+			throw new NullPointerException("createReference wurde 'null' übergeben")
+		}
+		val r = famixFactory.createIntegerReference
+		r.ref = ve
+		return r
+	}
+	
+	def createReference(HISMONamespaceHistory he) {
+		if(he === null){
+			throw new NullPointerException("createReference wurde 'null' übergeben")
+		}
+		val r = famixFactory.createIntegerReference
+		r.ref = he	
+		return r
+	}
+	
+	def createReference(HISMOClassHistory he) {
+		if(he === null){
+			throw new NullPointerException("createReference wurde 'null' übergeben")
+		}
+		val r = famixFactory.createIntegerReference
+		r.ref = he		
+		return r
+	}
+
+	def createReference(HISMOMethodHistory he) {
+		if(he === null){
+			throw new NullPointerException("createReference wurde 'null' übergeben")
+		}
+		val r = famixFactory.createIntegerReference
+		r.ref = he
+		return r
+	}
+	
+	def createReference(HISMOAttributeHistory he) {
+		if(he === null){
+			throw new NullPointerException("createReference wurde 'null' übergeben")
+		}
+		val r = famixFactory.createIntegerReference
+		r.ref = he
+		return r
+	}
+	
+	/**	/sum of Changes of whole History
+	 * 
+	 */
+	
+	def calcEvolution(HISMOClassHistory history){
+		val sum = history.classVersions.map[ref as HISMOClassVersion].map[methodVersions].reduce[].
+		map[ref as HISMOMethodVersion].map[evolutionNumberOfStatements].reduce[a,b | a + b]
+		
+		history.evolutionNumberOfStatements = sum
 	}
 }
