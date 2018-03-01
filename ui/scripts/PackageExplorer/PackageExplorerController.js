@@ -17,44 +17,20 @@ var packageExplorerController = (function() {
 	}
 	
 	function activate(rootDiv){
-        
-		//load zTree javascript-files
-		$.getScript("libs/zTree_v3/js/jquery.ztree.core-3.5.js", function(){
-		  	$.getScript("libs/zTree_v3/js/jquery.ztree.excheck-3.5.js", function(){
-				
-				
-				//load zTree css-files
-				var cssLink = document.createElement("link");
-				cssLink.type = "text/css";
-				cssLink.rel = "stylesheet";
-				cssLink.href = "libs/zTree_v3/css/zTreeStyle/zTreeStyle.css";
-				document.getElementsByTagName("head")[0].appendChild(cssLink);
-				
-				
-				cssLink = document.createElement("link");
-				cssLink.type = "text/css";
-				cssLink.rel = "stylesheet";
-				cssLink.href = "scripts/PackageExplorer/zt.css";
-				document.getElementsByTagName("head")[0].appendChild(cssLink);
-				
 
-				
 				//create zTree div-container
-				var zTreeDiv = document.createElement("DIV");
-				zTreeDiv.id = "zTreeDiv";
+		var zTreeDiv = document.createElement("DIV");
+		zTreeDiv.id = "zTreeDiv";
 				
-				var packageExplorerTreeUL = document.createElement("UL");
-				packageExplorerTreeUL.id = packageExplorerTreeID;
-				packageExplorerTreeUL.setAttribute("class", "ztree");
+		var packageExplorerTreeUL = document.createElement("UL");
+		packageExplorerTreeUL.id = packageExplorerTreeID;
+		packageExplorerTreeUL.setAttribute("class", "ztree");
 				
-				zTreeDiv.appendChild(packageExplorerTreeUL);				
-				rootDiv.appendChild(zTreeDiv);
+		zTreeDiv.appendChild(packageExplorerTreeUL);
+		rootDiv.appendChild(zTreeDiv);
 				
-				//create zTree
-				prepareTreeView();				
-				
-			});
-		});
+		//create zTree
+		prepareTreeView();
 		
 		events.selected.on.subscribe(onEntitySelected);
     }
