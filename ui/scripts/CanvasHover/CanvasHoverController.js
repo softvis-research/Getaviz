@@ -15,7 +15,8 @@ var canvasHoverController = (function() {
 	var controllerConfig = {
 		hoverColor: "darkred",
 		showQualifiedName : false,
-		showVersion : true,
+		showVersion : false,
+		showIncidents : false
 	};
 	
 	function activate(){
@@ -69,7 +70,14 @@ var canvasHoverController = (function() {
 			versionPElement.id = "tooltipVersion";
 			tooltipDivElement.appendChild(versionPElement);
 		}
-
+		if(controllerConfig.showIncidents) {
+			var openIncidentsPElement = document.createElement("P");
+			openIncidentsPElement.id = "tooltipOpenIncidents";
+			tooltipDivElement.appendChild((openIncidentsPElement));
+            var closedIncidentsPElement = document.createElement("P");
+            closedIncidentsPElement.id = "tooltipClosedIncidents";
+            tooltipDivElement.appendChild((closedIncidentsPElement));
+		}
 		canvas.appendChild(tooltipDivElement);
 	}
 		
@@ -144,6 +152,10 @@ var canvasHoverController = (function() {
 		if(controllerConfig.showVersion) {
 			$("#tooltipVersion").text("Version: " + entity.version);
 		}
+		if(controllerConfig.showIncidents){
+			$('#tooltipOpenIncidents').text("Open Incidents: " + entity.numberOfOpenIncidents);
+            $('#tooltipClosedIncidents').text("Closed Incidents: " + entity.numberOfClosedIncidents);
+        }
 
 		var tooltip = $("#tooltip");
         tooltip.css("top", applicationEvent.posY + 50 + "px");

@@ -98,7 +98,9 @@ var model = (function() {
 							entitiesByVersion.set(entity.version, map);
 						}
 					}
-                                        
+					entity.numberOfOpenIncidents = element.numberOfOpenIncidents;
+					entity.numberOfClosedIncidents = element.numberOfClosedIncidents;
+
 					break;
 				case  "ParameterizableClass":
 					entity.superTypes = element.subClassOf.split(",");
