@@ -13,6 +13,7 @@ public enum RDSettings {;
 	public static final double METHOD_FACTOR = 1;
 	public static final double HEIGHT = 1;
 	public static final double RING_WIDTH = 2;
+	public static final boolean CONVERT_TO_MULTIPART = true;
 	/**
 	* Sets the ring width of the method disks
 	* Only relevant if disk of type FAMIX.Method exist

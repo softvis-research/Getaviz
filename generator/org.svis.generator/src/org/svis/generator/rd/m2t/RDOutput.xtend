@@ -16,7 +16,6 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 class RDOutput implements IGenerator2 {
-	
 	@Inject extension X3DUtils util
 	val log = LogFactory::getLog(class) 
 	RD2X3D rd2x3d = new RD2X3D
@@ -43,8 +42,11 @@ class RDOutput implements IGenerator2 {
 			case X3D: {
 				fsa.generateFile("model.x3d", toX3DHead 
 					+ rd2x3d.toX3DBody(resource)
-					+ toX3DTail)	
-			 }
+					+ toX3DTail)
+				if(RDSettings::CONVERT_TO_MULTIPART) {
+					fsa.convertToMultipart
+			 	}
+		 	}
 			case X3D_COMPRESSED: {
 				fsa.generateFile("model.x3d", toX3DHead 
 					+ rd2x3dcomp.toX3DBody(resource)
@@ -61,9 +63,9 @@ class RDOutput implements IGenerator2 {
 					val Path p1 = Paths.get("../org.svis.generator/resource/anifra-minified.js")
 					fsa.generateFile("anifra-minified.js", Files.newInputStream(p1))
 				}	
-			} case SimpleGlyphsJson: {
-				fsa.generateFile("simple-glyphs.json","[" + rd2json.toGlyphsJson(resource) + "]")
-				
+			}
+			case SimpleGlyphsJson: {
+				fsa.generateFile("simple-glyphs.json","[" + rd2json.toGlyphsJson(resource) + "]")	
 			}
 		}
 	}

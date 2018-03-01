@@ -6,6 +6,8 @@ import org.svis.generator.rd.RDSettings
 import org.svis.generator.rd.RDSettings.Variant
 import org.svis.generator.city.CitySettings
 import org.svis.generator.city.CitySettings.BuildingType
+import org.eclipse.xtext.generator.IFileSystemAccess2
+import java.io.File
 
 class X3DUtils {
 	
@@ -141,4 +143,11 @@ class X3DUtils {
 	
 	export default App;
 	'''
+	
+	def convertToMultipart(IFileSystemAccess2 fsa) {
+		val processBuilder = new ProcessBuilder("./aopt-idmap-sapd.bat")
+ 		val directory = new File(fsa.getURI("aopt-idmap-sapd.bat").path.replace("%20", " ")).parentFile
+ 		processBuilder.directory (directory)
+		processBuilder.start
+	}
 }
