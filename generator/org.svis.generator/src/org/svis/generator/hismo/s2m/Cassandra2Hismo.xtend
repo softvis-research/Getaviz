@@ -106,7 +106,6 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		val index = fqn.lastIndexOf(".")
 		if(index < 0) return
 		val parentFQN = fqn.substring(0, index)
-		println("parent: " + parentFQN)
 		var parentHistory = hismoDocument.elements.filter(HISMONamespaceHistory).findFirst[value == parentFQN]
 		if(parentHistory === null) {
 			createParent(parentFQN)
