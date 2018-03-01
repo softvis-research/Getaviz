@@ -576,17 +576,16 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.height = RDSettings::HEIGHT
 		diskSegment.color = RDSettings::DATA_COLOR
 		diskSegment.transparency = RDSettings::DATA_TRANSPARENCY	
-	  	val a = hismoAttributeVersions.findFirst[
+	  	val history = hismoAttributeVersions.findFirst[
 			it.timestamp == timestamp && it.versionEntity.ref === attribute
-		]
-		 val ah = a.parentHistory.ref as HISMOAttributeHistory
-		diskSegment.fqn = ah.qualifiedNameMultiple
+		].parentHistory.ref as HISMOAttributeHistory
+		diskSegment.fqn = history.qualifiedNameMultiple
 		diskSegment.id = famix.createID(diskSegment.fqn)
 		diskSegment.size = 1 //attribute.declaredType.ref.attributeSize
-		val versions = hismoAttributeVersions.filter[parentHistory.ref === ah]
+		val versions = hismoAttributeVersions.filter[parentHistory.ref === history]
 		
 		versions.filter[it.timestamp == timestamp].forEach[
-			diskSegment.version = it.toVersion(ah)
+			diskSegment.version = it.toVersion(history)
 		]
 		return diskSegment
 	}	
