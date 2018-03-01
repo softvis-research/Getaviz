@@ -49,6 +49,8 @@ HISMOClassHistory:
 	('(attributeHistories' attributeHistories+=IntegerReference* ')')?
 	('(evolutionNumberOfStatements' evolutionNumberOfStatements=INT ')' )? 
 	('(lastAuthor' lastAuthor=MSESTRING ')')?
+	('(avgNumberOfIncidents' avgNumberOfIncidents = INT ')')?
+	('(avgEvolutionRate' avgEvolutionRate = MSESTRING ')')?
 	')';	
 	
 HISMOMethodHistory:

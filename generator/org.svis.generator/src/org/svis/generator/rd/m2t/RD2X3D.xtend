@@ -57,8 +57,9 @@ class RD2X3D {
 	'''
 
 	def String toDisk(Disk disk) '''
-		<Transform translation='«disk.position.x + " " + disk.position.y + " " +
-			disk.position.z»' rotation='0 0 1 1.57'>
+		<Transform translation='«disk.position.x + " " + disk.position.y + " " + disk.position.z»' 
+			rotation='0 0 1 1.57' 
+			scale='1 1 «disk.height»'>
 		<Transform DEF='«disk.id»'>
 			<Shape>
 				<Extrusion

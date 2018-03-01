@@ -74,7 +74,6 @@ class RD2RD extends WorkflowComponentWithConfig {
 			if(diskList.size == 1){
 				val diskRoot = diskList.get(0)
 				ctx.set("rdextendedwriter", diskRoot)
-				
 			}
 		}
 		ctx.set("rdextended", resource)
@@ -137,6 +136,9 @@ class RD2RD extends WorkflowComponentWithConfig {
 			namespace.color = RDSettings::NAMESPACE_COLOR_HEX
 		} else {
 			namespace.color =  NS_colors.get(namespace.level - 1).asPercentage
+			if(namespace.level == 1) {
+				namespace.color = "1 0.2 0.2"
+			}
 		}
 	}
 

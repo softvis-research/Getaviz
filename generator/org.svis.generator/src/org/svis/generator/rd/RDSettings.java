@@ -67,10 +67,10 @@ public enum RDSettings {;
 		NONE, BETWEENNESS_CENTRALITY, NUMBER_OF_STATEMENTS
 	}
 	
-	public static ClassColor CLASS_COLOR_METRIC = ClassColor.STATIC;
+	public static ClassColor CLASS_COLOR_METRIC = ClassColor.EVOLUTION_RATE;
 	
 	public static enum ClassColor {
-		STATIC, STK
+		STATIC, STK, EVOLUTION_RATE
 	}
 	
 	/**
@@ -114,5 +114,18 @@ public enum RDSettings {;
 	 *public static enum Metrics {
 	 *COMPLEXITY
 	}*/
+	
+	public static ShowVersions SHOW_VERSIONS = ShowVersions.LATEST;
+	
+	public static enum ShowVersions {
+		ALL, LATEST
+	}
+	
+	public static ClassHeight CLASS_HEIGHT = ClassHeight.NUMBER_OF_INCIDENTS;
+	
+	public static enum ClassHeight {
+		STATIC, NUMBER_OF_INCIDENTS
+	}
+
 
 }

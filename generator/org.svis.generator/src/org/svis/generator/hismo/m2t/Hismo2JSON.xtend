@@ -45,7 +45,6 @@ import org.svis.xtext.famix.FAMIXPath
 import org.svis.generator.hismo.HismoUtils
 import org.svis.generator.FamixUtils
 
-
 class Hismo2JSON implements IGenerator2 {
 
 	@Inject extension HismoUtils hismoUtil
@@ -63,10 +62,10 @@ class Hismo2JSON implements IGenerator2 {
 		elements.removeUnnecessaryFamixElements
 		if(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::MULTIPLE_TIME_LINE
 			|| RDSettings::EVOLUTION_REPRESENTATION ==EvolutionRepresentation::MULTIPLE_DYNAMIC_EVOLUTION) {
-			elements.filter(FAMIXNamespace).forEach[famix.setQualifiedName(it)]
-			elements.filter(FAMIXClass).forEach[famix.setQualifiedName(it)]
-			elements.filter(FAMIXMethod).forEach[famix.setQualifiedName(it)]
-			elements.filter(FAMIXAttribute).forEach[famix.setQualifiedName(it)]
+			elements.filter(FAMIXNamespace).forEach[famix.qualifiedName = it]
+			elements.filter(FAMIXClass).forEach[famix.qualifiedName = it]
+			elements.filter(FAMIXMethod).forEach[famix.qualifiedName = it]
+			elements.filter(FAMIXAttribute).forEach[famix.qualifiedName = it]
 		}
 		paths += elements.filter(FAMIXPath)
 		versions += elements.filter(HISMONamespaceVersion)
@@ -74,10 +73,10 @@ class Hismo2JSON implements IGenerator2 {
 		elements.removeAll(roles)
 		//elements.removeAll(paths)
 		if(RDSettings::SHOW_HISTORIES == false) {
-			elements.removeIf(e| e instanceof HISMONamespaceHistory)
-			elements.removeIf(e| e instanceof HISMOClassHistory)
-			elements.removeIf(e| e instanceof HISMOMethodHistory)
-			elements.removeIf(e| e instanceof HISMOAttributeHistory)
+			elements.removeIf[it instanceof HISMONamespaceHistory]
+			elements.removeIf[it instanceof HISMOClassHistory]
+			elements.removeIf[it instanceof HISMOMethodHistory]
+			elements.removeIf[it instanceof HISMOAttributeHistory]
 		}
 		fsa.generateFile("metaData.json", elements.toJSON)
 	}
@@ -263,7 +262,11 @@ class Hismo2JSON implements IGenerator2 {
 		«ELSE»
 			"component":	 "",
 		«ENDIF»
-		"betweennessCentrality":	«cv.betweennessCentrality»
+		«IF cv.betweennessCentrality !== null»
+			"betweennessCentrality":	«cv.betweennessCentrality»
+		«ELSE»
+			"betweennessCentrality":	""
+		«ENDIF»
 	'''
 	def dispatch private toMetaData(HISMOMethodVersion mv)'''
 		"id":			 "«mv.id»",

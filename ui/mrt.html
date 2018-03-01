@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!--
+	TODO in application auslagern
+-->
+<script type="text/javascript">  
+	var modelUrl = "data/mrt/model";
+
+	var multipartX3dUrl  = modelUrl + "/multiPart.x3d";
+	var multipartJsonUrl = modelUrl + "/multiPart.json";
+	var metaDataJsonUrl  = modelUrl + "/metaData.json";
+</script>
+
+<html>
+<head>
+	<title>SVIS UI Prototype</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <!--Main-->
+    <script type="text/javascript" src="libs/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="libs/typeahead.bundle.js"></script>
+    <script type="text/javascript" src="libs/handlebars-v2.0.0.js"></script>
+	
+	<!-- d3 -->
+	<script type="text/javascript" src="libs/d3/d3.v4.min.js"></script>
+	<script  ype="text/javascript" src="libs/d3/d3-ForceEdgeBundling.js"></script>
+	
+	<!--x3dom-->
+	<script type="text/javascript" src="libs/x3dom/x3dom.debug.js"></script>	
+	<link rel="stylesheet" href="libs/x3dom/x3dom.css" type="text/css"/>
+	<script type="text/javascript" src="libs/x3dom/components/Geometry2D.js"></script>
+	
+	<!--jqwidgets-->	
+    <script type="text/javascript" src="libs/jqwidgets/jqxcore.js"></script>
+	<script type="text/javascript" src="libs/jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxsplitter.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxpanel.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxcheckbox.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxradiobutton.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxexpander.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxinput.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxnavigationbar.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxwindow.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxnotification.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxtextarea.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxswitchbutton.js"></script>
+	<script type="text/javascript" src="libs/jqwidgets/jqxslider.js"></script>
+	<script type="text/javascript" src="libs/jqwidgets/jqxcheckbox.js"></script>
+	<script type="text/javascript" src="libs/jqwidgets/jqxcombobox.js"></script>
+	<script type="text/javascript" src="libs/jqwidgets/jqxlistbox.js"></script>
+
+	
+    <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.metro.css" type="text/css" />
+	
+	<!-- ztree -->
+	<script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.core.js"></script>
+	<script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.exhide.js"></script>
+	<script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.excheck.js"></script>
+	<link rel="stylesheet" href="libs/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+	<link rel="stylesheet" href="scripts/PackageExplorer/zt.css" type="text/css">
+	
+	<script type="text/javascript" src="scripts/CanvasFilter/CanvasFilterController.js"></script>
+	<script type="text/javascript" src="scripts/CanvasMark/CanvasMarkController.js"></script>
+	<script type="text/javascript" src="scripts/CanvasFlyTo/CanvasFlyToController.js"></script>
+	<script type="text/javascript" src="scripts/CanvasHover/CanvasHoverController.js"></script>
+	<script type="text/javascript" src="scripts/CanvasSelect/CanvasSelectController.js"></script>
+	<script type="text/javascript" src="scripts/CanvasResetView/CanvasResetViewController.js"></script>	
+	<script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>	
+	<script type="text/javascript" src="scripts/RelationConnector/RelationConnectorController.js"></script>	
+	<script type="text/javascript" src="scripts/RelationTransparency/RelationTransparencyController.js"></script>
+	<script type="text/javascript" src="scripts/PatternTransparency/PatternTransparencyController.js"></script>
+	<script type="text/javascript" src="scripts/RelationHighlight/RelationHighlightController.js"></script>	
+	<script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>	
+	<script type="text/javascript" src="scripts/PatternExplorer/PatternExplorerController.js"></script>
+	<script type="text/javascript" src="scripts/VersionExplorer/VersionExplorerController.js"></script>
+	<script type="text/javascript" src="scripts/Search/SearchController.js"></script>
+	<script type="text/javascript" src="scripts/Experiment/ExperimentController.js"></script>
+	<script type="text/javascript" src="scripts/SourceCode/SourceCodeController.js"></script>	
+	<script type="text/javascript" src="scripts/InteractionLogger/InteractionLogger.js"></script>
+	<script type="text/javascript" src="scripts/Email/EmailController.js"></script>
+	<script type="text/javascript" src="scripts/Menu/MenuController.js"></script>
+	<script type="text/javascript" src="scripts/PatternConnector/PatternConnectorController.js"></script>
+	<script type="text/javascript" src="scripts/EdgeConfigurator/EdgeConfiguratorController.js"></script>
+
+		
+	<!--user interface-->		
+	<script type="text/javascript" src="scripts/DefaultLogger.js"></script>
+	<script type="text/javascript" src="scripts/Model.js"></script>	
+	<script type="text/javascript" src="scripts/Events.js"></script>	
+	<script type="text/javascript" src="scripts/CanvasManipulator.js"></script>			
+	<script type="text/javascript" src="scripts/Application.js"></script>		
+	<script type="text/javascript" src="scripts/ActionController.js"></script>		
+	
+	<link rel="stylesheet" href="Style.css" type="text/css" />
+
+	<!--setup-->
+	<script type="text/javascript" src="setups/develop/antipattern.js"></script>	
+</head>
+<body>    
+	<div id="canvas">                    
+		<x3d id="x3dElement" showConsole="true">
+			<scene id="scene">
+				<Transform id="addedElements"></Transform>
+				<MultiPart id="multiPart" mapDEFToID="true" url="data/mrt/model/multiPart.x3d" urlIDMap="data/mrt/model/multiPart.json"></MultiPart>
+			</scene>
+		</x3d> 
+    </div>
+
+</body>
+</html>

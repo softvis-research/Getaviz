@@ -1,12 +1,8 @@
-
-
-		
-
-$(document).ready(function () {	
+$(document).ready(function () {
 	
 	//parse setup if defined
 	if(!window["setup"]){
-		Console.log("No setup definition found!")	
+		Console.log("No setup definition found!")
 		return;
 	}
 
@@ -19,37 +15,34 @@ $(document).ready(function () {
 			height: 200,
 			isModal: true, 
 			autoOpen: true,   
-			resizable: false, 
+			resizable: false
 		});		
 	}
-	
+	console.log("aha")
 	//load famix data
 	$.getJSON( metaDataJsonUrl, initializeApplication);
-	
+	console.log("u")
 });
 
-
-
 function initializeApplication(metaDataJson){
-	
-	//wait for canvas to be loaded full here...
+
+    //wait for canvas to be loaded full here...
 	var canvas = document.getElementById("x3dom-x3dElement-canvas");	
 	if(!canvas){
 		setTimeout(function(){initializeApplication(metaDataJson);}, 100);
 		return;
 	}
-
 	//create entity model
 	model.initialize(metaDataJson);
-	
+
 	//start action controller
 	actionController.initialize();
 
 	//initialize canvas manipulator
 	canvasManipulator.initialize();
-	
+
 	//initialize application
-	application.initialize();	
+	application.initialize();
 
 	if(setup.loadPopUp){
 		$("#RootLoadPopUp").jqxWindow("close");		

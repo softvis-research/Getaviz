@@ -17,6 +17,8 @@ import com.datastax.driver.core.Session
 import org.svis.xtext.hismo.impl.HismoFactoryImpl
 import org.svis.xtext.hismo.HISMONamespaceVersion
 import org.svis.generator.hismo.HismoUtils
+import java.util.Random
+import org.svis.generator.rd.RDSettings
 
 class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 	val hismoFactory = new HismoFactoryImpl()
@@ -37,25 +39,32 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
     	var hismoRoot = hismoFactory.createHismoRoot
 		hismoDocument = hismoFactory.createHismoDocument
 		hismoRoot.hismoDocument = hismoDocument
-    	
-    	val query = "SELECT * FROM commits"
-    	
-    	val Set<HISMONamespaceHistory> namespaceHistories = newTreeSet(nameComparator)
+
+		val Set<HISMONamespaceHistory> namespaceHistories = newTreeSet(nameComparator)
     	val Set<HISMONamespaceVersion> namespaceVersions = newTreeSet(nameComparator)
     	val Set<HISMOClassHistory> classHistories = newTreeSet(nameComparator)
     	val Set<HISMOClassVersion> classVersions = newTreeSet(nameComparator)
-    	    
+    	
+    	val query = "SELECT * FROM commits"
+    	    	    
         session.execute(query).forEach[result|
             val filename = result.getString("filename")
             if(filename.endsWith(".java")) {
             	val packagename = result.getString("packagename")
             	val commitdate = result.getDate("commitdate").toString
-            	//val project = result.getString("project")
+            	val project = result.getString("project")
             	val addedLines = result.getInt("addedlines")
             	val removedLines = result.getInt("removedlines")
             	//val id = result.getUUID("id").toString
             	
-            	val fqn = packagename + filename
+            	val fqn = project + "." + packagename + "." + filename
+            	
+            	var projectHistory = namespaceHistories.findFirst[value == project]
+            	if(projectHistory === null) {
+            		projectHistory = toNamespaceHistory(project)
+            		namespaceHistories += projectHistory
+            	}
+            	
             	var namespaceHistory = namespaceHistories.findFirst[value == packagename]
             	if(namespaceHistory === null) {
             		namespaceHistory = toNamespaceHistory(packagename)
@@ -79,41 +88,9 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
             }
         ]
         
-        client.close        
+        client.close
         hismoDocument.elements.filter(HISMONamespaceHistory).toList.forEach[createParent(it.value)]
         updateParents
-		
-		/*hismoClassVersions += hismoDocument.elements.filter(HISMOClassVersion)
-		hismoPackageVersions += hismoDocument.elements.filter(HISMONamespaceVersion)
-		hismoMethodVersions += hismoDocument.elements.filter(HISMOMethodVersion)
-		hismoAttributeVersions += hismoDocument.elements.filter(HISMOAttributeVersion)
-		
-		hismoAttributeVersions.forEach[v| timestamps += v.timestamp]
-		hismoMethodVersions.forEach[v| timestamps += v.timestamp]
-		hismoClassVersions.forEach[v| timestamps += v.timestamp]
-		hismoPackageVersions.forEach[v| timestamps += v.timestamp]
-		hismoMethods.toSet
-				
-		sortedtimestamps.addAll(timestamps.toList.sort)
-		val diskList = newArrayList
-		if(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::TIME_LINE
-			|| RDSettings::EVOLUTION_REPRESENTATION ==EvolutionRepresentation::DYNAMIC_EVOLUTION) {
-			val diskRoot = createRoot
-			fillLists()
-			hismoPackages.forEach[getPackages(it)]
-			hismoRootPackages.forEach[toDisk(it,1)]	
-			removeUnnecessaryFamixElements(hismoRoot)
-			diskList += diskRoot
-		} else {
-			for (timestamp: sortedtimestamps) {
-				val diskRoot = createRoot
-				fillLists(timestamp)
-				rootPackages.forEach[toDisk(1, timestamp)]
-				removeUnnecessaryHismoElements(hismoRoot)
-				diskList += diskRoot		
-			}	
-		}
-*/
 		
 		val resource = new ResourceImpl()
 		var hismoList = newArrayList
@@ -129,10 +106,12 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		val index = fqn.lastIndexOf(".")
 		if(index < 0) return
 		val parentFQN = fqn.substring(0, index)
+		println("parent: " + parentFQN)
 		var parentHistory = hismoDocument.elements.filter(HISMONamespaceHistory).findFirst[value == parentFQN]
 		if(parentHistory === null) {
 			createParent(parentFQN)
 			parentHistory = toNamespaceHistory(parentFQN)
+			toNamespaceVersion(parentHistory, "foobar")
 		}
 	}
 	
@@ -150,16 +129,6 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		val namespaceHistory = hismoFactory.createHISMONamespaceHistory 
 		namespaceHistory.value = fqn
 		namespaceHistory.name = famix.createID(fqn)
-//		var HISMONamespaceHistory actualNamespaceHistory
-//		if (fns.parentScope !== null) {
-//			actualNamespaceHistory = hismoDocument.elements.filter(HISMONamespaceHistory).findFirst [
-//				value.equals(fns.parentScope.ref.fqn)
-//			]
-//			if (actualNamespaceHistory === null) {
-//				actualNamespaceHistory = (fns.parentScope.ref as FAMIXNamespace).toHismoHistory
-//			}
-//			hismonamespacehistory.containingNamespaceHistory = actualNamespaceHistory.createReference
-//		} 
 		hismoDocument.elements += namespaceHistory
 		return namespaceHistory
 	}
@@ -188,7 +157,13 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		history.classHistories += classHistory.createReference
 		classHistory.containingNamespaceHistory = history.createReference
 		history.classHistories += classHistory.createReference
-	
+		val rand = new Random();
+		val n = rand.nextInt(100)
+		switch (n) {
+			case n < 30: classHistory.avgNumberOfIncidents = RDSettings::HEIGHT.intValue
+			default: classHistory.avgNumberOfIncidents = (n-20)/10
+		}
+
 		hismoDocument.elements += classHistory
 		return classHistory
 	}
