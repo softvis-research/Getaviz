@@ -2,7 +2,7 @@ module org.svis.generator.run.rd
 
 var projectName = "org.svis.generator.run"
 var runtimeProject = "../${projectName}"
-var outputPath = "./output/rd/hismo"
+var outputPath = "../../ui/data/mrt/model/"
 
 Workflow {
 
