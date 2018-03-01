@@ -18,7 +18,6 @@ import org.svis.xtext.hismo.impl.HismoFactoryImpl
 import org.svis.xtext.hismo.HISMONamespaceVersion
 import org.svis.generator.hismo.HismoUtils
 import java.util.Random
-import org.svis.generator.rd.RDSettings
 
 class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 	val hismoFactory = new HismoFactoryImpl()
@@ -57,27 +56,33 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
             	val removedLines = result.getInt("removedlines")
             	//val id = result.getUUID("id").toString
             	
-            	val fqn = project + "." + packagename + "." + filename
+            	val realPackagename = project + "." + packagename
+            	
+            	val fqn = realPackagename + "." + filename
             	
             	var projectHistory = namespaceHistories.findFirst[value == project]
             	if(projectHistory === null) {
             		projectHistory = toNamespaceHistory(project)
             		namespaceHistories += projectHistory
             	}
-            	
-            	var namespaceHistory = namespaceHistories.findFirst[value == packagename]
+            	var projectVersion = namespaceVersions.findFirst[value == project && timestamp == commitdate]
+            	if(projectVersion === null) {
+            		projectVersion = toNamespaceVersion(projectHistory, commitdate)
+            		namespaceVersions += projectVersion
+            	}
+            	var namespaceHistory = namespaceHistories.findFirst[value == realPackagename]
             	if(namespaceHistory === null) {
-            		namespaceHistory = toNamespaceHistory(packagename)
+            		namespaceHistory = toNamespaceHistory(realPackagename)
             		namespaceHistories += namespaceHistory
             	}
-            	var namespaceVersion = namespaceVersions.findFirst[value == packagename && timestamp == commitdate]
+            	var namespaceVersion = namespaceVersions.findFirst[value == realPackagename && timestamp == commitdate]
             	if(namespaceVersion === null) {
             		namespaceVersion = toNamespaceVersion(namespaceHistory, commitdate)
             		namespaceVersions += namespaceVersion
             	}
             	var classHistory = classHistories.findFirst[value == fqn]
             	if(classHistory === null) {
-            		classHistory = toClassHistory(namespaceHistory, fqn, packagename, commitdate)
+            		classHistory = toClassHistory(namespaceHistory, fqn, realPackagename, commitdate)
             		classHistories += classHistory
             	}
             	var classVersion = classVersions.findFirst[value == packagename && timestamp == commitdate]
@@ -152,27 +157,36 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		val classHistory = hismoFactory.createHISMOClassHistory
 		classHistory.value = fqn
 		classHistory.name = famix.createID(fqn + commitdate)
-
+		
 		history.classHistories += classHistory.createReference
 		classHistory.containingNamespaceHistory = history.createReference
 		history.classHistories += classHistory.createReference
 		val rand = new Random();
-		val n = rand.nextInt(100)
-		switch (n) {
-			case n < 30: classHistory.avgNumberOfIncidents = RDSettings::HEIGHT.intValue
-			default: classHistory.avgNumberOfIncidents = (n-20)/10
+		
+		val openIncidents = rand.nextInt(35) - 20
+		val closedIncidents = rand.nextInt(50) - 35
+		
+		switch (openIncidents) {
+			case openIncidents < 0: classHistory.avgNumberOfOpenIncidents = 0
+			default: classHistory.avgNumberOfOpenIncidents = openIncidents
+		}
+		
+		switch (closedIncidents) {
+			case closedIncidents < 0: classHistory.avgNumberOfClosedIncidents = 0
+			default: classHistory.avgNumberOfClosedIncidents = closedIncidents
 		}
 
 		hismoDocument.elements += classHistory
+		
 		return classHistory
 	}
 	
-	def HISMOClassVersion toClassVersion(HISMOClassHistory history, String fqn, String commitdate, int numberOfStatements) {
+	def private HISMOClassVersion toClassVersion(HISMOClassHistory history, String fqn, String commitdate, int numberOfStatements) {
 		val classVersion =  hismoFactory.createHISMOClassVersion
 		classVersion.timestamp = commitdate
 		classVersion.commitId = commitdate
 		classVersion.name = fqn
-		classVersion.id = famix.createID(fqn + commitdate)
+		classVersion.id = famix.createID(fqn)
 		classVersion.value = fqn
 		classVersion.evolutionNumberOfStatements = numberOfStatements
 		classVersion.parentHistory = history.createReference
@@ -180,6 +194,7 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		history.classVersions += classVersion.createReference
 
 		hismoDocument.elements += classVersion
+		
 		return classVersion
 	}	
 }

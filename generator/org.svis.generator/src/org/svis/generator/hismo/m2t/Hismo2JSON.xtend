@@ -235,6 +235,7 @@ class Hismo2JSON implements IGenerator2 {
 		}*/
 	}
 	def dispatch private toMetaData(HISMOClassVersion cv)'''
+		«val history = cv.parentHistory.ref as HISMOClassHistory»
 		"id":			 "«cv.id»",
 		"qualifiedName": "«cv.value»",
 		"name":			 "«cv.value»",
@@ -250,12 +251,10 @@ class Hismo2JSON implements IGenerator2 {
 		"version":		 "«cv.commitId»",
 		«IF cv.antipattern !== null»
 		"antipattern":	 "«FOR pattern : cv.antipattern SEPARATOR ","»«(pattern.ref as FAMIXAntipattern).id»«ENDFOR»",
-«««		"antipattern":	 "«toString2(cv.antipattern, cv)»",
 		«ELSE»
 		"antipattern":	 "",
 		«ENDIF»
 		"reaches":		 "«getPaths(cv)»",
-«««		"reachesSTK":	 "«getSTKPaths(cv)»"
 		"roles":	 	 "«toString2(cv.antipattern, cv)»",
 		«IF cv.scc !== null»
 			"component":	 "«((cv.scc.ref) as FAMIXComponent).id»",
@@ -263,10 +262,12 @@ class Hismo2JSON implements IGenerator2 {
 			"component":	 "",
 		«ENDIF»
 		«IF cv.betweennessCentrality !== null»
-			"betweennessCentrality":	«cv.betweennessCentrality»
+			"betweennessCentrality":	«cv.betweennessCentrality»,
 		«ELSE»
-			"betweennessCentrality":	""
+			"betweennessCentrality":	"",
 		«ENDIF»
+		"numberOfClosedIncidents":	«history.avgNumberOfClosedIncidents»,
+		"numberOfOpenIncidents": «history.avgNumberOfOpenIncidents»
 	'''
 	def dispatch private toMetaData(HISMOMethodVersion mv)'''
 		"id":			 "«mv.id»",

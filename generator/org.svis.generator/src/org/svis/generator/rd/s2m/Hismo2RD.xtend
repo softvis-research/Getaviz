@@ -262,7 +262,14 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		
 		switch(RDSettings::CLASS_HEIGHT) {
 			case STATIC: disk.height = RDSettings::HEIGHT
-			case NUMBER_OF_INCIDENTS: disk.height = history.avgNumberOfIncidents
+			case NUMBER_OF_INCIDENTS: {
+				val sum = (history.avgNumberOfOpenIncidents + history.avgNumberOfClosedIncidents)/3
+				if(sum < RDSettings::HEIGHT) {
+					disk.height = RDSettings::HEIGHT
+				} else {
+					disk.height = sum
+				}
+			}
 		}
 		disk.transparency = RDSettings::CLASS_TRANSPARENCY
 		switch(RDSettings::CLASS_SIZE) {
