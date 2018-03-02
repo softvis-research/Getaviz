@@ -220,12 +220,13 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.name = hismoNamespace.name
 		disk.value = hismoNamespace.name//hismoNamespace.value
 		disk.fqn = hismoNamespace.qualifiedName
+		disk.fqn = hismoNamespace.value
 		disk.type = "FAMIX.Namespace"
 		disk.level = level
 		disk.ringWidth = RDSettings::RING_WIDTH
 		disk.id = famix.createID(disk.fqn)
 		disk.height = RDSettings::HEIGHT
-		disk.transparency = RDSettings::NAMESPACE_TRANSPARENCY	
+		disk.transparency = RDSettings::NAMESPACE_TRANSPARENCY
 		
 		switch(RDSettings::SHOW_VERSIONS) {
 			case ShowVersions::LATEST: {

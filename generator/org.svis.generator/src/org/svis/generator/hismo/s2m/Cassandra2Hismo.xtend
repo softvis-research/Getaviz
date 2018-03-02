@@ -158,7 +158,7 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		namespaceVersion.timestamp = commit
 		namespaceVersion.commitId = commit
 		namespaceVersion.name = history.value
-		namespaceVersion.id = famix.createID(history.value + namespaceVersion.name)
+		namespaceVersion.id = famix.createID(namespaceVersion.name)
 		namespaceVersion.value =  history.value
 		namespaceVersion.parentHistory = history.createReference
 		
