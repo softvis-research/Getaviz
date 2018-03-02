@@ -7,7 +7,7 @@ package org.svis.generator.rd;
  */
 
 public enum RDSettings {;
-	public static final boolean SHOW_HISTORIES = true;
+	public static final boolean SHOW_HISTORIES = false;
 	public static final boolean SHOW_CLASS_MEMBERS = false;
 	public static final double DATA_FACTOR = 4;
 	public static final double METHOD_FACTOR = 1;

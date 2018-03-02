@@ -209,31 +209,13 @@ class Hismo2JSON implements IGenerator2 {
 		"name":			 "«nv.value»",
 		"type":			 "FAMIX.Namespace",
 		"version":		 "«nv.commitId»",
-		"belongsTo":     "«findParent(nv)»"
+		«IF(nv.container !== null)»
+		"belongsTo":     "«nv.container.ref.id»"
+		«ELSE»
+		"belongsTo":	 "root"
+		«ENDIF»
 	'''
 	
-	def findParent(HISMONamespaceVersion nv) {
-		return "root"
-		/*val value = nv.value.lastIndexOf('.')
-		nv.versionEntity
-		if(value > 0) {
-			println("value: " + nv.value)
-			val parentvalue = nv.value.substring(0, value)
-			println("parentvalue: " + parentvalue)
-			println(nv.parentHistory.ref)
-			val versionsl = (nv.parentHistory.ref as HISMONamespaceHistory).namespaceVersions.length
-			println(versionsl)
-			versions.filter[commitId == nv.commitId].forEach[x|
-				println(x.value)
-				println(x.commitId)
-			]
-			val versionValue = versions.filter[commitId == nv.commitId].findFirst[v|v.value == parentvalue].id
-			println(versionValue)
-			return versionValue
-		} else {
-			return "root"
-		}*/
-	}
 	def dispatch private toMetaData(HISMOClassVersion cv)'''
 		«val history = cv.parentHistory.ref as HISMOClassHistory»
 		"id":			 "«cv.id»",
@@ -269,6 +251,7 @@ class Hismo2JSON implements IGenerator2 {
 		"numberOfClosedIncidents":	«history.avgNumberOfClosedIncidents»,
 		"numberOfOpenIncidents": «history.avgNumberOfOpenIncidents»
 	'''
+	
 	def dispatch private toMetaData(HISMOMethodVersion mv)'''
 		"id":			 "«mv.id»",
 		"qualifiedName": "«escapeHtml4(qualifiedName(mv.parentHistory.ref as HISMOMethodHistory))»",
@@ -282,6 +265,7 @@ class Hismo2JSON implements IGenerator2 {
 		"version":		 "«mv.commitId»",
 		"belongsTo":     ""
 	'''
+	
 	def dispatch private toMetaData(HISMOAttributeVersion av)'''
 		"id":			 "«av.id»",
 		"qualifiedName": "«qualifiedName(av.parentHistory.ref as HISMOAttributeHistory)»",

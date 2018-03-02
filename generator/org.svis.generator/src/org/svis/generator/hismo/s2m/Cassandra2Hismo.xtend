@@ -75,7 +75,7 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
             		namespaceHistory = toNamespaceHistory(realPackagename)
             		namespaceHistories += namespaceHistory
             	}
-            	var namespaceVersion = namespaceVersions.findFirst[value == realPackagename && timestamp == commitdate]
+            	var namespaceVersion = namespaceVersions.findFirst[value == realPackagename]
             	if(namespaceVersion === null) {
             		namespaceVersion = toNamespaceVersion(namespaceHistory, commitdate)
             		namespaceVersions += namespaceVersion
@@ -96,6 +96,7 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
         client.close
         hismoDocument.elements.filter(HISMONamespaceHistory).toList.forEach[createParent(it.value)]
         updateParents
+        setParentVersion
 		
 		val resource = new ResourceImpl()
 		var hismoList = newArrayList
@@ -126,6 +127,21 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 			val parentFQN = namespaceHistory.value.substring(0, index)
 			var parentHistory = hismoDocument.elements.filter(HISMONamespaceHistory).findFirst[value == parentFQN]
 			namespaceHistory.containingNamespaceHistory = parentHistory.createReference
+		]
+	}
+	
+	def void setParentVersion() {
+		hismoDocument.elements.filter(HISMOClassVersion).forEach[classVersion|
+			val history = classVersion.parentHistory.ref as HISMOClassHistory
+			classVersion.container = (history.containingNamespaceHistory.ref as HISMONamespaceHistory)
+			.namespaceVersions.map[ref as HISMONamespaceVersion].last.createReference
+		]
+		hismoDocument.elements.filter(HISMONamespaceVersion).forEach[namespaceVersion|
+			val history = namespaceVersion.parentHistory.ref as HISMONamespaceHistory
+			if(history.containingNamespaceHistory !== null) {
+				namespaceVersion.container = (history.containingNamespaceHistory.ref as HISMONamespaceHistory)
+				.namespaceVersions.map[ref as HISMONamespaceVersion].last.createReference
+			}
 		]
 	}
 	

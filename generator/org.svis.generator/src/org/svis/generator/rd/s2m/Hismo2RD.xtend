@@ -53,6 +53,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 	val Set<HISMONamespaceHistory> hismoPackages = newTreeSet(nameComparator)
 	val Set<HISMONamespaceVersion> hismoPackageVersions = newTreeSet(nameComparator)
 	val Set<HISMOClassVersion> hismoClassVersions = newTreeSet(nameComparator)
+	val Set<HISMOClassVersion> latestClassVersions = newTreeSet(nameComparator)
 	val Set<HISMOMethodVersion> hismoMethodVersions = newTreeSet(nameComparator)
 	val Set<HISMOAttributeVersion> hismoAttributeVersions = newTreeSet(nameComparator)
 	val Set<HISMONamespaceHistory> hismoRootPackages = newTreeSet(nameComparator)
@@ -109,6 +110,10 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 			}
 		}
 		hismoClasses.forEach[setEvolutionRate(it)]
+		if(RDSettings::SHOW_VERSIONS == ShowVersions::LATEST) {
+			hismoClassVersions.clear
+			hismoClassVersions.addAll(latestClassVersions)
+		}
 		val resource = new ResourceImpl()
 		resource.contents += hismoRoot
 		ctx.set("metadata", resource)	
@@ -227,7 +232,9 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 				hismoClassVersions
 				.filter[(parentHistory.ref as HISMOClassHistory).containingNamespaceHistory.ref === hismoNamespace]
 				.groupBy[name].forEach[name, list|
-					disk.disks += list.sortBy[timestamp].last.toDisk(level+1)
+					val version = list.sortBy[timestamp].last
+					disk.disks += version.toDisk(level+1)
+					latestClassVersions += version
 				]
 			}
 			case ShowVersions::ALL: {

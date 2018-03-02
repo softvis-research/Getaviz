@@ -44,14 +44,14 @@ class RD2X3D {
 	
 	def String toRD(List<Disk> disks) '''
 		«FOR disk : disks»
-			«IF(RDSettings::SHOW_HISTORIES)»
+«««		  	«/IF(RDSettings::SHOW_HISTORIES)»
 				«toDisk(disk)»
 				«toSegment(disk.data)»
 				«toSegment(disk.methods)»
 				«FOR segment : disk.methods»
 					«segment.invocations.toSegmentInvocation(segment)»
 				«ENDFOR»
-			«ENDIF»
+«««			«//ENDIF»
 			«toDiskVersions(disk)»
 		«ENDFOR»
 	'''
