@@ -84,9 +84,6 @@
 			}],
 
 		},
-		{	name: 	"canvasSelectController",
-			color: "blue"
-		},	
 		{	name: 	"canvasFilterController" 
 		},
 		{ 	name: 	"canvasFlyToController" ,
@@ -94,85 +91,82 @@
 		},
 		{ 	name: 	"canvasResetViewController" 
 		},
-		{ 	name: 	"edgeConfiguratorController" 
-		},	
 		{	name: 	"searchController" 
 		},
         {	name: 	"packageExplorerController",
 		},
 		{	name: 	"versionExplorerController",
-		},
-		{ 	name: 	"patternConnectorController",
-			showInnerRelations: true,
-			createEndPoints: true,
-            elementShape : "square",					//circle, square
-            sourceStartAtParentBorder : false,
-            targetEndAtParentBorder : false,
-            sourceStartAtBorder: true,
-            targetEndAtBorder: true
-		},
-		{ 	name: 	"patternTransparencyController",
-		},
+		}
 	],
 	
 	uis: [{
-		name: "Antipattern",
+		name: "MRT",
 		navigation: { type:	"examine" },
 		area: {
-			name: "top",
-			orientation: "vertical",
-			collapsible: false,
-			resizable: false,
-			first: {
-				size: "20%",
-				collapsible: false,
-				expanders: [{
-					name: "packageExplorer",
-					title: "Package Explorer",
-					controllers: [{ name: "packageExplorerController" }]
-				}]
-			},
-			second: {
-				size: "60%",
-				collapsible: false,
-				area: {
-					name: "canvas",
-					orientation: "vertical",
-					collapsible: false,
-					first: {
-						size: "80%",
-						canvas: { },
-						collapsible: false,
-						controllers: [
-							{ name: "defaultLogger" }, 
-							{ name: "canvasHoverController" }, 
-							{ name: "canvasFilterController" }, 
-							{ name: "canvasSelectController" }, 
-							{ name: "canvasMarkController" }, 
-							{ name: "canvasFlyToController" }, 
-							{ name: "patternConnectorController" }, 
-							{ name: "patternTransparencyController" }
-						]
-					},
-					second: {
-						size: "20%",
-						area: {
-							//collapsible: false,
-							orientation: "horizontal",
-							first: {
-								size: "100%",
-								collapsible: false,
-								expanders: [{
-									name: "versionExplorer",
-									title: "Version Selector",
-									controllers: [{ name: "versionExplorerController" }]
-								}]
-							},
-							second: {}
-							,
-						},
-					},
-				},
+            name: "search",
+            orientation: "horizontal",
+            collapsible: false,
+            resizable: false,
+            first: {
+                size: "50px",
+                controllers: [{ name: "searchController" }]
+            },
+		    second: {
+			    collapsible: false,
+                size: "80%",
+                area: {
+                    orientation: "vertical",
+                    name: "topDown",
+                    first: {
+                        size: "20%",
+                        collapsible: false,
+                        expanders: [{
+                            name: "packageExplorer",
+                            title: "Package Explorer",
+                            controllers: [{name: "packageExplorerController"}]
+                        }]
+                    },
+                    second: {
+                        size: "60%",
+                        collapsible: false,
+                        area: {
+                            name: "canvas",
+                            orientation: "vertical",
+                            collapsible: false,
+                            first: {
+                                size: "80%",
+                                canvas: {},
+                                collapsible: false,
+                                controllers: [
+                                    {name: "defaultLogger"},
+                                    {name: "canvasHoverController"},
+                                    {name: "canvasFilterController"},
+                                    {name: "canvasSelectController"},
+                                    {name: "canvasMarkController"},
+                                    {name: "canvasFlyToController"}
+                                ]
+                            },
+                            second: {
+                                size: "20%",
+                                area: {
+                                    //collapsible: false,
+                                    orientation: "horizontal",
+                                    first: {
+                                        size: "100%",
+                                        collapsible: false,
+                                        expanders: [{
+                                            name: "versionExplorer",
+                                            title: "Version Selector",
+                                            controllers: [{name: "versionExplorerController"}]
+                                        }]
+                                    },
+                                    second: {}
+                                    ,
+                                },
+                            },
+                        },
+                    },
+                },
 			},
 		},
 	}],
