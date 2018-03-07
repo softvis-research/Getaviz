@@ -18,10 +18,8 @@ $(document).ready(function () {
 			resizable: false
 		});		
 	}
-	console.log("aha")
 	//load famix data
 	$.getJSON( metaDataJsonUrl, initializeApplication);
-	console.log("u")
 });
 
 function initializeApplication(metaDataJson){
