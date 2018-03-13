@@ -1,9 +1,6 @@
-.ztree a[help="true"] {
-    text-decoration: underline;
-}
 
 .ztree * {
-    font-family: 'Open Sans', sans-serif;
+    font-family: "Segoe UI";
     font-size: 12px;
 }
 
@@ -93,4 +90,3 @@
     border-style: solid;
     border-color: #e5e5e5;
 }
-
