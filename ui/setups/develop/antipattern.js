@@ -1,6 +1,6 @@
 ﻿var setup = {
-		
-	controllers: [	
+
+	controllers: [
 
 		{ 	name: 	"defaultLogger",
 
@@ -10,96 +10,32 @@
 			logInfoConsole : true,
             logWarningConsole: true,
             logErrorConsole: true
-		},		
+		},
 		{	name: 	"canvasHoverController",
-			hoverColor: "blue"
-		},	
-		{	name: 	"canvasMarkController",
-			//TODO pars by config
-			eventHandler: [{
-				handler : "onEntityMarked",
-				event 	: events.marked.on
-			},{
-				handler : "onEntityUnmarked",
-				event 	: events.marked.off
-			}],
-			
-			//as function
-			actionEventCoupling:	function(controller){
-				actionController.actions.mouse.key[2].up.subscribe(function(actionEvent){
-					if(!actionEvent.entity){
-						return;
-					}
-
-					if(!actionController.actions.keyboard.key[32].pressed){
-						return;
-					}
-
-					var entity = actionEvent.entity;
-
-					var applicationEvent = {				
-						sender		: canvasMarkController,
-						entities	: [entity]		
-					};
-					
-					if(entity.marked){
-						events.marked.off.publish(applicationEvent);		
-					} else {
-						events.marked.on.publish(applicationEvent);		
-					}
-				});
-
-				events.marked.on.subscribe(controller.onEntityMarked);
-				events.marked.off.subscribe(controller.onEntityUnmarked); 
-			},
-			
-			//as config
-			//TODO pars by actionEventMapper			
-			actionEventCouplingConfig: [{
-				event		: events.marked.off,
-
-				constraints	: [{
-					action : actionController.actions.mouse.key[2].up						
-				}, {
-					entity : [{
-						marked	: true
-					}]
-				}, {
-					pressed : actionController.actions.keyboard.key[32].pressed
-				}]					
-			}, {
-				event		: events.marked.on,
-
-				constraints	: [{
-					action : actionController.actions.mouse.key[2].up						
-				}, {
-					entity : [{
-						marked	: false
-					}]
-				}, {
-					pressed : actionController.actions.keyboard.key[32].pressed
-				}],
-			}],
-
+			hoverColor: "blue",
+            showVersion: true
 		},
 		{	name: 	"canvasSelectController",
 			color: "blue"
-		},	
-		{	name: 	"canvasFilterController" 
 		},
-		{ 	name: 	"canvasFlyToController" ,
-                        targetType: "Namespace"
+		{	name: 	"canvasFilterController"
 		},
-		{ 	name: 	"canvasResetViewController" 
+		{ 	name: 	"canvasFlyToController",
+			targetType: "Namespace"
 		},
-		{ 	name: 	"edgeConfiguratorController" 
-		},	
-		{	name: 	"searchController" 
+		{ 	name: 	"canvasResetViewController"
 		},
-        {	name: 	"patternExplorerController",
+		{ 	name: 	"edgeConfiguratorController"
 		},
-		{	name: 	"versionExplorerController",
+		{	name: 	"searchController"
 		},
+        {	name: 	"patternExplorerController"
+		},
+		{	name: 	"versionExplorerController"
+		},
+        {
+            name:   "legendController"
+        },
 		{ 	name: 	"patternConnectorController",
 			showInnerRelations: true,
 			createEndPoints: true,
@@ -109,10 +45,10 @@
             sourceStartAtBorder: true,
             targetEndAtBorder: true
 		},
-		{ 	name: 	"patternTransparencyController",
-		},
+		{ 	name: 	"patternTransparencyController"
+		}
 	],
-	
+
 	uis: [{
 		name: "Antipattern",
 		navigation: { type:	"examine" },
@@ -142,43 +78,59 @@
 						canvas: { },
 						collapsible: false,
 						controllers: [
-							{ name: "defaultLogger" }, 
-							{ name: "canvasHoverController" }, 
-							{ name: "canvasFilterController" }, 
-							{ name: "canvasSelectController" }, 
-							{ name: "canvasMarkController" }, 
-							{ name: "canvasFlyToController" }, 
-							{ name: "patternConnectorController" }, 
+							{ name: "defaultLogger" },
+							{ name: "canvasHoverController" },
+							{ name: "canvasFilterController" },
+							{ name: "canvasSelectController" },
+							{ name: "canvasMarkController" },
+							{ name: "canvasFlyToController" },
+							{ name: "patternConnectorController" },
 							{ name: "patternTransparencyController" }
 						]
 					},
 					second: {
-						size: "20%",
-						area: {
-							//collapsible: false,
-							orientation: "horizontal",
+					    collabsible: false,
+                        resizable: false,
+                        area: {
 							first: {
-								size: "20%",
-								collapsible: false,
-								expanders: [{
-									name: "versionExplorer",
-									title: "Version Selector",
-									controllers: [{ name: "versionExplorerController" }]
-								}]
-							},
-							second: {
-								size: "80%",
-								collapsible: false,
-								expanders: [{
-									name: "edgeConfigurator",
-									title: "SCC Configurator",
-									controllers: [{ name: "edgeConfiguratorController"}]
-								}]
-							},
-						},
-					},
-				},
-			},
-		},
-	}],
+                                resizable: false,
+                                collapsible: false
+                            },
+                            second: {
+                                collapsible: false,
+                                resizable: false,
+                                area: {
+                                    orientation: "horizontal",
+                                    collapsible: false,
+                                    size: "0px",
+                                    resizable: false,
+                                    first: {
+                                        collabsible: false
+                                    },second: {
+                                        collapsible: true,
+                                        expanders: [
+                                            {
+                                                name: "versionExplorer",
+                                                title: "Version Selector",
+                                                controllers: [{ name: "versionExplorerController" }]
+                                            },{
+                                                name: "edgeConfigurator",
+                                                title: "Configuration",
+                                                size: "100px",
+                                                controllers: [{name: "edgeConfiguratorController"}]
+                                            },
+                                            {
+                                                name: "legend",
+                                                title: "Legend",
+                                                controllers: [{name: "legendController"}]
+                                            }]
+                                    }
+                                }
+                            }
+						}
+					}
+				}
+			}
+		}
+	}]
 };
