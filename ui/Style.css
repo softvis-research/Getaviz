@@ -20,6 +20,23 @@ a {
     color: #767676;
 }
 
+.grid-container {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+}
+
+.grid-item-left {
+    text-align: right;
+    line-height: 24px;
+}
+
+.grid-item-right {
+    text-align: left;
+    font-size: 20px;
+    padding-left: 10px;
+    line-height: 20px;
+}
+
 .jqx-expander-content
 {
     height: 100% !important;

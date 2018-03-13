@@ -36,6 +36,12 @@
         {
             name:   "legendController"
         },
+        {
+            name:   "systeminfoController",
+			system: "antlr",
+			link: "http://www.antlr.org/",
+			visualization: "Recursive Disk"
+        },
 		{ 	name: 	"patternConnectorController",
 			showInnerRelations: true,
 			createEndPoints: true,
@@ -123,6 +129,11 @@
                                                 name: "legend",
                                                 title: "Legend",
                                                 controllers: [{name: "legendController"}]
+                                            },
+                                            {
+                                                name: "systeminfo",
+                                                title: "Info",
+                                                controllers: [{name: "systeminfoController"}]
                                             }]
                                     }
                                 }
