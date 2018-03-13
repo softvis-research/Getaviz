@@ -89,10 +89,9 @@ var patternConnectorController = function(){
 		var relatedEntity = applicationEvent.entities[0];
 		var version = applicationEvent.entities[0].version;
 		var myEntities = [];
+        removeAllConnectors();
 		if(lastApplicationEvent == null) {
-			removeAllConnectors();
 			if(finished) {
-				full = false;
 				callingEntities = [];
 				visitedEntities = [];
 			}
@@ -115,7 +114,8 @@ var patternConnectorController = function(){
 						myEntities.push(pair[1]);
 					}
 				});
-				if(activated){
+            finished = true;
+            if(activated){
 					if(controllerConfig.bundledEdges) {
 						forceLayout(version, myEntities);
 					} else {
@@ -124,9 +124,7 @@ var patternConnectorController = function(){
 				}
 		} else {
 			if(lastApplicationEvent.entities[0].id === applicationEvent.entities[0].component) {
-				//removeAllConnectors();
 				if(finished) {
-					full = false;
 					callingEntities = [];
 					visitedEntities = [];
 				}
@@ -149,7 +147,8 @@ var patternConnectorController = function(){
 						myEntities.push(pair[1]);
 					}
 				});
-				if(activated){
+                finished = true;
+                if(activated){
 					if(controllerConfig.bundledEdges) {
 						//createRelatedConnections();
 						forceLayout(version, myEntities);
@@ -158,8 +157,12 @@ var patternConnectorController = function(){
 					}
 				}
 			} else {
-				removeAllConnectors();
-			}
+                if(finished) {
+                    callingEntities = [];
+                    visitedEntities = [];
+                }
+                finished = true;
+            }
 		}
     }
 	
@@ -167,7 +170,10 @@ var patternConnectorController = function(){
 		var value = applicationEvent.entities[0];
 		controllerConfig.showInnerRelations = value;
 		if(lastApplicationEvent != null) {
-			onComponentSelected(lastApplicationEvent);
+            switch (lastApplicationEvent.entities[0].type) {
+                case "stk": onAntipatternSelected(lastApplicationEvent); break;
+                case "component": onComponentSelected(lastApplicationEvent); break;
+            }
 		}
 	}
 
@@ -200,27 +206,37 @@ var patternConnectorController = function(){
 	function onWeightChanged(applicationEvent) {
 		var value = applicationEvent.entities[0];
 		minWeight = value;
-		onComponentSelected(lastApplicationEvent);
+		if(lastApplicationEvent !== null) {
+            switch (lastApplicationEvent.entities[0].type) {
+				case "stk": onAntipatternSelected(lastApplicationEvent); break;
+                case "component": onComponentSelected(lastApplicationEvent); break;
+            }
+        }
 	}
 	
 	function onBundledEdgesChanged(applicationEvent) {
 		var value = applicationEvent.entities[0];
 		controllerConfig.bundledEdges = value;
-		onComponentSelected(lastApplicationEvent);
+        if(lastApplicationEvent !== null) {
+            switch (lastApplicationEvent.entities[0].type) {
+                case "stk": onAntipatternSelected(lastApplicationEvent); break;
+                case "component": onComponentSelected(lastApplicationEvent); break;
+            }
+        }
 	}
 
 	function removeAllConnectors() {
 
         events.log.info.publish({ text: "connector - removeAllConnectors"});
 
-        if( connectors.length == 0){
+        if(connectors.length == 0){
 			return;
         }
 
 		//remove scene elements
 		connectors.forEach(function(version, connector){
 			canvasManipulator.removeElement(connector);
-		});
+        });
 
 		connectors = new Map();
 
@@ -239,40 +255,53 @@ var patternConnectorController = function(){
 	
 	function onAntipatternSelected(applicationEvent) {
 
-		events.log.info.publish({ text: "pattern connector - onAntipatternSelected " + finished});
-
+		events.log.info.publish({ text: "pattern connector - onAntipatternSelected"});
+        lastApplicationEvent = applicationEvent;
 		removeAllConnectors();
 
 		//get related entites
 		var sourceEntity = applicationEvent.entities[0];
 		if(finished) {
-			full = false;
             callingEntities = [];
             visitedEntities = [];
         }
 
         var allRelatedEntities = model.getEntitiesByAntipattern(sourceEntity.id);
 		var relatedEntities = [];
+        var relatedEntitiesByVersion = new Map();
         var versions = model.getSelectedVersions();
         for (var i = 0; i < allRelatedEntities.length; ++i) {
             if(versions.includes(allRelatedEntities[i].version)){
 				relatedEntities.push(allRelatedEntities[i])
             }
 		}
-		relatedEntities.forEach(function(entity) {
-			addReaches2(entity, sourceEntity);
-		});
-		// TODO: find connected patterns
 
-		if(callingEntities.length == 0) {
+        relatedEntities.forEach(function(entity){
+            var map = [];
+            if(controllerConfig.bundledEdges)  {
+                if(relatedEntitiesByVersion.has(entity.version)) {
+                    map = relatedEntitiesByVersion.get(entity.version);
+                }
+                map.push(entity);
+                relatedEntitiesByVersion.set(entity.version, map);
+            } else {
+                addReaches2(entity, sourceEntity);
+            }
+        });
+
+        if(callingEntities.length == 0 && controllerConfig.bundledEdges == false) {
             return;
-		}
+        }
 
         finished = true;
 
-		if(activated){
-            createRelatedConnections(0);
-		}
+        if(activated){
+            if(controllerConfig.bundledEdges) {
+                relatedEntitiesByVersion.forEach(callback);
+            } else {
+                createRelatedConnections(0);
+            }
+        }
 	}
 	
 	function addReachesAndReachedBy (entity) {
@@ -328,7 +357,7 @@ var patternConnectorController = function(){
 		var i = 0;
 		var graph = {
 			links: [],
-			nodes: {},
+			nodes: {}
 		};
 		addInternalReaches(relatedEntities);
 		createRelatedConnections(minWeight);
@@ -340,7 +369,7 @@ var patternConnectorController = function(){
 				group: 1,
 				index: i,
 				x: d3Node.x,
-				y: d3Node.y,
+				y: d3Node.y
 			};
 			graph.nodes[d3Node.key] = node;
 			i++;
@@ -455,7 +484,6 @@ var patternConnectorController = function(){
 		var sourceEntity = applicationEvent.entities[0];
 			
 		if(finished) {
-			full = false;
 			callingEntities = [];
 			visitedEntities = [];
 		}
@@ -522,27 +550,27 @@ var patternConnectorController = function(){
 	}
 
 	function createRelatedConnections(minimalWeight){
-		var relatedEntitesMap = new Map();
+		var relatedEntitiesMap = new Map();
 
 		callingEntities.forEach(function(relatedPair){
-			if(relatedEntitesMap.has(relatedPair[1])){
+			// if(relatedEntitiesMap.has(relatedPair[1])){
 				//events.log.info.publish({ text: "pattern connector - onRelationsChanged - multiple relation"});
 				//return;
-			}
+			// }
 			if(controllerConfig.showInnerRelations === false){
 				if(isInnerClass(relatedPair[1], relatedPair[0])){
 					events.log.info.publish({ text: "pattern connector - onRelationsChanged - inner relation"});
 					return;
 				}
 			}
-			var weight = (relatedPair[0].betweennessCentrality + relatedPair[1].betweennessCentrality)/2;
+            var weight = (relatedPair[0].betweennessCentrality + relatedPair[1].betweennessCentrality)/2;
 			if(weight == 0) {
-				weight = 0.01;
-			}
-			if(weight < minimalWeight) {
-				return;
+				//weight = 0.01;
 			}
 
+            if(weight < minimalWeight) {
+				return;
+			}
             //create scene element
 			var connector = createConnector(relatedPair[0], relatedPair[1]);
 
@@ -553,7 +581,8 @@ var patternConnectorController = function(){
             connectors.set(connector, relatedPair[0].version);
 			canvasManipulator.addElement(connector);
 
-			//create model entity
+
+            //create model entity
 			var relation = model.createEntity(
 				"Relation",
 				relatedPair[0].id + "--2--" + relatedPair[1].id,
@@ -565,7 +594,7 @@ var patternConnectorController = function(){
             relation.source = relatedPair[0];
 			relation.target = relatedPair[1];
 			relations.push(relation);
-			relatedEntitesMap.set(relatedPair[0], relatedPair[1]);
+			relatedEntitiesMap.set(relatedPair[0], relatedPair[1]);
 		});
 
 		connectors.forEach(function(version, connector){
@@ -575,7 +604,7 @@ var patternConnectorController = function(){
 
         });
 
-		if(relatedEntitesMap.size != 0){
+		if(relatedEntitiesMap.size != 0){
 			var applicationEvent = {
 				sender: patternConnectorController,
 				entities: relations
@@ -588,7 +617,8 @@ var patternConnectorController = function(){
         var weight = (entity.betweennessCentrality + relatedEntity.betweennessCentrality)/2;
 		//calculate attributes
 		var sourcePosition = calculateSourcePosition(entity, relatedEntity);
-		if( sourcePosition === null ){
+
+        if( sourcePosition === null ){
 			return;
 		}
 
@@ -596,7 +626,8 @@ var patternConnectorController = function(){
 		if( targetPosition === null ){
 			return;
 		}
-		var connectorColor = "1 0 0";
+
+        var connectorColor = "1 0 0";
 		var connectorSize = weight;
 		if(connectorSize < 0.1) {
 			connectorSize = 0.1;
@@ -720,6 +751,7 @@ var patternConnectorController = function(){
 				d3Nodes.push(d3TargetNode);
 			}
 		}
+
 		//config
 		if(controllerConfig.fixPositionZ){
 			sourcePosition[2] = controllerConfig.fixPositionZ;
@@ -732,7 +764,7 @@ var patternConnectorController = function(){
                 startID: entity.id,
                 end: targetKey,
                 endID: relatedEntity.id,
-            }
+            };
             var id = "line" + index;
             index++;
             meta.set(id, info)

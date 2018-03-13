@@ -4,18 +4,18 @@ var canvasSelectController = (function() {
 		UP 			: "UP",
 		DOWN 		: "DOWN",
 		DURATION	: "DURATION"
-	}
+	};
 
 	//config parameters	
 	var controllerConfig = {
 		setCenterOfRotation : false,
-                color: "darkred",
+        color: "darkred",
 		selectionMouseKey: 1,
 		selectionMode: SELECTION_MODES.UP,					
 		selectionDurationSeconds: 0.5,
 		selectionMoveAllowed: false,
 		showProgressBar: false,
-	}
+	};
 
 	var downActionEventObject;
 
@@ -42,18 +42,14 @@ var canvasSelectController = (function() {
 		var selectedEntities = events.selected.getEntities();		
 		
 		selectedEntities.forEach(function(selectedEntity){
-			var unselectEvent = {					
-					sender: canvasSelectController,
-					entities: [selectedEntity]
-				}	
+			var unselectEvent = {
+                sender: canvasSelectController,
+                entities: [selectedEntity]
+            };
 
 			events.selected.off.publish(unselectEvent);	
 		});		
 	}
-
-
-	
-
 
 	function downAction(eventObject, timestamp){
 
@@ -120,15 +116,12 @@ var canvasSelectController = (function() {
 		}
 	}
 
-
-
-
 	function handleOnClick(eventObject) {            
 				
 		var applicationEvent = {			
 			sender: canvasSelectController,
 			entities: [eventObject.entity]
-		}	
+		};
 		
 		events.selected.on.publish(applicationEvent);		
 	}
@@ -143,7 +136,16 @@ var canvasSelectController = (function() {
 		if(selectedEntities.has(entity)){
 			return;
 		}
-		
+
+        if(entity.type == "text"){
+            return;
+        }
+
+        if(entity.type == "Namespace"){
+		    console.log("namespace")
+		    return;
+        }
+
 		//unhighlight old selected entities	for single select	
 		if(selectedEntities.size != 0){
 		
@@ -167,11 +169,10 @@ var canvasSelectController = (function() {
 		}
     }
 	
-	function onEntityUnselected(applicationEvent){		
+	function onEntityUnselected(applicationEvent){
 		var entity = applicationEvent.entities[0];
 		canvasManipulator.unhighlightEntities([entity]);		
 	}
-
 
 	function showProgressBar(eventObject){
 		

@@ -194,7 +194,7 @@ var application = (function() {
 		
 		//collect old active controllers for deactivation		
 		oldActiveControllers = Array.from(activeControllers.keys());
-		newActiveControllers = new Array();		
+		newActiveControllers = [];
 
 		try {
 			//parse new ui config
@@ -256,7 +256,6 @@ var application = (function() {
 		//expander
 		if(configPart.expanders !== undefined){
 			configPart.expanders.forEach(function(expander){
-				
 				var expanderName = configName + "_" + expander.name;
 				var expanderId = "#" + expanderName;
 				var expanderTitle = expander.title;
@@ -268,7 +267,7 @@ var application = (function() {
 				$(expanderId).jqxExpander({theme: "metro", width: "100%", height: "100%"});
 
 				//pars expander parts as config parts
-				var expanderContent = document.createElement("DIV");;
+				var expanderContent = document.createElement("DIV");
 				parseUIConfig(configName, expander, expanderContent);
 
 				$(expanderId).jqxExpander('setContent', expanderContent);
@@ -354,7 +353,7 @@ var application = (function() {
 
 		//conroller also in new ui -> no deactivation
 		if(oldActiveControllers.length != 0){		
-			var indexOfController = oldActiveControllers.indexOf(controllerObject) 
+			var indexOfController = oldActiveControllers.indexOf(controllerObject);
 			if( indexOfController != -1){
 				oldActiveControllers.splice(indexOfController, 1);
 			}
@@ -471,7 +470,7 @@ var application = (function() {
 		return	{	
 					expander: 	expanderDivElement,
 					head:		expanderHeadDivElement,
-					content:	expanderContentDivElement		
+					content:	expanderContentDivElement
 		};
 	}
 

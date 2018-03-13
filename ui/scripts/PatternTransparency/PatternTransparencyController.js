@@ -11,7 +11,7 @@ var patternTransparencyController = (function() {
 	//config parameters	
 	var controllerConfig = {
 		fullFadeValue : 0.85,
-		halfFadeValue : 0.5,
+		halfFadeValue : 0.0,
 		noFadeValue : 0.0,
 		startFaded: false,
 	};
@@ -55,13 +55,14 @@ var patternTransparencyController = (function() {
 			addReachesAndReachedBy(applicationEvent.entities[0]);
 			//get parents of releated entities
 			parents = [];
-			console.log("here we are")
 			relatedEntities.forEach(function(relatedEntity){
 				parents = parents.concat(relatedEntity.allParents);
 				relatedEntity.isTransparent = false;
 			});
-	
-			parents.forEach(function(parent){
+
+            relatedEntities = relatedEntities.concat(model.getLabels());
+
+            parents.forEach(function(parent){
 				parent.isTransparent = true;
 			});
 			if(activated){
@@ -79,20 +80,14 @@ var patternTransparencyController = (function() {
     } 
 
 	function unfadeAll(){
-		//TODO FIX
-		//realy realy bad fix for one model where elements in scene but not in model...
-		//add an all elements functionality for canvasmanipulator anyway 
-		var allCanvasElementIds = canvasManipulator.getElementIds();
-		var allCanvasObjects = [];
-		allCanvasElementIds.forEach(function(canvasElementId){
-			allCanvasObjects.push({id:canvasElementId});
-		});
-		canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.noFadeValue);	
+        var entities = model.getAllEntities();
+		canvasManipulator.changeTransparencyOfEntities(entities, controllerConfig.noFadeValue);
+        canvasManipulator.resetColorOfEntities(entities);
         faded = false;
 		model.getAllEntities().forEach(function(entity){
 			entity.isTransparent = false;
 		});
-	}
+    }
 	
 	function addReachesAndReachedBy (entity) {
 		relatedEntities.push(entity);
@@ -126,6 +121,8 @@ var patternTransparencyController = (function() {
             case "stk":
                 relatedEntities = model.getEntitiesByAntipattern(entity.id);
         }
+
+        relatedEntities = relatedEntities.concat(model.getLabels());
 
         if(relatedEntities.length == 0){
             return;
@@ -166,12 +163,15 @@ var patternTransparencyController = (function() {
 			case "stk":
 				relatedEntities = model.getEntitiesByAntipattern(entity.id);
 		}
-      
-		if(relatedEntities.length == 0){
+
+        if(relatedEntities.length == 0){
             return;
 		}
 
-		//get parents of releated entities
+        relatedEntities = relatedEntities.concat(model.getLabels());
+
+
+        //get parents of releated entities
 		parents = [];
 		relatedEntities.forEach(function(relatedEntity){
 			parents = parents.concat(relatedEntity.allParents);
@@ -189,35 +189,29 @@ var patternTransparencyController = (function() {
     }
 
 	function fadeEntities(){
-		//first relation selected -> fade all entities				
+		//first relation selected -> fade all entities
 		fadeAll();
 
-		//unfade parents of related entities				
-		canvasManipulator.changeTransparencyOfEntities(parents, controllerConfig.halfFadeValue);
+		//unfade parents of related entities
+        canvasManipulator.resetColorOfEntities(parents);
+        canvasManipulator.changeTransparencyOfEntities(parents, controllerConfig.halfFadeValue);
 		
-			//unfade related entities
-		canvasManipulator.changeTransparencyOfEntities(relatedEntities, controllerConfig.noFadeValue);
+        //unfade related entities
+        canvasManipulator.resetColorOfEntities(relatedEntities);
+        canvasManipulator.changeTransparencyOfEntities(relatedEntities, controllerConfig.noFadeValue);
 	}
 
 	function fadeAll(){
-		if(!faded){
-			
-			//TODO FIX
-			//realy realy bad fix for one model where elements in scene but not in model...
-			//add an all elements functionality for canvasmanipulator anyway 
-			var allCanvasElementIds = canvasManipulator.getElementIds();
-			var allCanvasObjects = [];
-			allCanvasElementIds.forEach(function(canvasElementId){
-				allCanvasObjects.push({id:canvasElementId});
-			});
+		if(!faded) {
+            var entities = model.getAllEntities();
 
-
-			canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.fullFadeValue);
-			faded = true;
-			model.getAllEntities().forEach(function(entity){
-				entity.isTransparent = true;
-			});
-		}
+            canvasManipulator.changeTransparencyOfEntities(entities, controllerConfig.fullFadeValue);
+            canvasManipulator.changeColorOfEntities(entities, "white");
+            faded = true;
+            model.getAllEntities().forEach(function (entity) {
+                entity.isTransparent = true;
+            });
+        }
 	}
 	
 	 return {

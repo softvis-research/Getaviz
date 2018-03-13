@@ -139,6 +139,10 @@ var canvasHoverController = (function() {
 			return;
 		}
 
+		if(entity.type == "text"){
+			return;
+		}
+
 		if(entity.marked && entity.selected){
 			canvasManipulator.unhighlightEntities([entity]);	
 		} else {
@@ -172,6 +176,9 @@ var canvasHoverController = (function() {
 			if(!entity.selected){
 				canvasManipulator.unhighlightEntities([entity]);			
 			}
+			if(entity.type == "Namespace"){
+			    canvasManipulator.unhighlightEntities([entity]);
+            }
         }
 		
 		$("#tooltip").css("display", "none");		
