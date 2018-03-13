@@ -17,6 +17,7 @@ var model = (function() {
     var entitiesByVersion = new Map();
 	var selectedVersions = [];
 	var paths = [];
+	var labels = [];
         
 	function initialize(famixModel) {            
 		//create initial entites from famix elements 
@@ -41,6 +42,28 @@ var model = (function() {
 			entity.isTransparent = false;
 						
 			switch(entity.type) {
+				case "text":
+                    entity.versions = element.versions.split(",");
+                    for(var i = 0; i < entity.versions.length; ++i) {
+                        entity.versions[i] = entity.versions[i].trim();
+                    }
+                    entity.versions.forEach(function(version){
+                        if(version != undefined) {
+                            if(entitiesByVersion.has(version)) {
+                                var map = entitiesByVersion.get(version);
+                                map.push(entity);
+                                entitiesByVersion.set(version, map);
+                            } else {
+                                addVersion(version);
+                                var map = [];
+                                map.push(entity);
+                                entitiesByVersion.set(version, map);
+                            }
+                        }
+                    });
+                    labels.push(entity);
+                    break;
+
 				case "path":
 					entity.start = element.start;
 					entity.end = element.end;
@@ -173,6 +196,8 @@ var model = (function() {
 			}	
 			
 			switch(entity.type) {
+                case "text":
+                    break;
                             
                 case "component":
                     var components = [];
@@ -489,6 +514,10 @@ var model = (function() {
 	function getEntitiesByVersion(versionid){
         return entitiesByVersion.get(versionid);
     }
+
+    function getLabels(){
+	    return labels;
+    }
 	
 	function getSelectedVersions() {
 		return selectedVersions;
@@ -516,7 +545,8 @@ var model = (function() {
 		getSelectedVersions			: getSelectedVersions,
 		getPaths					: getPaths,
         getRole 					: getRole,
-		getRoleBetween				: getRoleBetween
+		getRoleBetween				: getRoleBetween,
+        getLabels                   : getLabels
     };
 	
 })();

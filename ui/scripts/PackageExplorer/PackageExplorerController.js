@@ -207,11 +207,9 @@ var packageExplorerController = (function() {
         if(applicationEvent.sender !== packageExplorerController) {
 			var entity = applicationEvent.entities[0];
 			var item = tree.getNodeByParam("id", entity.id, null);            
-			tree.selectNode(item, false);         
-        }   
-		
-		//interactionLogger.logManipulation("PackageExplorerTree", "highlight", entity.id);
-    }
+			tree.selectNode(item, false);
+        }
+	}
 	
 	
 	
