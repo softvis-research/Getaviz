@@ -2,6 +2,7 @@ var patternExplorerController = (function() {
     
 	var patternExplorerTreeID = "patternExplorerTree";
 	var jQPatternExplorerTree = "#patternExplorerTree";
+	var tab = null;
 	
 	var tree;
 	
@@ -50,9 +51,9 @@ var patternExplorerController = (function() {
         var items = [];
         var components = [];
         
-        item = { id: "stk", open: false, nocheck: true, parentId: "", name: "Subtype Knowledge"};
+        item = { id: "stk", open: false, nocheck: true, parentId: "", name: "<span style='text-decoration: underline; font-style: italic;'>Subtype Knowledge</span>", help: true};
         items.push(item);
-        item = { id: "component", open: false, nocheck: true, parentId: "", name: "Strongly Connected Components", icon: iconFiles.packageIcon, iconSkin: "zt"};
+        item = { id: "component", open: false, nocheck: true, parentId: "", name: "<span style='text-decoration: underline; font-style: italic;'>Circular Dependency</span>"};
         items.push(item);
                 //build items for ztree
         entities.forEach(function(entity) {
@@ -173,7 +174,8 @@ var patternExplorerController = (function() {
                 enable: true,
                 idKey: "id",
                 pIdKey: "parentId",
-                rootPId: ""
+                rootPId: "",
+                    help: "true"
                 }
             },
             callback: {
@@ -182,7 +184,8 @@ var patternExplorerController = (function() {
             view:{
                 showLine: false,
                 showIcon: false,
-                selectMulti: false
+                selectMulti: false,
+                nameIsHTML: true
             }
         };
 
@@ -197,10 +200,17 @@ var patternExplorerController = (function() {
 			sender: patternExplorerController,
 			entities: [model.getEntityById(treeNode.id)]
 		};
+		if(treeNode.id == "component") {
+		    window.open("../glossary.html#cd",'glossary').focus();
+        }
+        if(treeNode.id == "stk") {
+            window.open("../glossary.html#stk",'glossary');
+        }
+
         if (applicationEvent.entities[0] === undefined) {
             return;
         }
-        
+
         var type = applicationEvent.entities[0].type;
 
 		switch(type) {
@@ -211,15 +221,21 @@ var patternExplorerController = (function() {
 				events.componentSelected.on.publish(applicationEvent);
 				break;
 			default:
-				//events.selected.on.publish(applicationEvent);
+				if(applicationEvent.entities[0].id == "stk") {
+                    window.open("../Glossary.html",'_blank');
+                }
 		}
     }
 	
     function onEntitySelected(applicationEvent) {
         if(applicationEvent.sender !== patternExplorerController) {
             var entity = applicationEvent.entities[0];
-            var item = tree.getNodeByParam("id", entity.id, null);            
-            tree.selectNode(item, false);         
+            var item = tree.getNodeByParam("name", entity.name, null);
+            if(item == null) {
+                tree.cancelSelectedNode()
+            } else {
+                tree.selectNode(item, false);
+            }
         }
     }
 	

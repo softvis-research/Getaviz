@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Getaviz Glossary</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <!--jqwidgets-->
+    <script type="text/javascript" src="libs/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxexpander.js"></script>
+
+    <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.metro.css" type="text/css" />
+
+    <link rel="stylesheet" href="Glossary.css" type="text/css" />
+
+    <script type="text/javascript">
+
+        var expanders = [];
+
+        function createExpander(id, title){
+            var expanderId = "#" + id;
+            var expanderDivElement = document.createElement("DIV");
+            expanderDivElement.id = id;
+
+            var expanderHeadDivElement = document.createElement("DIV");
+            expanderHeadDivElement.innerHTML = title;
+            expanderDivElement.appendChild(expanderHeadDivElement);
+
+            var expanderContentDivElement = document.createElement("DIV");
+            expanderDivElement.appendChild(expanderContentDivElement);
+
+            document.body.appendChild(expanderDivElement);
+            $(expanderId).jqxExpander({theme: "metro", width: "50%"});
+            var expanderContent = document.getElementById(id + "_content");
+            $(expanderId).jqxExpander('setContent', expanderContent);
+            return $(expanderId);
+        }
+
+        function updateExpanderStates(){
+            var hash = window.location.hash;
+            expanders.forEach(function(expander){
+                if(expander.selector == hash){
+                    expander.jqxExpander('expand')
+                } else {
+                    expander.jqxExpander('collapse')
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            expanders.push(createExpander("bc", "Betweenness Centrality"));
+            expanders.push(createExpander("cd", "Circular Dependency"));
+            expanders.push(createExpander("stk", "Subtype Knowledge"));
+            expanders.push(createExpander("todo", "STK Metric"));
+            expanders.push(createExpander("level", "Visibility Level of Dependencies"));
+            expanders.push(createExpander("selection", "Selection"));
+            updateExpanderStates();
+        });
+
+        document.onvisibilitychange = function() {
+            updateExpanderStates();
+        };
+    </script>
+</head>
+<body class="default">
+<h1>Glossary</h1>
+    <div id="stk_content">
+        In this antipattern [1], types have uses relationships to their subtypes. The presence of STK instances compromises separability of sub- and supertypes.
+        In particular, it implies that there are circular dependencies between the name spaces containing sub- and supertype. Instability in the (generally less abstract)
+        subtype will cause instability in the supertype, and the supertype cannot be used and understood without its subtype.
+        <p/>
+        <image src="stk.png"/>
+
+        <h3>References</h3>
+        <ol>
+            <li> A. J. Riel. Object-Oriented Design Heuristics. Addison-Wesley Longman Publishing Co., Inc., Boston, MA, USA, 1996.</li>
+        </ol>
+    </div>
+    <div id="cd_content">
+        Dependency cycles between name spaces (CD) is a special instance of cycles between modules [1]. Often, only weak circular dependencies between two packages are considered:
+        there must be one path connecting some class in a package A to some class in another package B, and another path connecting some class in B with some class in A.
+        This antipattern is stronger: it requires that there is one path that connects a class in A with a class in B and then returns to A. For instance, it is not possible to
+        break this antipattern by splitting packages. This antipattern is more difficult to remove as the path must be broken through refactoring.
+
+        The presence of this antipattern implies that the participating packages cannot be deployed and maintained separately. In particular, if these name spaces were deployed in
+        several runtime modules (jars), this would create a circular dependency between those jars.
+
+        <p/>
+        <image src="cd.png"/>
+
+        <p/>
+
+        <h3>References</h3>
+        <ol>
+            <li> W. Stevens, G. Myers, and L. Constantine. 1979. Structured design. In Classics in software engineering, Edward Nash Yourdon (Ed.). Yourdon Press, Upper Saddle River, NJ, USA 205-232.</li>
+        </ol>
+    </div>
+    <div id="bc_content">
+        Explenation of Betweenness Centrality
+    </div>
+    <div id="todo_content">
+        Explenation of STK Metrics
+    </div>
+    <div id="level_content">
+        Explenation of Visibility Level
+    </div>
+    <div id="selection_content">
+        Explenation of selection
+    </div>
+</body>
+</html>
