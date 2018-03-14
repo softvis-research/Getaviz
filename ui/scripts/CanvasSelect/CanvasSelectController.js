@@ -35,7 +35,23 @@ var canvasSelectController = (function() {
 		actionController.actions.mouse.move.subscribe(mouseMove);	
 			
 		events.selected.on.subscribe(onEntitySelected);
-		events.selected.off.subscribe(onEntityUnselected);		        
+		events.selected.off.subscribe(onEntityUnselected);
+        events.componentSelected.on.subscribe(onComponentSelected);
+        events.antipattern.on.subscribe(onComponentSelected);
+	}
+
+	function onComponentSelected(applicationEvent){
+		console.log("executed")
+        var selectedEntities = events.selected.getEntities();
+        selectedEntities.forEach(function(selectedEntity){
+
+            var unselectEvent = {
+                sender: canvasSelectController,
+                entities: [selectedEntity]
+            }
+
+            events.selected.off.publish(unselectEvent);
+        });
 	}
 	
 	function reset(){
@@ -142,7 +158,6 @@ var canvasSelectController = (function() {
         }
 
         if(entity.type == "Namespace"){
-		    console.log("namespace")
 		    return;
         }
 
