@@ -201,10 +201,10 @@ var patternExplorerController = (function() {
 			entities: [model.getEntityById(treeNode.id)]
 		};
 		if(treeNode.id == "component") {
-		    window.open("../glossary.html#cd",'glossary').focus();
+		    window.open("./glossary.html#cd",'glossary').focus();
         }
         if(treeNode.id == "stk") {
-            window.open("../glossary.html#stk",'glossary');
+            window.open("./glossary.html#stk",'glossary');
         }
 
         if (applicationEvent.entities[0] === undefined) {
@@ -222,7 +222,7 @@ var patternExplorerController = (function() {
 				break;
 			default:
 				if(applicationEvent.entities[0].id == "stk") {
-                    window.open("../Glossary.html",'_blank');
+                    window.open("./Glossary.html",'_blank');
                 }
 		}
     }

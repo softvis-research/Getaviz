@@ -84,16 +84,16 @@ var legendController = (function() {
         };
         switch(treeNode.id) {
             case "type_color": {
-                window.open("../glossary.html#bc",'glossary');
+                window.open("./glossary.html#bc",'glossary');
                 break;
             }
             case "type_size": {
-                window.open("../glossary.html#todo", 'glossary');
+                window.open("./glossary.html#todo", 'glossary');
                 break;
             }
 
             case "selection": {
-                window.open("../glossary.html#selection", 'glossary');
+                window.open("./glossary.html#selection", 'glossary');
                 break;
             }
         }

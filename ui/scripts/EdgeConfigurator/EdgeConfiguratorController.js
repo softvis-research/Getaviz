@@ -15,7 +15,7 @@ var edgeConfiguratorController = (function() {
         var a = document.createElement('a');
         var text = document.createTextNode("Visibility Level of Circular Dependencies");
         a.appendChild(text);
-        a.href ="javascript: window.open(\"../glossary.html#level\",'glossary');";
+        a.href ="javascript: window.open(\"./glossary.html#level\",'glossary');";
         rootDiv.appendChild(a);
         prepareRadioButton(rootDiv, "showall", "Show all dependencies", 0);
         prepareRadioButton(rootDiv, "showcritical", "Only show critical dependencies", 0.25);
