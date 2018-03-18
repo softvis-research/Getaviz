@@ -60,6 +60,9 @@ end
 group :development, :test do
   gem 'rspec-rails'
   gem 'factory_bot'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'database_cleaner'
   gem 'simplecov', require: false
   gem 'brakeman', require: false
 end
