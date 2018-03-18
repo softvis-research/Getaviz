@@ -2,6 +2,7 @@ before_script:
   - cp evaluationserver/config/database.travis.yml evaluationserver/config/database.yml
   - "mysql -e 'create database eval_server_test;'"
   - cd evaluationserver/
+  - bundle install
 env: 
   - RAILS_ENV=test
 language: ruby
