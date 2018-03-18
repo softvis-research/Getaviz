@@ -1,5 +1,5 @@
 before_script:
-  - cp config/database.travis.yml config/database.yml
+  - cp evaluationserver/config/database.travis.yml evaluationserver/config/database.yml
   - "mysql -e 'create database eval_server_test;'"
   - cd evaluationserver/
 env: 
