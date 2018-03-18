@@ -1,0 +1,17 @@
+before_script:
+  - cp config/database.travis.yml config/database.yml
+  - "mysql -e 'create database eval_server_test;'"
+  - cd evaluationserver/
+env: 
+  - RAILS_ENV=test
+language: ruby
+rvm:
+  - 2.5.0
+script:
+  - bundle exec rails db:migrate RAILS_ENV=test
+  - bundle exec rspec
+after_failure:
+  - "mysql -e 'show databases;'"
+  - "cat ./config/database.yml"
+  - "echo $RAILS_ENV"
+  - "bundle exec rake --version"
