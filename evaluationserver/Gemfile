@@ -64,6 +64,7 @@ group :development, :test do
   gem 'faker'
   gem 'database_cleaner'
   gem "i18n-tasks"
+  gem 'capybara'
   gem 'simplecov', require: false
   gem 'brakeman', require: false
 end
