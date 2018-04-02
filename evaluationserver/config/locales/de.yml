@@ -20,14 +20,11 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 de:
-  hello: "Hallo Welt"
   save: "Speichern"
   back: "Zurück"
   edit: "Bearbeiten"
   show: "Anzeigen"
   cancel: "Abbrechen"
-  title: "Titel"
-  description: "Beschreibung"
   actions: "Aktionen"
   edit: "Bearbeiten"
   destroy: "Löschen"
@@ -36,93 +33,57 @@ de:
   proceed: "Weiter"
   save_and_proceed: "Speichern und weiter"
   your_answer: "Ihre Antwort"
-  reload_warning_heading: "Hinweis"
   reload_warning_text: "Die Seiten des Experiments können leider nicht mehrfach aufgerufen werden. Bitte laden Sie deshalb die Seite nicht neu."
-  activerecord:
-    models:
-      test: Test
-      experiment_test: Experimenttest
-      participant: Teilnehmer
-      question: Frage
-      scene: Szene
-      scene_test: Szenentest
-      test: Test
-      text: Text
-      experiment: Experiment
-      assigner: Zuweiser
-  experiment_test:
-    successful_updated: "Experimenttest erfolgreich erzeugt"
-    successful_created: "Experimenttest erfolgreich aktualisiert"
+  add_answer: "Antwort hinzufügen"
+  add_possibilities: "Antwortmöglichkeit hinzufügen"
+  answer_text: "Antworttext"
+  answer_type: "Antworttyp"
+  correct_answer_string: "Korrekte Antwort (Text)"
+  correct_answer_value_min: "Korrekte Antwort (Zahl, Minimalwert)"
+  correct_answer_value_max: "Korrekte Antwort (Zahl, Maximalwert)"
+  default: "Voreinstellung"
+  import: "Importieren"
+  is_correct_choice: "Korrekte Auswahl"
+  max: "Maximal"
+  max_mistakes: "Maximale Fehleranzahl"
+  min: "Minimal"
+  placeholder: "Platzhalter"
+  remove_answer: "Antwort löschen" 
+  remove_possibilities: "Antwortmöglichkeit löschen"
+  step: "Schritt"
+  timeout: "Maximale Zeit"
   participants:
     successful_updated: "Teilnehmer erfolgreich erzeugt"
     successful_created: "Teilnehmer erfolgreich aktualisiert"
     participant: "Teilnehmer"
     edit: "Teilnehmer bearbeiten"
     new: "Teilnehmer anlegen"
-    name: "Name"
-    description: "Beschreibung"
-    id: "ID"
-    created_at: "Erzeugt am"
   questions:
     successful_created: "Frage erfolgreich erzeugt"
     successful_updated: "Frage erfolgreich aktualisiert"
     questions: "Fragen"
     question: "Frage"
-    edit: "Frage bearbeiten"
-    new: "Frage anlegen"
-    name: "Name"
-    description: "Beschreibung"
     id: "ID"
     created_at: "Erzeugt am"
     question_text: "Fragetext"
     question_type: "Fragetyp"
-    option: "Option"
-    from: "Von"
-    to: "Bis"
-    granularity: "Granularität"
   scenes:
     successful_created: "Szene erfolgreich erzeugt"
     successful_updated: "Szene erfolgreich aktualisiert"
     scenes: "Szenen"
     scene: "Szene"
-    edit: "Szene bearbeiten"
     new: "Neue Szene"
-    scene_file: "Szenendatei"
-    use_url: "URL nutzen"
     url: "URL"
     goto_url: "Szenen-URL aufrufen"
-    scenefile_file_name: "Szenendatei"
-    scene_file_file_name: "Szenendatei"
-    scene_file_file_size: "Dateigröße"
-    scene_file_content_type: "Inhaltstyp"
     name: "Name"
     description: "Beschreibung"
     id: "ID"
-    created_at: "Erzeugt am"
-    scene_file_updated_at: "Geändert am"
     dummy_text: "Blubb Blubb"
-    detailed_scene: "Detailierte Szene"
-    scene_start: "Szene Start ->"
-    scene_end: "<- Szene Ende"
     remarks: "Hinweise"
     mapping: "Mapping-Hinweis"
   scene_tests:
-    successful_created: "Szenentest erfolgreich erzeugt"
-    successful_updated: "Szenentest erfolgreich aktualisiert"
-    scene_test: "Szenentest"
-    scene_tests: "Szenentests"
-    assigner: "Zuweisungsart"
-    scenes: "Szenen"
-    tests: "Tests"
-    test: "Test"
     edit: "Szenentest bearbeiten"
     new: "Neuer Szenentest"
-    title: "Name"
-    name: "Name"
-    description: "Beschreibung"
-    id: "ID"
-    created_at: "Erzeugt am"
-    scene_file_updated_at: "Geändert am"
     dummy_text: "Blubb Blubb"
   tests:
     name: "Name"
@@ -131,23 +92,15 @@ de:
     id: "ID"
     created_at: "Erzeugt am"
     new: "Neuer Test"
-    test: "Test"
-    questions: "Fragen"
-    metadata: "Metadaten"
     edit: "Test bearbeiten"
-    selected_questions: "Ausgewählte Fragen"
-    not_selected_questions: "Nicht ausgewählte Fragen"
-    successful_created: "Test erfolgreich erzeugt"
-    successful_updated: "Test erfolgreich aktualisiert"
   texts:
+    new: "Neuer Text"
     title: "Name"
-    name: "Name"
     html: "HTML"
     edit: "Text bearbeiten"
     texts: "Texte"
     id: "ID"
     created_at: "Erzeugt am"
-    new: "Neuer Text"
     text: "Text"
     successful_created: "Text erfolgreich erzeugt"
     successful_updated: "Text erfolgreich aktualisiert"
@@ -170,229 +123,49 @@ de:
     conduct: "Durchführen"
     results: "Ergebnisse"
     new: "Neues Experiment"
-    participant_viewed: "Teilnehmer hat folgende Szenen angesehen: "
-    experiment_id: "ID"
-    scene: "Szene"
-    no_scenes: "Keine Szenen"
-    question: "Frage"
-    answer: "Antwort"
-    time_needed: "Benötigte Zeit"
     metadata: "Metadaten"
     steps: "Schritte"
+    results:
+      title: "Resultate"
+  steps:
+    title: "Titel"
+    id: "ID"
+    description: "Beschreibung"
+    created_at: "Erstellt am"
+    scenes: "Szenen"
+    step: "Name"
+    steps: "Schritte"
+    sub_steps: "Unterschritte"
+    successful_created: "Schritt erfolgreich erzeugt"
+    successful_updated: "Schritt erfolgreich aktualisiert"
+    textual_elements: "Textelemente"
+    type: "Typ"
+    use_parent_scene: "Elternszene benutzen"
   assigners:
     assigner: "Zuweisungsarten"
     name: "Name"
     description: "Beschreibung"
     id: "ID"
     created_at: "Erzeugt am"
+  questionaires:
+   description: "Beschreibung"
+   metadata: "Metadaten"
+   name: "Name"
+   not_selected_questions: "Nicht ausgewählte Fragen"
+   questionaire: "Fragebogen"
+   questions: "Fragen"
+   selected_questions: "Ausgewählte Fragen"
+   successful_created: "Fragebogen erfolgreich erfolgt"
+   successful_updated: "Fragebogen erfolgreich aktualisiert"
   layout:
     experiments: "Experimente"
     scenes: "Szenen"
-    tests: "Fragebögen"
-    scene_tests: "Szenentests"
+    steps: "Schritte"
     other: "Andere"
     questions: "Fragen"
+    questionaires: "Fragebögen"
     static_texts: "Statische Texte"
     admin_off: "Admin-Modus aus"
     title: "EvalServer"
     sidebar: "Seitenleiste"
-    title_long: "Evaluationsserver"
     admin_on: "Admin-Modus an"
-  date:
-    abbr_day_names:
-    - So
-    - Mo
-    - Di
-    - Mi
-    - Do
-    - Fr
-    - Sa
-    abbr_month_names:
-    -
-    - Jan
-    - Feb
-    - Mär
-    - Apr
-    - Mai
-    - Jun
-    - Jul
-    - Aug
-    - Sep
-    - Okt
-    - Nov
-    - Dez
-    day_names:
-    - Sonntag
-    - Montag
-    - Dienstag
-    - Mittwoch
-    - Donnerstag
-    - Freitag
-    - Samstag
-    formats:
-      default: ! '%d.%m.%Y'
-      long: ! '%e. %B %Y'
-      short: ! '%e. %b'
-    month_names:
-    -
-    - Januar
-    - Februar
-    - März
-    - April
-    - Mai
-    - Juni
-    - Juli
-    - August
-    - September
-    - Oktober
-    - November
-    - Dezember
-    order:
-    - :day
-    - :month
-    - :year
-  datetime:
-    distance_in_words:
-      about_x_hours:
-        one: etwa eine Stunde
-        other: etwa %{count} Stunden
-      about_x_months:
-        one: etwa ein Monat
-        other: etwa %{count} Monate
-      about_x_years:
-        one: etwa ein Jahr
-        other: etwa %{count} Jahre
-      almost_x_years:
-        one: fast ein Jahr
-        other: fast %{count} Jahre
-      half_a_minute: eine halbe Minute
-      less_than_x_minutes:
-        one: weniger als eine Minute
-        other: weniger als %{count} Minuten
-      less_than_x_seconds:
-        one: weniger als eine Sekunde
-        other: weniger als %{count} Sekunden
-      over_x_years:
-        one: mehr als ein Jahr
-        other: mehr als %{count} Jahre
-      x_days:
-        one: ein Tag
-        other: ! '%{count} Tage'
-      x_minutes:
-        one: eine Minute
-        other: ! '%{count} Minuten'
-      x_months:
-        one: ein Monat
-        other: ! '%{count} Monate'
-      x_seconds:
-        one: eine Sekunde
-        other: ! '%{count} Sekunden'
-    prompts:
-      day: Tag
-      hour: Stunden
-      minute: Minuten
-      month: Monat
-      second: Sekunden
-      year: Jahr
-  errors:
-    format: ! '%{attribute} %{message}'
-    messages:
-      accepted: muss akzeptiert werden
-      blank: muss ausgefüllt werden
-      confirmation: stimmt nicht mit der Bestätigung überein
-      empty: muss ausgefüllt werden
-      equal_to: muss genau %{count} sein
-      even: muss gerade sein
-      exclusion: ist nicht verfügbar
-      greater_than: muss größer als %{count} sein
-      greater_than_or_equal_to: muss größer oder gleich %{count} sein
-      inclusion: ist kein gültiger Wert
-      invalid: ist nicht gültig
-      less_than: muss kleiner als %{count} sein
-      less_than_or_equal_to: muss kleiner oder gleich %{count} sein
-      not_a_number: ist keine Zahl
-      not_an_integer: muss ganzzahlig sein
-      odd: muss ungerade sein
-      record_invalid: ! 'Gültigkeitsprüfung ist fehlgeschlagen: %{errors}'
-      restrict_dependent_destroy:
-        one: ! 'Datensatz kann nicht gelöscht werden, da ein abhängiger %{record}-Datensatz existiert.'
-        many: ! 'Datensatz kann nicht gelöscht werden, da abhängige %{record} existieren.'
-      taken: ist bereits vergeben
-      too_long: ist zu lang (mehr als %{count} Zeichen)
-      too_short: ist zu kurz (weniger als %{count} Zeichen)
-      wrong_length: hat die falsche Länge (muss genau %{count} Zeichen haben)
-    template:
-      body: ! 'Bitte überprüfen Sie die folgenden Felder:'
-      header:
-        one: ! 'Konnte %{model} nicht speichern: ein Fehler.'
-        other: ! 'Konnte %{model} nicht speichern: %{count} Fehler.'
-  helpers:
-    select:
-      prompt: Bitte wählen
-    submit:
-      create: ! '%{model} erstellen'
-      submit: ! '%{model} speichern'
-      update: ! '%{model} aktualisieren'
-  number:
-    currency:
-      format:
-        delimiter: .
-        format: ! '%n %u'
-        precision: 2
-        separator: ! ','
-        significant: false
-        strip_insignificant_zeros: false
-        unit: €
-    format:
-      delimiter: .
-      precision: 2
-      separator: ! ','
-      significant: false
-      strip_insignificant_zeros: false
-    human:
-      decimal_units:
-        format: ! '%n %u'
-        units:
-          billion:
-            one: Milliarde
-            other: Milliarden
-          million: Millionen
-          quadrillion:
-            one: Billiarde
-            other: Billiarden
-          thousand: Tausend
-          trillion: Billionen
-          unit: ''
-      format:
-        delimiter: ''
-        precision: 1
-        significant: true
-        strip_insignificant_zeros: true
-      storage_units:
-        format: ! '%n %u'
-        units:
-          byte:
-            one: Byte
-            other: Bytes
-          gb: GB
-          kb: KB
-          mb: MB
-          tb: TB
-    percentage:
-      format:
-        delimiter: ''
-    precision:
-      format:
-        delimiter: ''
-  support:
-    array:
-      last_word_connector: ! ' und '
-      two_words_connector: ! ' und '
-      words_connector: ! ', '
-  time:
-    am: vormittags
-    formats:
-      default: ! '%A, %d. %B %Y, %H:%M Uhr'
-      long: ! '%A, %d. %B %Y, %H:%M Uhr'
-      short: ! '%d. %B, %H:%M Uhr'
-    pm: nachmittags
