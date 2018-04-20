@@ -40,8 +40,14 @@ import org.svis.xtext.famix.impl.FamixFactoryImpl
 import java.util.Comparator
 import org.svis.xtext.famix.MethodType
 import org.svis.generator.rd.RDSettings
+import org.neo4j.graphdb.GraphDatabaseService
+import org.svis.lib.database.Database
+import org.svis.lib.database.DBConnector
+import org.neo4j.graphdb.Node
 
 class Famix2Famix extends WorkflowComponentWithConfig {
+	var GraphDatabaseService graph
+	var DBConnector dbConnector
 	val Set<FAMIXNamespace> rootPackages = newLinkedHashSet
 	val Set<FAMIXNamespace> subPackages = newLinkedHashSet
 	val List<FAMIXStructure> allStructures = newArrayList
@@ -50,37 +56,73 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	val List<FAMIXEnumValue> enumValues = newArrayList
 	val List<FAMIXStructure> structures = newArrayList
 	val List<FAMIXNamespace> packagesToMerge = newArrayList
-	val Map<FAMIXMethod, List<FAMIXParameter>> parameters = newHashMap 
+	val Map<FAMIXMethod, List<FAMIXParameter>> parameters = newHashMap
 	val static famixFactory = new FamixFactoryImpl()
-	
+	var fromDB = true
+
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Famix2Famix has started.")
-		
-		val resourceList = ctx.get("famix") as List<?>
-		
-		if(resourceList.size == 1) {
-			val famixRoot = run((resourceList as List<Root>).head)
+
+		if (fromDB) {
+			val famixRoot = famixFactory.createRoot
+			val famixDocument = famixFactory.createDocument
+			famixRoot.document = famixDocument
+			graph = Database::getInstance("../databases/graph.db")
+			dbConnector = new DBConnector(graph)
+			var result = graph.execute('''
+				MATCH (s:Package)			
+				RETURN s
+			''')
+			result.forEach [ row |
+				println(row)
+				val tx = graph.beginTx
+				val node = row.get("s") as Node
+				try {
+					val name = node.getProperty("name") as String
+					val fqn = node.getProperty("fqn") as String
+					val id = node.getId.toString
+					val namespace = famixFactory.createFAMIXNamespace
+					namespace.value = name
+					namespace.fqn = fqn
+					namespace.name = id
+					famixDocument.elements += namespace
+					tx.success
+				} catch (Exception e) {
+					print(e)
+				} finally {
+					tx.close
+				}
+			]
 			ctx.set("famix", famixRoot)
 			val resource = new ResourceImpl()
 			resource.contents += famixRoot
 			ctx.set("metadata", resource)
 		} else {
-			val resources = newLinkedList
-			for (famixRoot : resourceList as List<LazyLinkingResource>) {
-				famixRoot.load(null)
-				while (famixRoot.loading) {
-					log.info("famixRoot " + famixRoot.URI + " is loading.")
+			val resourceList = ctx.get("famix") as List<?>
+			if (resourceList.size == 1) {
+				val famixRoot = run((resourceList as List<Root>).head)
+				ctx.set("famix", famixRoot)
+				val resource = new ResourceImpl()
+				resource.contents += famixRoot
+				ctx.set("metadata", resource)
+			} else {
+				val resources = newLinkedList
+				for (famixRoot : resourceList as List<LazyLinkingResource>) {
+					famixRoot.load(null)
+					while (famixRoot.loading) {
+						log.info("famixRoot " + famixRoot.URI + " is loading.")
+					}
+					if (famixRoot.isLoaded) {
+						famixRoot.contents += run(famixRoot.contents.head as Root)
+					}
+					resources += famixRoot
 				}
-				if (famixRoot.isLoaded) {
-					famixRoot.contents += run(famixRoot.contents.head as Root)
-				}
-				resources += famixRoot
+				ctx.set("famix", resources)
 			}
-			ctx.set("famix", resources)
+			log.info("Famix2Famix has finished.")
 		}
-		log.info("Famix2Famix has finished.")	
 	}
-	
+
 	def private run(Root famixRoot) {
 		val famixDocument = famixRoot.document
 		famixDocument.elements.removeAll(Collections::singleton(null))
@@ -88,22 +130,28 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		val List<FAMIXStructure> structuresToDelete = newArrayList
 		val fileAnchors = famixDocument.elements.filter(FAMIXFileAnchor).filter[element !== null].toList
 		val Set<FAMIXNamespace> packages = newLinkedHashSet
-		fileAnchors.forEach[f|
+		fileAnchors.forEach [ f |
 			val element = f.element.ref
 			switch element {
-				FAMIXAttribute: attributes.add(element)
-				FAMIXMethod: methods.add(element)
-				FAMIXStructure: structures.add(element)
-				FAMIXComment, FAMIXLocalVariable, FAMIXAnnotationTypeAttribute: {} // do nothing, just to prevent them from being treaded in default
+				FAMIXAttribute:
+					attributes.add(element)
+				FAMIXMethod:
+					methods.add(element)
+				FAMIXStructure:
+					structures.add(element)
+				FAMIXComment,
+				FAMIXLocalVariable,
+				FAMIXAnnotationTypeAttribute: {
+				} // do nothing, just to prevent them from being treaded in default
 				default: {
-							log.warn("Famix2Famix: forgot " + element.class)
-							log.info(element.name)
-							log.info(element.toString)
-						}
+					log.warn("Famix2Famix: forgot " + element.class)
+					log.info(element.name)
+					log.info(element.toString)
+				}
 			}
 		]
-		
-		structures.forEach[s|
+
+		structures.forEach [ s |
 			val ref = s.container.ref
 			switch ref {
 				FAMIXNamespace: packages.add(ref)
@@ -112,13 +160,15 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			}
 		]
 		// delete anonymous classes and their methods and attributes
-		methods.removeIf([structuresToDelete.contains(parentType.ref) || parentType.ref instanceof FAMIXParameterizedType])
+		methods.removeIf([
+			structuresToDelete.contains(parentType.ref) || parentType.ref instanceof FAMIXParameterizedType
+		])
 		attributes.removeIf([structuresToDelete.contains(parentType.ref)])
 		structures.removeIf([structuresToDelete.contains(container.ref)])
 		structures -= structuresToDelete
-		
+
 		enumValues += famixDocument.elements.filter(FAMIXEnumValue).filter[structures.contains(parentEnum.ref)]
-		famixDocument.elements.filter(FAMIXParameter).filter[methods.contains(parentBehaviouralEntity.ref)].forEach[p|
+		famixDocument.elements.filter(FAMIXParameter).filter[methods.contains(parentBehaviouralEntity.ref)].forEach [ p |
 			val m = p.parentBehaviouralEntity.ref as FAMIXMethod
 			val l = parameters.get(m)
 			if (l === null) {
@@ -131,52 +181,48 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 				parameters.replace(m, l2)
 			}
 		]
-		if(FAMIXSettings::HIDE_PRIVATE_ELEMENTS) {
-			deletePrivates	
+		if (FAMIXSettings::HIDE_PRIVATE_ELEMENTS) {
+			deletePrivates
 		}
 		val allPackages = famixDocument.elements.filter(FAMIXNamespace).toSet
 		allStructures += famixDocument.elements.filter(FAMIXStructure)
 		val nameComparator = new BeanComparator("name")
-		val accesses = famixDocument.elements.filter(FAMIXAccess)
-							.filter[methods.contains(accessor.ref)]
-							.filter[attributes.contains(variable.ref)]
-							.sortWith(nameComparator)
-		val invocations = famixDocument.elements.filter(FAMIXInvocation)
-							.filter[methods.contains(candidates.ref)]
-							.filter[methods.contains(sender.ref)]
-							.sortWith(nameComparator)
-		val inheritances = famixDocument.elements.filter(FAMIXInheritance)
-							.filter[structures.contains(superclass.ref)]
-							.filter[structures.contains(subclass.ref)]
-							.sortWith(nameComparator)
+		val accesses = famixDocument.elements.filter(FAMIXAccess).filter[methods.contains(accessor.ref)].filter [
+			attributes.contains(variable.ref)
+		].sortWith(nameComparator)
+		val invocations = famixDocument.elements.filter(FAMIXInvocation).filter[methods.contains(candidates.ref)].filter [
+			methods.contains(sender.ref)
+		].sortWith(nameComparator)
+		val inheritances = famixDocument.elements.filter(FAMIXInheritance).filter[structures.contains(superclass.ref)].
+			filter[structures.contains(subclass.ref)].sortWith(nameComparator)
 		allPackages.forEach[getPackages]
 		rootPackages.forEach[setQualifiedName]
 		methods.forEach[setQualifiedName]
 		attributes.forEach[setQualifiedName]
 		enumValues.forEach[setQualifiedName]
-		
+
 		removeDuplicates()
-		if(RDSettings::METHOD_TYPE_MODE){	
+		if (RDSettings::METHOD_TYPE_MODE) {
 			methods.forEach[setMethodType(accesses)]
-			attributes.forEach[setCalledBy]	
+			attributes.forEach[setCalledBy]
 			deletePrivateAttributes(accesses)
 		}
 		val comparator = new BeanComparator("fqn")
-		if(FAMIXSettings::FAMIX_PARSER == FAMIXSettings::FamixParser::JDT2FAMIX) {
-			methods.forEach[
+		if (FAMIXSettings::FAMIX_PARSER == FAMIXSettings::FamixParser::JDT2FAMIX) {
+			methods.forEach [
 				val sourceAnchor = it.sourceAnchor.ref as FAMIXFileAnchor
 				val numberOfLines = sourceAnchor.endline - sourceAnchor.startline + 1
 				it.numberOfStatements = numberOfLines
 			]
 		}
-		if(FAMIXSettings::ATTRIBUTE_SORT_SIZE) {
+		if (FAMIXSettings::ATTRIBUTE_SORT_SIZE) {
 			Collections::sort(attributes, new Comparator<FAMIXAttribute>() {
 				override compare(FAMIXAttribute attribute1, FAMIXAttribute attribute2) {
 					val diffLength = attribute1.value.length - attribute2.value.length
-					if(diffLength == 0) {
+					if (diffLength == 0) {
 						return attribute1.value.compareToIgnoreCase(attribute2.value)
 					}
-					return diffLength  * -1
+					return diffLength * -1
 				}
 			})
 		} else {
@@ -184,31 +230,31 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		}
 		Collections::sort(structures, comparator)
 		Collections::sort(enumValues, comparator)
-		
+
 		val comparator2 = new BeanComparator("numberOfStatements")
 		Collections::sort(methods, comparator2)
 		rootPackages.clear
 		subPackages.clear
 		packages.forEach[getPackages]
-		if(FAMIXSettings::MASTER_ROOT && rootPackages.size >1){
+		if (FAMIXSettings::MASTER_ROOT && rootPackages.size > 1) {
 			val Master = createMasterRoot
-			rootPackages.forEach[setParentScopeRoots(it,Master)]
-			rootPackages.forEach[subPackages += it ]
+			rootPackages.forEach[setParentScopeRoots(it, Master)]
+			rootPackages.forEach[subPackages += it]
 			rootPackages.clear
 			rootPackages += Master
 		}
-		if(FAMIXSettings::MERGE_PACKAGES){
+		if (FAMIXSettings::MERGE_PACKAGES) {
 			rootPackages.forEach[findPackagesToMerge]
 			packagesToMerge.forEach[removePackages]
-			packagesToMerge.forEach[mergePackages]	
+			packagesToMerge.forEach[mergePackages]
 		}
 		famixDocument.elements.clear
 		famixDocument.elements.addAll(rootPackages)
 		famixDocument.elements.addAll(subPackages)
 		ECollections::sort(famixDocument.elements, comparator)
-		
+
 		famixDocument.elements.addAll(structures)
-	
+
 		famixDocument.elements.addAll(methods)
 		famixDocument.elements.addAll(attributes)
 		famixDocument.elements.addAll(enumValues)
@@ -223,248 +269,259 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		attributes.clear
 		enumValues.clear
 		structures.clear
-		return famixRoot	
+		return famixRoot
 	}
-	
+
 	def private deletePrivates() {
 		methods.removeIf([modifiers.contains("private")])
 		structures.removeIf([modifiers.contains("private")])
-		if(!RDSettings::METHOD_TYPE_MODE) {
+		if (!RDSettings::METHOD_TYPE_MODE) {
 			attributes.removeIf([modifiers.contains("private")])
 		}
-		// EnumValues are always public
+	// EnumValues are always public
 	}
-	
+
 	def private deletePrivateAttributes(List<FAMIXAccess> accesses) {
-		attributes.removeIf([modifiers.contains("private") && getterSetter.empty])	
-		accesses.removeIf[!attributes.contains(variable.ref)] 
+		attributes.removeIf([modifiers.contains("private") && getterSetter.empty])
+		accesses.removeIf[!attributes.contains(variable.ref)]
 	}
-	
+
 	def private void getPackages(FAMIXNamespace namespace) {
 		if (namespace.parentScope === null) {
 			rootPackages += namespace
 		} else {
 			subPackages += namespace
-			getPackages(namespace.parentScope.ref as FAMIXNamespace)				
+			getPackages(namespace.parentScope.ref as FAMIXNamespace)
 		}
 	}
-	
+
 	/**
 	 * creates the "master package" which contains all the root packages
 	 */
-	
-	def private createMasterRoot(){
+	def private createMasterRoot() {
 		val masterNamespace = famixFactory.createFAMIXNamespace
-		//masterNamespace.parentScope = namespaceFactory.createIntegerReference
+		// masterNamespace.parentScope = namespaceFactory.createIntegerReference
 		masterNamespace.parentScope = null
-		masterNamespace.name = "MasterRoot" 
+		masterNamespace.name = "MasterRoot"
 		masterNamespace.value = "MasterRoot"
 		masterNamespace.fqn = masterNamespace.name
 		masterNamespace.isStub = "false"
 		masterNamespace.id = createID(masterNamespace.fqn)
-		return masterNamespace		
+		return masterNamespace
 	}
-	
-	def private setParentScopeRoots(FAMIXNamespace namespace, FAMIXNamespace Master){
+
+	def private setParentScopeRoots(FAMIXNamespace namespace, FAMIXNamespace Master) {
 		namespace.parentScope = famixFactory.createIntegerReference
 		namespace.parentScope.ref = Master
 	}
-	
+
 	/**
 	 * checks if there is exactly one child element and if its of type FamixNamespace
 	 */
-	
-	def private checkMergeStatus(FAMIXNamespace namespace){	
+	def private checkMergeStatus(FAMIXNamespace namespace) {
 		val subs = subPackages.filter[parentScope.ref == namespace].toList
 		val sub = structures.filter[container.ref == namespace].toList
-		if((subs.size == 1) && (sub.size == 0)){
-			return true	
+		if ((subs.size == 1) && (sub.size == 0)) {
+			return true
 		}
-		return false	
+		return false
 	}
-	
+
 	/**
 	 * depth first search for candidates to merge
 	 */
-	
 	def private void findPackagesToMerge(FAMIXNamespace namespace) {
-		subPackages.filter[parentScope.ref == namespace].forEach[
-			if(namespace.checkMergeStatus){
+		subPackages.filter[parentScope.ref == namespace].forEach [
+			if (namespace.checkMergeStatus) {
 				packagesToMerge += it
 			}
 			findPackagesToMerge
 		]
 	}
-	
+
 	/**
 	 * removes packagesToMerge Elements from sub- and rootPackage List
 	 * so that they will not get visualized 
 	 */
-		
 	def private removePackages(FAMIXNamespace namespace) {
 		val parent = namespace.parentScope.ref as FAMIXNamespace
 		subPackages -= parent
 		rootPackages -= parent
 	}
-	
+
 	/**
 	 * actual merge of packages 
 	 */
-	
 	def private mergePackages(FAMIXNamespace namespace) {
 		var parent = namespace.parentScope.ref as FAMIXNamespace
 		namespace.parentScope = parent.parentScope
-		namespace.value = parent.value + "." + namespace.value		
-	}	
-	
-	def void setQualifiedName(FAMIXNamespace el) {	
+		namespace.value = parent.value + "." + namespace.value
+	}
+
+	def void setQualifiedName(FAMIXNamespace el) {
 		if (el.parentScope === null) {
 			el.fqn = el.value
 		} else {
 			el.fqn = (el.parentScope.ref as FAMIXNamespace).fqn + "." + el.value
 		}
-		
+
 		el.id = createID(el.fqn)
 
 		allStructures.filter[container.ref.equals(el)].forEach[setQualifiedName]
 		subPackages.filter[parentScope.ref.equals(el)].forEach[setQualifiedName]
 	}
-	
+
 	def void setQualifiedName(FAMIXStructure el) {
 		val ref = el.container.ref
 		var name = ""
 		switch ref {
-			FAMIXNamespace: 			name = ref.fqn
-			FAMIXStructure: 			name = ref.fqn
-			FAMIXMethod: 				name = ref.fqn
-			default: log.error("ERROR qualifiedName(FAMIXStructure): " + el.value) 	
-		} 
+			FAMIXNamespace: name = ref.fqn
+			FAMIXStructure: name = ref.fqn
+			FAMIXMethod: name = ref.fqn
+			default: log.error("ERROR qualifiedName(FAMIXStructure): " + el.value)
+		}
 		el.fqn = name + "." + el.value
 		el.id = createID(el.fqn)
-		
+
 		allStructures.filter[container.ref.equals(el)].forEach[setQualifiedName]
 	}
-	
+
 	def void setQualifiedName(FAMIXMethod method) {
 		var parameters = parameters.getOrDefault(method, newLinkedList).sortBy[value]
 		val ref = method.parentType.ref
 		var result = ""
 		switch ref {
-				FAMIXParameterizableClass: 	result += ref.fqn + "." + method.value
-				FAMIXClass:				 	result += ref.fqn + "." + method.value
-				//FAMIXParameterizedType: 	result += ref.fqn + "." + method.value
-				FAMIXEnum: 					result += ref.fqn + "." + method.value 
-				default: log.error("ERROR qualifiedName(FAMIXMethod famixMethod): " + method.value)
+			FAMIXParameterizableClass: result += ref.fqn + "." + method.value
+			FAMIXClass: result += ref.fqn + "." + method.value
+			// FAMIXParameterizedType: 	result += ref.fqn + "." + method.value
+			FAMIXEnum: result += ref.fqn + "." + method.value
+			default: log.error("ERROR qualifiedName(FAMIXMethod famixMethod): " + method.value)
 		}
 		result += parameters.toParameterList
 
 		method.fqn = result
 		method.id = createID(method.fqn)
 	}
-	
+
 	/** 
 	 * Sets the EnumValue method type which can either be Getter,Setter
 	 * Constructor or Unknown by default
 	 * Stores the accessed variable in method.accessesVar
-	 */ 
-	
-	def private void setMethodType(FAMIXMethod method,List<FAMIXAccess> accesses) {
+	 */
+	def private void setMethodType(FAMIXMethod method, List<FAMIXAccess> accesses) {
 		val Variables = newArrayList
-		accesses.filter[accessor.ref.equals(method)].forEach[Variables += variable.ref as FAMIXAttribute] 
+		accesses.filter[accessor.ref.equals(method)].forEach[Variables += variable.ref as FAMIXAttribute]
 		val parentClass = method.parentType.ref as FAMIXStructure
 		val methodValueLowerCase = method.value.toLowerCase
 		val isConstructor = method.value.equals(parentClass.value)
-		val accessedVariableOfGetter  = isGetter(methodValueLowerCase,Variables)
-		val	accessedVariableOfSetter = isSetter(methodValueLowerCase,Variables)
-		if(accessedVariableOfGetter !== null){
+		val accessedVariableOfGetter = isGetter(methodValueLowerCase, Variables)
+		val accessedVariableOfSetter = isSetter(methodValueLowerCase, Variables)
+		if (accessedVariableOfGetter !== null) {
 			method.methodType = MethodType::GETTER
 			method.accessesVar = famixFactory.createIntegerReference
 			method.accessesVar.ref = accessedVariableOfGetter
 		}
-		if(accessedVariableOfSetter !== null){
+		if (accessedVariableOfSetter !== null) {
 			method.methodType = MethodType::SETTER
 			method.accessesVar = famixFactory.createIntegerReference
 			method.accessesVar.ref = accessedVariableOfSetter
 		}
-		if(isConstructor){
-			method.methodType = MethodType::CONSTRUCTOR 
-		}	
+		if (isConstructor) {
+			method.methodType = MethodType::CONSTRUCTOR
+		}
 	}
-	
+
 	/**
 	 * checks if method is a getter and if yes it returns the accessed Variable
 	 */
-	
-	def private FAMIXAttribute isGetter(String methodValueLowerCase,List<FAMIXAttribute> Variables) {
-		if((Variables.size == 1 && methodValueLowerCase.startsWith("get"))
-			||(Variables.size > 1 && Variables.filter["get" + it.value.toLowerCase == methodValueLowerCase].size == 1)) {
+	def private FAMIXAttribute isGetter(String methodValueLowerCase, List<FAMIXAttribute> Variables) {
+		if ((Variables.size == 1 && methodValueLowerCase.startsWith("get")) || (Variables.size > 1 && Variables.filter [
+			"get" + it.value.toLowerCase == methodValueLowerCase
+		].size == 1)) {
 			return Variables.get(0)
 		} else {
 			return null
-		}	
+		}
 	}
-	
+
 	/**
 	 * checks if method is a setter and if yes it returns the accessed Variable
 	 */
-	
-	def private FAMIXAttribute isSetter(String methodValueLowerCase,List<FAMIXAttribute> Variables) {
-		if((Variables.size == 1 && methodValueLowerCase.startsWith("set"))
-			||(Variables.size > 1 && Variables.filter["set" + it.value.toLowerCase == methodValueLowerCase].size == 1)) {
+	def private FAMIXAttribute isSetter(String methodValueLowerCase, List<FAMIXAttribute> Variables) {
+		if ((Variables.size == 1 && methodValueLowerCase.startsWith("set")) || (Variables.size > 1 && Variables.filter [
+			"set" + it.value.toLowerCase == methodValueLowerCase
+		].size == 1)) {
 			return Variables.get(0)
 		} else {
 			return null
-		}	
+		}
 	}
-	
+
 	/**
 	 *  filters getters and setters of attributes and
 	 * Stores them in Reference List getterSetter
 	 */
-	
 	def private setCalledBy(FAMIXAttribute attribute) {
-		methods.filter[it.methodType == MethodType::GETTER || it.methodType == MethodType::SETTER]
-			.forEach[
-				if(it.accessesVar.ref == attribute) {
-					val getterSetter = famixFactory.createIntegerReference	
-					getterSetter.ref = it
-					attribute.getterSetter += getterSetter
-				}
-			]		
+		methods.filter[it.methodType == MethodType::GETTER || it.methodType == MethodType::SETTER].forEach [
+			if (it.accessesVar.ref == attribute) {
+				val getterSetter = famixFactory.createIntegerReference
+				getterSetter.ref = it
+				attribute.getterSetter += getterSetter
+			}
+		]
 	}
-	
+
 	def private String toParameterList(Iterable<FAMIXParameter> parameters) {
-		'''(«FOR p:parameters SEPARATOR  ","»«p.setQualifiedName»«ENDFOR»)'''
+		'''(«FOR p : parameters SEPARATOR ","»«p.setQualifiedName»«ENDFOR»)'''
 	}
-		
+
 	def private String setQualifiedName(FAMIXParameter parameter) {
 		val ref = parameter.declaredType.ref
-		switch(ref) {
-			FAMIXPrimitiveType: return ref.value
-			FAMIXClass:			return ref.fqn
-			FAMIXParameterizableClass: { if(ref.fqn === null) {return ref.value} else { return ref.fqn}}
-			FAMIXType: 			return ref.value//TODO container?
-			FAMIXParameterizedType: { if(ref.fqn === null) {return ref.value} else { return ref.fqn}}
-			FAMIXEnum: 			return ref.fqn
-			FAMIXParameterType: return ref.value//TODO container?
-			FAMIXAnnotationType: return ref.fqn
-			default: log.error("ERROR qualifiedName(FAMIXParameter famixParameter): " + parameter.value) 
+		switch (ref) {
+			FAMIXPrimitiveType:
+				return ref.value
+			FAMIXClass:
+				return ref.fqn
+			FAMIXParameterizableClass: {
+				if (ref.fqn === null) {
+					return ref.value
+				} else {
+					return ref.fqn
+				}
+			}
+			FAMIXType:
+				return ref.value // TODO container?
+			FAMIXParameterizedType: {
+				if (ref.fqn === null) {
+					return ref.value
+				} else {
+					return ref.fqn
+				}
+			}
+			FAMIXEnum:
+				return ref.fqn
+			FAMIXParameterType:
+				return ref.value // TODO container?
+			FAMIXAnnotationType:
+				return ref.fqn
+			default:
+				log.error("ERROR qualifiedName(FAMIXParameter famixParameter): " + parameter.value)
 		}
 		return ""
 	}
 
 	def setQualifiedName(FAMIXAttribute attribute) {
 		val ref = attribute.parentType.ref
-		switch(ref) {
-			FAMIXClass: 				attribute.fqn = ref.fqn + "." + attribute.value
-			FAMIXParameterizableClass:  attribute.fqn = ref.fqn + "." + attribute.value
-			FAMIXEnum: 					attribute.fqn = ref.fqn + "." + attribute.value
-			FAMIXAnnotationType:		attribute.fqn = ref.fqn + "." + attribute.value
-			default: log.error("ERROR qualifiedName(FAMIXAttribute famixAttribute): " + attribute.value) 
+		switch (ref) {
+			FAMIXClass: attribute.fqn = ref.fqn + "." + attribute.value
+			FAMIXParameterizableClass: attribute.fqn = ref.fqn + "." + attribute.value
+			FAMIXEnum: attribute.fqn = ref.fqn + "." + attribute.value
+			FAMIXAnnotationType: attribute.fqn = ref.fqn + "." + attribute.value
+			default: log.error("ERROR qualifiedName(FAMIXAttribute famixAttribute): " + attribute.value)
 		}
 		attribute.id = createID(attribute.fqn)
 	}
-	
+
 	def private setQualifiedName(FAMIXEnumValue enumValue) {
 		val ref = enumValue.parentEnum.ref
 		if (ref instanceof FAMIXEnum) {
@@ -472,7 +529,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		}
 		enumValue.id = createID(enumValue.fqn)
 	}
-	
+
 	/**
 	 * Creates hash as (hopefully) unique ID for every FAMIXElement
 	 * 
@@ -480,16 +537,14 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	 * @return  sha1 hash
 	 *  
 	 */
-	
-	def createID (String fqn) {
-		return "ID_"+ sha1Hex(fqn + config.repositoryName + config.repositoryOwner + config.commit)
+	def createID(String fqn) {
+		return "ID_" + sha1Hex(fqn + config.repositoryName + config.repositoryOwner + config.commit)
 	}
-	
+
 	/**
 	 * Removes entities with the same fqn
 	 * workaround for: https://bitbucket.org/rimue/generator/issues/30/multiple-entities-with-same-fqn
 	 */
-	
 	def private removeDuplicates() {
 		val List<FAMIXMethod> duplicateMethods = newArrayList
 		val List<FAMIXAttribute> duplicateAttributes = newArrayList
@@ -499,33 +554,34 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		val Set<String> attributeFqn = newHashSet
 		val Set<String> enumValueFqn = newHashSet
 		val Set<String> annotationTypeFqn = newHashSet
-		
-		structures.forEach[s|
+
+		structures.forEach [ s |
 			switch s {
-				FAMIXAnnotationType: if(!annotationTypeFqn.add(s.fqn)) {
-					duplicateAnnotationTypes.add(s)
-				}
+				FAMIXAnnotationType:
+					if (!annotationTypeFqn.add(s.fqn)) {
+						duplicateAnnotationTypes.add(s)
+					}
 			}
 		]
-		
-		methods.forEach[m|
-			if(!methodFqn.add(m.fqn)) {
+
+		methods.forEach [ m |
+			if (!methodFqn.add(m.fqn)) {
 				duplicateMethods.add(m)
 			}
 		]
-		
-		attributes.forEach[a|
-			if(!attributeFqn.add(a.fqn)) {
+
+		attributes.forEach [ a |
+			if (!attributeFqn.add(a.fqn)) {
 				duplicateAttributes.add(a)
 			}
 		]
-		
-		enumValues.forEach[e|
-			if(!enumValueFqn.add(e.fqn)) {
+
+		enumValues.forEach [ e |
+			if (!enumValueFqn.add(e.fqn)) {
 				duplicateEnumValues.add(e)
 			}
 		]
-		
+
 		methods.removeAll(duplicateMethods)
 		attributes.removeAll(duplicateAttributes)
 		enumValues.removeAll(duplicateEnumValues)
