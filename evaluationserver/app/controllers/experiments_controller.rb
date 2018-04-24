@@ -138,16 +138,6 @@ class ExperimentsController < ApplicationController
     
   end
 
-  def upload
-    uploaded_io = params[:experiment_xml]
-    xml_string = uploaded_io.read
-    the_experiment = Experiment.create_from_xml(xml_string)
-    if the_experiment
-      redirect_to experiment_path(the_experiment)
-    end
-  end
-
-
   def already_done
     ### TODO: Möglichkeit zum Fortsetzen schaffen
     render :layout => 'blank'
