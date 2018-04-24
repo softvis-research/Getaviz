@@ -67,6 +67,7 @@ group :development, :test do
   gem 'capybara'
   gem 'simplecov', require: false
   gem 'brakeman', require: false
+  gem 'capybara-screenshot', :group => :test
 end
 
 gem "font-awesome-rails"
