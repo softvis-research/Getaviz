@@ -125,8 +125,7 @@ de:
     new: "Neues Experiment"
     metadata: "Metadaten"
     steps: "Schritte"
-    results:
-      title: "Resultate"
+    results: "Resultate"
   steps:
     title: "Titel"
     id: "ID"

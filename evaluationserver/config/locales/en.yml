@@ -137,8 +137,7 @@ en:
     new: "New experiment"
     metadata: "Metadata"
     steps: "Steps"
-    results:
-      title: "Title"
+    results: "Results"
   assigners:
     assigner: "Assigner"
     name: "Name"
