@@ -1,5 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Step, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context "with only static text" do
+    it "has no questions" do
+      step = create(:step_with_static_text)
+      expect(step.has_questions?).to be false
+    end
+  end
 end
