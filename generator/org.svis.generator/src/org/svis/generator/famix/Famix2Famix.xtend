@@ -44,6 +44,10 @@ import org.neo4j.graphdb.GraphDatabaseService
 import org.svis.lib.database.Database
 import org.svis.lib.database.DBConnector
 import org.neo4j.graphdb.Node
+import org.neo4j.graphdb.Label
+import org.neo4j.graphdb.Transaction
+import org.neo4j.graphdb.traversal.Evaluators
+import org.neo4j.graphdb.Direction
 
 class Famix2Famix extends WorkflowComponentWithConfig {
 	var GraphDatabaseService graph
@@ -64,20 +68,20 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		log.info("Famix2Famix has started.")
 
 		if (fromDB) {
+
 			val famixRoot = famixFactory.createRoot
 			val famixDocument = famixFactory.createDocument
 			famixRoot.document = famixDocument
 			graph = Database::getInstance("../databases/graph.db")
 			dbConnector = new DBConnector(graph)
-			var result = graph.execute('''
-				MATCH (s:Package)			
-				RETURN s
-			''')
-			result.forEach [ row |
-				println(row)
-				val tx = graph.beginTx
-				val node = row.get("s") as Node
-				try {
+
+			val ts = graph.beginTx
+			try {
+				val nodes = graph.findNodes(Label.label("Package"))
+				val namespaces = newHashMap
+				val namespaceNodes = newArrayList
+				while (nodes.hasNext) {
+					val node = nodes.next
 					val name = node.getProperty("name") as String
 					val fqn = node.getProperty("fqn") as String
 					val id = node.getId.toString
@@ -85,14 +89,35 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 					namespace.value = name
 					namespace.fqn = fqn
 					namespace.name = id
+					namespace.id = id
+					namespaces.put(node.id, namespace)
+					namespaceNodes.add(node)
 					famixDocument.elements += namespace
-					tx.success
-				} catch (Exception e) {
-					print(e)
-				} finally {
-					tx.close
 				}
-			]
+				for (node : namespaceNodes) {
+					println(node.getProperty("name"))
+					val td = graph.traversalDescription.breadthFirst.relationships(Rels.CONTAINS, Direction.INCOMING).
+						evaluator(Evaluators.toDepth(1))
+					var parentNodes = td.traverse(node).nodes
+					val parentNamespaces = newArrayList
+					for (pNode : parentNodes) {
+						val id = pNode.id
+						if (namespaces.containsKey(id) && id != node.id)
+							parentNamespaces.add(pNode)
+					}
+					val ns = namespaces.get(node.id)
+					for(pNode : parentNamespaces) {
+						var ref = famixFactory.createIntegerReference
+						ref.ref = namespaces.get(pNode.id)
+						ns.parentScope = ref
+					}
+				}
+				ts.success
+			} catch (Exception e) {
+				print(e)
+			} finally {
+				ts.close
+			}
 			ctx.set("famix", famixRoot)
 			val resource = new ResourceImpl()
 			resource.contents += famixRoot
