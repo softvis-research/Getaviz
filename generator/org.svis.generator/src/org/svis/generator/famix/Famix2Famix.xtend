@@ -74,11 +74,11 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			dbConnector = new DBConnector(graph)
 			
 			// Create Namespaces
-			val ts = graph.beginTx
+			val packageLabel = Label.label("Package")
+			val namespaces = newHashMap
+			val parentNamespaces = newHashMap
+			var tx = graph.beginTx
 			try {
-				val namespaces = newHashMap
-				val parentNamespaces = newHashMap
-				val packageLabel = Label.label("Package")
 				val nodes = graph.findNodes(packageLabel)
 				while (nodes.hasNext) {
 					val node = nodes.next
@@ -98,11 +98,46 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 					ref.ref = namespaces.get(parentId)
 					namespaces.get(childId).parentScope = ref
 				]
-				ts.success
+				tx.success
 			} catch (Exception e) {
 				print(e)
 			} finally {
-				ts.close
+				tx.close
+			}
+			
+			//Create Classes
+			tx = graph.beginTx
+			try {
+				val classLabel = Label.label("Class")
+				val containerLabel = Label.label("Container")
+				val nodes = graph.findNodes(classLabel)
+				val classes = newHashMap
+				val containers = newHashMap
+				while (nodes.hasNext) {
+					val node = nodes.next
+					val class = createClass(node)
+					
+					classes.put(node.id,class)
+					famixDocument.elements += class
+					val td = graph.traversalDescription.breadthFirst.relationships(Rels.CONTAINS, Direction.INCOMING).
+						evaluator(Evaluators.toDepth(1))
+						for(parentNode : td.traverse(node).nodes) {
+							if (parentNode.hasLabel(packageLabel)) {
+							containers.put(node.id,parentNode.id)		
+						}
+						}
+				}
+				println(containers.size + " : " + classes.size)
+				containers.forEach[classId, containerId |
+					var ref = famixFactory.createIntegerReference
+					ref.ref = namespaces.get(containerId)
+					classes.get(classId).container = ref
+				]
+				tx.success
+			} catch (Exception e) {
+				print(e)
+			} finally {
+				tx.close
 			}
 			ctx.set("famix", famixRoot)
 			val resource = new ResourceImpl()
@@ -609,5 +644,25 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		namespace.name = id
 		namespace.id = id
 		return namespace
+	}
+	
+	def createClass(Node node) {
+		val class = famixFactory.createFAMIXClass
+					if(node.hasProperty("name")) {
+						val value = node.getProperty("name") as String
+						class.value = value
+					}
+					if(node.hasProperty("fqn")) {
+						val fqn = node.getProperty("fqn") as String
+						class.fqn = fqn
+					}
+					
+					if(node.hasProperty("md5")) {
+						val id = node.getProperty("md5") as String
+						class.id = id
+					}
+					val name = node.getId.toString
+					class.name = name
+					return class
 	}
 }
