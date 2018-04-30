@@ -4,6 +4,11 @@ FactoryBot.define do
     description {Faker::TheFreshPrinceOfBelAir.quote}
 
     factory :experiment_with_static_text do
+
+      after(:create) do |experiment, evaluator|
+        step = create(:step_with_static_text)
+        experiment.steps << step
+      end
       
       factory :experiment_with_scene do
 
