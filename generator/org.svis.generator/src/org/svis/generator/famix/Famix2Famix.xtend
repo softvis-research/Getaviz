@@ -47,6 +47,7 @@ import org.neo4j.graphdb.Node
 import org.neo4j.graphdb.Label
 import org.neo4j.graphdb.traversal.Evaluators
 import org.neo4j.graphdb.Direction
+import org.neo4j.graphdb.traversal.Uniqueness
 
 class Famix2Famix extends WorkflowComponentWithConfig {
 	var GraphDatabaseService graph
@@ -75,70 +76,102 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			
 			// Create Namespaces
 			val packageLabel = Label.label("Package")
+			val classLabel = Label.label("Class")
 			val namespaces = newHashMap
-			val parentNamespaces = newHashMap
+			val classes = newHashMap
+			val famixEvaluator = new FamixEvaluator()
 			var tx = graph.beginTx
 			try {
-				val nodes = graph.findNodes(packageLabel)
-				while (nodes.hasNext) {
-					val node = nodes.next
-					var namespace = createNamespace(node)
-					famixDocument.elements += namespace
-					namespaces.put(node.id, namespace)
-					val td = graph.traversalDescription.breadthFirst.relationships(Rels.CONTAINS, Direction.INCOMING).
-						evaluator(Evaluators.toDepth(1))
-					for (parentNode : td.traverse(node).nodes) {	
-						if (parentNode.id != node.id && parentNode.hasLabel(packageLabel)) {
-							parentNamespaces.put(node.id,parentNode.id)		
+				// get roots packages
+				val result = graph.execute("MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package)RETURN n")
+				result.forEach[row|
+					val rootnode = row.get("n") as Node
+					// traverse though complete graph
+					graph.traversalDescription
+					.breadthFirst
+					.relationships( Rels.CONTAINS, Direction.OUTGOING)
+					.relationships(Rels.DECLARES, Direction.OUTGOING) // filters relevant relationships
+					.uniqueness(Uniqueness.NONE) 
+					.evaluator(famixEvaluator) // filters relevant nodes
+					.traverse(rootnode)
+					.forEach[path|
+						// this loop is executed for every path
+						// for every end node an own path exists
+						// therefore we are just interested in the end node, the other nodes have already been handled
+						val node = path.endNode
+						var Node parent
+						if(path.length != 0) {
+							parent = path.nodes.get(path.length-1)
 						}
-					}
-				}
-				parentNamespaces.forEach[childId , parentId |
-					var ref = famixFactory.createIntegerReference
-					ref.ref = namespaces.get(parentId)
-					namespaces.get(childId).parentScope = ref
+						else {
+							parent = null
+						}
+						var type = ""
+						for(label : node.labels) {
+							if(label.name == "Package") {
+								type = "Package"
+							} else if (label.name == "Class") {
+								type = "Class"
+							} else if (label.name == "Method") {
+								type = "Method"
+							}
+						}
+						switch (type) {
+							case "Package": {
+								var namespace = createNamespace(node)
+								namespaces.put(node.id, namespace)
+								famixDocument.elements += namespace
+								if(parent !== null) {
+									val parentNamespace = namespaces.get(parent.id)
+									var ref = famixFactory.createIntegerReference
+									ref.ref = parentNamespace
+									namespace.parentScope = ref
+								}
+							}
+							case "Class": {
+								val class = createClass(node)
+								if(parent.hasLabel(packageLabel)) {
+									val parentNamespace = namespaces.get(parent.id)
+									println("parentID: " + parent.id)
+									println("namespace: " + parentNamespace)
+									println("nodeID: " + node.id)
+									println("Elementliste: " + (classes.size + namespaces.size))
+									println("FAMIXElemente: " + famixDocument.elements.size)
+									var ref = famixFactory.createIntegerReference
+									ref.ref = parentNamespace
+									class.container = ref
+									classes.put(node.id, class)
+									famixDocument.elements += class
+								}
+								if(parent.hasLabel(classLabel)) {
+									classes.put(node.id, class)
+									val parentClass = classes.get(parent.id)
+									var ref = famixFactory.createIntegerReference
+									ref.ref = parentClass
+									class.container = ref
+									println("parentID: " + parent.id)
+									println("parentClass: " + parentClass)
+									println("nodeID: " + node.id)
+									println("Elementliste: " + (classes.size + namespaces.size))
+									println("FAMIXElemente: " + famixDocument.elements.size)
+									famixDocument.elements += class
+								}
+							}
+							case "Method": {
+								// do method stuff
+							}
+						}
+					]
 				]
+				println("finish")
 				tx.success
 			} catch (Exception e) {
 				print(e)
 			} finally {
 				tx.close
 			}
-			
-			//Create Classes
-			tx = graph.beginTx
-			try {
-				val classLabel = Label.label("Class")
-				val containerLabel = Label.label("Container")
-				val nodes = graph.findNodes(classLabel)
-				val classes = newHashMap
-				val containers = newHashMap
-				while (nodes.hasNext) {
-					val node = nodes.next
-					val class = createClass(node)
-					
-					classes.put(node.id,class)
-					famixDocument.elements += class
-					val td = graph.traversalDescription.breadthFirst.relationships(Rels.CONTAINS, Direction.INCOMING).
-						evaluator(Evaluators.toDepth(1))
-						for(parentNode : td.traverse(node).nodes) {
-							if (parentNode.hasLabel(packageLabel)) {
-							containers.put(node.id,parentNode.id)		
-						}
-						}
-				}
-				println(containers.size + " : " + classes.size)
-				containers.forEach[classId, containerId |
-					var ref = famixFactory.createIntegerReference
-					ref.ref = namespaces.get(containerId)
-					classes.get(classId).container = ref
-				]
-				tx.success
-			} catch (Exception e) {
-				print(e)
-			} finally {
-				tx.close
-			}
+			println("Elementliste: " + (classes.size + namespaces.size))
+			println("FAMIXElemente: " + famixDocument.elements.size)
 			ctx.set("famix", famixRoot)
 			val resource = new ResourceImpl()
 			resource.contents += famixRoot
@@ -168,6 +201,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			log.info("Famix2Famix has finished.")
 		}
 	}
+
 
 	def private run(Root famixRoot) {
 		val famixDocument = famixRoot.document
@@ -643,6 +677,8 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		namespace.fqn = fqn
 		namespace.name = id
 		namespace.id = id
+		print("ID von " + namespace.value + ": ")
+		println(namespace.id)
 		return namespace
 	}
 	
