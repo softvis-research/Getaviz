@@ -132,11 +132,6 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 								val class = createClass(node)
 								if(parent.hasLabel(packageLabel)) {
 									val parentNamespace = namespaces.get(parent.id)
-									println("parentID: " + parent.id)
-									println("namespace: " + parentNamespace)
-									println("nodeID: " + node.id)
-									println("Elementliste: " + (classes.size + namespaces.size))
-									println("FAMIXElemente: " + famixDocument.elements.size)
 									var ref = famixFactory.createIntegerReference
 									ref.ref = parentNamespace
 									class.container = ref
@@ -144,21 +139,37 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 									famixDocument.elements += class
 								}
 								if(parent.hasLabel(classLabel)) {
-									classes.put(node.id, class)
 									val parentClass = classes.get(parent.id)
 									var ref = famixFactory.createIntegerReference
 									ref.ref = parentClass
 									class.container = ref
-									println("parentID: " + parent.id)
-									println("parentClass: " + parentClass)
-									println("nodeID: " + node.id)
-									println("Elementliste: " + (classes.size + namespaces.size))
-									println("FAMIXElemente: " + famixDocument.elements.size)
 									famixDocument.elements += class
+									classes.put(node.id, class)
 								}
 							}
 							case "Method": {
-								// do method stuff
+								val method = createMethod(node)
+								val parentClass = classes.get(parent.id)
+								var ref = famixFactory.createIntegerReference
+								ref.ref = parentClass
+								method.parentType = ref
+								val fileAnchor = famixFactory.createFAMIXFileAnchor
+								if(node.hasProperty("firstLineNumber")) {
+									val firstLineNumber = node.getProperty("firstLineNumber") as Long
+									fileAnchor.startline = firstLineNumber.intValue
+								}
+								if(node.hasProperty("lastLineNumber")) {
+									val lastLineNumber = node.getProperty("lastLineNumber") as Long
+									fileAnchor.endline = lastLineNumber.intValue
+								}
+								fileAnchor.filename = parent.getProperty("sourceFileName") as String
+								var anchorRef = famixFactory.createIntegerReference
+								anchorRef.ref = method
+								var methodRef = famixFactory.createIntegerReference
+								methodRef.ref = fileAnchor
+								fileAnchor.element = methodRef
+								method.sourceAnchor = anchorRef
+								famixDocument.elements += method
 							}
 						}
 					]
@@ -170,8 +181,6 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			} finally {
 				tx.close
 			}
-			println("Elementliste: " + (classes.size + namespaces.size))
-			println("FAMIXElemente: " + famixDocument.elements.size)
 			ctx.set("famix", famixRoot)
 			val resource = new ResourceImpl()
 			resource.contents += famixRoot
@@ -670,35 +679,53 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	
 	def createNamespace(Node node) {
 		val namespace = famixFactory.createFAMIXNamespace
-		val name = node.getProperty("name") as String
-		val fqn = node.getProperty("fqn") as String
 		val id = node.getId.toString
-		namespace.value = name
-		namespace.fqn = fqn
 		namespace.name = id
 		namespace.id = id
-		print("ID von " + namespace.value + ": ")
-		println(namespace.id)
+		namespace.value = node.getProperty("name") as String
+		namespace.fqn = node.getProperty("fqn") as String
 		return namespace
 	}
 	
 	def createClass(Node node) {
 		val class = famixFactory.createFAMIXClass
-					if(node.hasProperty("name")) {
-						val value = node.getProperty("name") as String
-						class.value = value
-					}
-					if(node.hasProperty("fqn")) {
-						val fqn = node.getProperty("fqn") as String
-						class.fqn = fqn
-					}
-					
-					if(node.hasProperty("md5")) {
-						val id = node.getProperty("md5") as String
-						class.id = id
-					}
-					val name = node.getId.toString
-					class.name = name
-					return class
+		class.name = node.getId.toString
+		if(node.hasProperty("name")) {
+			class.value = node.getProperty("name") as String
+		}		
+		if(node.hasProperty("fqn")) {
+			class.fqn = node.getProperty("fqn") as String
+		}
+		if(node.hasProperty("md5")) {
+			class.id = node.getProperty("md5") as String
+		}
+		val anchorRef = famixFactory.createIntegerReference
+		val classRef = famixFactory.createIntegerReference
+		val fileAnchor = famixFactory.createFAMIXFileAnchor
+		fileAnchor.filename = node.getProperty("sourceFileName") as String
+		anchorRef.ref = class
+		classRef.ref = fileAnchor
+		class.type = anchorRef
+		fileAnchor.element = classRef
+		return class
+	}
+	
+	def createMethod(Node node) {
+		val method = famixFactory.createFAMIXMethod
+		method.name = node.getId.toString
+		if(node.hasProperty("name")) {
+			method.value = node.getProperty("name") as String
+		}	
+		if(node.hasProperty("cyclomaticComplexity")) {
+			val cyclomaticComplexity = node.getProperty("cyclomaticComplexity") as Long
+			method.cyclomaticComplexity = cyclomaticComplexity.intValue
+		}
+		
+		if(node.hasProperty("effectiveLineCount")) {
+			val numberOfStatements = node.getProperty("effectiveLineCount") as Long
+			method.numberOfStatements = numberOfStatements.intValue
+		}
+		method.signature = node.getProperty("signature") as String
+		return method
 	}
 }
