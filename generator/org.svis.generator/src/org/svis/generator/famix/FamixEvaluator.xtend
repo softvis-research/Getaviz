@@ -3,7 +3,6 @@ package org.svis.generator.famix
 import org.neo4j.graphdb.Path
 import org.neo4j.graphdb.traversal.Evaluation
 import org.neo4j.graphdb.traversal.Evaluator
-import org.neo4j.graphdb.Direction
 import org.neo4j.graphdb.Label
 
 class FamixEvaluator implements Evaluator {
@@ -24,6 +23,11 @@ class FamixEvaluator implements Evaluator {
 						result = Evaluation.INCLUDE_AND_CONTINUE
 				}
 			}
+			if(label.name == "Field") {
+				result = Evaluation.INCLUDE_AND_CONTINUE
+				//To-Do: Attribute entfernen, die nur lokal in Funktionen deklariert werden
+			}
+		
 		}
 		return result
 	}

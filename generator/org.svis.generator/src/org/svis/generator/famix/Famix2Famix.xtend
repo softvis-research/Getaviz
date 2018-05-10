@@ -45,7 +45,6 @@ import org.svis.lib.database.Database
 import org.svis.lib.database.DBConnector
 import org.neo4j.graphdb.Node
 import org.neo4j.graphdb.Label
-import org.neo4j.graphdb.traversal.Evaluators
 import org.neo4j.graphdb.Direction
 import org.neo4j.graphdb.traversal.Uniqueness
 
@@ -114,6 +113,8 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 								type = "Class"
 							} else if (label.name == "Method") {
 								type = "Method"
+							} else if(label.name == "Field") {
+								type = "Field"
 							}
 						}
 						switch (type) {
@@ -170,6 +171,22 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 								fileAnchor.element = methodRef
 								method.sourceAnchor = anchorRef
 								famixDocument.elements += method
+							}
+							case "Field": {
+								val attribute = createAttribute(node)
+								val parentClass = classes.get(parent.id)
+								var ref = famixFactory.createIntegerReference
+								ref.ref = parentClass
+								attribute.parentType = ref
+								val fileAnchor = famixFactory.createFAMIXFileAnchor
+								val anchorRef = famixFactory.createIntegerReference
+								val attributeRef = famixFactory.createIntegerReference
+								fileAnchor.filename = parent.getProperty("sourceFileName") as String
+								anchorRef.ref = attribute
+								attributeRef.ref = fileAnchor
+								fileAnchor.element = attributeRef
+								attribute.sourceAnchor = anchorRef
+								famixDocument.elements+= attribute
 							}
 						}
 					]
@@ -679,7 +696,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	
 	def createNamespace(Node node) {
 		val namespace = famixFactory.createFAMIXNamespace
-		val id = node.getId.toString
+		val id = node.id.toString
 		namespace.name = id
 		namespace.id = id
 		namespace.value = node.getProperty("name") as String
@@ -689,7 +706,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	
 	def createClass(Node node) {
 		val class = famixFactory.createFAMIXClass
-		class.name = node.getId.toString
+		class.name = node.id.toString
 		if(node.hasProperty("name")) {
 			class.value = node.getProperty("name") as String
 		}		
@@ -712,7 +729,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	
 	def createMethod(Node node) {
 		val method = famixFactory.createFAMIXMethod
-		method.name = node.getId.toString
+		method.name = node.id.toString
 		if(node.hasProperty("name")) {
 			method.value = node.getProperty("name") as String
 		}	
@@ -727,5 +744,17 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		}
 		method.signature = node.getProperty("signature") as String
 		return method
+	}
+	
+	def createAttribute(Node node) {
+		val attribute = famixFactory.createFAMIXAttribute
+		attribute.name = node.id.toString
+		if(node.hasProperty("name")) {
+			attribute.value = node.getProperty("name") as String
+		}
+		if(node.hasProperty("visibility")) {
+			attribute.modifiers+= node.getProperty("visibility") as String
+		}
+		return attribute
 	}
 }
