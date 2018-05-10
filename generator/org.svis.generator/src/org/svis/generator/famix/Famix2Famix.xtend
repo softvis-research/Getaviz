@@ -48,6 +48,7 @@ import org.neo4j.graphdb.Label
 import org.neo4j.graphdb.Direction
 import org.neo4j.graphdb.traversal.Uniqueness
 import org.svis.xtext.famix.FAMIXElement
+import org.neo4j.graphdb.Relationship
 
 class Famix2Famix extends WorkflowComponentWithConfig {
 	var GraphDatabaseService graph
@@ -73,90 +74,111 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			famixRoot.document = famixDocument
 			graph = Database::getInstance("../databases/graph.db")
 			dbConnector = new DBConnector(graph)
-			
+
 			// Create Namespaces
 			val packageLabel = Label.label("Package")
 			val classLabel = Label.label("Class")
 			val namespaces = newHashMap
 			val classes = newHashMap
+			val methods = newHashMap
+			val attributes = newHashMap
 			val famixEvaluator = new FamixEvaluator()
 			var tx = graph.beginTx
 			try {
 				// get roots packages
 				val result = graph.execute("MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package)RETURN n")
-				result.forEach[row|
+				result.forEach [ row |
 					val rootnode = row.get("n") as Node
 					// traverse though complete graph
-					graph.traversalDescription
-					.breadthFirst
-					.relationships( Rels.CONTAINS, Direction.OUTGOING)
-					.relationships(Rels.DECLARES, Direction.OUTGOING) // filters relevant relationships
-					.uniqueness(Uniqueness.NONE) 
-					.evaluator(famixEvaluator) // filters relevant nodes
-					.traverse(rootnode)
-					.forEach[path|
-						// this loop is executed for every path
-						// for every end node an own path exists
-						// therefore we are just interested in the end node, the other nodes have already been handled
-						val node = path.endNode
-						var Node parent
-						if(path.length != 0) {
-							parent = path.nodes.get(path.length-1)
-						}
-						else {
-							parent = null
-						}
-						var type = ""
-						for(label : node.labels) {
-							if(label.name == "Package") {
-								type = "Package"
-							} else if (label.name == "Class") {
-								type = "Class"
-							} else if (label.name == "Method") {
-								type = "Method"
-							} else if(label.name == "Field") {
-								type = "Field"
+					graph.traversalDescription.breadthFirst.relationships(Rels.CONTAINS, Direction.OUTGOING).
+						relationships(Rels.DECLARES, Direction.OUTGOING) // filters relevant relationships
+						.uniqueness(Uniqueness.NONE).evaluator(famixEvaluator) // filters relevant nodes
+						.traverse(rootnode).forEach [ path |
+							// this loop is executed for every path
+							// for every end node an own path exists
+							// therefore we are just interested in the end node, the other nodes have already been handled
+							val node = path.endNode
+							var Node parent
+							if (path.length != 0) {
+								parent = path.nodes.get(path.length - 1)
+							} else {
+								parent = null
 							}
-						}
-						switch (type) {
-							case "Package": {
-								var FAMIXNamespace parentNamespace = null
-								if(parent !== null) {
-									 parentNamespace = namespaces.get(parent.id)
+							var type = ""
+							for (label : node.labels) {
+								if (label.name == "Package") {
+									type = "Package"
+								} else if (label.name == "Class") {
+									type = "Class"
+								} else if (label.name == "Method") {
+									type = "Method"
+								} else if (label.name == "Field") {
+									type = "Field"
 								}
-								val namespace = createNamespace(node, parentNamespace)
-								namespaces.put(node.id, namespace)
-								famixDocument.elements += namespace
 							}
-							case "Class": {
-								var FAMIXElement container
-								if(parent.hasLabel(packageLabel)) {
-									container = namespaces.get(parent.id) as FAMIXNamespace
+							switch (type) {
+								case "Package": {
+									var FAMIXNamespace parentNamespace = null
+									if (parent !== null) {
+										parentNamespace = namespaces.get(parent.id)
+									}
+									val namespace = createNamespace(node, parentNamespace)
+									namespaces.put(node.id, namespace)
+									famixDocument.elements += namespace
 								}
-								
-								if(parent.hasLabel(classLabel)) {
-									container = classes.get(parent.id) as FAMIXClass
+								case "Class": {
+									var FAMIXElement container
+									if (parent.hasLabel(packageLabel)) {
+										container = namespaces.get(parent.id) as FAMIXNamespace
+									}
+
+									if (parent.hasLabel(classLabel)) {
+										container = classes.get(parent.id) as FAMIXClass
+									}
+									val class = createClass(node, container)
+									classes.put(node.id, class)
+									famixDocument.elements += class
 								}
-								val class = createClass(node, container)
-								classes.put(node.id, class)
-								famixDocument.elements += class
+								case "Method": {
+									val parentClass = classes.get(parent.id)
+									val fileAnchor = famixFactory.createFAMIXFileAnchor
+									fileAnchor.filename = parent.getProperty("sourceFileName") as String
+									val method = createMethod(node, parentClass, fileAnchor)
+									methods.put(node.id, method)
+									famixDocument.elements += method
+								}
+								case "Field": {
+									val parentClass = classes.get(parent.id)
+									val fileAnchor = famixFactory.createFAMIXFileAnchor
+									fileAnchor.filename = parent.getProperty("sourceFileName") as String
+									val attribute = createAttribute(node, parentClass, fileAnchor)
+									attributes.put(node.id, attribute)
+									famixDocument.elements += attribute
+								}
 							}
-							case "Method": {
-								val parentClass = classes.get(parent.id)
-								val fileAnchor = famixFactory.createFAMIXFileAnchor
-								fileAnchor.filename = parent.getProperty("sourceFileName") as String
-								val method = createMethod(node, parentClass, fileAnchor)
-								famixDocument.elements += method
-							}
-							case "Field": {
-								val parentClass = classes.get(parent.id)
-								val fileAnchor = famixFactory.createFAMIXFileAnchor
-								fileAnchor.filename = parent.getProperty("sourceFileName") as String
-								val attribute = createAttribute(node, parentClass, fileAnchor)
-								famixDocument.elements+= attribute
-							}
-						}
-					]
+						]
+				]
+				graph.execute("MATCH p=()-[r:INVOKES]->() RETURN r").forEach [ row |
+					val rel = row.get("r") as Relationship
+					val invocation = famixFactory.createFAMIXInvocation
+					val senderRef = famixFactory.createIntegerReference
+					val receiverRef = famixFactory.createIntegerReference
+					senderRef.ref = methods.get(rel.startNode.id)
+					receiverRef.ref = methods.get(rel.endNode.id)
+					invocation.sender = senderRef
+					invocation.candidates = receiverRef
+					famixDocument.elements += invocation
+				]
+				graph.execute("MATCH p=()-[r:READS|WRITES]->() RETURN r").forEach [ row |
+					val rel = row.get("r") as Relationship
+					val access = famixFactory.createFAMIXAccess
+					val attributeRef = famixFactory.createIntegerReference
+					val accessorRef = famixFactory.createIntegerReference
+					attributeRef.ref = attributes.get(rel.endNode.id)
+					accessorRef.ref = methods.get(rel.startNode.id)
+					access.variable = attributeRef
+					access.accessor = accessorRef
+					famixDocument.elements += access
 				]
 				println("finish")
 				tx.success
@@ -165,6 +187,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			} finally {
 				tx.close
 			}
+
 			ctx.set("famix", famixRoot)
 			val resource = new ResourceImpl()
 			resource.contents += famixRoot
@@ -194,7 +217,6 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			log.info("Famix2Famix has finished.")
 		}
 	}
-
 
 	def private run(Root famixRoot) {
 		val famixDocument = famixRoot.document
@@ -660,7 +682,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		enumValues.removeAll(duplicateEnumValues)
 		structures.removeAll(duplicateAnnotationTypes)
 	}
-	
+
 	def createNamespace(Node node, FAMIXNamespace parent) {
 		val namespace = famixFactory.createFAMIXNamespace
 		val id = node.id.toString
@@ -668,31 +690,30 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		namespace.id = id
 		namespace.value = node.getProperty("name") as String
 		namespace.fqn = node.getProperty("fqn") as String
-		if(parent !== null) {
+		if (parent !== null) {
 			var ref = famixFactory.createIntegerReference
 			ref.ref = parent
 			namespace.parentScope = ref
 		}
 		return namespace
 	}
-	
+
 	def createClass(Node node, FAMIXElement parent) {
 		val class = famixFactory.createFAMIXClass
 		class.name = node.id.toString
-		if(node.hasProperty("name")) {
+		if (node.hasProperty("name")) {
 			class.value = node.getProperty("name") as String
-		}		
-		if(node.hasProperty("fqn")) {
+		}
+		if (node.hasProperty("fqn")) {
 			class.fqn = node.getProperty("fqn") as String
 		}
-		if(node.hasProperty("md5")) {
+		if (node.hasProperty("md5")) {
 			class.id = node.getProperty("md5") as String
 		}
 		var ref = famixFactory.createIntegerReference
-		if(parent instanceof FAMIXNamespace) {
+		if (parent instanceof FAMIXNamespace) {
 			ref.ref = parent as FAMIXNamespace
-		}
-		else {
+		} else {
 			ref.ref = parent as FAMIXClass
 		}
 		class.container = ref
@@ -706,33 +727,34 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		fileAnchor.element = classRef
 		return class
 	}
-	
+
 	def createMethod(Node node, FAMIXClass parent, FAMIXFileAnchor fileAnchor) {
 		val method = famixFactory.createFAMIXMethod
 		method.name = node.id.toString
-		if(node.hasProperty("name")) {
+		if (node.hasProperty("name")) {
 			method.value = node.getProperty("name") as String
-		}	
-		if(node.hasProperty("cyclomaticComplexity")) {
+		}
+		if (node.hasProperty("cyclomaticComplexity")) {
 			val cyclomaticComplexity = node.getProperty("cyclomaticComplexity") as Long
 			method.cyclomaticComplexity = cyclomaticComplexity.intValue
 		}
-		if(node.hasProperty("effectiveLineCount")) {
+		if (node.hasProperty("effectiveLineCount")) {
 			val numberOfStatements = node.getProperty("effectiveLineCount") as Long
 			method.numberOfStatements = numberOfStatements.intValue
 		}
 		method.signature = node.getProperty("signature") as String
+		method.fqn = parent.fqn + "." + method.value + "()"
 		var ref = famixFactory.createIntegerReference
 		ref.ref = parent
 		method.parentType = ref
-		if(node.hasProperty("firstLineNumber")) {
+		if (node.hasProperty("firstLineNumber")) {
 			val firstLineNumber = node.getProperty("firstLineNumber") as Long
 			fileAnchor.startline = firstLineNumber.intValue
 		}
-		if(node.hasProperty("lastLineNumber")) {
+		if (node.hasProperty("lastLineNumber")) {
 			val lastLineNumber = node.getProperty("lastLineNumber") as Long
 			fileAnchor.endline = lastLineNumber.intValue
-		}					
+		}
 		var anchorRef = famixFactory.createIntegerReference
 		anchorRef.ref = method
 		var methodRef = famixFactory.createIntegerReference
@@ -741,15 +763,15 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		method.sourceAnchor = anchorRef
 		return method
 	}
-	
+
 	def createAttribute(Node node, FAMIXClass parent, FAMIXFileAnchor fileAnchor) {
 		val attribute = famixFactory.createFAMIXAttribute
 		attribute.name = node.id.toString
-		if(node.hasProperty("name")) {
+		if (node.hasProperty("name")) {
 			attribute.value = node.getProperty("name") as String
 		}
-		if(node.hasProperty("visibility")) {
-			attribute.modifiers+= node.getProperty("visibility") as String
+		if (node.hasProperty("visibility")) {
+			attribute.modifiers += node.getProperty("visibility") as String
 		}
 		var ref = famixFactory.createIntegerReference
 		ref.ref = parent
