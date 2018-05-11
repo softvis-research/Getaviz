@@ -160,25 +160,30 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 				]
 				graph.execute("MATCH p=()-[r:INVOKES]->() RETURN r").forEach [ row |
 					val rel = row.get("r") as Relationship
-					val invocation = famixFactory.createFAMIXInvocation
-					val senderRef = famixFactory.createIntegerReference
-					val receiverRef = famixFactory.createIntegerReference
-					senderRef.ref = methods.get(rel.startNode.id)
-					receiverRef.ref = methods.get(rel.endNode.id)
-					invocation.sender = senderRef
-					invocation.candidates = receiverRef
-					famixDocument.elements += invocation
+					if (methods.containsKey(rel.startNode.id) && methods.containsKey(rel.endNode.id)) {
+						val invocation = famixFactory.createFAMIXInvocation
+						val senderRef = famixFactory.createIntegerReference
+						val receiverRef = famixFactory.createIntegerReference
+						senderRef.ref = methods.get(rel.startNode.id)
+						receiverRef.ref = methods.get(rel.endNode.id)
+						invocation.sender = senderRef
+						invocation.candidates = receiverRef
+						famixDocument.elements += invocation
+					}
 				]
 				graph.execute("MATCH p=()-[r:READS|WRITES]->() RETURN r").forEach [ row |
 					val rel = row.get("r") as Relationship
-					val access = famixFactory.createFAMIXAccess
-					val attributeRef = famixFactory.createIntegerReference
-					val accessorRef = famixFactory.createIntegerReference
-					attributeRef.ref = attributes.get(rel.endNode.id)
-					accessorRef.ref = methods.get(rel.startNode.id)
-					access.variable = attributeRef
-					access.accessor = accessorRef
-					famixDocument.elements += access
+					if (methods.containsKey(rel.startNode.id) && attributes.containsKey(rel.endNode.id)) {
+						val access = famixFactory.createFAMIXAccess
+						val attributeRef = famixFactory.createIntegerReference
+						val accessorRef = famixFactory.createIntegerReference
+						attributeRef.ref = attributes.get(rel.endNode.id)
+						accessorRef.ref = methods.get(rel.startNode.id)
+						access.variable = attributeRef
+						access.accessor = accessorRef
+						famixDocument.elements += access
+					}
+
 				]
 				println("finish")
 				tx.success
@@ -731,6 +736,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	def createMethod(Node node, FAMIXClass parent, FAMIXFileAnchor fileAnchor) {
 		val method = famixFactory.createFAMIXMethod
 		method.name = node.id.toString
+		method.id = node.id.toString
 		if (node.hasProperty("name")) {
 			method.value = node.getProperty("name") as String
 		}
@@ -767,6 +773,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	def createAttribute(Node node, FAMIXClass parent, FAMIXFileAnchor fileAnchor) {
 		val attribute = famixFactory.createFAMIXAttribute
 		attribute.name = node.id.toString
+		attribute.id = node.id.toString
 		if (node.hasProperty("name")) {
 			attribute.value = node.getProperty("name") as String
 		}
