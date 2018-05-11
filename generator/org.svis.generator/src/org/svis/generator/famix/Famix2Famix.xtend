@@ -185,6 +185,19 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 					}
 
 				]
+				graph.execute("MATCH p=()-[r:EXTENDS]->() RETURN r").forEach [ row |
+					val rel = row.get("r") as Relationship
+					if (classes.containsKey(rel.startNode.id) && classes.containsKey(rel.endNode.id)) {
+						val inheritance = famixFactory.createFAMIXInheritance
+						val subclassRef = famixFactory.createIntegerReference
+						val superclassRef = famixFactory.createIntegerReference
+						subclassRef.ref = classes.get(rel.startNode.id)
+						superclassRef.ref = classes.get(rel.endNode.id)
+						inheritance.subclass = subclassRef
+						inheritance.superclass = superclassRef
+						famixDocument.elements += inheritance
+					}
+				]
 				println("finish")
 				tx.success
 			} catch (Exception e) {
@@ -708,6 +721,8 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		class.name = node.id.toString
 		if (node.hasProperty("name")) {
 			class.value = node.getProperty("name") as String
+		} else {
+			class.value = ""
 		}
 		if (node.hasProperty("fqn")) {
 			class.fqn = node.getProperty("fqn") as String
