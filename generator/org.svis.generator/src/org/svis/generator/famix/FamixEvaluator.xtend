@@ -7,10 +7,9 @@ import org.neo4j.graphdb.traversal.Evaluator
 class FamixEvaluator implements Evaluator {
 
 	override evaluate(Path path) {
-		var result = Evaluation.EXCLUDE_AND_PRUNE
 		val node = path.endNode
 		if (node.hasLabel(DBLabel.PACKAGE) || node.hasLabel(DBLabel.MEMBER)) {
-			result = Evaluation.INCLUDE_AND_CONTINUE
+			return Evaluation.INCLUDE_AND_CONTINUE
 		}
 		if (node.hasLabel(DBLabel.TYPE)) {
 			if (node.hasLabel(DBLabel.CLASS) || node.hasLabel(DBLabel.INTERFACE) || node.hasLabel(DBLabel.ENUM) ||
@@ -18,12 +17,12 @@ class FamixEvaluator implements Evaluator {
 				val pre = path.nodes.get(path.length - 1)
 				val isInnerClass = path.endNode.getProperty("name").toString.contains("$")
 				if ((pre.hasLabel(DBLabel.PACKAGE) && isInnerClass) || pre.hasLabel(DBLabel.METHOD)) {
-					result = Evaluation.EXCLUDE_AND_PRUNE
+					return Evaluation.EXCLUDE_AND_PRUNE
 				} else {
-					result = Evaluation.INCLUDE_AND_CONTINUE
+					return Evaluation.INCLUDE_AND_CONTINUE
 				}
 			}
 		}
-		return result
+		return Evaluation.EXCLUDE_AND_PRUNE
 	}
 }

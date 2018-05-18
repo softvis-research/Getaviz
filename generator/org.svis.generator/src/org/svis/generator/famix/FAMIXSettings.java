@@ -27,8 +27,10 @@ public enum FAMIXSettings{;
 	 */
 	public static FamixParser FAMIX_PARSER = FamixParser.VERVEINEJ;
 	
+	public static String DATABASE_NAME = "../databases/graph.db";
+	
 	public static enum FamixParser {
 		
-		JDT2FAMIX,VERVEINEJ;	
+		JDT2FAMIX,VERVEINEJ,JQA_BYTECODE;	
 	}
 }
