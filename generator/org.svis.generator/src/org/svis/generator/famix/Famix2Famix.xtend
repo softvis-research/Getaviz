@@ -67,7 +67,8 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Famix2Famix has started.")
-
+		// FAMIX to DB
+		// DB to FAMIX
 		if (FAMIXSettings.FAMIX_PARSER === FamixParser::JQA_BYTECODE) {
 			val famixRoot = famixFactory.createRoot
 			val famixDocument = famixFactory.createDocument
@@ -386,6 +387,20 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		attributes.clear
 		enumValues.clear
 		structures.clear
+		graph = Database::getInstance("../databases/famix_graph.db")
+		val document = famixRoot.document
+		val rootPackages = document.elements.filter(FAMIXNamespace).filter[parentScope === null]
+		subPackages += document.elements.filter(FAMIXNamespace).filter[parentScope !== null]
+		allStructures += document.elements.filter(FAMIXStructure)
+		var tx = graph.beginTx
+		try {
+			rootPackages.forEach [ root |
+				toDB(root, null)
+			]
+			tx.success
+		} finally {
+			tx.close
+		}
 		return famixRoot
 	}
 
@@ -856,5 +871,33 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 				modifiers += "abstract"
 			}
 		}
+	}
+
+	def Node toDB(FAMIXNamespace namespace, Node parent) {
+		val node = graph.createNode(DBLabel.PACKAGE)
+		node.setProperty("name", namespace.value)
+		node.setProperty("fqn", namespace.fqn)
+		if (parent !== null) {
+			parent.createRelationshipTo(node, Rels.CONTAINS)
+		}
+		allStructures.filter[container.ref.equals(namespace)].forEach[toDB(node)]
+		subPackages.filter[parentScope.ref.equals(namespace)].forEach[toDB(node)]
+		return node
+	}
+
+	def Node toDB(FAMIXStructure structure, Node parent) {
+		val node = graph.createNode
+		switch structure {
+			FAMIXClass: {
+				node.addLabel(DBLabel.CLASS)
+				node.setProperty("fqn", structure.fqn)
+				// md5 von JQAssisstant?
+				node.setProperty("md5", structure.id)
+			}
+		}
+		node.setProperty("name", structure.value)
+		parent.createRelationshipTo(node, Rels.CONTAINS)
+		structures.filter[container.ref.equals(structure)].forEach[toDB(node)]
+		return node
 	}
 }
