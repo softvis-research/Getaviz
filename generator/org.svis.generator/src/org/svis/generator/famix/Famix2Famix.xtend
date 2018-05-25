@@ -64,6 +64,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	val List<FAMIXNamespace> packagesToMerge = newArrayList
 	val Map<FAMIXMethod, List<FAMIXParameter>> parameters = newHashMap
 	val static famixFactory = new FamixFactoryImpl()
+	val Map<String, Node> nodes = newHashMap
 
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Famix2Famix has started.")
@@ -380,6 +381,20 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		famixDocument.elements.addAll(accesses)
 		famixDocument.elements.addAll(inheritances)
 		famixDocument.elements.addAll(fileAnchors)
+		if (FAMIXSettings::WRITE_TO_DATABASE) {
+			graph = Database::getInstance(FAMIXSettings::DATABASE_NAME)
+			val document = famixRoot.document
+			var tx = graph.beginTx
+			try {
+				rootPackages.forEach[toDB(it, null)]
+				document.elements.filter(FAMIXInvocation).forEach[toDB(it)]
+				document.elements.filter(FAMIXInheritance).forEach[toDB(it)]
+				document.elements.filter(FAMIXAccess).forEach[toDB(it)]
+				tx.success
+			} finally {
+				tx.close
+			}
+		}
 		rootPackages.clear
 		subPackages.clear
 		allStructures.clear
@@ -387,20 +402,6 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		attributes.clear
 		enumValues.clear
 		structures.clear
-		graph = Database::getInstance("../databases/famix_graph.db")
-		val document = famixRoot.document
-		val rootPackages = document.elements.filter(FAMIXNamespace).filter[parentScope === null]
-		subPackages += document.elements.filter(FAMIXNamespace).filter[parentScope !== null]
-		allStructures += document.elements.filter(FAMIXStructure)
-		var tx = graph.beginTx
-		try {
-			rootPackages.forEach [ root |
-				toDB(root, null)
-			]
-			tx.success
-		} finally {
-			tx.close
-		}
 		return famixRoot
 	}
 
@@ -874,30 +875,175 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	}
 
 	def Node toDB(FAMIXNamespace namespace, Node parent) {
-		val node = graph.createNode(DBLabel.PACKAGE)
+		val node = graph.createNode(Labels.Package)
 		node.setProperty("name", namespace.value)
 		node.setProperty("fqn", namespace.fqn)
 		if (parent !== null) {
 			parent.createRelationshipTo(node, Rels.CONTAINS)
 		}
-		allStructures.filter[container.ref.equals(namespace)].forEach[toDB(node)]
+		structures.filter[container.ref.equals(namespace)].forEach[toDB(node)]
 		subPackages.filter[parentScope.ref.equals(namespace)].forEach[toDB(node)]
 		return node
 	}
 
 	def Node toDB(FAMIXStructure structure, Node parent) {
-		val node = graph.createNode
+		val node = graph.createNode(Labels.Type)
+		node.setProperty("fqn", structure.fqn)
+		node.setProperty("name", structure.value)
+		var String fileName
 		switch structure {
 			FAMIXClass: {
-				node.addLabel(DBLabel.CLASS)
-				node.setProperty("fqn", structure.fqn)
+				node.addLabel(Labels.Class)
 				// md5 von JQAssisstant?
 				node.setProperty("md5", structure.id)
+				fileName = (structure.type.ref as FAMIXFileAnchor).filename
+				if (structure.isInterface == "true") {
+					node.addLabel(Labels.Interface)
+				} else {
+					node.addLabel(Labels.Class)
+				}
+			}
+			FAMIXEnum: {
+				node.addLabel(Labels.Enum)
+				fileName = (structure.sourceAnchor.ref as FAMIXFileAnchor).filename
+				enumValues.filter[parentEnum.ref.equals(structure)].forEach[toDB(node)]
+			}
+			FAMIXAnnotationType: {
+				node.addLabel(Labels.Annotation)
+				fileName = (structure.sourceAnchor.ref as FAMIXFileAnchor).filename
 			}
 		}
-		node.setProperty("name", structure.value)
+		node.setProperty("sourceFileName", fileName)
+		if (structure.modifiers.size != 0) {
+			setModifierProperties(node, structure.modifiers)
+		}
+		nodes.put(structure.id, node)
 		parent.createRelationshipTo(node, Rels.CONTAINS)
 		structures.filter[container.ref.equals(structure)].forEach[toDB(node)]
+		methods.filter[parentType.ref.equals(structure)].forEach[toDB(node)]
+		attributes.filter[parentType.ref.equals(structure)].forEach[toDB(node)]
 		return node
+	}
+
+	def toDB(FAMIXMethod method, Node parent) {
+		val node = graph.createNode(Labels.Method, Labels.Member)
+		val fileAnchor = method.sourceAnchor.ref as FAMIXFileAnchor
+		node.setProperty("name", method.value)
+		node.setProperty("effectiveLineCount", method.numberOfStatements.longValue)
+		node.setProperty("cyclomaticComplexity", method.cyclomaticComplexity.longValue)
+		node.setProperty("firstLineNumber", fileAnchor.startline.longValue)
+		node.setProperty("lastLineNumber", fileAnchor.endline.longValue)
+		node.setProperty("sourceFileName", fileAnchor.filename)
+		var signature = method.signature
+		var FAMIXElement declaredType
+		try {
+			declaredType = method.declaredType.ref
+		} catch (NullPointerException e) {
+			declaredType = null
+		}
+		var String type
+		switch declaredType {
+			FAMIXPrimitiveType: type = (declaredType as FAMIXPrimitiveType).value + " "
+			FAMIXParameterizedType: type = (declaredType as FAMIXParameterizedType).value + " "
+			default: type = ""
+		}
+		signature = type + signature
+		node.setProperty("signature", signature)
+		if (method.modifiers.size != 0) {
+			setFinalProperty(node, method.modifiers)
+			setVisibilityProperty(node, method.modifiers)
+			setStaticProperty(node, method.modifiers)
+		}
+		nodes.put(method.id, node)
+		parent.createRelationshipTo(node, Rels.DECLARES)
+	}
+
+	def toDB(FAMIXAttribute attribute, Node parent) {
+		val node = graph.createNode(Labels.Field, Labels.Member)
+		node.setProperty("name", attribute.value)
+		if (attribute.modifiers.size != 0) {
+			setFinalProperty(node, attribute.modifiers)
+			setVisibilityProperty(node, attribute.modifiers)
+			setStaticProperty(node, attribute.modifiers)
+		}
+		nodes.put(attribute.id, node)
+		parent.createRelationshipTo(node, Rels.DECLARES)
+	}
+
+	def toDB(FAMIXInvocation invocation) {
+		val sender = invocation.sender.ref as FAMIXMethod
+		val receiver = invocation.candidates.ref as FAMIXMethod
+		val senderNode = nodes.get(sender.id)
+		val receiverNode = nodes.get(receiver.id)
+		if (senderNode !== null && receiverNode !== null) {
+			senderNode.createRelationshipTo(receiverNode, Rels.INVOKES)
+		}
+	}
+
+	def toDB(FAMIXInheritance inheritance) {
+		val subClass = inheritance.subclass.ref as FAMIXStructure
+		val superClass = inheritance.superclass.ref as FAMIXStructure
+		val subClassNode = nodes.get(subClass.id)
+		val superClassNode = nodes.get(superClass.id)
+		if (subClassNode !== null && superClassNode !== null) {
+			subClassNode.createRelationshipTo(superClassNode, Rels.EXTENDS)
+		}
+	}
+
+	def toDB(FAMIXAccess access) {
+		val method = access.accessor.ref as FAMIXMethod
+		val attribute = access.variable.ref as FAMIXAttribute
+		val methodNode = nodes.get(method.id)
+		val attributeNode = nodes.get(attribute.id)
+		if (methodNode !== null && attributeNode !== null) {
+			var Rels relationship
+			if (access.isWrite == "true") {
+				relationship = Rels.WRITES
+			} else {
+				relationship = Rels.READS
+			}
+			methodNode.createRelationshipTo(attributeNode, relationship)
+		}
+	}
+
+	def toDB(FAMIXEnumValue enumVal, Node parent) {
+		val node = graph.createNode(Labels.Field, Labels.Member)
+		node.setProperty("name", enumVal.value)
+		parent.createRelationshipTo(node, Rels.DECLARES)
+	}
+
+	def setModifierProperties(Node node, EList<String> modifiers) {
+		setAbstractProperty(node, modifiers)
+		setFinalProperty(node, modifiers)
+		setVisibilityProperty(node, modifiers)
+		setStaticProperty(node, modifiers)
+	}
+
+	def setAbstractProperty(Node node, EList<String> modifiers) {
+		val abstract = modifiers.findFirst[it == "abstract"]
+		if (abstract !== null) {
+			node.setProperty("abstract", true)
+		}
+	}
+
+	def setFinalProperty(Node node, EList<String> modifiers) {
+		val final = modifiers.findFirst[it == "final"]
+		if (final !== null) {
+			node.setProperty("final", true)
+		}
+	}
+
+	def setVisibilityProperty(Node node, EList<String> modifiers) {
+		val visibility = modifiers.findFirst[it == "public" || it == "private" || it == "protected" || it == "package"]
+		if (visibility !== null) {
+			node.setProperty("visibility", visibility)
+		}
+	}
+
+	def setStaticProperty(Node node, EList<String> modifiers) {
+		val static = modifiers.findFirst[it == "static"]
+		if (static !== null) {
+			node.setProperty("static", true)
+		}
 	}
 }
