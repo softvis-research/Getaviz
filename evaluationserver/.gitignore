@@ -29,3 +29,7 @@ web-deployment.yaml
 web-env-configmap.yaml
 web-service.yaml
 coverage
+
+# Ignore encrypted secrets key file.
+config/secrets.yml.key
+config/initializers/01_env.rb
