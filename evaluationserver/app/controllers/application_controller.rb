@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   CREDENTIALS = {
     :name => 'admin',
-    :password => ENV['ADMIN_PASSWORD']
+    :password => Rails.application.credentials.admin_password
 
   }
 

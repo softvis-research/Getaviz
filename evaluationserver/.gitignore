@@ -33,3 +33,6 @@ coverage
 # Ignore encrypted secrets key file.
 config/secrets.yml.key
 config/initializers/01_env.rb
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
