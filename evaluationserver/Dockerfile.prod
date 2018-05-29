@@ -9,7 +9,6 @@ COPY . .
 RUN gem install bundler && bundle binstub bundler --force && bundle install --jobs 20 --retry 5 # might be better?
 RUN gem install bundler
 ENV RAILS_ENV production
-RUN bundle binstub bundler --force
 RUN bundle exec rake assets:precompile
 LABEL maintainer="david.baum@uni-leipzig.de" \
       version="1.0"
