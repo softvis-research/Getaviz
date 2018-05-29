@@ -20,7 +20,6 @@ class Answer < ApplicationRecord
 
   ## override in subclasses
   def is_correct_answered_with?(answer)
-    puts "AAAAAAAAAAAAAAAAAAAa"
     return false
   end
 
