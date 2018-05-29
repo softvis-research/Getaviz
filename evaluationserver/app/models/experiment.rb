@@ -10,31 +10,7 @@ class Experiment < ApplicationRecord
     self.id_hash ||= SecureRandom.uuid
   end
 
-    
-  def self.create_from_xml(xml_string)
-    the_experiment = nil
-    xml = Nokogiri::XML(xml_string)
-    xml.xpath("//Experiment").each{|experiment|
-      title = nil
-      title = experiment.at_xpath("./Title").content if experiment.at_xpath("./Title")
-      description = nil
-      description = experiment.at_xpath("./Description").content if experiment.at_xpath("./Description")
-      the_experiment = Experiment.create(:title => title, :description => description)
-
-      scenes_hash = {}
-      experiment.xpath(".//Scene").each{|scene|
-        title = nil
-        title = scene.at_xpath("./Title").content if scene.at_xpath("./Title")
-        description = nil
-        description = scene.at_xpath("./Description").content if scene.at_xpath("./Description")
-        scenes_hash[scene['URL']] = Scene.create(:name => title, :description => description, :use_url => true, :url => scene['URL']) unless scenes_hash[scene['URL']]
-      }
-      
-      
-    }
-    return the_experiment
-  end
-
+  
   def results(complete = false)
     
     number_of_steps = steps.length
