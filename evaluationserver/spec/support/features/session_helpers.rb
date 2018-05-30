@@ -4,7 +4,7 @@ module Features
       visit root_path
       click_link(t('layout.admin_on'))
       admin_user = "admin"
-      page.driver.browser.basic_authorize(admin_user,ENV['ADMIN_PASSWORD'])
+      page.driver.browser.basic_authorize(admin_user,Rails.application.credentials.admin_password)
     end
 
 
