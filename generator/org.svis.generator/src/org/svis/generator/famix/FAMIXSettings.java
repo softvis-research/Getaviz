@@ -33,6 +33,6 @@ public enum FAMIXSettings{;
 	
 	public static enum FamixParser {
 		
-		JDT2FAMIX,VERVEINEJ,JQA_BYTECODE;	
+		JDT2FAMIX,VERVEINEJ;	
 	}
 }
