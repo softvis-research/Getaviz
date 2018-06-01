@@ -35,6 +35,7 @@
 		<surefire.version>2.19.1</surefire.version>
 	    <dependency.locations.enabled>false</dependency.locations.enabled>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<bean.utils.version>1.9.3</bean.utils.version>
 	</properties>
 	<distributionManagement>
     	<site>

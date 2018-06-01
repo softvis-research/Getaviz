@@ -50,6 +50,7 @@ import org.svis.xtext.famix.FAMIXElement
 import org.neo4j.graphdb.Relationship
 import org.eclipse.emf.common.util.EList
 import org.svis.generator.famix.FAMIXSettings.FamixParser
+import org.svis.generator.SettingsConfiguration
 
 class Famix2Famix extends WorkflowComponentWithConfig {
 	var GraphDatabaseService graph
@@ -64,6 +65,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	val List<FAMIXNamespace> packagesToMerge = newArrayList
 	val Map<FAMIXMethod, List<FAMIXParameter>> parameters = newHashMap
 	val static famixFactory = new FamixFactoryImpl()
+	val settings = new SettingsConfiguration
 
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Famix2Famix has started.")
@@ -72,7 +74,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			val famixRoot = famixFactory.createRoot
 			val famixDocument = famixFactory.createDocument
 			famixRoot.document = famixDocument
-			graph = Database::getInstance(FAMIXSettings::DATABASE_NAME)
+			graph = Database::getInstance(settings.databaseName)
 			dbConnector = new DBConnector(graph)
 
 			// Create Namespaces
@@ -298,12 +300,12 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 				parameters.replace(m, l2)
 			}
 		]
-		if (FAMIXSettings::HIDE_PRIVATE_ELEMENTS) {
+		if (settings.hidePrivateElements) {
 			deletePrivates
 		}
 		val allPackages = famixDocument.elements.filter(FAMIXNamespace).toSet
 		allStructures += famixDocument.elements.filter(FAMIXStructure)
-		val nameComparator = new BeanComparator("name")
+		val BeanComparator<FAMIXElement> nameComparator = new BeanComparator("name")
 		val accesses = famixDocument.elements.filter(FAMIXAccess).filter[methods.contains(accessor.ref)].filter [
 			attributes.contains(variable.ref)
 		].sortWith(nameComparator)
@@ -324,15 +326,15 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			attributes.forEach[setCalledBy]
 			deletePrivateAttributes(accesses)
 		}
-		val comparator = new BeanComparator("fqn")
-		if (FAMIXSettings::FAMIX_PARSER == FAMIXSettings::FamixParser::JDT2FAMIX) {
+		val BeanComparator<FAMIXElement> comparator = new BeanComparator("fqn")
+		if (settings.parser === "jdt2famix") {
 			methods.forEach [
 				val sourceAnchor = it.sourceAnchor.ref as FAMIXFileAnchor
 				val numberOfLines = sourceAnchor.endline - sourceAnchor.startline + 1
 				it.numberOfStatements = numberOfLines
 			]
 		}
-		if (FAMIXSettings::ATTRIBUTE_SORT_SIZE) {
+		if (settings.attributeSortSize) {
 			Collections::sort(attributes, new Comparator<FAMIXAttribute>() {
 				override compare(FAMIXAttribute attribute1, FAMIXAttribute attribute2) {
 					val diffLength = attribute1.value.length - attribute2.value.length
@@ -353,14 +355,14 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		rootPackages.clear
 		subPackages.clear
 		packages.forEach[getPackages]
-		if (FAMIXSettings::MASTER_ROOT && rootPackages.size > 1) {
+		if (settings.masterRoot && rootPackages.size > 1) {
 			val Master = createMasterRoot
 			rootPackages.forEach[setParentScopeRoots(it, Master)]
 			rootPackages.forEach[subPackages += it]
 			rootPackages.clear
 			rootPackages += Master
 		}
-		if (FAMIXSettings::MERGE_PACKAGES) {
+		if (settings.masterRoot) {
 			rootPackages.forEach[findPackagesToMerge]
 			packagesToMerge.forEach[removePackages]
 			packagesToMerge.forEach[mergePackages]
