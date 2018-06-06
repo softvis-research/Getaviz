@@ -45,7 +45,7 @@ public class SettingsConfiguration {
 		return config.getBoolean("structure.merge_packages", false);
 	}
 
-	public String getOutputFormat() {
+	public String getCityOutputFormat() {
 		return config.getString("city.output_format", "x3d");
 	}
 
@@ -81,8 +81,8 @@ public class SettingsConfiguration {
 		return config.getString("city.brick.layout", "progressive");
 	}
 
-	public int getBrickSize() {
-		return config.getInt("city.brick.size", 1);
+	public double getBrickSize() {
+		return config.getDouble("city.brick.size", 1.0);
 	}
 
 	public double getBrickHorizontalMargin() {
@@ -147,12 +147,12 @@ public class SettingsConfiguration {
 		return config.getString("city.original_building_metric", "none");
 	}
 
-	public int getWidthMin() {
-		return config.getInt("city.width_min", 1);
+	public double getWidthMin() {
+		return config.getDouble("city.width_min", 1.0);
 	}
 
-	public int getHeightMin() {
-		return config.getInt("city.height_min", 1);
+	public double getHeightMin() {
+		return config.getDouble("city.height_min", 1.0);
 	}
 
 	public double getBLDGHorizontalMargin() {
@@ -211,7 +211,137 @@ public class SettingsConfiguration {
 		String color = name.toLowerCase();
 		return getColor(config.getString("city.color." + color));
 	}
-
+	
+	public double getDataFactor() {
+		return config.getDouble("rd.data_factor", 4.0);
+	}
+	
+	public double getMethodFactor() {
+		return config.getDouble("rd.method_factor", 1.0);
+	}
+	
+	public double getRDHeight() {
+		return config.getDouble("rd.height", 1.0);
+	}
+	
+	public int getRDHeightBoost() {
+		return config.getInt("rd.height_boost", 8);
+	}
+	
+	public double getRDHeightMultiplicator() {
+		return config.getDouble("rd.height_multiplicator", 50.0);
+	}
+	
+	public double getRDRingWidth() {
+		return config.getDouble("rd.ring_width", 2.0);
+	}
+	
+	public double getRDRingWidthMD() {
+		return config.getDouble("rd.ring_width_md", 0);
+	}
+	
+	public double getRDRingWidthAD() {
+		return config.getDouble("rd.ring_width_ad", 0);
+	}
+	
+	public double getMinArea() {
+		return config.getDouble("rd.min_area", 10.0);
+	}
+	
+	public double getNamespaceTransparency() {
+		return config.getDouble("rd.namespace_transparency", 0);
+	}
+	
+	public double getClassTransparency() {
+		return config.getDouble("rd.class_transparency", 0);
+	}
+	
+	public double getMethodTransparency() {
+		return config.getDouble("rd.method_transparency", 0);
+	}
+	
+	public double getDataTransparency() {
+		return config.getDouble("rd.data_transparency", 0);
+	}
+	
+	public Color getClassColor() {
+		return getColor(config.getString("rd.color.class", "#353559"));
+	}
+	
+	public String getClassColorFormatted() {
+		return getColorFormatted(getClassColor());
+	}
+	
+	public Color getDataColor() {
+		return getColor(config.getString("rd.color.data", "#fffc19"));
+	}
+	
+	public String getDataColorFormatted() {
+		return getColorFormatted(getDataColor());
+	}
+	
+	public Color getMethodColor() {
+		return getColor(config.getString("rd.color.method", "#1485cc"));
+	}
+	
+	public String getMethodColorFormatted() {
+		return getColorFormatted(getMethodColor());
+	}
+	
+	public Color getNamespaceColor() {
+		return getColor(config.getString("rd.color.namespace", "#969696"));
+	}
+	
+	public String getNamespaceColorFormatted() {
+		return getColorFormatted(getNamespaceColor());
+	}
+	
+	public Color getMethodInvocationColor() {
+		return getColor(config.getString("rd.color.method_invocation", "#780a32"));
+	}
+	
+	public String getMethodInvocationColorFormatted() {
+		return getColorFormatted(getMethodInvocationColor());
+	}
+	
+	public boolean isMethodDisks() {
+		return config.getBoolean("rd.method_disks", false);
+	}
+	
+	public boolean isDataDisks() {
+		return config.getBoolean("rd.data_disks", false);
+	}
+	
+	public boolean isMethodTypeMode() {
+		return config.getBoolean("rd.method_type_mode", false);
+	}
+	
+	public String getRDOutputFormat() {
+		return config.getString("rd.output_format", "x3d");
+	}
+	
+	public String getMetricRepresentation() {
+		return config.getString("rd.metric_representation", "none");
+	}
+	
+	public String getInvocationRepresentation() {
+		return config.getString("rd.invocation_representation", "none");
+	}
+	
+	public String getEvolutionRepresentation() {
+		return config.getString("rd.evolution_representation", "time_line");
+	}
+	
+	public String getVariant() {
+		return config.getString("rd.variant", "static");
+	}
+	
+	private String getColorFormatted(Color color) {
+		float[] components = color.getColorComponents(null);
+		String formattedColor = String.format("%f %f %f", components[0], components[1], components[2]);
+		return formattedColor;
+	}
+	
 	private Color getColor(String hex) {
 		return Color.decode(hex);
 	}
