@@ -27,8 +27,8 @@ An academic publication about Getaviz you can find [here](https://www.researchga
 Getaviz is developed by the research group [Software Visualization In 3D And Virtual Reality](https://home.uni-leipzig.de/svis/) of Leipzig University. It has been developed over several years and is the basic for many scientific publications. In 2018 we released Getaviz as open source to simplify collaboration and practical use of our research prototype. 
 
 Currently, four developers are contributung actively to Getaviz:
-* Dr. Richard Müller
-* Dr. Jan Schilbach
+* [Richard Müller](https://github.com/rmllr)
+* Jan Schilbach
 * Pascal Kovacs
 * David Baum
 
@@ -45,7 +45,7 @@ Many thanks to all the contributors who have improved Getaviz by implementing ne
 
 ## How do I get set up? ###
 
-The recommended way is **not** to clone this repository, but to follow the instructions under [Oomph Setup](../../wiki/Oomph%20Setup).
+The recommended way is **not** to clone this repository, but to follow the instructions under [Installation & Setup](../../wiki/Installation-&-Setup).
 Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.md with further instructions and documentation.
 
 ## Wiki
