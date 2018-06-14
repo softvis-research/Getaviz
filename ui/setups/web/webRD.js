@@ -159,6 +159,11 @@
 							height: 	200,
 							width:		2050,
 						},
+						{
+							title: 	"Privacy Police",
+							link: 	true,
+							url:	"http://home.uni-leipzig.de/svis/privacy-policy/"							
+						},
 					]
 				},				
 			]
