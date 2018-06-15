@@ -48,6 +48,12 @@ Many thanks to all the contributors who have improved Getaviz by implementing ne
 The recommended way is **not** to clone this repository, but to follow the instructions under [Installation & Setup](../../wiki/Installation-&-Setup).
 Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.md with further instructions and documentation.
 
+## Docker ##
+
+Getaviz can also be run via Docker. We provide containers via Docker Hub.
+Evaluation server: https://hub.docker.com/r/getaviz/evaluationserver/
+User Interface: https://hub.docker.com/r/getaviz/ui/
+
 ## Wiki
 
 Please have a look at our [Wiki](../../wiki/Home) which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
