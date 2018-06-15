@@ -51,8 +51,8 @@ Each subdirectory of this repository represents a standalone component of Getavi
 ## Docker ##
 
 Getaviz can also be run via Docker. We provide containers via Docker Hub.
-Evaluation server: https://hub.docker.com/r/getaviz/evaluationserver/
-User Interface: https://hub.docker.com/r/getaviz/ui/
+* Evaluation server: https://hub.docker.com/r/getaviz/evaluationserver/
+* User Interface: https://hub.docker.com/r/getaviz/ui/
 
 ## Wiki
 
