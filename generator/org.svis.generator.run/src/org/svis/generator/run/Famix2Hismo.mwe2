@@ -1,6 +1,9 @@
 module org.svis.generator.run.Famix2Hismo
 
+var projectName = "org.svis.generator.run"
+var runtimeProject = "../${projectName}"
 var configPath = "./metadata.json"
+
 
 /**
  * This workflow is only for testing purposes
