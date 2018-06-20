@@ -55,7 +55,7 @@ FAMIXClass:
 	'(' 'name' value=MSESTRING ')'
 	('(' 'hash' id = STRING ')')?
 	('(' 'fqn' fqn = MSESTRING ')')?
-	'(' 'container' container=IntegerReference ')'
+	('(' 'container' container=IntegerReference ')')?
 	('(' 'isInterface' isInterface=Boolean ')')?
 	('(' 'isStub' isStub=Boolean ')')?
 	('(' 'modifiers' modifiers+=MSESTRING* ')')?
@@ -73,7 +73,7 @@ FAMIXParameterizableClass:
 	'(' 'name' value=MSESTRING ')'
 	('(' 'hash' id = STRING ')')?
 	('(' 'fqn' fqn = MSESTRING ')')?
-	'(' 'container' container=IntegerReference ')'
+	('(' 'container' container=IntegerReference ')')?
 	('(' 'isInterface' isInterface=Boolean ')')?
 	('(' 'isStub' isStub=Boolean ')')?
 	('(' 'modifiers' modifiers+=MSESTRING* ')')?
@@ -215,7 +215,7 @@ FAMIXAnnotationType:
 	'(' 'name' value=MSESTRING ')'
 	('(' 'hash' id = STRING ')')?
 	('(' 'fqn' fqn = MSESTRING ')')?
-	'(' 'container' container=IntegerReference ')'
+	('(' 'container' container=IntegerReference ')')?
 	('(' 'isStub' isStub=Boolean ')')?
 	('(' 'modifiers' modifiers+=MSESTRING* ')')?
 	('(' 'sourceAnchor' sourceAnchor=IntegerReference ')')?
@@ -301,7 +301,7 @@ FAMIXEnum:
 	'(' 'name' value=MSESTRING ')'
 	('(' 'hash' id = STRING ')')?
 	('(' 'fqn' fqn = MSESTRING ')')?
-	'(' 'container' container=IntegerReference ')'
+	('(' 'container' container=IntegerReference ')')?
 	('(' 'isStub' isStub=Boolean ')')?
 	('(' 'modifiers' modifiers+=MSESTRING* ')')?
 	('(' 'sourceAnchor' sourceAnchor=IntegerReference ')')?
