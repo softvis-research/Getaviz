@@ -98,24 +98,6 @@
 							</arguments>
 						</configuration>
 					</execution>
-					<execution>
-						<id>loop</id>
-						<goals>
-							<goal>
-								java
-							</goal>
-						</goals>
-						<configuration>
-          					<executable>java</executable>
-          					<arguments>
-          						<argument>-Xms4g</argument>
-          						<argument>-Xmx4g</argument>
-            					<argument>-classpath</argument>
-            					<classpath/>
-            					<argument>org.svis.generator.run.WorkflowLoop</argument>
-	          				</arguments>
-    		    		</configuration>
-					</execution>
 				</executions>
 			</plugin>
 		</plugins>
