@@ -15,7 +15,7 @@ var configPath = "./metadata.json"
 
 Workflow {
 	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
-		platformUri = "../org.svis.extractor.hismo/.."
+		platformUri = "${runtimeProject}/.."
 		registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
 		registerGeneratedEPackage = "org.svis.xtext.hismo.HismoPackage"
 	}
