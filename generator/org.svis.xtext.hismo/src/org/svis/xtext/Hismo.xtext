@@ -23,7 +23,8 @@ HISMOElement returns famix::FAMIXElement:
 	HISMONamespaceVersion | 
 	HISMOClassVersion | 
 	HISMOMethodVersion | 
-	HISMOAttributeVersion 
+	HISMOAttributeVersion |
+	HISMOIssue
 ;
 
 
@@ -51,7 +52,10 @@ HISMOClassHistory:
 	('(lastAuthor' lastAuthor=MSESTRING ')')?
 	('(avgNumberOfOpenIncidents' avgNumberOfOpenIncidents = INT ')')?
 	('(avgNumberOfClosedIncidents' avgNumberOfClosedIncidents = INT ')')?
+	('(numberOfOpenSecurityIncidents' numberOfOpenSecurityIncidents = INT ')')?
+	('(numberOfClosedSecurityIncidents' numberOfClosedSecurityIncidents = INT ')')?
 	('(avgEvolutionRate' avgEvolutionRate = MSESTRING ')')?
+	('(issues' issues += MSESTRING* ')')?
 	')';	
 	
 HISMOMethodHistory:
@@ -91,6 +95,7 @@ HISMONamespaceVersion:
 	('(author' author=MSESTRING ')')?	
 	('(timestamp' timestamp=Timestamp')')?
 	('(commitId' commitId=MSESTRING ')')?	
+	('(isProject' isProject = Boolean ')')?
 	')';
 	
 HISMOClassVersion:
@@ -139,6 +144,14 @@ HISMOAttributeVersion:
 	('(author' author=MSESTRING ')')?	
 	('(timestamp' timestamp=Timestamp')')?
 	('(commitId' commitId=MSESTRING ')')?	
+	')';
+	
+HISMOIssue:
+	'(HISMO.Issues'
+	'(id:' name=INT_ID ')'
+	'(name' value=MSESTRING ')'
+	'(' 'open' open = Boolean ')'
+	'(' 'security' security = Boolean ')'
 	')';
 	
 Timestamp returns ecore::EString : MSESTRING;
