@@ -36,6 +36,13 @@ class FamixUtils {
 		val color = new RGBColor(red, green, 0)
 		return color
 	}
+	
+	def getBlueGradient(double value){
+		val red = 202 * value
+		val green = 202 * value
+		val color = new RGBColor(red, green, 206)
+		return color
+	}
 
 	def getAttributeSize(FAMIXElement element) {
 		switch(element) {
