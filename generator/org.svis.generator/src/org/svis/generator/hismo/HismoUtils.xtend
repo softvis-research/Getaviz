@@ -1,6 +1,6 @@
 package org.svis.generator.hismo
 
-import org.apache.commons.logging.LogFactory
+//import org.apache.commons.logging.LogFactory
 import org.svis.xtext.hismo.HISMOClassVersion
 import org.svis.xtext.hismo.HISMONamespaceVersion
 import org.svis.xtext.hismo.HISMOMethodHistory
@@ -11,9 +11,10 @@ import org.svis.xtext.hismo.HISMOAttributeVersion
 import org.svis.xtext.hismo.HISMONamespaceHistory
 import org.svis.generator.FamixUtils
 import org.svis.xtext.famix.impl.FamixFactoryImpl
+import java.util.ArrayList
 
 class HismoUtils {
-	val log = LogFactory::getLog(class)
+	//val log = LogFactory::getLog(class)
 	val static famixFactory = new FamixFactoryImpl()
 	extension FamixUtils util = new FamixUtils
 	
@@ -255,8 +256,16 @@ class HismoUtils {
 	 */
 	
 	def calcEvolution(HISMOClassHistory history){
-		val sum = history.classVersions.map[ref as HISMOClassVersion].map[methodVersions].reduce[].
-		map[ref as HISMOMethodVersion].map[evolutionNumberOfStatements].reduce[a,b | a + b]
+		var temp = new ArrayList<Integer>()
+		for( hist: history.classVersions){
+			for(meth: (hist.ref as HISMOClassVersion).methodVersions){
+				temp += (meth.ref as HISMOMethodVersion).evolutionNumberOfStatements	
+			}
+		}
+		var sum = 0
+		for(i:temp){
+			sum += i
+		}
 		
 		history.evolutionNumberOfStatements = sum
 	}
