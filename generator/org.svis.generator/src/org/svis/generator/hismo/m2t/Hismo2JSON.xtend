@@ -44,6 +44,11 @@ import org.svis.xtext.famix.FAMIXComponent
 import org.svis.xtext.famix.FAMIXPath
 import org.svis.generator.hismo.HismoUtils
 import org.svis.generator.FamixUtils
+import org.svis.xtext.hismo.HISMOIssue
+import org.svis.generator.rd.RDSettings.ShowVersions
+import java.time.format.DateTimeFormatter
+import java.util.Collections
+import java.time.LocalDate
 
 class Hismo2JSON implements IGenerator2 {
 
@@ -54,8 +59,7 @@ class Hismo2JSON implements IGenerator2 {
 	val List<FAMIXAccess> accesses = newArrayList
 	val List<FAMIXInvocation> invocations = newArrayList
 	val List<FAMIXInheritance> inheritances = newArrayList
-	val List<FAMIXPath> paths = newArrayList
-	val List<HISMONamespaceVersion> versions = newArrayList
+	val List<FAMIXPath> paths = newArrayList	
 	
 	override doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
 		val elements = EcoreUtil2::getAllContentsOfType(resource.contents.head, FAMIXElement)
@@ -68,10 +72,35 @@ class Hismo2JSON implements IGenerator2 {
 			elements.filter(FAMIXAttribute).forEach[famix.qualifiedName = it]
 		}
 		paths += elements.filter(FAMIXPath)
-		versions += elements.filter(HISMONamespaceVersion)
 		val roles = elements.filter(FAMIXRole)
 		elements.removeAll(roles)
 		//elements.removeAll(paths)
+		
+		if(RDSettings::SHOW_VERSIONS == ShowVersions::LATEST) {
+			val latestClassVersions = newArrayList
+			val List<HISMONamespaceVersion> latestNamespaceVersions = newArrayList
+			val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			var classVersions = elements.filter(HISMOClassVersion)
+			var namespaceVersions = elements.filter(HISMONamespaceVersion)
+			elements.filter(HISMOClassHistory).forEach[history|
+				var versions = history.classVersions.map[ref as HISMOClassVersion].clone
+				 Collections::sort(versions, [s1, s2|
+				 	LocalDate::parse(s1.timestamp, formatter).compareTo(LocalDate::parse(s2.timestamp, formatter))
+				])
+				latestClassVersions += versions.last
+			]
+			elements.filter(HISMONamespaceHistory).forEach[history|
+				val versions = history.namespaceVersions.map[ref as HISMONamespaceVersion].clone
+				 Collections::sort(versions, [s1, s2| 
+				 	LocalDate::parse(s1.timestamp, formatter).compareTo(LocalDate::parse(s2.timestamp, formatter))
+				])
+				latestNamespaceVersions += versions.last
+			]
+			elements.removeAll(classVersions)
+			elements.removeAll(namespaceVersions)
+			elements.addAll(latestClassVersions)
+			elements.addAll(latestNamespaceVersions)
+		}
 		if(RDSettings::SHOW_HISTORIES == false) {
 			elements.removeIf[it instanceof HISMONamespaceHistory]
 			elements.removeIf[it instanceof HISMOClassHistory]
@@ -100,6 +129,13 @@ class Hismo2JSON implements IGenerator2 {
 		«FOR el : list BEFORE "[{" SEPARATOR "\n},{" AFTER "}]"»
 			«toMetaData(el)»
 		«ENDFOR»
+	'''
+	
+	def dispatch private toMetaData(HISMOIssue issue)'''
+		"id":				"«issue.value»",
+		"type":				"issue",
+		"open":				"«issue.open»",
+		"security":			"«issue.security»"
 	'''
 	
 	def dispatch private toMetaData(FAMIXPath path) '''
@@ -171,7 +207,8 @@ class Hismo2JSON implements IGenerator2 {
 		"belongsTo":     "",
 		"reaches":		 "",
 		"antipattern":	 "",
-		"roles":	 	 ""
+		"roles":	 	 "",
+		"issues":		 ""
 	'''
 	def dispatch private toMetaData(HISMOMethodHistory mh)'''
 		"id":			 "«famix.createID(mh.qualifiedName)»",
@@ -207,7 +244,11 @@ class Hismo2JSON implements IGenerator2 {
 		"id":			 "«nv.id»",
 		"qualifiedName": "«nv.value»",
 		"name":			 "«nv.value»",
+		«IF (nv.container !== null)»
 		"type":			 "FAMIX.Namespace",
+		«ELSE»
+		"type":			 "FAMIX.Project",
+		«ENDIF»
 		"version":		 "«nv.commitId»",
 		«IF(nv.container !== null)»
 		"belongsTo":     "«nv.container.ref.id»"
@@ -248,8 +289,11 @@ class Hismo2JSON implements IGenerator2 {
 		«ELSE»
 			"betweennessCentrality":	"",
 		«ENDIF»
-		"numberOfClosedIncidents":	«history.avgNumberOfClosedIncidents»,
-		"numberOfOpenIncidents": «history.avgNumberOfOpenIncidents»
+		"numberOfClosedIssues":	«history.avgNumberOfClosedIncidents»,
+		"numberOfOpenIssues": «history.avgNumberOfOpenIncidents»,
+		"numberOfClosedSecurityIssues": «history.numberOfClosedSecurityIncidents»,
+		"numberOfOpenSecurityIssues": 	«history.numberOfOpenSecurityIncidents»,
+		"issues": "«(cv.parentHistory.ref as HISMOClassHistory).issues.removeBrackets»"
 	'''
 	
 	def dispatch private toMetaData(HISMOMethodVersion mv)'''
@@ -299,7 +343,8 @@ class Hismo2JSON implements IGenerator2 {
 		"superClassOf":  "«c.subClasses»",
 		"belongsTo":     "«c.container.ref.id»",
 		"antipattern":	 "«toString(c.antipattern)»",
-		"roles":	 	 "«toString2(c.antipattern, c)»"
+		"roles":	 	 "«toString2(c.antipattern, c)»",
+		"issues":		 ""
 	'''
 	
 	def dispatch private toMetaData(FAMIXAttribute a)'''
