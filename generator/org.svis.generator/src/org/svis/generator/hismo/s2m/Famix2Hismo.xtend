@@ -166,7 +166,7 @@ class Famix2Hismo extends WorkflowComponentWithConfig {
 				val components = famixDoc.elements.filter(FAMIXComponent).filterNull.toList
 				val antipattern = famixDoc.elements.filter(FAMIXAntipattern).filterNull.toList
 				val roles = famixDoc.elements.filter(FAMIXRole).filterNull.toList
-				val paths = famixDoc.elements.filter(FAMIXPath).filterNull.toList
+				val paths = famixDoc.elements.filter(FAMIXPath).filter[start.ref !== null && end.ref !== null].filterNull.toList
 
 				hismoDocument.elements += components
 				allComponents += components
@@ -334,6 +334,7 @@ class Famix2Hismo extends WorkflowComponentWithConfig {
 						replacedComponents.put(relatedComponent, antipattern)
 					} else {
 						log.warn("Unrelated Component (component splitting) detected. This case is not implemented.")
+						replacedComponents.put(relatedComponent, antipattern)
 					}
 				]
 			}
@@ -343,16 +344,8 @@ class Famix2Hismo extends WorkflowComponentWithConfig {
 			newComponent.path += oldComponent.path
 			newComponent.elements += oldComponent.elements
 			newComponent.versions += oldComponent.versions
-			newComponent.versions
-			val setVersions = newHashSet
-			setVersions += newComponent.versions
-			newComponent.versions.clear
-			newComponent.versions += setVersions.toList
 			antipatterns.map[realcomponents].forEach[s|
 				s.removeIf[r|r.ref == oldComponent]
-				//s.filter[rc|rc.ref == oldComponent].forEach[rc|		
-					//rc.ref = newComponent
-				//]
 			]
 			hismoDocument.elements.filter(HISMOClassVersion).filter[cv|cv.antipattern !== null].forEach[cv|
 			//.filter[cv|cv.antipattern.map[ref].contains(oldComponent)].forEach[cv|
@@ -432,7 +425,7 @@ class Famix2Hismo extends WorkflowComponentWithConfig {
 					if(numberOfUnrelatedComponents) {
 						replacedComponents.put(relatedComponent, component)
 					} else {
-						log.warn("Unrelated Component (component splitting) detected. This case is not implemented.")
+						replacedComponents.put(relatedComponent, component)
 					}
 				]
 			}
@@ -442,22 +435,57 @@ class Famix2Hismo extends WorkflowComponentWithConfig {
 			newComponent.path += oldComponent.path
 			newComponent.elements += oldComponent.elements
 			newComponent.versions += oldComponent.versions
-			newComponent.versions
-			val setVersions = newHashSet
-			setVersions += newComponent.versions
-			newComponent.versions.clear
-			newComponent.versions += setVersions.toList
 			components.map[realcomponents].forEach[s|
 				s.removeIf[r|r.ref == oldComponent]
-				//s.filter[rc|rc.ref == oldComponent].forEach[rc|		
-					//rc.ref = newComponent
-				//]
 			]
 			hismoDocument.elements.filter(HISMOClassVersion).filter[scc !== null].filter[scc.ref == oldComponent].forEach[cv|
 				cv.scc.ref = newComponent
 			]
 			hismoDocument.elements.remove(oldComponent)
 		]
+		val finalComponents = hismoDocument.elements.filter(FAMIXComponent)
+		val componentsToDelete = newHashSet
+		finalComponents.forEach[component|
+			val oldPaths = newLinkedList
+			val classes = newHashSet
+			component.path.forEach[ref|
+				val path = ref.ref as FAMIXPath
+				val start = path.start.ref as HISMOClassVersion
+				val end = path.end.ref as HISMOClassVersion
+				if(start !== null && end !== null) {
+					val famixstart = start.versionEntity.ref as FAMIXClass
+					val famixend = end.versionEntity.ref as FAMIXClass
+					if(famixstart.container.ref == famixend || famixend.container.ref == famixstart
+						|| (famixstart.container.ref == famixend.container.ref && famixstart.container.ref instanceof FAMIXClass)) {
+						oldPaths += ref
+					} else {
+						classes += start
+						classes += end
+					}
+				}	
+			]
+			component.path.removeAll(oldPaths)
+			val elementsToRemove = newHashSet
+			oldPaths.forEach[ref|
+				val path = ref.ref as FAMIXPath
+				val start = path.start.ref as HISMOClassVersion
+				val end = path.end.ref as HISMOClassVersion
+				if(!classes.contains(start)) {
+					start.scc = null
+					elementsToRemove += start.versionEntity.ref
+				}
+				if(!classes.contains(end)) {
+					end.scc = null
+					elementsToRemove += end.versionEntity.ref
+				}
+			]
+			component.elements.removeAll(elementsToRemove)
+			if(component.path.isNullOrEmpty || component.elements.isNullOrEmpty) {
+				componentsToDelete += component
+			}
+		]
+		
+		hismoDocument.elements.removeAll(componentsToDelete)
 		
 		hismoDocument.elements.filter(FAMIXComponent).sortBy[c|c.elements.length/c.versions.length].reverse.forEach[component, index|
 			component.fqn = "Component " + (index + 1) 
@@ -465,6 +493,7 @@ class Famix2Hismo extends WorkflowComponentWithConfig {
 	}
 	
 	def private updatePaths(List<FAMIXPath> list) {
+		val pathsToDelete = newLinkedList
 		list.forEach[path|
 			val oldstart = path.start.ref.name
 			val oldend =  path.end.ref.name
@@ -472,7 +501,13 @@ class Famix2Hismo extends WorkflowComponentWithConfig {
 			val newend = ids.get(oldend)
 			path.start.ref = newstart
 			path.end.ref = newend
+			if(newstart === null || newend === null){
+				val ref = famixFactory.createIntegerReference
+				ref.ref = path
+				pathsToDelete += ref
+			}
 		]
+		hismoDocument.elements.removeAll(pathsToDelete)
 	}
 	
 	def private updateParents() {
@@ -677,7 +712,6 @@ class Famix2Hismo extends WorkflowComponentWithConfig {
 			hismomethodversion.commitId = currentDirectory.name
 			hismomethodversion.name = (i++).toString
 			hismomethodversion.id = famix.createID(mt.id + hismomethodversion.name)
-			println("mv: " + hismomethodversion.id)
 			mt.numberOfStatements = 30
 			hismomethodversion.evolutionNumberOfStatements = 30
 			// set additional Information from Versioning, like author
@@ -739,7 +773,6 @@ class Famix2Hismo extends WorkflowComponentWithConfig {
 			// TODO: das ist hier Ansichtssache, ob die gesamten statements die evolution vom null-Zustand darstellen, oder eben 0 
 			// return ((history.versions.filter(typeof(HISMORank)).head.version.ref as HISMOMethodVersion).versionEntity as FAMIXMethod).numberOfStatements
 		}
-		println("####Calc Rank Evolution: " + history.name)
 		val prevVersion = (history.methodVersions.sortBy[(it.ref as HISMOMethodVersion).timestamp].head.ref as HISMOMethodVersion) // .filter[it.version.ref.name == method.name]
 		val prevVersionEntity = prevVersion.versionEntity.ref as FAMIXMethod
 
@@ -757,7 +790,6 @@ class Famix2Hismo extends WorkflowComponentWithConfig {
 	def void calcAverageNOS(HISMOMethodHistory history) {
 		var int temp
 		for (v : history.methodVersions) {
-			println(((v.ref as HISMOMethodVersion).versionEntity.ref as FAMIXMethod).numberOfStatements)
 			temp += ((v.ref as HISMOMethodVersion).versionEntity.ref as FAMIXMethod).numberOfStatements
 		}
 		history.averageNumberOfStatements = temp / history.methodVersions.length
