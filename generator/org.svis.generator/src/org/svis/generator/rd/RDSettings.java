@@ -68,10 +68,10 @@ public enum RDSettings {;
 		NONE, BETWEENNESS_CENTRALITY, NUMBER_OF_STATEMENTS
 	}
 	
-	public static ClassColor CLASS_COLOR_METRIC = ClassColor.EVOLUTION_RATE;
+	public static ClassColor CLASS_COLOR_METRIC = ClassColor.CHANGE_FREQUENCY;
 	
 	public static enum ClassColor {
-		STATIC, STK, EVOLUTION_RATE
+		STATIC, STK, CHANGE_FREQUENCY
 	}
 	
 	/**

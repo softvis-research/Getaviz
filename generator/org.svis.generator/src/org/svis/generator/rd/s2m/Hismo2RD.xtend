@@ -293,7 +293,11 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		switch(RDSettings::CLASS_COLOR_METRIC) {
 			case STK: disk.color = famixUtil.getGradient(Double.parseDouble(classVersion.stkRank)).asPercentage
 			case STATIC: disk.color = RDSettings::CLASS_COLOR
-			case EVOLUTION_RATE: disk.color = famixUtil.getGradient(Double.parseDouble(history.avgEvolutionRate)).asPercentage
+			case CHANGE_FREQUENCY: {
+				 val max = hismoClasses.map[h|h.classVersions.size].max
+				 val abc = history.classVersions.size * 1.0/max
+				 disk.color = famixUtil.getBlueGradient(abc).asPercentage
+			}
 		}
 		
 		return disk
