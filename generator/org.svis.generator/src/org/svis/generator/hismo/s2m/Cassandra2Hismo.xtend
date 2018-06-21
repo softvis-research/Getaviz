@@ -17,7 +17,8 @@ import com.datastax.driver.core.Session
 import org.svis.xtext.hismo.impl.HismoFactoryImpl
 import org.svis.xtext.hismo.HISMONamespaceVersion
 import org.svis.generator.hismo.HismoUtils
-import java.util.Random
+import com.datastax.driver.core.querybuilder.QueryBuilder
+import org.svis.xtext.hismo.HISMOIssue
 
 class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 	val hismoFactory = new HismoFactoryImpl()
@@ -49,52 +50,97 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
         session.execute(query).forEach[result|
             val filename = result.getString("filename")
             if(filename.endsWith(".java")) {
-            	val packagename = result.getString("packagename")
-            	val commitdate = result.getDate("commitdate").toString
+            	val packagename = result.getString("package_name")
+            	val commitdate = result.getDate("commit_date").toString
+            	val commitid = result.getString("commit_id")
             	val project = result.getString("project")
-            	val addedLines = result.getInt("addedlines")
-            	val removedLines = result.getInt("removedlines")
+            	val addedLines = result.getInt("added_lines")
+            	val removedLines = result.getInt("removed_lines")
             	//val id = result.getUUID("id").toString
             	
             	val realPackagename = project + "." + packagename
             	
             	val fqn = realPackagename + "." + filename
             	
-            	var projectHistory = namespaceHistories.findFirst[value == project]
-            	if(projectHistory === null) {
-            		projectHistory = toNamespaceHistory(project)
-            		namespaceHistories += projectHistory
-            	}
-            	var projectVersion = namespaceVersions.findFirst[value == project && timestamp == commitdate]
-            	if(projectVersion === null) {
-            		projectVersion = toNamespaceVersion(projectHistory, commitdate)
-            		namespaceVersions += projectVersion
-            	}
-            	var namespaceHistory = namespaceHistories.findFirst[value == realPackagename]
-            	if(namespaceHistory === null) {
-            		namespaceHistory = toNamespaceHistory(realPackagename)
-            		namespaceHistories += namespaceHistory
-            	}
-            	var namespaceVersion = namespaceVersions.findFirst[value == realPackagename]
-            	if(namespaceVersion === null) {
-            		namespaceVersion = toNamespaceVersion(namespaceHistory, commitdate)
-            		namespaceVersions += namespaceVersion
-            	}
-            	var classHistory = classHistories.findFirst[value == fqn]
-            	if(classHistory === null) {
-            		classHistory = toClassHistory(namespaceHistory, fqn, realPackagename, commitdate)
-            		classHistories += classHistory
-            	}
-            	var classVersion = classVersions.findFirst[value == packagename && timestamp == commitdate]
-            	if(classVersion === null) {
-            		classVersion = toClassVersion(classHistory, fqn, commitdate, addedLines - removedLines)
-            		classVersions += classVersion
-            	}
-            }
+            //	if(project == "project_a") {
+       	
+	            	val statement = QueryBuilder.select.all
+	        			.from("issues")
+	        			.allowFiltering
+	        			.where(QueryBuilder::eq("filename", filename))
+	        			.and(QueryBuilder::eq("project", project))
+	        			.and(QueryBuilder::eq("package_name", packagename))
+	        		
+	        		var closedIncidents = 0;
+	        		var openIncidents = 0;
+	        		var openSecurityIncidents = 0;
+	        		var closedSecurityIncidents = 0;
+	        		var issueIds = newHashSet
+	        		for(issueResult : session.execute(statement)) {
+	            		val old =  issueResult.getBool("old")
+	            		val security_relevant = issueResult.getBool("security_relevant")
+	            		val id = issueResult.getString("issue_id")
+	            		var newIssue = issueIds.add(id)
+	            		if(newIssue){
+	            			hismoDocument.elements += toIssue(id, !old, security_relevant)
+	            		}
+	            		if(old) {
+	            			if(security_relevant) {
+	            				closedSecurityIncidents++
+	            			} else {
+	            				closedIncidents++	
+	            			}
+	            		} else {
+	            			if(security_relevant) {
+	            				openSecurityIncidents++            				
+	            			} else {
+	            				openIncidents++
+	            			}
+	            		}
+	            	}
+	            	
+	            	var projectHistory = namespaceHistories.findFirst[value == project]
+	            	if(projectHistory === null) {
+	            		projectHistory = toNamespaceHistory(project)
+	            		namespaceHistories += projectHistory
+	            	}
+	            	var projectVersion = namespaceVersions.findFirst[value == project && commitId == commitid]
+	            	if(projectVersion === null) {
+	            		projectVersion = toNamespaceVersion(projectHistory, commitdate, commitid)
+	            		namespaceVersions += projectVersion
+	            	}
+	            	var namespaceHistory = namespaceHistories.findFirst[value == realPackagename]
+	            	if(namespaceHistory === null) {
+	            		namespaceHistory = toNamespaceHistory(realPackagename)
+	            		namespaceHistories += namespaceHistory
+	            	}
+	            	var namespaceVersion = namespaceVersions.findFirst[value == realPackagename]
+	            	if(namespaceVersion === null) {
+	            		namespaceVersion = toNamespaceVersion(namespaceHistory, commitdate, commitid)
+	            		namespaceVersions += namespaceVersion
+	            	}
+	            	var classHistory = classHistories.findFirst[value == fqn]
+	            	if(classHistory === null) {
+	            		classHistory = toClassHistory(namespaceHistory, fqn, realPackagename, commitdate, closedIncidents, closedSecurityIncidents, openIncidents, openSecurityIncidents)
+	            		classHistories += classHistory
+	            	}
+	            	var classVersion = classVersions.findFirst[value == packagename && commitId == commitid]
+	            	if(classVersion === null) {
+	            		classVersion = toClassVersion(classHistory, fqn, commitid, commitdate, addedLines - removedLines)
+	            		(classVersion.parentHistory.ref as HISMOClassHistory).issues += issueIds
+	            		classVersions += classVersion
+	            	}
+	            }
+           // }
         ]
         
         client.close
         hismoDocument.elements.filter(HISMONamespaceHistory).toList.forEach[createParent(it.value)]
+        hismoDocument.elements.filter(HISMOClassHistory).toList.forEach[history|
+        	val uniqueIssues = history.issues.toSet
+        	history.issues.clear
+        	history.issues += uniqueIssues
+        ]
         updateParents
         setParentVersion
 		
@@ -116,7 +162,7 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		if(parentHistory === null) {
 			createParent(parentFQN)
 			parentHistory = toNamespaceHistory(parentFQN)
-			toNamespaceVersion(parentHistory, "foobar")
+			toNamespaceVersion(parentHistory, "foobar", "0")
 		}
 	}
 	
@@ -145,6 +191,14 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		]
 	}
 	
+	def HISMOIssue toIssue(String id, boolean open, boolean security) {
+		val issue = hismoFactory.createHISMOIssue 
+		issue.value = id
+		issue.open = open.toString
+		issue.security = security.toString
+		return issue
+	}
+	
 	def HISMONamespaceHistory toNamespaceHistory(String fqn) {
 		val namespaceHistory = hismoFactory.createHISMONamespaceHistory 
 		namespaceHistory.value = fqn
@@ -153,10 +207,10 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		return namespaceHistory
 	}
 	
-	def HISMONamespaceVersion toNamespaceVersion(HISMONamespaceHistory history, String commit) {
+	def HISMONamespaceVersion toNamespaceVersion(HISMONamespaceHistory history, String commit, String commitid) {
 		val namespaceVersion = hismoFactory.createHISMONamespaceVersion
 		namespaceVersion.timestamp = commit
-		namespaceVersion.commitId = commit
+		namespaceVersion.commitId = commitid
 		namespaceVersion.name = history.value
 		namespaceVersion.id = famix.createID(namespaceVersion.name)
 		namespaceVersion.value =  history.value
@@ -169,7 +223,8 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		return namespaceVersion
 	}
 	
-	def private HISMOClassHistory toClassHistory(HISMONamespaceHistory history, String fqn, String packagename, String commitdate) {
+	def private HISMOClassHistory toClassHistory(HISMONamespaceHistory history, String fqn, String packagename, String commitdate, 
+		int closedIncidents, int closedSecurityIncidents, int openIncidents, int openSecurityIncidents) {
 		val classHistory = hismoFactory.createHISMOClassHistory
 		classHistory.value = fqn
 		classHistory.name = famix.createID(fqn + commitdate)
@@ -177,10 +232,6 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		history.classHistories += classHistory.createReference
 		classHistory.containingNamespaceHistory = history.createReference
 		history.classHistories += classHistory.createReference
-		val rand = new Random();
-		
-		val openIncidents = rand.nextInt(35) - 20
-		val closedIncidents = rand.nextInt(50) - 35
 		
 		switch (openIncidents) {
 			case openIncidents < 0: classHistory.avgNumberOfOpenIncidents = 0
@@ -191,16 +242,19 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 			case closedIncidents < 0: classHistory.avgNumberOfClosedIncidents = 0
 			default: classHistory.avgNumberOfClosedIncidents = closedIncidents
 		}
+		
+		classHistory.numberOfOpenSecurityIncidents = openSecurityIncidents
+		classHistory.numberOfClosedSecurityIncidents = closedSecurityIncidents
 
 		hismoDocument.elements += classHistory
 		
 		return classHistory
 	}
 	
-	def private HISMOClassVersion toClassVersion(HISMOClassHistory history, String fqn, String commitdate, int numberOfStatements) {
+	def private HISMOClassVersion toClassVersion(HISMOClassHistory history, String fqn, String commitid, String commitdate, int numberOfStatements) {
 		val classVersion =  hismoFactory.createHISMOClassVersion
 		classVersion.timestamp = commitdate
-		classVersion.commitId = commitdate
+		classVersion.commitId = commitid
 		classVersion.name = fqn
 		classVersion.id = famix.createID(fqn)
 		classVersion.value = fqn
