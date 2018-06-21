@@ -6,6 +6,19 @@ import java.awt.Color;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.svis.generator.city.CitySettings.Bricks.Layout;
+import org.svis.generator.city.CitySettings.BuildingType;
+import org.svis.generator.city.CitySettings.ClassElementsModes;
+import org.svis.generator.city.CitySettings.ClassElementsSortModesCoarse;
+import org.svis.generator.city.CitySettings.ClassElementsSortModesFine;
+import org.svis.generator.city.CitySettings.Original.BuildingMetric;
+import org.svis.generator.city.CitySettings.Panels.SeparatorModes;
+import org.svis.generator.city.CitySettings.Schemes;
+import org.svis.generator.rd.RDSettings.EvolutionRepresentation;
+import org.svis.generator.rd.RDSettings.InvocationRepresentation;
+import org.svis.generator.rd.RDSettings.MetricRepresentation;
+import org.svis.generator.rd.RDSettings.OutputFormat;
+import org.svis.generator.rd.RDSettings.Variant;
 
 public class SettingsConfiguration {
 	private String path = "../org.svis.generator/src/org/svis/generator/settings.properties";
@@ -45,28 +58,123 @@ public class SettingsConfiguration {
 		return config.getBoolean("structure.merge_packages", false);
 	}
 
-	public String getCityOutputFormat() {
+	public String getCityOutputFormatAsString() {
 		return config.getString("city.output_format", "x3d");
 	}
-
-	public String getBuildingType() {
-		return config.getString("city.building_type", "city_original");
+	
+	public OutputFormat getCityOutputFormat() {
+		switch (getCityOutputFormatAsString()) {
+		case "x3dom":
+			return OutputFormat.X3DOM;
+		case "aFrame":
+			return OutputFormat.AFrame;
+		default:
+			return OutputFormat.X3D;
+		}
+	}
+	
+	public boolean isCityOutputFormatSetTo(OutputFormat format) {
+		return getCityOutputFormat() == format;
 	}
 
-	public String getScheme() {
+	public String getBuildingTypeAsString() {
+		return config.getString("city.building_type", "original");
+	}
+
+	public BuildingType getBuildingType() {
+		switch (getBuildingTypeAsString()) {
+		case "panels":
+			return BuildingType.CITY_PANELS;
+		case "bricks":
+			return BuildingType.CITY_BRICKS;
+		case "floor":
+			return BuildingType.CITY_FLOOR;
+		case "dynamic":
+			return BuildingType.CITY_BRICKS;
+		default:
+			return BuildingType.CITY_ORIGINAL;
+		}
+	}
+	
+	public boolean isBuildingTypeSetTo(BuildingType type) {
+		return getBuildingType() == type;
+	}
+
+	public String getSchemeAsString() {
 		return config.getString("city.scheme", "types");
 	}
+	
+	public Schemes getScheme() {
+		switch (getSchemeAsString()) {
+		case "visibility":
+			return Schemes.VISIBILITY;
+		default:
+			return Schemes.TYPES;
+		}
+	}
+	
+	public boolean isSchemeSetTo(Schemes scheme) {
+		return getScheme() == scheme;
+	}
 
-	public String getClassElementsMode() {
+	public String getClassElementsModeAsString() {
 		return config.getString("city.class_elements_mode", "methods_and_attributes");
 	}
 
-	public String getClassElementsSortModeCoarse() {
-		return config.getString("city.class_elements_sort_mode_coarse", "methods_first");
+	public ClassElementsModes getClassElementsMode() {
+		switch (getClassElementsModeAsString()) {
+		case "methods_only":
+			return ClassElementsModes.METHODS_ONLY;
+		case "attributes_only":
+			return ClassElementsModes.ATTRIBUTES_ONLY;
+		default:
+			return ClassElementsModes.METHODS_AND_ATTRIBUTES;
+		}
+	}
+	
+	public boolean isClassElementsModeSetTo(ClassElementsModes mode) {
+		return getClassElementsMode() == mode;
 	}
 
-	public String getElementsSortModeFide() {
-		return config.getString("city.elements_sort_mode_fide", "scheme");
+	public String getClassElementsSortModeCoarseAsString() {
+		return config.getString("city.class_elements_sort_mode_coarse", "methods_first");
+	}
+	
+	// methods_first (default), unsorted, attributes_firs
+	public ClassElementsSortModesCoarse getClassElementsSortModeCoarse() {
+		switch (getClassElementsSortModeCoarseAsString()) {
+		case "unsorted":
+			return ClassElementsSortModesCoarse.UNSORTED;
+		case "attributes_first":
+			return ClassElementsSortModesCoarse.ATTRIBUTES_FIRST;
+		default:
+			return ClassElementsSortModesCoarse.METHODS_FIRST;
+		}
+	}
+	
+	public boolean isClassElementsSortModeCoarseSetTo(ClassElementsSortModesCoarse mode) {
+		return getClassElementsSortModeCoarse() == mode;
+	}
+
+	public String getElementsSortModeFineAsString() {
+		return config.getString("city.elements_sort_mode_fine", "scheme");
+	}
+	
+	// scheme (default), unsorted, alphabetically, nos
+	public ClassElementsSortModesFine getElementsSortModeFine() {
+		switch (getElementsSortModeFineAsString()) {
+		case "unsorted":
+			return ClassElementsSortModesFine.UNSORTED;
+		case "alphabetically":
+			return ClassElementsSortModesFine.ALPHABETICALLY;
+		case "nos" : return ClassElementsSortModesFine.NOS;
+		default:
+			return ClassElementsSortModesFine.UNSORTED;
+		}
+	}
+	
+	public boolean isElementsSortModeFineSetTo(ClassElementsSortModesFine mode) {
+		return getElementsSortModeFine() == mode;
 	}
 
 	public boolean isClassElementsSortModeFineDirectionReversed() {
@@ -77,8 +185,23 @@ public class SettingsConfiguration {
 		return config.getBoolean("city.building_base", false);
 	}
 
-	public String getBrickLayout() {
+	public String getBrickLayoutAsString() {
 		return config.getString("city.brick.layout", "progressive");
+	}
+	
+	public Layout getBrickLayout() {
+		switch (getBrickLayoutAsString()) {
+		case "straight":
+			return Layout.STRAIGHT;
+		case "alphabetically":
+			return Layout.BALANCED;
+		default:
+			return Layout.PROGRESSIVE;
+		}
+	}
+	
+	public boolean isBrickLayoutSetTo(Layout layout) {
+		return getBrickLayout() == layout;
 	}
 
 	public double getBrickSize() {
@@ -105,8 +228,23 @@ public class SettingsConfiguration {
 		return config.getBoolean("city.show_attributes_as_cylinders", true);
 	}
 
-	public String getPanelSeparatorMode() {
+	public String getPanelSeparatorModeAsString() {
 		return config.getString("city.panel_separator_mode", "separator");
+	}
+
+	public SeparatorModes getPanelSeparatorMode() {
+		switch (getPanelSeparatorModeAsString()) {
+		case "none":
+			return SeparatorModes.NONE;
+		case "gap":
+			return SeparatorModes.GAP;
+		default:
+			return SeparatorModes.SEPARATOR;
+		}
+	}
+	
+	public boolean isPanelSeparatorModeSetTo(SeparatorModes mode) {
+		return getPanelSeparatorMode() == mode;
 	}
 
 	public int[] getPanelHeightTresholdNos() {
@@ -143,8 +281,21 @@ public class SettingsConfiguration {
 		return config.getDouble("city.panel.separator_height", 0.125);
 	}
 
-	public String getOriginalBuildingMetric() {
+	public String getOriginalBuildingMetricAsString() {
 		return config.getString("city.original_building_metric", "none");
+	}
+	
+	public BuildingMetric getOriginalBuildingMetric() {
+		switch (getOriginalBuildingMetricAsString()) {
+		case "nos":
+			return BuildingMetric.NOS;
+		default:
+			return BuildingMetric.NONE;
+		}
+	}
+	
+	public boolean isPanelSeparatorModeSetTo(BuildingMetric metric) {
+		return getOriginalBuildingMetric() == metric;
 	}
 
 	public double getWidthMin() {
@@ -192,7 +343,7 @@ public class SettingsConfiguration {
 	}
 
 	public Color getDynamicClassColorEnd() {
-		return getColor(config.getString("dynamic.class.color_end", "#feb280"));
+		return getColor(config.getString("city.dynamic.class.color_end", "#feb280"));
 	}
 
 	public Color getDynamicMethodColor() {
@@ -316,24 +467,107 @@ public class SettingsConfiguration {
 		return config.getBoolean("rd.method_type_mode", false);
 	}
 
-	public String getRDOutputFormat() {
+	public String getRDOutputFormatAsString() {
 		return config.getString("rd.output_format", "x3d");
 	}
+	
+	public OutputFormat getRDOutputFormat() {
+		switch (getRDOutputFormatAsString()) {
+		case "x3dom":
+			return OutputFormat.X3DOM;
+		case "aFrame":
+			return OutputFormat.AFrame;
+		case "simple_glyphs_json":
+			return OutputFormat.SimpleGlyphsJson;
+		case "x3d_compressed":
+			return OutputFormat.X3D_COMPRESSED;
+		default:
+			return OutputFormat.X3D;
+		}
+	}
+	
+	public boolean isRDOutputFormatSetTo(OutputFormat format) {
+		return getRDOutputFormat() == format;
+	}
 
-	public String getMetricRepresentation() {
+	public String getMetricRepresentationAsString() {
 		return config.getString("rd.metric_representation", "none");
 	}
 
-	public String getInvocationRepresentation() {
-		return config.getString("rd.invocation_representation", "none");
+	public MetricRepresentation getMetricRepresentation() {
+		switch (getMetricRepresentationAsString()) {
+		case "height":
+			return MetricRepresentation.HEIGHT;
+		case "luminance":
+			return MetricRepresentation.LUMINANCE;
+		case "frequency":
+			return MetricRepresentation.FREQUENCY;
+		default:
+			return MetricRepresentation.NONE;
+		}
+	}
+	
+	public boolean isMetricRepresentationSetTo(MetricRepresentation representation) {
+		return getMetricRepresentation() == representation;
 	}
 
-	public String getEvolutionRepresentation() {
+	public String getInvocationRepresentationAsString() {
+		return config.getString("rd.invocation_representation", "none");
+	}
+	
+	public InvocationRepresentation getInvocationRepresentation() {
+		switch (getInvocationRepresentationAsString()) {
+		case "moving_spheres":
+			return InvocationRepresentation.MOVING_SPHERES;
+		case "flashing_methods":
+			return InvocationRepresentation.FLASHING_METHODS;
+		case "moving_flashing":
+			return InvocationRepresentation.MOVING_FLASHING;
+		default:
+			return InvocationRepresentation.NONE;
+		}
+	}
+	
+	public boolean isInvocationRepresentationSetTo(InvocationRepresentation representation) {
+		return getInvocationRepresentation() == representation;
+	}
+
+	public String getEvolutionRepresentationAsString() {
 		return config.getString("rd.evolution_representation", "time_line");
 	}
 
-	public String getVariant() {
+	public EvolutionRepresentation getEvolutionRepresentation() {
+		switch (getEvolutionRepresentationAsString()) {
+		case "dynamic_evolution":
+			return EvolutionRepresentation.DYNAMIC_EVOLUTION;
+		case "multiple_time_line":
+			return EvolutionRepresentation.MULTIPLE_TIME_LINE;
+		case "multiple_dynamic_evolution":
+			return EvolutionRepresentation.MULTIPLE_DYNAMIC_EVOLUTION;
+		default:
+			return EvolutionRepresentation.TIME_LINE;
+		}
+	}
+	
+	public boolean isEvolutionRepresentationSetTo(EvolutionRepresentation representation) {
+		return getEvolutionRepresentation() == representation;
+	}
+
+	public String getVariantAsString() {
 		return config.getString("rd.variant", "static");
+	}
+	
+	public Variant getVariant() {
+		switch (getVariantAsString()) {
+		case "dynamic":
+			return Variant.DYNAMIC;
+		default:
+			return Variant.STATIC;
+		}
+	}
+	
+	public boolean isVariantSetTo(Variant variant) {
+		return getVariant() == variant;
 	}
 
 	public String getPackageShape() {
@@ -419,7 +653,8 @@ public class SettingsConfiguration {
 	}
 
 	public String getInnerClassTextureBloom() {
-		return config.getString("plant.inner_class.texture_bloom", "<ImageTexture url='pics/bloom.png' scale='false' />");
+		return config.getString("plant.inner_class.texture_bloom",
+				"<ImageTexture url='pics/bloom.png' scale='false' />");
 	}
 
 	public String getInnerClassColor() {
@@ -436,7 +671,7 @@ public class SettingsConfiguration {
 		Color color = getColor(config.getString("plant.inner_class.color03", "#ffff00"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
-	
+
 	public String getAttributeShape() {
 		return config.getString("plant.attribute.shape", "realistic_petal");
 	}
@@ -457,20 +692,21 @@ public class SettingsConfiguration {
 		Color color = getColor(config.getString("plant.attribute.color", "#8a3398"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
-	
+
 	public String getInnerClassAttributeShape() {
 		return config.getString("plant.inner_class_attribute.shape", "default");
 	}
 
 	public String getInnerClassAttributeTexture() {
-		return config.getString("plant.inner_class_attribute.texture", "<ImageTexture url='pics/lilacPetal.png' scale='false' />");
+		return config.getString("plant.inner_class_attribute.texture",
+				"<ImageTexture url='pics/lilacPetal.png' scale='false' />");
 	}
 
 	public String getInnerClassAttributeColor() {
 		Color color = getColor(config.getString("plant.inner_class_attribute.color", "#ab2626"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
-	
+
 	public String getMethodShape() {
 		return config.getString("plant.method.shape", "default");
 	}
@@ -486,58 +722,60 @@ public class SettingsConfiguration {
 	public String getMethodTexture() {
 		return config.getString("plant.method.texture", "<ImageTexture url='pics/junctionGreen.png' scale='false' />");
 	}
-	
+
 	public String getMethodTexturePollball() {
-		return config.getString("plant.method.texture_pollball", "<ImageTexture url='pics/pollball.png' scale='false' />");
+		return config.getString("plant.method.texture_pollball",
+				"<ImageTexture url='pics/pollball.png' scale='false' />");
 	}
 
 	public String getMethodColor() {
 		Color color = getColor(config.getString("plant.method.color", "#000100"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
-	
+
 	public String getMethodColor02() {
 		Color color = getColor(config.getString("plant.method.color", "#010100"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
-	
+
 	public String getInnerClassMethodhape() {
 		return config.getString("plant.inner_class_method.shape", "default");
 	}
 
 	public String getInnerClassMethodTexture() {
-		return config.getString("plant.inner_class_method.texture", "<ImageTexture url='pics/bloom.png' scale='false' />");
+		return config.getString("plant.inner_class_method.texture",
+				"<ImageTexture url='pics/bloom.png' scale='false' />");
 	}
 
 	public String getInnerClassMethodColor() {
 		Color color = getColor(config.getString("plant.inner_class_method.color", "#8b4413"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
-	
+
 	public double getAreaheight() {
 		return config.getDouble("plant.area_height", 3.5);
 	}
-	
+
 	public double getStemThickness() {
 		return config.getDouble("plant.stem.thickness", 3.0);
 	}
-	
+
 	public double getStemHeight() {
 		return config.getDouble("plant.stem.height", 6.0);
 	}
-	
+
 	public double getCronHeight() {
 		return config.getDouble("plant.cron.height", 2.0);
 	}
-	
+
 	public double getCronHeadHeight() {
 		return config.getDouble("plant.cron.head_height", 0.5);
 	}
-	
+
 	public double getPetalAngle() {
 		return config.getDouble("plant.petal.angle", 0.5236);
 	}
-	
+
 	public double getPetalDistanceMultiplier() {
 		return config.getDouble("plant.petal.distance_multiplier", 3.0);
 	}
@@ -545,43 +783,43 @@ public class SettingsConfiguration {
 	public double getPollstemAngle() {
 		return config.getDouble("plant.pollstem.angle", 0.05);
 	}
-	
+
 	public double getPollstemAngleDistanceMultiplier() {
 		return config.getDouble("plant.pollstem.angle_distance_multiplier", 0.3);
 	}
-	
+
 	public double getPollstemBallMultiplier() {
 		return config.getDouble("plant.pollstem.ball_multiplier", 1.57);
 	}
-	
+
 	public double getPollstemBallHeight() {
 		return getCronHeight() + 3.78;
 	}
-	
+
 	public double getJunctionAngle() {
 		return config.getDouble("plant.junction.angle", 1.3);
 	}
-	
+
 	public double getJunctionStemThickness() {
 		return getStemThickness() / 2;
 	}
-	
+
 	public double getJunctionDistanceMultiplier() {
 		return config.getDouble("plant.junction.distance_multiplier", 8.0);
 	}
-	
+
 	public double getJunctionPollstemBallMultiplier() {
 		return config.getDouble("plant.junction.pollstem.ball_multiplier", 0.1);
 	}
-	
+
 	public double getPlantBuildingHorizontalMargin() {
 		return config.getDouble("plant.building.horizontal_margin", 3.0);
 	}
-	
+
 	public double getPlantBuildingHorizontalGap() {
 		return config.getDouble("plant.building.horizontal_gap", 7.0);
 	}
-	
+
 	public double getPlantBuildingVerticalMargin() {
 		return config.getDouble("plant.building.vertical_margin", 3.0);
 	}
