@@ -62,8 +62,10 @@ class GenerateHismo implements IGenerator2 {
 		
 		antipattern.forEach [ a |
 			a.path.forEach[p |
-				val path = p.ref as FAMIXPath 
-				actionsList += toPath(path).toString
+				val path = p.ref as FAMIXPath
+				if(path.start.ref !== null && path.end.ref !== null){
+					actionsList += toPath(path).toString
+				} 
 			]
 			a.roles.forEach[r |
 				val role = r.ref as FAMIXRole
@@ -73,8 +75,10 @@ class GenerateHismo implements IGenerator2 {
 		]
 		components.forEach[c|
 			c.path.forEach[p |
-				val path = p.ref as FAMIXPath 
-				actionsList += toPath(path).toString
+				val path = p.ref as FAMIXPath
+				if(path.start.ref !== null && path.end.ref !== null){ 
+					actionsList += toPath(path).toString
+				}
 			]
 			actionsList += toComponent(c).toString
 		]
@@ -143,11 +147,33 @@ class GenerateHismo implements IGenerator2 {
 		( elements «FOR element: component.elements»(ref: «element.ref.name»)«ENDFOR»)
 		( fqn '«component.fqn»' )
 		( realcomponents «FOR element: component.realcomponents»(ref: «element.ref.name»)«ENDFOR»)
-		( path «FOR element: component.path»(ref: «element.ref.name»)«ENDFOR»)
+		( path «component.toPathRef»)
 		( version '«component.version»' )
 		( versions «FOR version:component.versions»'«version»' «ENDFOR» )
 	)
 	'''
+	
+	def private toPathRef(FAMIXComponent component) {
+		var String result = ""
+		for (element : component.path) {
+			var path = element.ref as FAMIXPath
+			if(path.start.ref !== null && path.end.ref !== null){ 
+				result += "(ref: " + path.name + ")" 
+			}
+		}
+		return result
+	}
+	
+	def private toPathRef(FAMIXAntipattern antipattern) {
+		var String result = ""
+		for (element : antipattern.path) {
+			var path = element.ref as FAMIXPath
+			if(path.start.ref !== null && path.end.ref !== null){ 
+				result += "(ref: " + path.name + ")" 
+			}
+		}
+		return result
+	}
 	
 	def private toAntipattern(FAMIXAntipattern antipattern) '''
 	(FAMIX.Antipattern
@@ -158,7 +184,7 @@ class GenerateHismo implements IGenerator2 {
 		( type '«antipattern.type»' )
 		( elements «FOR element: antipattern.elements»(ref: «element.ref.name»)«ENDFOR»)
 		( realcomponents «FOR element: antipattern.realcomponents»(ref: «element.ref.name»)«ENDFOR»)
-		( path «FOR element: antipattern.path»(ref: «element.ref.name»)«ENDFOR»)
+		( path «antipattern.toPathRef»)
 		( roles «FOR element: antipattern.roles»(ref: «element.ref.name»)«ENDFOR»)
 		( version '«antipattern.version»' )
 		( versions «FOR version:antipattern.versions»'«version»' «ENDFOR» )
