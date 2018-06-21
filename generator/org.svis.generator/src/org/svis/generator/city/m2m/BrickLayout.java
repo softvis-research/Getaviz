@@ -2,9 +2,8 @@ package org.svis.generator.city.m2m;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.svis.generator.SettingsConfiguration;
 import org.svis.generator.city.CityDebugUtils;
-import org.svis.generator.city.CitySettings;
-import org.svis.generator.city.CitySettings.Bricks;
 import org.svis.generator.city.CityUtils;
 import org.svis.xtext.city.Building;
 import org.svis.xtext.city.BuildingSegment;
@@ -17,6 +16,7 @@ import org.svis.xtext.city.impl.CityFactoryImpl;
 public class BrickLayout {
 	private static final boolean DEBUG = false;
 	private static final CityFactory cityFactory = new CityFactoryImpl();
+	private static SettingsConfiguration config = new SettingsConfiguration();
 
 	public static void brickLayout(final Root root) {
 		if(DEBUG) System.out.println("[ INFO]"+ " brickLayout(root)-arrival.");
@@ -59,14 +59,14 @@ public class BrickLayout {
 
 		// Get elements for modeling
 		EList<BuildingSegment> classElements = new BasicEList<BuildingSegment>();
-		switch (CitySettings.CLASS_ELEMENTS_MODE) {
-			case ATTRIBUTES_ONLY:
+		switch (config.getClassElementsModeAsString()) {
+			case "attributes_only":
 				classElements.addAll(b.getData());
 				break;
-			case METHODS_ONLY:
+			case "methods_only":
 				classElements.addAll(b.getMethods());
 				break;
-			case METHODS_AND_ATTRIBUTES:
+			case "methods_and_attributes":
 				classElements.addAll(b.getData());
 				classElements.addAll(b.getMethods());
 				break;
@@ -121,17 +121,16 @@ public class BrickLayout {
 
 			// setting position for brick
 			Position pos = cityFactory.createPosition();
-			pos.setX(b_lowerLeftX + Bricks.BRICK_HORIZONTAL_MARGIN
-					+ (Bricks.BRICK_HORIZONTAL_GAP + Bricks.BRICK_SIZE) * bsPosIndex_X
-					+ Bricks.BRICK_SIZE * 0.5);
-			pos.setZ(b_lowerLeftZ + Bricks.BRICK_HORIZONTAL_MARGIN
-					+ (Bricks.BRICK_HORIZONTAL_GAP + Bricks.BRICK_SIZE) * bsPosIndex_Z
-					+ Bricks.BRICK_SIZE * 0.5);
-			pos.setY(b_upperY + Bricks.BRICK_VERTICAL_MARGIN
-					+ (Bricks.BRICK_VERTICAL_GAP + Bricks.BRICK_SIZE) * bsPosIndex_Y
-					+ Bricks.BRICK_SIZE * 0.5);
+			pos.setX(b_lowerLeftX + config.getBrickHorizontalMargin()
+					+ (config.getBrickHorizontalGap() + config.getBrickSize() * bsPosIndex_X
+					+ config.getBrickSize() * 0.5));
+			pos.setZ(b_lowerLeftZ + config.getBrickHorizontalMargin()
+					+ (config.getBrickHorizontalGap() + config.getBrickSize()) * bsPosIndex_Z
+					+ config.getBrickSize() * 0.5);
+			pos.setY(b_upperY + config.getBrickVerticalMargin()
+					+ (config.getBrickVerticalGap() + config.getBrickSize()) * bsPosIndex_Y
+					+ config.getBrickSize() * 0.5);
 			bs.setPosition(pos);
 		}
 	}
-
 }

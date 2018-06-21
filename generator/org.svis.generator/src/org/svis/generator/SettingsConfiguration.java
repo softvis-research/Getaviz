@@ -17,7 +17,6 @@ import org.svis.generator.city.CitySettings.Schemes;
 import org.svis.generator.rd.RDSettings.EvolutionRepresentation;
 import org.svis.generator.rd.RDSettings.InvocationRepresentation;
 import org.svis.generator.rd.RDSettings.MetricRepresentation;
-import org.svis.generator.rd.RDSettings.OutputFormat;
 import org.svis.generator.rd.RDSettings.Variant;
 
 public class SettingsConfiguration {
@@ -140,7 +139,6 @@ public class SettingsConfiguration {
 		return config.getString("city.class_elements_sort_mode_coarse", "methods_first");
 	}
 	
-	// methods_first (default), unsorted, attributes_firs
 	public ClassElementsSortModesCoarse getClassElementsSortModeCoarse() {
 		switch (getClassElementsSortModeCoarseAsString()) {
 		case "unsorted":
@@ -156,13 +154,12 @@ public class SettingsConfiguration {
 		return getClassElementsSortModeCoarse() == mode;
 	}
 
-	public String getElementsSortModeFineAsString() {
+	public String getClassElementsSortModeFineAsString() {
 		return config.getString("city.elements_sort_mode_fine", "scheme");
 	}
 	
-	// scheme (default), unsorted, alphabetically, nos
-	public ClassElementsSortModesFine getElementsSortModeFine() {
-		switch (getElementsSortModeFineAsString()) {
+	public ClassElementsSortModesFine getClassElementsSortModeFine() {
+		switch (getClassElementsSortModeFineAsString()) {
 		case "unsorted":
 			return ClassElementsSortModesFine.UNSORTED;
 		case "alphabetically":
@@ -173,8 +170,8 @@ public class SettingsConfiguration {
 		}
 	}
 	
-	public boolean isElementsSortModeFineSetTo(ClassElementsSortModesFine mode) {
-		return getElementsSortModeFine() == mode;
+	public boolean isClassElementsSortModeFineSetTo(ClassElementsSortModesFine mode) {
+		return getClassElementsSortModeFine() == mode;
 	}
 
 	public boolean isClassElementsSortModeFineDirectionReversed() {
@@ -317,6 +314,10 @@ public class SettingsConfiguration {
 	public double getBuildingVerticalMargin() {
 		return config.getDouble("city.building.vertical_margin", 3.0);
 	}
+	
+	public String getPackageColorHex() {
+		return config.getString("city.package.color_start", "#969696");
+	}
 
 	public Color getPackageColorStart() {
 		return getColor(config.getString("city.package.color_start", "#969696"));
@@ -324,6 +325,10 @@ public class SettingsConfiguration {
 
 	public Color getPackageColorEnd() {
 		return getColor(config.getString("city.package.color_end", "#f0f0f0"));
+	}
+	
+	public String getClassColorHex() {
+		return config.getString("city.class.color", "#353559");
 	}
 
 	public Color getClassColorStart() {
@@ -334,7 +339,7 @@ public class SettingsConfiguration {
 		return getColor(config.getString("city.class.color_end", "#00ff00"));
 	}
 
-	public Color getCityClassColor() {
+	public Color getClassColor() {
 		return getColor(config.getString("city.class.color", "#353559"));
 	}
 
@@ -359,8 +364,16 @@ public class SettingsConfiguration {
 	}
 
 	public Color getCityColor(String name) {
+		return getColor(getCityColorAsHex(name));
+	}
+	
+	public String getCityColorAsHex(String name) {
 		String color = name.toLowerCase();
-		return getColor(config.getString("city.color." + color));
+		return config.getString("city.color." + color);
+	}
+	
+	public String getCityColorAsPercentage(String name) {
+		return getColorFormatted(getCityColor(name));
 	}
 
 	public double getDataFactor() {
@@ -620,17 +633,17 @@ public class SettingsConfiguration {
 		return config.getString("plant.class.texture_bloom", "<ImageTexture url='pics/bloom.png' scale='false' />");
 	}
 
-	public String getClassColor() {
+	public String getPlantClassColor() {
 		Color color = getColor(config.getString("plant.class.color", "#34663b"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
 
-	public String getClassColor02() {
+	public String getPlantClassColor02() {
 		Color color = getColor(config.getString("plant.class.color02", "#8b4413"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
 
-	public String getClassColor03() {
+	public String getPlantClassColor03() {
 		Color color = getColor(config.getString("plant.class.color03", "#ffff00"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
@@ -836,5 +849,9 @@ public class SettingsConfiguration {
 
 	private Color getColor(String hex) {
 		return Color.decode(hex);
+	}
+	
+	public static enum OutputFormat {
+		X3D,X3DOM,SimpleGlyphsJson,X3D_COMPRESSED,AFrame;
 	}
 }

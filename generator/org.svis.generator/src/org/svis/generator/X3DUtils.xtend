@@ -4,10 +4,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import org.svis.generator.rd.RDSettings
 import org.svis.generator.rd.RDSettings.Variant
-import org.svis.generator.city.CitySettings
 import org.svis.generator.city.CitySettings.BuildingType
 
 class X3DUtils {
+	val config = new SettingsConfiguration
 
 	def String toX3DHead() '''
 		<?xml version="1.0" encoding="UTF-8"?>
@@ -38,7 +38,7 @@ class X3DUtils {
 		<title>X3DOM-SVIS</title> 			
 		<script type='text/javascript' src='http://x3dom.org/release/x3dom-full.js'> </script> 
 		<link rel='stylesheet' type='text/css' href='http://www.x3dom.org/download/x3dom.css'></link> 
-		«IF(RDSettings::VARIANT == Variant::DYNAMIC || CitySettings::BUILDING_TYPE == BuildingType::CITY_DYNAMIC)»
+		«IF(RDSettings::VARIANT == Variant::DYNAMIC || config.buildingType == BuildingType::CITY_DYNAMIC)»
 		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 		<script type='text/javascript' src='./anifra-minified.js'> </script>
 		«ENDIF»
@@ -92,7 +92,7 @@ class X3DUtils {
 	'''
 
 	def toAnimationFramework() '''
-		«IF(RDSettings::VARIANT == Variant::DYNAMIC || CitySettings::BUILDING_TYPE == BuildingType::CITY_DYNAMIC)»
+		«IF(RDSettings::VARIANT == Variant::DYNAMIC || config.buildingType == BuildingType::CITY_DYNAMIC)»
 		«toAnimationFramework("events.js")»
 		«ENDIF»
 	'''
