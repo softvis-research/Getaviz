@@ -159,9 +159,6 @@ class Famix2JSON implements IGenerator2 {
 		"calls":		 "«m.calls»",
 		"calledBy":		 "«m.calledBy»",
 		"accesses":	 	 "«m.accesses»",
-		«IF(FAMIXSettings::ANTIPATTERN)»
-		"antipattern":	 "«m.antipattern»",
-		«ENDIF»
 		"belongsTo":     "«m.parentType.ref.id»"
 	'''
 	
