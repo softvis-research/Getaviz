@@ -88,7 +88,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		}
 		timestamps += hismoClassVersions.map[timestamp]
 		timestamps += hismoPackageVersions.map[timestamp]
-				
+
 		sortedtimestamps.addAll(timestamps.toList.sort)
 		
 		val diskList = newArrayList
@@ -109,7 +109,6 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 				diskList += diskRoot		
 			}
 		}
-		hismoClasses.forEach[setEvolutionRate(it)]
 		if(RDSettings::SHOW_VERSIONS == ShowVersions::LATEST) {
 			hismoClassVersions.clear
 			hismoClassVersions.addAll(latestClassVersions)
@@ -157,14 +156,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		hismoMethods += hismoDocument.elements.filter(HISMOMethodHistory)
 		hismoAttributes += hismoDocument.elements.filter(HISMOAttributeHistory)
 	}
-	
-	def private setEvolutionRate(HISMOClassHistory history) {
-		var evolutionRate = history.classVersions.map[ref as HISMOClassVersion].map[it.evolutionNumberOfStatements/it.NOS].
-			reduce[a,b | a + b]/history.classVersions.size
-		if(evolutionRate < 0) evolutionRate *= -1
-		history.avgEvolutionRate = evolutionRate.toString
-	}
-	
+
 	def private fillLists(String timestamp) {
 		rootPackages.clear
 		rootPackages += hismoDocument.elements
@@ -271,7 +263,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		switch(RDSettings::CLASS_HEIGHT) {
 			case STATIC: disk.height = RDSettings::HEIGHT
 			case NUMBER_OF_INCIDENTS: {
-				val sum = (history.avgNumberOfOpenIncidents + history.avgNumberOfClosedIncidents)/3
+				val sum = history.avgNumberOfOpenIncidents + history.avgNumberOfClosedIncidents + history.numberOfOpenSecurityIncidents + history.numberOfClosedSecurityIncidents
 				if(sum < RDSettings::HEIGHT) {
 					disk.height = RDSettings::HEIGHT
 				} else {
@@ -284,11 +276,6 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 			case BETWEENNESS_CENTRALITY: disk.ringWidth = Double.parseDouble(classVersion.betweennessCentrality) * 100
 			case NUMBER_OF_STATEMENTS: disk.ringWidth = classVersion.NOS / 100
 		}
-		
-		var evolutionRate = history.classVersions.map[ref as HISMOClassVersion].map[it.evolutionNumberOfStatements/it.NOS].
-			reduce[a,b | a + b]/history.classVersions.size
-		if(evolutionRate < 0) evolutionRate *= -1
-		history.avgEvolutionRate = evolutionRate.toString
 
 		switch(RDSettings::CLASS_COLOR_METRIC) {
 			case STK: disk.color = famixUtil.getGradient(Double.parseDouble(classVersion.stkRank)).asPercentage
@@ -411,7 +398,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 			switch(RDSettings::CLASS_SIZE) {
 				case BETWEENNESS_CENTRALITY: return Double.parseDouble(version.betweennessCentrality)
 				case NUMBER_OF_STATEMENTS: {
-					val sum = 150 + classHistory.classVersions.map[ref as HISMOClassVersion]
+					val sum = 500 + classHistory.classVersions.map[ref as HISMOClassVersion]
 						.filter[it.timestamp <= version.timestamp]
 						.map[evolutionNumberOfStatements].reduce[ a, b | a + b ]
 					return sum

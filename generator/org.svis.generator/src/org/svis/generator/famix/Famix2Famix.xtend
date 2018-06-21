@@ -162,7 +162,11 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			switch element {
 				FAMIXAttribute: attributes.add(element)
 				FAMIXMethod: methods.add(element)
-				FAMIXStructure: structures.add(element)
+				FAMIXStructure: {
+					if(element.container !== null) {
+						structures.add(element)
+					}
+				}
 				FAMIXComment, FAMIXLocalVariable, FAMIXAnnotationTypeAttribute: {} // do nothing, just to prevent them from being treaded in default
 				default: {
 					log.warn("Famix2Famix: forgot " + element.class)
