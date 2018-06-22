@@ -7,13 +7,13 @@ package org.svis.generator.rd;
  */
 
 public enum RDSettings {;
-	public static final boolean SHOW_HISTORIES = false;
-	public static final boolean SHOW_CLASS_MEMBERS = false;
+	public static final boolean SHOW_HISTORIES = true;
+	public static final boolean SHOW_CLASS_MEMBERS = true;
 	public static final double DATA_FACTOR = 4;
 	public static final double METHOD_FACTOR = 1;
 	public static final double HEIGHT = 1;
 	public static final double RING_WIDTH = 2;
-	public static final boolean CONVERT_TO_MULTIPART = true;
+	public static final boolean CONVERT_TO_MULTIPART = false;
 	/**
 	* Sets the ring width of the method disks
 	* Only relevant if disk of type FAMIX.Method exist
@@ -62,13 +62,13 @@ public enum RDSettings {;
 		X3D, X3DOM, SimpleGlyphsJson, X3D_COMPRESSED, AFrame, D3
 	}
 	
-	public static ClassSize CLASS_SIZE = ClassSize.NUMBER_OF_STATEMENTS;
+	public static ClassSize CLASS_SIZE = ClassSize.NONE;
 	
 	public static enum ClassSize {
 		NONE, BETWEENNESS_CENTRALITY, NUMBER_OF_STATEMENTS
 	}
 	
-	public static ClassColor CLASS_COLOR_METRIC = ClassColor.CHANGE_FREQUENCY;
+	public static ClassColor CLASS_COLOR_METRIC = ClassColor.STATIC;
 	
 	public static enum ClassColor {
 		STATIC, STK, CHANGE_FREQUENCY
@@ -116,13 +116,13 @@ public enum RDSettings {;
 	 *COMPLEXITY
 	}*/
 	
-	public static ShowVersions SHOW_VERSIONS = ShowVersions.LATEST;
+	public static ShowVersions SHOW_VERSIONS = ShowVersions.ALL;
 	
 	public static enum ShowVersions {
 		ALL, LATEST
 	}
 	
-	public static ClassHeight CLASS_HEIGHT = ClassHeight.NUMBER_OF_INCIDENTS;
+	public static ClassHeight CLASS_HEIGHT = ClassHeight.STATIC;
 	
 	public static enum ClassHeight {
 		STATIC, NUMBER_OF_INCIDENTS
