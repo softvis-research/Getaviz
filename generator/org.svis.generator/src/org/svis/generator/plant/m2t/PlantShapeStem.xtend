@@ -2,12 +2,13 @@ package org.svis.generator.plant.m2t
 
 import org.svis.xtext.plant.Stem
 import org.svis.xtext.plant.Entity
-import org.svis.generator.plant.PlantConfiguration
+import org.svis.generator.SettingsConfiguration
 
 /**
  * Paint the stem and its variants in X3D.
  */
 class PlantShapeStem {
+	val config = new SettingsConfiguration
 	/**
 	 * Default Shape for the plant metaphor.
 	 */
@@ -66,7 +67,7 @@ class PlantShapeStem {
 			<!-- Head/Kegel/Cone -->
 			<transform DEF='«stem.id + (j++).toString»' 
 				translation='«stem.position.x +" "+ (stem.height+stem.level) +" "+ stem.position.z»' 
-					scale='2 «PlantConfiguration.CRON_HEIGHT» 2' 
+					scale='2 «config.cronHeight» 2' 
 					rotation='1 0 0 3.14'>
 					<Shape>
 					<Appearance>
@@ -79,14 +80,14 @@ class PlantShapeStem {
 		
 			<!-- plant head top part -->
 			<transform DEF='«stem.id + (i++).toString»'
-				translation='«stem.position.x +" "+ (stem.height + stem.level + PlantConfiguration.CRON_HEIGHT) +" "+ stem.position.z»»' 
+				translation='«stem.position.x +" "+ (stem.height + stem.level + config.cronHeight) +" "+ stem.position.z»»' 
 				rotation='1 0 0 3.14'>
 					<Shape>
 					<Appearance>
 						«stem.headTopPartTexture»
 						«stem.headTopPartColor»
 					</Appearance>
-					<Cylinder height='«PlantConfiguration.CRON_HEAD_HEIGHT»' radius='2'/>
+					<Cylinder height='«config.cronHeadHeight»' radius='2'/>
 				</Shape>
 			</transform>
 		</transform>
@@ -108,7 +109,7 @@ class PlantShapeStem {
 			<!-- Head/Kegel/Cone -->
 			<transform DEF='«stem.id»' 
 				translation='«stem.position.x +" "+ (stem.height+stem.level) +" "+ stem.position.z»' 
-					scale='2 «PlantConfiguration.CRON_HEIGHT» 2' 
+					scale='2 «config.cronHeight» 2' 
 					rotation='1 0 0 3.14'>
 					<Shape>
 					<Appearance>
@@ -121,20 +122,16 @@ class PlantShapeStem {
 		
 			<!-- plant head top part -->
 			<transform 
-				translation='«stem.position.x +" "+ (stem.height + stem.level + PlantConfiguration.CRON_HEIGHT) +" "+ stem.position.z»»' 
+				translation='«stem.position.x +" "+ (stem.height + stem.level + config.cronHeight) +" "+ stem.position.z»»' 
 				rotation='1 0 0 3.14'>
 					<Shape>
 					<Appearance>
 						«stem.headTopPartTexture»
 						«stem.headTopPartColor»
 					</Appearance>
-					<Cylinder height='«PlantConfiguration.CRON_HEAD_HEIGHT»' radius='2'/>
+					<Cylinder height='«config.cronHeadHeight»' radius='2'/>
 				</Shape>
 			</transform>
 		</transform>
 	'''
-
-
-	
-	
 }

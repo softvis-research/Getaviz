@@ -599,7 +599,8 @@ public class SettingsConfiguration {
 	}
 
 	public String getPackageShape() {
-		return config.getString("plant.package.shape", "default");
+		String value = config.getString("plant.package.shape", "default");
+		return value.toUpperCase();
 	}
 
 	public boolean isPackageUseTextures() {
@@ -623,9 +624,15 @@ public class SettingsConfiguration {
 		Color color = getColor(config.getString("plant.package.even_color", "#30ba43"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
+	
+	public String switchAttributeMethodMapping() {
+		String value = config.getString("plant.switch_attribute_method_mapping", "petal_pollstem");
+		return value.toUpperCase();
+	}
 
 	public String getClassShape() {
-		return config.getString("plant.class.shape", "default");
+		String value = config.getString("plant.class.shape", "default");
+		return value.toUpperCase();
 	}
 
 	public boolean isClassUseTextures() {
@@ -664,7 +671,8 @@ public class SettingsConfiguration {
 	}
 
 	public String getInnerClassShape() {
-		return config.getString("plant.inner_class.shape", "default");
+		String value = config.getString("plant.inner_class.shape", "default");
+		return value.toUpperCase();
 	}
 
 	public boolean isInnerClassUseTextures() {
@@ -701,7 +709,8 @@ public class SettingsConfiguration {
 	}
 
 	public String getAttributeShape() {
-		return config.getString("plant.attribute.shape", "realistic_petal");
+		String value = config.getString("plant.attribute.shape", "realistic_petal");
+		return value.toUpperCase();
 	}
 
 	public boolean isShowAttributes() {
@@ -722,7 +731,8 @@ public class SettingsConfiguration {
 	}
 
 	public String getInnerClassAttributeShape() {
-		return config.getString("plant.inner_class_attribute.shape", "default");
+		String value = config.getString("plant.inner_class_attribute.shape", "default");
+		return value.toUpperCase();
 	}
 
 	public String getInnerClassAttributeTexture() {
@@ -736,7 +746,8 @@ public class SettingsConfiguration {
 	}
 
 	public String getMethodShape() {
-		return config.getString("plant.method.shape", "default");
+		String value = config.getString("plant.method.shape", "default");
+		return value.toUpperCase();
 	}
 
 	public boolean isShowMethods() {
@@ -766,8 +777,9 @@ public class SettingsConfiguration {
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
 
-	public String getInnerClassMethodhape() {
-		return config.getString("plant.inner_class_method.shape", "default");
+	public String getInnerClassMethodShape() {
+		String value = config.getString("plant.inner_class_method.shape", "default");
+		return value.toUpperCase();
 	}
 
 	public String getInnerClassMethodTexture() {
@@ -780,7 +792,7 @@ public class SettingsConfiguration {
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
 
-	public double getAreaheight() {
+	public double getAreaHeight() {
 		return config.getDouble("plant.area_height", 3.5);
 	}
 
