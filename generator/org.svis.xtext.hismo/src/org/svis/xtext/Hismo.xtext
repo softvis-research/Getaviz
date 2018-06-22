@@ -126,7 +126,7 @@ HISMOMethodVersion:
 	('(parentHistory' parentHistory=IntegerReference ')')?	
 	('(versionEntity' versionEntity=IntegerReference ')')?
 	('(author' author=MSESTRING ')')?	
-	('(timestamp' timestamp=Timestamp')')?
+	('(timestamp' timestamp=MSESTRING ')')?
 	('(commitId' commitId=MSESTRING ')')?	
 	//Measurements	
 	('(evolutionNumberOfStatements' evolutionNumberOfStatements=INT ')' )? //Sum of absolute Changes in subsequent Versions
@@ -141,7 +141,7 @@ HISMOAttributeVersion:
 	('(parentHistory' parentHistory=IntegerReference ')')?	
 	('(versionEntity' versionEntity=IntegerReference ')')?
 	('(author' author=MSESTRING ')')?	
-	('(timestamp' timestamp=Timestamp')')?
+	('(timestamp' timestamp=MSESTRING ')')?
 	('(commitId' commitId=MSESTRING ')')?	
 	')';
 	
@@ -152,5 +152,3 @@ HISMOIssue:
 	'(' 'open' open = Boolean ')'
 	'(' 'security' security = Boolean ')'
 	')';
-	
-Timestamp returns ecore::EString : MSESTRING;
