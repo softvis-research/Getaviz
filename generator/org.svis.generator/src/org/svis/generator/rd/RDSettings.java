@@ -127,6 +127,7 @@ public enum RDSettings {;
 	public static enum ClassHeight {
 		STATIC, NUMBER_OF_INCIDENTS
 	}
-
-
+	
+	public static String TIMEFORMAT = "yyyy-MM-dd'T'HH:mm";
+	public static boolean SHOw_NAMESPACE_VERSIONS = false;
 }

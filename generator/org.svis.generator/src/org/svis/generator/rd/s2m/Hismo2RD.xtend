@@ -40,6 +40,9 @@ import java.util.ArrayList
 import org.svis.generator.hismo.HismoUtils
 import org.svis.generator.FamixUtils
 import org.svis.generator.rd.RDSettings.ShowVersions
+import java.time.format.DateTimeFormatter
+import java.util.Collections
+import java.time.LocalDate
 
 class Hismo2RD extends WorkflowComponentWithModelSlot {
 	val static diskFactory = new RdFactoryImpl()
@@ -88,8 +91,11 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		}
 		timestamps += hismoClassVersions.map[timestamp]
 		timestamps += hismoPackageVersions.map[timestamp]
-
-		sortedtimestamps.addAll(timestamps.toList.sort)
+		sortedtimestamps.addAll(timestamps)
+		val formatter = DateTimeFormatter.ofPattern(RDSettings::TIMEFORMAT);
+		Collections::sort(sortedtimestamps, [s1, s2|
+			LocalDate::parse(s1, formatter).compareTo(LocalDate::parse(s2, formatter))
+		])
 		
 		val diskList = newArrayList
 		if(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::TIME_LINE
@@ -194,12 +200,12 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 	
 	def private void getPackages(HISMONamespaceHistory namespace) {
 		if (namespace.containingNamespaceHistory === null) {
-			val SubPacks = new ArrayList<HISMONamespaceHistory>
+			val subPacks = new ArrayList<HISMONamespaceHistory>
 			hismoPackages.filter[containingNamespaceHistory !== null]
 						.filter[containingNamespaceHistory.ref === namespace].forEach[
-							SubPacks += it
+							subPacks += it
 						]
-			if (!SubPacks.empty || !namespace.classHistories.empty) {
+			if (!subPacks.empty || !namespace.classHistories.empty) {
           		hismoRootPackages += namespace
       		} 
 		} else {
@@ -235,9 +241,11 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 					disk.disks += it.toDisk(level + 1)
 				]
 				
-	 			hismoPackageVersions.filter[parentHistory.ref === hismoNamespace].forEach[
-	 				disk.diskVersions += it.toDiskVersion
-	 			]
+				if(RDSettings::SHOw_NAMESPACE_VERSIONS) {
+	 				hismoPackageVersions.filter[parentHistory.ref === hismoNamespace].forEach[
+	 					disk.diskVersions += it.toDiskVersion
+	 				]
+ 				}
 			}
 		}
 		
