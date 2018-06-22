@@ -92,7 +92,7 @@ HISMONamespaceVersion:
 	('(classVersions' classVersions+=IntegerReference* ')')?
 	('(versionEntity' versionEntity=IntegerReference ')')?
 	('(author' author=MSESTRING ')')?	
-	('(timestamp' timestamp=Timestamp')')?
+	('(timestamp' timestamp=MSESTRING ')')?
 	('(commitId' commitId=MSESTRING ')')?	
 	('(isProject' isProject = Boolean ')')?
 	')';
@@ -108,7 +108,7 @@ HISMOClassVersion:
 	('(attributeVersions' attributeVersions+=IntegerReference* ')')?
 	('(versionEntity' versionEntity=IntegerReference ')')?
 	('(author' author=MSESTRING ')')?	
-	('(timestamp' timestamp=Timestamp')')?
+	('(timestamp' timestamp=MSESTRING')')?
 	('(scc' scc=IntegerReference ')')?
 	('(antipattern' antipattern +=IntegerReference* ')')?
 	('(commitId' commitId=MSESTRING ')')?	
