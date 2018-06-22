@@ -313,7 +313,11 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.fqn = hismoClass.qualifiedName
 		disk.type = "FAMIX.ClassH"
 		disk.level = level
-		disk.ringWidth = getMaxNOS(hismoClass) / 10
+		switch(RDSettings::CLASS_SIZE) {
+			case BETWEENNESS_CENTRALITY: disk.ringWidth =  getMaxNOS(hismoClass) * 10 
+			case NUMBER_OF_STATEMENTS: disk.ringWidth = RDSettings::RING_WIDTH
+			case NONE: disk.ringWidth = RDSettings::RING_WIDTH
+		}
 		if(disk.ringWidth == 0) { 
 			disk.ringWidth = 1
 		}
@@ -357,7 +361,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskversion.id = classVersion.id
 		switch(RDSettings::CLASS_SIZE) {
 			case BETWEENNESS_CENTRALITY: diskversion.ringWidth = Double.parseDouble(classVersion.betweennessCentrality) * 100
-			case NUMBER_OF_STATEMENTS: diskversion.ringWidth = 5 //classVersion.evolutionNumberOfStatements
+			case NUMBER_OF_STATEMENTS: diskversion.ringWidth = RDSettings::RING_WIDTH
 		}
 		switch(RDSettings::CLASS_COLOR_METRIC) {
 			case STK: diskversion.color = famixUtil.getGradient(Double.parseDouble(classVersion.stkRank)).asPercentage
@@ -517,7 +521,6 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.height = RDSettings::HEIGHT
 		disk.transparency = RDSettings::CLASS_TRANSPARENCY
 		disk.color = RDSettings::CLASS_COLOR
-		disk.ringWidth = 0.1
 		
 		val ch = hismoClassVersions.findFirst[
 			it.timestamp == timestamp && it.versionEntity.ref === el  
