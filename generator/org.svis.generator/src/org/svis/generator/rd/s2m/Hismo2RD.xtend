@@ -6,7 +6,6 @@ import org.apache.commons.logging.LogFactory
 import org.eclipse.emf.mwe.core.WorkflowContext
 import org.eclipse.emf.mwe.core.issues.Issues
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor
-import org.svis.generator.rd.RDSettings
 import org.svis.xtext.hismo.HISMOAttributeHistory
 import org.svis.xtext.hismo.HISMOClassHistory
 import org.svis.xtext.hismo.HISMOClassVersion
@@ -41,8 +40,10 @@ import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.svis.xtext.famix.FAMIXFileAnchor
 import java.util.ArrayList
+import org.svis.generator.SettingsConfiguration
 
 class Hismo2RD extends WorkflowComponentWithModelSlot {
+	val config = new SettingsConfiguration
 	val static diskFactory = new RdFactoryImpl()
 	var HismoDocument hismoDocument
 	var Document diskDocument
@@ -90,8 +91,8 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 				
 		sortedtimestamps.addAll(timestamps.toList.sort)
 		val diskList = newArrayList
-		if(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::TIME_LINE
-			|| RDSettings::EVOLUTION_REPRESENTATION ==EvolutionRepresentation::DYNAMIC_EVOLUTION) {
+		if(config.evolutionRepresentation == EvolutionRepresentation::TIME_LINE
+			|| config.evolutionRepresentation == EvolutionRepresentation::DYNAMIC_EVOLUTION) {
 			val diskRoot = createRoot
 			fillLists()
 			hismoPackages.forEach[getPackages(it)]
@@ -210,10 +211,10 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.fqn = hismoNamespace.qualifiedName
 		disk.type = "FAMIX.Namespace"
 		disk.level = level
-		disk.ringWidth = RDSettings::RING_WIDTH
+		disk.ringWidth = config.RDRingWidth
 		disk.id = famix.createID(disk.fqn)
-		disk.height = RDSettings::HEIGHT
-		disk.transparency = RDSettings::NAMESPACE_TRANSPARENCY
+		disk.height = config.RDHeight
+		disk.transparency = config.RDNamespaceTransparency
 		
 		//hismoNamespace.namespaceVersions.forEach[v| disk.diskVersions.add((v.ref as HISMONamespaceVersion).toDiskVersion())]
 		
@@ -229,7 +230,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 	}
 	
 	def private DiskVersion create diskVersion: diskFactory.createDiskVersion toDiskVersion(HISMONamespaceVersion version) {
-		diskVersion.height = sortedtimestamps.indexOf(version.timestamp) * RDSettings::HEIGHT_BOOST
+		diskVersion.height = sortedtimestamps.indexOf(version.timestamp) * config.RDHeightBoost
 		diskVersion.level =sortedtimestamps.indexOf(version.timestamp) 
 		diskVersion.commitId = version.commitId
 		diskVersion.author = version.author
@@ -243,11 +244,11 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.fqn = hismoClass.qualifiedName
 		disk.type = "FAMIX.Class"
 		disk.level = level
-		disk.ringWidth = RDSettings::RING_WIDTH
+		disk.ringWidth = config.RDRingWidth
 		disk.id = famix.createID(disk.fqn)
-		disk.height = RDSettings::HEIGHT
-		disk.color = RDSettings::CLASS_COLOR
-		disk.transparency = RDSettings::CLASS_TRANSPARENCY
+		disk.height = config.RDHeight
+		disk.color = config.RDClassColorPercentage
+		disk.transparency = config.RDClassTransparency
 		
 		//TODO any side effects?
 		//disk.setLoc(famixClass.loc)
@@ -280,7 +281,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 	}
 
 	def private DiskVersion create diskversion: diskFactory.createDiskVersion toVersion(HISMOClassVersion classVersion,HISMOClassHistory history) {
-		diskversion.height = sortedtimestamps.indexOf(classVersion.timestamp) * RDSettings::HEIGHT_BOOST
+		diskversion.height = sortedtimestamps.indexOf(classVersion.timestamp) * config.RDHeightBoost
 		diskversion.level = sortedtimestamps.indexOf(classVersion.timestamp) 
 		diskversion.commitId = classVersion.commitId
 		diskversion.author = classVersion.author
@@ -325,12 +326,12 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.fqn =  hismoMethod.qualifiedName //"AAA"//method.qualifiedName(parameters)
 		diskSegment.signature = hismoMethod.signature
 		diskSegment.id = famix.createID(diskSegment.fqn)
-		diskSegment.height = RDSettings::HEIGHT
-		diskSegment.color = RDSettings::METHOD_COLOR
-		diskSegment.transparency = RDSettings::METHOD_TRANSPARENCY
+		diskSegment.height = config.RDHeight
+		diskSegment.color = config.RDMethodColorPercentage
+		diskSegment.transparency = config.RDMethodTransparency
 
-		if (hismoMethod.maxNumberOfStatements  <= RDSettings::MIN_AREA) {
-			diskSegment.size = RDSettings::MIN_AREA
+		if (hismoMethod.maxNumberOfStatements  <= config.RDMinArea) {
+			diskSegment.size = config.RDMinArea
 		} else {
 			diskSegment.size = 1//hismoMethod.maxNumberOfStatements//method.numberOfStatements
 		}
@@ -343,7 +344,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 	}
 	
 	def private Version create version: diskFactory.createVersion toVersion(HISMOMethodVersion methodVersion, HISMOMethodHistory history) {
-		version.height = sortedtimestamps.indexOf(methodVersion.timestamp) * RDSettings::HEIGHT_BOOST
+		version.height = sortedtimestamps.indexOf(methodVersion.timestamp) * config.RDHeightBoost
 		
 		version.scale = methodVersion.evolutionNumberOfStatements*1.0/history.maxNumberOfStatements;
 		version.level = sortedtimestamps.indexOf(methodVersion.timestamp)
@@ -359,9 +360,9 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.fqn = attribute.qualifiedName
 		diskSegment.id = famix.createID(diskSegment.fqn)
 		diskSegment.size = 1 //attribute.declaredType.ref.attributeSize
-		diskSegment.height = RDSettings::HEIGHT
-		diskSegment.color = RDSettings::DATA_COLOR
-		diskSegment.transparency = RDSettings::DATA_TRANSPARENCY
+		diskSegment.height = config.RDHeight
+		diskSegment.color = config.RDDataColorPercentage
+		diskSegment.transparency = config.RDDataTransparency
 		
    	val versions = hismoAttributeVersions.filter[
 			parentHistory.ref === attribute
@@ -372,7 +373,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 	}
 
 	def private Version create version: diskFactory.createVersion toVersion(HISMOAttributeVersion attributeVersion, HISMOAttributeHistory history) {
-		version.height = sortedtimestamps.indexOf(attributeVersion.timestamp) * RDSettings::HEIGHT_BOOST
+		version.height = sortedtimestamps.indexOf(attributeVersion.timestamp) * config.RDHeightBoost
 		version.level = sortedtimestamps.indexOf(attributeVersion.timestamp)
 		version.commitId = attributeVersion.commitId
 		version.author = attributeVersion.author
@@ -457,10 +458,10 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		val disk = diskFactory.createDisk
 		disk.name = famixNamespace.name
 		disk.value = famixNamespace.value
-		disk.ringWidth = RDSettings::RING_WIDTH
-		disk.height = RDSettings::HEIGHT
+		disk.ringWidth = config.RDRingWidth
+		disk.height = config.RDHeight
 		disk.position = diskFactory.createPosition
-		disk.position.z = sortedtimestamps.indexOf(timestamp) * RDSettings::HEIGHT_MULTIPLICATOR
+		disk.position.z = sortedtimestamps.indexOf(timestamp) * config.RDHeightMultiplicator
 		
 		val nsh = hismoPackageVersions.findFirst[hcv|
 			hcv.timestamp == timestamp && hcv.versionEntity.ref === famixNamespace  
@@ -469,7 +470,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.fqn = nsh.qualifiedNameMultiple
 		disk.id = famix.createID(disk.fqn)
 		disk.type = "FAMIX.Namespace"
-		disk.transparency = RDSettings::NAMESPACE_TRANSPARENCY
+		disk.transparency = config.RDNamespaceTransparency
 		disk.level = level
 		
 		structures.filter[container.ref === famixNamespace]
@@ -496,12 +497,12 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		val disk = diskFactory.createDisk
 		disk.name = el.name
 		disk.value = el.value
-		disk.ringWidth = RDSettings::RING_WIDTH
+		disk.ringWidth = config.RDRingWidth
 		disk.position = diskFactory.createPosition
-		disk.position.z = sortedtimestamps.indexOf(timestamp) * RDSettings::HEIGHT_MULTIPLICATOR
-		disk.height = RDSettings::HEIGHT
-		disk.transparency = RDSettings::CLASS_TRANSPARENCY
-		disk.color = RDSettings::CLASS_COLOR
+		disk.position.z = sortedtimestamps.indexOf(timestamp) * config.RDHeightMultiplicator
+		disk.height = config.RDHeight
+		disk.transparency = config.RDClassTransparency
+		disk.color = config.RDClassColorPercentage
 		
 		val ch = hismoClassVersions.findFirst[hpv|
 			hpv.timestamp == timestamp && hpv.versionEntity.ref === el  
@@ -555,9 +556,9 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		val diskSegment = diskFactory.createDiskSegment
 		diskSegment.name = method.name
 		diskSegment.value = method.value
-		diskSegment.height = RDSettings::HEIGHT
-		diskSegment.color = RDSettings::METHOD_COLOR
-		diskSegment.transparency = RDSettings::METHOD_TRANSPARENCY
+		diskSegment.height = config.RDHeight
+		diskSegment.color = config.RDMethodColorPercentage
+		diskSegment.transparency = config.RDMethodTransparency
 		
 		val mh = hismoMethodVersions.findFirst[hmv|
 			hmv.timestamp == timestamp && hmv.versionEntity.ref === method  
@@ -567,8 +568,8 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.id = famix.createID(diskSegment.fqn)
 		diskSegment.signature = method.signature
 
-		if (method.numberOfStatements <= RDSettings::MIN_AREA) {
-			diskSegment.size = RDSettings::MIN_AREA
+		if (method.numberOfStatements <= config.RDMinArea) {
+			diskSegment.size = config.RDMinArea
 		} else {
 			diskSegment.size = method.numberOfStatements
 		}
@@ -588,9 +589,9 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		val diskSegment = diskFactory.createDiskSegment
 		diskSegment.name attribute.name
 		diskSegment.value = attribute.value
-		diskSegment.height = RDSettings::HEIGHT
-		diskSegment.color = RDSettings::DATA_COLOR
-		diskSegment.transparency = RDSettings::DATA_TRANSPARENCY	
+		diskSegment.height = config.RDHeight
+		diskSegment.color = config.RDDataColorPercentage
+		diskSegment.transparency = config.RDDataTransparency
 	  	val a = hismoAttributeVersions.findFirst[hav|
 			hav.timestamp == timestamp && hav.versionEntity.ref === attribute
 		]
@@ -617,9 +618,9 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.fqn = enumValue.fqn
 		diskSegment.id = famix.createID(diskSegment.fqn)
 		diskSegment.size = 1 // TODO size
-		diskSegment.height = RDSettings::HEIGHT
-		diskSegment.color = RDSettings::DATA_COLOR
-		diskSegment.transparency = RDSettings::DATA_TRANSPARENCY
+		diskSegment.height = config.RDHeight
+		diskSegment.color = config.RDDataColorPercentage
+		diskSegment.transparency = config.RDDataTransparency
 		return diskSegment
 	}
 	

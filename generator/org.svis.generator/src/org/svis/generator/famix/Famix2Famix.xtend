@@ -39,7 +39,6 @@ import org.svis.generator.famix.FAMIXSettings
 import org.svis.xtext.famix.impl.FamixFactoryImpl
 import java.util.Comparator
 import org.svis.xtext.famix.MethodType
-import org.svis.generator.rd.RDSettings
 import org.neo4j.graphdb.GraphDatabaseService
 import org.svis.lib.database.Database
 import org.svis.lib.database.DBConnector
@@ -321,7 +320,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		enumValues.forEach[setQualifiedName]
 
 		removeDuplicates()
-		if (RDSettings::METHOD_TYPE_MODE) {
+		if (settings.methodTypeMode) {
 			methods.forEach[setMethodType(accesses)]
 			attributes.forEach[setCalledBy]
 			deletePrivateAttributes(accesses)
@@ -394,7 +393,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	def private deletePrivates() {
 		methods.removeIf([modifiers.contains("private")])
 		structures.removeIf([modifiers.contains("private")])
-		if (!RDSettings::METHOD_TYPE_MODE) {
+		if (!settings.methodTypeMode) {
 			attributes.removeIf([modifiers.contains("private")])
 		}
 	// EnumValues are always public

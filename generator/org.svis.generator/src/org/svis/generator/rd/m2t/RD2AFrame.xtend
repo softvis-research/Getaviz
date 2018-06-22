@@ -4,7 +4,6 @@ import java.util.List
 import org.eclipse.emf.common.util.EList
 import org.svis.xtext.rd.Disk
 import org.svis.xtext.rd.DiskSegment
-import org.svis.generator.rd.RDSettings
 import org.svis.xtext.rd.DiskSegmentInvocation
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.EcoreUtil2
@@ -15,9 +14,10 @@ import org.svis.generator.rd.RDSettings.Variant
 import java.util.ArrayList
 import org.apache.commons.logging.LogFactory
 import org.svis.generator.rd.RDSettings.EvolutionRepresentation
+import org.svis.generator.SettingsConfiguration
 
 class RD2AFrame {
-	
+	val config = new SettingsConfiguration
 	//TODO remove colors
 	// TODO solve it with injection
 	// @Inject extension FamixUtils
@@ -38,11 +38,11 @@ class RD2AFrame {
 			multipleDiskSegments += EcoreUtil2::getAllContentsOfType(root, DiskSegment)
 		}
 		var boolean withScale = false
-		switch(RDSettings::EVOLUTION_REPRESENTATION){
+		switch(config.evolutionRepresentation){
 			case MULTIPLE_DYNAMIC_EVOLUTION,
 			case MULTIPLE_TIME_LINE: {
 				disks = multipleDisks
-				if(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::MULTIPLE_DYNAMIC_EVOLUTION){
+				if(config.evolutionRepresentation == EvolutionRepresentation::MULTIPLE_DYNAMIC_EVOLUTION){
 					diskSegments = multipleDiskSegments
 					withScale = true
 				}
@@ -62,12 +62,12 @@ class RD2AFrame {
 	def private toX3DOMRD(List<Disk> disks,boolean withScale) '''
 		«FOR disk : disks»
 			«toX3DOMDisk(disk,withScale)»
-			«IF(disk.diskVersions.size != 0 && !(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::DYNAMIC_EVOLUTION))»«toDiskVersions(disk.diskVersions,heightMultiplier,offset)»«ENDIF»
+			«IF(disk.diskVersions.size != 0 && !(config.evolutionRepresentation == EvolutionRepresentation::DYNAMIC_EVOLUTION))»«toDiskVersions(disk.diskVersions,heightMultiplier,offset)»«ENDIF»
 		«ENDFOR»
 	'''
 
 	def private toX3DOMDisk(Disk disk, boolean withScale) '''
-		«IF disk.radius - RDSettings::RING_WIDTH == 0»
+		«IF disk.radius - config.RDRingWidth == 0»
 			<a-circle position="«disk.position.x + " " + disk.position.y + " " + disk.position.z»"
 				radius="«disk.radius»" 
 				color="«disk.color »"
@@ -83,7 +83,7 @@ class RD2AFrame {
 			</a-circle>
 		«ELSE»
 			<a-ring position="«disk.position.x + " " + disk.position.y + " " + disk.position.z»"
-				radius-inner="«disk.radius - RDSettings::RING_WIDTH»"
+				radius-inner="«disk.radius - config.RDRingWidth»"
 				radius-outer="«disk.radius»" 
 				color="«disk.color »"
 				shader="flat"
@@ -195,7 +195,7 @@ class RD2AFrame {
 	
 	def private diskSegmentInvocationsX3Dom(Resource resource,List<DiskSegment> diskSegments){
 		val diskSegmentInvocations = EcoreUtil2::getAllContentsOfType(resource.contents.head, DiskSegmentInvocation).clone.toList
-		if(diskSegmentInvocations.size == 0 || RDSettings::VARIANT == Variant::DYNAMIC) {
+		if(diskSegmentInvocations.size == 0 || config.variant == Variant::DYNAMIC) {
 			return newLinkedList
 		}
 		return 	rd2rd4dynamix.prepareDiskSegmentInvocations(1,18,diskSegmentInvocations)
@@ -213,7 +213,7 @@ class RD2AFrame {
 					<Shape>
 					<Group USE='«segment.id»__RECTANGULARTORUS'></Group>
 										<Appearance>
-												<Material diffuseColor='«RDSettings.METHOD_INVOCATION_COLOR»'></Material>
+												<Material diffuseColor='«config.RDMethodInvocationColorPercentage»'></Material>
 										</Appearance>
 					
 					</Shape>

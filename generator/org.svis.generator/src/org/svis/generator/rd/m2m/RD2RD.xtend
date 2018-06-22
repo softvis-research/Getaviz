@@ -14,7 +14,6 @@ import org.eclipse.emf.mwe.core.issues.Issues
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor
 import org.eclipse.xtext.EcoreUtil2
 import org.svis.generator.FamixUtils
-import org.svis.generator.rd.RDSettings
 import org.svis.xtext.rd.Disk
 import org.svis.xtext.rd.DiskSegment
 import org.svis.xtext.rd.Document
@@ -24,8 +23,10 @@ import org.svis.generator.rd.RDSettings.OutputFormat
 import org.svis.generator.rd.RDSettings.MetricRepresentation
 import org.svis.generator.WorkflowComponentWithConfig
 import org.svis.generator.rd.RDSettings.EvolutionRepresentation
+import org.svis.generator.SettingsConfiguration
 
 class RD2RD extends WorkflowComponentWithConfig {
+	val config = new SettingsConfiguration
 	// TODO solve it with injection
 	// @Inject extension FamixUtils
 	extension FamixUtils util = new FamixUtils
@@ -69,8 +70,8 @@ class RD2RD extends WorkflowComponentWithConfig {
 		}
 		//put created target model in slot
 		// put diskroot into list (for writer)
-		if(!(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::MULTIPLE_TIME_LINE
-				|| RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::MULTIPLE_DYNAMIC_EVOLUTION)) {
+		if(!(config.evolutionRepresentation == EvolutionRepresentation::MULTIPLE_TIME_LINE
+				|| config.evolutionRepresentation == EvolutionRepresentation::MULTIPLE_DYNAMIC_EVOLUTION)) {
 			if(diskList.size == 1){
 				val diskRoot = diskList.get(0)
 				ctx.set("rdextendedwriter", diskRoot)
@@ -97,12 +98,12 @@ class RD2RD extends WorkflowComponentWithConfig {
 
 	def private calculateNetArea(Disk disk) {
 		// set sizes of methods and data
-		disk.data.forEach[size = size * RDSettings::DATA_FACTOR]
-		disk.methods.forEach[size = size * RDSettings::METHOD_FACTOR]		
+		disk.data.forEach[size = size * config.RDDataFactor]
+		disk.methods.forEach[size = size * config.RDMethodFactor]		
 		disk.netArea = disk.methods.sum + disk.data.sum
 		
 		if (disk.netArea == 0 && (disk.type.equals("FAMIX.Class ") || disk.type.equals("FAMIX.ParameterizableClass"))) {
-			disk.netArea = RDSettings::MIN_AREA
+			disk.netArea = config.RDMinArea
 		// get sizes from nested disks
 		//		if ((!disk.disks.nullOrEmpty) && (disk.type.equals("FAMIX.Namespace") || disk.type.equals("FAMIX.Class") || disk.type.equals("FAMIX.ParameterizableClass"))) {
 		}
@@ -122,8 +123,8 @@ class RD2RD extends WorkflowComponentWithConfig {
 	}
 	
 	def setNamespaceColor(Disk namespace) {
-		if(RDSettings::OUTPUT_FORMAT == RDSettings::OutputFormat::AFrame) {
-			namespace.color = RDSettings::NAMESPACE_COLOR_HEX
+		if(config.RDOutputFormat == OutputFormat::AFrame) {
+			namespace.color = config.RDNamespaceColorHex
 		} else {
 			namespace.color =  NS_colors.get(namespace.getLevel()-1).asPercentage
 		}
@@ -132,7 +133,7 @@ class RD2RD extends WorkflowComponentWithConfig {
 	def private postLayout(Disk disk) {
 		disk.fractions
 		disk.data.fractions
-		if(RDSettings::OUTPUT_FORMAT != OutputFormat::SimpleGlyphsJson) {
+		if(config.RDOutputFormat != OutputFormat::SimpleGlyphsJson) {
 			disk.methods.fractions
 		}
 		disk.disks.forEach[calculateRings]
@@ -175,14 +176,14 @@ class RD2RD extends WorkflowComponentWithConfig {
 			if (!disk.methods.nullOrEmpty) {
 				disk.methods.calculateCrossSection(b_methods, disk.height)
 				calculateSpines(disk.methods, r_methods - 0.5 * b_methods)
-				if(RDSettings::OUTPUT_FORMAT == OutputFormat::X3DOM || RDSettings::OUTPUT_FORMAT == OutputFormat::AFrame) {
+				if(config.RDOutputFormat == OutputFormat::X3DOM || config.RDOutputFormat == OutputFormat::AFrame) {
 					disk.methods.forEach[m| m.outerRadius = r_methods; m.innerRadius = r_data]
 				}
 			}
 			if (!disk.data.nullOrEmpty) {
 				disk.data.calculateCrossSection(r_data, disk.height)
 				calculateSpines(disk.data, 0.5 * r_data)
-				if(RDSettings::OUTPUT_FORMAT == OutputFormat::X3DOM || RDSettings::OUTPUT_FORMAT == OutputFormat::AFrame ) {
+				if(config.RDOutputFormat == OutputFormat::X3DOM || config.RDOutputFormat == OutputFormat::AFrame ) {
 					disk.data.forEach[d| d.outerRadius = r_data; d.innerRadius = 0]
 				}
 			}
@@ -196,14 +197,14 @@ class RD2RD extends WorkflowComponentWithConfig {
 			if (!disk.methods.nullOrEmpty) {
 				disk.methods.calculateCrossSection(b_methods, disk.height)
 				calculateSpines(disk.methods, r_methods - 0.5 * b_methods)
-				if(RDSettings::OUTPUT_FORMAT == OutputFormat::X3DOM || RDSettings::OUTPUT_FORMAT == OutputFormat::AFrame) {
+				if(config.RDOutputFormat == OutputFormat::X3DOM || config.RDOutputFormat == OutputFormat::AFrame) {
 					disk.methods.forEach[m| m.outerRadius = r_methods; m.innerRadius = r_data]
 				}
 			}	
 			if (!disk.data.nullOrEmpty) {	
 				disk.data.calculateCrossSection(b_data, disk.height)
 				calculateSpines(disk.data, r_data - 0.5 * b_data)
-				if(RDSettings::OUTPUT_FORMAT == OutputFormat::X3DOM || RDSettings::OUTPUT_FORMAT == OutputFormat::AFrame) {
+				if(config.RDOutputFormat == OutputFormat::X3DOM || config.RDOutputFormat == OutputFormat::AFrame) {
 					disk.data.forEach[d| d.outerRadius = r_data; d.innerRadius = r_data - b_data]
 				}			
 			}
@@ -231,7 +232,7 @@ class RD2RD extends WorkflowComponentWithConfig {
 	}
 
 	def private calculateCrossSection(EList<DiskSegment> segments, double width, double height) {
-		if(!(RDSettings::METRIC_REPRESENTATION == MetricRepresentation::NONE)) {
+		if(!(config.metricRepresentation == MetricRepresentation::NONE)) {
 			segments.forEach[
 			val crossSection = (-(width / 2 ) + " " + (it.height) + ", " + (width / 2) + " " + (it.height) + ", " +
 			(width / 2 ) + " " + 0) + ", " + -(width / 2) + " " + 0 + ", " +
@@ -314,7 +315,7 @@ class RD2RD extends WorkflowComponentWithConfig {
 			segment.spine = partSpine.removeBrackets
 		}
 		
-		if(RDSettings::OUTPUT_FORMAT == OutputFormat::X3DOM) {
+		if(config.RDOutputFormat == OutputFormat::X3DOM) {
 			// set positionAngle and angle of Segments
 			val separationFactor = 0.05
 			// 5 % of the circle will be used to separate the segments
@@ -334,7 +335,7 @@ class RD2RD extends WorkflowComponentWithConfig {
 					position = position + segment.angle + separationPerSegment
 				}
 			}
-		} else if (RDSettings::OUTPUT_FORMAT == OutputFormat::AFrame) {
+		} else if (config.RDOutputFormat == OutputFormat::AFrame) {
 			if(!segments.empty) {
 				val separationFactor = 1
 				var sizeSum = 0.0

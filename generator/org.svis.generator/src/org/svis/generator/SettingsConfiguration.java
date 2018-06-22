@@ -364,10 +364,10 @@ public class SettingsConfiguration {
 	}
 
 	public Color getCityColor(String name) {
-		return getColor(getCityColorAsHex(name));
+		return getColor(getCityColorHex(name));
 	}
 	
-	public String getCityColorAsHex(String name) {
+	public String getCityColorHex(String name) {
 		String color = name.toLowerCase();
 		return config.getString("city.color." + color);
 	}
@@ -376,11 +376,11 @@ public class SettingsConfiguration {
 		return getColorFormatted(getCityColor(name));
 	}
 
-	public double getDataFactor() {
+	public double getRDDataFactor() {
 		return config.getDouble("rd.data_factor", 4.0);
 	}
 
-	public double getMethodFactor() {
+	public double getRDMethodFactor() {
 		return config.getDouble("rd.method_factor", 1.0);
 	}
 
@@ -408,64 +408,79 @@ public class SettingsConfiguration {
 		return config.getDouble("rd.ring_width_ad", 0);
 	}
 
-	public double getMinArea() {
+	public double getRDMinArea() {
 		return config.getDouble("rd.min_area", 10.0);
 	}
 
-	public double getNamespaceTransparency() {
+	public double getRDNamespaceTransparency() {
 		return config.getDouble("rd.namespace_transparency", 0);
 	}
 
-	public double getClassTransparency() {
+	public double getRDClassTransparency() {
 		return config.getDouble("rd.class_transparency", 0);
 	}
 
-	public double getMethodTransparency() {
+	public double getRDMethodTransparency() {
 		return config.getDouble("rd.method_transparency", 0);
 	}
 
-	public double getDataTransparency() {
+	public double getRDDataTransparency() {
 		return config.getDouble("rd.data_transparency", 0);
 	}
 
 	public Color getRDClassColor() {
-		return getColor(config.getString("rd.color.class", "#353559"));
+		return getColor(getRDClassColorHex());
+	}
+	
+	public String getRDClassColorHex() {
+		return config.getString("rd.color.class", "#353559");
 	}
 
-	public String getRDClassColorFormatted() {
+	public String getRDClassColorPercentage() {
 		return getColorFormatted(getRDClassColor());
 	}
 
-	public Color getDataColor() {
-		return getColor(config.getString("rd.color.data", "#fffc19"));
+	public Color getRDDataColor() {
+		return getColor(getRDDataColorHex());
+	}
+	
+	public String getRDDataColorHex() {
+		return config.getString("rd.color.data", "#fffc19");
 	}
 
-	public String getDataColorFormatted() {
-		return getColorFormatted(getDataColor());
+	public String getRDDataColorPercentage() {
+		return getColorFormatted(getRDDataColor());
 	}
 
 	public Color getRDMethodColor() {
-		return getColor(config.getString("rd.color.method", "#1485cc"));
+		return getColor(getRDMethodColorHex());
+	}
+	
+	public String getRDMethodColorHex() {
+		return config.getString("rd.color.method", "#1485cc");
 	}
 
-	public String getMethodColorFormatted() {
+	public String getRDMethodColorPercentage() {
 		return getColorFormatted(getRDMethodColor());
 	}
 
-	public Color getNamespaceColor() {
-		return getColor(config.getString("rd.color.namespace", "#969696"));
+	public Color getRDNamespaceColor() {
+		return getColor(getRDNamespaceColorHex());
+	}
+	public String getRDNamespaceColorHex() {
+		return config.getString("rd.color.namespace", "#969696");
 	}
 
-	public String getNamespaceColorFormatted() {
-		return getColorFormatted(getNamespaceColor());
+	public String getRDNamespaceColorPercentage() {
+		return getColorFormatted(getRDNamespaceColor());
 	}
 
-	public Color getMethodInvocationColor() {
+	public Color getRDMethodInvocationColor() {
 		return getColor(config.getString("rd.color.method_invocation", "#780a32"));
 	}
 
-	public String getMethodInvocationColorFormatted() {
-		return getColorFormatted(getMethodInvocationColor());
+	public String getRDMethodInvocationColorPercentage() {
+		return getColorFormatted(getRDMethodInvocationColor());
 	}
 
 	public boolean isMethodDisks() {
