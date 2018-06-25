@@ -12,7 +12,7 @@ import org.svis.generator.rd.RDSettings
 import org.svis.generator.rd.RDSettings.InvocationRepresentation
 import org.svis.generator.rd.RDSettings.Variant
 
-class Prawn_X3DomMovingSpheres {
+class Prawn_X3DomMovingSpheresTest {
 	
 				//TODO reimplement tests for new dynamix metamodel
 	@BeforeClass
