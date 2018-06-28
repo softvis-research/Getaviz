@@ -16,7 +16,7 @@ import org.svis.xtext.city.impl.CityFactoryImpl;
 public class BrickLayout {
 	private static final boolean DEBUG = false;
 	private static final CityFactory cityFactory = new CityFactoryImpl();
-	private static SettingsConfiguration config = new SettingsConfiguration();
+	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 
 	public static void brickLayout(final Root root) {
 		if(DEBUG) System.out.println("[ INFO]"+ " brickLayout(root)-arrival.");

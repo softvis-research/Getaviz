@@ -33,7 +33,6 @@ import org.apache.commons.beanutils.BeanComparator
 import org.eclipse.emf.common.util.ECollections
 import static org.apache.commons.codec.digest.DigestUtils.sha1Hex
 import org.eclipse.xtext.linking.lazy.LazyLinkingResource
-import org.svis.generator.WorkflowComponentWithConfig
 import java.util.Map
 import org.svis.generator.famix.FAMIXSettings
 import org.svis.xtext.famix.impl.FamixFactoryImpl
@@ -50,8 +49,11 @@ import org.neo4j.graphdb.Relationship
 import org.eclipse.emf.common.util.EList
 import org.svis.generator.famix.FAMIXSettings.FamixParser
 import org.svis.generator.SettingsConfiguration
+import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
+import org.apache.commons.logging.LogFactory
 
-class Famix2Famix extends WorkflowComponentWithConfig {
+class Famix2Famix extends WorkflowComponentWithModelSlot {
+	val log = LogFactory::getLog(class)
 	var GraphDatabaseService graph
 	var DBConnector dbConnector
 	val Set<FAMIXNamespace> rootPackages = newLinkedHashSet
@@ -64,7 +66,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	val List<FAMIXNamespace> packagesToMerge = newArrayList
 	val Map<FAMIXMethod, List<FAMIXParameter>> parameters = newHashMap
 	val static famixFactory = new FamixFactoryImpl()
-	val settings = new SettingsConfiguration
+	val config = SettingsConfiguration.instance;
 
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Famix2Famix has started.")
@@ -73,7 +75,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			val famixRoot = famixFactory.createRoot
 			val famixDocument = famixFactory.createDocument
 			famixRoot.document = famixDocument
-			graph = Database::getInstance(settings.databaseName)
+			graph = Database::getInstance(config.databaseName)
 			dbConnector = new DBConnector(graph)
 
 			// Create Namespaces
@@ -299,7 +301,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 				parameters.replace(m, l2)
 			}
 		]
-		if (settings.hidePrivateElements) {
+		if (config.hidePrivateElements) {
 			deletePrivates
 		}
 		val allPackages = famixDocument.elements.filter(FAMIXNamespace).toSet
@@ -320,20 +322,20 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		enumValues.forEach[setQualifiedName]
 
 		removeDuplicates()
-		if (settings.methodTypeMode) {
+		if (config.methodTypeMode) {
 			methods.forEach[setMethodType(accesses)]
 			attributes.forEach[setCalledBy]
 			deletePrivateAttributes(accesses)
 		}
 		val BeanComparator<FAMIXElement> comparator = new BeanComparator("fqn")
-		if (settings.parser === "jdt2famix") {
+		if (config.parser === "jdt2famix") {
 			methods.forEach [
 				val sourceAnchor = it.sourceAnchor.ref as FAMIXFileAnchor
 				val numberOfLines = sourceAnchor.endline - sourceAnchor.startline + 1
 				it.numberOfStatements = numberOfLines
 			]
 		}
-		if (settings.attributeSortSize) {
+		if (config.attributeSortSize) {
 			Collections::sort(attributes, new Comparator<FAMIXAttribute>() {
 				override compare(FAMIXAttribute attribute1, FAMIXAttribute attribute2) {
 					val diffLength = attribute1.value.length - attribute2.value.length
@@ -354,14 +356,14 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		rootPackages.clear
 		subPackages.clear
 		packages.forEach[getPackages]
-		if (settings.masterRoot && rootPackages.size > 1) {
+		if (config.masterRoot && rootPackages.size > 1) {
 			val Master = createMasterRoot
 			rootPackages.forEach[setParentScopeRoots(it, Master)]
 			rootPackages.forEach[subPackages += it]
 			rootPackages.clear
 			rootPackages += Master
 		}
-		if (settings.masterRoot) {
+		if (config.masterRoot) {
 			rootPackages.forEach[findPackagesToMerge]
 			packagesToMerge.forEach[removePackages]
 			packagesToMerge.forEach[mergePackages]
@@ -393,7 +395,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	def private deletePrivates() {
 		methods.removeIf([modifiers.contains("private")])
 		structures.removeIf([modifiers.contains("private")])
-		if (!settings.methodTypeMode) {
+		if (!config.methodTypeMode) {
 			attributes.removeIf([modifiers.contains("private")])
 		}
 	// EnumValues are always public
@@ -656,7 +658,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	 *  
 	 */
 	def createID(String fqn) {
-		return "ID_" + sha1Hex(fqn + config.repositoryName + config.repositoryOwner + config.commit)
+		return "ID_" + sha1Hex(fqn + config.repositoryName + config.repositoryOwner)
 	}
 
 	/**

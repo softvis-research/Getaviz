@@ -25,7 +25,7 @@ public class CityLayout {
 	private static String info = "[INFOstream] ";
 	private static CityFactory cityFactory = new CityFactoryImpl();
 	public static Rectangle rootRectangle;
-	private static SettingsConfiguration config = new SettingsConfiguration();
+	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 
 	/**
 	 * @param root

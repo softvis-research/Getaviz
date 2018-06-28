@@ -17,7 +17,7 @@ import org.svis.generator.SettingsConfiguration
 
 class Plant2Plant extends WorkflowComponentWithPlantConfig {
 
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 
 	// val log = LogFactory::getLog(class)
 	// TODO solve it with injection

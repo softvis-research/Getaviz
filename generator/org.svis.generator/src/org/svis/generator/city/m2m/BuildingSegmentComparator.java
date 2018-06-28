@@ -12,7 +12,7 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 	private int coarseValue; // compares class elements (methods <-> attributes)
 	private int fineValue; // compared after coarseValue
 	private int finerValue; // compared after finevalue, if it was equal
-	private SettingsConfiguration config = new SettingsConfiguration();
+	private SettingsConfiguration config = SettingsConfiguration.getInstance();
 
 	public BuildingSegmentComparator(final BuildingSegment bs) {
 		this.bs = bs;

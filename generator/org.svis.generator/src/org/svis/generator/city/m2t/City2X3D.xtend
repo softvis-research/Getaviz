@@ -19,7 +19,7 @@ import org.svis.generator.SettingsConfiguration
 class City2X3D {
 
 	val log = LogFactory::getLog(getClass)
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 
 	def toX3DBody(Resource resource) {
 		log.info("City2X3D has started.")

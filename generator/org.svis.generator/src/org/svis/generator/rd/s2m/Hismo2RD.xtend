@@ -43,7 +43,7 @@ import java.util.ArrayList
 import org.svis.generator.SettingsConfiguration
 
 class Hismo2RD extends WorkflowComponentWithModelSlot {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 	val static diskFactory = new RdFactoryImpl()
 	var HismoDocument hismoDocument
 	var Document diskDocument
@@ -247,7 +247,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.ringWidth = config.RDRingWidth
 		disk.id = famix.createID(disk.fqn)
 		disk.height = config.RDHeight
-		disk.color = config.RDClassColorPercentage
+		disk.color = config.RDClassColorAsPercentage
 		disk.transparency = config.RDClassTransparency
 		
 		//TODO any side effects?
@@ -327,7 +327,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.signature = hismoMethod.signature
 		diskSegment.id = famix.createID(diskSegment.fqn)
 		diskSegment.height = config.RDHeight
-		diskSegment.color = config.RDMethodColorPercentage
+		diskSegment.color = config.RDMethodColorAsPercentage
 		diskSegment.transparency = config.RDMethodTransparency
 
 		if (hismoMethod.maxNumberOfStatements  <= config.RDMinArea) {
@@ -361,7 +361,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.id = famix.createID(diskSegment.fqn)
 		diskSegment.size = 1 //attribute.declaredType.ref.attributeSize
 		diskSegment.height = config.RDHeight
-		diskSegment.color = config.RDDataColorPercentage
+		diskSegment.color = config.RDDataColorAsPercentage
 		diskSegment.transparency = config.RDDataTransparency
 		
    	val versions = hismoAttributeVersions.filter[
@@ -502,7 +502,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.position.z = sortedtimestamps.indexOf(timestamp) * config.RDHeightMultiplicator
 		disk.height = config.RDHeight
 		disk.transparency = config.RDClassTransparency
-		disk.color = config.RDClassColorPercentage
+		disk.color = config.RDClassColorAsPercentage
 		
 		val ch = hismoClassVersions.findFirst[hpv|
 			hpv.timestamp == timestamp && hpv.versionEntity.ref === el  
@@ -557,7 +557,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.name = method.name
 		diskSegment.value = method.value
 		diskSegment.height = config.RDHeight
-		diskSegment.color = config.RDMethodColorPercentage
+		diskSegment.color = config.RDMethodColorAsPercentage
 		diskSegment.transparency = config.RDMethodTransparency
 		
 		val mh = hismoMethodVersions.findFirst[hmv|
@@ -590,7 +590,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.name attribute.name
 		diskSegment.value = attribute.value
 		diskSegment.height = config.RDHeight
-		diskSegment.color = config.RDDataColorPercentage
+		diskSegment.color = config.RDDataColorAsPercentage
 		diskSegment.transparency = config.RDDataTransparency
 	  	val a = hismoAttributeVersions.findFirst[hav|
 			hav.timestamp == timestamp && hav.versionEntity.ref === attribute
@@ -619,7 +619,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskSegment.id = famix.createID(diskSegment.fqn)
 		diskSegment.size = 1 // TODO size
 		diskSegment.height = config.RDHeight
-		diskSegment.color = config.RDDataColorPercentage
+		diskSegment.color = config.RDDataColorAsPercentage
 		diskSegment.transparency = config.RDDataTransparency
 		return diskSegment
 	}

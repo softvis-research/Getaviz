@@ -18,7 +18,7 @@ import org.svis.generator.SettingsConfiguration
 
 class City2X3DOM {
 	val log = LogFactory::getLog(getClass)
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 
 	def toX3DOMBody(Resource resource) {
 		log.info("City2X3DOM has started")

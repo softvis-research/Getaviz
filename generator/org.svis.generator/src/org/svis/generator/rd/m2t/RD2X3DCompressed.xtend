@@ -18,7 +18,7 @@ import java.util.TreeMap
 import org.svis.generator.SettingsConfiguration
 
 class RD2X3DCompressed {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 	RD2RD4Dynamix rd2rd4dy = new RD2RD4Dynamix
 	val log = LogFactory::getLog(class)
 	val multipleDisks = new ArrayList<Disk>
@@ -157,7 +157,7 @@ class RD2X3DCompressed {
 		«var firstDataSegId = ""»
 		«FOR segs : segments.values»
 			«FOR segment :segs»
-				«IF(segment.color == config.RDDataColorPercentage)»
+				«IF(segment.color == config.RDDataColorAsPercentage)»
 					<Transform  translation='«(segment.
 			eContainer as Disk).position.x + " " + (segment.eContainer as Disk).position.y + " " +
 			(segment.eContainer as Disk).position.z»' rotation='0 0 1 1.57'>
@@ -202,7 +202,7 @@ class RD2X3DCompressed {
 		«var firstMethSegId = ""»
 		«FOR segs : segments.values»
 			«FOR segment :segs»
-				«IF(segment.color !== config.RDDataColorPercentage)»
+				«IF(segment.color !== config.RDDataColorAsPercentage)»
 					<Transform  translation='«(segment.
 			eContainer as Disk).position.x + " " + (segment.eContainer as Disk).position.y + " " +
 			(segment.eContainer as Disk).position.z»' rotation='0 0 1 1.57'>
@@ -315,7 +315,7 @@ class RD2X3DCompressed {
 					           endCap='true'/> 
 					 <Appearance>
 					 	<Material
-					 		diffuseColor='«config.RDMethodInvocationColorPercentage»'
+					 		diffuseColor='«config.RDMethodInvocationColorAsPercentage»'
 					 		transparency='0'/>
 					 </Appearance>
 					</Shape>

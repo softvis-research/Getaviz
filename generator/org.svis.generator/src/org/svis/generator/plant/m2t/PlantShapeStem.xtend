@@ -8,7 +8,7 @@ import org.svis.generator.SettingsConfiguration
  * Paint the stem and its variants in X3D.
  */
 class PlantShapeStem {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 	/**
 	 * Default Shape for the plant metaphor.
 	 */

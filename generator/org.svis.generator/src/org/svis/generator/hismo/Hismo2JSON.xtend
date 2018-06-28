@@ -41,7 +41,7 @@ import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import org.svis.generator.SettingsConfiguration
 
 class Hismo2JSON implements IGenerator2 {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 	@Inject extension FamixUtils util
 	Hismo2RD hismo2rd = new Hismo2RD
 	val famix = new Famix2Famix

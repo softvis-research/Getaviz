@@ -25,7 +25,7 @@ import org.svis.xtext.plant.Junction
 import org.svis.generator.SettingsConfiguration
 
 class Famix2Plant extends WorkflowComponentWithPlantConfig {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 	val log = LogFactory::getLog(class)
 	val static plantFactory = new PlantFactoryImpl()
 	var Document famixDocument

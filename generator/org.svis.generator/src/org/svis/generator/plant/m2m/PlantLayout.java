@@ -21,7 +21,7 @@ import org.svis.xtext.plant.Stem;
 import org.svis.xtext.plant.impl.PlantFactoryImpl;
 
 public class PlantLayout {
-	private static SettingsConfiguration config = new SettingsConfiguration();
+	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 	private static boolean DEBUG = false;
 	private static boolean DEBUG_Part1 = false;
 	private static boolean DEBUG_Part2 = false;

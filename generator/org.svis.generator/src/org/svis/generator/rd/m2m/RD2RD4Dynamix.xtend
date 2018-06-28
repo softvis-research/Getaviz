@@ -19,7 +19,7 @@ import java.util.List
 import org.svis.generator.SettingsConfiguration
 
 class RD2RD4Dynamix extends WorkflowComponentWithModelSlot {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 	val rdFactory = new RdFactoryImpl
 	var long invocationStartTime
 	var long invocationStopTime

@@ -20,10 +20,29 @@ import org.svis.generator.rd.RDSettings.MetricRepresentation;
 import org.svis.generator.rd.RDSettings.Variant;
 
 public class SettingsConfiguration {
-	private String path = "../org.svis.generator/src/org/svis/generator/settings.properties";
-	private PropertiesConfiguration config;
+	private static PropertiesConfiguration config;
+	private static SettingsConfiguration instance = null;
 
-	public SettingsConfiguration() {
+	private SettingsConfiguration() {
+	}
+
+	public static SettingsConfiguration getInstance() {
+		if (instance == null) {
+			instance = new SettingsConfiguration();
+			loadConfig("../org.svis.generator.releng/settings.properties");
+		}
+		return instance;
+	}
+	
+	public static SettingsConfiguration getInstance(String path) {
+		if (instance == null) {
+			instance = new SettingsConfiguration();
+		}
+		loadConfig(path);
+		return instance;
+	}
+	
+	private static void loadConfig(String path) {
 		File file = new File(path);
 		try {
 			Configurations configs = new Configurations();
@@ -32,9 +51,32 @@ public class SettingsConfiguration {
 			System.out.println(cex);
 		}
 	}
+	
+	public String getRepositoryName() {
+		return config.getString("history.repository_name", "");
+	}
+	
+	public String getRepositoryOwner() {
+		return config.getString("history.repository_owner", "");
+	}
 
 	public String getDatabaseName() {
-		return config.getString("structure.database_name", "../databases/graph.db");
+		return config.getString("database_name", "../databases/graph.db");
+	}
+	
+	public OutputFormat getOutputFormat() {
+		switch (config.getString("output_format", "xd3")) {
+		case "x3dom":
+			return OutputFormat.X3DOM;
+		case "aFrame":
+			return OutputFormat.AFrame;
+		case "simple_glyphs_json":
+			return OutputFormat.SimpleGlyphsJson;
+		case "x3d_compressed":
+			return OutputFormat.X3D_COMPRESSED;
+		default:
+			return OutputFormat.X3D;
+		}
 	}
 
 	public boolean isHidePrivateElements() {
@@ -57,25 +99,6 @@ public class SettingsConfiguration {
 		return config.getBoolean("structure.merge_packages", false);
 	}
 
-	public String getCityOutputFormatAsString() {
-		return config.getString("city.output_format", "x3d");
-	}
-	
-	public OutputFormat getCityOutputFormat() {
-		switch (getCityOutputFormatAsString()) {
-		case "x3dom":
-			return OutputFormat.X3DOM;
-		case "aFrame":
-			return OutputFormat.AFrame;
-		default:
-			return OutputFormat.X3D;
-		}
-	}
-	
-	public boolean isCityOutputFormatSetTo(OutputFormat format) {
-		return getCityOutputFormat() == format;
-	}
-
 	public String getBuildingTypeAsString() {
 		return config.getString("city.building_type", "original");
 	}
@@ -94,15 +117,11 @@ public class SettingsConfiguration {
 			return BuildingType.CITY_ORIGINAL;
 		}
 	}
-	
-	public boolean isBuildingTypeSetTo(BuildingType type) {
-		return getBuildingType() == type;
-	}
 
 	public String getSchemeAsString() {
 		return config.getString("city.scheme", "types");
 	}
-	
+
 	public Schemes getScheme() {
 		switch (getSchemeAsString()) {
 		case "visibility":
@@ -110,10 +129,6 @@ public class SettingsConfiguration {
 		default:
 			return Schemes.TYPES;
 		}
-	}
-	
-	public boolean isSchemeSetTo(Schemes scheme) {
-		return getScheme() == scheme;
 	}
 
 	public String getClassElementsModeAsString() {
@@ -130,15 +145,11 @@ public class SettingsConfiguration {
 			return ClassElementsModes.METHODS_AND_ATTRIBUTES;
 		}
 	}
-	
-	public boolean isClassElementsModeSetTo(ClassElementsModes mode) {
-		return getClassElementsMode() == mode;
-	}
 
 	public String getClassElementsSortModeCoarseAsString() {
 		return config.getString("city.class_elements_sort_mode_coarse", "methods_first");
 	}
-	
+
 	public ClassElementsSortModesCoarse getClassElementsSortModeCoarse() {
 		switch (getClassElementsSortModeCoarseAsString()) {
 		case "unsorted":
@@ -149,29 +160,22 @@ public class SettingsConfiguration {
 			return ClassElementsSortModesCoarse.METHODS_FIRST;
 		}
 	}
-	
-	public boolean isClassElementsSortModeCoarseSetTo(ClassElementsSortModesCoarse mode) {
-		return getClassElementsSortModeCoarse() == mode;
-	}
 
 	public String getClassElementsSortModeFineAsString() {
 		return config.getString("city.elements_sort_mode_fine", "scheme");
 	}
-	
+
 	public ClassElementsSortModesFine getClassElementsSortModeFine() {
 		switch (getClassElementsSortModeFineAsString()) {
 		case "unsorted":
 			return ClassElementsSortModesFine.UNSORTED;
 		case "alphabetically":
 			return ClassElementsSortModesFine.ALPHABETICALLY;
-		case "nos" : return ClassElementsSortModesFine.NOS;
+		case "nos":
+			return ClassElementsSortModesFine.NOS;
 		default:
 			return ClassElementsSortModesFine.UNSORTED;
 		}
-	}
-	
-	public boolean isClassElementsSortModeFineSetTo(ClassElementsSortModesFine mode) {
-		return getClassElementsSortModeFine() == mode;
 	}
 
 	public boolean isClassElementsSortModeFineDirectionReversed() {
@@ -185,7 +189,7 @@ public class SettingsConfiguration {
 	public String getBrickLayoutAsString() {
 		return config.getString("city.brick.layout", "progressive");
 	}
-	
+
 	public Layout getBrickLayout() {
 		switch (getBrickLayoutAsString()) {
 		case "straight":
@@ -195,10 +199,6 @@ public class SettingsConfiguration {
 		default:
 			return Layout.PROGRESSIVE;
 		}
-	}
-	
-	public boolean isBrickLayoutSetTo(Layout layout) {
-		return getBrickLayout() == layout;
 	}
 
 	public double getBrickSize() {
@@ -239,10 +239,6 @@ public class SettingsConfiguration {
 			return SeparatorModes.SEPARATOR;
 		}
 	}
-	
-	public boolean isPanelSeparatorModeSetTo(SeparatorModes mode) {
-		return getPanelSeparatorMode() == mode;
-	}
 
 	public int[] getPanelHeightTresholdNos() {
 		int[] defaultValue = { 3, 6, 12, 24, 48, 96, 144, 192, 240 };
@@ -281,7 +277,7 @@ public class SettingsConfiguration {
 	public String getOriginalBuildingMetricAsString() {
 		return config.getString("city.original_building_metric", "none");
 	}
-	
+
 	public BuildingMetric getOriginalBuildingMetric() {
 		switch (getOriginalBuildingMetricAsString()) {
 		case "nos":
@@ -289,10 +285,6 @@ public class SettingsConfiguration {
 		default:
 			return BuildingMetric.NONE;
 		}
-	}
-	
-	public boolean isPanelSeparatorModeSetTo(BuildingMetric metric) {
-		return getOriginalBuildingMetric() == metric;
 	}
 
 	public double getWidthMin() {
@@ -314,7 +306,7 @@ public class SettingsConfiguration {
 	public double getBuildingVerticalMargin() {
 		return config.getDouble("city.building.vertical_margin", 3.0);
 	}
-	
+
 	public String getPackageColorHex() {
 		return config.getString("city.package.color_start", "#969696");
 	}
@@ -326,7 +318,7 @@ public class SettingsConfiguration {
 	public Color getPackageColorEnd() {
 		return getColor(config.getString("city.package.color_end", "#f0f0f0"));
 	}
-	
+
 	public String getClassColorHex() {
 		return config.getString("city.class.color", "#353559");
 	}
@@ -366,12 +358,12 @@ public class SettingsConfiguration {
 	public Color getCityColor(String name) {
 		return getColor(getCityColorHex(name));
 	}
-	
+
 	public String getCityColorHex(String name) {
 		String color = name.toLowerCase();
 		return config.getString("city.color." + color);
 	}
-	
+
 	public String getCityColorAsPercentage(String name) {
 		return getColorFormatted(getCityColor(name));
 	}
@@ -431,47 +423,48 @@ public class SettingsConfiguration {
 	public Color getRDClassColor() {
 		return getColor(getRDClassColorHex());
 	}
-	
+
 	public String getRDClassColorHex() {
 		return config.getString("rd.color.class", "#353559");
 	}
 
-	public String getRDClassColorPercentage() {
+	public String getRDClassColorAsPercentage() {
 		return getColorFormatted(getRDClassColor());
 	}
 
 	public Color getRDDataColor() {
 		return getColor(getRDDataColorHex());
 	}
-	
+
 	public String getRDDataColorHex() {
 		return config.getString("rd.color.data", "#fffc19");
 	}
 
-	public String getRDDataColorPercentage() {
+	public String getRDDataColorAsPercentage() {
 		return getColorFormatted(getRDDataColor());
 	}
 
 	public Color getRDMethodColor() {
 		return getColor(getRDMethodColorHex());
 	}
-	
+
 	public String getRDMethodColorHex() {
 		return config.getString("rd.color.method", "#1485cc");
 	}
 
-	public String getRDMethodColorPercentage() {
+	public String getRDMethodColorAsPercentage() {
 		return getColorFormatted(getRDMethodColor());
 	}
 
 	public Color getRDNamespaceColor() {
 		return getColor(getRDNamespaceColorHex());
 	}
+
 	public String getRDNamespaceColorHex() {
 		return config.getString("rd.color.namespace", "#969696");
 	}
 
-	public String getRDNamespaceColorPercentage() {
+	public String getRDNamespaceColorAsPercentage() {
 		return getColorFormatted(getRDNamespaceColor());
 	}
 
@@ -479,7 +472,7 @@ public class SettingsConfiguration {
 		return getColor(config.getString("rd.color.method_invocation", "#780a32"));
 	}
 
-	public String getRDMethodInvocationColorPercentage() {
+	public String getRDMethodInvocationColorAsPercentage() {
 		return getColorFormatted(getRDMethodInvocationColor());
 	}
 
@@ -493,29 +486,6 @@ public class SettingsConfiguration {
 
 	public boolean isMethodTypeMode() {
 		return config.getBoolean("rd.method_type_mode", false);
-	}
-
-	public String getRDOutputFormatAsString() {
-		return config.getString("rd.output_format", "x3d");
-	}
-	
-	public OutputFormat getRDOutputFormat() {
-		switch (getRDOutputFormatAsString()) {
-		case "x3dom":
-			return OutputFormat.X3DOM;
-		case "aFrame":
-			return OutputFormat.AFrame;
-		case "simple_glyphs_json":
-			return OutputFormat.SimpleGlyphsJson;
-		case "x3d_compressed":
-			return OutputFormat.X3D_COMPRESSED;
-		default:
-			return OutputFormat.X3D;
-		}
-	}
-	
-	public boolean isRDOutputFormatSetTo(OutputFormat format) {
-		return getRDOutputFormat() == format;
 	}
 
 	public String getMetricRepresentationAsString() {
@@ -534,15 +504,11 @@ public class SettingsConfiguration {
 			return MetricRepresentation.NONE;
 		}
 	}
-	
-	public boolean isMetricRepresentationSetTo(MetricRepresentation representation) {
-		return getMetricRepresentation() == representation;
-	}
 
 	public String getInvocationRepresentationAsString() {
 		return config.getString("rd.invocation_representation", "none");
 	}
-	
+
 	public InvocationRepresentation getInvocationRepresentation() {
 		switch (getInvocationRepresentationAsString()) {
 		case "moving_spheres":
@@ -554,10 +520,6 @@ public class SettingsConfiguration {
 		default:
 			return InvocationRepresentation.NONE;
 		}
-	}
-	
-	public boolean isInvocationRepresentationSetTo(InvocationRepresentation representation) {
-		return getInvocationRepresentation() == representation;
 	}
 
 	public String getEvolutionRepresentationAsString() {
@@ -577,14 +539,10 @@ public class SettingsConfiguration {
 		}
 	}
 	
-	public boolean isEvolutionRepresentationSetTo(EvolutionRepresentation representation) {
-		return getEvolutionRepresentation() == representation;
-	}
-
 	public String getVariantAsString() {
 		return config.getString("rd.variant", "static");
 	}
-	
+
 	public Variant getVariant() {
 		switch (getVariantAsString()) {
 		case "dynamic":
@@ -592,10 +550,6 @@ public class SettingsConfiguration {
 		default:
 			return Variant.STATIC;
 		}
-	}
-	
-	public boolean isVariantSetTo(Variant variant) {
-		return getVariant() == variant;
 	}
 
 	public String getPackageShape() {
@@ -624,7 +578,7 @@ public class SettingsConfiguration {
 		Color color = getColor(config.getString("plant.package.even_color", "#30ba43"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
-	
+
 	public String switchAttributeMethodMapping() {
 		String value = config.getString("plant.switch_attribute_method_mapping", "petal_pollstem");
 		return value.toUpperCase();
@@ -865,9 +819,8 @@ public class SettingsConfiguration {
 	}
 
 	private String getColorFormatted(Color color) {
-		float[] components = color.getColorComponents(null);
-		String formattedColor = String.format("%f %f %f", components[0], components[1], components[2]);
-		return formattedColor;
+		float[] rgb = color.getColorComponents(null);
+		return rgb[0] + " " + rgb[1] + " " + rgb[2] ;
 	}
 
 	private String getPlantColorFormatted(String formattedColor) {
@@ -877,8 +830,8 @@ public class SettingsConfiguration {
 	private Color getColor(String hex) {
 		return Color.decode(hex);
 	}
-	
+
 	public static enum OutputFormat {
-		X3D,X3DOM,SimpleGlyphsJson,X3D_COMPRESSED,AFrame;
+		X3D, X3DOM, SimpleGlyphsJson, X3D_COMPRESSED, AFrame;
 	}
 }

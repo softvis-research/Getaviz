@@ -17,7 +17,7 @@ import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import org.svis.generator.SettingsConfiguration
 
 class RD2AFrame {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 	//TODO remove colors
 	// TODO solve it with injection
 	// @Inject extension FamixUtils
@@ -213,7 +213,7 @@ class RD2AFrame {
 					<Shape>
 					<Group USE='«segment.id»__RECTANGULARTORUS'></Group>
 										<Appearance>
-												<Material diffuseColor='«config.RDMethodInvocationColorPercentage»'></Material>
+												<Material diffuseColor='«config.RDMethodInvocationColorAsPercentage»'></Material>
 										</Appearance>
 					
 					</Shape>

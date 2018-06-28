@@ -22,7 +22,7 @@ import org.svis.generator.rd.m2m.RD2RD4Dynamix
 import org.svis.generator.SettingsConfiguration
 
 class RD2JS {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 	RD2RD4Dynamix rd2rd4dy = new RD2RD4Dynamix
 	val startTime = 5000
 	val versionSpeed = 2000

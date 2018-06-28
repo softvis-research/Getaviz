@@ -30,7 +30,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 	var RGBColor[] NOS_colors
 	var RGBColor[] CLSS_colors
 	val log = LogFactory::getLog(class)
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("City2City has started.")
@@ -117,7 +117,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 			} else if (d.type == "FAMIX.Namespace") {
 				d.color = NSP_colors.get(d.level - 1).asPercentage
 			}
-		} else if (config.cityOutputFormat == OutputFormat::AFrame) {
+		} else if (config.outputFormat == OutputFormat::AFrame) {
 			d.color = config.packageColorHex
 		} else {
 			d.color = PCKG_colors.get(d.level - 1).asPercentage
@@ -158,7 +158,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 			b.color = NOS_colors.get(b.numberOfStatements).asPercentage
 		} else if (config.buildingType == BuildingType::CITY_DYNAMIC) {
 			b.color = new RGBColor(config.dynamicMethodColor).asPercentage
-		} else if (config.cityOutputFormat == OutputFormat::AFrame) {
+		} else if (config.outputFormat == OutputFormat::AFrame) {
 			b.color = config.classColorHex
 		} else {
 			b.color = new RGBColor(config.classColor).asPercentage
@@ -183,7 +183,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 		// set counters to zero, to let them vanish in city2.xml (optional)
 		b.dataCounter = 0
 		b.methodCounter = 0
-		if (config.cityOutputFormat == OutputFormat::AFrame) {
+		if (config.outputFormat == OutputFormat::AFrame) {
 			b.color = config.classColorHex
 		} else {
 			b.color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0 // pko 2016
@@ -209,7 +209,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 			b.width = config.widthMin * areaUnit + Panels::PANEL_HORIZONTAL_MARGIN * 2
 			b.length = config.widthMin * areaUnit + Panels::PANEL_HORIZONTAL_MARGIN * 2
 		}
-		if (config.cityOutputFormat == OutputFormat::AFrame) {
+		if (config.outputFormat == OutputFormat::AFrame) {
 			b.color = config.classColorHex
 		} else {
 			b.color = new RGBColor(config.classColor).asPercentage
@@ -222,7 +222,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 		} else {
 			b.height = 0
 		}
-		if (config.cityOutputFormat == OutputFormat::AFrame) {
+		if (config.outputFormat == OutputFormat::AFrame) {
 			b.color = config.classColorHex
 		} else {
 			b.color = new RGBColor(config.classColor).asPercentage;
@@ -425,7 +425,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 			floor.height = bHeight / ( floorNumber + 2 ) * 0.80
 			floor.width = bWidth * 1.1
 			floor.length = bLength * 1.1
-			if (config.cityOutputFormat == OutputFormat::AFrame) {
+			if (config.outputFormat == OutputFormat::AFrame) {
 				floor.color = "#1485CC"
 			} else {
 				floor.color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0
@@ -466,7 +466,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 			chimney.width = 0.5
 			chimney.length = 0.5
 
-			if (config.cityOutputFormat == OutputFormat::AFrame) {
+			if (config.outputFormat == OutputFormat::AFrame) {
 				chimney.color = "#FFFC19"
 			} else {
 				chimney.color = 255 / 255.0 + " " + 252 / 255.0 + " " + 25 / 255.0

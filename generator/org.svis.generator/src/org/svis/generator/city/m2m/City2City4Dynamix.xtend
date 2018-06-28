@@ -14,7 +14,7 @@ import org.svis.xtext.city.Building
 import org.svis.generator.SettingsConfiguration
 
 class City2City4Dynamix extends WorkflowComponentWithModelSlot {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 //	val cityFactory = new CityFactoryImpl
 	var long invocationStartTime
 	var long invocationStopTime

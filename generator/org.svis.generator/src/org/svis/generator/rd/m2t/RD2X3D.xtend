@@ -17,7 +17,7 @@ import org.svis.generator.rd.m2m.RD2RD4Dynamix
 import org.svis.generator.SettingsConfiguration
 
 class RD2X3D {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 	RD2RD4Dynamix rd2rd4dy = new RD2RD4Dynamix
 	val log = LogFactory::getLog(class)
 	val multipleDisks = new ArrayList<Disk>
@@ -180,7 +180,7 @@ class RD2X3D {
 							endCap='true'/>
 						<Appearance>
 							<Material
-								diffuseColor='«config.RDMethodInvocationColorPercentage»'
+								diffuseColor='«config.RDMethodInvocationColorAsPercentage»'
 								transparency='0'/>
 						</Appearance>
 					</Shape>

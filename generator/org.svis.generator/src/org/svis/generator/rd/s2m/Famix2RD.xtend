@@ -15,14 +15,14 @@ import org.svis.xtext.famix.Root
 import org.svis.xtext.rd.Disk
 import org.svis.xtext.rd.impl.RdFactoryImpl
 import org.svis.xtext.famix.FAMIXStructure
-import org.svis.generator.WorkflowComponentWithConfig
 import org.apache.commons.logging.LogFactory
 import org.svis.generator.rd.RDSettings.MetricRepresentation
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.SettingsConfiguration.OutputFormat
+import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
 
-class Famix2RD extends WorkflowComponentWithConfig {
-	val config = new SettingsConfiguration
+class Famix2RD extends WorkflowComponentWithModelSlot {
+	val config = SettingsConfiguration.getInstance
 	val log = LogFactory::getLog(class)
 	val static diskFactory = new RdFactoryImpl()
 	var Document famixDocument
@@ -102,10 +102,10 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		disk.level = level
 		disk.ringWidth = config.RDRingWidth
 		disk.height = config.RDHeight
-		if(config.RDOutputFormat == OutputFormat::AFrame) {
+		if(config.outputFormat == OutputFormat::AFrame) {
 			disk.color = config.RDClassColorHex
 		} else {
-			disk.color = config.RDClassColorPercentage
+			disk.color = config.RDClassColorAsPercentage
 		}
 		disk.transparency = config.RDClassTransparency
 		
@@ -163,10 +163,10 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		diskSegment.frequency = 0
 		diskSegment.luminance = 0
 		diskSegment.height = config.RDHeight
-		if(config.RDOutputFormat == OutputFormat::AFrame) {
+		if(config.outputFormat == OutputFormat::AFrame) {
 			diskSegment.color = config.RDMethodColorHex
 		} else {
-			diskSegment.color = config.RDMethodColorPercentage
+			diskSegment.color = config.RDMethodColorAsPercentage
 		}
 		diskSegment.transparency = config.RDMethodTransparency
 		
@@ -207,7 +207,7 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		disk.ringWidth = config.RDRingWidthMD 
 		disk.height = config.RDHeight
 		disk.transparency = config.RDMethodTransparency
-		if(config.RDOutputFormat == OutputFormat::AFrame) {
+		if(config.outputFormat == OutputFormat::AFrame) {
 			disk.color = config.RDMethodColorHex
 		} else {
 			disk.color = 153/255.0 + " " + 0/255.0 + " " + 0/255.0
@@ -225,10 +225,10 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		diskSegment.fqn = attribute.fqn
 		diskSegment.size = 1 //attribute.declaredType.ref.attributeSize
 		diskSegment.height = config.RDHeight
-		if(config.RDOutputFormat == OutputFormat::AFrame) {
+		if(config.outputFormat == OutputFormat::AFrame) {
 			diskSegment.color = config.RDDataColorHex
 		} else {
-			diskSegment.color = config.RDDataColorPercentage
+			diskSegment.color = config.RDDataColorAsPercentage
 		}
 		diskSegment.transparency = config.RDDataTransparency
 		
@@ -245,7 +245,7 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		disk.ringWidth = config.RDRingWidthAD
 		disk.height = config.RDHeight
 		disk.transparency = config.RDDataTransparency
-		if(config.RDOutputFormat == OutputFormat::AFrame) {
+		if(config.outputFormat == OutputFormat::AFrame) {
 			disk.color = config.RDDataColorHex
 		} else {
 			disk.color = 153/255.0 + " " + 0/255.0 + " " + 0/255.0
@@ -266,10 +266,10 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		diskSegment.fqn = enumValue.fqn
 		diskSegment.size = 1 // TODO size
 		diskSegment.height = config.RDHeight
-		if(config.RDOutputFormat == OutputFormat::AFrame) {
+		if(config.outputFormat == OutputFormat::AFrame) {
 			diskSegment.color = config.RDDataColorHex
 		} else {
-			diskSegment.color = config.RDDataColorPercentage
+			diskSegment.color = config.RDDataColorAsPercentage
 		}
 		diskSegment.transparency = config.RDDataTransparency
 	
@@ -286,7 +286,7 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		disk.ringWidth = config.RDRingWidthAD
 		disk.height = config.RDHeight
 		disk.transparency = config.RDDataTransparency
-		if(config.RDOutputFormat == OutputFormat::AFrame) {
+		if(config.outputFormat == OutputFormat::AFrame) {
 			disk.color = config.RDDataColorHex
 		} else {
 			disk.color = 153/255.0 + " " + 0/255.0 + " " + 0/255.0 

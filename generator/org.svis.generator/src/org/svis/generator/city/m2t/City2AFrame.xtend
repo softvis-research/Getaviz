@@ -17,7 +17,7 @@ import org.svis.generator.SettingsConfiguration
 class City2AFrame {
 
 	val log = LogFactory::getLog(getClass)
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 
 	def toAFrameBody(Resource resource) {
 		log.info("City2AFrame has started")
@@ -117,7 +117,7 @@ class City2AFrame {
 				<a-cylinder position="«separator.position.x + " " + separator.position.y + " " + separator.position.z»"
 					 radius="«separatorC.radius»" 
 					 height="«Panels::SEPARATOR_HEIGHT»" 
-					 color="«config.getCityColorAsHex("black")»"
+					 color="«config.getCityColorHex("black")»"
 					 shader="flat"
 					 fog="false"
 					 flat-shading="true"
@@ -130,7 +130,7 @@ class City2AFrame {
 						width="«separatorB.width»"
 						height="«Panels::SEPARATOR_HEIGHT»"
 						depth="«separatorB.length»"
-						color="«config.getCityColorAsHex("black")»"
+						color="«config.getCityColorHex("black")»"
 						shader="flat"
 						fog="false"
 						flat-shading="true">

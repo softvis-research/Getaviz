@@ -16,7 +16,7 @@ import java.nio.file.Paths
 import org.svis.generator.SettingsConfiguration
 
 class RDOutput implements IGenerator2 {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 	@Inject extension X3DUtils util
 	val log = LogFactory::getLog(class)
 	RD2X3D rd2x3d = new RD2X3D
@@ -35,7 +35,7 @@ class RDOutput implements IGenerator2 {
 	}
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
-		switch (config.RDOutputFormat) {
+		switch (config.outputFormat) {
 			case AFrame: {
 				fsa.generateFile("model.html", toAFrameHead + rd2aframe.body(resource) + toAFrameTail)
 			}

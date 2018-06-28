@@ -6,7 +6,7 @@ import org.svis.generator.rd.RDSettings.Variant
 import org.svis.generator.city.CitySettings.BuildingType
 
 class X3DUtils {
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 
 	def String toX3DHead() '''
 		<?xml version="1.0" encoding="UTF-8"?>

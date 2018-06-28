@@ -26,7 +26,7 @@ public class CityUtils {
 
 	/** Used to save some memory for empty string values, which often occurs. */
 	private static final String emptyString = "";
-	private static SettingsConfiguration config = new SettingsConfiguration();
+	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 
 	public static String getFamixClassString(final String className) {
 		String s = className.substring(0, 5) + "." + className.substring(5, className.length());
@@ -246,18 +246,18 @@ public class CityUtils {
 	 *            BuildingSegment which has to get a color.
 	 */
 	public static void setBuildingSegmentColor(final BuildingSegment bs) {
-		if (config.getCityOutputFormat() == OutputFormat.AFrame) {
+		if (config.getOutputFormat() == OutputFormat.AFrame) {
 			switch (config.getScheme()) {
 			case VISIBILITY:
 				if (bs.getModifiers().contains("public")) {
-					bs.setColor(config.getCityColorAsHex("dark_green"));
+					bs.setColor(config.getCityColorHex("dark_green"));
 				} else if (bs.getModifiers().contains("protected")) {
-					bs.setColor(config.getCityColorAsHex("yellow"));
+					bs.setColor(config.getCityColorHex("yellow"));
 				} else if (bs.getModifiers().contains("private")) {
-					bs.setColor(config.getCityColorAsHex("red"));
+					bs.setColor(config.getCityColorHex("red"));
 				} else {
 					// Package visibility or default
-					bs.setColor(config.getCityColorAsHex("blue"));
+					bs.setColor(config.getCityColorHex("blue"));
 				}
 				break;
 			case TYPES:
@@ -269,14 +269,14 @@ public class CityUtils {
 					setMethodColor(bs);
 					break;
 				default:
-					bs.setColor(config.getCityColorAsHex("blue"));
+					bs.setColor(config.getCityColorHex("blue"));
 					// System.out.println("setBuildingSegmentColor(BS) type not handled: \"" +
 					// bs.getType() + "\" colored with default color.");
 					break;
 				}
 				break;
 			default:
-				bs.setColor(config.getCityColorAsHex("blue"));
+				bs.setColor(config.getCityColorHex("blue"));
 			}
 		} else {
 			switch (config.getScheme()) {
@@ -314,11 +314,11 @@ public class CityUtils {
 	}
 
 	private static void setAttributeColor(final BuildingSegment bs) {
-		if (config.getCityOutputFormat() == OutputFormat.AFrame) {
+		if (config.getOutputFormat() == OutputFormat.AFrame) {
 			if (Boolean.parseBoolean(bs.getDeclaredType().getIsPrimitiveType())) {
-				bs.setColor(config.getCityColorAsHex("pink"));
+				bs.setColor(config.getCityColorHex("pink"));
 			} else { // complex type
-				bs.setColor(config.getCityColorAsHex("aqua"));
+				bs.setColor(config.getCityColorHex("aqua"));
 			}
 		} else {
 			if (Boolean.parseBoolean(bs.getDeclaredType().getIsPrimitiveType())) {
@@ -330,21 +330,21 @@ public class CityUtils {
 	}
 
 	private static void setMethodColor(final BuildingSegment bs) {
-		if (config.getCityOutputFormat() == OutputFormat.AFrame) {
+		if (config.getOutputFormat() == OutputFormat.AFrame) {
 			// if (bs.getMethodKind().equals("constructor")) {
 			if (bs.getValue().equals(bs.getParent().getValue())) {
-				bs.setColor(config.getCityColorAsHex("red"));
+				bs.setColor(config.getCityColorHex("red"));
 			} else if (bs.getSignature().startsWith("get")) {
-				bs.setColor(config.getCityColorAsHex("light_green"));
+				bs.setColor(config.getCityColorHex("light_green"));
 			} else if (bs.getSignature().startsWith("set")) {
-				bs.setColor(config.getCityColorAsHex("dark_green"));
+				bs.setColor(config.getCityColorHex("dark_green"));
 			} else if (bs.getModifiers().contains("static")) {
-				bs.setColor(config.getCityColorAsHex("yellow"));
+				bs.setColor(config.getCityColorHex("yellow"));
 			} else if (bs.getModifiers().contains("abstract")) {
-				bs.setColor(config.getCityColorAsHex("orange"));
+				bs.setColor(config.getCityColorHex("orange"));
 			} else {
 				// Default
-				bs.setColor(config.getCityColorAsHex("violet"));
+				bs.setColor(config.getCityColorHex("violet"));
 			}
 		} else {
 			// if (bs.getMethodKind().equals("constructor")) {

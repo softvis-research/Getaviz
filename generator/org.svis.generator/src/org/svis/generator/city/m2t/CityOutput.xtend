@@ -15,7 +15,7 @@ import org.svis.generator.SettingsConfiguration
 
 class CityOutput implements IGenerator2 {
 	val log = LogFactory::getLog(class)
-	val config = new SettingsConfiguration
+	val config = SettingsConfiguration.instance
 	City2JS city2js = new City2JS
 	City2X3DOM city2x3dom = new City2X3DOM
 	City2AFrame city2aframe = new City2AFrame
@@ -31,7 +31,7 @@ class CityOutput implements IGenerator2 {
 	}
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
-		switch (config.cityOutputFormat) {
+		switch (config.outputFormat) {
 			case AFrame: {
 				switch (config.buildingType) {
 					case BuildingType::CITY_ORIGINAL,
