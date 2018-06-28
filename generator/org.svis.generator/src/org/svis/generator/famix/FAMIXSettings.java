@@ -2,6 +2,8 @@ package org.svis.generator.famix;
 
 public enum FAMIXSettings{;
 	
+	public static boolean CONTAINS_PROJECTS = false;
+	
 	public static boolean MERGE_PACKAGES = false;
 	/**
 	 *  if set true there will be one root package which contains
