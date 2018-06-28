@@ -242,9 +242,9 @@ public class CityLayout {
 			}
 		}
 		entity.setWidth(covrec.getBottomRightX()
-				+ (config.getBrickHorizontalMargin() - config.getBuildingHorizontalGap() / 2) * 2);
+				+ (config.getBuildingHorizontalMargin() - config.getBuildingHorizontalGap() / 2) * 2);
 		entity.setLength(covrec.getBottomRightY()
-				+ (config.getBrickHorizontalMargin() - config.getBuildingHorizontalGap() / 2) * 2);
+				+ (config.getBuildingHorizontalMargin() - config.getBuildingHorizontalGap() / 2) * 2);
 		if (DEBUG) {
 			System.out.println("\t\t" + info + "Entity " + entity.getFqn() + " [checkVALUES]: width="
 					+ entity.getWidth() + " length=" + entity.getLength());

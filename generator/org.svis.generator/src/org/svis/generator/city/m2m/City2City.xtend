@@ -8,8 +8,6 @@ import org.eclipse.emf.mwe.core.issues.Issues
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor
 import org.eclipse.xtext.EcoreUtil2
-import org.svis.generator.city.CitySettings.Panels
-import org.svis.generator.city.CitySettings.Bricks
 import org.svis.generator.city.CityUtils
 import org.svis.xtext.city.Building
 import org.svis.xtext.city.BuildingSegment
@@ -21,6 +19,7 @@ import org.svis.generator.city.CitySettings.BuildingType
 import org.svis.generator.city.CitySettings.OutputFormat
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.city.CitySettings.Original.BuildingMetric
+import org.svis.generator.city.CitySettings.Panels.SeparatorModes
 
 class City2City extends WorkflowComponentWithModelSlot {
 
@@ -87,6 +86,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 		var resource = new ResourceImpl()
 		resource.contents += cityRoot
 		ctx.set("CITYv2", resource)
+		println(districts.filter[type == "FAMIX.Class"].size)
 		log.info("City2City has finished.")
 	}
 
@@ -132,7 +132,6 @@ class City2City extends WorkflowComponentWithModelSlot {
 			case CITY_BRICKS: setBuildingAttributesBricks(b)
 			case CITY_FLOOR: setBuildingAttributesFloors(b)
 		}
-
 	}
 
 	def private setBuildingAttributesOriginal(Building b) {
@@ -203,11 +202,11 @@ class City2City extends WorkflowComponentWithModelSlot {
 			areaUnit = b.dataCounter
 		}
 		if (areaUnit <= 1) {
-			b.width = config.widthMin + Panels::PANEL_HORIZONTAL_MARGIN * 2
-			b.length = config.widthMin + Panels::PANEL_HORIZONTAL_MARGIN * 2
+			b.width = config.widthMin + config.panelHorizontalMargin * 2
+			b.length = config.widthMin + config.panelHorizontalMargin * 2
 		} else {
-			b.width = config.widthMin * areaUnit + Panels::PANEL_HORIZONTAL_MARGIN * 2
-			b.length = config.widthMin * areaUnit + Panels::PANEL_HORIZONTAL_MARGIN * 2
+			b.width = config.widthMin * areaUnit + config.panelHorizontalMargin * 2
+			b.length = config.widthMin * areaUnit + config.panelHorizontalMargin * 2
 		}
 		if (config.outputFormat == OutputFormat::AFrame) {
 			b.color = config.classColorHex
@@ -250,10 +249,10 @@ class City2City extends WorkflowComponentWithModelSlot {
 				b.sideCapacity = 1;
 			}
 		}
-		b.width = Bricks::BRICK_SIZE * b.sideCapacity + Bricks::BRICK_HORIZONTAL_MARGIN * 2 +
-			Bricks::BRICK_HORIZONTAL_GAP * (b.sideCapacity - 1)
-		b.length = Bricks::BRICK_SIZE * b.sideCapacity + Bricks::BRICK_HORIZONTAL_MARGIN * 2 +
-			Bricks::BRICK_HORIZONTAL_GAP * (b.sideCapacity - 1)
+		b.width = config.brickSize * b.sideCapacity + config.brickHorizontalMargin * 2 +
+			config.brickHorizontalGap * (b.sideCapacity - 1)
+		b.length = config.brickSize * b.sideCapacity + config.brickHorizontalMargin * 2 +
+			config.brickHorizontalGap * (b.sideCapacity - 1)
 
 	}
 
@@ -310,19 +309,19 @@ class City2City extends WorkflowComponentWithModelSlot {
 		// }
 		// Setting up panel height
 		var index = 0
-		while (index < Panels::PANEL_HEIGHT_THRESHOLD_NOS.size &&
-			bs.numberOfStatements >= Panels::PANEL_HEIGHT_THRESHOLD_NOS.get(index)) {
+		while (index < config.panelHeightTresholdNos.size &&
+			bs.numberOfStatements >= config.panelHeightTresholdNos.get(index)) {
 			index = index + 1
 		}
-		bs.height = Panels::PANEL_HEIGHT_UNIT * (index + 1)
+		bs.height = config.panelHeightUnit * (index + 1)
 
 		CityUtils.setBuildingSegmentColor(bs);
 	}
 
 	def private setBuildingSegmentAttributesBricks(BuildingSegment bs) {
-		bs.width = Bricks::BRICK_SIZE
-		bs.height = Bricks::BRICK_SIZE
-		bs.length = Bricks::BRICK_SIZE
+		bs.width = config.brickSize
+		bs.height = config.brickSize
+		bs.length = config.brickSize
 
 		CityUtils.setBuildingSegmentColor(bs);
 	}
@@ -343,12 +342,11 @@ class City2City extends WorkflowComponentWithModelSlot {
 		CityUtils.sortBuildingSegments(classElements)
 
 		// upper bound of the panel below the actual panel inside the loop
-		var lowerBsPosY = b.position.y + b.height / 2 + Panels::PANEL_VERTICAL_MARGIN
+		var lowerBsPosY = b.position.y + b.height / 2 + config.panelVerticalMargin
 
 		// Correcting the initial gap on top of building depending on SeparatorMode
-		if (config.panelSeparatorMode == Panels::SeparatorModes::GAP ||
-			config.panelSeparatorMode == Panels::SeparatorModes::SEPARATOR)
-			lowerBsPosY = lowerBsPosY - Panels::PANEL_VERTICAL_GAP
+		if (config.panelSeparatorMode == SeparatorModes::GAP || config.panelSeparatorMode == SeparatorModes::SEPARATOR)
+			lowerBsPosY = lowerBsPosY - config.panelVerticalGap
 		// System.out.println("")
 		// Looping through methods of building
 		for (bs : classElements) {
@@ -363,7 +361,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 					lowerBsPosY = bsPos.y + bs.height / 2
 				}
 				case GAP: { // Leave a free space between segments
-					bsPos.y = lowerBsPosY + Panels::PANEL_VERTICAL_GAP + bs.height / 2
+					bsPos.y = lowerBsPosY + config.panelVerticalGap + bs.height / 2
 					bs.position = bsPos
 					lowerBsPosY = bsPos.y + bs.height / 2
 				}
@@ -375,7 +373,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 					if (classElements.last != bs) {
 						val sepPos = cityFactory.createPosition
 						sepPos.x = b.position.x
-						sepPos.y = bsPos.y + bs.height / 2 + Panels::SEPARATOR_HEIGHT / 2
+						sepPos.y = bsPos.y + bs.height / 2 + config.panelSeparatorHeight / 2
 						sepPos.z = b.position.z
 
 						// Deciding which shape the separator has to have
@@ -394,7 +392,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 							bs.separator += panelSeparator
 						}
 
-						lowerBsPosY = sepPos.y + Panels::SEPARATOR_HEIGHT / 2
+						lowerBsPosY = sepPos.y + config.panelSeparatorHeight / 2
 					}
 				}
 			}

@@ -33,7 +33,7 @@ public class SettingsConfiguration {
 		}
 		return instance;
 	}
-	
+
 	public static SettingsConfiguration getInstance(String path) {
 		if (instance == null) {
 			instance = new SettingsConfiguration();
@@ -41,7 +41,7 @@ public class SettingsConfiguration {
 		loadConfig(path);
 		return instance;
 	}
-	
+
 	private static void loadConfig(String path) {
 		File file = new File(path);
 		try {
@@ -51,11 +51,15 @@ public class SettingsConfiguration {
 			System.out.println(cex);
 		}
 	}
-	
+
+	public void loadDefault() {
+		loadConfig("../org.svis.generator.releng/settings.properties");
+	}
+
 	public String getRepositoryName() {
 		return config.getString("history.repository_name", "");
 	}
-	
+
 	public String getRepositoryOwner() {
 		return config.getString("history.repository_owner", "");
 	}
@@ -63,7 +67,7 @@ public class SettingsConfiguration {
 	public String getDatabaseName() {
 		return config.getString("database_name", "../databases/graph.db");
 	}
-	
+
 	public OutputFormat getOutputFormat() {
 		switch (config.getString("output_format", "xd3")) {
 		case "x3dom":
@@ -112,7 +116,7 @@ public class SettingsConfiguration {
 		case "floor":
 			return BuildingType.CITY_FLOOR;
 		case "dynamic":
-			return BuildingType.CITY_BRICKS;
+			return BuildingType.CITY_DYNAMIC;
 		default:
 			return BuildingType.CITY_ORIGINAL;
 		}
@@ -183,7 +187,7 @@ public class SettingsConfiguration {
 	}
 
 	public boolean isShowBuildingBase() {
-		return config.getBoolean("city.building_base", false);
+		return config.getBoolean("city.building_base", true);
 	}
 
 	public String getBrickLayoutAsString() {
@@ -194,7 +198,7 @@ public class SettingsConfiguration {
 		switch (getBrickLayoutAsString()) {
 		case "straight":
 			return Layout.STRAIGHT;
-		case "alphabetically":
+		case "balanced":
 			return Layout.BALANCED;
 		default:
 			return Layout.PROGRESSIVE;
@@ -304,7 +308,7 @@ public class SettingsConfiguration {
 	}
 
 	public double getBuildingVerticalMargin() {
-		return config.getDouble("city.building.vertical_margin", 3.0);
+		return config.getDouble("city.building.vertical_margin", 1.0);
 	}
 
 	public String getPackageColorHex() {
@@ -361,7 +365,36 @@ public class SettingsConfiguration {
 
 	public String getCityColorHex(String name) {
 		String color = name.toLowerCase();
-		return config.getString("city.color." + color);
+		String defaultColor = "";
+		switch (name) {
+		case "aqua":
+			defaultColor = "#99ccff";
+		case "blue":
+			defaultColor = "#99ffcc";
+		case "light_green":
+			defaultColor = "#ccff99";
+		case "dark_green":
+			defaultColor = "#99ff99";
+		case "yellow":
+			defaultColor = "#ffff99";
+		case "orange":
+			defaultColor = "#ffcc99";
+		case "red":
+			defaultColor = "#ff9999";
+		case "pink":
+			defaultColor = "#ff99ff";
+		case "violet":
+			defaultColor = "#9999ff";
+		case "light_grey":
+			defaultColor = "#cccccc";
+		case "dark_grey":
+			defaultColor = "#999999";
+		case "white":
+			defaultColor = "#ffffff";
+		case "black":
+			defaultColor = "#000000";
+		}
+		return config.getString("city.color." + color, defaultColor);
 	}
 
 	public String getCityColorAsPercentage(String name) {
@@ -538,7 +571,7 @@ public class SettingsConfiguration {
 			return EvolutionRepresentation.TIME_LINE;
 		}
 	}
-	
+
 	public String getVariantAsString() {
 		return config.getString("rd.variant", "static");
 	}
@@ -820,7 +853,7 @@ public class SettingsConfiguration {
 
 	private String getColorFormatted(Color color) {
 		float[] rgb = color.getColorComponents(null);
-		return rgb[0] + " " + rgb[1] + " " + rgb[2] ;
+		return rgb[0] + " " + rgb[1] + " " + rgb[2];
 	}
 
 	private String getPlantColorFormatted(String formattedColor) {
