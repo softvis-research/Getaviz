@@ -24,6 +24,7 @@ import org.svis.generator.rd.RDSettings.MetricRepresentation
 import org.svis.generator.WorkflowComponentWithConfig
 import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import org.svis.generator.FamixUtils
+import org.svis.generator.famix.FAMIXSettings
 
 class RD2RD extends WorkflowComponentWithConfig {
 	// TODO solve it with injection
@@ -138,8 +139,10 @@ class RD2RD extends WorkflowComponentWithConfig {
 			namespace.color = RDSettings::NAMESPACE_COLOR_HEX
 		} else {
 			namespace.color = NS_colors.get(namespace.level - 1).asPercentage
-			if (namespace.level == 1) {
-				namespace.color = RDSettings::CLASS_COLOR
+			if(FAMIXSettings::CONTAINS_PROJECTS) {
+				if (namespace.level == 1) {
+					namespace.color = RDSettings::PROJECT_COLOR
+				}
 			}
 		}
 	}

@@ -37,6 +37,7 @@ public enum RDSettings {;
 	public static final String NAMESPACE_COLOR = 150/255.0 + " " + 150/255.0 + " " + 150/255.0;
 	public static final String NAMESPACE_COLOR_HEX = "#969696";
 	public static final String METHOD_INVOCATION_COLOR = 120/255.0 + " " + 10/255.0 + " " + 50/255.0;
+	public static final String PROJECT_COLOR = 53/255.0 + " " + 53/255.0 + " " + 89/255.0;
 	public static final int HEIGHT_BOOST = 8;
 	public static final float HEIGHT_MULTIPLICATOR = 50.0f;
 	/**
