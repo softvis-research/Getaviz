@@ -79,7 +79,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		log.info("Hismo2RD has started")
 		var hismoRoot = ctx.get("hismo") as List<HismoRoot>
 		hismoDocument = hismoRoot.head.hismoDocument
-		
+		setID
 		hismoClassVersions += hismoDocument.elements.filter(HISMOClassVersion)
 		hismoPackageVersions += hismoDocument.elements.filter(HISMONamespaceVersion)
 		val Set<String> timestamps = newHashSet
@@ -128,6 +128,18 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		ctx.set("rd", diskList)
 			
 		log.info("Hismo2RD has finished.")
+	}
+	
+	def private setID() {
+		 hismoDocument.elements.filter(HISMONamespaceVersion).forEach[version|
+		 	version.id = famix.createID(hismoUtil.qualifiedName(version.parentHistory.ref as HISMONamespaceHistory) + version.name.toString)
+		 ]
+		 hismoDocument.elements.filter(HISMOMethodVersion).forEach[version|
+		 	version.id = famix.createID(hismoUtil.qualifiedName(version.parentHistory.ref as HISMOMethodHistory) + version.name.toString)
+		 ]
+		 hismoDocument.elements.filter(HISMOClassVersion).forEach[version|
+		 	version.id = famix.createID(hismoUtil.qualifiedName(version.parentHistory.ref as HISMOClassHistory) + version.name.toString)
+		 ]
 	}
 	
 	def private createRoot() {
@@ -264,7 +276,8 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.fqn = classVersion.name
 		disk.type = "FAMIX.Class"
 		disk.level = level
-		disk.id = famix.createID(disk.fqn)
+		//disk.id = famix.createID(disk.fqn)
+		disk.id = classVersion.id
 		
 		val history = classVersion.parentHistory.ref as HISMOClassHistory
 		

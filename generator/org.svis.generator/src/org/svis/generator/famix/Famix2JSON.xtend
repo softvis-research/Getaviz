@@ -169,7 +169,6 @@ class Famix2JSON implements IGenerator2 {
 		"type":          "FAMIX.Enum",
 		"modifiers":     "«e.modifiers.removeBrackets»",
 		"belongsTo":     "«e.container.ref.id»"
-«««		"antipattern":	 "«toString(e.antipattern)»"
 	'''
 	
 	def dispatch private toMetaData(FAMIXEnumValue ev)'''
@@ -189,7 +188,6 @@ class Famix2JSON implements IGenerator2 {
 		"subClassOf":    "",
 		"superClassOf":  "",
 		"belongsTo":     "«el.container.ref.id»"
-«««		"antipattern":	 "«toString(el.antipattern)»"
 	'''
 	
 	def dispatch private toMetaData(FAMIXFileAnchor el) '''

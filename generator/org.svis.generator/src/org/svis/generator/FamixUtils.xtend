@@ -143,4 +143,11 @@ class FamixUtils {
 			default: log.warn("Forgot" + el.class + " in FamixUtils.getFqn")
 		}
 	}
+	
+	def checkNull(String string) {
+		if(string === null) {
+			return ""
+		}
+		return string
+	}
 }

@@ -49,6 +49,7 @@ import org.svis.generator.rd.RDSettings.ShowVersions
 import java.time.format.DateTimeFormatter
 import java.util.Collections
 import java.time.LocalDate
+import org.svis.generator.famix.FAMIXSettings
 
 class Hismo2JSON implements IGenerator2 {
 
@@ -59,13 +60,13 @@ class Hismo2JSON implements IGenerator2 {
 	val List<FAMIXAccess> accesses = newArrayList
 	val List<FAMIXInvocation> invocations = newArrayList
 	val List<FAMIXInheritance> inheritances = newArrayList
-	val List<FAMIXPath> paths = newArrayList	
-	
+	val List<FAMIXPath> paths = newArrayList
+
 	override doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
 		val elements = EcoreUtil2::getAllContentsOfType(resource.contents.head, FAMIXElement)
 		elements.removeUnnecessaryFamixElements
-		if(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::MULTIPLE_TIME_LINE
-			|| RDSettings::EVOLUTION_REPRESENTATION ==EvolutionRepresentation::MULTIPLE_DYNAMIC_EVOLUTION) {
+		if (RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::MULTIPLE_TIME_LINE ||
+			RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::MULTIPLE_DYNAMIC_EVOLUTION) {
 			elements.filter(FAMIXNamespace).forEach[famix.qualifiedName = it]
 			elements.filter(FAMIXClass).forEach[famix.qualifiedName = it]
 			elements.filter(FAMIXMethod).forEach[famix.qualifiedName = it]
@@ -74,25 +75,24 @@ class Hismo2JSON implements IGenerator2 {
 		paths += elements.filter(FAMIXPath)
 		val roles = elements.filter(FAMIXRole)
 		elements.removeAll(roles)
-		//elements.removeAll(paths)
-		
-		if(RDSettings::SHOW_VERSIONS == ShowVersions::LATEST) {
+		// elements.removeAll(paths)
+		if (RDSettings::SHOW_VERSIONS == ShowVersions::LATEST) {
 			val latestClassVersions = newArrayList
 			val List<HISMONamespaceVersion> latestNamespaceVersions = newArrayList
 			val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			var classVersions = elements.filter(HISMOClassVersion)
 			var namespaceVersions = elements.filter(HISMONamespaceVersion)
-			elements.filter(HISMOClassHistory).forEach[history|
+			elements.filter(HISMOClassHistory).forEach [ history |
 				var versions = history.classVersions.map[ref as HISMOClassVersion].clone
-				 Collections::sort(versions, [s1, s2|
-				 	LocalDate::parse(s1.timestamp, formatter).compareTo(LocalDate::parse(s2.timestamp, formatter))
+				Collections::sort(versions, [ s1, s2 |
+					LocalDate::parse(s1.timestamp, formatter).compareTo(LocalDate::parse(s2.timestamp, formatter))
 				])
 				latestClassVersions += versions.last
 			]
-			elements.filter(HISMONamespaceHistory).forEach[history|
+			elements.filter(HISMONamespaceHistory).forEach [ history |
 				val versions = history.namespaceVersions.map[ref as HISMONamespaceVersion].clone
-				 Collections::sort(versions, [s1, s2| 
-				 	LocalDate::parse(s1.timestamp, formatter).compareTo(LocalDate::parse(s2.timestamp, formatter))
+				Collections::sort(versions, [ s1, s2 |
+					LocalDate::parse(s1.timestamp, formatter).compareTo(LocalDate::parse(s2.timestamp, formatter))
 				])
 				latestNamespaceVersions += versions.last
 			]
@@ -101,7 +101,7 @@ class Hismo2JSON implements IGenerator2 {
 			elements.addAll(latestClassVersions)
 			elements.addAll(latestNamespaceVersions)
 		}
-		if(RDSettings::SHOW_HISTORIES == false) {
+		if (RDSettings::SHOW_HISTORIES == false) {
 			elements.removeIf[it instanceof HISMONamespaceHistory]
 			elements.removeIf[it instanceof HISMOClassHistory]
 			elements.removeIf[it instanceof HISMOMethodHistory]
@@ -109,35 +109,36 @@ class Hismo2JSON implements IGenerator2 {
 		}
 		fsa.generateFile("metaData.json", elements.toJSON)
 	}
-	
+
 	override beforeGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
 		log.info("Hismo2JSON has started.")
 	}
+
 	override afterGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
 		log.info("Hismo2JSON has finished.")
 	}
-	
-	def private removeUnnecessaryFamixElements(List<FAMIXElement> elements){
+
+	def private removeUnnecessaryFamixElements(List<FAMIXElement> elements) {
 		elements.removeAll(elements.filter(FAMIXNamespace))
 		elements.removeAll(elements.filter(FAMIXClass))
 		elements.removeAll(elements.filter(FAMIXMethod))
 		elements.removeAll(elements.filter(FAMIXAttribute))
 		elements.removeAll(elements.filter(FAMIXFileAnchor))
 	}
-	
-	def String toJSON(Iterable<FAMIXElement> list)'''
+
+	def String toJSON(Iterable<FAMIXElement> list) '''
 		«FOR el : list BEFORE "[{" SEPARATOR "\n},{" AFTER "}]"»
 			«toMetaData(el)»
 		«ENDFOR»
 	'''
-	
-	def dispatch private toMetaData(HISMOIssue issue)'''
+
+	def dispatch private toMetaData(HISMOIssue issue) '''
 		"id":				"«issue.value»",
 		"type":				"issue",
 		"open":				"«issue.open»",
 		"security":			"«issue.security»"
 	'''
-	
+
 	def dispatch private toMetaData(FAMIXPath path) '''
 		"id":				"«path.id»",
 		"name":				"«path.id»",
@@ -145,18 +146,10 @@ class Hismo2JSON implements IGenerator2 {
 		"type":				"path",
 		"start":			"«path.start.ref.id»",
 		"end":				"«path.end.ref.id»",
-		«IF (path.role !== null)»
-		"role":				"«path.role»",
-		«ELSE»
-		"role":				"",
-		«ENDIF»
-		«IF (path.antipattern !== null)»
-		"belongsTo":		"«path.antipattern.ref.id»"
-		«ELSE»
-		"belongsTo":		""
-		«ENDIF»
+		"role":				"«path.role.checkNull»",
+		"belongsTo":		"«path.antipattern.ref.id.checkNull»"
 	'''
-	
+
 	def dispatch private toMetaData(FAMIXAntipattern antipattern) '''
 		"id":				"«antipattern.id»",
 		"qualifiedName": 	"«antipattern.fqn»",
@@ -167,7 +160,7 @@ class Hismo2JSON implements IGenerator2 {
 		"version":			"«antipattern.version»",
 		"versions":			"«antipattern.versions.removeBrackets»"
 	'''
-	
+
 	def dispatch private toMetaData(FAMIXComponent component) '''
 		"id":				"«component.id»",
 		"qualifiedName": 	"«component.fqn»",
@@ -179,26 +172,27 @@ class Hismo2JSON implements IGenerator2 {
 		"version":			"«component.version»",
 		"versions":			"«component.versions.removeBrackets»"
 	'''
-	
-	def dispatch private toMetaData(HISMONamespaceHistory nh)'''
+
+	def dispatch private toMetaData(HISMONamespaceHistory nh) '''
 		"id":			 "«famix.createID(nh.qualifiedName)»",
 		"qualifiedName": "«nh.qualifiedName»",
 		«IF (!nh.namespaceVersions.isEmpty)»
-		"name":			 "«(nh.namespaceVersions.get(0).ref as HISMONamespaceVersion).value»",
+			"name":			 "«(nh.namespaceVersions.get(0).ref as HISMONamespaceVersion).value»",
 		«ELSE»
-		"name":			 "",
+			"name":			 "",
 		«ENDIF»
 		"type":			 "FAMIX.Namespace",
 		"belongsTo":     ""
-
+		
 	'''
-	def dispatch private toMetaData(HISMOClassHistory ch)'''
+
+	def dispatch private toMetaData(HISMOClassHistory ch) '''
 		"id":			 "«famix.createID(ch.qualifiedName)»",
 		"qualifiedName": "«ch.qualifiedName»",
 		«IF (!ch.classVersions.isEmpty)»
-		"name":			 "«(ch.classVersions.get(0).ref as HISMOClassVersion).value»",
+			"name":			 "«(ch.classVersions.get(0).ref as HISMOClassVersion).value»",
 		«ELSE»
-		"name:			 "",
+			"name:			 "",
 		«ENDIF»
 		"type":			 "FAMIX.Class",
 		"modifiers":     "",
@@ -210,15 +204,16 @@ class Hismo2JSON implements IGenerator2 {
 		"roles":	 	 "",
 		"issues":		 ""
 	'''
-	def dispatch private toMetaData(HISMOMethodHistory mh)'''
+
+	def dispatch private toMetaData(HISMOMethodHistory mh) '''
 		"id":			 "«famix.createID(mh.qualifiedName)»",
 		"qualifiedName": "«mh.qualifiedName»",
 		«IF (mh.methodVersions !== null)»
-		"name":			 "«(mh.methodVersions.get(0).ref as HISMOMethodVersion).value»",
+			"name":			 "«(mh.methodVersions.get(0).ref as HISMOMethodVersion).value»",
 		«ELSE»
-		"name":			 "",
+			"name":			 "",
 		«ENDIF»
-		"type":			 "FAMIX.Method2",
+		"type":			 "FAMIX.Method",
 		"modifiers":     "",
 		"signature":  	 "",
 		"calls":		 "",
@@ -226,13 +221,14 @@ class Hismo2JSON implements IGenerator2 {
 		"accesses":	 	 "",
 		"belongsTo":     ""
 	'''
-	def dispatch private toMetaData(HISMOAttributeHistory ah)'''
+
+	def dispatch private toMetaData(HISMOAttributeHistory ah) '''
 		"id":			 "«famix.createID(ah.qualifiedName)»",
 		"qualifiedName": "«ah.qualifiedName»",
 		«IF (ah.attributeVersions !== null)»
-		"name":			 "«(ah.attributeVersions.get(0).ref as HISMOAttributeVersion).value»",
+			"name":			 "«(ah.attributeVersions.get(0).ref as HISMOAttributeVersion).value»",
 		«ELSE»
-		"name":			 "",
+			"name":			 "",
 		«ENDIF»
 		"type":			 "FAMIX.Attribute",
 		"modifiers":     "",
@@ -240,24 +236,25 @@ class Hismo2JSON implements IGenerator2 {
 		"accessedBy":	 "",
 		"belongsTo":     ""
 	'''
-	def dispatch private toMetaData(HISMONamespaceVersion nv)'''
+
+	def dispatch private toMetaData(HISMONamespaceVersion nv) '''
 		"id":			 "«nv.id»",
 		"qualifiedName": "«nv.value»",
 		"name":			 "«nv.value»",
-		«IF (nv.container !== null)»
-		"type":			 "FAMIX.Namespace",
+		«IF (FAMIXSettings::CONTAINS_PROJECTS)»
+			"type":			 "FAMIX.Project",
 		«ELSE»
-		"type":			 "FAMIX.Project",
+			"type":			 "FAMIX.Namespace",
 		«ENDIF»
 		"version":		 "«nv.commitId»",
-		«IF(nv.container !== null)»
-		"belongsTo":     "«nv.container.ref.id»"
+		«IF (nv.container !== null)»
+			"belongsTo":     "«nv.container.ref.id»"
 		«ELSE»
-		"belongsTo":	 "root"
+			"belongsTo":	 "root"
 		«ENDIF»
 	'''
-	
-	def dispatch private toMetaData(HISMOClassVersion cv)'''
+
+	def dispatch private toMetaData(HISMOClassVersion cv) '''
 		«val history = cv.parentHistory.ref as HISMOClassHistory»
 		"id":			 "«cv.id»",
 		"qualifiedName": "«cv.value»",
@@ -266,16 +263,16 @@ class Hismo2JSON implements IGenerator2 {
 		"modifiers":     "",
 		"subClassOf":    "",
 		"superClassOf":  "",
-		«IF(cv.container !== null)»
-		"belongsTo":     "«cv.container.ref.id»",
+		«IF (cv.container !== null)»
+			"belongsTo":     "«cv.container.ref.id»",
 		«ELSE»
-		"belongsTo":	 "",
+			"belongsTo":	 "",
 		«ENDIF»
 		"version":		 "«cv.commitId»",
 		«IF cv.antipattern !== null»
-		"antipattern":	 "«FOR pattern : cv.antipattern SEPARATOR ","»«(pattern.ref as FAMIXAntipattern).id»«ENDFOR»",
+			"antipattern":	 "«FOR pattern : cv.antipattern SEPARATOR ","»«(pattern.ref as FAMIXAntipattern).id»«ENDFOR»",
 		«ELSE»
-		"antipattern":	 "",
+			"antipattern":	 "",
 		«ENDIF»
 		"reaches":		 "«getPaths(cv)»",
 		"roles":	 	 "«toString2(cv.antipattern, cv)»",
@@ -295,8 +292,8 @@ class Hismo2JSON implements IGenerator2 {
 		"numberOfOpenSecurityIssues": 	«history.numberOfOpenSecurityIncidents»,
 		"issues": "«(cv.parentHistory.ref as HISMOClassHistory).issues.removeBrackets»"
 	'''
-	
-	def dispatch private toMetaData(HISMOMethodVersion mv)'''
+
+	def dispatch private toMetaData(HISMOMethodVersion mv) '''
 		"id":			 "«mv.id»",
 		"qualifiedName": "«escapeHtml4(qualifiedName(mv.parentHistory.ref as HISMOMethodHistory))»",
 		"name":			 "«mv.value»",
@@ -309,8 +306,8 @@ class Hismo2JSON implements IGenerator2 {
 		"version":		 "«mv.commitId»",
 		"belongsTo":     ""
 	'''
-	
-	def dispatch private toMetaData(HISMOAttributeVersion av)'''
+
+	def dispatch private toMetaData(HISMOAttributeVersion av) '''
 		"id":			 "«av.id»",
 		"qualifiedName": "«qualifiedName(av.parentHistory.ref as HISMOAttributeHistory)»",
 		"name":			 "«av.value»",
@@ -320,20 +317,20 @@ class Hismo2JSON implements IGenerator2 {
 		"accessedBy":	 "",
 		"belongsTo":     ""
 	'''
-	
- 	def dispatch private toMetaData(FAMIXNamespace p)'''
+
+	def dispatch private toMetaData(FAMIXNamespace p) '''
 		"id":            "«p.id»",
 		"qualifiedName": "«p.fqn»",
 		"name":          "«p.value»",
 		"type":          "FAMIX.Namespace",
 		«IF p.parentScope !== null»
-		"belongsTo":     "«p.parentScope.ref.id»"
+			"belongsTo":     "«p.parentScope.ref.id»"
 		«ELSE»
-		"belongsTo":     "root"
+			"belongsTo":     "root"
 		«ENDIF»
 	'''
-	
-	def dispatch private toMetaData(FAMIXClass c)'''
+
+	def dispatch private toMetaData(FAMIXClass c) '''
 		"id":            "«c.id»",
 		"qualifiedName": "«c.fqn»",
 		"name":          "«c.value»",
@@ -346,21 +343,21 @@ class Hismo2JSON implements IGenerator2 {
 		"roles":	 	 "«toString2(c.antipattern, c)»",
 		"issues":		 ""
 	'''
-	
-	def dispatch private toMetaData(FAMIXAttribute a)'''
+
+	def dispatch private toMetaData(FAMIXAttribute a) '''
 		"id":            "«a.id»",
 		"qualifiedName": "«a.fqn»",
 		"name":          "«a.value»",
 		"type":          "FAMIX.Attribute",
 		"modifiers":     "«a.modifiers.removeBrackets»",
 		«IF a.declaredType !== null»
-		"declaredType":  "«a.declaredType.ref.type»",
+			"declaredType":  "«a.declaredType.ref.type»",
 		«ENDIF»		
 		"accessedBy":	 "«a.accessedBy»",
 		"belongsTo":     "«a.parentType.ref.id»"
 	'''
-	
-	def dispatch private toMetaData(FAMIXMethod m)'''
+
+	def dispatch private toMetaData(FAMIXMethod m) '''
 		"id":            "«m.id»",
 		"qualifiedName": "«escapeHtml4(m.fqn)»",
 		"name":          "«m.value»",
@@ -372,126 +369,132 @@ class Hismo2JSON implements IGenerator2 {
 		"accesses":	 	 "«m.accesses»",
 		"belongsTo":     "«m.parentType.ref.id»"
 	'''
-	
+
 	def private getPaths(HISMOClassVersion version) {
 		val targets = newArrayList
-		paths.filter[start.ref == version].forEach[p| 
+		paths.filter[start.ref == version].forEach [ p |
 			targets += p.end
 		]
 		return toString(targets)
 	}
-	
+
 	def dispatch private toMetaData(FAMIXFileAnchor el) '''
 	'''
-	
+
 	def private getSuperClasses(FAMIXElement element) {
 		val tmp = newArrayList
-		inheritances.filter[subclass.ref === element].forEach[ tmp += superclass.ref.id ]
+		inheritances.filter[subclass.ref === element].forEach[tmp += superclass.ref.id]
 		return tmp.removeBrackets
 	}
-	
+
 	def private getSubClasses(FAMIXElement element) {
 		val tmp = newArrayList
-		inheritances.filter[superclass.ref === element].forEach[ tmp += subclass.ref.id ]
+		inheritances.filter[superclass.ref === element].forEach[tmp += subclass.ref.id]
 		return tmp.removeBrackets
 	}
-	
+
 	def private getCalls(FAMIXMethod method) {
 		val tmp = newArrayList
-		invocations.filter[sender.ref === method].forEach[ tmp += candidates.ref.id ]
+		invocations.filter[sender.ref === method].forEach[tmp += candidates.ref.id]
 		return tmp.removeBrackets
 	}
-	
+
 	def private getCalledBy(FAMIXMethod method) {
 		val tmp = newArrayList
-		invocations.filter[candidates.ref === method].forEach[ tmp += sender.ref.id ]
+		invocations.filter[candidates.ref === method].forEach[tmp += sender.ref.id]
 		return tmp.removeBrackets
 	}
-	
+
 	def private getAccessedBy(FAMIXAttribute attribute) {
 		val tmp = newArrayList
-		accesses.filter[variable.ref === attribute].forEach[ tmp += accessor.ref.id ]
+		accesses.filter[variable.ref === attribute].forEach[tmp += accessor.ref.id]
 		return tmp.removeBrackets
 	}
-	
+
 	def private getAccesses(FAMIXMethod method) {
 		val tmp = newArrayList
-		accesses.filter[accessor.ref === method].forEach[ tmp += variable.ref.id ]
+		accesses.filter[accessor.ref === method].forEach[tmp += variable.ref.id]
 		return tmp.removeBrackets
 	}
-	
+
 	def private getType(FAMIXElement element) {
-		switch(element) {
-			FAMIXPrimitiveType: 		return element.value
-			FAMIXClass:					return element.value
-			FAMIXParameterizableClass: 	return element.value
-			FAMIXType: 					return element.value
-			FAMIXEnum: 					return element.value
-			FAMIXParameterType: 		return element.value
+		switch (element) {
+			FAMIXPrimitiveType:
+				return element.value
+			FAMIXClass:
+				return element.value
+			FAMIXParameterizableClass:
+				return element.value
+			FAMIXType:
+				return element.value
+			FAMIXEnum:
+				return element.value
+			FAMIXParameterType:
+				return element.value
 			FAMIXParameterizedType:
-				if(element.arguments === null){
+				if (element.arguments === null) {
 					return element.value
 				} else {
 					return element.value + "<" + element.arguments.types + ">"
 				}
 		}
 	}
-	
+
 	def private getTypes(List<IntegerReference> irefs) {
 		var types = ""
 		for (iref : irefs) {
 			val ref = iref.ref
-			switch(ref) {
-				FAMIXPrimitiveType: 		types += " " + ref.value
-				FAMIXClass: 				types += " " + ref.value
-				FAMIXParameterizableClass: 	types += " " + ref.value
-				FAMIXParameterizedType: 	types += " " + ref.value
-				FAMIXAnnotationType:		types += " " + ref.value
-				FAMIXEnum: 					types += " " + ref.value
-				FAMIXType: 					types += " " + ref.value
-				FAMIXParameterType: 		types += " " + ref.value
+			switch (ref) {
+				FAMIXPrimitiveType: types += " " + ref.value
+				FAMIXClass: types += " " + ref.value
+				FAMIXParameterizableClass: types += " " + ref.value
+				FAMIXParameterizedType: types += " " + ref.value
+				FAMIXAnnotationType: types += " " + ref.value
+				FAMIXEnum: types += " " + ref.value
+				FAMIXType: types += " " + ref.value
+				FAMIXParameterType: types += " " + ref.value
 				default: log.warn("Unknown type: " + ref)
 			}
 		}
 		return types.trim
 	}
-	
-	def private toString (List<IntegerReference> list) { 
-    	val tmp = newArrayList 
-    	list.forEach[el| 
-      		tmp += el.ref.id 
-    	]     
-    	return tmp.removeBrackets
+
+	def private toString(List<IntegerReference> list) {
+		val tmp = newArrayList
+		list.forEach [ el |
+			tmp += el.ref.id
+		]
+		return tmp.removeBrackets
 	}
 
-	def private toString2 (List<IntegerReference> list, FAMIXStructure s) { 
-    	val tmp = newArrayList 
-    		list.forEach[el|
-    			val antipattern = el.ref as FAMIXAntipattern
-    			val roles = antipattern.roles as List<IntegerReference>
-    			roles.forEach[ r |
-    				val role = r.ref as FAMIXRole
-    				if(role.element.ref == s) {
-    					tmp += role.role
-   					}
-    			]
-    			 
- 	 		]     
-    	return tmp.removeBrackets
-   	}
-	
-	def private toString2 (List<IntegerReference> list, HISMOClassVersion s) {
-    	val tmp = newArrayList 
-    		list.forEach[el|
-    			val antipattern = el.ref as FAMIXAntipattern
-    			val roles = antipattern.roles as List<IntegerReference>
-    			roles.forEach[ r |
-    				val role = r.ref as FAMIXRole
-    				if(role.element.ref == s) {
-    					tmp += role.role
-   					}
-    			]
- 	 		]     
-    	return tmp.removeBrackets
-   	}
+	def private toString2(List<IntegerReference> list, FAMIXStructure s) {
+		val tmp = newArrayList
+		list.forEach [ el |
+			val antipattern = el.ref as FAMIXAntipattern
+			val roles = antipattern.roles as List<IntegerReference>
+			roles.forEach [ r |
+				val role = r.ref as FAMIXRole
+				if (role.element.ref == s) {
+					tmp += role.role
+				}
+			]
+
+		]
+		return tmp.removeBrackets
+	}
+
+	def private toString2(List<IntegerReference> list, HISMOClassVersion s) {
+		val tmp = newArrayList
+		list.forEach [ el |
+			val antipattern = el.ref as FAMIXAntipattern
+			val roles = antipattern.roles as List<IntegerReference>
+			roles.forEach [ r |
+				val role = r.ref as FAMIXRole
+				if (role.element.ref == s) {
+					tmp += role.role
+				}
+			]
+		]
+		return tmp.removeBrackets
+	}
 }
