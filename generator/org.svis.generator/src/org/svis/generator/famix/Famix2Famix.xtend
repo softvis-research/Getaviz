@@ -208,7 +208,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			deletePrivates	
 		}
 		val allPackages = famixDocument.elements.filter(FAMIXNamespace).toSet
-		allStructures += famixDocument.elements.filter(FAMIXStructure)
+		allStructures += famixDocument.elements.filter(FAMIXStructure).filter[container !== null]
 		val nameComparator = new BeanComparator("name")
 		val accesses = famixDocument.elements.filter(FAMIXAccess)
 							.filter[methods.contains(accessor.ref)]
