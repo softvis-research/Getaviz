@@ -18,6 +18,7 @@ import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
 import org.svis.generator.city.CitySettings
 import org.svis.generator.city.CitySettings.BuildingType
+import org.svis.generator.SettingsConfiguration
 
 class CityOriginal_AndroidPhoneTest {
 	
@@ -30,7 +31,8 @@ class CityOriginal_AndroidPhoneTest {
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
-		CitySettings::BUILDING_TYPE = BuildingType.CITY_ORIGINAL
+		//CitySettings::BUILDING_TYPE = BuildingType.CITY_ORIGINAL
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/android_phone/input/CityOriginalAndroidPhoneTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/city/Famix2City.mwe2", "-p", "inputPath=testdata/android_phone/input/famix", "outputPath=./output/city/famix/original/android_phone"])
 		json = JSONUtil::read("./output/city/famix/original/android_phone/metaData.json")
 	}

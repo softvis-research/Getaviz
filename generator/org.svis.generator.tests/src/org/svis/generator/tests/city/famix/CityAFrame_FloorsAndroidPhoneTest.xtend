@@ -18,7 +18,8 @@ import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
 import org.svis.generator.city.CitySettings
 import org.svis.generator.city.CitySettings.BuildingType
-import org.svis.generator.city.CitySettings.OutputFormat
+//import org.svis.generator.city.CitySettings.OutputFormat
+import org.svis.generator.SettingsConfiguration
 
 class CityAFrame_FloorsAndroidPhoneTest {
 	
@@ -31,11 +32,16 @@ class CityAFrame_FloorsAndroidPhoneTest {
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
+		/*
 		CitySettings::OUTPUT_FORMAT = OutputFormat::AFrame
 		CitySettings::BUILDING_TYPE = BuildingType.CITY_FLOOR
+		*/
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/android_phone/input/CityAFrameFloorsAndroidPhoneTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/city/Famix2City.mwe2", "-p", "inputPath=testdata/android_phone/input/famix", "outputPath=./output/city/famix/aframe/floors/android_phone"])
+		/*
 		CitySettings::BUILDING_TYPE = BuildingType.CITY_ORIGINAL
 		CitySettings::OUTPUT_FORMAT = OutputFormat::X3D
+		*/
 		json = JSONUtil::read("./output/city/famix/aframe/floors/android_phone/metaData.json")
 	}
 
