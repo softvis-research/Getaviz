@@ -4,7 +4,6 @@ import java.util.List
 import org.apache.commons.logging.LogFactory
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.EcoreUtil2
-import org.svis.generator.city.CitySettings.Panels
 import org.svis.generator.city.m2m.CityLayout
 import org.svis.generator.city.m2m.Rectangle
 import org.svis.xtext.city.Building
@@ -144,10 +143,10 @@ class City2X3D {
 				<Shape>
 				«IF separator instanceof PanelSeparatorCylinder»
 					«val separatorC = separator»
-					<Cylinder radius='«separatorC.radius»' height='«Panels::SEPARATOR_HEIGHT»'></Cylinder>
+					<Cylinder radius='«separatorC.radius»' height='«config.panelSeparatorHeight»'></Cylinder>
 				«ELSE»
 					«val separatorB = separator as PanelSeparatorBox»
-					<Box size='«separatorB.width +" "+ Panels::SEPARATOR_HEIGHT + " "+ separatorB.length»'></Box>
+					<Box size='«separatorB.width +" "+ config.panelSeparatorHeight + " "+ separatorB.length»'></Box>
 				«ENDIF»
 					<Appearance>
 						<Material diffuseColor='«config.getCityColorAsPercentage("black")»'></Material>

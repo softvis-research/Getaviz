@@ -167,6 +167,7 @@ class Famix2RD extends WorkflowComponentWithModelSlot {
 			diskSegment.color = config.RDMethodColorHex
 		} else {
 			diskSegment.color = config.RDMethodColorAsPercentage
+			println("Nicht AFrame: " + config.RDMethodColorAsPercentage)
 		}
 		diskSegment.transparency = config.RDMethodTransparency
 		

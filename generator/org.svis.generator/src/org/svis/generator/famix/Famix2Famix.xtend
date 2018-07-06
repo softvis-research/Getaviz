@@ -71,7 +71,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Famix2Famix has started.")
 
-		if (FAMIXSettings.FAMIX_PARSER === FamixParser::JQA_BYTECODE) {
+		if (config.parser === FamixParser::JQA_BYTECODE) {
 			val famixRoot = famixFactory.createRoot
 			val famixDocument = famixFactory.createDocument
 			famixRoot.document = famixDocument
@@ -328,7 +328,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 			deletePrivateAttributes(accesses)
 		}
 		val BeanComparator<FAMIXElement> comparator = new BeanComparator("fqn")
-		if (config.parser === "jdt2famix") {
+		if (config.parser === FamixParser.JDT2FAMIX) {
 			methods.forEach [
 				val sourceAnchor = it.sourceAnchor.ref as FAMIXFileAnchor
 				val numberOfLines = sourceAnchor.endline - sourceAnchor.startline + 1
@@ -363,7 +363,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 			rootPackages.clear
 			rootPackages += Master
 		}
-		if (config.masterRoot) {
+		if (config.mergePackages) {
 			rootPackages.forEach[findPackagesToMerge]
 			packagesToMerge.forEach[removePackages]
 			packagesToMerge.forEach[mergePackages]

@@ -16,7 +16,7 @@ class X3DUtils {
 		        <meta content='model.x3d' name='title'/>
 		        <meta content='SVIS-Generator' name='creator'/>
 			</head>
-			   <ContextSetup zWriteTrans='false'/>
+		    <ContextSetup zWriteTrans='false'/>
 		<Scene>
 	'''
 
@@ -86,7 +86,7 @@ class X3DUtils {
 
 	def toAFrameTail() '''
 			</a-scene>
-		 </body>
+		  </body>
 		</html>
 	'''
 

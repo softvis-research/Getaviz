@@ -13,13 +13,13 @@ public enum CitySettings {;
 	 * either be panels, bricks or originals
 	 *
 	 */
-	public static OutputFormat OUTPUT_FORMAT =  OutputFormat.X3D;
+//	public static OutputFormat OUTPUT_FORMAT =  OutputFormat.X3D;
 	
-	public static enum OutputFormat {
-		X3D, X3DOM, AFrame
-	}
+//	public static enum OutputFormat {
+//		X3D, X3DOM, AFrame
+//	}
 	
-	public static BuildingType BUILDING_TYPE = BuildingType.CITY_ORIGINAL;
+//	public static BuildingType BUILDING_TYPE = BuildingType.CITY_ORIGINAL;
 
 	public static enum BuildingType{
 		CITY_ORIGINAL, CITY_PANELS, CITY_BRICKS, CITY_FLOOR , CITY_DYNAMIC; 
@@ -32,7 +32,7 @@ public enum CitySettings {;
 	 * 
 	 * @see Schemes
 	 */
-	public static Schemes SCHEME = Schemes.TYPES;
+//	public static Schemes SCHEME = Schemes.TYPES;
 
 	/**
 	 * Switch to control the elements of the classes to show. Methods and/or
@@ -40,7 +40,7 @@ public enum CitySettings {;
 	 * 
 	 * @see ClassElementsModes
 	 */
-	public static ClassElementsModes CLASS_ELEMENTS_MODE = ClassElementsModes.METHODS_AND_ATTRIBUTES;
+//	public static ClassElementsModes CLASS_ELEMENTS_MODE = ClassElementsModes.METHODS_AND_ATTRIBUTES;
 
 	/**
 	 * Sets the arrangement of the elements of the classes.<br>
@@ -53,7 +53,7 @@ public enum CitySettings {;
 	 * @see ClassElementsModes
 	 * @see BuildingSegmentComparator
 	 */
-	public static ClassElementsSortModesCoarse CLASS_ELEMENTS_SORT_MODE_COARSE = ClassElementsSortModesCoarse.METHODS_FIRST;
+//	public static ClassElementsSortModesCoarse CLASS_ELEMENTS_SORT_MODE_COARSE = ClassElementsSortModesCoarse.METHODS_FIRST;
 
 	/**
 	 * The active mode, how to sort the methods or attributes separately among
@@ -71,7 +71,7 @@ public enum CitySettings {;
 	 * @see Attributes.SortPriorities_Types
 	 * @see BuildingSegmentComparator
 	 */
-	public static ClassElementsSortModesFine CLASS_ELEMENTS_SORT_MODE_FINE = ClassElementsSortModesFine.SCHEME;
+//	public static ClassElementsSortModesFine CLASS_ELEMENTS_SORT_MODE_FINE = ClassElementsSortModesFine.SCHEME;
 
 	/**
 	 * If {@code TRUE}, the order of the sorting, defined in
@@ -80,13 +80,13 @@ public enum CitySettings {;
 	 * secondary sorting is performed to place methods with high numbers of
 	 * statements to the bottom. This behavior isn't influenced by this switch.
 	 */
-	public static boolean CLASS_ELEMENTS_SORT_MODE_FINE_DIRECTION_REVERSED = false;
+//	public static boolean CLASS_ELEMENTS_SORT_MODE_FINE_DIRECTION_REVERSED = false;
 
 	/**
 	 * Switch to show or hide building base in panels or bricks mode.<br>
 	 * If set to {@code FALSE}, only districts and buildingSegments are visible.
 	 */
-	public static boolean SHOW_BUILDING_BASE = true;
+//	public static boolean SHOW_BUILDING_BASE = true;
 
 	/**
 	 * The active mode for the layout of the bricks/methods.<br>
@@ -94,13 +94,13 @@ public enum CitySettings {;
 	 * 
 	 * @see Bricks.Layout Layout
 	 */
-	public static Bricks.Layout BRICK_LAYOUT = Bricks.Layout.PROGRESSIVE;
+//	public static Bricks.Layout BRICK_LAYOUT = Bricks.Layout.PROGRESSIVE;
 
 	/**
 	 * Switch for showing attributes as cylinders instead of boxes.<br>
 	 * This setting has only an affect in panels-mode.
 	 */
-	public static boolean SHOW_ATTRIBUTES_AS_CYLINDERS = true;
+//	public static boolean SHOW_ATTRIBUTES_AS_CYLINDERS = true;
 
 	/**
 	 * The active mode for the area between panels/methods.
@@ -108,7 +108,7 @@ public enum CitySettings {;
 	 * @see Panels.SeparatorModes SeparatorModes
 	 * @see Panels#SEPARATOR_HEIGHT SEPARATOR_HEIGHT
 	 */
-	public static Panels.SeparatorModes PANEL_SEPARATOR_MODE = Panels.SeparatorModes.SEPARATOR;
+//	public static Panels.SeparatorModes PANEL_SEPARATOR_MODE = Panels.SeparatorModes.SEPARATOR;
 
 	// /Compile settings
 
@@ -321,11 +321,11 @@ public enum CitySettings {;
 		}
 
 		// Measurements Bricks
-		public static double BRICK_SIZE = 1;
-		public static double BRICK_HORIZONTAL_MARGIN = 0.5;	//horizontal distance to parent
-		public static double BRICK_HORIZONTAL_GAP = 0.2;		//horizontal distance to neighbor
-		public static double BRICK_VERTICAL_MARGIN = 0.2;		//vertical distance to parent
-		public static double BRICK_VERTICAL_GAP = 0.2;		//vertical distance to neighbor
+//		public static double BRICK_SIZE = 1;
+//		public static double BRICK_HORIZONTAL_MARGIN = 0.5;	//horizontal distance to parent
+//		public static double BRICK_HORIZONTAL_GAP = 0.2;		//horizontal distance to neighbor
+//		public static double BRICK_VERTICAL_MARGIN = 0.2;		//vertical distance to parent
+//		public static double BRICK_VERTICAL_GAP = 0.2;		//vertical distance to neighbor
 
 	}
 
@@ -384,19 +384,19 @@ public enum CitySettings {;
 		 */
 //		public static int[] PANEL_HEIGHT_THRESHOLD_NOS = { 5, 20, 50, 200 };
 //		public static int[] PANEL_HEIGHT_THRESHOLD_NOS = { 3, 7, 17, 40, 100, 230 };
-		public static int[] PANEL_HEIGHT_THRESHOLD_NOS = { 3, 6, 12, 24, 48, 96, 144, 192, 240 };
+//		public static int[] PANEL_HEIGHT_THRESHOLD_NOS = { 3, 6, 12, 24, 48, 96, 144, 192, 240 };
 
 		// Measurements Panels
 		/** height is multiplied by {@link Panels#PANEL_HEIGHT_THRESHOLD_NOS PANEL_HEIGHT_THRESHOLD_NOS}*/ 
-		public static double PANEL_HEIGHT_UNIT = 0.5;
-		public static double PANEL_HORIZONTAL_MARGIN = 0.5;	//horizontal distance to parent
-		public static double PANEL_VERTICAL_MARGIN = 0.25;	//vertical distance to parent
-		public static double PANEL_VERTICAL_GAP = 0.125;		//vertical distance to neighbor
-
-		public static double SEPARATOR_HEIGHT = 0.125;
+//		public static double PANEL_HEIGHT_UNIT = 0.5;
+//		public static double PANEL_HORIZONTAL_MARGIN = 0.5;	//horizontal distance to parent
+//		public static double PANEL_VERTICAL_MARGIN = 0.25;	//vertical distance to parent
+//		public static double PANEL_VERTICAL_GAP = 0.125;		//vertical distance to neighbor
+//
+//		public static double SEPARATOR_HEIGHT = 0.125;
 	}
 	
-	public static Original.BuildingMetric ORIGINAL_BuildingMetric = Original.BuildingMetric.NONE;
+//	public static Original.BuildingMetric ORIGINAL_BuildingMetric = Original.BuildingMetric.NONE;
 
 	public static enum Original {
 		;
@@ -407,52 +407,52 @@ public enum CitySettings {;
 	}
 
 	// Measurements
-	public static double WIDTH_MIN = 1;
-	public static double HEIGHT_MIN = 1;
-
-	public static double BLDG_horizontalMargin = 3;		//horizontal distance to parent
-	public static double BLDG_horizontalGap = 3;			//horizontal distance to neighbor
-	public static double BLDG_verticalMargin = 1;
-
-	// Colors
-	public static RGBColor PCKG_colorStart = new RGBColor(150, 150, 150);
-	public static RGBColor PCKG_colorEnd = new RGBColor(240, 240, 240); //from CodeCity
-	public static String   PCKG_COLOR_HEX = "#969696";
-	public static RGBColor CLSS_colorStart = new RGBColor(19, 22, 21);
-	public static RGBColor CLSS_colorEnd = new RGBColor(0, 255, 0); //from CodeCity
-	public static RGBColor CLSS_color = new RGBColor(53, 53, 89);
-	public static String   CLSS_COLOR_HEX =  "#353559";
-
-	public static RGBColor COLOR_BLUE = new RGBColor(153, 255, 204);
-	public static String   COLOR_BLUE_HEX = "#99FFCC";
-	public static RGBColor COLOR_AQUA = new RGBColor(153, 204, 255);
-	public static String   COLOR_AQUA_HEX = "#99CCFF";
-	public static RGBColor COLOR_LIGHT_GREEN = new RGBColor(204, 255, 153);
-	public static String   COLOR_LIGHT_GREEN_HEX = "#CCFF99";
-	public static RGBColor COLOR_DARK_GREEN = new RGBColor(153, 255, 153);
-	public static String   COLOR_DARK_GREEN_HEX = "#99FF99";
-	public static RGBColor COLOR_YELLOW = new RGBColor(255, 255, 153);
-	public static String   COLOR_YELLOW_HEX = "#FFFF99";
-	public static RGBColor COLOR_ORANGE = new RGBColor(255, 204, 153);
-	public static String   COLOR_ORANGE_HEX = "#FFCC99";
-	public static RGBColor COLOR_RED = new RGBColor(255, 153, 153);
-	public static String   COLOR_RED_HEX = "#FF9999";
-	public static RGBColor COLOR_PINK = new RGBColor(255, 153, 255);
-	public static String   COLOR_PINK_HEX = "#FF99FF";
-	public static RGBColor COLOR_VIOLET = new RGBColor(153, 153, 255);
-	public static String   COLOR_VIOLET_HEX = "#9999FF";
-	public static RGBColor COLOR_LIGHT_GREY = new RGBColor(204, 204, 204);
-	public static RGBColor COLOR_DARK_GREY = new RGBColor(153, 153, 153);
-	public static RGBColor COLOR_WHITE = new RGBColor(255, 255, 255);
-	public static RGBColor COLOR_BLACK = new RGBColor(0, 0, 0);
-	public static String   COLOR_BLACK_HEX = "#000000";
-	
-	
-	//Dynamic City Colors
-	
-	public static RGBColor DYNAMIC_CLSS_colorStart = new RGBColor(250,150,92);
-	public static RGBColor DYNAMIC_CLSS_colorEnd   = new RGBColor(254,178,128);
-	public static RGBColor DYNAMIC_METHOD = new RGBColor(115,94,185);
-	public static RGBColor DYNAMIC_PCKG_colorStart = new RGBColor(35,134,44);
-	public static RGBColor DYNAMIC_PCKG_colorEnd = new RGBColor(123,205,141);
+//	public static double WIDTH_MIN = 1;
+//	public static double HEIGHT_MIN = 1;
+//
+//	public static double BLDG_horizontalMargin = 3;		//horizontal distance to parent
+//	public static double BLDG_horizontalGap = 3;			//horizontal distance to neighbor
+//	public static double BLDG_verticalMargin = 1;
+//
+//	// Colors
+//	public static RGBColor PCKG_colorStart = new RGBColor(150, 150, 150);
+//	public static RGBColor PCKG_colorEnd = new RGBColor(240, 240, 240); //from CodeCity
+//	public static String   PCKG_COLOR_HEX = "#969696";
+//	public static RGBColor CLSS_colorStart = new RGBColor(19, 22, 21);
+//	public static RGBColor CLSS_colorEnd = new RGBColor(0, 255, 0); //from CodeCity
+//	public static RGBColor CLSS_color = new RGBColor(53, 53, 89);
+//	public static String   CLSS_COLOR_HEX =  "#353559";
+//
+//	public static RGBColor COLOR_BLUE = new RGBColor(153, 255, 204);
+//	public static String   COLOR_BLUE_HEX = "#99FFCC";
+//	public static RGBColor COLOR_AQUA = new RGBColor(153, 204, 255);
+//	public static String   COLOR_AQUA_HEX = "#99CCFF";
+//	public static RGBColor COLOR_LIGHT_GREEN = new RGBColor(204, 255, 153);
+//	public static String   COLOR_LIGHT_GREEN_HEX = "#CCFF99";
+//	public static RGBColor COLOR_DARK_GREEN = new RGBColor(153, 255, 153);
+//	public static String   COLOR_DARK_GREEN_HEX = "#99FF99";
+//	public static RGBColor COLOR_YELLOW = new RGBColor(255, 255, 153);
+//	public static String   COLOR_YELLOW_HEX = "#FFFF99";
+//	public static RGBColor COLOR_ORANGE = new RGBColor(255, 204, 153);
+//	public static String   COLOR_ORANGE_HEX = "#FFCC99";
+//	public static RGBColor COLOR_RED = new RGBColor(255, 153, 153);
+//	public static String   COLOR_RED_HEX = "#FF9999";
+//	public static RGBColor COLOR_PINK = new RGBColor(255, 153, 255);
+//	public static String   COLOR_PINK_HEX = "#FF99FF";
+//	public static RGBColor COLOR_VIOLET = new RGBColor(153, 153, 255);
+//	public static String   COLOR_VIOLET_HEX = "#9999FF";
+//	public static RGBColor COLOR_LIGHT_GREY = new RGBColor(204, 204, 204);
+//	public static RGBColor COLOR_DARK_GREY = new RGBColor(153, 153, 153);
+//	public static RGBColor COLOR_WHITE = new RGBColor(255, 255, 255);
+//	public static RGBColor COLOR_BLACK = new RGBColor(0, 0, 0);
+//	public static String   COLOR_BLACK_HEX = "#000000";
+//	
+//	
+//	//Dynamic City Colors
+//	
+//	public static RGBColor DYNAMIC_CLSS_colorStart = new RGBColor(250,150,92);
+//	public static RGBColor DYNAMIC_CLSS_colorEnd   = new RGBColor(254,178,128);
+//	public static RGBColor DYNAMIC_METHOD = new RGBColor(115,94,185);
+//	public static RGBColor DYNAMIC_PCKG_colorStart = new RGBColor(35,134,44);
+//	public static RGBColor DYNAMIC_PCKG_colorEnd = new RGBColor(123,205,141);
 }

@@ -87,30 +87,30 @@ class City2AFrame {
 	'''
 
 	def String toBuildingSegment(BuildingSegment bs) '''
-		«IF config.buildingType == BuildingType.CITY_PANELS
+			«IF config.buildingType == BuildingType.CITY_PANELS
 					&& bs.type == "FAMIX.Attribute"
 					&& config.showAttributesAsCylinders»
-			<a-cylinder position="«bs.position.x + " " + bs.position.y + " " + bs.position.z»"
-				 radius="«bs.width/2»"
-				 height="«bs.height»" 
-				 color="«bs.color»"
-				 shader="flat"
-				 fog="false"
-				 flat-shading="true"
-				 segments-height="2"
-				 segments-radial="20">
-			</a-cylinder>
-		«ELSE»
-			<a-box position="«bs.position.x + " " + bs.position.y + " " + bs.position.z»"
-					width="«bs.width»"
-					height="«bs.height»"
-					depth="«bs.length»"
-					color="«bs.color»"
-					shader="flat"
-					fog="false"
-					flat-shading="true">
-			</a-box>
-		«ENDIF»
+				<a-cylinder position="«bs.position.x + " " + bs.position.y + " " + bs.position.z»"
+					 radius="«bs.width/2»"
+					 height="«bs.height»" 
+					 color="«bs.color»"
+					 shader="flat"
+					 fog="false"
+					 flat-shading="true"
+					 segments-height="2"
+					 segments-radial="20">
+				</a-cylinder>
+			«ELSE»
+				<a-box position="«bs.position.x + " " + bs.position.y + " " + bs.position.z»"
+						width="«bs.width»"
+						height="«bs.height»"
+						depth="«bs.length»"
+						color="«bs.color»"
+						shader="flat"
+						fog="false"
+						flat-shading="true">
+				</a-box>
+			«ENDIF»
 		«FOR separator : bs.separator»
 			«IF separator instanceof PanelSeparatorCylinder»
 				«val separatorC = separator»
@@ -140,26 +140,26 @@ class City2AFrame {
 	'''
 
 	def toFloor(BuildingSegment floor) '''
-		<a-box position="«floor.position.x + " " + floor.position.y + " " + floor.position.z»"
-			width="«floor.width»"
-			height="«floor.height»"
-			depth="«floor.length»"
-			color="«floor.color»"
-			shader="flat"
-			fog="false"
-			flat-shading="true">
-		</a-box>
+			<a-box position="«floor.position.x + " " + floor.position.y + " " + floor.position.z»"
+				width="«floor.width»"
+				height="«floor.height»"
+				depth="«floor.length»"
+				color="«floor.color»"
+				shader="flat"
+				fog="false"
+				flat-shading="true">
+			</a-box>
 	'''
 
 	def toChimney(BuildingSegment chimney) '''
-		<a-box position="«chimney.position.x + " " + chimney.position.y + " " + chimney.position.z»"
-			width="«chimney.width»"
-			height="«chimney.height»"
-			depth="«chimney.length»"
-			color="«chimney.color»"
-			shader="flat"
-			fog="false"
-			flat-shading="true">
-		</a-box>
+			<a-box position="«chimney.position.x + " " + chimney.position.y + " " + chimney.position.z»"
+				width="«chimney.width»"
+				height="«chimney.height»"
+				depth="«chimney.length»"
+				color="«chimney.color»"
+				shader="flat"
+				fog="false"
+				flat-shading="true">
+			</a-box>
 	'''
 }

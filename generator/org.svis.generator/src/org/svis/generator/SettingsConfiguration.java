@@ -14,6 +14,7 @@ import org.svis.generator.city.CitySettings.ClassElementsSortModesFine;
 import org.svis.generator.city.CitySettings.Original.BuildingMetric;
 import org.svis.generator.city.CitySettings.Panels.SeparatorModes;
 import org.svis.generator.city.CitySettings.Schemes;
+import org.svis.generator.famix.FAMIXSettings.FamixParser;
 import org.svis.generator.rd.RDSettings.EvolutionRepresentation;
 import org.svis.generator.rd.RDSettings.InvocationRepresentation;
 import org.svis.generator.rd.RDSettings.MetricRepresentation;
@@ -69,10 +70,10 @@ public class SettingsConfiguration {
 	}
 
 	public OutputFormat getOutputFormat() {
-		switch (config.getString("output_format", "xd3")) {
+		switch (config.getString("output_format", "x3d")) {
 		case "x3dom":
 			return OutputFormat.X3DOM;
-		case "aFrame":
+		case "aframe":
 			return OutputFormat.AFrame;
 		case "simple_glyphs_json":
 			return OutputFormat.SimpleGlyphsJson;
@@ -87,8 +88,19 @@ public class SettingsConfiguration {
 		return config.getBoolean("structure.hide_private_elements", false);
 	}
 
-	public String parser() {
+	public String getParserAsString() {
 		return config.getString("structure.parser", "verveinej");
+	}
+	
+	public FamixParser getParser() {
+		switch (getParserAsString()) {
+		case "jdt2famix":
+			return FamixParser.JDT2FAMIX;
+		case "jqa_bytecode":
+			return FamixParser.JQA_BYTECODE;
+		default:
+			return FamixParser.VERVEINEJ;
+		}
 	}
 
 	public boolean isAttributeSortSize() {
@@ -178,7 +190,7 @@ public class SettingsConfiguration {
 		case "nos":
 			return ClassElementsSortModesFine.NOS;
 		default:
-			return ClassElementsSortModesFine.UNSORTED;
+			return ClassElementsSortModesFine.SCHEME;
 		}
 	}
 
@@ -253,6 +265,7 @@ public class SettingsConfiguration {
 			int[] value = new int[result.length];
 			for (int i = 0; i < result.length; i++) {
 				value[i] = Integer.parseInt(result[i]);
+				System.out.print(value[i] +  " ");
 			}
 			return value;
 		}
@@ -368,31 +381,31 @@ public class SettingsConfiguration {
 		String defaultColor = "";
 		switch (name) {
 		case "aqua":
-			defaultColor = "#99ccff";
+			defaultColor = "#99CCFF"; break;
 		case "blue":
-			defaultColor = "#99ffcc";
+			defaultColor = "#99FFCC"; break;
 		case "light_green":
-			defaultColor = "#ccff99";
+			defaultColor = "#CCFF99"; break;
 		case "dark_green":
-			defaultColor = "#99ff99";
+			defaultColor = "#99FF99"; break;
 		case "yellow":
-			defaultColor = "#ffff99";
+			defaultColor = "#FFFF99"; break;
 		case "orange":
-			defaultColor = "#ffcc99";
+			defaultColor = "#FFCC99"; break;
 		case "red":
-			defaultColor = "#ff9999";
+			defaultColor = "#FF9999"; break;
 		case "pink":
-			defaultColor = "#ff99ff";
+			defaultColor = "#FF99FF"; break;
 		case "violet":
-			defaultColor = "#9999ff";
+			defaultColor = "#9999FF"; break;
 		case "light_grey":
-			defaultColor = "#cccccc";
+			defaultColor = "#CCCCCC"; break;
 		case "dark_grey":
-			defaultColor = "#999999";
+			defaultColor = "#999999"; break;
 		case "white":
-			defaultColor = "#ffffff";
+			defaultColor = "#FFFFFF"; break;
 		case "black":
-			defaultColor = "#000000";
+			defaultColor = "#000000"; break;
 		}
 		return config.getString("city.color." + color, defaultColor);
 	}
@@ -417,8 +430,8 @@ public class SettingsConfiguration {
 		return config.getInt("rd.height_boost", 8);
 	}
 
-	public double getRDHeightMultiplicator() {
-		return config.getDouble("rd.height_multiplicator", 50.0);
+	public float getRDHeightMultiplicator() {
+		return (float)config.getDouble("rd.height_multiplicator", 50.0);
 	}
 
 	public double getRDRingWidth() {
@@ -852,8 +865,11 @@ public class SettingsConfiguration {
 	}
 
 	private String getColorFormatted(Color color) {
-		float[] rgb = color.getColorComponents(null);
-		return rgb[0] + " " + rgb[1] + " " + rgb[2];
+		//double[] rgb = color.getColorComponents(null);
+		double r = color.getRed() / 255.0;
+		double g = color.getGreen() / 255.0;
+		double b = color.getBlue() / 255.0;
+		return r + " " + g + " " + b;
 	}
 
 	private String getPlantColorFormatted(String formattedColor) {

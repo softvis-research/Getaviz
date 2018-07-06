@@ -16,10 +16,10 @@ import org.svis.xtext.city.Root
 import org.svis.xtext.city.impl.CityFactoryImpl
 import org.svis.generator.city.CitySettings.ClassElementsModes
 import org.svis.generator.city.CitySettings.BuildingType
-import org.svis.generator.city.CitySettings.OutputFormat
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.city.CitySettings.Original.BuildingMetric
 import org.svis.generator.city.CitySettings.Panels.SeparatorModes
+import org.svis.generator.SettingsConfiguration.OutputFormat
 
 class City2City extends WorkflowComponentWithModelSlot {
 
@@ -86,7 +86,6 @@ class City2City extends WorkflowComponentWithModelSlot {
 		var resource = new ResourceImpl()
 		resource.contents += cityRoot
 		ctx.set("CITYv2", resource)
-		println(districts.filter[type == "FAMIX.Class"].size)
 		log.info("City2City has finished.")
 	}
 
