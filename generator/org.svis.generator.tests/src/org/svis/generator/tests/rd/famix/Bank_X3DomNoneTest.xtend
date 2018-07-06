@@ -10,7 +10,8 @@ import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
 import org.svis.generator.rd.RDSettings
 import org.junit.AfterClass
-import org.svis.generator.rd.RDSettings.OutputFormat
+//import org.svis.generator.rd.RDSettings.OutputFormat
+import org.svis.generator.SettingsConfiguration
 
 class Bank_X3DomNoneTest {
 	
@@ -18,7 +19,8 @@ class Bank_X3DomNoneTest {
 
 	@BeforeClass
 	def static void launch() {
-		RDSettings::OUTPUT_FORMAT = OutputFormat::X3DOM
+		//RDSettings::OUTPUT_FORMAT = OutputFormat::X3DOM
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankX3DOMNoneTest.properties")
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p","inputPath=testdata/bank/input/famix", "outputPath=" + path])
@@ -40,6 +42,6 @@ class Bank_X3DomNoneTest {
 
 	@AfterClass
 	def static void end() {
-		RDSettings::OUTPUT_FORMAT = OutputFormat::X3D
+//		RDSettings::OUTPUT_FORMAT = OutputFormat::X3D
 	}
 }

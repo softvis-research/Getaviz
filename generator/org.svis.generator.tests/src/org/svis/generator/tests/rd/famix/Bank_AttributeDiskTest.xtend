@@ -18,6 +18,7 @@ import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
 import org.svis.generator.rd.RDSettings
 import org.junit.AfterClass
+import org.svis.generator.SettingsConfiguration
 
 class Bank_AttributeDiskTest {
 	
@@ -28,7 +29,8 @@ class Bank_AttributeDiskTest {
 	
 	@BeforeClass
 	def static void launch() {
-		RDSettings::DATA_DISKS = true
+		//RDSettings::DATA_DISKS = true
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankAttributeDiskTest.properties")
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p", "inputPath=testdata/bank/input/famix", "outputPath=" + path])

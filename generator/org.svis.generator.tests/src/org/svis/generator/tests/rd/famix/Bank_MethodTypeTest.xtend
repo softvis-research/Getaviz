@@ -19,6 +19,7 @@ import org.svis.generator.tests.helper.JSONUtil
 import org.svis.generator.rd.RDSettings
 import org.junit.AfterClass
 import org.svis.generator.famix.FAMIXSettings
+import org.svis.generator.SettingsConfiguration
 
 class Bank_MethodTypeTest {
 	
@@ -30,8 +31,9 @@ class Bank_MethodTypeTest {
 	
 	@BeforeClass
 	def static void launch() {
-		RDSettings::METHOD_TYPE_MODE = true
-		FAMIXSettings::HIDE_PRIVATE_ELEMENTS = true
+		//RDSettings::METHOD_TYPE_MODE = true
+		//FAMIXSettings::HIDE_PRIVATE_ELEMENTS = true
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankMethodTypeTest.properties")
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p", "inputPath=testdata/bank/input/famix", "outputPath=" + path])

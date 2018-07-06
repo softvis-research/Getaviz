@@ -13,19 +13,19 @@ import org.svis.generator.rd.RDSettings.InvocationRepresentation
 import org.svis.generator.rd.RDSettings.Variant
 import org.svis.generator.SettingsConfiguration
 
-class Prawn_X3DomMovingFlashingTest {
+class Prawn_X3DomMovingSpheresTest {
 	
-			//TODO reimplement tests for new dynamix metamodel
+				//TODO reimplement tests for new dynamix metamodel
 	@BeforeClass
 	def static void launch() {
 		/*
 		RDSettings::OUTPUT_FORMAT = OutputFormat::X3DOM
-		RDSettings::INVOCATION_REPRESENTATION = InvocationRepresentation::MOVING_FLASHING  
+		RDSettings::INVOCATION_REPRESENTATION = InvocationRepresentation::MOVING_SPHERES 
 		RDSettings::VARIANT = Variant::DYNAMIC
 		*/
-		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/prawn/input/PrawnMovingFlashingTest.properties")
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/prawn/input/PrawnMovingSpheresTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Dynamix2RD.mwe2", "-p", "famixPath=testdata/prawn/input/famixDyn",
-			"dynamixPath=testdata/prawn/input/dynamix","outputPath=output/rd/dynamix/prawn/prawn_x3dom_moving_flashing"])
+			"dynamixPath=testdata/prawn/input/dynamix","outputPath=output/rd/dynamix/prawn/prawn_x3dom_moving_spheres"])
 		/*
 		RDSettings::OUTPUT_FORMAT = OutputFormat::X3D 
 		RDSettings::VARIANT = Variant::STATIC
@@ -38,8 +38,8 @@ class Prawn_X3DomMovingFlashingTest {
     	var File file1 = null
         var File file2 = null
         try {
-            file1 = new File("./output/rd/dynamix/prawn/prawn_x3dom_moving_flashing/x3dom-model.html")
-			file2 = new File("./testdata/prawn/output/rd/dynamix/prawn_x3dom_moving_flashing/x3dom-model.html")
+            file1 = new File("./output/rd/dynamix/prawn/prawn_x3dom_moving_spheres/x3dom-model.html")
+			file2 = new File("./testdata/prawn/output/rd/dynamix/prawn_x3dom_moving_spheres/x3dom-model.html")
         } catch (FileNotFoundException e) {
             e.printStackTrace
         }
@@ -52,8 +52,8 @@ class Prawn_X3DomMovingFlashingTest {
         var File file1 = null
         var File file2 = null
         try {
-            file1 = new File("./output/rd/dynamix/prawn/prawn_x3dom_moving_flashing/metaData.json")
-			file2 = new File("./testdata/prawn/output/rd/dynamix/prawn_x3dom_moving_flashing/metaData.json")
+            file1 = new File("./output/rd/dynamix/prawn/prawn_x3dom_moving_spheres/metaData.json")
+			file2 = new File("./testdata/prawn/output/rd/dynamix/prawn_x3dom_moving_spheres/metaData.json")
         } catch (FileNotFoundException e) {
             e.printStackTrace
         }
@@ -65,8 +65,8 @@ class Prawn_X3DomMovingFlashingTest {
 		var File file1 = null
 		var File file2 = null
 		try {
-			file1 = new File("./output/rd/dynamix/prawn/prawn_x3dom_moving_flashing/events.js")
-			file2 = new File("./testdata/prawn/output/rd/dynamix/prawn_x3dom_moving_flashing/events.js")
+			file1 = new File("./output/rd/dynamix/prawn/prawn_x3dom_moving_spheres/events.js")
+			file2 = new File("./testdata/prawn/output/rd/dynamix/prawn_x3dom_moving_spheres/events.js")
 		} catch (FileNotFoundException e) {
 			e.printStackTrace
 		}

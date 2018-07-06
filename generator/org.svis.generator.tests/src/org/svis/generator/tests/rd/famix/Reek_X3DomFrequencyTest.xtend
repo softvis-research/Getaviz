@@ -10,9 +10,10 @@ import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
 import org.svis.generator.rd.RDSettings
 import org.junit.AfterClass
-import org.svis.generator.rd.RDSettings.OutputFormat
+//import org.svis.generator.rd.RDSettings.OutputFormat
 import org.svis.generator.rd.RDSettings.MetricRepresentation
 import org.svis.generator.rd.RDSettings.Variant
+import org.svis.generator.SettingsConfiguration
 
 class Reek_X3DomFrequencyTest {
 	
@@ -20,9 +21,12 @@ class Reek_X3DomFrequencyTest {
 	
 	@BeforeClass
 	def static void launch() {
+		/*
 		RDSettings::OUTPUT_FORMAT = OutputFormat::X3DOM
 		RDSettings::VARIANT = Variant::DYNAMIC
 		RDSettings::METRIC_REPRESENTATION = MetricRepresentation::FREQUENCY
+		*/
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/reek/input/ReekX3DomFrequencyTest.properties")
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p", "inputPath=testdata/reek/input/famix", "outputPath=" + path])
@@ -58,8 +62,8 @@ class Reek_X3DomFrequencyTest {
 	
 	@AfterClass
     def static void end() {
-    	RDSettings::OUTPUT_FORMAT = OutputFormat::X3D
-    	RDSettings::METRIC_REPRESENTATION = MetricRepresentation::NONE
-    	RDSettings::VARIANT = Variant::STATIC
+//    	RDSettings::OUTPUT_FORMAT = OutputFormat::X3D
+//    	RDSettings::METRIC_REPRESENTATION = MetricRepresentation::NONE
+//    	RDSettings::VARIANT = Variant::STATIC
     }
 }

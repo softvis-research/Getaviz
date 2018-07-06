@@ -18,6 +18,7 @@ import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
 import org.svis.generator.rd.RDSettings
 import org.svis.generator.rd.RDSettings.OutputFormat
+import org.svis.generator.SettingsConfiguration
 
 class AndroidPhone_CompressedTest {
 	
@@ -31,9 +32,10 @@ class AndroidPhone_CompressedTest {
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
     	XMLUnit::ignoreComments = true
-    	RDSettings::OUTPUT_FORMAT = OutputFormat::X3D_COMPRESSED
+    	//RDSettings::OUTPUT_FORMAT = OutputFormat::X3D_COMPRESSED
+    	SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/android_phone/input/AndroidPhoneCompressedTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p", "inputPath=testdata/android_phone/input/famix", "outputPath=" + path])
-		RDSettings::OUTPUT_FORMAT = OutputFormat::X3D
+		//RDSettings::OUTPUT_FORMAT = OutputFormat::X3D
 		json = JSONUtil::read("./testdata/android_phone/output/rd/famix/compressed/metaData.json")
 	}
 	

@@ -18,6 +18,7 @@ import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
 import org.svis.generator.famix.FAMIXSettings
 import org.junit.AfterClass
+import org.svis.generator.SettingsConfiguration
 
 class Bank_JdtParserTest {
 	
@@ -28,7 +29,8 @@ class Bank_JdtParserTest {
 	
 	@BeforeClass
 	def static void launch() {
-		FAMIXSettings::FAMIX_PARSER = FAMIXSettings::FamixParser.JDT2FAMIX
+		//FAMIXSettings::FAMIX_PARSER = FAMIXSettings::FamixParser.JDT2FAMIX
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankJdtParserTest.properties")
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p", "inputPath=testdata/bank/input/famix_jdtParser", "outputPath=" + path])
