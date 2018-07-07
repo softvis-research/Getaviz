@@ -16,7 +16,7 @@ var canvasHoverController = (function() {
 		hoverColor: "darkred",
 		showQualifiedName : false,
 		showVersion : false,
-		showIncidents : false
+		showIssues : false
 	};
 	
 	function activate(){
@@ -24,10 +24,10 @@ var canvasHoverController = (function() {
 		var multiPart = document.getElementById("multiPart");
 		multiPart.addEventListener("mouseenter", handleOnMouseEnter, false);
 		multiPart.addEventListener("mouseleave", handleOnMouseLeave, false);
-		
+
 		var canvas = document.getElementById("x3dom-x3dElement-canvas");
 		canvas.addEventListener("mousedown", handleOnMousedown, false);
-		canvas.addEventListener("mouseup", handleOnMouseup, false);		
+		canvas.addEventListener("mouseup", handleOnMouseup, false);
 				
 		createTooltipContainer();		
 			
@@ -70,16 +70,25 @@ var canvasHoverController = (function() {
 			versionPElement.id = "tooltipVersion";
 			tooltipDivElement.appendChild(versionPElement);
 		}
-		if(controllerConfig.showIncidents) {
-			var openIncidentsPElement = document.createElement("P");
-			openIncidentsPElement.id = "tooltipOpenIncidents";
-			tooltipDivElement.appendChild((openIncidentsPElement));
-            var closedIncidentsPElement = document.createElement("P");
-            closedIncidentsPElement.id = "tooltipClosedIncidents";
-            tooltipDivElement.appendChild((closedIncidentsPElement));
+		if(controllerConfig.showIssues) {
+			var openIssuesPElement = document.createElement("P");
+			openIssuesPElement.id = "tooltipOpenIssues";
+			tooltipDivElement.appendChild((openIssuesPElement));
+
+            var closedIssuesPElement = document.createElement("P");
+            closedIssuesPElement.id = "tooltipClosedIssues";
+            tooltipDivElement.appendChild((closedIssuesPElement));
+
+            var openSecurityIssuesPElement = document.createElement("P");
+            openSecurityIssuesPElement.id = "tooltipOpenSecurityIssues";
+            tooltipDivElement.appendChild((openSecurityIssuesPElement));
+
+            var closedSecurityIssuesPElement = document.createElement("P");
+            closedSecurityIssuesPElement.id = "tooltipClosedSecurityIssues";
+            tooltipDivElement.appendChild((closedSecurityIssuesPElement));
 		}
 		canvas.appendChild(tooltipDivElement);
-	}
+    }
 		
 	function handleOnMousedown(canvasEvent) {
 		isInNavigation = true;
@@ -95,7 +104,7 @@ var canvasHoverController = (function() {
 		}        
 
 		var entity = model.getEntityById(multipartEvent.partID); 
-		if(entity == undefined){
+		if(entity === undefined){
 			entity = multipartEvent.target.id;
 			console.log("entity: " + entity);
 			events.log.error.publish({ text: "Entity of partID " + multipartEvent.partID + " not in model data."});
@@ -115,7 +124,7 @@ var canvasHoverController = (function() {
 	function handleOnMouseLeave(multipartEvent) {
 		
 		var entity = model.getEntityById(multipartEvent.partID); 
-		if(entity == undefined){
+		if(entity === undefined){
 			events.log.error.publish({ text: "Entity of partID " + multipartEvent.partID + " not in model data."});
 			return;
 		}
@@ -130,16 +139,16 @@ var canvasHoverController = (function() {
 
 	function onEntityHover(applicationEvent) {
 		var entity = applicationEvent.entities[0];
-		
-		if(entity == undefined){
+
+        if(entity === undefined){
 			events.log.error.publish({ text: "Entity is not defined"});
 		}
 		
-		if(entity.isTransparent == true) {
+		if(entity.isTransparent === true) {
 			return;
 		}
 
-		if(entity.type == "text"){
+		if(entity.type === "text"){
 			return;
 		}
 
@@ -156,16 +165,33 @@ var canvasHoverController = (function() {
 		if(controllerConfig.showVersion) {
 			$("#tooltipVersion").text("Version: " + entity.version);
 		}
-		if(controllerConfig.showIncidents){
-			$('#tooltipOpenIncidents').text("Open Incidents: " + entity.numberOfOpenIncidents);
-            $('#tooltipClosedIncidents').text("Closed Incidents: " + entity.numberOfClosedIncidents);
+		if(controllerConfig.showIssues) {
+			let openIssuesSelector = $('#tooltipOpenIssues');
+			let closedIssuesSelector = $('#tooltipClosedIssues');
+			let openSecurityIssuesSelector = $('#tooltipOpenSecurityIssues');
+			let closedSecurityIssuesSelector = $('#tooltipClosedSecurityIssues');
+			if (entity.type === "Namespace") {
+                openIssuesSelector.css("display", "none");
+                closedIssuesSelector.css("display", "none");
+                openSecurityIssuesSelector.css("display", "none");
+                closedSecurityIssuesSelector.css("display", "none");
+            } else {
+                openIssuesSelector.text("Open Issues: " + entity.numberOfOpenIssues);
+            	closedIssuesSelector.text("Closed Issues: " + entity.numberOfClosedIssues);
+                openSecurityIssuesSelector.text("Open Security Issues: " + entity.numberOfOpenSecurityIssues);
+                closedSecurityIssuesSelector.text("Closed Security Issues: " + entity.numberOfClosedSecurityIssues);
+                openIssuesSelector.css("display", "block");
+                closedIssuesSelector.css("display", "block");
+                openSecurityIssuesSelector.css("display", "block");
+                closedSecurityIssuesSelector.css("display", "block");
+            }
         }
 
 		var tooltip = $("#tooltip");
         tooltip.css("top", applicationEvent.posY + 50 + "px");
         tooltip.css("left", applicationEvent.posX + 50 +  "px");
 		tooltip.css("display", "block");
-	}
+    }
 	
 	function onEntityUnhover(applicationEvent) {
 		var entity = applicationEvent.entities[0];
@@ -176,21 +202,21 @@ var canvasHoverController = (function() {
 			if(!entity.selected){
 				canvasManipulator.unhighlightEntities([entity]);			
 			}
-			if(entity.type == "Namespace"){
+			if(entity.type === "Namespace"){
 			    canvasManipulator.unhighlightEntities([entity]);
             }
         }
 		
-		$("#tooltip").css("display", "none");		
-	}
+		$("#tooltip").css("display", "none");
+
+    }
 	
 	function getTooltipName(entity) {
-        
-        if(entity.type == "Method") {
+        if(entity.type === "Method") {
 			return entity.type + ": " + entity.signature;
         }
         
-		if (entity.type == "Namespace") {
+		if (entity.type === "Namespace") {
             return "Package: " + entity.name;
         }
         
