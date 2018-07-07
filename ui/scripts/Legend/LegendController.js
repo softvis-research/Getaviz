@@ -33,7 +33,7 @@ var legendController = (function() {
 	}
 
 	function createItem(entry, parent) {
-        var item = { id: entry.name, parentId: parent, name: entry.name, iconSkin: "zt", icon: entry.icon, open: true};
+        var item = { id: entry.name, parentId: parent, name: entry.name, iconSkin: "zt", icon: entry.icon, open: true, glossary: entry.glossary };
         items.push(item);
         if(entry.entries !== undefined) {
             var parentid = entry.name;
@@ -41,6 +41,10 @@ var legendController = (function() {
                 createItem(entry, parentid);
             });
         }
+    }
+
+    function getFont(treeId, node) {
+        return node.glossary ? {'text-decoration':'underline', 'font-style':'italic'} : {};
     }
     
     function prepareTreeView() {
@@ -62,9 +66,19 @@ var legendController = (function() {
                 showIcon: true,
                 selectMulti: false,
                 nameIsHTML: true,
-            }
+                fontCss: getFont
+            },
+            callback: {
+                onClick: zTreeOnClick
+            },
         };		
         tree = $.fn.zTree.init( $(jQVersionExplorerTree), settings, items);
+    }
+
+    function zTreeOnClick(treeEvent, treeId, treeNode) {
+	    if(treeNode.glossary) {
+            window.open("./glossary/glossary.html#" + treeNode.glossary,'glossary');
+	    }
     }
 
     return {

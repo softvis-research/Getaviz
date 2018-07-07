@@ -43,7 +43,8 @@ patternExplorerController = (function () {
             open: false,
             nocheck: true,
             parentId: "",
-            name: "<span style='text-decoration: underline; font-style: italic;'>Subtype Knowledge</span>",
+            glossary: "stk",
+            name: "Subtype Knowledge",
             help: true
         };
         items.push(stkItem);
@@ -52,7 +53,8 @@ patternExplorerController = (function () {
             open: false,
             nocheck: true,
             parentId: "",
-            name: "<span style='text-decoration: underline; font-style: italic;'>Circular Dependency</span>"
+            glossary: "cd",
+            name: "Circular Dependency"
         };
         items.push(componentItem);
         //build items for ztree
@@ -175,12 +177,17 @@ patternExplorerController = (function () {
                 showLine: false,
                 showIcon: false,
                 selectMulti: false,
-                nameIsHTML: true
+                nameIsHTML: true,
+                fontCss: getFont
             }
         };
 
         //create zTree
         tree = $.fn.zTree.init($(jQPatternExplorerTree), settings, items);
+    }
+
+    function getFont(treeId, node) {
+        return node.glossary ? {'text-decoration':'underline', 'font-style':'italic'} : {};
     }
 
     function zTreeOnClick(treeEvent, treeId, treeNode) {
@@ -190,10 +197,10 @@ patternExplorerController = (function () {
             entities: [model.getEntityById(treeNode.id)]
         };
         if (treeNode.id == "component") {
-            window.open("./glossary.html#cd", 'glossary').focus();
+            window.open("./glossary/glossary.html#cd", 'glossary').focus();
         }
         if (treeNode.id == "stk") {
-            window.open("./glossary.html#stk", 'glossary');
+            window.open("./glossary/glossary.html#stk", 'glossary');
         }
 
         if (applicationEvent.entities[0] === undefined) {
@@ -211,7 +218,7 @@ patternExplorerController = (function () {
                 break;
             default:
                 if (applicationEvent.entities[0].id == "stk") {
-                    window.open("./Glossary.html", '_blank');
+                    window.open("./glossary/Glossary.html", '_blank');
                 }
         }
     }
