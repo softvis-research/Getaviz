@@ -2,7 +2,7 @@ $(document).ready(function () {
 	
 	//parse setup if defined
 	if(!window["setup"]){
-		Console.log("No setup definition found!")
+		console.log("No setup definition found!");
 		return;
 	}
 
@@ -44,8 +44,7 @@ function initializeApplication(metaDataJson){
 
 	if(setup.loadPopUp){
 		$("#RootLoadPopUp").jqxWindow("close");		
-	};
-
+	}
 }
 
 
@@ -61,8 +60,8 @@ var application = (function() {
 	var controllers = new Map();
 	var activeControllers = new Map();
 	
-	var newActiveControllers = new Array();
-	var oldActiveControllers = new Array();
+	var newActiveControllers = [];
+	var oldActiveControllers = [];
 	
 	var uiConfigs = new Map();
 	var currentUIConfig = null;
@@ -112,7 +111,7 @@ var application = (function() {
 	function startConfigParsingAfterControllerLoading(){
 		
 		//check that all controllers loaded
-		if(setup.controllers.length != controllers.size){
+		if(setup.controllers.length !== controllers.size){
 			setTimeout(startConfigParsingAfterControllerLoading, 1);
 			return;
 		}
@@ -128,7 +127,7 @@ var application = (function() {
 		currentUIConfig.uiDIV = uiDIV;
 		
 		//activate controller
-		newActiveControllers = new Array();	
+		newActiveControllers = [];
 
 		try {
 			//parse ui config
@@ -167,13 +166,13 @@ var application = (function() {
 		resetApplication();
 		
 		//same ui? -> nothing to do
-		if(uiConfigName == currentUIConfig.name){
+		if(uiConfigName === currentUIConfig.name){
 			return;
 		}
 		
 		var nextUIConfig = uiConfigs.get(uiConfigName);
 		
-		if( nextUIConfig == undefined){
+		if( nextUIConfig === undefined){
 			events.log.error.publish({ text: "No UI config with name " + uiConfigName + " found"});
 			return;
 		}
@@ -334,16 +333,16 @@ var application = (function() {
 		
 		if(activeControllers.has(controllerObject)){
 			
-			var controllerDiv = activeControllers.get(controllerObject);
+			let controllerDiv = activeControllers.get(controllerObject);
 			
-			var controllerDivParent = controllerDiv.parentElement;
+			let controllerDivParent = controllerDiv.parentElement;
 			controllerDivParent.removeChild(controllerDiv);
 			
 			parent.appendChild(controllerDiv);
 						
 		} else {
-				
-			var controllerDiv = document.createElement("DIV");
+
+			let controllerDiv = document.createElement("DIV");
 			parent.appendChild(controllerDiv);
 			
 			activeControllers.set(controllerObject, controllerDiv);
@@ -352,9 +351,9 @@ var application = (function() {
 		}
 
 		//conroller also in new ui -> no deactivation
-		if(oldActiveControllers.length != 0){		
-			var indexOfController = oldActiveControllers.indexOf(controllerObject);
-			if( indexOfController != -1){
+		if(oldActiveControllers.length !== 0){
+			let indexOfController = oldActiveControllers.indexOf(controllerObject);
+			if( indexOfController !== -1){
 				oldActiveControllers.splice(indexOfController, 1);
 			}
 		}
@@ -400,7 +399,7 @@ var application = (function() {
 		if(!navigationInfoElement){
 			var scene = document.getElementById("scene");
 		
-			var navigationInfoElement = document.createElement("NAVIGATIONINFO");
+			navigationInfoElement = document.createElement("NAVIGATIONINFO");
 			navigationInfoElement.id = "navigationInfo";
 			
 			scene.appendChild(navigationInfoElement);		
@@ -423,7 +422,7 @@ var application = (function() {
 		
 		var panel = {
 			size: areaPart.size
-		}
+		};
 		if(areaPart.min !== undefined){
 			panel.min = areaPart.min;
 		}	
@@ -494,14 +493,13 @@ var application = (function() {
 
 		return popupWindowDiv;		       
 	}
-	
 
 
 	//Helper
 
 	function transferConfigParams(setupConfig, controllerConfig){
 		for (var property in setupConfig) {
-			if(property == "name"){
+			if(property === "name"){
 				continue;
 			}
 			
