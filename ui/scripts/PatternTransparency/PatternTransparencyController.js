@@ -30,7 +30,7 @@ var patternTransparencyController = (function() {
 			setTimeout(fadeAll, 1000);
 		}
 
-		if(relatedEntities.length != 0){
+		if(relatedEntities.length !== 0){
 			fadeEntities();
 		}
 	}
@@ -71,7 +71,7 @@ var patternTransparencyController = (function() {
 				relatedEntity.isTransparent = false;
 			});
 		} else {
-			if(lastApplicationEvent.entities[0].id != applicationEvent.entities[0].component) {
+			if(lastApplicationEvent.entities[0].id !== applicationEvent.entities[0].component) {
 				unfadeAll();
 				lastApplicationEvent = null;
 			}
@@ -122,7 +122,7 @@ var patternTransparencyController = (function() {
 
         relatedEntities = relatedEntities.concat(model.getLabels());
 
-        if(relatedEntities.length == 0){
+        if(relatedEntities.length === 0){
             return;
         }
 
@@ -162,7 +162,7 @@ var patternTransparencyController = (function() {
 				relatedEntities = model.getEntitiesByAntipattern(entity.id);
 		}
 
-        if(relatedEntities.length == 0){
+        if(relatedEntities.length === 0){
             return;
 		}
 
