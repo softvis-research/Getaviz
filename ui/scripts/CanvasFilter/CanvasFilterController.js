@@ -6,9 +6,9 @@ var canvasFilterController = (function() {
 	function activate(){
 		events.filtered.on.subscribe(onEntityFilter);
 		events.filtered.off.subscribe(onEntityUnfilter);
-        	events.versionSelected.on.subscribe(onVersionSelected);
-		events.versionSelected.off.subscribe(offVersionSelected);  
-	}
+		events.versionSelected.on.subscribe(onVersionSelected);
+		events.versionSelected.off.subscribe(offVersionSelected);
+    }
 		
 	function onEntityFilter(applicationEvent) {				
 		var entities = applicationEvent.entities;
@@ -22,12 +22,12 @@ var canvasFilterController = (function() {
 	}
 	
 	function onVersionSelected(applicationEvent) {
-        entities = model.getEntitiesByVersion(applicationEvent.entities[0]);
+        var entities = model.getEntitiesByVersion(applicationEvent.entities[0]);
         canvasManipulator.showEntities(entities);
     }    
         
     function offVersionSelected(applicationEvent) {
-        entities = model.getEntitiesByVersion(applicationEvent.entities[0]);
+        var entities = model.getEntitiesByVersion(applicationEvent.entities[0]);
         canvasManipulator.hideEntities(entities);
     }
 
