@@ -92,7 +92,7 @@ var events = (function() {
 				//-> endless loop warning 
 				//-> output on console 
 				var eventListenerArray = eventMap.get(this);
-				if(eventListenerArray == undefined){
+				if(eventListenerArray === undefined){
 					if(logEvent.text){
 						console.log("NO LOGGER for " + this.type + " subscribed! - " + logEvent.text); 
 					} else {
@@ -138,6 +138,7 @@ var events = (function() {
 		innerClasses		: { name: "innerClasses"},
 		parentInnerClasses	: { name: "parentInnerClases"},
 		bundledEdges		: { name: "bundledEdges"},
+		issues				: { name: "issues"}
 	};
 	events.config = {};
 	var configTypeArray = Object.keys(configTypes);
@@ -158,7 +159,7 @@ var events = (function() {
 				//-> endless loop warning 
 				//-> output on console 
 				var eventListenerArray = eventMap.get(this);
-				if(eventListenerArray == undefined){
+				if(eventListenerArray === undefined){
 					if(logEvent.text){
 						console.log("NO LOGGER for " + this.type + " subscribed! - " + logEvent.text); 
 					} else {
@@ -188,8 +189,8 @@ var events = (function() {
 		
 		var eventListenerArray = eventMap.get(eventType);
 			
-		if(eventListenerArray == undefined){
-			eventListenerArray = new Array();
+		if(eventListenerArray === undefined){
+			eventListenerArray = [];
 			eventMap.set(eventType, eventListenerArray);
 			
 			eventModelMap.set(eventType, listener);
@@ -213,7 +214,7 @@ var events = (function() {
 		}	
 
 		var eventListenerArray = eventMap.get(eventType);
-		if(eventListenerArray == undefined || !listener in eventListenerArray){
+		if(eventListenerArray === undefined || !listener in eventListenerArray){
 			events.log.warning.publish({ text: "unsubscribe not subscribed listener: " + listener.toString()});
 			return;
 		}
@@ -238,7 +239,7 @@ var events = (function() {
 						
 		var eventListenerArray = eventMap.get(eventType);
 		
-		if(eventListenerArray == undefined){			
+		if(eventListenerArray === undefined){
 			events.log.warning.publish({ text: "no listener subscribed"});
 			return;
 		}
