@@ -11,7 +11,6 @@ var patternTransparencyController = (function() {
 	//config parameters	
 	var controllerConfig = {
 		fullFadeValue : 0.85,
-		halfFadeValue : 0.0,
 		noFadeValue : 0.0,
 		startFaded: false,
 	};
@@ -63,7 +62,7 @@ var patternTransparencyController = (function() {
             relatedEntities = relatedEntities.concat(model.getLabels());
 
             parents.forEach(function(parent){
-				parent.isTransparent = true;
+				parent.isTransparent = false;
 			});
 			if(activated){
 				fadeEntities();
@@ -100,7 +99,6 @@ var patternTransparencyController = (function() {
 				relatedEntities.push(element);
 			}
 		});
-
 	}
 
     function onAntipatternSelected(applicationEvent) {
@@ -134,11 +132,11 @@ var patternTransparencyController = (function() {
             parents = parents.concat(relatedEntity.allParents);
         });
 
-        parents.forEach(function(parent){
-            parent.isTransparent = true;
-        });
         if(activated){
             fadeEntities();
+            parents.forEach(function(parent){
+                parent.isTransparent = false;
+            });
             relatedEntities.forEach(function(relatedEntity){
                 relatedEntity.isTransparent = false;
             });
@@ -177,11 +175,11 @@ var patternTransparencyController = (function() {
 			parents = parents.concat(relatedEntity.allParents);
 		});
 
-		parents.forEach(function(parent){
-			parent.isTransparent = true;
-		});
 		if(activated){
 			fadeEntities();
+            parents.forEach(function(parent){
+                parent.isTransparent = false;
+            });
 			relatedEntities.forEach(function(relatedEntity){
 				relatedEntity.isTransparent = false;
 			});
@@ -194,7 +192,7 @@ var patternTransparencyController = (function() {
 
 		//unfade parents of related entities
         canvasManipulator.resetColorOfEntities(parents);
-        canvasManipulator.changeTransparencyOfEntities(parents, controllerConfig.halfFadeValue);
+        canvasManipulator.changeTransparencyOfEntities(parents, controllerConfig.noFadeValue);
 		
         //unfade related entities
         canvasManipulator.resetColorOfEntities(relatedEntities);
@@ -204,9 +202,8 @@ var patternTransparencyController = (function() {
 	function fadeAll(){
 		if(!faded) {
             var entities = model.getAllEntities();
-
-            canvasManipulator.changeTransparencyOfEntities(entities, controllerConfig.fullFadeValue);
             canvasManipulator.changeColorOfEntities(entities, "white");
+            canvasManipulator.changeTransparencyOfEntities(entities, controllerConfig.fullFadeValue);
             faded = true;
             model.getAllEntities().forEach(function (entity) {
                 entity.isTransparent = true;
