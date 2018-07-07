@@ -92,13 +92,7 @@ var experimentController = (function() {
 		$("#taskSolvedButton").click(taskSolvedButtonClick);
 		
 		//taskdialog
-		$("#taskDialog").jqxWindow({ height: 1000, width: 700, theme: 'metro', isModal: true, autoOpen: false, resizable: false, okButton: $('#button_ok') });					
-		$('#taskDialog').on('close', function (event) {
-			if(event.args.dialogResult.None) {
-				$("#taskDialog").jqxWindow('open');
-			}
-		});
-		
+		$("#taskDialog").jqxWindow({ height: 1000, width: 700, theme: 'metro', isModal: true, autoOpen: false, resizable: false, showCloseButton: false, okButton: $('#button_ok') });
 		$("#button_ok").jqxButton({ theme: "metro", width: "50px" });		
 		$("#button_ok").click(function () {		
 			if(stepTime != 0){
