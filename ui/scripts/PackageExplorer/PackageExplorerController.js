@@ -51,7 +51,7 @@ var packageExplorerController = (function() {
 			
 			var item;
 			
-			if(entity.belongsTo == undefined){ 
+			if(entity.belongsTo === undefined){
 				//rootpackages
 				if(entity.type !== "issue") {
 					if(entity.type === "Namespace") {
@@ -201,7 +201,7 @@ var packageExplorerController = (function() {
 	function zTreeOnCheck(event, treeId, treeNode) {
         var nodes = tree.getChangeCheckedNodes();
         
-		var entities = new Array;
+		var entities = [];
 		nodes.forEach(function(node){
 			node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes	
 			entities.push(model.getEntityById(node.id));
@@ -224,7 +224,7 @@ var packageExplorerController = (function() {
         var applicationEvent = {
 			sender: packageExplorerController,
 			entities: [model.getEntityById(treeNode.id)]
-		}	
+		};
 		
 		events.selected.on.publish(applicationEvent);
     }
