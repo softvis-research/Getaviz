@@ -20,8 +20,8 @@
 
 .ztree li span.button.zt_ico_close, .ztree li span.button.zt_ico_open, .ztree li span.button.zt_ico_docu {
     background-size: contain !important;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     margin-right: 5px;
 }
 

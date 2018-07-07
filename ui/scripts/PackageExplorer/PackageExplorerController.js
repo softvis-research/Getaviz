@@ -5,16 +5,19 @@ var packageExplorerController = (function() {
 	
 	var tree;
 	
-	var iconFiles = {
+
+
+	var controllerConfig = {
+		projectIcon: 	"scripts/PackageExplorer/images/project.png",
 		packageIcon: 	"scripts/PackageExplorer/images/package.png",
 		typeIcon: 		"scripts/PackageExplorer/images/type.png",
 		fieldIcon: 		"scripts/PackageExplorer/images/field.png",
 		methodIcon:		"scripts/PackageExplorer/images/method.png"
-	}
+	};
 	
-	function initialize(){
-	
-	}
+	function initialize(setupConfig){
+        application.transferConfigParams(setupConfig, controllerConfig);
+    }
 	
 	function activate(rootDiv){
 
@@ -31,7 +34,6 @@ var packageExplorerController = (function() {
 				
 		//create zTree
 		prepareTreeView();
-		
 		events.selected.on.subscribe(onEntitySelected);
     }
 	
@@ -51,39 +53,65 @@ var packageExplorerController = (function() {
 			
 			if(entity.belongsTo == undefined){ 
 				//rootpackages
-                item = { id: entity.id, open: false, checked: true, parentId: "", name: entity.name, icon: iconFiles.packageIcon, iconSkin: "zt"};
+				if(entity.type !== "issue") {
+					if(entity.type === "Namespace") {
+                        item = {
+                            id: entity.id,
+                            open: false,
+                            checked: true,
+                            parentId: "",
+                            name: entity.name,
+                            icon: controllerConfig.packageIcon,
+                            iconSkin: "zt"
+                        };
+                    } else {
+                        item = {
+                            id: entity.id,
+                            open: true,
+                            checked: true,
+                            parentId: "",
+                            name: entity.name,
+                            icon: controllerConfig.projectIcon,
+                            iconSkin: "zt"
+                        };
+                    }
+                }
             } else {	
 				switch(entity.type) {
+					case "Project":
+						item = { id: entity.id, open: true, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.projectIcon, iconSkin: "zt"};
+						break;
 					case "Namespace":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: iconFiles.packageIcon, iconSkin: "zt"};
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.packageIcon, iconSkin: "zt"};
 						break;
 					case "Class":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: iconFiles.typeIcon, iconSkin: "zt"};
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
 						break;
 					case  "ParameterizableClass":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: iconFiles.typeIcon, iconSkin: "zt"};
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
 						break;
 					case "Enum":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: iconFiles.typeIcon, iconSkin: "zt"};
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
 						break;
 					case "EnumValue":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: iconFiles.fieldIcon, iconSkin: "zt"};
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt"};
 						break;
 					case "Attribute":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: iconFiles.fieldIcon, iconSkin: "zt"};
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt"};
 						break;
 					case "Method":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: iconFiles.methodIcon, iconSkin: "zt"};
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt"};
 						break;
 					
 					default: 
 						events.log.warning.publish({ text: "FamixElement not in tree: " + entity.type});
+
 						return;
 				}
            }
-           
-		   items.push(item);			
-			
+			if(item !== undefined) {
+                items.push(item);
+            }
 		});
 		
 		//Sortierung nach Typ und Alphanumerisch
@@ -92,16 +120,16 @@ var packageExplorerController = (function() {
 				
 				var sortStringA = "";
 				switch(a.icon){
-					case iconFiles.packageIcon:
+					case controllerConfig.packageIcon:
 						sortStringA = "1" + a.name.toUpperCase();
 						break;
-					case iconFiles.typeIcon:
+					case controllerConfig.typeIcon:
 						sortStringA = "2" + a.name.toUpperCase();
 						break;
-					case iconFiles.fieldIcon:
+					case controllerConfig.fieldIcon:
 						sortStringA = "3" + a.name.toUpperCase();
 						break;
-					case iconFiles.methodIcon:
+					case controllerConfig.methodIcon:
 						sortStringA = "4" + a.name.toUpperCase();
 						break;
 					default:
@@ -110,16 +138,16 @@ var packageExplorerController = (function() {
 				
 				var sortStringB = "";
 				switch(b.icon){
-					case iconFiles.packageIcon:
+					case controllerConfig.packageIcon:
 						sortStringB = "1" + b.name.toUpperCase();
 						break;
-					case iconFiles.typeIcon:
+					case controllerConfig.typeIcon:
 						sortStringB = "2" + b.name.toUpperCase();
 						break;
-					case iconFiles.fieldIcon:
+					case controllerConfig.fieldIcon:
 						sortStringB = "3" + b.name.toUpperCase();
 						break;
-					case iconFiles.methodIcon:
+					case controllerConfig.methodIcon:
 						sortStringB = "4" + b.name.toUpperCase();
 						break;
 					default:
@@ -137,8 +165,8 @@ var packageExplorerController = (function() {
 				
 				return 0;
 			}
-		);					
-			       
+		);
+
 		//zTree settings
 		var settings = {
             check: {
@@ -171,7 +199,6 @@ var packageExplorerController = (function() {
     
 	
 	function zTreeOnCheck(event, treeId, treeNode) {
-				
         var nodes = tree.getChangeCheckedNodes();
         
 		var entities = new Array;
@@ -183,7 +210,7 @@ var packageExplorerController = (function() {
 		var applicationEvent = {			
 			sender: 	packageExplorerController,
 			entities:	entities
-		}	
+		};
 		
 		if (!treeNode.checked){
 			events.filtered.on.publish(applicationEvent);
@@ -193,9 +220,8 @@ var packageExplorerController = (function() {
 		
     }
 
-    function zTreeOnClick(treeEvent, treeId, treeNode) {        
-		
-		var applicationEvent = {			 
+    function zTreeOnClick(treeEvent, treeId, treeNode) {
+        var applicationEvent = {
 			sender: packageExplorerController,
 			entities: [model.getEntityById(treeNode.id)]
 		}	
