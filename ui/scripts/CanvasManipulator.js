@@ -3,7 +3,8 @@ var canvasManipulator = (function() {
 	var colors = {
 		darkred: "darkred",
 		black: "black",
-		orange: "orange"
+		orange: "orange",
+		darkorange: "darkorange"
 	}
 
 	var x3domRuntime;
