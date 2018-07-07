@@ -553,11 +553,14 @@ var patternConnectorController = function(){
 		var relatedEntitiesMap = new Map();
 
 		callingEntities.forEach(function(relatedPair){
-			// if(relatedEntitiesMap.has(relatedPair[1])){
+            // if(relatedEntitiesMap.has(relatedPair[1])){
 				//events.log.info.publish({ text: "pattern connector - onRelationsChanged - multiple relation"});
 				//return;
 			// }
-			if(controllerConfig.showInnerRelations === false){
+			if(relatedPair[0].version != relatedPair[1].version){
+				return;
+			}
+            if(controllerConfig.showInnerRelations === false){
 				if(isInnerClass(relatedPair[1], relatedPair[0])){
 					events.log.info.publish({ text: "pattern connector - onRelationsChanged - inner relation"});
 					return;
@@ -567,20 +570,18 @@ var patternConnectorController = function(){
 			if(weight == 0) {
 				//weight = 0.01;
 			}
-
             if(weight < minimalWeight) {
 				return;
 			}
             //create scene element
 			var connector = createConnector(relatedPair[0], relatedPair[1]);
 
-			//target or source not rendered -> no connector -> remove relatation
-			if( connector === undefined){
+            //target or source not rendered -> no connector -> remove relatation
+			if( connector === undefined || connector === null){
 				return;
 			}
             connectors.set(connector, relatedPair[0].version);
 			canvasManipulator.addElement(connector);
-
 
             //create model entity
 			var relation = model.createEntity(
@@ -595,10 +596,11 @@ var patternConnectorController = function(){
 			relation.target = relatedPair[1];
 			relations.push(relation);
 			relatedEntitiesMap.set(relatedPair[0], relatedPair[1]);
-		});
+        });
 
 		connectors.forEach(function(version, connector){
-		    var collection = connector.getElementsByTagName("Shape")
+
+            var collection = connector.getElementsByTagName("Shape")
             collection[0].addEventListener("mouseover", handleOnMouseEnter, false);
             collection[0].addEventListener("mouseout", handleOnMouseOut, false);
 
@@ -623,10 +625,10 @@ var patternConnectorController = function(){
 		}
 
         var targetPosition = calculateTargetPosition(entity, relatedEntity);
-		if( targetPosition === null ){
+
+        if( targetPosition === null ){
 			return;
 		}
-
         var connectorColor = "1 0 0";
 		var connectorSize = weight;
 		if(connectorSize < 0.1) {
@@ -770,13 +772,23 @@ var patternConnectorController = function(){
             meta.set(id, info)
 			//create element
 			var transform = document.createElement('Transform');
-			//events.log.info.publish({text: "color: " + entity.color});
+
+            if(isNaN(sourcePosition[0])
+				|| isNaN(sourcePosition[1])
+                || isNaN(sourcePosition[2])
+                || isNaN(targetPosition[0])
+                || isNaN(targetPosition[1])
+                || isNaN(targetPosition[2])){
+                return null;
+            }
+
 			transform.appendChild(createLine(sourcePosition, targetPosition, connectorColor, connectorSize, id));
 	
 			//config
 			if(controllerConfig.createEndpoints){
 				transform.appendChild(createEndPoint(sourcePosition, targetPosition, "0 0 0", connectorSize * 2));
 			}
+
             return transform;
 		}
 	}
@@ -784,10 +796,9 @@ var patternConnectorController = function(){
 	function calculateSourcePosition(entity, relatedEntity){
 
 		var sourcePosition = getObjectPosition(entity.id);
-
 		if(controllerConfig.sourceStartAtParentBorder){
 			if(!isTargetChildOfSourceParent(relatedEntity, entity)){
-				var targetPosition = getObjectPosition(relatedEntity.id);
+				let targetPosition = getObjectPosition(relatedEntity.id);
 				if(targetPosition === null){
 					return null;
 				}
@@ -795,14 +806,16 @@ var patternConnectorController = function(){
 			}
 		}
 
-		if(controllerConfig.sourceStartAtBorder){
-            var targetPosition = getObjectPosition(relatedEntity.id);
+        if(controllerConfig.sourceStartAtBorder){
+
+            let targetPosition = getObjectPosition(relatedEntity.id);
+
             if(targetPosition === null){
-				return null;
+                return null;
 			}
+
             sourcePosition = calculateBorderPosition(sourcePosition, targetPosition, entity);
         }
-
         return sourcePosition;
 	}
 
@@ -815,13 +828,13 @@ var patternConnectorController = function(){
 
 		if(controllerConfig.targetEndAtParentBorder){
 			if(!isTargetChildOfSourceParent(relatedEntity, entity)){
-				var sourcePosition = getObjectPosition(entity.id);
+				let sourcePosition = getObjectPosition(entity.id);
 				targetPosition = calculatePositionFromParent(targetPosition, sourcePosition, relatedEntity.belongsTo);
 			}
 		}
 
 		if(controllerConfig.targetEndAtBorder){
-			var sourcePosition = getObjectPosition(entity.id);
+			let sourcePosition = getObjectPosition(entity.id);
 			targetPosition = calculateBorderPosition(targetPosition, sourcePosition, relatedEntity);
 		}
 
@@ -870,9 +883,8 @@ var patternConnectorController = function(){
 		return false;
 	}
 
-	function calculateBorderPosition(sourcePosition, targetPosition, entity){
-
-		if(!loadedMin.has(entity.id) || !loadedMax.has(entity.id)){
+	function calculateBorderPosition(originalSourcePosition, originalTargetPosition, entity){
+        if(!loadedMin.has(entity.id) || !loadedMax.has(entity.id)){
 			events.log.error.publish({ text: "min max position for " + entity.id + " not loaded!" });
 			return;
 		}
@@ -881,8 +893,8 @@ var patternConnectorController = function(){
 		var min = loadedMin.get(entity.id);
 		var max = loadedMax.get(entity.id);
 
-		var sourcePosition = sourcePosition.slice();
-		var targetPosition = targetPosition.slice();
+		var sourcePosition = originalSourcePosition.slice();
+		var targetPosition = originalTargetPosition.slice();
 
 		//calculate the 4 corner points
 		var point00 = min.slice();
@@ -903,7 +915,7 @@ var patternConnectorController = function(){
 		sourcePosition[1] = deltaY;
 		targetPosition[1] = deltaY;
 
-		//calculate distances
+        //calculate distances
 
 		var distances = new Map();
 		distances.set(calculateDistance(point00, targetPosition), point00);
@@ -911,18 +923,18 @@ var patternConnectorController = function(){
 		distances.set(calculateDistance(point10, targetPosition), point10);
 		distances.set(calculateDistance(point11, targetPosition), point11);
 
-		//get the two nearest points
+        //get the two nearest points
 		var sortedDistances =  Array.from(distances.keys());
 		sortedDistances = sortedDistances.sort(function(a,b){return a-b;});
 
-		var nearestPoint1 = distances.get(sortedDistances[0]);
+        var nearestPoint1 = distances.get(sortedDistances[0]);
 		var nearestPoint2 = distances.get(sortedDistances[1]);
 
 
 		var valueUsedToCalculate;
 		var valueToCalculate;
 
-		if (nearestPoint1[0] === nearestPoint2[0]) {
+        if (nearestPoint1[0] === nearestPoint2[0]) {
 			valueUsedToCalculate = 0;
 			valueToCalculate = 2;
 		} else if (nearestPoint1[2] === nearestPoint2[2]) {
@@ -933,7 +945,7 @@ var patternConnectorController = function(){
 			return;
 		}
 
-		var riseVector = calculateDistanceVector(sourcePosition, targetPosition);
+        var riseVector = calculateDistanceVector(sourcePosition, targetPosition);
 
 
 		if(riseVector[valueUsedToCalculate] == 0){
