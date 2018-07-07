@@ -7,7 +7,6 @@ var edgeConfiguratorController = (function() {
         rootDiv.setAttribute("style","height:100%");
 
         prepareVisibilityLevelMenu(rootDiv);
-		prepareRelationsCheckbox(rootDiv);
 		prepareBundledEdgesCheckbox(rootDiv);
     }
 
@@ -61,30 +60,6 @@ var edgeConfiguratorController = (function() {
 				entities: [false]
 			};
 			events.config.bundledEdges.publish(applicationEvent);
-		});
-	}
-	
-	function prepareRelationsCheckbox(rootDiv) {
-		var checkboxID = "#checkbox";
-		var divElement = document.createElement("DIV");
-		var textNode = document.createTextNode("Show dependencies to inner classes");
-		divElement.id = "checkbox";
-		divElement.appendChild(textNode);
-		rootDiv.appendChild(divElement);
-		$(checkboxID).jqxCheckBox({theme: "metro", checked: true});
-		$(checkboxID).on('checked', function () {
-			var applicationEvent = {			 
-				sender: edgeConfiguratorController,
-				entities: [true]
-			};
-			events.config.innerClasses.publish(applicationEvent);
-		});
-		$(checkboxID).on('unchecked', function () {
-			var applicationEvent = {			 
-				sender: edgeConfiguratorController,
-				entities: [false]
-			};
-			events.config.innerClasses.publish(applicationEvent);
 		});
 	}
 	
