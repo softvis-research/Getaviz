@@ -120,7 +120,7 @@
 						{
 							title: 	"City Floors",
 							link: 	true,
-							url:	"Index%20mini.php?setup=web/webCity&model=City%20floor%20findbugs"							
+							url:	"Index%20mini.php?setup=web/City freemind&model=City%20floor%20freemind"
 						},
 						{
 							title: 	"Recursive Disk",
