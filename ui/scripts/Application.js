@@ -231,9 +231,21 @@ var application = (function() {
 			if(area.resizable === false){
 				splitterResizable = area.resizable;
 			} 
-			
+
+
 			var firstPart = area.first;
 			var secondPart = area.second;
+
+			if(firstPart === undefined){
+				console.log("abc")
+				console.log(area)
+			}
+
+
+            if(secondPart === undefined){
+                console.log("xyz")
+                console.log(area)
+            }
 			
 			
 			//create jqwidget splitter
@@ -242,14 +254,16 @@ var application = (function() {
 			//add splitter to parent
 			parent.appendChild(splitterObject.splitter);
 			
-			var firstPanel = createPanel(firstPart);			
+			var firstPanel = createPanel(firstPart);
 			var secondPanel = createPanel(secondPart);
-					
+
 			$(splitterId).jqxSplitter({ theme: "metro", width: "100%", height: "100%", resizable: splitterResizable, orientation: splitterOrientation, panels: [firstPanel, secondPanel ] });
 			
 			//pars area parts as config parts
 			parseUIConfig(configName, firstPart, splitterObject.firstPanel);
-			parseUIConfig(configName, secondPart, splitterObject.secondPanel);
+			if(secondPart !== undefined) {
+                parseUIConfig(configName, secondPart, splitterObject.secondPanel);
+            }
 		}
 		
 		//expander
@@ -419,17 +433,15 @@ var application = (function() {
 	}
 	
 	function createPanel(areaPart){
-		
 		var panel = {
 			size: areaPart.size
 		};
 		if(areaPart.min !== undefined){
 			panel.min = areaPart.min;
-		}	
+		}
 		if(areaPart.collapsible !== undefined){
 			panel.collapsible = areaPart.collapsible;
-		}	
-		
+		}
 		return panel;
 	}
 			
