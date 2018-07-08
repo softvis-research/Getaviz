@@ -1,9 +1,10 @@
 var systeminfoController = (function() {
 
-    var controllerConfig = {
+    let controllerConfig = {
         system: "",
         link: "",
-        visualization: "",
+        noc: false,
+        loc: 0
     };
 
 	function initialize(setupConfig){
@@ -11,49 +12,65 @@ var systeminfoController = (function() {
     }
 	
 	function activate(rootDiv){
-	    var container= document.createElement("DIV");
+	    let container= document.createElement("DIV");
 	    container.setAttribute("class", "grid-container");
-	    var g1 = document.createElement("div");
-	    var g2 = document.createElement("div");
-	    var g3 = document.createElement("div");
-	    var g4 = document.createElement("div");
-	    var g5 = document.createElement("div");
-	    var g6 = document.createElement("div");
 
-	    g1.setAttribute("class", "grid-item-left")
-	    g2.setAttribute("class", "grid-item-right")
-	    g3.setAttribute("class", "grid-item-left")
-	    g4.setAttribute("class", "grid-item-right")
-	    g5.setAttribute("class", "grid-item-left")
-	    g6.setAttribute("class", "grid-item-right")
+        if(controllerConfig.system !== "") {
+            let leftCell = document.createElement("div");
+            let rightCell = document.createElement("div");
+            leftCell.setAttribute("class", "grid-item-left");
+            rightCell.setAttribute("class", "grid-item-right");
+            let nameElement1 = document.createTextNode("System");
+            let nameElement2 = document.createTextNode(controllerConfig.system);
+            leftCell.appendChild(nameElement1);
+            rightCell.appendChild(nameElement2);
+            container.appendChild(leftCell);
+            container.appendChild(rightCell);
 
-		var nameElement1 = document.createTextNode("System");
-		var nameElement2= document.createTextNode(controllerConfig.system);
+        }
 
-		var linkElement1 = document.createTextNode("Web page");
-        var linkElement2 = document.createTextNode(controllerConfig.link);
-        var a = document.createElement("a");
-        a.href = controllerConfig.link;
-        a.target = "_blank";
-        a.appendChild(linkElement2)
+        if(controllerConfig.link !== "") {
+            let leftCell = document.createElement("div");
+            let rightCell = document.createElement("div");
+            leftCell.setAttribute("class", "grid-item-left");
+            rightCell.setAttribute("class", "grid-item-right");
+            let linkElement1 = document.createTextNode("Web page");
+            let link = document.createTextNode(controllerConfig.link);
+            let linkElement2 = document.createElement("a");
+            linkElement2.href = controllerConfig.link;
+            linkElement2.target = "_blank";
+            linkElement2.appendChild(link);
+            leftCell.appendChild(linkElement1);
+            rightCell.appendChild(linkElement2);
+            container.appendChild(leftCell);
+            container.appendChild(rightCell);
+        }
 
-        var visualizationElement1 = document.createTextNode("Visualization");
-        var visualizationElement2 = document.createTextNode(controllerConfig.visualization);
+        if(controllerConfig.noc) {
+            let leftCell = document.createElement("div");
+            let rightCell = document.createElement("div");
+            leftCell.setAttribute("class", "grid-item-left");
+            rightCell.setAttribute("class", "grid-item-right");
+            let nocElement1 = document.createTextNode("Classes");
+            let nocElement2 = document.createTextNode(model.getEntitiesByType("Class").length);
+            leftCell.appendChild(nocElement1);
+            rightCell.appendChild(nocElement2);
+            container.appendChild(leftCell);
+            container.appendChild(rightCell);
+        }
 
-
-        g1.appendChild(nameElement1)
-        g2.appendChild(nameElement2)
-        g3.appendChild(linkElement1)
-        g4.appendChild(a)
-        g5.appendChild(visualizationElement1)
-        g6.appendChild(visualizationElement2)
-
-        container.appendChild(g1)
-        container.appendChild(g2)
-        container.appendChild(g3)
-        container.appendChild(g4)
-      //  container.appendChild(g5)
-       // container.appendChild(g6)
+        if(controllerConfig.loc > 0) {
+            let leftCell = document.createElement("div");
+            let rightCell = document.createElement("div");
+            leftCell.setAttribute("class", "grid-item-left");
+            rightCell.setAttribute("class", "grid-item-right");
+            let locElement1 = document.createTextNode("LOC");
+            let locElement2 = document.createTextNode(controllerConfig.loc.toString());
+            leftCell.appendChild(locElement1);
+            rightCell.appendChild(locElement2);
+            container.appendChild(leftCell);
+            container.appendChild(rightCell);
+        }
 
 		rootDiv.appendChild(container);
 	}

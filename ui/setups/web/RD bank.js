@@ -37,12 +37,6 @@
 
 		{	name: 	"packageExplorerController",
 		},
-        {
-            name:   "systeminfoController",
-            system: "Bank",
-            link: "http://undertow.io/",
-            visualization: "Recursive Disk"
-        },
 		{	name: 	"sourceCodeController",
 		},
 		
@@ -60,8 +54,14 @@
 		},
 			
 		{ 	name: 	"relationHighlightController" 
-		},	
-
+		},
+        {
+            name:   "systeminfoController",
+            system: "Bank",
+            link: "https://github.com/softvis-research/Bank",
+            noc: true,
+            loc: 192
+        },
 		{	name: 	"menuController",
 			menuMapping: [
 
@@ -314,18 +314,40 @@
                                     ],
                                 },
                                 second: {
-                                    size: "20%",
-                                    min: "200",
-                                    oriontation: "vertical",
-                                    expanders: [
-                                        {
-                                            name: "CodeViewer",
-                                            title: "CodeViewer",
-                                            controllers: [
-                                                {name: "sourceCodeController"}
+                                    area: {
+                                        orientation: "horizontal",
+                                        collapsible: false,
+                                        name: "rightPael",
+                                        size: "80%",
+                                        first: {
+                                            size: "80%",
+                                            min: "200",
+                                            oriontation: "horizontal",
+                                            expanders: [
+                                                {
+                                                    name: "CodeViewer",
+                                                    title: "CodeViewer",
+                                                    controllers: [
+                                                        {name: "sourceCodeController"}
+                                                    ],
+                                                },
                                             ],
                                         },
-                                    ],
+                                        second: {
+                                            size: "20%",
+                                            min: "200",
+                                            oriontation: "horizontal",
+                                            expanders: [
+                                                {
+                                                    name: "systeminfo",
+                                                    title: "Info",
+                                                    controllers: [
+                                                        {name: "systeminfoController"}
+                                                    ],
+                                                },
+                                            ],
+                                        }
+                                    }
                                 }
                             }
                         }
