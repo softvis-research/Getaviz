@@ -67,6 +67,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	var List<FAMIXAntipattern> antipattern = newArrayList()
 	var List<FAMIXComponent> components = newArrayList()
 	var int i = 0
+	val Map<String, Node> nodes = newHashMap
 	
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Famix2Famix has started.")
