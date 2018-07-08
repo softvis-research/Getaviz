@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20161002202724) do
 
-  create_table "answer_possibility_collections", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "answer_possibility_collections", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "question_id"
     t.string "answer_type"
     t.integer "timeout"
@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["question_id"], name: "index_answer_possibility_collections_on_question_id"
   end
 
-  create_table "answers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "answers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "answer_possibility_collection_id"
     t.string "answer_text"
     t.string "placeholder"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["answer_possibility_collection_id"], name: "index_answers_on_answer_possibility_collection_id"
   end
 
-  create_table "experiment_steps", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "experiment_steps", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "position"
     t.integer "experiment_id"
     t.datetime "created_at"
@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["step_id"], name: "index_experiment_steps_on_step_id"
   end
 
-  create_table "experiment_surveys", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "experiment_surveys", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "survey_id"
     t.integer "scene_id"
     t.datetime "created_at"
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["survey_id"], name: "index_experiment_surveys_on_survey_id"
   end
 
-  create_table "experiments", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "experiments", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "title"
     t.text "description"
     t.string "id_hash"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["pre_test_id"], name: "index_experiments_on_pre_test_id"
   end
 
-  create_table "participant_experiment_step_answers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "participant_experiment_step_answers", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text "answer"
     t.integer "question_id"
     t.datetime "created_at"
@@ -93,7 +93,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["question_id"], name: "index_participant_experiment_step_answers_on_question_id"
   end
 
-  create_table "participant_experiment_step_scenes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "participant_experiment_step_scenes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "scene_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["scene_id"], name: "index_participant_experiment_step_scenes_on_scene_id"
   end
 
-  create_table "participant_experiment_steps", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "participant_experiment_steps", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "experiment_step_id"
     t.integer "participant_id"
     t.datetime "created_at"
@@ -118,14 +118,14 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["participant_id"], name: "index_participant_experiment_steps_on_participant_id"
   end
 
-  create_table "participants", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "participants", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "id_hash"
     t.integer "experiment_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "question_options", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "question_options", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "answer"
     t.integer "question_id"
     t.datetime "created_at"
@@ -133,13 +133,13 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["question_id"], name: "index_question_options_on_question_id"
   end
 
-  create_table "question_types", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "question_types", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "questionaire_questions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "questionaire_questions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "questionaire_id"
     t.integer "question_id"
     t.integer "position"
@@ -149,7 +149,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["questionaire_id"], name: "index_questionaire_questions_on_questionaire_id"
   end
 
-  create_table "questions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "questions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text "question_text"
     t.integer "question_type_id"
     t.datetime "created_at"
@@ -159,7 +159,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["question_type_id"], name: "index_questions_on_question_type_id"
   end
 
-  create_table "scene_test_scenes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "scene_test_scenes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "scene_test_id"
     t.integer "scene_id"
     t.datetime "created_at"
@@ -168,7 +168,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["scene_test_id"], name: "index_scene_test_scenes_on_scene_test_id"
   end
 
-  create_table "scene_tests", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "scene_tests", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "title"
     t.text "description"
     t.datetime "created_at"
@@ -179,7 +179,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["test_id"], name: "index_scene_tests_on_test_id"
   end
 
-  create_table "scenes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "scenes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "description"
     t.datetime "created_at"
@@ -190,7 +190,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.text "mapping"
   end
 
-  create_table "step_scenes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "step_scenes", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "step_id"
     t.integer "scene_id"
     t.datetime "created_at", null: false
@@ -199,7 +199,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["step_id"], name: "index_step_scenes_on_step_id"
   end
 
-  create_table "step_textual_elements", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "step_textual_elements", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "step_id"
     t.integer "textual_element_id"
     t.integer "position"
@@ -209,7 +209,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["textual_element_id"], name: "index_step_textual_elements_on_textual_element_id"
   end
 
-  create_table "steps", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "steps", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "title"
     t.string "description"
     t.datetime "created_at", null: false
@@ -220,7 +220,7 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.boolean "use_scene_from_parent_group"
   end
 
-  create_table "test_questions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "test_questions", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "test_id"
     t.integer "question_id"
     t.integer "position"
@@ -230,21 +230,21 @@ ActiveRecord::Schema.define(version: 20161002202724) do
     t.index ["test_id"], name: "index_test_questions_on_test_id"
   end
 
-  create_table "tests", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "tests", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "title"
     t.string "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "texts", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "texts", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text "html"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "title"
   end
 
-  create_table "textual_elements", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "textual_elements", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "title"
     t.string "description"
     t.text "html"
