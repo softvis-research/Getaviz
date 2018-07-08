@@ -110,7 +110,11 @@ var model = (function() {
 				case "Class":
 					entity.superTypes = element.subClassOf.split(",");
 					entity.subTypes = element.superClassOf.split(",");
-					entity.reaches = element.reaches.split(",");
+					if(element.reaches !== undefined) {
+                        entity.reaches = element.reaches.split(",");
+                    } else {
+						entity.reaches = [];
+					}
 					entity.reachedBy = [];
 					entity.antipattern = element.antipattern.split(",");
 					entity.roles = element.roles.split(",");
@@ -129,7 +133,11 @@ var model = (function() {
 							entitiesByVersion.set(entity.version, map);
 						}
 					}
-					entity.issues = element.issues.split(",");
+					if(element.issues !== undefined) {
+                        entity.issues = element.issues.split(",");
+                    } else {
+						entity.issues = [];
+					}
                   	for(let i = 0; i < entity.issues.length; ++i) {
                         entity.issues[i] = entity.issues[i].trim();
                     }
