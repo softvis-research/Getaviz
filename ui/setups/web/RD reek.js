@@ -57,10 +57,10 @@
 		},
         {
             name:   "systeminfoController",
-            system: "Bank",
-            link: "https://github.com/softvis-research/Bank",
+            system: "Reek",
+            link: "https://github.com/troessner/reek",
             noc: true,
-            loc: 192
+            loc: 13952
         },
 		{	name: 	"menuController",
 			menuMapping: [
@@ -131,8 +131,7 @@
 							title: 	"Recursive Disk",
 							link: 	true,
 							url:	"Index%20mini.php?setup=web/RD freemind&model=RD%20freemind"
-						},
-                        {
+						}, {
                             title: 	"Recursive Disk 3D",
                             link: 	true,
                             url:	"Index%20mini.php?setup=web/RD reek&model=RD%203D%20reek"
@@ -183,9 +182,6 @@
             }, {
                 name: "Method",
                 icon: "setups/web/method.png",
-            }, {
-                name: "Field",
-                icon: "setups/web/field.png",
             }, {
                 name: "Navigation",
                 icon: "setups/web/navigation.png",

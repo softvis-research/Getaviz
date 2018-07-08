@@ -126,7 +126,11 @@
 							title: 	"Recursive Disk",
 							link: 	true,
 							url:	"Index%20mini.php?setup=web/RD freemind&model=RD%20freemind"
-						},
+						}, {
+                            title: 	"Recursive Disk 3D",
+                            link: 	true,
+                            url:	"Index%20mini.php?setup=web/RD reek&model=RD%203D%20reek"
+                        },
 					]
 				},
 
