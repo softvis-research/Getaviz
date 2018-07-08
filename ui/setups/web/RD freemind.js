@@ -120,7 +120,7 @@
 						{
 							title: 	"City Bricks",
 							link: 	true,
-							url:	"Index%20mini.php?setup=web/webCity&model=City%20bricks%20freemind"							
+							url:	"Index%20mini.php?setup=web/City freemind&model=City%20bricks%20freemind"
 						},						
 						{
 							title: 	"City Floors",
