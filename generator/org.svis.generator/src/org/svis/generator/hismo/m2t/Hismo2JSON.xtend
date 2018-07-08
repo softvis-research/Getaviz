@@ -146,7 +146,12 @@ class Hismo2JSON implements IGenerator2 {
 		"type":				"path",
 		"start":			"«path.start.ref.id»",
 		"end":				"«path.end.ref.id»",
-		"role":				"«path.role.checkNull»"
+		"role":				"«path.role.checkNull»",
+		«IF path.antipattern !== null»
+		"belongsTo":    "«path.antipattern.ref.id.checkNull»"
+		«ELSE»
+		"belongsTo":	""
+		«ENDIF»
 	'''
 
 	def dispatch private toMetaData(FAMIXAntipattern antipattern) '''
