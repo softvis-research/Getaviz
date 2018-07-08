@@ -5,7 +5,6 @@ import java.util.Set
 import org.eclipse.emf.mwe.core.WorkflowContext
 import org.eclipse.emf.mwe.core.issues.Issues
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor
-import org.svis.generator.FamixUtils
 import org.svis.generator.city.CitySettings
 import org.svis.generator.city.CityUtils
 import org.svis.xtext.city.Building
@@ -29,6 +28,7 @@ import org.svis.xtext.famix.FAMIXPrimitiveType
 import org.svis.xtext.famix.FAMIXReference
 import org.svis.xtext.famix.FAMIXStructure
 import org.svis.generator.city.CitySettings.BuildingType
+import org.svis.generator.FamixUtils
 
 class Famix2City extends WorkflowComponentWithConfig {
 	

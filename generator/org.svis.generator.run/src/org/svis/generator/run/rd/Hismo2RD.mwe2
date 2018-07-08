@@ -32,7 +32,7 @@ Workflow {
 	
 	// write metaData
 	component = org.eclipse.xtext.generator.GeneratorComponent {
-		register = org.svis.generator.hismo.Hismo2JSONStandaloneSetup {}
+		register = org.svis.generator.hismo.m2t.Hismo2JSONStandaloneSetup {}
 		slot = 'metadata'
 		outlet = {
 			path = "${outputPath}"

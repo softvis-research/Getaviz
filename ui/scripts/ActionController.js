@@ -41,7 +41,7 @@ var actionController = (function() {
 	var mouseMovedEvent = {};
 	
 	//create mouse action object for every key
-	for(var i=0; i < 5; i = i + 1){
+	for(let i=0; i < 5; i = i + 1){
 		actions.mouse.key.push({
 			pressed 	: false,	
 			bubbles		: false,
@@ -54,7 +54,7 @@ var actionController = (function() {
 	}
 	
 	//create key action object for every key
-	for(var i=0; i < 200; i = i + 1){
+	for(let i=0; i < 200; i = i + 1){
 		actions.keyboard.key.push({
 			pressed 	: false,	
 			bubbles		: false,
@@ -155,23 +155,24 @@ var actionController = (function() {
 
 			eventObject.cancelBubble = true;
 			eventObject.stopPropagation(); 
-			return false;				
+			return false;
 		}; 
 		
 	
 		//scroll
-		canvas.onmousewheel = function(eventObject){
+		canvas.addEventListener("onmousewheel", function(eventObject){
 			
-			scrollAction(actions.mouse.scroll, eventObject);	
+			scrollAction(actions.mouse.scroll, eventObject);
 
 			if(actions.mouse.scroll.bubbles){
 				return true;
 			}
 
 			eventObject.cancelBubble = true;
-			eventObject.stopPropagation(); 
-			return false;				
-		}; 
+			eventObject.cancelable = false;
+            eventObject.stopPropagation();
+			return false;
+		}, true);
 
 
 		//scroll FF
@@ -184,26 +185,29 @@ var actionController = (function() {
 			}
 
 			eventObject.cancelBubble = true;
-			eventObject.stopPropagation(); 
-			return false;				
-		}); 
+			eventObject.stopPropagation();
+			return false;
+		}, true);
 		
 
 		//mouseleave
-		canvas.onmouseleave = function(eventObject){
+		canvas.addEventListener("onmouseleave", function(eventObject){
 			
 			//general upAction for controllers
-			upAction(actions.mouse, eventObject);	
+			upAction(actions.mouse, eventObject);
 
-			if(actions.mouse.key[getMouseButton(eventObject)].bubbles){
-				return true;
-			}
+			if(getMouseButton(eventObject) !== undefined) {
+
+                if (actions.mouse.key[getMouseButton(eventObject)].bubbles) {
+                    return true;
+                }
+            }
 
 			eventObject.cancelBubble = true;
 			eventObject.stopPropagation(); 
 			return false;	
 
-		};
+		}, true);
 
 		
 		//keydown

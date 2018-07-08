@@ -1,0 +1,92 @@
+
+.ztree * {
+    font-family: "Segoe UI";
+    font-size: 12px;
+}
+
+.ztree li {
+    padding: 0px;
+    line-height: 25px;
+}
+
+.ztree li a {
+    color: #767676;
+    height: 25px;
+    padding-left: 1px;
+}
+
+.ztree li span.button.zt_ico_close, .ztree li span.button.zt_ico_open, .ztree li span.button.zt_ico_docu {
+    background-size: contain !important;
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+.ztree li a:hover {
+    text-decoration: none;
+    color: #000000;
+    background-color: #E7E7E7;
+}
+
+.ztree li a.curSelectedNode {
+    background-color:#1faeff;
+    color: #FFFFFF;
+    border: 0px;
+    height: 25px;
+}
+
+.ztree li span.button.noline_open {
+    background-image: url("../../libs/jqwidgets/styles/images/metro-icon-down.png");
+    background-position: center;
+}
+
+.ztree li span.button.noline_close {
+    background-image: url("../../libs/jqwidgets/styles/images/metro-icon-right.png");
+    background-position: center;
+}
+
+.ztree li span.checkbox_true_full.chk.button {
+    background-image: url("../../libs/jqwidgets/styles/images/check_black.png");
+    background-position: center;
+}
+
+.ztree li span.checkbox_false_full.chk.button {
+    background-image: none;
+    background-position: center;
+}
+
+.ztree li span.checkbox_false_part.chk.button {
+    background-image: none;
+    background-position: center;
+}
+
+.ztree li span.checkbox_false_part_focus.chk.button {
+    background-image: none;
+    background-position: center;
+}
+
+.ztree li span.checkbox_true_part.chk.button {
+    background-image: url("../../libs/jqwidgets/styles/images/check_indeterminate_black.png");
+    background-position: center;
+}
+
+.ztree li span.button.chk.checkbox_false_full_focus {
+    background-image: none;
+    background-position: center;
+}
+
+.ztree li span.button.chk.checkbox_true_full_focus {
+    background-image: url("../../libs/jqwidgets/styles/images/check_black.png");
+    background-position: center;
+}
+
+.ztree li span.button.chk.checkbox_true_part_focus {
+    background-image: url("../../libs/jqwidgets/styles/images/check_indeterminate_black.png");
+    background-position: center;
+}
+
+.ztree li span.chk.button {
+    border: 1px;
+    border-style: solid;
+    border-color: #e5e5e5;
+}

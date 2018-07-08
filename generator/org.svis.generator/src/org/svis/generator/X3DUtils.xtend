@@ -6,9 +6,11 @@ import org.svis.generator.rd.RDSettings
 import org.svis.generator.rd.RDSettings.Variant
 import org.svis.generator.city.CitySettings
 import org.svis.generator.city.CitySettings.BuildingType
+import org.eclipse.xtext.generator.IFileSystemAccess2
+import java.io.File
 
 class X3DUtils {
-
+	
 	def String toX3DHead() '''
 		<?xml version="1.0" encoding="UTF-8"?>
 		<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.3//EN" "http://www.web3d.org/specifications/x3d-3.3.dtd">
@@ -106,4 +108,46 @@ class X3DUtils {
 			  <LabelEventHandler></LabelEventHandler>
 			</AnimationFramework>
 	'''
+	
+	def toD3Head()'''
+	import React, { Component } from 'react';
+	import './App.css';
+	import { InteractiveForceGraph, ForceGraphNode, ForceGraphLink, ForceGraphArrowLink } from 'react-vis-force';
+	
+	class App extends Component {
+	  render() {
+	    return (
+	      <div className="App">
+	
+	        <p className="App-intro">
+	          Prototype 1:  <a href="https://github.com/uber/react-vis-force">react-vis-force</a>
+	        </p>
+			<div>
+			<InteractiveForceGraph
+				simulationOptions={{ height: 600, width: 800 }}
+				labelAttr="label"
+				onSelectNode={(node) => console.log(node)}
+				highlightDependencies="true"
+				zoom="true"
+			>
+	'''
+	
+	def toD3Tail() '''
+			</InteractiveForceGraph>
+			</div>
+	      </div>
+	
+	    );
+	  }
+	}
+	
+	export default App;
+	'''
+	
+	def convertToMultipart(IFileSystemAccess2 fsa) {
+		val processBuilder = new ProcessBuilder("./aopt-idmap-sapd.bat")
+ 		val directory = new File(fsa.getURI("aopt-idmap-sapd.bat").path.replace("%20", " ")).parentFile
+ 		processBuilder.directory (directory)
+		processBuilder.start
+	}
 }

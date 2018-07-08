@@ -39,6 +39,10 @@ import org.svis.xtext.famix.impl.FamixFactoryImpl
 import java.util.Comparator
 import org.svis.xtext.famix.MethodType
 import org.svis.generator.rd.RDSettings
+import org.svis.xtext.famix.FAMIXAntipattern
+import org.svis.xtext.famix.FAMIXPath
+import org.svis.xtext.famix.FAMIXComponent
+import org.svis.xtext.famix.IntegerReference
 import org.neo4j.graphdb.GraphDatabaseService
 import org.svis.lib.database.Database
 import org.neo4j.graphdb.Node
@@ -51,14 +55,20 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 	val Set<FAMIXNamespace> subPackages = newLinkedHashSet
 	val List<FAMIXStructure> allStructures = newArrayList
 	val List<FAMIXMethod> methods = newArrayList
+	val List<FAMIXMethod> antiMethods = newArrayList
 	val List<FAMIXAttribute> attributes = newArrayList
 	val List<FAMIXEnumValue> enumValues = newArrayList
 	val List<FAMIXStructure> structures = newArrayList
 	val List<FAMIXNamespace> packagesToMerge = newArrayList
-	val Map<FAMIXMethod, List<FAMIXParameter>> parameters = newHashMap
-	val static famixFactory = new FamixFactoryImpl()
-	val Map<String, Node> nodes = newHashMap
 
+	val Map<FAMIXMethod, List<FAMIXParameter>> parameters = newHashMap 
+	val List<FAMIXInvocation> invocations = newArrayList
+	val static famixFactory = new FamixFactoryImpl()
+	var List<FAMIXAntipattern> antipattern = newArrayList()
+	var List<FAMIXComponent> components = newArrayList()
+	var int i = 0
+	val Map<String, Node> nodes = newHashMap
+	
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Famix2Famix has started.")
 		val resourceList = ctx.get("famix") as List<?>
@@ -77,6 +87,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 				}
 				if (famixRoot.isLoaded) {
 					famixRoot.contents += run(famixRoot.contents.head as Root)
+					i++;
 				}
 				resources += famixRoot
 			}
@@ -85,26 +96,83 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		log.info("Famix2Famix has finished.")
 	}
 
+	def private toInvocation(FAMIXMethod m1, FAMIXMethod m2) {
+		val invocation = famixFactory.createFAMIXInvocation
+		invocation.name = m2.name + 2000000
+		invocation.sender = famixFactory.createIntegerReference
+		invocation.sender.ref = m1
+		invocation.candidates = famixFactory.createIntegerReference
+		invocation.candidates.ref = m2
+		
+		invocations += invocation
+	}
+	
+	def private toMethod(FAMIXStructure s, int j, int index, String pattern, String id) {
+		val method = famixFactory.createFAMIXMethod
+		method.numberOfStatements = 20
+		method.parentType = famixFactory.createIntegerReference
+		method.parentType.ref = s
+		method.id = s.id + "_" + j + "_" + index
+		method.fqn = pattern
+		method.signature = pattern
+		method.value = (i + j).toString
+		method.name = (i + j).toString
+		method.antipattern = id
+		antiMethods.add(method)
+		return method
+	}
+	
+	def private addAntipattern(FAMIXStructure elem, FAMIXAntipattern antipattern) {
+		switch elem {
+			FAMIXClass: if(!elem.antipattern.contains(antipattern)) {
+							val antipatternref = famixFactory.createIntegerReference
+							antipatternref.ref = antipattern
+							elem.antipattern.add(antipatternref)
+						}
+			FAMIXParameterizableClass: if(!elem.antipattern.contains(antipattern)) {
+							val antipatternref = famixFactory.createIntegerReference
+							antipatternref.ref = antipattern
+							elem.antipattern.add(antipatternref)
+						}
+			FAMIXEnum: if(!elem.antipattern.contains(antipattern)) {
+							val antipatternref = famixFactory.createIntegerReference
+							antipatternref.ref = antipattern
+							elem.antipattern.add(antipatternref)
+						}
+			FAMIXAnnotationType: if(!elem.antipattern.contains(antipattern)) {
+							val antipatternref = famixFactory.createIntegerReference
+							antipatternref.ref = antipattern
+							elem.antipattern.add(antipatternref)
+						}
+		}
+		
+	}
+	
 	def private run(Root famixRoot) {
 		val famixDocument = famixRoot.document
 		famixDocument.elements.removeAll(Collections::singleton(null))
 		// elements we do not want
 		val List<FAMIXStructure> structuresToDelete = newArrayList
 		val fileAnchors = famixDocument.elements.filter(FAMIXFileAnchor).filter[element !== null].toList
+		antipattern = famixDocument.elements.filter(FAMIXAntipattern).toList
+		components = famixDocument.elements.filter(FAMIXComponent).toList
 		val Set<FAMIXNamespace> packages = newLinkedHashSet
-		fileAnchors.forEach [ f |
+		
+		famixDocument.elements.filter(FAMIXPath).forEach[path|
+			path.id = createID(path.name + path.start.ref.name + path.end.ref.name);
+		]
+		
+		fileAnchors.forEach[f|
 			val element = f.element.ref
 			switch element {
-				FAMIXAttribute:
-					attributes.add(element)
-				FAMIXMethod:
-					methods.add(element)
-				FAMIXStructure:
-					structures.add(element)
-				FAMIXComment,
-				FAMIXLocalVariable,
-				FAMIXAnnotationTypeAttribute: {
-				} // do nothing, just to prevent them from being treaded in default
+				FAMIXAttribute: attributes.add(element)
+				FAMIXMethod: methods.add(element)
+				FAMIXStructure: {
+					if(element.container !== null) {
+						structures.add(element)
+					}
+				}
+				FAMIXComment, FAMIXLocalVariable, FAMIXAnnotationTypeAttribute: {} // do nothing, just to prevent them from being treaded in default
 				default: {
 					log.warn("Famix2Famix: forgot " + element.class)
 					log.info(element.name)
@@ -147,16 +215,20 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			deletePrivates
 		}
 		val allPackages = famixDocument.elements.filter(FAMIXNamespace).toSet
-		allStructures += famixDocument.elements.filter(FAMIXStructure)
+		allStructures += famixDocument.elements.filter(FAMIXStructure).filter[container !== null]
 		val nameComparator = new BeanComparator("name")
-		val accesses = famixDocument.elements.filter(FAMIXAccess).filter[methods.contains(accessor.ref)].filter [
-			attributes.contains(variable.ref)
-		].sortWith(nameComparator)
-		val invocations = famixDocument.elements.filter(FAMIXInvocation).filter[methods.contains(candidates.ref)].filter [
-			methods.contains(sender.ref)
-		].sortWith(nameComparator)
-		val inheritances = famixDocument.elements.filter(FAMIXInheritance).filter[structures.contains(superclass.ref)].
-			filter[structures.contains(subclass.ref)].sortWith(nameComparator)
+		val accesses = famixDocument.elements.filter(FAMIXAccess)
+							.filter[methods.contains(accessor.ref)]
+							.filter[attributes.contains(variable.ref)]
+							.sortWith(nameComparator)
+		invocations += famixDocument.elements.filter(FAMIXInvocation)
+							.filter[methods.contains(candidates.ref)]
+							.filter[methods.contains(sender.ref)]
+							.sortWith(nameComparator)
+		val inheritances = famixDocument.elements.filter(FAMIXInheritance)
+							.filter[structures.contains(superclass.ref)]
+							.filter[structures.contains(subclass.ref)]
+							.sortWith(nameComparator)
 		allPackages.forEach[getPackages]
 		rootPackages.forEach[setQualifiedName]
 		methods.forEach[setQualifiedName]
@@ -190,6 +262,8 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		} else {
 			Collections::sort(attributes, comparator)
 		}
+
+		structures.removeIf[fqn === null]
 		Collections::sort(structures, comparator)
 		Collections::sort(enumValues, comparator)
 
@@ -210,13 +284,102 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 			packagesToMerge.forEach[removePackages]
 			packagesToMerge.forEach[mergePackages]
 		}
+		
+		val paths = famixDocument.elements.filter(FAMIXPath).filter[start.ref !== null].filter[end.ref !== null].toList
+		
 		famixDocument.elements.clear
 		famixDocument.elements.addAll(rootPackages)
 		famixDocument.elements.addAll(subPackages)
 		ECollections::sort(famixDocument.elements, comparator)
-
+		famixDocument.elements.addAll(paths)
 		famixDocument.elements.addAll(structures)
-
+		
+		val componentsToDelete = newHashSet
+		components.forEach[component|
+			val oldPaths = newLinkedList
+			val classes = newHashSet
+			component.path.forEach[ref|
+				val path = ref.ref as FAMIXPath
+				val start = path.start.ref as FAMIXClass
+				val end = path.end.ref as FAMIXClass
+				if(start.container !== null && end.container !== null) {
+					if(start.container.ref == end || end.container.ref == start){
+						oldPaths += ref
+					} else {
+						classes += start
+						classes += end
+					}
+				}
+			]
+			component.path.removeAll(oldPaths)			
+			component.elements.removeIf[el| classes.contains(el.ref) == false]
+			if(component.path.isNullOrEmpty || component.elements.isNullOrEmpty) {
+				componentsToDelete += component
+			}
+		]
+		
+		famixDocument.elements.removeAll(componentsToDelete)
+		components.removeAll(componentsToDelete)
+		
+		val List<String> strings = newLinkedList
+		components.forEach[component |
+			component.id = component.name.createID
+			component.elements.forEach[el, index |
+				strings += el.ref.name
+				val structure = el.ref as FAMIXClass
+				val ref = famixFactory.createIntegerReference
+				ref.ref = component
+				structure.scc = ref
+			]
+		]
+		
+		antipattern.forEach[p, j|
+			val currentPattern = p
+			currentPattern.id = currentPattern.name.createID
+			val Map<String, FAMIXMethod> methods_ = newHashMap
+			val List<IntegerReference> pathsToDelete = newLinkedList
+			p.path.forEach[n, index|
+				val node  = n.ref as FAMIXPath
+				val start_id = (node.start.ref as FAMIXStructure).name
+				var foundStart = true
+				var foundEnd = true
+				var FAMIXMethod start_method
+				var FAMIXMethod end_method
+				if (methods_.containsKey(start_id)) {
+					start_method = methods_.get(start_id)
+				} else {
+					foundStart = !structures.filter[name == start_id].isNullOrEmpty
+					if(foundStart) {
+						val start_class = structures.filter[name == start_id].get(0)
+						start_method = toMethod(start_class, j, index, p.type, currentPattern.id)
+						methods_.put(start_id, start_method)
+						addAntipattern(start_class, currentPattern)
+					}
+				}
+				
+				val end_id = (node.end.ref as FAMIXStructure).name
+				if (methods_.containsKey(end_id)) {
+					end_method = methods_.get(end_id)
+				} else {
+					foundEnd = !structures.filter[name == end_id].nullOrEmpty
+					if(foundEnd) {					
+						val end_class = structures.filter[name == end_id].get(0)
+						end_method = toMethod(end_class, j, index, p.type, currentPattern.id)
+						methods_.put(end_id, end_method)
+						addAntipattern(end_class, currentPattern)
+					}
+				}
+				if (foundStart && foundEnd) {
+					toInvocation(start_method, end_method)
+				} else {
+					pathsToDelete += n
+				}
+			]
+			
+			p.path.removeAll(pathsToDelete)
+			paths.removeAll(pathsToDelete)
+		]
+	
 		famixDocument.elements.addAll(methods)
 		famixDocument.elements.addAll(attributes)
 		famixDocument.elements.addAll(enumValues)
@@ -224,6 +387,9 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		famixDocument.elements.addAll(accesses)
 		famixDocument.elements.addAll(inheritances)
 		famixDocument.elements.addAll(fileAnchors)
+		famixDocument.elements.addAll(antipattern)
+		famixDocument.elements.addAll(components)
+
 		if (FAMIXSettings::WRITE_TO_DATABASE) {
 			graph = Database::getInstance(FAMIXSettings::DATABASE_NAME)
 			val document = famixRoot.document
@@ -238,6 +404,7 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 				tx.close
 			}
 		}
+
 		rootPackages.clear
 		subPackages.clear
 		allStructures.clear
@@ -245,7 +412,10 @@ class Famix2Famix extends WorkflowComponentWithConfig {
 		attributes.clear
 		enumValues.clear
 		structures.clear
-		return famixRoot
+		antiMethods.clear
+		antipattern.clear
+		components.clear
+		return famixRoot	
 	}
 
 	def private deletePrivates() {

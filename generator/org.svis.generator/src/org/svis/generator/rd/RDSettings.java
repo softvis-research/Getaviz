@@ -7,10 +7,13 @@ package org.svis.generator.rd;
  */
 
 public enum RDSettings {;
+	public static final boolean SHOW_HISTORIES = true;
+	public static final boolean SHOW_CLASS_MEMBERS = true;
 	public static final double DATA_FACTOR = 4;
 	public static final double METHOD_FACTOR = 1;
 	public static final double HEIGHT = 1;
 	public static final double RING_WIDTH = 2;
+	public static final boolean CONVERT_TO_MULTIPART = false;
 	/**
 	* Sets the ring width of the method disks
 	* Only relevant if disk of type FAMIX.Method exist
@@ -34,6 +37,7 @@ public enum RDSettings {;
 	public static final String NAMESPACE_COLOR = 150/255.0 + " " + 150/255.0 + " " + 150/255.0;
 	public static final String NAMESPACE_COLOR_HEX = "#969696";
 	public static final String METHOD_INVOCATION_COLOR = 120/255.0 + " " + 10/255.0 + " " + 50/255.0;
+	public static final String PROJECT_COLOR = 53/255.0 + " " + 53/255.0 + " " + 89/255.0;
 	public static final int HEIGHT_BOOST = 8;
 	public static final float HEIGHT_MULTIPLICATOR = 50.0f;
 	/**
@@ -56,8 +60,21 @@ public enum RDSettings {;
 	public static OutputFormat OUTPUT_FORMAT = OutputFormat.X3D;
 	
 	public static enum OutputFormat {
-		X3D,X3DOM,SimpleGlyphsJson,X3D_COMPRESSED,AFrame
-	}	
+		X3D, X3DOM, SimpleGlyphsJson, X3D_COMPRESSED, AFrame, D3
+	}
+	
+	public static ClassSize CLASS_SIZE = ClassSize.NONE;
+	
+	public static enum ClassSize {
+		NONE, BETWEENNESS_CENTRALITY, NUMBER_OF_STATEMENTS
+	}
+	
+	public static ClassColor CLASS_COLOR_METRIC = ClassColor.STATIC;
+	
+	public static enum ClassColor {
+		STATIC, STK, CHANGE_FREQUENCY
+	}
+	
 	/**
 	 * Depending on the value set metrics will not represented, by height
 	 * or in a dynamic way which can either be Luminance or Frequency 
@@ -75,7 +92,7 @@ public enum RDSettings {;
 	public static InvocationRepresentation INVOCATION_REPRESENTATION = InvocationRepresentation.NONE;
 
 	public static enum InvocationRepresentation {
-		NONE,MOVING_SPHERES,FLASHING_METHODS,MOVING_FLASHING
+		NONE, MOVING_SPHERES, FLASHING_METHODS, MOVING_FLASHING
 	}
 	/**
 	 * Sets in which way the Historic Evolution
@@ -99,5 +116,19 @@ public enum RDSettings {;
 	 *public static enum Metrics {
 	 *COMPLEXITY
 	}*/
-
+	
+	public static ShowVersions SHOW_VERSIONS = ShowVersions.ALL;
+	
+	public static enum ShowVersions {
+		ALL, LATEST
+	}
+	
+	public static ClassHeight CLASS_HEIGHT = ClassHeight.STATIC;
+	
+	public static enum ClassHeight {
+		STATIC, NUMBER_OF_INCIDENTS
+	}
+	
+	public static String TIMEFORMAT = "yyyy-MM-dd'T'HH:mm";
+	public static boolean SHOw_NAMESPACE_VERSIONS = false;
 }
