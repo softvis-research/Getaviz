@@ -130,7 +130,7 @@
 						{
 							title: 	"Recursive Disk",
 							link: 	true,
-							url:	"Index%20mini.php?setup=web/webRD&model=RD%20freemind"							
+							url:	"Index%20mini.php?setup=web/RD freemind&model=RD%20freemind"
 						},
 					]
 				},

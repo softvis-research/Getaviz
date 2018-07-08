@@ -28,7 +28,7 @@
 
 <html>
 <head>
-	<title>SVIS UI Prototype</title>
+	<title>Getaviz</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	
     <!--Main-->
@@ -58,9 +58,18 @@
 	<script type="text/javascript" src="libs/jqwidgets/jqxtextarea.js"></script>
 	<script type="text/javascript" src="libs/jqwidgets/jqxswitchbutton.js"></script>
 	<script type="text/javascript" src="libs/jqwidgets/jqxprogressbar.js"></script>
+	<script type="text/javascript" src="libs/jqwidgets/jqxcheckbox.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxcombobox.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxlistbox.js"></script>
 	
     <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.base.css" type="text/css" />
     <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.metro.css" type="text/css" />
+    <!-- ztree -->
+    	<script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.core.js"></script>
+    	<script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.exhide.js"></script>
+    	<script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.excheck.js"></script>
+    	<link rel="stylesheet" href="libs/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    	<link rel="stylesheet" href="scripts/PackageExplorer/zt.css" type="text/css">
 	
 	<script type="text/javascript" src="scripts/CanvasFilter/CanvasFilterController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasMark/CanvasMarkController.js"></script>
@@ -79,6 +88,12 @@
 	<script type="text/javascript" src="scripts/InteractionLogger/InteractionLogger.js"></script>
 	<script type="text/javascript" src="scripts/Email/EmailController.js"></script>
 	<script type="text/javascript" src="scripts/Menu/MenuController.js"></script>
+	<script type="text/javascript" src="scripts/Legend/LegendController.js"></script>
+    <script type="text/javascript" src="scripts/Systeminfo/SysteminfoController.js"></script>
+    <script type="text/javascript" src="scripts/PatternConnector/PatternConnectorController.js"></script>
+    <script type="text/javascript" src="scripts/EdgeConfigurator/EdgeConfiguratorController.js"></script>
+    <script type="text/javascript" src="scripts/PatternExplorer/PatternExplorerController.js"></script>
+    <script type="text/javascript" src="scripts/VersionExplorer/VersionExplorerController.js"></script>
 	
 	<!--user interface-->		
 	<script type="text/javascript" src="scripts/DefaultLogger.js"></script>
