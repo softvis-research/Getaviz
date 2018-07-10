@@ -237,10 +237,4 @@ class Bank_MethodTypeTest {
     	
 		assertEquals(FileUtils.checksumCRC32(file1), FileUtils.checksumCRC32(file2))
 	}
-    
-    @AfterClass
-    def static void end(){
-    	RDSettings::METHOD_TYPE_MODE = false
-    	FAMIXSettings::HIDE_PRIVATE_ELEMENTS = false
-    }
 }
