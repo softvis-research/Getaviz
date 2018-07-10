@@ -125,10 +125,10 @@ class City2X3DOM {
 					<Shape>
 					«IF separator instanceof PanelSeparatorCylinder»
 						«val separatorC = separator»
-						<Cylinder radius='«separatorC.radius»' height='«Panels::SEPARATOR_HEIGHT»'></Cylinder>
+						<Cylinder radius='«separatorC.radius»' height='«config.panelSeparatorHeight»'></Cylinder>
 					«ELSE»
 						«val separatorB = separator as PanelSeparatorBox»
-						<Box size='«separatorB.width +" "+ Panels::SEPARATOR_HEIGHT + " "+ separatorB.length»'></Box>
+						<Box size='«separatorB.width +" "+ config.panelSeparatorHeight + " "+ separatorB.length»'></Box>
 					«ENDIF»
 					<Appearance>
 						<Material diffuseColor='«config.getCityColorAsPercentage("black")»'></Material>

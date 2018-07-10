@@ -116,7 +116,7 @@ class City2AFrame {
 				«val separatorC = separator»
 				<a-cylinder position="«separator.position.x + " " + separator.position.y + " " + separator.position.z»"
 					 radius="«separatorC.radius»" 
-					 height="«Panels::SEPARATOR_HEIGHT»" 
+					 height="«config.panelSeparatorHeight»" 
 					 color="«config.getCityColorHex("black")»"
 					 shader="flat"
 					 fog="false"
@@ -128,7 +128,7 @@ class City2AFrame {
 				«val separatorB = separator as PanelSeparatorBox»
 				<a-box position="«separator.position.x + " " + separator.position.y + " " + separator.position.z»"
 						width="«separatorB.width»"
-						height="«Panels::SEPARATOR_HEIGHT»"
+						height="«config.panelSeparatorHeight»"
 						depth="«separatorB.length»"
 						color="«config.getCityColorHex("black")»"
 						shader="flat"
