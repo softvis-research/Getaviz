@@ -38,6 +38,7 @@
 		{	name: 	"packageExplorerController",
 		},
 		{	name: 	"sourceCodeController",
+            url:    "https://raw.githubusercontent.com/softvis-research/freemind-mmx/master/freemind/"
 		},
         { 	name: 	"relationConnectorController",
 
