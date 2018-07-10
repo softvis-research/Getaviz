@@ -38,6 +38,8 @@
 		{	name: 	"packageExplorerController",
 		},
 		{	name: 	"sourceCodeController",
+            url:    "https://raw.githubusercontent.com/troessner/reek/master/lib/",
+            fileType: "rb"
 		},
 		
 		{ 	name: 	"relationConnectorController",		
