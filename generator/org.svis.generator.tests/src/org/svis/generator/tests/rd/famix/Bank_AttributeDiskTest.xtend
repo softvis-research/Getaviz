@@ -16,8 +16,6 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
-import org.svis.generator.rd.RDSettings
-import org.junit.AfterClass
 import org.svis.generator.SettingsConfiguration
 
 class Bank_AttributeDiskTest {
@@ -233,10 +231,5 @@ class Bank_AttributeDiskTest {
         }
     	
     	assertEquals(FileUtils.checksumCRC32(file1), FileUtils.checksumCRC32(file2))
-    }
-    
-    @AfterClass
-    def static void end() {
-    	RDSettings::DATA_DISKS = false
     }
 }

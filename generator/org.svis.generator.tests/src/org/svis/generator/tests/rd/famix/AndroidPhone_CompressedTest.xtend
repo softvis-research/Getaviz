@@ -20,7 +20,7 @@ import org.svis.generator.SettingsConfiguration
 
 class AndroidPhone_CompressedTest {
 	
-		val static path = "./output/rd/famix/android_phone/compressed/"
+	val static path = "./output/rd/famix/android_phone/compressed/"
 	val static engine = XMLUnit.newXpathEngine
 	var static String json
 	val rd = XMLUnit::buildControlDocument(Files::toString(new File(path + "rd.xml"), Charset.forName("UTF-8")))
