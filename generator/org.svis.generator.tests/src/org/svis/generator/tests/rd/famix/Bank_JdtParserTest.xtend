@@ -240,9 +240,4 @@ class Bank_JdtParserTest {
     	
     	assertEquals(FileUtils.checksumCRC32(file1), FileUtils.checksumCRC32(file2))
     }
-    
-    @AfterClass
-    def static void end() {
-    	FAMIXSettings::FAMIX_PARSER = FAMIXSettings::FamixParser.VERVEINEJ
-    }
 }
