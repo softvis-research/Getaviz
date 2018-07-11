@@ -8,6 +8,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
+import org.svis.generator.SettingsConfiguration
 
 class Bank_PlantTest {
 	
@@ -17,8 +18,8 @@ class Bank_PlantTest {
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
-		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/plant/Famix2Plant.mwe2", "-p", "path=testdata/bank/input/famix", "outputPath=" + path,
-			"configPath=testdata/bank/input/famix/plantConfig.json","projectName=org.svis.generator.tests","texturDestinyPath=org.svis.generator.tests/output/plant/famix/bank/pics"])
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankPlantTest.properties")
+		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/plant/Famix2Plant.mwe2", "-p", "path=testdata/bank/input/famix", "outputPath=" + path, "projectName=org.svis.generator.tests","texturDestinyPath=org.svis.generator.tests/output/plant/famix/bank/pics"])
 	}
 	
 	@Test
@@ -51,7 +52,7 @@ class Bank_PlantTest {
 	
 	    
     @Test
-    def rd() {
+    def plant() {
     	var File file1 = null
     	var File file2 = null
         try {
@@ -65,7 +66,7 @@ class Bank_PlantTest {
     }
     
     @Test
-    def rdExtended() {
+    def plantExtended() {
     	var File file1 = null
     	var File file2 = null
 
