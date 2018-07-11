@@ -158,6 +158,7 @@ class RD2X3DCompressed {
 		«FOR segs : segments.values»
 			«FOR segment :segs»
 				«IF(segment.color == config.RDDataColorAsPercentage)»
+				«log.info("Data: " + segment.color + " : " + config.RDDataColorAsPercentage)»
 					<Transform  translation='«(segment.
 			eContainer as Disk).position.x + " " + (segment.eContainer as Disk).position.y + " " +
 			(segment.eContainer as Disk).position.z»' rotation='0 0 1 1.57'>
@@ -202,7 +203,8 @@ class RD2X3DCompressed {
 		«var firstMethSegId = ""»
 		«FOR segs : segments.values»
 			«FOR segment :segs»
-				«IF(segment.color !== config.RDDataColorAsPercentage)»
+				«IF(segment.color != config.RDDataColorAsPercentage)»
+				«log.info("Method: " + segment.color + " : " + config.RDDataColorAsPercentage)»
 					<Transform  translation='«(segment.
 			eContainer as Disk).position.x + " " + (segment.eContainer as Disk).position.y + " " +
 			(segment.eContainer as Disk).position.z»' rotation='0 0 1 1.57'>

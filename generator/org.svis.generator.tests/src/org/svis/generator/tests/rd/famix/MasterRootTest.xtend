@@ -134,7 +134,7 @@ class MasterRootTest {
     
     @AfterClass
     def static void end() {
-    	FAMIXSettings::MASTER_ROOT = false
-    	FAMIXSettings::MERGE_PACKAGES = false
+//    	FAMIXSettings::MASTER_ROOT = false
+//    	FAMIXSettings::MERGE_PACKAGES = false
     }
 }

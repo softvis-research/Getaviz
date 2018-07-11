@@ -237,6 +237,6 @@ class Bank_AttributeDiskTest {
     
     @AfterClass
     def static void end() {
-    	RDSettings::DATA_DISKS = false
+//    	RDSettings::DATA_DISKS = false
     }
 }

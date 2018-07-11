@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
 import org.svis.generator.rd.RDSettings
-import org.svis.generator.rd.RDSettings.OutputFormat
+//import org.svis.generator.rd.RDSettings.OutputFormat
 import org.svis.generator.SettingsConfiguration
 
 class AndroidPhone_CompressedTest {

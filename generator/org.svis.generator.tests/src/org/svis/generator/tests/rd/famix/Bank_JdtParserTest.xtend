@@ -243,6 +243,6 @@ class Bank_JdtParserTest {
     
     @AfterClass
     def static void end() {
-    	FAMIXSettings::FAMIX_PARSER = FAMIXSettings::FamixParser.VERVEINEJ
+//    	FAMIXSettings::FAMIX_PARSER = FAMIXSettings::FamixParser.VERVEINEJ
     }
 }

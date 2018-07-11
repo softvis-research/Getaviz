@@ -240,7 +240,7 @@ class Bank_MethodTypeTest {
     
     @AfterClass
     def static void end(){
-    	RDSettings::METHOD_TYPE_MODE = false
-    	FAMIXSettings::HIDE_PRIVATE_ELEMENTS = false
+//    	RDSettings::METHOD_TYPE_MODE = false
+//    	FAMIXSettings::HIDE_PRIVATE_ELEMENTS = false
     }
 }
