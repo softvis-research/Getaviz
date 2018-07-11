@@ -14,12 +14,14 @@ import org.svis.xtext.plant.PollStem
 import org.svis.generator.plant.WorkflowComponentWithPlantConfig
 import org.svis.xtext.plant.Junction
 import org.svis.generator.SettingsConfiguration
+import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
+import org.apache.commons.logging.LogFactory
 
-class Plant2Plant extends WorkflowComponentWithPlantConfig {
+class Plant2Plant extends WorkflowComponentWithModelSlot {
 
 	val config = SettingsConfiguration.instance
 
-	// val log = LogFactory::getLog(class)
+	 val log = LogFactory::getLog(class)
 	// TODO solve it with injection
 	// @Inject extension FamixUtils
 //	extension FamixUtils util = new FamixUtils
@@ -181,7 +183,7 @@ class Plant2Plant extends WorkflowComponentWithPlantConfig {
 	 * Calculate and set stem size. 
 	 */
 	def private void calcStemSize(Stem stem) {
-		if (config.classSize == "Count_AttributesAndMethods") {
+		if (config.classSize == "count_attributes_and_methods") {
 			stem.width = config.stemThickness * 2 + stem.dataCounter + stem.methodCounter + config.stemHeight * 2 + 6;
 			stem.length = config.stemThickness * 2 + stem.dataCounter + stem.methodCounter + config.stemHeight * 2 + 6;
 			stem.height = config.stemHeight + stem.dataCounter + stem.methodCounter + stem.methodCounter;

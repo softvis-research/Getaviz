@@ -23,8 +23,9 @@ import org.svis.xtext.famix.impl.FAMIXMethodImpl
 import org.svis.generator.plant.WorkflowComponentWithPlantConfig
 import org.svis.xtext.plant.Junction
 import org.svis.generator.SettingsConfiguration
+import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
 
-class Famix2Plant extends WorkflowComponentWithPlantConfig {
+class Famix2Plant extends WorkflowComponentWithModelSlot {
 	val config = SettingsConfiguration.instance
 	val log = LogFactory::getLog(class)
 	val static plantFactory = new PlantFactoryImpl()
@@ -120,7 +121,7 @@ class Famix2Plant extends WorkflowComponentWithPlantConfig {
 		methods.filter[parentType.ref === el].forEach[entity.methodCounter = entity.methodCounter + 1]
 
 		// mapping attribute and methods to PETAL || POLLSTEM:		
-		if (config.switchAttributeMethodMapping === "PETAL_POLLSTEM") {
+		if (config.switchAttributeMethodMapping == "PETAL_POLLSTEM") {
 			if (config.showAttributes) {
 				attributes.filter[parentType.ref === el].forEach[entity.petals += toPetals(entity)]
 			}
@@ -260,7 +261,7 @@ class Famix2Plant extends WorkflowComponentWithPlantConfig {
 		attributes.filter[parentType.ref === el].forEach[junction.dataCounter = junction.dataCounter + 1]
 		methods.filter[parentType.ref === el].forEach[junction.methodCounter = junction.methodCounter + 1]
 
-		if (config.switchAttributeMethodMapping === "PETAL_POLLSTEM") {
+		if (config.switchAttributeMethodMapping == "PETAL_POLLSTEM") {
 			if (config.showAttributes) {
 				attributes.filter[parentType.ref === el].forEach[junction.petals += toPetals(junction)]
 			}

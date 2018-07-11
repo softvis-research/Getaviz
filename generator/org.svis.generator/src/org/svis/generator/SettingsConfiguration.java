@@ -604,15 +604,15 @@ public class SettingsConfiguration {
 	}
 
 	public boolean isPackageUseTextures() {
-		return config.getBoolean("plant.package.use_textures", false);
+		return config.getBoolean("plant.package.use_textures", true);
 	}
 
 	public String getPackageOddTexture() {
-		return config.getString("plant.package.odd_texture");
+		return config.getString("plant.package.odd_texture", "<ImageTexture url='pics/ground.png' scale='false' />");
 	}
 
 	public String getPackageEvenTexture() {
-		return config.getString("plant.package.even_texture");
+		return config.getString("plant.package.even_texture", "<ImageTexture url='pics/freeGrass.png' scale='false' />");
 	}
 
 	public String getPackageOddColor() {
@@ -768,12 +768,12 @@ public class SettingsConfiguration {
 	}
 
 	public String getMethodColor() {
-		Color color = getColor(config.getString("plant.method.color", "#000100"));
+		Color color = getColor(config.getString("plant.method.color", "#00FF00"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
 
 	public String getMethodColor02() {
-		Color color = getColor(config.getString("plant.method.color", "#010100"));
+		Color color = getColor(config.getString("plant.method.color", "#FFFF00"));
 		return getPlantColorFormatted(getColorFormatted(color));
 	}
 
@@ -833,7 +833,7 @@ public class SettingsConfiguration {
 	}
 
 	public double getPollstemBallHeight() {
-		return getCronHeight() + 3.78;
+		return getCronHeight() + 3.87;
 	}
 
 	public double getJunctionAngle() {
@@ -861,7 +861,7 @@ public class SettingsConfiguration {
 	}
 
 	public double getPlantBuildingVerticalMargin() {
-		return config.getDouble("plant.building.vertical_margin", 3.0);
+		return config.getDouble("plant.building.vertical_margin", 1.0);
 	}
 
 	private String getColorFormatted(Color color) {

@@ -19,8 +19,9 @@ import org.svis.generator.plant.WorkflowComponentWithPlantConfig
 import org.eclipse.emf.mwe.core.WorkflowContext
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor
 import org.eclipse.emf.mwe.core.issues.Issues
+import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
 
-class Plant2X3D extends WorkflowComponentWithPlantConfig implements IGenerator2 {
+class Plant2X3D extends WorkflowComponentWithModelSlot implements IGenerator2 {
 	
 	
 	@Inject extension X3DUtils util
@@ -32,7 +33,7 @@ class Plant2X3D extends WorkflowComponentWithPlantConfig implements IGenerator2 
 
 	override afterGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
 		log.info("Plant2X3D has finished.")
-		config.toJSON(config.outputDirectory + "/plantConfig.json");
+//		config.toJSON(config.outputDirectory + "/plantConfig.json");
 	}
 	
 	
