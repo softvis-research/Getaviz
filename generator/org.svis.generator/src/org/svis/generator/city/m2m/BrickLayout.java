@@ -122,8 +122,8 @@ public class BrickLayout {
 			// setting position for brick
 			Position pos = cityFactory.createPosition();
 			pos.setX(b_lowerLeftX + config.getBrickHorizontalMargin()
-					+ (config.getBrickHorizontalGap() + config.getBrickSize() * bsPosIndex_X
-					+ config.getBrickSize() * 0.5));
+					+ (config.getBrickHorizontalGap() + config.getBrickSize()) * bsPosIndex_X
+					+ config.getBrickSize() * 0.5);
 			pos.setZ(b_lowerLeftZ + config.getBrickHorizontalMargin()
 					+ (config.getBrickHorizontalGap() + config.getBrickSize()) * bsPosIndex_Z
 					+ config.getBrickSize() * 0.5);
