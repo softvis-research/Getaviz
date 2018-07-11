@@ -4,7 +4,6 @@ import java.util.List
 import org.apache.commons.logging.LogFactory
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.EcoreUtil2
-import org.svis.generator.city.CitySettings.Panels
 import org.svis.xtext.city.Building
 import org.svis.xtext.city.BuildingSegment
 import org.svis.xtext.city.Entity
@@ -116,7 +115,7 @@ class City2AFrame {
 				«val separatorC = separator»
 				<a-cylinder position="«separator.position.x + " " + separator.position.y + " " + separator.position.z»"
 					 radius="«separatorC.radius»" 
-					 height="«Panels::SEPARATOR_HEIGHT»" 
+					 height="«config.panelSeparatorHeight»" 
 					 color="«config.getCityColorHex("black")»"
 					 shader="flat"
 					 fog="false"
@@ -128,7 +127,7 @@ class City2AFrame {
 				«val separatorB = separator as PanelSeparatorBox»
 				<a-box position="«separator.position.x + " " + separator.position.y + " " + separator.position.z»"
 						width="«separatorB.width»"
-						height="«Panels::SEPARATOR_HEIGHT»"
+						height="«config.panelSeparatorHeight»"
 						depth="«separatorB.length»"
 						color="«config.getCityColorHex("black")»"
 						shader="flat"
