@@ -16,13 +16,11 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
-import org.svis.generator.rd.RDSettings
-//import org.svis.generator.rd.RDSettings.OutputFormat
 import org.svis.generator.SettingsConfiguration
 
 class AndroidPhone_CompressedTest {
 	
-		val static path = "./output/rd/famix/android_phone/compressed/"
+	val static path = "./output/rd/famix/android_phone/compressed/"
 	val static engine = XMLUnit.newXpathEngine
 	var static String json
 	val rd = XMLUnit::buildControlDocument(Files::toString(new File(path + "rd.xml"), Charset.forName("UTF-8")))

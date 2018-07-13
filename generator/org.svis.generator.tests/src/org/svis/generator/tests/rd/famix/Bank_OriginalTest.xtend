@@ -16,6 +16,7 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
+import org.svis.generator.SettingsConfiguration
 
 class Bank_OriginalTest {
 	
@@ -30,6 +31,7 @@ class Bank_OriginalTest {
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankOriginalTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p", "inputPath=testdata/bank/input/famix", "outputPath=" + path])
 		json = JSONUtil::read("./testdata/bank/output/rd/famix/original/metaData.json")
 	}

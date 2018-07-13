@@ -9,6 +9,7 @@ import java.io.FileNotFoundException
 import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
 import org.svis.generator.tests.helper.JSONUtil
+import org.svis.generator.SettingsConfiguration
 
 class Prawn_OriginalTest {
 	
@@ -20,6 +21,7 @@ class Prawn_OriginalTest {
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/prawn/input/PrawnOriginalTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p", "inputPath=testdata/prawn/input/famix", "outputPath=" + path])
 		json = JSONUtil::read("./testdata/prawn/output/rd/famix/original/metaData.json")
 	}

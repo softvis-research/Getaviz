@@ -7,12 +7,14 @@ import java.io.File
 import java.io.FileNotFoundException
 import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
+import org.svis.generator.SettingsConfiguration
 
 class PrawnTest {
 	
 			//TODO reimplement tests for new dynamix metamodel
 	@BeforeClass
 	def static void launch() {
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/prawn/input/PrawnTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Dynamix2RD.mwe2", "-p", "famixPath=testdata/prawn/input/famixDyn",
 			"dynamixPath=testdata/prawn/input/dynamix","outputPath=output/rd/dynamix/prawn/original"])
 	}
