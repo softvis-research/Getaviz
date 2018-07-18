@@ -11,7 +11,6 @@ import org.svis.xtext.plant.Root
 import org.svis.xtext.plant.Area
 import org.svis.xtext.plant.Petal
 import org.svis.xtext.plant.PollStem
-import org.svis.generator.plant.WorkflowComponentWithPlantConfig
 import org.svis.xtext.plant.Junction
 import org.svis.generator.SettingsConfiguration
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot

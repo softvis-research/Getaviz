@@ -20,7 +20,6 @@ import org.svis.xtext.plant.impl.PlantFactoryImpl
 import org.svis.xtext.plant.Entity
 import org.svis.xtext.famix.impl.FAMIXAttributeImpl
 import org.svis.xtext.famix.impl.FAMIXMethodImpl
-import org.svis.generator.plant.WorkflowComponentWithPlantConfig
 import org.svis.xtext.plant.Junction
 import org.svis.generator.SettingsConfiguration
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot

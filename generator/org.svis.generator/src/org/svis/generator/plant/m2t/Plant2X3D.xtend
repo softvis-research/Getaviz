@@ -15,7 +15,6 @@ import org.svis.xtext.plant.Petal
 import org.svis.xtext.plant.Junction
 import org.svis.xtext.plant.PollStem
 import org.svis.xtext.plant.Area
-import org.svis.generator.plant.WorkflowComponentWithPlantConfig
 import org.eclipse.emf.mwe.core.WorkflowContext
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor
 import org.eclipse.emf.mwe.core.issues.Issues
@@ -33,7 +32,6 @@ class Plant2X3D extends WorkflowComponentWithModelSlot implements IGenerator2 {
 
 	override afterGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
 		log.info("Plant2X3D has finished.")
-//		config.toJSON(config.outputDirectory + "/plantConfig.json");
 	}
 	
 	
