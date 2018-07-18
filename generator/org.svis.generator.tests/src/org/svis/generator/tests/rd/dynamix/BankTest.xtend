@@ -9,7 +9,6 @@ import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
 
 class BankTest {
-	//TODO reimplement tests for new dynamix metamodel
 	@BeforeClass
 	def static launch() {
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Dynamix2RD.mwe2", "-p", "famixPath=testdata/bank/input/famixDyn",

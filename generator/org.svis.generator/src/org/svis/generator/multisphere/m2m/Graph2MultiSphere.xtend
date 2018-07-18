@@ -10,10 +10,12 @@ import org.svis.xtext.graph.Edge
 import org.svis.xtext.graph.Model
 import org.svis.xtext.graph.Node
 import org.svis.xtext.graph.impl.GraphFactoryImpl
-import org.svis.generator.WorkflowComponentWithConfig
+import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
+import org.apache.commons.logging.LogFactory
 
-class Graph2MultiSphere extends WorkflowComponentWithConfig {
-	
+class Graph2MultiSphere extends WorkflowComponentWithModelSlot {
+	//val config = SettingsConfiguration.instance
+	val log = LogFactory::getLog(class)
 	var Model graphRoot
 	var myGraphFactory = new GraphFactoryImpl
 	

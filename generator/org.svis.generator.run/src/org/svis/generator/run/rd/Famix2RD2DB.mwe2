@@ -1,7 +1,6 @@
 module org.svis.generator.run.rd
 
 var path = "./input/famix"
-var configPath = "config.json"
 
 Workflow {
 
@@ -24,18 +23,15 @@ Workflow {
 	// delete unnecessary objects
 	component = org.svis.generator.famix.Famix2Famix {
 		modelSlot = "famix"
-		config = configPath
 	}
 		
 	// transform famix into disks (s2m)
 	component = org.svis.generator.rd.s2m.Famix2RD {
 		modelSlot = "famix"
-		config = configPath
 	}
 	
 	component = org.svis.generator.famix.Famix2DB {
 		modelSlot = "famix"
-		config = configPath
 	}
 
 	// calculate rd layout (m2m)
@@ -45,6 +41,5 @@ Workflow {
 
 	component = org.svis.generator.rd.m2t.RD2DB {
 		modelSlot = 'rdextended'
-		config = configPath
 	}
 }

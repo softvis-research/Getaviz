@@ -7,16 +7,13 @@ import java.io.File
 import java.io.FileNotFoundException
 import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
-import org.svis.generator.rd.RDSettings
-import org.svis.generator.rd.RDSettings.EvolutionRepresentation
+import org.svis.generator.SettingsConfiguration
 
 class Sidekiq_MultipleTimeLineX3DTest {
-		//TODO reimplement tests for new hismo metamodel
 	@BeforeClass
 	def static void launch() {
-		RDSettings::EVOLUTION_REPRESENTATION = EvolutionRepresentation::MULTIPLE_TIME_LINE 
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/sidekiq/input/SidekiqMultipleTimeLineX3DTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Hismo2RD.mwe2", "-p", "inputPath=testdata/sidekiq/input","outputPath=output/rd/hismo/sidekiq/sidekiq_x3d_multiple_time_line/"])
-		RDSettings::EVOLUTION_REPRESENTATION = EvolutionRepresentation::TIME_LINE 
 	}
      
     @Test

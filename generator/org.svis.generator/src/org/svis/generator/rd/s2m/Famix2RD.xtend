@@ -5,7 +5,6 @@ import org.eclipse.emf.mwe.core.WorkflowContext
 import org.eclipse.emf.mwe.core.issues.Issues
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor
 import org.svis.generator.FamixUtils
-import org.svis.generator.rd.RDSettings
 import org.svis.xtext.famix.Document
 import org.svis.xtext.famix.FAMIXAttribute
 import org.svis.xtext.famix.FAMIXEnumValue
@@ -16,11 +15,14 @@ import org.svis.xtext.famix.Root
 import org.svis.xtext.rd.Disk
 import org.svis.xtext.rd.impl.RdFactoryImpl
 import org.svis.xtext.famix.FAMIXStructure
-import org.svis.generator.WorkflowComponentWithConfig
 import org.apache.commons.logging.LogFactory
-import org.svis.generator.rd.RDSettings.MetricRepresentation
+import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.OutputFormat
+import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
+import org.svis.generator.SettingsConfiguration.MetricRepresentation
 
-class Famix2RD extends WorkflowComponentWithConfig {
+class Famix2RD extends WorkflowComponentWithModelSlot {
+	val config = SettingsConfiguration.getInstance
 	val log = LogFactory::getLog(class)
 	val static diskFactory = new RdFactoryImpl()
 	var Document famixDocument
@@ -75,9 +77,9 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		disk.fqn = famixNamespace.fqn
 		disk.type = "FAMIX.Namespace"
 		disk.level = level
-		disk.ringWidth = RDSettings::RING_WIDTH
-		disk.height = RDSettings::HEIGHT
-		disk.transparency = RDSettings::NAMESPACE_TRANSPARENCY
+		disk.ringWidth = config.RDRingWidth
+		disk.height = config.RDHeight
+		disk.transparency = config.RDNamespaceTransparency
 		
 		structures.filter[container.ref === famixNamespace]
 			.forEach[disk.disks += toDisk(level + 1)]
@@ -98,14 +100,14 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		disk.fqn = el.fqn
 		disk.type = el.typeString
 		disk.level = level
-		disk.ringWidth = RDSettings::RING_WIDTH
-		disk.height = RDSettings::HEIGHT
-		if(RDSettings::OUTPUT_FORMAT == RDSettings::OutputFormat::AFrame) {
-			disk.color = RDSettings::CLASS_COLOR_HEX
+		disk.ringWidth = config.RDRingWidth
+		disk.height = config.RDHeight
+		if(config.outputFormat == OutputFormat::AFrame) {
+			disk.color = config.RDClassColorHex
 		} else {
-			disk.color = RDSettings::CLASS_COLOR
+			disk.color = config.RDClassColorAsPercentage
 		}
-		disk.transparency = RDSettings::CLASS_TRANSPARENCY
+		disk.transparency = config.RDClassTransparency
 		
 		// references
 		inheritances.filter[subclass.ref === el].forEach[i|
@@ -115,7 +117,7 @@ class Famix2RD extends WorkflowComponentWithConfig {
 			inheritance.fqn = i.superclass.ref.fqn
 			disk.references += inheritance
 		]
-		if(RDSettings::METHOD_TYPE_MODE){
+		if(config.methodTypeMode){
 			methods.filter[parentType.ref === el].forEach[
 				switch (methodType){
 					case CONSTRUCTOR:disk.methods += toDiskSegment()
@@ -126,14 +128,14 @@ class Famix2RD extends WorkflowComponentWithConfig {
 			attributes.filter[parentType.ref === el].forEach[disk.disks += toDisk()]
 			enumValues.filter[parentEnum.ref === el].forEach[disk.disks += toDisk]	
 		} else {	
-			if (RDSettings::DATA_DISKS){
+			if (config.dataDisks){
 				attributes.filter[parentType.ref === el].forEach[disk.disks += toDisk]
 				enumValues.filter[parentEnum.ref === el].forEach[disk.disks += toDisk]
 			} else {
 				attributes.filter[parentType.ref === el].forEach[disk.data += toDiskSegment]
 				enumValues.filter[parentEnum.ref === el].forEach[disk.data += toDiskSegment]
 			}
-			if(RDSettings::METHOD_DISKS){
+			if(config.methodDisks){
 				methods.filter[parentType.ref === el].forEach[disk.disks += toDisk()]
 			} else {
 				methods.filter[parentType.ref === el].forEach[disk.methods += toDiskSegment()]
@@ -141,7 +143,7 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		} 
 			structures.filter[container.ref === el].forEach[disk.disks += toDisk(level + 1)]
 		
-		if(!(RDSettings::METRIC_REPRESENTATION === MetricRepresentation::NONE)) {	
+		if(!(config.metricRepresentation === MetricRepresentation::NONE)) {	
 			var sumCompl = 0
 			for (m : methods.filter[parentType.ref === el]) {
 				sumCompl += m.cyclomaticComplexity
@@ -160,15 +162,15 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		diskSegment.signature = method.signature
 		diskSegment.frequency = 0
 		diskSegment.luminance = 0
-		diskSegment.height = RDSettings::HEIGHT
-		if(RDSettings::OUTPUT_FORMAT == RDSettings::OutputFormat::AFrame) {
-			diskSegment.color = RDSettings::METHOD_COLOR_HEX
+		diskSegment.height = config.RDHeight
+		if(config.outputFormat == OutputFormat::AFrame) {
+			diskSegment.color = config.RDMethodColorHex
 		} else {
-			diskSegment.color = RDSettings::METHOD_COLOR
+			diskSegment.color = config.RDMethodColorAsPercentage
 		}
-		diskSegment.transparency = RDSettings::METHOD_TRANSPARENCY
+		diskSegment.transparency = config.RDMethodTransparency
 		
-		switch(RDSettings::METRIC_REPRESENTATION)  {
+		switch(config.metricRepresentation)  {
 			case HEIGHT: {
 				diskSegment.height = ((method.cyclomaticComplexity - 1.0 )* heightMultiplicator) + 1.0
 			}
@@ -186,8 +188,8 @@ class Famix2RD extends WorkflowComponentWithConfig {
 			}
 			default: {}
 		}		
-		if (method.numberOfStatements <= RDSettings::MIN_AREA) {
-			diskSegment.size = RDSettings::MIN_AREA
+		if (method.numberOfStatements <= config.RDMinArea) {
+			diskSegment.size = config.RDMinArea
 		} else {
 			diskSegment.size = method.numberOfStatements
 		}
@@ -202,11 +204,11 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		disk.fqn= method.fqn
 		disk.signature = method.signature
 		disk.type = "FAMIX.Method"
-		disk.ringWidth = RDSettings::RING_WIDTH_MD 
-		disk.height = RDSettings::HEIGHT
-		disk.transparency = RDSettings::METHOD_TRANSPARENCY
-		if(RDSettings::OUTPUT_FORMAT == RDSettings::OutputFormat::AFrame) {
-			disk.color = RDSettings::METHOD_COLOR_HEX
+		disk.ringWidth = config.RDRingWidthMD 
+		disk.height = config.RDHeight
+		disk.transparency = config.RDMethodTransparency
+		if(config.outputFormat == OutputFormat::AFrame) {
+			disk.color = config.RDMethodColorHex
 		} else {
 			disk.color = 153/255.0 + " " + 0/255.0 + " " + 0/255.0
 		}
@@ -222,13 +224,13 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		diskSegment.value = attribute.value
 		diskSegment.fqn = attribute.fqn
 		diskSegment.size = 1 //attribute.declaredType.ref.attributeSize
-		diskSegment.height = RDSettings::HEIGHT
-		if(RDSettings::OUTPUT_FORMAT == RDSettings::OutputFormat::AFrame) {
-			diskSegment.color = RDSettings::DATA_COLOR_HEX
+		diskSegment.height = config.RDHeight
+		if(config.outputFormat == OutputFormat::AFrame) {
+			diskSegment.color = config.RDDataColorHex
 		} else {
-			diskSegment.color = RDSettings::DATA_COLOR
+			diskSegment.color = config.RDDataColorAsPercentage
 		}
-		diskSegment.transparency = RDSettings::DATA_TRANSPARENCY
+		diskSegment.transparency = config.RDDataTransparency
 		
 		return diskSegment
 	}
@@ -240,11 +242,11 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		disk.value = attribute.value
 		disk.fqn= attribute.fqn
 		disk.type = "FAMIX.Attribute"
-		disk.ringWidth = RDSettings::RING_WIDTH_AD 
-		disk.height = RDSettings::HEIGHT
-		disk.transparency = RDSettings::DATA_TRANSPARENCY
-		if(RDSettings::OUTPUT_FORMAT == RDSettings::OutputFormat::AFrame) {
-			disk.color = RDSettings::DATA_COLOR_HEX
+		disk.ringWidth = config.RDRingWidthAD
+		disk.height = config.RDHeight
+		disk.transparency = config.RDDataTransparency
+		if(config.outputFormat == OutputFormat::AFrame) {
+			disk.color = config.RDDataColorHex
 		} else {
 			disk.color = 153/255.0 + " " + 0/255.0 + " " + 0/255.0
 		}
@@ -263,13 +265,13 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		diskSegment.value = enumValue.value
 		diskSegment.fqn = enumValue.fqn
 		diskSegment.size = 1 // TODO size
-		diskSegment.height = RDSettings::HEIGHT
-		if(RDSettings::OUTPUT_FORMAT == RDSettings::OutputFormat::AFrame) {
-			diskSegment.color = RDSettings::DATA_COLOR_HEX
+		diskSegment.height = config.RDHeight
+		if(config.outputFormat == OutputFormat::AFrame) {
+			diskSegment.color = config.RDDataColorHex
 		} else {
-			diskSegment.color = RDSettings::DATA_COLOR
+			diskSegment.color = config.RDDataColorAsPercentage
 		}
-		diskSegment.transparency = RDSettings::DATA_TRANSPARENCY
+		diskSegment.transparency = config.RDDataTransparency
 	
 		return diskSegment
 	}
@@ -281,11 +283,11 @@ class Famix2RD extends WorkflowComponentWithConfig {
 		disk.value = enumValue.value
 		disk.fqn= enumValue.fqn
 		disk.type = "FAMIX.EnumValue"
-		disk.ringWidth = RDSettings::RING_WIDTH_AD 
-		disk.height = RDSettings::HEIGHT
-		disk.transparency = RDSettings::DATA_TRANSPARENCY
-		if(RDSettings::OUTPUT_FORMAT == RDSettings::OutputFormat::AFrame) {
-			disk.color = RDSettings::DATA_COLOR_HEX
+		disk.ringWidth = config.RDRingWidthAD
+		disk.height = config.RDHeight
+		disk.transparency = config.RDDataTransparency
+		if(config.outputFormat == OutputFormat::AFrame) {
+			disk.color = config.RDDataColorHex
 		} else {
 			disk.color = 153/255.0 + " " + 0/255.0 + " " + 0/255.0 
 		}

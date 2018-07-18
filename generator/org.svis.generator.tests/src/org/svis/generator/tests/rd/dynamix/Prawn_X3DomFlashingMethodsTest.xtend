@@ -7,24 +7,15 @@ import java.io.File
 import java.io.FileNotFoundException
 import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
-import org.svis.generator.rd.RDSettings.OutputFormat
-import org.svis.generator.rd.RDSettings
-import org.svis.generator.rd.RDSettings.InvocationRepresentation
-import org.svis.generator.rd.RDSettings.Variant
+import org.svis.generator.SettingsConfiguration
 
 class Prawn_X3DomFlashingMethodsTest {
 	
-				//TODO reimplement tests for new dynamix metamodel
 	@BeforeClass
 	def static void launch() {
-		RDSettings::OUTPUT_FORMAT = OutputFormat::X3DOM
-		RDSettings::INVOCATION_REPRESENTATION = InvocationRepresentation::FLASHING_METHODS  
-		RDSettings::VARIANT = Variant::DYNAMIC
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/prawn/input/PrawnFlashingMethodsTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Dynamix2RD.mwe2", "-p", "famixPath=testdata/prawn/input/famixDyn",
 			"dynamixPath=testdata/prawn/input/dynamix","outputPath=output/rd/dynamix/prawn/prawn_x3dom_flashing_methods"])
-		RDSettings::OUTPUT_FORMAT = OutputFormat::X3D 
-		RDSettings::VARIANT = Variant::STATIC
-		RDSettings::INVOCATION_REPRESENTATION = InvocationRepresentation::NONE
 	}
      
     @Test

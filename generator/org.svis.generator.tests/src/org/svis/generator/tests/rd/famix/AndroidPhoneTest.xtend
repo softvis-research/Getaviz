@@ -16,6 +16,7 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
+import org.svis.generator.SettingsConfiguration
 
 class AndroidPhoneTest {
 	
@@ -29,6 +30,7 @@ class AndroidPhoneTest {
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
     	XMLUnit::ignoreComments = true
+    	SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/android_phone/input/RDAndroidPhoneTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p", "inputPath=testdata/android_phone/input/famix", "outputPath=" + path])
 		json = JSONUtil::read("./testdata/android_phone/output/rd/famix/original/metaData.json")
 	}

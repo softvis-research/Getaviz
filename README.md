@@ -1,4 +1,4 @@
-# Getaviz
+﻿# Getaviz
 
 Getaviz is a toolset for designing, generating, and exploring software visualizations in 2D, 3D, and virtual reality (VR), supporting structural, behavioral and evolutional visualizations. An **online demo** of Getaviz you can find [here](https://home.uni-leipzig.de/svis/getaviz/Index.html).
 
@@ -42,6 +42,7 @@ Many thanks to all the contributors who have improved Getaviz by implementing ne
 * André Naumann
 * [Stefan Faulhaber](https://github.com/StefanFaulhaber)
 * [Dan Häberlein](https://github.com/dhaeb)
+* Lisa Vogelsberg
 
 ## How do I get set up? ###
 
