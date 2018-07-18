@@ -19,12 +19,12 @@ import org.svis.xtext.rd.DiskSegment
 import org.svis.xtext.rd.Document
 import org.svis.xtext.rd.Root
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
-import org.svis.generator.rd.RDSettings.MetricRepresentation
-import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import org.svis.generator.SettingsConfiguration
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
 import org.apache.commons.logging.LogFactory
 import org.svis.generator.SettingsConfiguration.OutputFormat
+import org.svis.generator.SettingsConfiguration.EvolutionRepresentation
+import org.svis.generator.SettingsConfiguration.MetricRepresentation
 
 class RD2RD extends WorkflowComponentWithModelSlot {
 	val config = SettingsConfiguration.instance

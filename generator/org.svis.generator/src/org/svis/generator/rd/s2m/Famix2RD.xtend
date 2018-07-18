@@ -16,10 +16,10 @@ import org.svis.xtext.rd.Disk
 import org.svis.xtext.rd.impl.RdFactoryImpl
 import org.svis.xtext.famix.FAMIXStructure
 import org.apache.commons.logging.LogFactory
-import org.svis.generator.rd.RDSettings.MetricRepresentation
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.SettingsConfiguration.OutputFormat
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
+import org.svis.generator.SettingsConfiguration.MetricRepresentation
 
 class Famix2RD extends WorkflowComponentWithModelSlot {
 	val config = SettingsConfiguration.getInstance

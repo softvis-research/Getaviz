@@ -27,7 +27,6 @@ class Bank_AttributeDiskTest {
 	
 	@BeforeClass
 	def static void launch() {
-		//RDSettings::DATA_DISKS = true
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankAttributeDiskTest.properties")
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true

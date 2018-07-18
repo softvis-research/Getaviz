@@ -37,8 +37,8 @@ import org.svis.xtext.hismo.HISMONamespaceVersion
 import org.svis.xtext.hismo.HISMOClassVersion
 import org.svis.xtext.hismo.HISMOMethodVersion
 import org.svis.xtext.hismo.HISMOAttributeVersion
-import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.EvolutionRepresentation
 
 class Hismo2JSON implements IGenerator2 {
 	val config = SettingsConfiguration.instance

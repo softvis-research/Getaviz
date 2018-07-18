@@ -36,11 +36,11 @@ import org.svis.xtext.famix.FAMIXParameterizableClass
 import org.svis.xtext.famix.FAMIXAnnotationType
 import org.svis.xtext.famix.FAMIXStructure
 import org.svis.generator.famix.Famix2Famix
-import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.svis.xtext.famix.FAMIXFileAnchor
 import java.util.ArrayList
 import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.EvolutionRepresentation
 
 class Hismo2RD extends WorkflowComponentWithModelSlot {
 	val config = SettingsConfiguration.instance

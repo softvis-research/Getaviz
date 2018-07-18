@@ -11,7 +11,6 @@ import org.svis.generator.SettingsConfiguration
 
 class PrawnTest {
 	
-			//TODO reimplement tests for new dynamix metamodel
 	@BeforeClass
 	def static void launch() {
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/prawn/input/PrawnTest.properties")

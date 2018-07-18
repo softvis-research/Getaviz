@@ -10,11 +10,11 @@ import org.eclipse.xtext.EcoreUtil2
 import org.svis.generator.rd.m2m.RD2RD4Dynamix
 import org.svis.xtext.rd.DiskVersion
 import org.svis.xtext.rd.Version
-import org.svis.generator.rd.RDSettings.Variant
 import java.util.ArrayList
 import org.apache.commons.logging.LogFactory
-import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.EvolutionRepresentation
+import org.svis.generator.SettingsConfiguration.Variant
 
 class RD2AFrame {
 	val config = SettingsConfiguration.instance

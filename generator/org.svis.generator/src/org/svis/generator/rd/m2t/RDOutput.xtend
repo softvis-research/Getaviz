@@ -9,11 +9,11 @@ import org.eclipse.xtext.generator.IGenerator2
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
 import javax.inject.Inject
-import org.svis.generator.rd.RDSettings.Variant
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.Variant
 
 class RDOutput implements IGenerator2 {
 	val config = SettingsConfiguration.instance

@@ -1,6 +1,5 @@
 package org.svis.generator.tests.rd.famix
 
-import org.svis.generator.famix.FAMIXSettings
 import static org.junit.Assert.*
 import org.junit.Test
 import org.junit.BeforeClass

@@ -34,7 +34,6 @@ import org.eclipse.emf.common.util.ECollections
 import static org.apache.commons.codec.digest.DigestUtils.sha1Hex
 import org.eclipse.xtext.linking.lazy.LazyLinkingResource
 import java.util.Map
-import org.svis.generator.famix.FAMIXSettings
 import org.svis.xtext.famix.impl.FamixFactoryImpl
 import java.util.Comparator
 import org.svis.xtext.famix.MethodType
@@ -47,10 +46,10 @@ import org.neo4j.graphdb.traversal.Uniqueness
 import org.svis.xtext.famix.FAMIXElement
 import org.neo4j.graphdb.Relationship
 import org.eclipse.emf.common.util.EList
-import org.svis.generator.famix.FAMIXSettings.FamixParser
 import org.svis.generator.SettingsConfiguration
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
 import org.apache.commons.logging.LogFactory
+import org.svis.generator.SettingsConfiguration.FamixParser
 
 class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val log = LogFactory::getLog(class)

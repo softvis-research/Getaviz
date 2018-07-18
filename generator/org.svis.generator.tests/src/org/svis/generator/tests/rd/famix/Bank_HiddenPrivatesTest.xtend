@@ -17,7 +17,6 @@ import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
 import org.junit.AfterClass
-import org.svis.generator.famix.FAMIXSettings
 import org.svis.generator.SettingsConfiguration
 
 class Bank_HiddenPrivatesTest {

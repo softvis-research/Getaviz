@@ -5,7 +5,6 @@ import org.svis.xtext.rd.DiskSegment
 import java.util.Collections
 import java.util.Comparator
 import java.util.ArrayList
-import org.svis.generator.rd.RDSettings.InvocationRepresentation
 import org.svis.xtext.rd.DiskSegmentInvocation
 import org.svis.xtext.rd.Disk
 import java.util.HashMap
@@ -15,11 +14,12 @@ import org.svis.xtext.rd.Version
 import org.apache.commons.logging.LogFactory
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.EcoreUtil2
-import org.svis.generator.rd.RDSettings.Variant
-import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import java.util.TreeMap
 import org.svis.generator.rd.m2m.RD2RD4Dynamix
 import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.EvolutionRepresentation
+import org.svis.generator.SettingsConfiguration.Variant
+import org.svis.generator.SettingsConfiguration.InvocationRepresentation
 
 class RD2JS {
 	val config = SettingsConfiguration.instance

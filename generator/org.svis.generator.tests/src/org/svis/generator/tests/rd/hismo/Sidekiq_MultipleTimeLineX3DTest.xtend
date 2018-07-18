@@ -7,8 +7,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
-import org.svis.generator.rd.RDSettings
-import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import org.svis.generator.SettingsConfiguration
 
 class Sidekiq_MultipleTimeLineX3DTest {

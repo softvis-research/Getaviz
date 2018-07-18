@@ -11,11 +11,11 @@ import org.svis.xtext.rd.Version
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.EcoreUtil2
 import java.util.ArrayList
-import org.svis.generator.rd.RDSettings.EvolutionRepresentation
 import org.svis.generator.famix.Famix2Famix
 import org.svis.generator.rd.m2m.RD2RD4Dynamix
 import java.util.TreeMap
 import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.EvolutionRepresentation
 
 class RD2X3DCompressed {
 	val config = SettingsConfiguration.instance

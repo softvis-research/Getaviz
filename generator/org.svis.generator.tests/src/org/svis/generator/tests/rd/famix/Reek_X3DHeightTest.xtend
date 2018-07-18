@@ -12,9 +12,7 @@ import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.junit.Assert
 import org.apache.commons.io.FileUtils
 import org.svis.generator.tests.helper.JSONUtil
-import org.svis.generator.rd.RDSettings
 import org.junit.AfterClass
-import org.svis.generator.rd.RDSettings.MetricRepresentation
 import org.svis.generator.SettingsConfiguration
 
 class Reek_X3DHeightTest {

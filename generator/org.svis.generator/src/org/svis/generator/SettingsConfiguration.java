@@ -14,11 +14,6 @@ import org.svis.generator.city.CitySettings.ClassElementsSortModesFine;
 import org.svis.generator.city.CitySettings.Original.BuildingMetric;
 import org.svis.generator.city.CitySettings.Panels.SeparatorModes;
 import org.svis.generator.city.CitySettings.Schemes;
-import org.svis.generator.famix.FAMIXSettings.FamixParser;
-import org.svis.generator.rd.RDSettings.EvolutionRepresentation;
-import org.svis.generator.rd.RDSettings.InvocationRepresentation;
-import org.svis.generator.rd.RDSettings.MetricRepresentation;
-import org.svis.generator.rd.RDSettings.Variant;
 
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
@@ -882,5 +877,34 @@ public class SettingsConfiguration {
 
 	public static enum OutputFormat {
 		X3D, X3DOM, SimpleGlyphsJson, X3D_COMPRESSED, AFrame;
+	}
+	
+	public static enum FamixParser {	
+		JDT2FAMIX, VERVEINEJ, JQA_BYTECODE;	
+	}
+	
+	public static enum MetricRepresentation {
+		NONE, HEIGHT, LUMINANCE, FREQUENCY
+	}	
+	/**
+	 * Depending on this Variable the Dynamix Visualization will be created,
+	 * it can either be in a static or dynamic way 
+	 */
+
+	public static enum InvocationRepresentation {
+		NONE, MOVING_SPHERES, FLASHING_METHODS ,MOVING_FLASHING
+	}
+	/**
+	 * Sets in which way the Historic Evolution
+	 * of the analyzed Software should be represented, 
+	 * it can either be in a static or dynamic way 
+	 */
+	
+	public static enum EvolutionRepresentation {
+		TIME_LINE, DYNAMIC_EVOLUTION, MULTIPLE_TIME_LINE, MULTIPLE_DYNAMIC_EVOLUTION
+	}
+
+	public static enum Variant {
+		STATIC, DYNAMIC
 	}
 }
