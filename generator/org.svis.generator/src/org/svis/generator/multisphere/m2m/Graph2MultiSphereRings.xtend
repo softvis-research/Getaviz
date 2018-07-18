@@ -17,10 +17,12 @@ import org.abego.treelayout.util.DefaultTreeForTreeLayout
 import org.abego.treelayout.util.DefaultConfiguration
 import org.abego.treelayout.util.FixedNodeExtentProvider
 import org.abego.treelayout.TreeLayout
-import org.svis.generator.WorkflowComponentWithConfig
+import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
+import org.apache.commons.logging.LogFactory
 
-class Graph2MultiSphereRings extends WorkflowComponentWithConfig {
-	
+class Graph2MultiSphereRings extends WorkflowComponentWithModelSlot {
+	//val config = SettingsConfiguration.instance
+	val log = LogFactory::getLog(class)
 	var Model graphRoot
 	var myGraphFactory = new GraphFactoryImpl
 	
