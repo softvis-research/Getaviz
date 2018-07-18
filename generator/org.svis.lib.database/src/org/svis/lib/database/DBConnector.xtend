@@ -187,12 +187,6 @@ class DBConnector {
 		try {
 			famixNode.createRelationshipTo(node, DBRelationships::VISUALIZED_BY)
 		} catch (NullPointerException e) {
-			if(famixNode == null) {
-				println("famixnode")
-			}
-			if(node == null) {
-				println("node")
-			}
 		}
 	}
 	

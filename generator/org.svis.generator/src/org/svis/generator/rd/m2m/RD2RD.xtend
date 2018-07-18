@@ -332,12 +332,12 @@ class RD2RD extends WorkflowComponentWithModelSlot {
 			}
 		} else if (config.outputFormat == OutputFormat::AFrame) {
 			if (!segments.empty) {
-				val separationFactor = 1
+				//val separationFactor = 1
 				var sizeSum = 0.0
 				var position = 0.0
 
-				var completeSeparation = (360 * separationFactor)
-				var separationPerSegment = completeSeparation / (segments.length)
+				//var completeSeparation = (360 * separationFactor)
+				//var separationPerSegment = completeSeparation / (segments.length)
 
 				for (DiskSegment segment : segments) {
 					sizeSum = sizeSum + segment.size

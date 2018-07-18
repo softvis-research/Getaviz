@@ -1,8 +1,8 @@
 package org.svis.app.analyzer.metrics
 
 //import org.svis.metrics.charts.Charts
-import org.svis.app.analyzer.metrics.statistics.SystemStatistics
-import org.svis.app.analyzer.metrics.statistics.PackageStatistics
+//import org.svis.app.analyzer.metrics.statistics.SystemStatistics
+//import org.svis.app.analyzer.metrics.statistics.PackageStatistics
 import org.svis.app.analyzer.metrics.statistics.ClassStatistics
 import org.svis.lib.database.Database
 import java.io.File

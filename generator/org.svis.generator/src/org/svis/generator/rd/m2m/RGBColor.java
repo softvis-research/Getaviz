@@ -1,6 +1,6 @@
 package org.svis.generator.rd.m2m;
 
-import java.awt.Color;
+//import java.awt.Color;
 
 public class RGBColor {
 	private final double lowerBound =0;
