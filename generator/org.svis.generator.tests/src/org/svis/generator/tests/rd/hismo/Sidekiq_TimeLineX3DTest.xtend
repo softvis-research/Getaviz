@@ -10,7 +10,7 @@ import org.apache.commons.io.FileUtils
 import org.svis.generator.SettingsConfiguration
 
 class Sidekiq_TimeLineX3DTest {
-		//TODO reimplement tests for new hismo metamodel
+	
 	@BeforeClass
 	def static void launch() {
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/sidekiq/input/SidekiqTimeLineX3DTest.properties")

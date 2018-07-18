@@ -11,15 +11,10 @@ import org.svis.generator.SettingsConfiguration
 
 class Sidekiq_MultipleTimeLineTest {
 	
-	//TODO reimplement tests for new hismo metamodel
 	@BeforeClass
 	def static void launch() {
-		//RDSettings::OUTPUT_FORMAT = OutputFormat::X3DOM 
-		//RDSettings::EVOLUTION_REPRESENTATION = EvolutionRepresentation::MULTIPLE_TIME_LINE
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/sidekiq/input/SidekiqMultipleTimeLineTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Hismo2RD.mwe2", "-p", "inputPath=testdata/sidekiq/input","outputPath=output/rd/hismo/sidekiq/sidekiq_multiple_time_line/"])
-		//RDSettings::OUTPUT_FORMAT = OutputFormat::X3D 
-		//RDSettings::EVOLUTION_REPRESENTATION = EvolutionRepresentation::TIME_LINE
 	}
      
     @Test

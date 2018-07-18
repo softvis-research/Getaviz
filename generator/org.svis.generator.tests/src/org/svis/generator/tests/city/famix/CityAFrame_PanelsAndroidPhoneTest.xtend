@@ -29,16 +29,8 @@ class CityAFrame_PanelsAndroidPhoneTest {
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
-		/*
-		CitySettings::OUTPUT_FORMAT = OutputFormat::AFrame
-		CitySettings::BUILDING_TYPE = BuildingType.CITY_PANELS
-		*/
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/android_phone/input/CityAFramePanelsAndroidPhoneTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/city/Famix2City.mwe2", "-p", "inputPath=testdata/android_phone/input/famix", "outputPath=./output/city/famix/aframe/panels/android_phone"])
-		/*
-		CitySettings::BUILDING_TYPE = BuildingType.CITY_ORIGINAL
-		CitySettings::OUTPUT_FORMAT = OutputFormat::X3D
-		*/
 		json = JSONUtil::read("./output/city/famix/aframe/panels/android_phone/metaData.json")
 	}
 

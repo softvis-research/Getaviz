@@ -3,7 +3,6 @@ package org.svis.generator.tests.plant.famix
 import static org.junit.Assert.*
 import org.junit.Test
 import org.junit.BeforeClass
-import org.custommonkey.xmlunit.XMLUnit
 import java.io.File
 import java.io.FileNotFoundException
 import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
@@ -16,8 +15,6 @@ class Bank_PlantTest {
 	
 	@BeforeClass
 	def static void launch() {
-		XMLUnit::ignoreWhitespace = true
-		XMLUnit::ignoreComments = true
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankPlantTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/plant/Famix2Plant.mwe2", "-p", "path=testdata/bank/input/famix", "outputPath=" + path, "projectName=org.svis.generator.tests","texturDestinyPath=org.svis.generator.tests/output/plant/famix/bank/pics"])
 	}

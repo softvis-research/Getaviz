@@ -11,21 +11,10 @@ import org.svis.generator.SettingsConfiguration
 
 class Sidekiq_DynamicEvolutionTest {
 	
-	//TODO reimplement tests for new hismo metamodel
 	@BeforeClass
 	def static void launch() {
-		/*
-		RDSettings::OUTPUT_FORMAT = OutputFormat::X3DOM 
-		RDSettings::EVOLUTION_REPRESENTATION = EvolutionRepresentation::DYNAMIC_EVOLUTION
-		RDSettings::VARIANT = Variant::DYNAMIC
-		*/
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/sidekiq/input/SidekiqDynamicEvolutionTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Hismo2RD.mwe2", "-p", "inputPath=testdata/sidekiq/input","outputPath=output/rd/hismo/sidekiq/sidekiq_dynamic_evolution/"])
-		/*
-		RDSettings::OUTPUT_FORMAT = OutputFormat::X3D 
-		RDSettings::VARIANT = Variant::STATIC
-		RDSettings::EVOLUTION_REPRESENTATION = EvolutionRepresentation::TIME_LINE
-		*/
 	}
      
     @Test

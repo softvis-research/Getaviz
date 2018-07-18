@@ -29,10 +29,8 @@ class CityBricks_AndroidPhoneTest {
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
-		//CitySettings::BUILDING_TYPE = BuildingType.CITY_BRICKS
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/android_phone/input/CityBricksAndroidPhoneTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/city/Famix2City.mwe2", "-p", "inputPath=testdata/android_phone/input/famix", "outputPath=./output/city/famix/bricks/android_phone"])
-		//CitySettings::BUILDING_TYPE = BuildingType.CITY_ORIGINAL
 		json = JSONUtil::read("./output/city/famix/bricks/android_phone/metaData.json")
 	}
 

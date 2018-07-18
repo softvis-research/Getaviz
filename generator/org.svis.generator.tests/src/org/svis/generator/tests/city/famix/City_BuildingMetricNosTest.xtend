@@ -29,13 +29,8 @@ class City_BuildingMetricNosTest {
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
-		/*
-		CitySettings::BUILDING_TYPE = BuildingType.CITY_ORIGINAL
-		CitySettings::ORIGINAL_BuildingMetric = CitySettings::Original::BuildingMetric::NOS
-		*/
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/android_phone/input/CityBuildingMetricNosTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/city/Famix2City.mwe2", "-p", "inputPath=testdata/android_phone/input/famix", "outputPath=./output/city/famix/original/android_phone/nos_color"])
-		//CitySettings::ORIGINAL_BuildingMetric = CitySettings::Original::BuildingMetric::NONE
 		json = JSONUtil::read("./output/city/famix/original/android_phone/nos_color/metaData.json")
 	}
 
