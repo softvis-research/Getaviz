@@ -14,7 +14,7 @@ Workflow {
 	}
 	
 	// reader Famix
-	component = org.svis.generator.ReaderWithConfig {
+	component = org.eclipse.xtext.mwe.Reader {
 		path = "${inputPath}"
 		register = org.svis.xtext.FamixStandaloneSetup {}
 		loadResource = {

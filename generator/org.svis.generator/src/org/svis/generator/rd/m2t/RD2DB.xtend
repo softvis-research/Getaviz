@@ -23,7 +23,7 @@ class RD2DB extends WorkflowComponentWithModelSlot {
 		log.info("RD2DB has started.")
 		graphDb = Database::getInstance(config.repositoryOwner, config.repositoryName)
 		dbconnector = new DBConnector(graphDb)
-		val resource = ((ctx.get("rd") as ArrayList).get(0) as Root).document
+		val resource = ((ctx.get("rd") as ArrayList<?>).get(0) as Root).document
 		val rootDisks = resource.disks.filter[level == 1].toList
 		val tx = graphDb.beginTx
 		val configSnapshotId = ""//config.snapshotID
