@@ -3,7 +3,6 @@ package org.svis.generator.tests.rd.famix
 import static org.junit.Assert.*
 import org.junit.Test
 import org.junit.BeforeClass
-import org.custommonkey.xmlunit.XMLUnit
 import java.io.File
 import java.io.FileNotFoundException
 import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
@@ -16,11 +15,8 @@ class Prawn_OriginalTest {
 	val static path = "./output/rd/famix/prawn/original/"
 	var static String json
 	
-	
 	@BeforeClass
 	def static void launch() {
-		XMLUnit::ignoreWhitespace = true
-		XMLUnit::ignoreComments = true
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/prawn/input/PrawnOriginalTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p", "inputPath=testdata/prawn/input/famix", "outputPath=" + path])
 		json = JSONUtil::read("./testdata/prawn/output/rd/famix/original/metaData.json")

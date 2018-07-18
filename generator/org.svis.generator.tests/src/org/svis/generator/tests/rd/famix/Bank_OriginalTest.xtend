@@ -23,9 +23,7 @@ class Bank_OriginalTest {
 	val static path = "./output/rd/famix/bank/original/"
 	val static engine = XMLUnit.newXpathEngine
 	var static String json
-	val rd = XMLUnit::buildControlDocument(Files::toString(new File(path + "rd.xml"), Charset.forName("UTF-8")))
-	
-	
+	val rd = XMLUnit::buildControlDocument(Files::toString(new File(path + "rd.xml"), Charset.forName("UTF-8")))	
 	
 	@BeforeClass
 	def static void launch() {

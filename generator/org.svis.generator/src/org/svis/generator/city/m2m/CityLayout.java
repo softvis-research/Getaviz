@@ -10,7 +10,7 @@ import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.svis.generator.SettingsConfiguration;
-import org.svis.generator.city.CitySettings.BuildingType;
+import org.svis.generator.SettingsConfiguration.BuildingType;
 import org.svis.xtext.city.CityFactory;
 import org.svis.xtext.city.Document;
 import org.svis.xtext.city.Entity;

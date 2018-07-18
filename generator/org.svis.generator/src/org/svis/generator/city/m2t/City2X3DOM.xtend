@@ -4,7 +4,6 @@ import java.util.List
 import org.apache.commons.logging.LogFactory
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.EcoreUtil2
-import org.svis.generator.city.CitySettings.Panels
 import org.svis.generator.city.m2m.CityLayout
 import org.svis.generator.city.m2m.Rectangle
 import org.svis.xtext.city.Building
@@ -12,9 +11,9 @@ import org.svis.xtext.city.BuildingSegment
 import org.svis.xtext.city.Entity
 import org.svis.xtext.city.PanelSeparatorBox
 import org.svis.xtext.city.PanelSeparatorCylinder
-import org.svis.generator.city.CitySettings.BuildingType
 import org.svis.xtext.city.District
 import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.BuildingType
 
 class City2X3DOM {
 	val log = LogFactory::getLog(getClass)

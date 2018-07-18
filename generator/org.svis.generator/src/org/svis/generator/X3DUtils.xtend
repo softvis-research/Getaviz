@@ -2,8 +2,8 @@ package org.svis.generator
 
 import java.text.SimpleDateFormat
 import java.util.Date
-import org.svis.generator.city.CitySettings.BuildingType
 import org.svis.generator.SettingsConfiguration.Variant
+import org.svis.generator.SettingsConfiguration.BuildingType
 
 class X3DUtils {
 	val config = SettingsConfiguration.instance

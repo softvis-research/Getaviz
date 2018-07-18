@@ -6,14 +6,9 @@ import java.awt.Color;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.svis.generator.city.CitySettings.Bricks.Layout;
-import org.svis.generator.city.CitySettings.BuildingType;
-import org.svis.generator.city.CitySettings.ClassElementsModes;
-import org.svis.generator.city.CitySettings.ClassElementsSortModesCoarse;
-import org.svis.generator.city.CitySettings.ClassElementsSortModesFine;
-import org.svis.generator.city.CitySettings.Original.BuildingMetric;
-import org.svis.generator.city.CitySettings.Panels.SeparatorModes;
-import org.svis.generator.city.CitySettings.Schemes;
+import org.svis.generator.SettingsConfiguration.Bricks.Layout;
+import org.svis.generator.SettingsConfiguration.Original.BuildingMetric;
+import org.svis.generator.SettingsConfiguration.Panels.SeparatorModes;
 
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
@@ -906,5 +901,263 @@ public class SettingsConfiguration {
 
 	public static enum Variant {
 		STATIC, DYNAMIC
+	}
+	
+	public static enum BuildingType{
+		CITY_ORIGINAL, CITY_PANELS, CITY_BRICKS, CITY_FLOOR , CITY_DYNAMIC; 
+	}
+	
+	/**
+	 * Defines how the methods and attributes are sorted and colored in the city
+	 * model.
+	 * 
+	 * @see CitySettings#SET_SCHEME SET_SCHEME
+	 */
+	public static enum Schemes {
+		/**
+		 * The class elements are sorted and colored corresponding to there
+		 * visibility modifiers.
+		 * 
+		 * @see SortPriorities_Visibility
+		 */
+		VISIBILITY,
+
+		/**
+		 * The class elements are sorted and colored associated to
+		 * type/functionality of the method.
+		 * 
+		 * @see Methods.SortPriorities_Types
+		 * @see Attributes.SortPriorities_Types
+		 */
+		TYPES;
+	};
+	
+	/**
+	 * Defines which elements of a class are to show.
+	 * 
+	 * @see CitySettings#SET_CLASS_ELEMENTS_MODE SET_CLASS_ELEMENTS_MODE
+	 */
+	public static enum ClassElementsModes {
+		METHODS_ONLY, ATTRIBUTES_ONLY, METHODS_AND_ATTRIBUTES;
+	}
+	
+	/**
+	 * Defines which how the elements of a class are sorted.
+	 * 
+	 * @see CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_COARSE
+	 *      SET_CLASS_ELEMENTS_SORT_MODE_COARSE
+	 */
+	public static enum ClassElementsSortModesCoarse {
+		UNSORTED, ATTRIBUTES_FIRST, METHODS_FIRST;
+	}
+
+	/**
+	 * A list of types of a method with the associated priority value.<br>
+	 * Highest priority/smallest number is placed on the bottom, lowest on top.
+	 * 
+	 * @see #SET_CLASS_ELEMENTS_SORT_MODE_FINE SET_CLASS_ELEMENTS_SORT_MODE_FINE
+	 * @see SortPriorities_Visibility
+	 * @see Methods.SortPriorities_Types
+	 * @see Attributes.SortPriorities_Types
+	 */
+	public static enum ClassElementsSortModesFine {
+		/** Class elements won't be sorted. */
+		UNSORTED,
+
+		/** Methods will be sorted according to the name. */
+		ALPHABETICALLY,
+
+		/**
+		 * Methods will be sorted according to the active
+		 * {@link CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_FINE
+		 * SET_CLASS_ELEMENTS_SORT_MODE_FINE}.
+		 */
+		SCHEME,
+
+		/** Methods will be sorted according to there number of statements. */
+		NOS;
+	}
+
+	/**
+	 * A list of visibility modifiers of a method with the associated priority
+	 * value.<br>
+	 * Highest priority/smallest number is placed on the bottom, lowest on top.
+	 * 
+	 * @see #SET_CLASS_ELEMENTS_SORT_MODE_FINE SET_CLASS_ELEMENTS_SORT_MODE_FINE
+	 * @see ClassElementsSortModesFine
+	 * 
+	 */
+	public static enum SortPriorities_Visibility {;
+		public static int PRIVATE = 1;
+		public static int PROTECTED = 2;
+		public static int PACKAGE = 3;
+		public static int PUBLIC = 4;
+	}
+
+	public static enum Methods {;
+
+		/**
+		 * A list of types of a method with the associated priority value.<br>
+		 * Highest priority/smallest number is placed on the bottom, lowest on
+		 * top.
+		 * 
+		 * @see CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_FINE
+		 *      SET_CLASS_ELEMENTS_SORT_MODE_FINE
+		 * @see ClassElementsSortModesFine
+		 * @see SortPriorities_Visibility
+		 */
+		public static enum SortPriorities_Types {;
+
+			/**
+			 * Method is a constructor.
+			 */
+			public static int CONSTRUCTOR = 1;
+
+			/**
+			 * The name of the method begins with "get".
+			 */
+			public static int GETTER = 2;
+
+			/**
+			 * The name of the method begins with "set".
+			 */
+			public static int SETTER = 3;
+
+			/**
+			 * Method has a {@code static} modifier.
+			 */
+			public static int STATIC = 4;
+
+			/**
+			 * Method has an {@code abstract} modifier.
+			 */
+			public static int ABSTRACT = 5;
+
+			/**
+			 * Every other type that isn't specified by the other constants in
+			 * this field.
+			 */
+			public static int LEFTOVER = 6;
+		}
+
+	}
+
+	public static enum Attributes {;
+
+		/**
+		 * A list of types of a method with the associated priority value.<br>
+		 * Highest priority/smallest number is placed on the bottom, lowest on
+		 * top.
+		 * 
+		 * @see CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_FINE
+		 *      SET_CLASS_ELEMENTS_SORT_MODE_FINE
+		 * @see ClassElementsSortModesFine
+		 */
+		public static enum SortPriorities_Types {;
+
+			/** Type is a primitive like {@code boolean}, {@code int}. */
+			public static int PRIMITVE = 1;
+
+			/** Type is a (Non-wrapper) class, collection, etc. */
+			public static int COMPLEX = 2;
+
+		}
+
+	}
+
+	public static enum Bricks {;
+
+		/**
+		 * Defines the layout for the BuildingSegments of the city model, which
+		 * represents the methods and/or attributes of a class.
+		 * 
+		 * @see CitySettings#SET_BRICK_LAYOUT SET_BRICK_LAYOUT
+		 */
+		public static enum Layout {
+
+			/**
+			 * One-dimensional bricks layout, where the segments simply are
+			 * placed on top of the other.
+			 */
+			STRAIGHT,
+
+			/**
+			 * Three-dimensional brick layout, where the base area is computed
+			 * depending on the {@link CitySettings#SET_CLASS_ELEMENTS_MODE
+			 * SET_CLASS_ELEMENTS_MODE}.<br>
+			 * If only methods are shown, the base area is computed by the
+			 * number of attributes and vice versa.<br>
+			 * In case of methods and attributes are shown, the base area is
+			 * computed by the sum of the numbers of attributes and methods
+			 * inside the class.
+			 * <p>
+			 * When {@link CitySettings#SET_CLASS_ELEMENTS_MODE
+			 * SET_CLASS_ELEMENTS_MODE} is set to
+			 * {@code METHODS_AND_ATTRIBUTES}, the {@code BALANCED} layout and
+			 * {@link Layout#PROGRESSIVE PROGRESSIVE} layout are identical.
+			 */
+			BALANCED,
+
+			/**
+			 * Three-dimensional brick layout, where the base area is computed
+			 * depending on the {@link CitySettings#SET_CLASS_ELEMENTS_MODE
+			 * SET_CLASS_ELEMENTS_MODE}.<br>
+			 * If only methods are shown, the base area is computed by the
+			 * number of methods and vice versa. So the aspect lies on only one
+			 * type of element of a class and is visualized.
+			 * <p>
+			 * When {@link CitySettings#SET_CLASS_ELEMENTS_MODE
+			 * SET_CLASS_ELEMENTS_MODE} is set to
+			 * {@code METHODS_AND_ATTRIBUTES}, the {@link Layout#BALANCED
+			 * PROGRESSIVE} layout and {@code PROGRESSIVE} layout are identical.
+			 */
+			PROGRESSIVE;
+
+		}
+	}
+
+	public enum Panels {
+		;
+
+		/**
+		 * Defines the the space between the panels.<br>
+		 * The panels can either touch each other without a gap, leave a gap
+		 * between them, or fill the space with a separator of a defined color.
+		 * 
+		 * @see CitySettings#SET_PANEL_SEPARATOR_MODE SET_PANEL_SEPARATOR_MODE
+		 */
+		public static enum SeparatorModes {
+
+			/**
+			 * No space between the panels and they are placed on top of each
+			 * other.
+			 */
+			NONE,
+
+			/**
+			 * The panels have a free space between them and don't touch each
+			 * other.
+			 * 
+			 * @see Panels#PANEL_VERTICAL_GAP PANEL_VERTICAL_GAP
+			 */
+			GAP,
+
+			/**
+			 * Between the panels separators are placed with a fix height and
+			 * color.
+			 * 
+			 * @see Panels#SEPARATOR_HEIGHT SEPARATOR_HEIGHT
+			 */
+			SEPARATOR;
+
+		}
+	}
+	
+	public static enum Original {
+		;
+		public static enum BuildingMetric {
+			NONE,
+			NOS;
+		}
 	}
 }

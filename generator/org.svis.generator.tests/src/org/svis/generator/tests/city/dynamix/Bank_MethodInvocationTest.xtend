@@ -9,8 +9,6 @@ import java.io.FileNotFoundException
 import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
 import org.svis.generator.tests.helper.JSONUtil
-import org.svis.generator.city.CitySettings
-import org.svis.generator.city.CitySettings.BuildingType
 import org.svis.generator.SettingsConfiguration
 
 class Bank_MethodInvocationTest {

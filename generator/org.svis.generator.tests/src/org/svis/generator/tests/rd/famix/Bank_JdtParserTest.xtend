@@ -27,7 +27,6 @@ class Bank_JdtParserTest {
 	
 	@BeforeClass
 	def static void launch() {
-		//FAMIXSettings::FAMIX_PARSER = FAMIXSettings::FamixParser.JDT2FAMIX
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankJdtParserTest.properties")
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true

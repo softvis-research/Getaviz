@@ -14,12 +14,12 @@ import org.svis.xtext.city.BuildingSegment
 import org.svis.xtext.city.District
 import org.svis.xtext.city.Root
 import org.svis.xtext.city.impl.CityFactoryImpl
-import org.svis.generator.city.CitySettings.ClassElementsModes
-import org.svis.generator.city.CitySettings.BuildingType
 import org.svis.generator.SettingsConfiguration
-import org.svis.generator.city.CitySettings.Original.BuildingMetric
-import org.svis.generator.city.CitySettings.Panels.SeparatorModes
 import org.svis.generator.SettingsConfiguration.OutputFormat
+import org.svis.generator.SettingsConfiguration.BuildingType
+import org.svis.generator.SettingsConfiguration.Original.BuildingMetric
+import org.svis.generator.SettingsConfiguration.ClassElementsModes
+import org.svis.generator.SettingsConfiguration.Panels.SeparatorModes
 
 class City2City extends WorkflowComponentWithModelSlot {
 

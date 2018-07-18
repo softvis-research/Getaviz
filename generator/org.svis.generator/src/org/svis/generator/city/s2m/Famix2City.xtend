@@ -26,12 +26,12 @@ import org.svis.xtext.famix.FAMIXParameterizedType
 import org.svis.xtext.famix.FAMIXPrimitiveType
 import org.svis.xtext.famix.FAMIXReference
 import org.svis.xtext.famix.FAMIXStructure
-import org.svis.generator.city.CitySettings.BuildingType
 import org.svis.generator.SettingsConfiguration
-import org.svis.generator.city.CitySettings.ClassElementsModes
-import org.svis.generator.city.CitySettings.Original.BuildingMetric
 import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
 import org.apache.commons.logging.LogFactory
+import org.svis.generator.SettingsConfiguration.BuildingType
+import org.svis.generator.SettingsConfiguration.ClassElementsModes
+import org.svis.generator.SettingsConfiguration.Original.BuildingMetric
 
 class Famix2City extends WorkflowComponentWithModelSlot {
 	val config = SettingsConfiguration.instance

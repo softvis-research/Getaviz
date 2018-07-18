@@ -9,9 +9,9 @@ import org.svis.xtext.city.BuildingSegment
 import org.svis.xtext.city.Entity
 import org.svis.xtext.city.PanelSeparatorBox
 import org.svis.xtext.city.PanelSeparatorCylinder
-import org.svis.generator.city.CitySettings.BuildingType
 import org.svis.xtext.city.District
 import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.BuildingType
 
 class City2AFrame {
 

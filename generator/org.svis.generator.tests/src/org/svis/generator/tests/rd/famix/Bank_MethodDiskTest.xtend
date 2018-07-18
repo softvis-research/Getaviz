@@ -16,7 +16,6 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
-import org.junit.AfterClass
 import org.svis.generator.SettingsConfiguration
 
 class Bank_MethodDiskTest {
@@ -28,7 +27,6 @@ class Bank_MethodDiskTest {
 	
 	@BeforeClass
 	def static void launch() {
-		//RDSettings::METHOD_DISKS = true
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankMethodDiskTest.properties")
 		XMLUnit::ignoreWhitespace = true
     	XMLUnit::ignoreComments = true
@@ -232,10 +230,5 @@ class Bank_MethodDiskTest {
         }
     	
     	assertEquals(FileUtils.checksumCRC32(file1), FileUtils.checksumCRC32(file2))
-    }
-    
-    @AfterClass
-    def static void end() {
-//    	RDSettings::METHOD_DISKS = false
     }
 }

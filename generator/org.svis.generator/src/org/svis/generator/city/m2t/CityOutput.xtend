@@ -7,11 +7,11 @@ import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
 import org.svis.generator.X3DUtils
 import javax.inject.Inject
-import org.svis.generator.city.CitySettings.BuildingType
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.BuildingType
 
 class CityOutput implements IGenerator2 {
 	val log = LogFactory::getLog(class)

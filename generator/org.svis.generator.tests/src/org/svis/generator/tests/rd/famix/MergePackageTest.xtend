@@ -15,7 +15,6 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
-import org.junit.AfterClass
 import org.svis.generator.SettingsConfiguration
 
 class MergePackageTest {
@@ -27,7 +26,6 @@ class MergePackageTest {
 	
 	@BeforeClass
 	def static void launch() {
-		//FAMIXSettings::MERGE_PACKAGES = true
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/nested_package_test/input/MergePackageTest.properties")
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
@@ -129,9 +127,4 @@ class MergePackageTest {
     	
 		assertEquals(FileUtils.checksumCRC32(file1), FileUtils.checksumCRC32(file2))
 	}
-    
-    @AfterClass
-    def static void end() {
-//    	FAMIXSettings::MERGE_PACKAGES = false
-    }
 }

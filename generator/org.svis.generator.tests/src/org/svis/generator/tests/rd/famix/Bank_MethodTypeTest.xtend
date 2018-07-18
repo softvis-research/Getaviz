@@ -28,8 +28,6 @@ class Bank_MethodTypeTest {
 	
 	@BeforeClass
 	def static void launch() {
-		//RDSettings::METHOD_TYPE_MODE = true
-		//FAMIXSettings::HIDE_PRIVATE_ELEMENTS = true
 		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankMethodTypeTest.properties")
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true

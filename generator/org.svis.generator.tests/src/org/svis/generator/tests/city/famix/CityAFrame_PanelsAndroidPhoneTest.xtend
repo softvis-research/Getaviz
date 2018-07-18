@@ -16,9 +16,6 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
-import org.svis.generator.city.CitySettings
-import org.svis.generator.city.CitySettings.BuildingType
-//import org.svis.generator.city.CitySettings.OutputFormat
 import org.svis.generator.SettingsConfiguration
 
 class CityAFrame_PanelsAndroidPhoneTest {

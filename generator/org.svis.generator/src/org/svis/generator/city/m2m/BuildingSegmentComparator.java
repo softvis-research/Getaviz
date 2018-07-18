@@ -1,9 +1,9 @@
 package org.svis.generator.city.m2m;
 
 import org.svis.generator.SettingsConfiguration;
-import org.svis.generator.city.CitySettings.Attributes;
-import org.svis.generator.city.CitySettings.Methods;
-import org.svis.generator.city.CitySettings.SortPriorities_Visibility;
+import org.svis.generator.SettingsConfiguration.Attributes;
+import org.svis.generator.SettingsConfiguration.Methods;
+import org.svis.generator.SettingsConfiguration.SortPriorities_Visibility;
 import org.svis.xtext.city.BuildingSegment;
 
 public class BuildingSegmentComparator implements Comparable<BuildingSegmentComparator> {
