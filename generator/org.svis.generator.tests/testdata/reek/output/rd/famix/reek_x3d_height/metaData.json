@@ -317,7 +317,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_86dd25513708309602a137418908f45714c89c20"
+"belongsTo":     "ID_86dd25513708309602a137418908f45714c89c20",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f8f0017b92a1c4d27f675da150a75c20c8f12e41",
 "qualifiedName": "Reek.AST.Node",
@@ -326,7 +329,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_86dd25513708309602a137418908f45714c89c20"
+"belongsTo":     "ID_86dd25513708309602a137418908f45714c89c20",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d84ea37411a14d6879495d7b62b1bec9dacabaed",
 "qualifiedName": "Reek.AST.ObjectRefs",
@@ -335,7 +341,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_86dd25513708309602a137418908f45714c89c20"
+"belongsTo":     "ID_86dd25513708309602a137418908f45714c89c20",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_80e64b08b53cbd8d65f1a5d40add08be1d7c1550",
 "qualifiedName": "Reek.AST.ReferenceCollector",
@@ -344,7 +353,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_86dd25513708309602a137418908f45714c89c20"
+"belongsTo":     "ID_86dd25513708309602a137418908f45714c89c20",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_37bb88d70f9a448b644bd984c9af6676dd20b80f",
 "qualifiedName": "Reek.AST.SexpExtensions.ArgNodeBase.__dummy__",
@@ -353,7 +365,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_d89dbb39eaef8d0a06241fbaaab079153ef62d72"
+"belongsTo":     "ID_d89dbb39eaef8d0a06241fbaaab079153ef62d72",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_8a32f2e243da30e7cbf7fcd49b5b256d2ac76d8d",
 "qualifiedName": "Reek.AST.SexpExtensions.AttrasgnNode.__dummy__",
@@ -362,7 +377,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fd079a2ef0c61a957d7bea9a9234154f169e31a4"
+"belongsTo":     "ID_fd079a2ef0c61a957d7bea9a9234154f169e31a4",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_8af38642adfcb09173c20129bd4e88ac9cd24c1d",
 "qualifiedName": "Reek.AST.SexpExtensions.BlockNode.__dummy__",
@@ -371,7 +389,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_eea61c78de814f4c8129a6c736bc84d9fab7c480"
+"belongsTo":     "ID_eea61c78de814f4c8129a6c736bc84d9fab7c480",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_3cefa5511d8c4e1ebe90b870bc77f4ca5a3ceea3",
 "qualifiedName": "Reek.AST.SexpExtensions.BlockargNode.__dummy__",
@@ -380,7 +401,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_c44e0655080034b36308ad5eb881411e03b7fbb3"
+"belongsTo":     "ID_c44e0655080034b36308ad5eb881411e03b7fbb3",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_fc4907c1b64ca68aa910a4960dcad134a65604b2",
 "qualifiedName": "Reek.AST.SexpExtensions.CaseNode.__dummy__",
@@ -389,7 +413,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_815790012dc78cbd8abbd0bc507286ca7468e6bf"
+"belongsTo":     "ID_815790012dc78cbd8abbd0bc507286ca7468e6bf",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_115626e341f4e8819c7f895500f30ca9525c5f10",
 "qualifiedName": "Reek.AST.SexpExtensions.CasgnNode.__dummy__",
@@ -398,7 +425,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_989b195cbf20048edaf0c49d39651af5a20cf7a2"
+"belongsTo":     "ID_989b195cbf20048edaf0c49d39651af5a20cf7a2",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e43a251c87b029d3da3807eb9d4db0eec64665c5",
 "qualifiedName": "Reek.AST.SexpExtensions.ClassNode.__dummy__",
@@ -407,7 +437,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1189cb702e0073396c321261ca196d3f1ce3f2aa"
+"belongsTo":     "ID_1189cb702e0073396c321261ca196d3f1ce3f2aa",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f5295e23923b277828acceb2fa5204e64003c380",
 "qualifiedName": "Reek.AST.SexpExtensions.ConstNode.__dummy__",
@@ -416,7 +449,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_df592cc780b06e7288b3e7d4048b28e53cebcb9b"
+"belongsTo":     "ID_df592cc780b06e7288b3e7d4048b28e53cebcb9b",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_9b308336e385c447dcfe9bb107b974937ae5b61b",
 "qualifiedName": "Reek.AST.SexpExtensions.DefNode.__dummy__",
@@ -425,7 +461,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_cbaee4b1d9560e22d6195b5d7612b70e2c3d3f86"
+"belongsTo":     "ID_cbaee4b1d9560e22d6195b5d7612b70e2c3d3f86",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_0145411c6ba1e604f2787870eacbe27424ac77e3",
 "qualifiedName": "Reek.AST.SexpExtensions.DefsNode.__dummy__",
@@ -434,7 +473,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_544eebf39d482cc61b1da6031eee01c00a6263ce"
+"belongsTo":     "ID_544eebf39d482cc61b1da6031eee01c00a6263ce",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_96797da0e662c16339ae7751c84eb25feb644fd5",
 "qualifiedName": "Reek.AST.SexpExtensions.IfNode.__dummy__",
@@ -443,7 +485,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_77f5a63476e0c79f4ec28a2a1140e7bfdc36106b"
+"belongsTo":     "ID_77f5a63476e0c79f4ec28a2a1140e7bfdc36106b",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b1ca43fff266f87cceba981a1fcf6985c95a6caa",
 "qualifiedName": "Reek.AST.SexpExtensions.KwoptargNode.__dummy__",
@@ -452,7 +497,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_9cc7444ef13521e1631eefac9fea129cddab817c"
+"belongsTo":     "ID_9cc7444ef13521e1631eefac9fea129cddab817c",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5d38bcf4bf2f887b99ac9944c775325207e3d8ba",
 "qualifiedName": "Reek.AST.SexpExtensions.KwrestargNode.__dummy__",
@@ -461,7 +509,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_eca4658a4dbc76a3105113b7821dd2a6fe3f76da"
+"belongsTo":     "ID_eca4658a4dbc76a3105113b7821dd2a6fe3f76da",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ee7f645ff44a4d6810e1d4a558dfc55361a627e4",
 "qualifiedName": "Reek.AST.SexpExtensions.LambdaNode.__dummy__",
@@ -470,7 +521,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_c87b05c2e3068c26734e8e84ecc2a65fa78dd7ec"
+"belongsTo":     "ID_c87b05c2e3068c26734e8e84ecc2a65fa78dd7ec",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_67602c1e731a58334f63f505d35d4f15d042c5ac",
 "qualifiedName": "Reek.AST.SexpExtensions.LitNode.__dummy__",
@@ -479,7 +533,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_854989cc1c8b484334696ed4d68b2f3828ed781a"
+"belongsTo":     "ID_854989cc1c8b484334696ed4d68b2f3828ed781a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f4dcbd1a5f285b0640da3e56949db5e236d689ae",
 "qualifiedName": "Reek.AST.SexpExtensions.LogicOperatorBase.__dummy__",
@@ -488,7 +545,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_16090d76e2d61cd1e24edda68de35660772b05a0"
+"belongsTo":     "ID_16090d76e2d61cd1e24edda68de35660772b05a0",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_64ce5c1957d7b3aef0d76a2e8a443deefb51d47c",
 "qualifiedName": "Reek.AST.SexpExtensions.LvarNode.__dummy__",
@@ -497,7 +557,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_84390e4a459bbfe309efeacb4cc41c362034af23"
+"belongsTo":     "ID_84390e4a459bbfe309efeacb4cc41c362034af23",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f2fc07adcbc3a7109413683bacc4a0b6ebcb766d",
 "qualifiedName": "Reek.AST.SexpExtensions.MethodNodeBase.__dummy__",
@@ -506,7 +569,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_d9acf4b48c07ebd8c853c35c6961f80b94ca2e5b"
+"belongsTo":     "ID_d9acf4b48c07ebd8c853c35c6961f80b94ca2e5b",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_6402f71dc2264f133f790f09bed4b1be47da1729",
 "qualifiedName": "Reek.AST.SexpExtensions.ModuleNodeBase.__dummy__",
@@ -515,7 +581,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_5378da6a0fdb862b0004a08d1fd52ef72871b409"
+"belongsTo":     "ID_5378da6a0fdb862b0004a08d1fd52ef72871b409",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_fa3166658c24cc999246ae7dda56259b824d83e2",
 "qualifiedName": "Reek.AST.SexpExtensions.NestedAssignables.__dummy__",
@@ -524,7 +593,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_f96d5be09b32398cbc61efd727d2bde3f3f4a6ad"
+"belongsTo":     "ID_f96d5be09b32398cbc61efd727d2bde3f3f4a6ad",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4741b814723555db11f180dcd6e5a71f589e5ca3",
 "qualifiedName": "Reek.AST.SexpExtensions.OptargNode.__dummy__",
@@ -533,7 +605,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_dfec53bc0a9bca492361e1ff0b37b60eb6c197f8"
+"belongsTo":     "ID_dfec53bc0a9bca492361e1ff0b37b60eb6c197f8",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e65803bfdbb438fd72f0eda4601d7f06a0a1608c",
 "qualifiedName": "Reek.AST.SexpExtensions.RestargNode.__dummy__",
@@ -542,7 +617,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_e18a449166335c0f781c55161bcf9b1250630f54"
+"belongsTo":     "ID_e18a449166335c0f781c55161bcf9b1250630f54",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4dbe04e04eb0350056dfd97a9ce09532372c765f",
 "qualifiedName": "Reek.AST.SexpExtensions.SelfNode.__dummy__",
@@ -551,7 +629,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_98743289c346deb1fce50f67b6efcbb822af8e90"
+"belongsTo":     "ID_98743289c346deb1fce50f67b6efcbb822af8e90",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a57bcc4203e05b8e4ea2d0d5a3843b9d9a42cfba",
 "qualifiedName": "Reek.AST.SexpExtensions.SendNode.__dummy__",
@@ -560,7 +641,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_4be6a3c48fc301002a8c380222d8371893ace0e4"
+"belongsTo":     "ID_4be6a3c48fc301002a8c380222d8371893ace0e4",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_47d3cf69acc90361f0f68b7ac304aa20287b56a3",
 "qualifiedName": "Reek.AST.SexpExtensions.SuperNode.__dummy__",
@@ -569,7 +653,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_ad126561092e368519429234eb833dea1eafe53a"
+"belongsTo":     "ID_ad126561092e368519429234eb833dea1eafe53a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d37d33b265dd2651b6e1d40a78fdbd3dc2d91a67",
 "qualifiedName": "Reek.AST.SexpExtensions.SymNode.__dummy__",
@@ -578,7 +665,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_77d633d504b99205ff7ea885ded99b197bbf7d32"
+"belongsTo":     "ID_77d633d504b99205ff7ea885ded99b197bbf7d32",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_dc2421d85d8455c1e6b67a55f9f640f15f0fe174",
 "qualifiedName": "Reek.AST.SexpExtensions.VariableBase.__dummy__",
@@ -587,7 +677,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_6711ede51ea5f3a09f33e6b121f1b04fcf59a2ed"
+"belongsTo":     "ID_6711ede51ea5f3a09f33e6b121f1b04fcf59a2ed",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_0b4d0076d51ab719233102ea1f9674c8ebc4653e",
 "qualifiedName": "Reek.AST.SexpExtensions.WhenNode.__dummy__",
@@ -596,7 +689,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_05d957b9012b6a3de006a730259170d5b13d949c"
+"belongsTo":     "ID_05d957b9012b6a3de006a730259170d5b13d949c",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e83f6819c7a754a5af1d0c9122b8a31123ce062a",
 "qualifiedName": "Reek.AST.SexpExtensions.YieldNode.__dummy__",
@@ -605,7 +701,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_9e0c2cef3f9bc3a44e7213bd1b44795607fe2d2e"
+"belongsTo":     "ID_9e0c2cef3f9bc3a44e7213bd1b44795607fe2d2e",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4a7bafee46fcc97641523bc1924cd93453b495fb",
 "qualifiedName": "Reek.CLI.Application",
@@ -614,7 +713,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_2fb02aff2b4032cc2401985beb47240b42eeac98"
+"belongsTo":     "ID_2fb02aff2b4032cc2401985beb47240b42eeac98",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5ac32ba498af329762c9e76ec2f2ddd20b2b25e4",
 "qualifiedName": "Reek.CLI.Command.BaseCommand",
@@ -623,7 +725,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_613770714162a19f238d896a91dbba966815899c"
+"belongsTo":     "ID_613770714162a19f238d896a91dbba966815899c",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5bc8a4e8e079dad76555725b62884d765c0faf45",
 "qualifiedName": "Reek.CLI.Command.ReportCommand",
@@ -632,7 +737,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_613770714162a19f238d896a91dbba966815899c"
+"belongsTo":     "ID_613770714162a19f238d896a91dbba966815899c",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_14cfddd669636be9ca854ea38a854daa85b25adb",
 "qualifiedName": "Reek.CLI.Command.TodoListCommand",
@@ -641,7 +749,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_613770714162a19f238d896a91dbba966815899c"
+"belongsTo":     "ID_613770714162a19f238d896a91dbba966815899c",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_97f38ff5a4bb34a00abc6311b5b7fb2f58f9c420",
 "qualifiedName": "Reek.CLI.Options",
@@ -650,7 +761,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_2fb02aff2b4032cc2401985beb47240b42eeac98"
+"belongsTo":     "ID_2fb02aff2b4032cc2401985beb47240b42eeac98",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_945aaba830f8bdbc2d32bcaf00c860bed3d9dce7",
 "qualifiedName": "Reek.CLI.Silencer.__dummy__",
@@ -659,7 +773,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_04d78b9839b9508f231c4faa32a57f67388f5fb9"
+"belongsTo":     "ID_04d78b9839b9508f231c4faa32a57f67388f5fb9",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7b30fffe1593aa1481c8d4bc99360a829facf8f4",
 "qualifiedName": "Reek.CLI.WarningCollector",
@@ -668,7 +785,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_2fb02aff2b4032cc2401985beb47240b42eeac98"
+"belongsTo":     "ID_2fb02aff2b4032cc2401985beb47240b42eeac98",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_155a96e5ec7f4ec6c7462bf4a607ea7b6c4d32b0",
 "qualifiedName": "Reek.CandidateMethod",
@@ -677,7 +797,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6"
+"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a9ff0aba5ecb0bc87c152949e282063dce6e96a3",
 "qualifiedName": "Reek.CodeComment",
@@ -686,7 +809,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6"
+"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e2417f6bab3dc931bdd6e6eef775e50a877f0ca8",
 "qualifiedName": "Reek.Configuration.AppConfiguration",
@@ -695,7 +821,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b3a935465f05bd83dccb9d8eb2119710a8334d7d"
+"belongsTo":     "ID_b3a935465f05bd83dccb9d8eb2119710a8334d7d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_59216384f270864fe99ca5bad688562576d7aa5e",
 "qualifiedName": "Reek.Configuration.ConfigFileException",
@@ -704,7 +833,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b3a935465f05bd83dccb9d8eb2119710a8334d7d"
+"belongsTo":     "ID_b3a935465f05bd83dccb9d8eb2119710a8334d7d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_759c1eeb1b13eb60463609fd71239c8bf539de0c",
 "qualifiedName": "Reek.Configuration.ConfigurationFileFinder.__dummy__",
@@ -713,7 +845,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_9a31f996413e6283f7df271e4a1915f2707ef96e"
+"belongsTo":     "ID_9a31f996413e6283f7df271e4a1915f2707ef96e",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_beebf47fbcb807d0e2dfcc4ed0385e99195498cd",
 "qualifiedName": "Reek.Configuration.ConfigurationValidator.__dummy__",
@@ -722,7 +857,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_31c642201ed78e7d4aad63e9b53ca2cdc01d503d"
+"belongsTo":     "ID_31c642201ed78e7d4aad63e9b53ca2cdc01d503d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_cb62a4c2d2b830aeb4d01fea1bc9fb4a61b26a5f",
 "qualifiedName": "Reek.Configuration.DefaultDirective.__dummy__",
@@ -731,7 +869,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_38ddc714a77b912d2ab6237dff9ec5b892f0bbf9"
+"belongsTo":     "ID_38ddc714a77b912d2ab6237dff9ec5b892f0bbf9",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b1f93ffc7be3bc0eee28d6a065edfef848025364",
 "qualifiedName": "Reek.Configuration.DirectoryDirectives.__dummy__",
@@ -740,7 +881,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b0ce727c81766ed93c695555ab99fa2d7a744192"
+"belongsTo":     "ID_b0ce727c81766ed93c695555ab99fa2d7a744192",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ff0d3bbc219bb41f5115c5c2ebde3c61a4e6c387",
 "qualifiedName": "Reek.Configuration.ExcludedPaths.__dummy__",
@@ -749,7 +893,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_e98a28315526e0c72d39d26b7c841dc7847e103d"
+"belongsTo":     "ID_e98a28315526e0c72d39d26b7c841dc7847e103d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_842f5e17613ee6921ac0556b83ccbeb1a0d4cc15",
 "qualifiedName": "Reek.Context.AttributeContext",
@@ -758,7 +905,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4d128a5559ddf2619c0121e7465afb705ce6e908",
 "qualifiedName": "Reek.Context.ClassContext",
@@ -767,7 +917,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e1e70710241a13ea60a65596743b1a880447674d",
 "qualifiedName": "Reek.Context.CodeContext",
@@ -776,7 +929,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7d67c1edbeb6be2de10e0c27793019cd31e00004",
 "qualifiedName": "Reek.Context.GhostContext",
@@ -785,7 +941,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_9814348e6ccccb3550f6423869b1b1cf62c4d348",
 "qualifiedName": "Reek.Context.MethodContext",
@@ -794,7 +953,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_48c30872578e76b88fde5f60601958aea9231755",
 "qualifiedName": "Reek.Context.ModuleContext",
@@ -803,7 +965,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_81ff1daaafa4705025e1041a1ef70283504ce43d",
 "qualifiedName": "Reek.Context.RootContext",
@@ -812,7 +977,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_245c0809330187910fa32240c40c645ca1724620",
 "qualifiedName": "Reek.Context.SendContext",
@@ -821,7 +989,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_3c321b93b3d38cc573884bf7047c6b20bed90fc4",
 "qualifiedName": "Reek.Context.SingletonAttributeContext",
@@ -830,7 +1001,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_296d7e52ccbdde8b77d63270897245482a24cf12",
 "qualifiedName": "Reek.Context.SingletonMethodContext",
@@ -839,7 +1013,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_46c174a1302392b68473a729cf3884432dd620dd",
 "qualifiedName": "Reek.Context.StatementCounter",
@@ -848,7 +1025,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_3c894dce713ab612785d5b88bcfdf3068305afce",
 "qualifiedName": "Reek.Context.VisibilityTracker",
@@ -857,7 +1037,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a"
+"belongsTo":     "ID_bc7246dd3634bb395572adbc949ced6331155d2a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_61ba05c10c48004a51d97fa177f48a2ac096495d",
 "qualifiedName": "Reek.ContextBuilder",
@@ -866,7 +1049,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6"
+"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f8e5188b385148570ae4eaaecf27b1778d1d6909",
 "qualifiedName": "Reek.Examiner",
@@ -875,7 +1061,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6"
+"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_15df3e8caa177e65acea44367e9e7c58cae2a859",
 "qualifiedName": "Reek.MethodGroup",
@@ -884,7 +1073,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6"
+"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_369552a87ac841987b40079d913a41743a44fb90",
 "qualifiedName": "Reek.Rake.Task",
@@ -893,7 +1085,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_c4f2c48a60d70c0c6956725558a5988fac40c130"
+"belongsTo":     "ID_c4f2c48a60d70c0c6956725558a5988fac40c130",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_afee217305d18510b7975551d6846c956d9c9498",
 "qualifiedName": "Reek.Report.Base",
@@ -902,7 +1097,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94"
+"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_246e88cc299feaf7cf8c175a31a71ae715687cb1",
 "qualifiedName": "Reek.Report.BlankLocationFormatter.__dummy__",
@@ -911,7 +1109,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_4301daee7655ca995b1d6f1598bdfe39d6ec71fd"
+"belongsTo":     "ID_4301daee7655ca995b1d6f1598bdfe39d6ec71fd",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_42db87c4b9d610fbb1b133fd489925eeb21914e0",
 "qualifiedName": "Reek.Report.CodeClimateFormatter",
@@ -920,7 +1121,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94"
+"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_73f81cc385d01b7331fd14bfa7a28e4fe39b010d",
 "qualifiedName": "Reek.Report.CodeClimateReport",
@@ -929,7 +1133,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94"
+"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f50d3f6ceb5b20f22a7cf23738a03d31fa23db57",
 "qualifiedName": "Reek.Report.DefaultLocationFormatter.__dummy__",
@@ -938,7 +1145,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_4003cac83500dad3279ecfaa1b722bd574bda678"
+"belongsTo":     "ID_4003cac83500dad3279ecfaa1b722bd574bda678",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a0ffa309b8684d5a1d08674eeae00ce2ee313b1c",
 "qualifiedName": "Reek.Report.Formatter.__dummy__",
@@ -947,7 +1157,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_e4eea55b4b808a273b0ecc866003c6aca6635f3d"
+"belongsTo":     "ID_e4eea55b4b808a273b0ecc866003c6aca6635f3d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e5decdf1ba32ec455a4cf6c4cb01273c2354da66",
 "qualifiedName": "Reek.Report.HTMLReport",
@@ -956,7 +1169,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94"
+"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_61ab3ba5d9cd584bfc5b9199bbeaa96c3a0cef96",
 "qualifiedName": "Reek.Report.HeadingFormatter.Base",
@@ -965,7 +1181,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_e8b42b892caa332f96544d4ee0a41b12976dd3b4"
+"belongsTo":     "ID_e8b42b892caa332f96544d4ee0a41b12976dd3b4",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_93578d0b3eba324f0fea4efde965f43cfdeaf436",
 "qualifiedName": "Reek.Report.HeadingFormatter.Quiet",
@@ -974,7 +1193,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_e8b42b892caa332f96544d4ee0a41b12976dd3b4"
+"belongsTo":     "ID_e8b42b892caa332f96544d4ee0a41b12976dd3b4",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_30d5bf40bfc05df94556e349484db689f63599ab",
 "qualifiedName": "Reek.Report.HeadingFormatter.Verbose",
@@ -983,7 +1205,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_e8b42b892caa332f96544d4ee0a41b12976dd3b4"
+"belongsTo":     "ID_e8b42b892caa332f96544d4ee0a41b12976dd3b4",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e1db5e8b119c2c0574f97e753ba4eafb5d111217",
 "qualifiedName": "Reek.Report.JSONReport",
@@ -992,7 +1217,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94"
+"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d686cbc70bfe52c32f7ff6acc8561d0209946693",
 "qualifiedName": "Reek.Report.SimpleWarningFormatter",
@@ -1001,7 +1229,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94"
+"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5b4f8c449aa53963a3b78ea378c3ba38a0cd9eab",
 "qualifiedName": "Reek.Report.SingleLineLocationFormatter.__dummy__",
@@ -1010,7 +1241,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa4b8a10b906f97919b9c930dd0a63b30844075d"
+"belongsTo":     "ID_fa4b8a10b906f97919b9c930dd0a63b30844075d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ef04f1fd60ae18c3e7c55fee4f853c5f8545e9f2",
 "qualifiedName": "Reek.Report.TextReport",
@@ -1019,7 +1253,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94"
+"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5fdfd462643ec48b510ebb24bd5c4180e616b717",
 "qualifiedName": "Reek.Report.WikiLinkWarningFormatter",
@@ -1028,7 +1265,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94"
+"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_efa78ae66cddbeea12053be2538322606668ff1c",
 "qualifiedName": "Reek.Report.XMLReport",
@@ -1037,7 +1277,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94"
+"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_aca89026d393dd8ed178e7fadd71bb2e918095aa",
 "qualifiedName": "Reek.Report.YAMLReport",
@@ -1046,7 +1289,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94"
+"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a7e47c7d3abb9ea3262b519d4e0e833df48212b0",
 "qualifiedName": "Reek.Report.__dummy__",
@@ -1055,7 +1301,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94"
+"belongsTo":     "ID_a5e01162183b887d36da4d7276349e0583837b94",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4d6196ae05a4b1c6ebda225a08e07a9510af1f7d",
 "qualifiedName": "Reek.Smells.Attribute",
@@ -1064,7 +1313,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_0fb84835e02e59defc05ec91697375bda1942d9a",
 "qualifiedName": "Reek.Smells.BooleanParameter",
@@ -1073,7 +1325,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4233ea1c094250313d82b8b57e96bb38c04130c7",
 "qualifiedName": "Reek.Smells.ClassVariable",
@@ -1082,7 +1337,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d5cfbbb70e28f61c3512e66675d984a3a2083b02",
 "qualifiedName": "Reek.Smells.ControlParameter",
@@ -1091,7 +1349,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_32460d4f9e3a7307396863ad1d03e30a21a42797",
 "qualifiedName": "Reek.Smells.ControlParameter.ControlParameterCollector",
@@ -1100,7 +1361,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_d5cfbbb70e28f61c3512e66675d984a3a2083b02"
+"belongsTo":     "ID_d5cfbbb70e28f61c3512e66675d984a3a2083b02",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_845e816a1b43950420aac8abdf78e4eceb29afcb",
 "qualifiedName": "Reek.Smells.ControlParameter.ControlParameterFinder",
@@ -1109,7 +1373,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_d5cfbbb70e28f61c3512e66675d984a3a2083b02"
+"belongsTo":     "ID_d5cfbbb70e28f61c3512e66675d984a3a2083b02",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ab2d7fb474ac02c6013e00dbd673ff0d2d04ce98",
 "qualifiedName": "Reek.Smells.ControlParameter.FoundControlParameter",
@@ -1118,7 +1385,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_d5cfbbb70e28f61c3512e66675d984a3a2083b02"
+"belongsTo":     "ID_d5cfbbb70e28f61c3512e66675d984a3a2083b02",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d0a0871a2c64b105d15839b944d3af6fd9e64ec0",
 "qualifiedName": "Reek.Smells.DataClump",
@@ -1127,7 +1397,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_fc1ac5be23d5c08c2382bd8642f7cf0a259b635d",
 "qualifiedName": "Reek.Smells.DuplicateMethodCall",
@@ -1136,7 +1409,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5acd6fa3abe1ad895df3943b7e2aa0c10a295bbb",
 "qualifiedName": "Reek.Smells.DuplicateMethodCall.CallCollector",
@@ -1145,7 +1421,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fc1ac5be23d5c08c2382bd8642f7cf0a259b635d"
+"belongsTo":     "ID_fc1ac5be23d5c08c2382bd8642f7cf0a259b635d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_fc1ccf8fbc399bc18afdde4abe12df06d12cdf76",
 "qualifiedName": "Reek.Smells.DuplicateMethodCall.FoundCall",
@@ -1154,7 +1433,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fc1ac5be23d5c08c2382bd8642f7cf0a259b635d"
+"belongsTo":     "ID_fc1ac5be23d5c08c2382bd8642f7cf0a259b635d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d35fb0f4218c05e9bcd15157b48842d12402aef1",
 "qualifiedName": "Reek.Smells.FeatureEnvy",
@@ -1163,7 +1445,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d072a668bbe5a312582d21ce53f291e75038f93c",
 "qualifiedName": "Reek.Smells.IrresponsibleModule",
@@ -1172,7 +1457,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_cdd37ced6e562b542702c5e6c29c19bada2b4965",
 "qualifiedName": "Reek.Smells.LongParameterList",
@@ -1181,7 +1469,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_da94ba1905460e648755bf2c84938c6384d71897",
 "qualifiedName": "Reek.Smells.LongYieldList",
@@ -1190,7 +1481,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e16b1bc88173f4ce7f4fc8601bdef27c4183f535",
 "qualifiedName": "Reek.Smells.ModuleInitialize",
@@ -1199,7 +1493,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_884f2ec54de5f859fc7e4a38e93687b93e8f8586",
 "qualifiedName": "Reek.Smells.NestedIterators",
@@ -1208,7 +1505,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_94490dab1ecab36d7aec00709e18e7aac3cc7b20",
 "qualifiedName": "Reek.Smells.NestedIterators.Iterator",
@@ -1217,7 +1517,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_884f2ec54de5f859fc7e4a38e93687b93e8f8586"
+"belongsTo":     "ID_884f2ec54de5f859fc7e4a38e93687b93e8f8586",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_51db63e2f6957d104285169c618f54f0f6bdbd83",
 "qualifiedName": "Reek.Smells.NilCheck",
@@ -1226,7 +1529,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_289fde0a6c4bc0a0d9d4dbbd833f629af667aebe",
 "qualifiedName": "Reek.Smells.NilCheck.NilCallNodeDetector",
@@ -1235,7 +1541,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_51db63e2f6957d104285169c618f54f0f6bdbd83"
+"belongsTo":     "ID_51db63e2f6957d104285169c618f54f0f6bdbd83",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_73d64c75f1ef9970ef0580fc880b276df3c06a12",
 "qualifiedName": "Reek.Smells.NilCheck.NilCallNodeDetector.__dummy__",
@@ -1244,7 +1553,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_289fde0a6c4bc0a0d9d4dbbd833f629af667aebe"
+"belongsTo":     "ID_289fde0a6c4bc0a0d9d4dbbd833f629af667aebe",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_2ea12930d1c03255e8ef6a63df7be68043440e1f",
 "qualifiedName": "Reek.Smells.NilCheck.NilWhenNodeDetector",
@@ -1253,7 +1565,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_51db63e2f6957d104285169c618f54f0f6bdbd83"
+"belongsTo":     "ID_51db63e2f6957d104285169c618f54f0f6bdbd83",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_844e78bb22283860dd3f98ab64b4a2d94c2a614f",
 "qualifiedName": "Reek.Smells.NilCheck.NilWhenNodeDetector.__dummy__",
@@ -1262,7 +1577,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_2ea12930d1c03255e8ef6a63df7be68043440e1f"
+"belongsTo":     "ID_2ea12930d1c03255e8ef6a63df7be68043440e1f",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_86f7fc2dd0ad1bf29ce543009eab592d7b9b4f04",
 "qualifiedName": "Reek.Smells.NilCheck.NodeDetector",
@@ -1271,7 +1589,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_51db63e2f6957d104285169c618f54f0f6bdbd83"
+"belongsTo":     "ID_51db63e2f6957d104285169c618f54f0f6bdbd83",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d554ec41388a6f3ea3a7a8b1d893585f273b7dc0",
 "qualifiedName": "Reek.Smells.NilCheck.NodeFinder",
@@ -1280,7 +1601,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_51db63e2f6957d104285169c618f54f0f6bdbd83"
+"belongsTo":     "ID_51db63e2f6957d104285169c618f54f0f6bdbd83",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5ec60a071c9106f483c2345f27beef6e0138eb78",
 "qualifiedName": "Reek.Smells.NilCheck.SafeNavigationNodeDetector",
@@ -1289,7 +1613,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_51db63e2f6957d104285169c618f54f0f6bdbd83"
+"belongsTo":     "ID_51db63e2f6957d104285169c618f54f0f6bdbd83",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_efc5b813ab468434c2579f2e1fdc34e6c5cc16c6",
 "qualifiedName": "Reek.Smells.NilCheck.SafeNavigationNodeDetector.__dummy__",
@@ -1298,7 +1625,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_5ec60a071c9106f483c2345f27beef6e0138eb78"
+"belongsTo":     "ID_5ec60a071c9106f483c2345f27beef6e0138eb78",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_cd69ba5315daac548fad9dbb6622dd45b02fc8cf",
 "qualifiedName": "Reek.Smells.Overrides",
@@ -1307,7 +1637,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_c4e758b957df4be3c2f8874e1cac3dc1ffe8a1f1",
 "qualifiedName": "Reek.Smells.PrimaDonnaMethod",
@@ -1316,7 +1649,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_8f12c1a80124e86b65049e9d628eb750e53bdea1",
 "qualifiedName": "Reek.Smells.RepeatedConditional",
@@ -1325,7 +1661,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_84d6bd4c00123d926b9f5455a534a97ca704f0ef",
 "qualifiedName": "Reek.Smells.SmellConfiguration",
@@ -1334,7 +1673,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a2fe70c26fd6602db846e45299e6f98355454405",
 "qualifiedName": "Reek.Smells.SmellDetector",
@@ -1343,7 +1685,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_6822688f0b29358a0f3ee35891ff0d34d6885b93",
 "qualifiedName": "Reek.Smells.SmellRepository",
@@ -1352,7 +1697,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b6b50db40b1b189f7cfad42b60909008499b0816",
 "qualifiedName": "Reek.Smells.SmellWarning",
@@ -1361,7 +1709,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7566d798be03aa87043b34ed4d2f2af461e27ca6",
 "qualifiedName": "Reek.Smells.SubclassedFromCoreClass",
@@ -1370,7 +1721,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_45dafe111aec0499e1172314b120ca502423fe81",
 "qualifiedName": "Reek.Smells.TooManyConstants",
@@ -1379,7 +1733,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_82ad127a33a2dad1d1477d196ad2341b83a05e7c",
 "qualifiedName": "Reek.Smells.TooManyInstanceVariables",
@@ -1388,7 +1745,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_6a417c192a692b3f169a434958a67fb63757db15",
 "qualifiedName": "Reek.Smells.TooManyMethods",
@@ -1397,7 +1757,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ba8038d58664f6b528b605f5bef3d1e501d6ee5d",
 "qualifiedName": "Reek.Smells.TooManyStatements",
@@ -1406,7 +1769,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_98e7dde21fccdc011c48374dda3e12caeecc433d",
 "qualifiedName": "Reek.Smells.UncommunicativeMethodName",
@@ -1415,7 +1781,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_2d6cd29f4509a7ec61d85c5158f2ffe97d066b68",
 "qualifiedName": "Reek.Smells.UncommunicativeModuleName",
@@ -1424,7 +1793,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f585576a27a7321916ce2706c63a35f0f3b4d3fb",
 "qualifiedName": "Reek.Smells.UncommunicativeParameterName",
@@ -1433,7 +1805,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_1c9c9449a6264b6fe2294403966a9c8d35ca8a90",
 "qualifiedName": "Reek.Smells.UncommunicativeVariableName",
@@ -1442,7 +1817,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_6cb3ef449f33fdfc8c3ab705bc2bafaad6d3710f",
 "qualifiedName": "Reek.Smells.UnusedParameters",
@@ -1451,7 +1829,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_52224c86fd9d2dfd778fb677827b43b8c2d8ffd0",
 "qualifiedName": "Reek.Smells.UnusedPrivateMethod",
@@ -1460,7 +1841,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_eee3f17724b5d07cd7af562dc1ec27501468e2c3",
 "qualifiedName": "Reek.Smells.UnusedPrivateMethod.Hit",
@@ -1469,7 +1853,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_52224c86fd9d2dfd778fb677827b43b8c2d8ffd0"
+"belongsTo":     "ID_52224c86fd9d2dfd778fb677827b43b8c2d8ffd0",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5941e8c44e54038bffcb03897450332b03ecbf07",
 "qualifiedName": "Reek.Smells.UtilityFunction",
@@ -1478,7 +1865,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21"
+"belongsTo":     "ID_1eb4b98dbefc3fd0b9a22d17568927f578453a21",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ba0e26f3903f2b70781dddbf0f603f8866726bb0",
 "qualifiedName": "Reek.Source.SourceCode",
@@ -1487,7 +1877,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_eefe924b62ab8f7754656a02e22b58805aa8f04f"
+"belongsTo":     "ID_eefe924b62ab8f7754656a02e22b58805aa8f04f",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a35d88fa4abbbdcb76fdffc63002e6adb7a4e0d1",
 "qualifiedName": "Reek.Source.SourceLocator",
@@ -1496,7 +1889,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_eefe924b62ab8f7754656a02e22b58805aa8f04f"
+"belongsTo":     "ID_eefe924b62ab8f7754656a02e22b58805aa8f04f",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_403d7320ac344efd1978816645a535a783c274da",
 "qualifiedName": "Reek.Spec.ShouldReek",
@@ -1505,7 +1901,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_cfba0e2c0c3c6a72df6d7f72c54131d531c95efa"
+"belongsTo":     "ID_cfba0e2c0c3c6a72df6d7f72c54131d531c95efa",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5959a5573801ce168776256bc1559034801526a6",
 "qualifiedName": "Reek.Spec.ShouldReekOf",
@@ -1514,7 +1913,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_cfba0e2c0c3c6a72df6d7f72c54131d531c95efa"
+"belongsTo":     "ID_cfba0e2c0c3c6a72df6d7f72c54131d531c95efa",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ea5c79c1ba239c74572ed3c741abf57e856a5376",
 "qualifiedName": "Reek.Spec.ShouldReekOnlyOf",
@@ -1523,7 +1925,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_cfba0e2c0c3c6a72df6d7f72c54131d531c95efa"
+"belongsTo":     "ID_cfba0e2c0c3c6a72df6d7f72c54131d531c95efa",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_c8dee95bfccca319774559ad903cc65edebd3853",
 "qualifiedName": "Reek.Spec.SmellMatcher",
@@ -1532,7 +1937,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_cfba0e2c0c3c6a72df6d7f72c54131d531c95efa"
+"belongsTo":     "ID_cfba0e2c0c3c6a72df6d7f72c54131d531c95efa",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7f7824d4acd03ee869c28a16d2ed12bb2fe3d6ce",
 "qualifiedName": "Reek.Spec.__dummy__",
@@ -1541,7 +1949,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_cfba0e2c0c3c6a72df6d7f72c54131d531c95efa"
+"belongsTo":     "ID_cfba0e2c0c3c6a72df6d7f72c54131d531c95efa",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_0b74f130f3ee2f1b2718b66ef8472854b08003b7",
 "qualifiedName": "Reek.TreeDresser",
@@ -1550,7 +1961,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6"
+"belongsTo":     "ID_16af8306cca932a943fb81a4c5e8f59b2c10f8c6",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_367d3c2b3a2573cc48b75f37e9d41e847e699396",
 "qualifiedName": "Reek.Spec.__dummy__.reek_of()",

@@ -41,6 +41,7 @@ Disk:
 	('(' 'parent' parent=[Disk] ')')?
 	('(' 'diskVersions' diskVersions+=DiskVersion ')')? //hismo
 	('(' 'diskVersion' diskVersion = DiskVersion ')')?
+	('(' 'noa' noa = INT ')')?
 	')';
 	//TODO add type to DiskSegment	
 	
@@ -105,16 +106,20 @@ DiskSegmentInvocation:
 DiskVersion:
 	'(' 'ref:' name=INT_ID ')'
 	'(' 'level' level=INT ')'
+	('(' 'hash' id=STRING ')')?
 	('(' 'scale' scale=Decimal ')')?
 	('(' 'height' height=Decimal ')')?
 	('(' 'author' author=MSESTRING ')')?	
 	('(' 'timestamp' timestamp=MSESTRING')')?
-	('(' 'commitId' commitId=MSESTRING ')')?	
+	('(' 'commitId' commitId=MSESTRING ')')?
+	('(' 'ringWidth' ringWidth = Decimal ')')?
+	('(' 'color' color = MSESTRING ')')?
 	;
 
 Version:
 	'(' 'ref:' name=INT_ID ')'
 	'(' 'level' level=INT ')'
+	'(' 'hash' id=STRING ')'
 	('(' 'scale' scale=Decimal ')')?
 	('(' 'height' height=Decimal ')')?	
 	('(' 'author' author=MSESTRING ')')?	

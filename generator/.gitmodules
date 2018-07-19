@@ -1,6 +1,0 @@
-[submodule "./jdt2famix/src"]
-	path = ./jdt2famix/src
-	url = https://github.com/girba/jdt2famix.git
-[submodule "org.svis.extractor.famix.csharp"]
-	path = org.svis.extractor.famix.csharp
-	url = https://bitbucket.org/naraesk/org.svis.extractor.famix.csharp.git

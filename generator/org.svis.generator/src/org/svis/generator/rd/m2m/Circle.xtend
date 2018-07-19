@@ -1,18 +1,18 @@
 package org.svis.generator.rd.m2m;
 
 import java.awt.geom.Point2D.Double;
+import org.eclipse.xtend.lib.annotations.Accessors
 
 public abstract class Circle implements Comparable<Circle> {
 
-	@Property double radius = 0
-	@Property Double centre = new Double(0,0)
+	@Accessors double radius = 0
+	@Accessors Double centre = new Double(0,0)
 	// TODO extended circle!
-	@Property double minArea = 0
-	@Property double netArea
-	@Property double grossArea
-	@Property String serial = ""
-	@Property double ringWidth
-	
+	@Accessors double minArea = 0
+	@Accessors double netArea
+	@Accessors double grossArea
+	@Accessors String serial = ""
+	@Accessors double ringWidth
 	
 	override int compareTo(Circle circle) {
 		if (netArea < circle.netArea) {

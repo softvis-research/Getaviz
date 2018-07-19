@@ -1,12 +1,8 @@
-
-
-		
-
-$(document).ready(function () {	
+$(document).ready(function () {
 	
 	//parse setup if defined
 	if(!window["setup"]){
-		console.log("No setup definition found!")	
+		console.log("No setup definition found!");
 		return;
 	}
 
@@ -19,42 +15,36 @@ $(document).ready(function () {
 			height: 200,
 			isModal: true, 
 			autoOpen: true,   
-			resizable: false, 
+			resizable: false
 		});		
 	}
-	
 	//load famix data
 	$.getJSON( metaDataJsonUrl, initializeApplication);
-	
 });
 
-
-
 function initializeApplication(metaDataJson){
-	
-	//wait for canvas to be loaded full here...
+
+    //wait for canvas to be loaded full here...
 	var canvas = document.getElementById("x3dom-x3dElement-canvas");	
 	if(!canvas){
 		setTimeout(function(){initializeApplication(metaDataJson);}, 100);
 		return;
 	}
-
 	//create entity model
 	model.initialize(metaDataJson);
-	
+
 	//start action controller
 	actionController.initialize();
 
 	//initialize canvas manipulator
 	canvasManipulator.initialize();
-	
+
 	//initialize application
-	application.initialize();	
+	application.initialize();
 
 	if(setup.loadPopUp){
 		$("#RootLoadPopUp").jqxWindow("close");		
-	};
-
+	}
 }
 
 
@@ -70,8 +60,8 @@ var application = (function() {
 	var controllers = new Map();
 	var activeControllers = new Map();
 	
-	var newActiveControllers = new Array();
-	var oldActiveControllers = new Array();
+	var newActiveControllers = [];
+	var oldActiveControllers = [];
 	
 	var uiConfigs = new Map();
 	var currentUIConfig = null;
@@ -121,7 +111,7 @@ var application = (function() {
 	function startConfigParsingAfterControllerLoading(){
 		
 		//check that all controllers loaded
-		if(setup.controllers.length != controllers.size){
+		if(setup.controllers.length !== controllers.size){
 			setTimeout(startConfigParsingAfterControllerLoading, 1);
 			return;
 		}
@@ -137,7 +127,7 @@ var application = (function() {
 		currentUIConfig.uiDIV = uiDIV;
 		
 		//activate controller
-		newActiveControllers = new Array();	
+		newActiveControllers = [];
 
 		try {
 			//parse ui config
@@ -176,13 +166,13 @@ var application = (function() {
 		resetApplication();
 		
 		//same ui? -> nothing to do
-		if(uiConfigName == currentUIConfig.name){
+		if(uiConfigName === currentUIConfig.name){
 			return;
 		}
 		
 		var nextUIConfig = uiConfigs.get(uiConfigName);
 		
-		if( nextUIConfig == undefined){
+		if( nextUIConfig === undefined){
 			events.log.error.publish({ text: "No UI config with name " + uiConfigName + " found"});
 			return;
 		}
@@ -203,7 +193,7 @@ var application = (function() {
 		
 		//collect old active controllers for deactivation		
 		oldActiveControllers = Array.from(activeControllers.keys());
-		newActiveControllers = new Array();		
+		newActiveControllers = [];
 
 		try {
 			//parse new ui config
@@ -241,9 +231,21 @@ var application = (function() {
 			if(area.resizable === false){
 				splitterResizable = area.resizable;
 			} 
-			
+
+
 			var firstPart = area.first;
 			var secondPart = area.second;
+
+			if(firstPart === undefined){
+				console.log("abc")
+				console.log(area)
+			}
+
+
+            if(secondPart === undefined){
+                console.log("xyz")
+                console.log(area)
+            }
 			
 			
 			//create jqwidget splitter
@@ -252,20 +254,21 @@ var application = (function() {
 			//add splitter to parent
 			parent.appendChild(splitterObject.splitter);
 			
-			var firstPanel = createPanel(firstPart);			
+			var firstPanel = createPanel(firstPart);
 			var secondPanel = createPanel(secondPart);
-					
+
 			$(splitterId).jqxSplitter({ theme: "metro", width: "100%", height: "100%", resizable: splitterResizable, orientation: splitterOrientation, panels: [firstPanel, secondPanel ] });
 			
 			//pars area parts as config parts
 			parseUIConfig(configName, firstPart, splitterObject.firstPanel);
-			parseUIConfig(configName, secondPart, splitterObject.secondPanel);
+			if(secondPart !== undefined) {
+                parseUIConfig(configName, secondPart, splitterObject.secondPanel);
+            }
 		}
 		
 		//expander
 		if(configPart.expanders !== undefined){
 			configPart.expanders.forEach(function(expander){
-				
 				var expanderName = configName + "_" + expander.name;
 				var expanderId = "#" + expanderName;
 				var expanderTitle = expander.title;
@@ -277,7 +280,7 @@ var application = (function() {
 				$(expanderId).jqxExpander({theme: "metro", width: "100%", height: "100%"});
 
 				//pars expander parts as config parts
-				var expanderContent = document.createElement("DIV");;
+				var expanderContent = document.createElement("DIV");
 				parseUIConfig(configName, expander, expanderContent);
 
 				$(expanderId).jqxExpander('setContent', expanderContent);
@@ -344,16 +347,16 @@ var application = (function() {
 		
 		if(activeControllers.has(controllerObject)){
 			
-			var controllerDiv = activeControllers.get(controllerObject);
+			let controllerDiv = activeControllers.get(controllerObject);
 			
-			var controllerDivParent = controllerDiv.parentElement;
+			let controllerDivParent = controllerDiv.parentElement;
 			controllerDivParent.removeChild(controllerDiv);
 			
 			parent.appendChild(controllerDiv);
 						
 		} else {
-				
-			var controllerDiv = document.createElement("DIV");
+
+			let controllerDiv = document.createElement("DIV");
 			parent.appendChild(controllerDiv);
 			
 			activeControllers.set(controllerObject, controllerDiv);
@@ -362,9 +365,9 @@ var application = (function() {
 		}
 
 		//conroller also in new ui -> no deactivation
-		if(oldActiveControllers.length != 0){		
-			var indexOfController = oldActiveControllers.indexOf(controllerObject) 
-			if( indexOfController != -1){
+		if(oldActiveControllers.length !== 0){
+			let indexOfController = oldActiveControllers.indexOf(controllerObject);
+			if( indexOfController !== -1){
 				oldActiveControllers.splice(indexOfController, 1);
 			}
 		}
@@ -410,7 +413,7 @@ var application = (function() {
 		if(!navigationInfoElement){
 			var scene = document.getElementById("scene");
 		
-			var navigationInfoElement = document.createElement("NAVIGATIONINFO");
+			navigationInfoElement = document.createElement("NAVIGATIONINFO");
 			navigationInfoElement.id = "navigationInfo";
 			
 			scene.appendChild(navigationInfoElement);		
@@ -430,17 +433,15 @@ var application = (function() {
 	}
 	
 	function createPanel(areaPart){
-		
 		var panel = {
 			size: areaPart.size
-		}
+		};
 		if(areaPart.min !== undefined){
 			panel.min = areaPart.min;
-		}	
+		}
 		if(areaPart.collapsible !== undefined){
 			panel.collapsible = areaPart.collapsible;
-		}	
-		
+		}
 		return panel;
 	}
 			
@@ -480,7 +481,7 @@ var application = (function() {
 		return	{	
 					expander: 	expanderDivElement,
 					head:		expanderHeadDivElement,
-					content:	expanderContentDivElement		
+					content:	expanderContentDivElement
 		};
 	}
 
@@ -504,14 +505,13 @@ var application = (function() {
 
 		return popupWindowDiv;		       
 	}
-	
 
 
 	//Helper
 
 	function transferConfigParams(setupConfig, controllerConfig){
 		for (var property in setupConfig) {
-			if(property == "name"){
+			if(property === "name"){
 				continue;
 			}
 			

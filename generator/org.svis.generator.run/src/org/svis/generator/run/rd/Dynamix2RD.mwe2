@@ -12,7 +12,7 @@ Workflow {
     	platformUri = "${runtimeProject}/.."
 	}
 	
-	component = org.svis.generator.ReaderWithConfig{
+	component = org.eclipse.xtext.mwe.Reader {
 		path = "${famixPath}"
 		register = org.svis.xtext.FamixStandaloneSetup {}
 		loadResource = {
@@ -20,7 +20,7 @@ Workflow {
 		}
 	}
 	
-	component = org.svis.generator.ReaderWithConfig {
+	component = org.eclipse.xtext.mwe.Reader {
 		path = "${dynamixPath}"
 		register = org.svis.xtext.DynamixStandaloneSetup {}
 		loadResource = {

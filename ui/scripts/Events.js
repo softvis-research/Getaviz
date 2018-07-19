@@ -72,7 +72,7 @@ var events = (function() {
 		manipulation	: { name: "manipulation"},
 	};	
 
-	events["log"] = {};
+	events.log = {};
 
 	var logTypeArray = Object.keys(logTypes);
 
@@ -92,7 +92,7 @@ var events = (function() {
 				//-> endless loop warning 
 				//-> output on console 
 				var eventListenerArray = eventMap.get(this);
-				if(eventListenerArray == undefined){
+				if(eventListenerArray === undefined){
 					if(logEvent.text){
 						console.log("NO LOGGER for " + this.type + " subscribed! - " + logEvent.text); 
 					} else {
@@ -113,7 +113,7 @@ var events = (function() {
     //UI events
     //**************
 
-	events["ui"] = {};
+	events.ui = {};
 
 	var buttonClick = {
 		type : "buttonClickEvent",
@@ -127,21 +127,53 @@ var events = (function() {
 		}
 	};
 
-	events.ui["buttonClick"] = buttonClick;
+	events.ui.buttonClick = buttonClick;
 	
+	//**************
+    //Config events
+    //**************
+	
+	var configTypes = {
+		weight				: { name: "weight"},
+		innerClasses		: { name: "innerClasses"},
+		parentInnerClasses	: { name: "parentInnerClases"},
+		bundledEdges		: { name: "bundledEdges"},
+		issues				: { name: "issues"}
+	};
+	events.config = {};
+	var configTypeArray = Object.keys(configTypes);
 
+	configTypeArray.forEach(function(configTypeName){
+		var configType = configTypes[configTypeName];
+	
+		var config = {
+			type : "config" + configType.name.charAt(0).toUpperCase() + configType.name.slice(1) + "Event",
+			
+			subscribe : function(listener){
+				subscribeEvent(this, listener);
+			},
+			
+			publish	: function(logEvent){
+								
+				//no listener subscribed? 
+				//-> endless loop warning 
+				//-> output on console 
+				var eventListenerArray = eventMap.get(this);
+				if(eventListenerArray === undefined){
+					if(logEvent.text){
+						console.log("NO LOGGER for " + this.type + " subscribed! - " + logEvent.text); 
+					} else {
+						console.log("NO LOGGER for " + this.type + " subscribed!"); 
+					}
+					return;
+				}
+				publishEvent(this, logEvent);
+			}
+		};
 
-
-
-
-
-
-
-
-
-
-
-
+		events.config[configTypeName] = config;
+	});
+	
 	//event to listener map
 	var eventMap = new Map();
 	
@@ -157,8 +189,8 @@ var events = (function() {
 		
 		var eventListenerArray = eventMap.get(eventType);
 			
-		if(eventListenerArray == undefined){
-			eventListenerArray = new Array();
+		if(eventListenerArray === undefined){
+			eventListenerArray = [];
 			eventMap.set(eventType, eventListenerArray);
 			
 			eventModelMap.set(eventType, listener);
@@ -182,7 +214,7 @@ var events = (function() {
 		}	
 
 		var eventListenerArray = eventMap.get(eventType);
-		if(eventListenerArray == undefined || !listener in eventListenerArray){
+		if(eventListenerArray === undefined || !listener in eventListenerArray){
 			events.log.warning.publish({ text: "unsubscribe not subscribed listener: " + listener.toString()});
 			return;
 		}
@@ -207,11 +239,11 @@ var events = (function() {
 						
 		var eventListenerArray = eventMap.get(eventType);
 		
-		if(eventListenerArray == undefined){			
+		if(eventListenerArray === undefined){
 			events.log.warning.publish({ text: "no listener subscribed"});
 			return;
 		}
-				
+		
 		applicationEvent.eventType = eventType;
 		applicationEvent.timeStamp = Date.now();
 

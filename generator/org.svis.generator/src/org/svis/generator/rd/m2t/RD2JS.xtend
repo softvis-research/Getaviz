@@ -23,7 +23,7 @@ import org.svis.generator.SettingsConfiguration.InvocationRepresentation
 
 class RD2JS {
 	val config = SettingsConfiguration.instance
-	RD2RD4Dynamix rd2rd4dy = new RD2RD4Dynamix
+	val rd2rd4dy = new RD2RD4Dynamix
 	val startTime = 5000
 	val versionSpeed = 2000
 	val diskVersionAnimationSpeed = 500

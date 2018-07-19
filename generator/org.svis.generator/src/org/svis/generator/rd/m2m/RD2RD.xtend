@@ -98,26 +98,39 @@ class RD2RD extends WorkflowComponentWithModelSlot {
 	 * so the values are too low and gets updated in updateNetArea after the layout calculation
 	 */
 	def private calculateNetArea(Disk disk) {
-		// set sizes of methods and data
-		disk.data.forEach[size = size * config.RDDataFactor]
-		disk.methods.forEach[size = size * config.RDMethodFactor]
-		disk.netArea = disk.methods.sum + disk.data.sum
+		switch (config.RDClassSize) {
+			case BETWEENNESS_CENTRALITY:
+				disk.netArea = Math::PI * disk.ringWidth * disk.ringWidth
+			case NUMBER_OF_STATEMENTS:
+				disk.netArea = Math::PI * disk.ringWidth * disk.ringWidth
+			default: {
+				// set sizes of methods and data
+				disk.data.forEach[size = size * config.RDDataFactor]
+				disk.methods.forEach[size = size * config.RDMethodFactor]
+				disk.netArea = disk.methods.sum + disk.data.sum
 
-		if (disk.netArea == 0 && (disk.type.equals("FAMIX.Class ") || disk.type.equals("FAMIX.ParameterizableClass"))) {
-			disk.netArea = config.RDMinArea
-		// get sizes from nested disks
-		// if ((!disk.disks.nullOrEmpty) && (disk.type.equals("FAMIX.Namespace") || disk.type.equals("FAMIX.Class") || disk.type.equals("FAMIX.ParameterizableClass"))) {
+				if (disk.netArea == 0 &&
+					(disk.type.equals("FAMIX.Class ") || disk.type.equals("FAMIX.ParameterizableClass"))) {
+					disk.netArea = config.RDMinArea
+				// get sizes from nested disks
+				// if ((!disk.disks.nullOrEmpty) && (disk.type.equals("FAMIX.Namespace") || disk.type.equals("FAMIX.Class") || disk.type.equals("FAMIX.ParameterizableClass"))) {
+				}
+			}
 		}
 	}
 
 	def calculateRadius(Disk disk) {
-		disk.radius = Math::sqrt(disk.netArea / Math::PI) + disk.ringWidth
+		switch (config.RDClassSize) {
+			case NONE: disk.radius = Math::sqrt(disk.netArea / Math::PI) + disk.ringWidth
+			case BETWEENNESS_CENTRALITY: disk.radius = disk.ringWidth
+			case NUMBER_OF_STATEMENTS: disk.radius = disk.ringWidth
+		}
 	}
 
 	def private calculateLayout(Document diskDocument) {
 		// transform disks into circles
 		val nestedCircles = new ArrayList<CircleWithInnerCircles>
-		diskDocument.disks.forEach[f|nestedCircles += new CircleWithInnerCircles(f)]
+		diskDocument.disks.forEach[disk|nestedCircles += new CircleWithInnerCircles(disk)]
 		// calculate disk layout
 		RDLayout::nestedLayout(nestedCircles)
 		nestedCircles.forEach[updateDisk]
@@ -127,7 +140,13 @@ class RD2RD extends WorkflowComponentWithModelSlot {
 		if (config.outputFormat == OutputFormat::AFrame) {
 			namespace.color = config.RDNamespaceColorHex
 		} else {
-			namespace.color = NS_colors.get(namespace.getLevel() - 1).asPercentage
+			//namespace.color = NS_colors.get(namespace.getLevel() - 1).asPercentage
+			namespace.color = NS_colors.get(namespace.level - 1).asPercentage
+			if(config.containsProjects) {
+				if (namespace.level == 1) {
+					namespace.color = config.RDProjectColorAsPercentage
+				}
+			}
 		}
 	}
 
@@ -160,7 +179,6 @@ class RD2RD extends WorkflowComponentWithModelSlot {
 	}
 
 	def private void calculateRings(Disk disk) {
-		// disk rings
 		if (disk.ringWidth == 0) {
 			calculateCrossSection(disk, disk.ringWidth, 0)
 		} else {

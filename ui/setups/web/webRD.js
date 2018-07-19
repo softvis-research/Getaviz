@@ -111,7 +111,7 @@
 						{
 							title: 	"City Original",
 							link: 	true,
-							url:	"Index%20mini.php?setup=web/webCity&model=City%20original%20freemind"							
+							url:	"Index%20mini.php?setup=web/City freemind&model=City%20original%20freemind"
 						},
 						{
 							title: 	"City Bricks",
@@ -158,6 +158,11 @@
 										"rmueller(-a-t-)wifa.uni-leipzig.de<br\/\>",
 							height: 	200,
 							width:		2050,
+						},
+						{
+							title: 	"Privacy Police",
+							link: 	true,
+							url:	"http://home.uni-leipzig.de/svis/privacy-policy/"							
 						},
 					]
 				},				

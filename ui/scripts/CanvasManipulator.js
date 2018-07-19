@@ -3,7 +3,8 @@ var canvasManipulator = (function() {
 	var colors = {
 		darkred: "darkred",
 		black: "black",
-		orange: "orange"
+		orange: "orange",
+		darkorange: "darkorange"
 	}
 
 	var x3domRuntime;
@@ -68,8 +69,7 @@ var canvasManipulator = (function() {
 
 
 	function changeTransparencyOfEntities(entities, value){
-	
-		var entitiyIds = new Array();
+		var entitiyIds = [];
 		entities.forEach(function(entity){			
 			var part = multiPart.getParts([entity.id]);	
 			if(part == null){
@@ -119,19 +119,17 @@ var canvasManipulator = (function() {
 
 
 	function changeColorOfEntities(entities, color){
-	
-		var entitiyIds = new Array();
+		var entitiyIds = [];
 		entities.forEach(function(entity){
 			var part = multiPart.getParts([entity.id]);		
 			if(part == null){
 				return;
 			}	
 			if(!entity.oldColor){
-				entity.oldColor = part.getDiffuseColor();
+				entity.oldColor = part.getDiffuseColor().toString();
 			}
-
 			entitiyIds.push(entity.id);
-		});
+        });
 
 		var parts = multiPart.getParts(entitiyIds);
 		if(parts === null){
@@ -143,12 +141,10 @@ var canvasManipulator = (function() {
 
 
 	function resetColorOfEntities(entities){
-
-		//sort each entity by its old color for performance 
+		//sort each entity by its old color for performance
 		var oldColorMap = new Map();
 		entities.forEach(function(entity){
-			
-			if(!entity.oldColor){
+            if(entity.oldColor == null){
 				return;
 			}
 			var oldColor = entity.oldColor;
@@ -171,9 +167,6 @@ var canvasManipulator = (function() {
 			setColor(parts, oldColor);
 		});
 	}
-
-
-
 
 	function hideEntities(entities){
 		var entitiyIds = new Array();

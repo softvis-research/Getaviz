@@ -27,11 +27,11 @@ class RDOutput implements IGenerator2 {
 	RD2JSON rd2json = new RD2JSON
 
 	override beforeGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
-		log.info("RD23D has started")
+		log.info("RD2Output has started")
 	}
 
 	override afterGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
-		log.info("RD23D has finished")
+		log.info("RD2Output has finished")
 	}
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
@@ -40,8 +40,13 @@ class RDOutput implements IGenerator2 {
 				fsa.generateFile("model.html", toAFrameHead + rd2aframe.body(resource) + toAFrameTail)
 			}
 			case X3D: {
-				fsa.generateFile("model.x3d", toX3DHead + rd2x3d.toX3DBody(resource) + toX3DTail)
-			}
+				fsa.generateFile("model.x3d", toX3DHead 
+					+ rd2x3d.toX3DBody(resource)
+					+ toX3DTail)
+				if(config.convertToMultipart) {
+					fsa.convertToMultipart
+			 	}
+		 	}
 			case X3D_COMPRESSED: {
 				fsa.generateFile("model.x3d", toX3DHead + rd2x3dcomp.toX3DBody(resource) + toX3DTail)
 			}
@@ -57,7 +62,6 @@ class RDOutput implements IGenerator2 {
 			}
 			case SimpleGlyphsJson: {
 				fsa.generateFile("simple-glyphs.json", "[" + rd2json.toGlyphsJson(resource) + "]")
-
 			}
 		}
 	}

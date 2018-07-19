@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-EvalServer::Application.config.secret_key_base = '715eb86cac15abfacc1dc995e7cb88f562e0b8030608347d03d750bcefded2b6ad1e1b59076c53e7955452f2b7be6ceb84b9c5c6b579200459d88f4bb3784333'
+EvalServer::Application.config.secret_key_base = Rails.application.credentials.secret_key_base
