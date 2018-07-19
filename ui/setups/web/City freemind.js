@@ -111,26 +111,26 @@
 						{
 							title: 	"City Original",
 							link: 	true,
-							url:	"Index.php?setup=web/City freemind&model=City%20original%20freemind"
+							url:	"index.php?setup=web/City freemind&model=City%20original%20freemind"
 						},
 						{
 							title: 	"City Bricks",
 							link: 	true,
-							url:	"Index.php?setup=web/City freemind&model=City%20bricks%20freemind"
+							url:	"index.php?setup=web/City freemind&model=City%20bricks%20freemind"
 						},						
 						{
 							title: 	"City Floors",
 							link: 	true,
-							url:	"Index.php?setup=web/City freemind&model=City%20floor%20freemind"
+							url:	"index.php?setup=web/City freemind&model=City%20floor%20freemind"
 						},
 						{
 							title: 	"Recursive Disk",
 							link: 	true,
-							url:	"Index.php?setup=web/RD freemind&model=RD%20freemind"
+							url:	"index.php?setup=web/RD freemind&model=RD%20freemind"
 						}, {
                             title: 	"Recursive Disk 3D",
                             link: 	true,
-                            url:	"Index.php?setup=web/RD reek&model=RD%203D%20reek"
+                            url:	"index.php?setup=web/RD reek&model=RD%203D%20reek"
                         },
 					]
 				},
