@@ -23,7 +23,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "ID_47400cfec078b202f1479e33623230898d7e8c20, ID_86820d9689560b50a6b54ce40b91101a33c771e0",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e646ad8c523e7510409463b3f4ef8f7790425a74",
 "qualifiedName": "com.android.phone.ADNList.QueryHandler",
@@ -32,7 +35,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_d4107e8a97712c5a9bf2352dd61e11ff484b3dc3"
+"belongsTo":     "ID_d4107e8a97712c5a9bf2352dd61e11ff484b3dc3",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_478d37d978e3dcf6507d87a6ac6c0dce086e177c",
 "qualifiedName": "com.android.phone.BluetoothAtPhonebook",
@@ -41,7 +47,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_eb55dab4bc6624141ca86f161f8dc0fc29012a9a",
 "qualifiedName": "com.android.phone.BluetoothAtPhonebook.PhonebookResult",
@@ -50,7 +59,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_478d37d978e3dcf6507d87a6ac6c0dce086e177c"
+"belongsTo":     "ID_478d37d978e3dcf6507d87a6ac6c0dce086e177c",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4ad9afc7abd20532477a315ecf737165ad37d3ea",
 "qualifiedName": "com.android.phone.BluetoothCmeError",
@@ -59,7 +71,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_da3856ad38bd47499a8ec588c55c5334c577ba12",
 "qualifiedName": "com.android.phone.BluetoothHandsfree",
@@ -68,7 +83,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_cb6434edb5e422c26218198971d6d15a5478eac1",
 "qualifiedName": "com.android.phone.BluetoothHandsfree.BluetoothPhoneState",
@@ -77,7 +95,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_da3856ad38bd47499a8ec588c55c5334c577ba12"
+"belongsTo":     "ID_da3856ad38bd47499a8ec588c55c5334c577ba12",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_9b1a062b2dcaab29c738a3b6073270ed75fb8f1c",
 "qualifiedName": "com.android.phone.BluetoothHandsfree.DebugThread",
@@ -86,7 +107,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_da3856ad38bd47499a8ec588c55c5334c577ba12"
+"belongsTo":     "ID_da3856ad38bd47499a8ec588c55c5334c577ba12",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_af9311014985431be87f7f46712037fc38a62920",
 "qualifiedName": "com.android.phone.BluetoothHeadsetService",
@@ -95,7 +119,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_561d29937138a76b279b22c61ed35d3e01f9491f",
 "qualifiedName": "com.android.phone.BluetoothHeadsetService.HeadsetPriority",
@@ -104,7 +131,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_af9311014985431be87f7f46712037fc38a62920"
+"belongsTo":     "ID_af9311014985431be87f7f46712037fc38a62920",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_505761772e6b454febd5a9fcebb2372f8a8bc934",
 "qualifiedName": "com.android.phone.BluetoothHeadsetService.RfcommConnectThread",
@@ -113,7 +143,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_af9311014985431be87f7f46712037fc38a62920"
+"belongsTo":     "ID_af9311014985431be87f7f46712037fc38a62920",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_db717d54361c6ee8f329f50c16042d2cfab9a158",
 "qualifiedName": "com.android.phone.ButtonGridLayout",
@@ -122,7 +155,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_dfed8481b6d00b1fd31eff586c59ed44721d952f",
 "qualifiedName": "com.android.phone.CLIRListPreference",
@@ -131,7 +167,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_aae130b931f5f3be2ef17b2eaa67d1f484801dc9",
 "qualifiedName": "com.android.phone.CLIRListPreference.MyHandler",
@@ -140,7 +179,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_dfed8481b6d00b1fd31eff586c59ed44721d952f"
+"belongsTo":     "ID_dfed8481b6d00b1fd31eff586c59ed44721d952f",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4c141df147f212f9d24fca5c9e3b9126fd6192ac",
 "qualifiedName": "com.android.phone.CallCard",
@@ -149,7 +191,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_a409ea48dcdbfb53c4dc10b8b6e380945427a8bd",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_657604c8d4b7671a8c237667c6f9c54b0bbb0f06",
 "qualifiedName": "com.android.phone.CallFeaturesSetting",
@@ -158,7 +203,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_e85be746b5e6aca9f8aec5500ccd5d2670743673, ID_f05f1fc12b8d7ea83c2ae4918c99a696ecaf033f",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b720576e798c3a10d3e2d99c2e2de3ea74de12a3",
 "qualifiedName": "com.android.phone.CallFeaturesSetting.PhoneNo",
@@ -167,7 +215,10 @@
 "modifiers":     "static",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_657604c8d4b7671a8c237667c6f9c54b0bbb0f06"
+"belongsTo":     "ID_657604c8d4b7671a8c237667c6f9c54b0bbb0f06",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_c9674e269795f6f43fc82b486825429cf72b3aed",
 "qualifiedName": "com.android.phone.CallFeaturesSetting.VoiceMailProvider",
@@ -176,7 +227,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_657604c8d4b7671a8c237667c6f9c54b0bbb0f06"
+"belongsTo":     "ID_657604c8d4b7671a8c237667c6f9c54b0bbb0f06",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_45bbcc552950301e8024a1b70448364b82a58840",
 "qualifiedName": "com.android.phone.CallFeaturesSetting.VoiceMailProviderSettings",
@@ -185,7 +239,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_657604c8d4b7671a8c237667c6f9c54b0bbb0f06"
+"belongsTo":     "ID_657604c8d4b7671a8c237667c6f9c54b0bbb0f06",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_619658f0d43cebec6066e97d7b1db38a04204d41",
 "qualifiedName": "com.android.phone.CallForwardEditPreference",
@@ -194,7 +251,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_17996fdb364628d400f93fe910128f2ec88b457f",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_be966b2000ba1b16bffa05b6478f010e700e7ecd",
 "qualifiedName": "com.android.phone.CallForwardEditPreference.MyHandler",
@@ -203,7 +263,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_619658f0d43cebec6066e97d7b1db38a04204d41"
+"belongsTo":     "ID_619658f0d43cebec6066e97d7b1db38a04204d41",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a07ab82d150fc9043d45e22cba032b718548b2dd",
 "qualifiedName": "com.android.phone.CallNotifier",
@@ -212,7 +275,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_225b1ba757cb0f563997600e7ab5b237ff5560b6",
 "qualifiedName": "com.android.phone.CallNotifier.EmergencyTonePlayerVibrator",
@@ -221,7 +287,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a07ab82d150fc9043d45e22cba032b718548b2dd"
+"belongsTo":     "ID_a07ab82d150fc9043d45e22cba032b718548b2dd",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5542309e4cbf31e92d22427716e0349885587afd",
 "qualifiedName": "com.android.phone.CallNotifier.InCallRingbackTonePlayer",
@@ -230,7 +299,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a07ab82d150fc9043d45e22cba032b718548b2dd"
+"belongsTo":     "ID_a07ab82d150fc9043d45e22cba032b718548b2dd",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d8cfcf01ad1a948609b1995563dc97dadb659406",
 "qualifiedName": "com.android.phone.CallNotifier.InCallTonePlayer",
@@ -239,7 +311,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a07ab82d150fc9043d45e22cba032b718548b2dd"
+"belongsTo":     "ID_a07ab82d150fc9043d45e22cba032b718548b2dd",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7a661d14387dca716568233b1aeccf27377e32d2",
 "qualifiedName": "com.android.phone.CallNotifier.SignalInfoTonePlayer",
@@ -248,7 +323,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a07ab82d150fc9043d45e22cba032b718548b2dd"
+"belongsTo":     "ID_a07ab82d150fc9043d45e22cba032b718548b2dd",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_eea82946c901d687c3db6021375eeab0ba897060",
 "qualifiedName": "com.android.phone.CallNotifier.TurnListener",
@@ -257,7 +335,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a07ab82d150fc9043d45e22cba032b718548b2dd"
+"belongsTo":     "ID_a07ab82d150fc9043d45e22cba032b718548b2dd",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7a586f5e0972ab4f7b73087665edc8fc6184bc52",
 "qualifiedName": "com.android.phone.CallTime",
@@ -266,7 +347,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a409ea48dcdbfb53c4dc10b8b6e380945427a8bd",
 "qualifiedName": "com.android.phone.CallTime.OnTickListener",
@@ -275,7 +359,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "ID_4c141df147f212f9d24fca5c9e3b9126fd6192ac",
-"belongsTo":     "ID_7a586f5e0972ab4f7b73087665edc8fc6184bc52"
+"belongsTo":     "ID_7a586f5e0972ab4f7b73087665edc8fc6184bc52",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5da1c8d84db9df0b946ba3d3b07ea701202d00d8",
 "qualifiedName": "com.android.phone.CallTime.PeriodicTimerCallback",
@@ -284,7 +371,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_7a586f5e0972ab4f7b73087665edc8fc6184bc52"
+"belongsTo":     "ID_7a586f5e0972ab4f7b73087665edc8fc6184bc52",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_044d0bc64dd78487623b709b92efad549d841a3f",
 "qualifiedName": "com.android.phone.CallWaitingCheckBoxPreference",
@@ -293,7 +383,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_3b63eb71f1161f5bd5d298fd7fb554faf064b78b",
 "qualifiedName": "com.android.phone.CallWaitingCheckBoxPreference.MyHandler",
@@ -302,7 +395,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_044d0bc64dd78487623b709b92efad549d841a3f"
+"belongsTo":     "ID_044d0bc64dd78487623b709b92efad549d841a3f",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_31547cb3f4b6be63442b560f074994f21f686d02",
 "qualifiedName": "com.android.phone.CarrierLogo",
@@ -311,7 +407,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7aa108ac57d521eaabb1e7bdd2e85c8505d6de30",
 "qualifiedName": "com.android.phone.CdmaCallOptions",
@@ -320,7 +419,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_81aeba89898b792643572e42809937a7ab9e5214",
 "qualifiedName": "com.android.phone.CdmaDisplayInfo",
@@ -329,7 +431,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_403be91f730905f4c30280caafa16bf992f007d0",
 "qualifiedName": "com.android.phone.CdmaOptions",
@@ -338,7 +443,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4e038567f7e15dda4e0603fd55a4ab22f051e09f",
 "qualifiedName": "com.android.phone.CdmaPhoneCallState",
@@ -347,7 +455,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_437550476d557838e0a0baff205c2699d3aa49c4",
 "qualifiedName": "com.android.phone.CdmaPhoneCallState.PhoneCallState",
@@ -363,7 +474,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_2ca9bcb5bba55b1d82401dc6e70ad3ebe5665036",
 "qualifiedName": "com.android.phone.CdmaRoamingListPreference.MyHandler",
@@ -372,7 +486,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_01ac0e3c70146b6ef43aeee83529e15a5b1f6e22"
+"belongsTo":     "ID_01ac0e3c70146b6ef43aeee83529e15a5b1f6e22",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a59a8f50ae6e65dd91156a386f1c3c5fc8e35c46",
 "qualifiedName": "com.android.phone.CdmaVoicePrivacyCheckBoxPreference",
@@ -381,7 +498,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_987e111a0daa81b705342e59b1fa91e7230a8ce7",
 "qualifiedName": "com.android.phone.CdmaVoicePrivacyCheckBoxPreference.MyHandler",
@@ -390,7 +510,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a59a8f50ae6e65dd91156a386f1c3c5fc8e35c46"
+"belongsTo":     "ID_a59a8f50ae6e65dd91156a386f1c3c5fc8e35c46",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4cc8994cd1a49ff0bd8eba602ba4caea2f16bfe5",
 "qualifiedName": "com.android.phone.CellBroadcastSms",
@@ -399,7 +522,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_407686f13c916aea03b573ca3bbe3adce7649402",
 "qualifiedName": "com.android.phone.CellBroadcastSms.CellBroadcastSmsConfig",
@@ -408,7 +534,10 @@
 "modifiers":     "final, static, private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_4cc8994cd1a49ff0bd8eba602ba4caea2f16bfe5"
+"belongsTo":     "ID_4cc8994cd1a49ff0bd8eba602ba4caea2f16bfe5",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_2c6f8b74583a0bc5a2715b62e4d3d2b7c1d8503b",
 "qualifiedName": "com.android.phone.CellBroadcastSms.MyHandler",
@@ -417,7 +546,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_4cc8994cd1a49ff0bd8eba602ba4caea2f16bfe5"
+"belongsTo":     "ID_4cc8994cd1a49ff0bd8eba602ba4caea2f16bfe5",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ec747ead44fca3e6ee6b9481b9479db377a7d862",
 "qualifiedName": "com.android.phone.ChangeIccPinScreen",
@@ -426,7 +558,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a63939044fa8e662521a5753f23ee4ac55ddf43d",
 "qualifiedName": "com.android.phone.ChangeIccPinScreen.EntryState",
@@ -442,7 +577,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_c55b5bcd622043a3cabf0cf8f6b29fa05d674aae",
 "qualifiedName": "com.android.phone.DTMFTwelveKeyDialer.DTMFDisplayMovementMethod",
@@ -451,7 +589,10 @@
 "modifiers":     "static, private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fca2619cd34b91182873244167703742bbcbb920"
+"belongsTo":     "ID_fca2619cd34b91182873244167703742bbcbb920",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_8e07acf937159854e67e3846abd45745bc2eed90",
 "qualifiedName": "com.android.phone.DTMFTwelveKeyDialer.DTMFKeyListener",
@@ -460,7 +601,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fca2619cd34b91182873244167703742bbcbb920"
+"belongsTo":     "ID_fca2619cd34b91182873244167703742bbcbb920",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d32147464c1744d3a296120197ccbb47a2bb7f13",
 "qualifiedName": "com.android.phone.DTMFTwelveKeyDialerView",
@@ -469,7 +613,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_c828dda441a832483654f76d914838e28de62fa0",
 "qualifiedName": "com.android.phone.DeleteFdnContactScreen",
@@ -478,7 +625,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_027622e268b0f5dc14eaceb4d9489c583bb64c42",
 "qualifiedName": "com.android.phone.DeleteFdnContactScreen.QueryHandler",
@@ -487,7 +637,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_c828dda441a832483654f76d914838e28de62fa0"
+"belongsTo":     "ID_c828dda441a832483654f76d914838e28de62fa0",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_62a11e7c15c2a2ea9f32476af081983510907d08",
 "qualifiedName": "com.android.phone.EditFdnContactScreen",
@@ -496,7 +649,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b612795d6b2a0294d43b121b0f80e8b3ebdd029c",
 "qualifiedName": "com.android.phone.EditFdnContactScreen.QueryHandler",
@@ -505,7 +661,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_62a11e7c15c2a2ea9f32476af081983510907d08"
+"belongsTo":     "ID_62a11e7c15c2a2ea9f32476af081983510907d08",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_17996fdb364628d400f93fe910128f2ec88b457f",
 "qualifiedName": "com.android.phone.EditPhoneNumberPreference",
@@ -514,7 +673,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "ID_619658f0d43cebec6066e97d7b1db38a04204d41",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e85be746b5e6aca9f8aec5500ccd5d2670743673",
 "qualifiedName": "com.android.phone.EditPhoneNumberPreference.GetDefaultNumberListener",
@@ -523,7 +685,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "ID_657604c8d4b7671a8c237667c6f9c54b0bbb0f06",
-"belongsTo":     "ID_17996fdb364628d400f93fe910128f2ec88b457f"
+"belongsTo":     "ID_17996fdb364628d400f93fe910128f2ec88b457f",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f05f1fc12b8d7ea83c2ae4918c99a696ecaf033f",
 "qualifiedName": "com.android.phone.EditPhoneNumberPreference.OnDialogClosedListener",
@@ -532,7 +697,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "ID_657604c8d4b7671a8c237667c6f9c54b0bbb0f06",
-"belongsTo":     "ID_17996fdb364628d400f93fe910128f2ec88b457f"
+"belongsTo":     "ID_17996fdb364628d400f93fe910128f2ec88b457f",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b94aef1398244f37f04605a7cb44ec8daf816a62",
 "qualifiedName": "com.android.phone.EditPinPreference",
@@ -541,7 +709,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f6998f5d50d5af4c6c83f3275acbf727d8970888",
 "qualifiedName": "com.android.phone.EditPinPreference.OnPinEnteredListener",
@@ -550,7 +721,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "ID_20a88e2f36b6b5bef0c107cf365df135835ff4b0",
-"belongsTo":     "ID_b94aef1398244f37f04605a7cb44ec8daf816a62"
+"belongsTo":     "ID_b94aef1398244f37f04605a7cb44ec8daf816a62",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b610e9cb6d875050ddce354c6006c11e011ab2be",
 "qualifiedName": "com.android.phone.EmergencyCallHandler",
@@ -559,7 +733,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d78b2154c0494a514127de6d7c1f6be6dab3fcf9",
 "qualifiedName": "com.android.phone.EmergencyCallHandler.EmergencyCallEventHandler",
@@ -568,7 +745,10 @@
 "modifiers":     "static, private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b610e9cb6d875050ddce354c6006c11e011ab2be"
+"belongsTo":     "ID_b610e9cb6d875050ddce354c6006c11e011ab2be",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_44504a1d7ce8fb96f5176fa23c09311fbb9cc9ea",
 "qualifiedName": "com.android.phone.EmergencyCallHandler.EmergencyCallInfo",
@@ -577,7 +757,10 @@
 "modifiers":     "static, private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b610e9cb6d875050ddce354c6006c11e011ab2be"
+"belongsTo":     "ID_b610e9cb6d875050ddce354c6006c11e011ab2be",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_605cec2938cf5cc931c656f1722464f1b6bc2810",
 "qualifiedName": "com.android.phone.EmergencyCallbackModeExitDialog",
@@ -586,7 +769,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4c5d23404c95ea7ba91cea3863a0d1a9337a8bf0",
 "qualifiedName": "com.android.phone.EmergencyCallbackModeService",
@@ -595,7 +781,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_421e495a78a5cc35e9de24a4193083e6c7b6aff9",
 "qualifiedName": "com.android.phone.EmergencyCallbackModeService.LocalBinder",
@@ -604,7 +793,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_4c5d23404c95ea7ba91cea3863a0d1a9337a8bf0"
+"belongsTo":     "ID_4c5d23404c95ea7ba91cea3863a0d1a9337a8bf0",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_3eaf1b3087266e0bf42429830621832ef273f084",
 "qualifiedName": "com.android.phone.EmergencyDialer",
@@ -613,7 +805,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_cfa3400819b24033b656e7e88d535a61aa90cd56",
 "qualifiedName": "com.android.phone.EnableFdnScreen",
@@ -622,7 +817,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_c18310b235fe576f376629949c867fcd0d16637c",
 "qualifiedName": "com.android.phone.EnableIccPinScreen",
@@ -631,7 +829,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_c6cc03c6ab43da368c219548b97415713041491e",
 "qualifiedName": "com.android.phone.FakePhoneActivity",
@@ -640,7 +841,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_6f1ccf27e6e959fab362eea3e1e94d6b689c138d",
 "qualifiedName": "com.android.phone.FakePhoneActivity.ButtonListener",
@@ -649,7 +853,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_c6cc03c6ab43da368c219548b97415713041491e"
+"belongsTo":     "ID_c6cc03c6ab43da368c219548b97415713041491e",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_47400cfec078b202f1479e33623230898d7e8c20",
 "qualifiedName": "com.android.phone.FdnList",
@@ -658,7 +865,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_d4107e8a97712c5a9bf2352dd61e11ff484b3dc3",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_20a88e2f36b6b5bef0c107cf365df135835ff4b0",
 "qualifiedName": "com.android.phone.FdnSetting",
@@ -667,7 +877,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_f6998f5d50d5af4c6c83f3275acbf727d8970888",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_81be2777b7d185a558ed66cf9dcf15cdaa726e06",
 "qualifiedName": "com.android.phone.GetPin2Screen",
@@ -676,7 +889,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_61aab191883443a4b68294edf496380d21a16cec",
 "qualifiedName": "com.android.phone.GsmUmtsAdditionalCallOptions",
@@ -685,7 +901,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_3fbce74794819dc47b2dde8afbccd565a07ce545",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_3125a48f3d82547240c8c873c65899b58d3c3bab",
 "qualifiedName": "com.android.phone.GsmUmtsCallForwardOptions",
@@ -694,7 +913,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_3fbce74794819dc47b2dde8afbccd565a07ce545",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_60bea9e4a9b7ccd277150848c000c8c8bdc8a0e3",
 "qualifiedName": "com.android.phone.GsmUmtsCallOptions",
@@ -703,7 +925,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_39219f4e45b08824ed1608d1f9ebbab7a6041292",
 "qualifiedName": "com.android.phone.GsmUmtsOptions",
@@ -712,7 +937,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_86774ef3c608babfde9bc1568f0923cc2c8be32d",
 "qualifiedName": "com.android.phone.IccMissingPanel",
@@ -721,7 +949,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_36871de283883bc9f6794a37a8d0f95c7f7a3b27",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_06726156c965299a33d4702d614e2109dc266fd5",
 "qualifiedName": "com.android.phone.IccNetworkDepersonalizationPanel",
@@ -730,7 +961,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_36871de283883bc9f6794a37a8d0f95c7f7a3b27",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_36871de283883bc9f6794a37a8d0f95c7f7a3b27",
 "qualifiedName": "com.android.phone.IccPanel",
@@ -739,7 +973,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "ID_86774ef3c608babfde9bc1568f0923cc2c8be32d, ID_780d8d04c274a8fbe92be9faafa9b9a64d9ae0e5, ID_06726156c965299a33d4702d614e2109dc266fd5",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_780d8d04c274a8fbe92be9faafa9b9a64d9ae0e5",
 "qualifiedName": "com.android.phone.IccPinUnlockPanel",
@@ -748,7 +985,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_36871de283883bc9f6794a37a8d0f95c7f7a3b27",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7fb3892e82b02ace0a9e6c1db7a1eb5c345c6858",
 "qualifiedName": "com.android.phone.IccPinUnlockPanel.IccLockState",
@@ -764,7 +1004,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_780d8d04c274a8fbe92be9faafa9b9a64d9ae0e5"
+"belongsTo":     "ID_780d8d04c274a8fbe92be9faafa9b9a64d9ae0e5",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_871b93ccca3eb182c6c3163c6f15aed8529d413a",
 "qualifiedName": "com.android.phone.IccProvider",
@@ -773,7 +1016,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d872a5bd3c91f4dbc6fbe4751d09fa4f61801f1d",
 "qualifiedName": "com.android.phone.InCallControlState",
@@ -782,7 +1028,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_4df4f81a4f1d9331ec5a364cc8478f373aa10da9",
 "qualifiedName": "com.android.phone.InCallMenu",
@@ -791,7 +1040,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e4ffb4d34719515dbe799b0ead4a62e5af9028a9",
 "qualifiedName": "com.android.phone.InCallMenuItemView",
@@ -800,7 +1052,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_fdfe858c8349a807145802849954832cfb34a75b",
 "qualifiedName": "com.android.phone.InCallMenuView",
@@ -809,7 +1064,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_3800b70a650a3e72be74b3305511f23979440b71",
 "qualifiedName": "com.android.phone.InCallMenuView.LayoutParams",
@@ -818,7 +1076,10 @@
 "modifiers":     "static, public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fdfe858c8349a807145802849954832cfb34a75b"
+"belongsTo":     "ID_fdfe858c8349a807145802849954832cfb34a75b",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_8219617cb62b6cd3e181f02c21af9f3ed4df68d3",
 "qualifiedName": "com.android.phone.InCallScreen",
@@ -827,7 +1088,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_c71c0e179eb14c1861f38ee831f6d24e54ba10a2",
 "qualifiedName": "com.android.phone.InCallScreen.InCallInitStatus",
@@ -850,7 +1114,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f9ac38488bb293e38a096712883eaf6838c2ae46",
 "qualifiedName": "com.android.phone.InCallTouchUi",
@@ -859,7 +1126,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ec312eb29f279bf71a419cd2fabb648cb712c0b3",
 "qualifiedName": "com.android.phone.ManageConferenceUtils",
@@ -868,7 +1138,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_9f0a6c90148907ced253ae39e87d3b838f28c992",
 "qualifiedName": "com.android.phone.NetworkQueryService",
@@ -877,7 +1150,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a01abace90c30b2cd9b4e3c49dd657bc0dcc82ac",
 "qualifiedName": "com.android.phone.NetworkQueryService.LocalBinder",
@@ -886,7 +1162,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_9f0a6c90148907ced253ae39e87d3b838f28c992"
+"belongsTo":     "ID_9f0a6c90148907ced253ae39e87d3b838f28c992",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e3b7bb49fd8ec031e2d7551e46141821f79594b4",
 "qualifiedName": "com.android.phone.NetworkSetting",
@@ -895,7 +1174,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_00c85f129b0c11173df30f2d264c45e5e3a3c79a",
 "qualifiedName": "com.android.phone.NotificationMgr",
@@ -904,7 +1186,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_70284c47ff269409f876e4f845747c5b6d199b36",
 "qualifiedName": "com.android.phone.NotificationMgr.QueryHandler",
@@ -913,7 +1198,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_00c85f129b0c11173df30f2d264c45e5e3a3c79a"
+"belongsTo":     "ID_00c85f129b0c11173df30f2d264c45e5e3a3c79a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_084c8145f72b65c5163625b3f1babf50eb1f212c",
 "qualifiedName": "com.android.phone.NotificationMgr.QueryHandler.NotificationInfo",
@@ -922,7 +1210,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_70284c47ff269409f876e4f845747c5b6d199b36"
+"belongsTo":     "ID_70284c47ff269409f876e4f845747c5b6d199b36",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_c82229daa0390f2ec277ff104a3f6458e789f852",
 "qualifiedName": "com.android.phone.NotificationMgr.StatusBarMgr",
@@ -931,7 +1222,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_00c85f129b0c11173df30f2d264c45e5e3a3c79a"
+"belongsTo":     "ID_00c85f129b0c11173df30f2d264c45e5e3a3c79a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a6026f2b51bc7781bc9065a53dbe6f892fc4da4e",
 "qualifiedName": "com.android.phone.OtaStartupReceiver",
@@ -940,7 +1234,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8",
 "qualifiedName": "com.android.phone.OtaUtils",
@@ -949,7 +1246,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_1aaac534b9cbf956b2ed11e61ce8999b4b01f0ee",
 "qualifiedName": "com.android.phone.OtaUtils.CdmaOtaConfigData",
@@ -958,7 +1258,10 @@
 "modifiers":     "static, public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8"
+"belongsTo":     "ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_cba151edf17023010153b2a57dee630d52a80cf5",
 "qualifiedName": "com.android.phone.OtaUtils.CdmaOtaInCallScreenUiState",
@@ -967,7 +1270,10 @@
 "modifiers":     "static, public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8"
+"belongsTo":     "ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_20a3b964a9e81a6eba7f2e4b8c1d36d117afa81c",
 "qualifiedName": "com.android.phone.OtaUtils.CdmaOtaInCallScreenUiState.State",
@@ -983,7 +1289,10 @@
 "modifiers":     "static, public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8"
+"belongsTo":     "ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b189edc7a39a97edcfe799a7c9a5dbe43f82b94f",
 "qualifiedName": "com.android.phone.OtaUtils.CdmaOtaScreenState",
@@ -992,7 +1301,10 @@
 "modifiers":     "static, public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8"
+"belongsTo":     "ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_55ac52c99fe8121c05ef918fe8a465f31e5eaeff",
 "qualifiedName": "com.android.phone.OtaUtils.CdmaOtaScreenState.OtaScreenState",
@@ -1008,7 +1320,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8"
+"belongsTo":     "ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_0bc354d0c2d59b6d46cf6dce54d90037f5c1e8be",
 "qualifiedName": "com.android.phone.OutgoingCallBroadcaster",
@@ -1017,7 +1332,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f5064a63c92064089aeb2bc6b42bd9eaa00217c3",
 "qualifiedName": "com.android.phone.OutgoingCallBroadcaster.OutgoingCallReceiver",
@@ -1026,7 +1344,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_0bc354d0c2d59b6d46cf6dce54d90037f5c1e8be"
+"belongsTo":     "ID_0bc354d0c2d59b6d46cf6dce54d90037f5c1e8be",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b7091b41bc7aff3858d55289b293bbd1aa24307a",
 "qualifiedName": "com.android.phone.PhoneApp",
@@ -1035,7 +1356,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_207fa8c2b0e29c10585878b1bdfed675b9d65ff4",
 "qualifiedName": "com.android.phone.PhoneApp.MediaButtonBroadcastReceiver",
@@ -1044,7 +1368,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b7091b41bc7aff3858d55289b293bbd1aa24307a"
+"belongsTo":     "ID_b7091b41bc7aff3858d55289b293bbd1aa24307a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_9b3dc9f78b2cdc8d1cc95888a23154c0fda804d5",
 "qualifiedName": "com.android.phone.PhoneApp.PhoneAppBroadcastReceiver",
@@ -1053,7 +1380,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b7091b41bc7aff3858d55289b293bbd1aa24307a"
+"belongsTo":     "ID_b7091b41bc7aff3858d55289b293bbd1aa24307a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f3aec0285dd07eea87853979239d9e67eec0266e",
 "qualifiedName": "com.android.phone.PhoneApp.ScreenTimeoutDuration",
@@ -1069,7 +1399,10 @@
 "modifiers":     "final, private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b7091b41bc7aff3858d55289b293bbd1aa24307a"
+"belongsTo":     "ID_b7091b41bc7aff3858d55289b293bbd1aa24307a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7f40bbd43ea48f795ef030db089afad34eb834d4",
 "qualifiedName": "com.android.phone.PhoneApp.WakeState",
@@ -1085,7 +1418,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_87e02e878e55a78e7b4a20de12d8b80e2aed4a06",
 "qualifiedName": "com.android.phone.PhoneInterfaceManager.CheckSimPin",
@@ -1094,7 +1430,10 @@
 "modifiers":     "static, private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b5946ae8550b36173548318d03aa2be442ba35e8"
+"belongsTo":     "ID_b5946ae8550b36173548318d03aa2be442ba35e8",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_14d27ea5a897a38b29955d4a8a1c2d9d9d9acaca",
 "qualifiedName": "com.android.phone.PhoneInterfaceManager.MainThreadHandler",
@@ -1103,7 +1442,10 @@
 "modifiers":     "final, private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b5946ae8550b36173548318d03aa2be442ba35e8"
+"belongsTo":     "ID_b5946ae8550b36173548318d03aa2be442ba35e8",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_2795379b2df7614aa6387042855861db39347550",
 "qualifiedName": "com.android.phone.PhoneInterfaceManager.MainThreadRequest",
@@ -1112,7 +1454,10 @@
 "modifiers":     "final, static, private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b5946ae8550b36173548318d03aa2be442ba35e8"
+"belongsTo":     "ID_b5946ae8550b36173548318d03aa2be442ba35e8",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b493b25346511112f3f467d21bb7a3a442f8864e",
 "qualifiedName": "com.android.phone.PhoneUtils",
@@ -1121,7 +1466,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_3086f8004d51d62235eea67870babdc1359c2d05",
 "qualifiedName": "com.android.phone.PhoneUtils.CallerInfoToken",
@@ -1130,7 +1478,10 @@
 "modifiers":     "static, public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b493b25346511112f3f467d21bb7a3a442f8864e"
+"belongsTo":     "ID_b493b25346511112f3f467d21bb7a3a442f8864e",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5534b1857439a0a55dd2edbdb76454458af4ccf7",
 "qualifiedName": "com.android.phone.PhoneUtils.ConnectionHandler",
@@ -1139,7 +1490,10 @@
 "modifiers":     "static, private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b493b25346511112f3f467d21bb7a3a442f8864e"
+"belongsTo":     "ID_b493b25346511112f3f467d21bb7a3a442f8864e",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_9b15688e773e0687da59a65485f33cfa46200a2d",
 "qualifiedName": "com.android.phone.PhoneUtils.VoiceMailNumberMissingException",
@@ -1148,7 +1502,10 @@
 "modifiers":     "static, public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b493b25346511112f3f467d21bb7a3a442f8864e"
+"belongsTo":     "ID_b493b25346511112f3f467d21bb7a3a442f8864e",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_6031e0947c2cf768edc0e09db9da3fcaa5ef75d3",
 "qualifiedName": "com.android.phone.ProcessOutgoingCallTest",
@@ -1157,7 +1514,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b1441e6446699bbf40be3ddfcb16b69ec795c301",
 "qualifiedName": "com.android.phone.Profiler",
@@ -1166,7 +1526,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_fdc32b41955a04f39ab604c87266380ce3627f3d",
 "qualifiedName": "com.android.phone.Ringer",
@@ -1175,7 +1538,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_daae9c423c0226a5cd6a91b7189397e7f34d4e32",
 "qualifiedName": "com.android.phone.Ringer.VibratorThread",
@@ -1184,7 +1550,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fdc32b41955a04f39ab604c87266380ce3627f3d"
+"belongsTo":     "ID_fdc32b41955a04f39ab604c87266380ce3627f3d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_b6318fbb6c60e0033a0a9c9615845301f39cfd67",
 "qualifiedName": "com.android.phone.Ringer.Worker",
@@ -1193,7 +1562,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fdc32b41955a04f39ab604c87266380ce3627f3d"
+"belongsTo":     "ID_fdc32b41955a04f39ab604c87266380ce3627f3d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_bdbdfe1cc1eb60ff093162c09b4cc576d49b9b0f",
 "qualifiedName": "com.android.phone.Settings",
@@ -1202,7 +1574,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d0b7bdfc8ce1f000f410ac2b10e513b42d876c89",
 "qualifiedName": "com.android.phone.Settings.MyHandler",
@@ -1211,7 +1586,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bdbdfe1cc1eb60ff093162c09b4cc576d49b9b0f"
+"belongsTo":     "ID_bdbdfe1cc1eb60ff093162c09b4cc576d49b9b0f",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_86820d9689560b50a6b54ce40b91101a33c771e0",
 "qualifiedName": "com.android.phone.SimContacts",
@@ -1220,7 +1598,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_d4107e8a97712c5a9bf2352dd61e11ff484b3dc3",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_239340eaddc7e176eb483680fe47b5d1b0871d4b",
 "qualifiedName": "com.android.phone.SimContacts.ImportAllSimContactsThread",
@@ -1229,7 +1610,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_86820d9689560b50a6b54ce40b91101a33c771e0"
+"belongsTo":     "ID_86820d9689560b50a6b54ce40b91101a33c771e0",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7b876b011a23df3d7702ee96bbddc9b7e4ee380d",
 "qualifiedName": "com.android.phone.SimContacts.NamePhoneTypePair",
@@ -1238,7 +1622,10 @@
 "modifiers":     "static, private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_86820d9689560b50a6b54ce40b91101a33c771e0"
+"belongsTo":     "ID_86820d9689560b50a6b54ce40b91101a33c771e0",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_c0d5b8c4764b3562dd3b9024b0061b46b9c5e484",
 "qualifiedName": "com.android.phone.SpecialCharSequenceMgr",
@@ -1247,7 +1634,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_3fbce74794819dc47b2dde8afbccd565a07ce545",
 "qualifiedName": "com.android.phone.TimeConsumingPreferenceActivity",
@@ -1256,7 +1646,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_6eb10a78cff7e308bfa122bf528ab7538c48a2ae",
 "superClassOf":  "ID_61aab191883443a4b68294edf496380d21a16cec, ID_3125a48f3d82547240c8c873c65899b58d3c3bab",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_6eb10a78cff7e308bfa122bf528ab7538c48a2ae",
 "qualifiedName": "com.android.phone.TimeConsumingPreferenceListener",
@@ -1265,7 +1658,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "ID_3fbce74794819dc47b2dde8afbccd565a07ce545",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_1b39b3071c491e283fb97fd895d31abdae344c89",
 "qualifiedName": "com.android.phone.Use2GOnlyCheckBoxPreference",
@@ -1274,7 +1670,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832"
+"belongsTo":     "ID_fa5a869f00e096e9671eaf38761b29e7e6fba832",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5bfeebb09375c5d8e318ae366848644711dea727",
 "qualifiedName": "com.android.phone.Use2GOnlyCheckBoxPreference.MyHandler",
@@ -1283,7 +1682,10 @@
 "modifiers":     "private",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1b39b3071c491e283fb97fd895d31abdae344c89"
+"belongsTo":     "ID_1b39b3071c491e283fb97fd895d31abdae344c89",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_710398611e875071b8127c234a76a5165f7a71cc",
 "qualifiedName": "com.android.phone.NotificationMgr.StatusBarMgr.StatusBarMgr()",

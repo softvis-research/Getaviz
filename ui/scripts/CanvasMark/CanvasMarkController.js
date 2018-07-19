@@ -5,20 +5,18 @@ var canvasMarkController = (function() {
 		UP 			: "UP",
 		DOWN 		: "DOWN",
 		DURATION	: "DURATION"
-	}
-
-	var markingColor = "0 1 0";
-
+	};
+	
 	//config parameters	
 	var controllerConfig = {		
 		setCenterOfRotation : false,
-		
-		selectionMouseKey: 2,
+        markingColor: "darkred",
+    	selectionMouseKey: 2,
 		selectionMode: SELECTION_MODES.UP,
 		selectionDurationSeconds: 0.5,
 		selectionMoveAllowed: false,
 		showProgressBar: false,
-	}
+	};
 
 	var downActionEventObject;
     
@@ -56,14 +54,14 @@ var canvasMarkController = (function() {
 			return;
 		}
 
-		if(controllerConfig.selectionMode == "DOWN"){
+		if(controllerConfig.selectionMode === "DOWN"){
 			handleOnClick(eventObject);
 			return;
 		}
 		
 		downActionEventObject = eventObject;
 
-		if(controllerConfig.selectionMode == "DURATION" && controllerConfig.showProgressBar){
+		if(controllerConfig.selectionMode === "DURATION" && controllerConfig.showProgressBar){
 			showProgressBar(eventObject);
 		}
 	}
@@ -74,12 +72,12 @@ var canvasMarkController = (function() {
 			return;
 		}
 
-		if(controllerConfig.selectionMode == "UP"){
+		if(controllerConfig.selectionMode === "UP"){
 			handleOnClick(downActionEventObject);
 			return;
 		}
 
-		if(controllerConfig.selectionMode == "DURATION" && controllerConfig.showProgressBar){
+		if(controllerConfig.selectionMode === "DURATION" && controllerConfig.showProgressBar){
 			hideProgressBar();
 		}
 	}
@@ -90,7 +88,7 @@ var canvasMarkController = (function() {
 			return;
 		}
 
-		if(controllerConfig.selectionMode != "DURATION"){
+		if(controllerConfig.selectionMode !== "DURATION"){
 			return;
 		}
 
@@ -98,7 +96,6 @@ var canvasMarkController = (function() {
 			hideProgressBar();
 			handleOnClick(downActionEventObject);
 			downActionEventObject = null;
-			return;
 		}
 	}
 
@@ -119,7 +116,7 @@ var canvasMarkController = (function() {
 		var applicationEvent = {			
 			sender: canvasMarkController,
 			entities: [eventObject.entity]
-		}	
+		};
 		
 		if(eventObject.entity.marked){
 			events.marked.off.publish(applicationEvent);		
@@ -143,7 +140,7 @@ var canvasMarkController = (function() {
 		if(entity.hovered){
 			canvasManipulator.unhighlightEntities([entity]);			
 		}
-		canvasManipulator.changeColorOfEntities([entity], markingColor);			
+		canvasManipulator.changeColorOfEntities([entity], controllerConfig.markingColor);
 	}
 
 	function onEntityUnmarked(applicationEvent) {

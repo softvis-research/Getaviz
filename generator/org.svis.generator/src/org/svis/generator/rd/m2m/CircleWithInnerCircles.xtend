@@ -1,9 +1,10 @@
 package org.svis.generator.rd.m2m;
 
 import java.util.ArrayList
-import org.svis.generator.FamixUtils
 import org.svis.xtext.rd.Disk
 import org.svis.xtext.rd.impl.RdFactoryImpl
+import org.svis.generator.FamixUtils
+import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * @author Rimue
@@ -11,8 +12,8 @@ import org.svis.xtext.rd.impl.RdFactoryImpl
  */
 //TODO rename
 public class CircleWithInnerCircles extends Circle {
-	@Property var int level
-	@Property val innerCircles = new ArrayList<CircleWithInnerCircles>
+	@Accessors int level
+	@Accessors val innerCircles = new ArrayList<CircleWithInnerCircles>
 	 val diskFactory = new RdFactoryImpl
 	 var Disk disk
 	

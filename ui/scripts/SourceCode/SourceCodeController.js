@@ -11,7 +11,8 @@ var sourceCodeController = (function(){
     //config parameters	
 	var controllerConfig = {		
 		fileType : "java",
-	}
+        url: "",
+	};
     
 	function initialize(setupConfig){	
 
@@ -139,13 +140,17 @@ var sourceCodeController = (function(){
 		}		
 		
 		// ersetze . durch / und fuege .java an -> file
-        var javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;  
-		
+        var javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;
+
         displayCode(javaCodeFile, classEntity, entity);          
     }
 
-    function displayCode(file, classEntity, entity){              
-       file = modelUrl + "/src/" + file;
+    function displayCode(file, classEntity, entity){
+        if (controllerConfig.url == "") {
+            file = modelUrl + "/src/" + file;
+        } else {
+            file = controllerConfig.url + file;
+        }
        
        // fuer das Extrafenster
        lastObject.file = file;       

@@ -149,7 +149,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_54151021cdb9b8e70054afaa16af67baf809792d"
+"belongsTo":     "ID_54151021cdb9b8e70054afaa16af67baf809792d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_23104ee3936c6d64db98d4f42c245c13684d8f9e",
 "qualifiedName": "PDF.Core.Stream",
@@ -158,7 +161,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_54151021cdb9b8e70054afaa16af67baf809792d"
+"belongsTo":     "ID_54151021cdb9b8e70054afaa16af67baf809792d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7ad7dad3471209c60550ac42f36a11e5e65b8594",
 "qualifiedName": "PDF.Core.__dummy__",
@@ -167,7 +173,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_54151021cdb9b8e70054afaa16af67baf809792d"
+"belongsTo":     "ID_54151021cdb9b8e70054afaa16af67baf809792d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_864fa4ee0378458290842aebca0541edceecb836",
 "qualifiedName": "Prawn.Configurable.__dummy__",
@@ -176,7 +185,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_3eb5964101769e2008c2d4766b1b14bcdbcb5dd3"
+"belongsTo":     "ID_3eb5964101769e2008c2d4766b1b14bcdbcb5dd3",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_1cbeefd960629fab27953fab10069cb9c548d585",
 "qualifiedName": "Prawn.Document",
@@ -185,7 +197,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a"
+"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d13591c54a40d2d097de2570148bbd3204976ba6",
 "qualifiedName": "Prawn.Document.BoundingBox",
@@ -194,7 +209,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585"
+"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_359d60b5c3424f22329386d2d3df125e2e0d9fc4",
 "qualifiedName": "Prawn.Document.ColumnBox",
@@ -203,7 +221,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585"
+"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_20aed18f9454830951f4ba8dd99a90be28799ce6",
 "qualifiedName": "Prawn.Document.Grid",
@@ -212,7 +233,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585"
+"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_70bf5d8b9f3b62c4c5a61fcf4163204185b1452a",
 "qualifiedName": "Prawn.Document.GridBox",
@@ -221,7 +245,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585"
+"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_fbda884ca561aeebc89c36744454881032747c7b",
 "qualifiedName": "Prawn.Document.Internals",
@@ -230,7 +257,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585"
+"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_6c69b5da785f160ed7069c418650b7fecffae274",
 "qualifiedName": "Prawn.Document.Internals.__dummy__",
@@ -239,7 +269,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_fbda884ca561aeebc89c36744454881032747c7b"
+"belongsTo":     "ID_fbda884ca561aeebc89c36744454881032747c7b",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_622ee728328486069bc9484f3e6572aae309d728",
 "qualifiedName": "Prawn.Document.MultiBox",
@@ -248,7 +281,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585"
+"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_21a30c92cbc77e0446558138a13fa887f2ecee80",
 "qualifiedName": "Prawn.Document.Security",
@@ -257,7 +293,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585"
+"belongsTo":     "ID_1cbeefd960629fab27953fab10069cb9c548d585",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_87a05ab60e3505fe7284d619a9ac52b7162306f4",
 "qualifiedName": "Prawn.Document.Security.__dummy__",
@@ -266,7 +305,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_21a30c92cbc77e0446558138a13fa887f2ecee80"
+"belongsTo":     "ID_21a30c92cbc77e0446558138a13fa887f2ecee80",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_940ad4c7f590ad1d0205960e9815f8d4d245c659",
 "qualifiedName": "Prawn.Encoding.WinAnsi",
@@ -275,7 +317,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_051198d4104b17b0905e8fdf7b0d640b766c69cd"
+"belongsTo":     "ID_051198d4104b17b0905e8fdf7b0d640b766c69cd",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_2580d6ae1d3142c245a9477cfe94c6caa2457c32",
 "qualifiedName": "Prawn.Font",
@@ -284,7 +329,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a"
+"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_a1b5aca7ae4560b3a514beeecf4d965beae2cca8",
 "qualifiedName": "Prawn.Font.AFM",
@@ -293,7 +341,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_2580d6ae1d3142c245a9477cfe94c6caa2457c32"
+"belongsTo":     "ID_2580d6ae1d3142c245a9477cfe94c6caa2457c32",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_9fd6e1db8b6e4ffd9f14f59bc1b31c947e48c3f7",
 "qualifiedName": "Prawn.Font.DFont",
@@ -302,7 +353,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_2580d6ae1d3142c245a9477cfe94c6caa2457c32"
+"belongsTo":     "ID_2580d6ae1d3142c245a9477cfe94c6caa2457c32",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_1703c64f78601a71f5ca3fd6523b2eacd90d38bb",
 "qualifiedName": "Prawn.Font.TTF",
@@ -311,7 +365,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_2580d6ae1d3142c245a9477cfe94c6caa2457c32"
+"belongsTo":     "ID_2580d6ae1d3142c245a9477cfe94c6caa2457c32",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ac6b02914450b28858dd7df4f8acd871130a49c5",
 "qualifiedName": "Prawn.FontMetricCache",
@@ -320,7 +377,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a"
+"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ef2c837d222c038d6d0fd2291da961afad5b4838",
 "qualifiedName": "Prawn.FontMetricCache.CacheEntry",
@@ -329,7 +389,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_ac6b02914450b28858dd7df4f8acd871130a49c5"
+"belongsTo":     "ID_ac6b02914450b28858dd7df4f8acd871130a49c5",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_8a002e3cf8294192e7038cc61634908f5cfca83d",
 "qualifiedName": "Prawn.Graphics.BlendMode.__dummy__",
@@ -338,7 +401,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_87314a508e075355d71a4388c296d41fc7841a50"
+"belongsTo":     "ID_87314a508e075355d71a4388c296d41fc7841a50",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_969303674275c48aab7fb3bceac949b8a03cc2fd",
 "qualifiedName": "Prawn.Graphics.CapStyle.__dummy__",
@@ -347,7 +413,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_7f9a31c41b48efd839789f9e007fb3a91c39c426"
+"belongsTo":     "ID_7f9a31c41b48efd839789f9e007fb3a91c39c426",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_0d67d4ccb7f9fa084b4ec56b6dd75f2689cf365a",
 "qualifiedName": "Prawn.Graphics.Color.__dummy__",
@@ -356,7 +425,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_b4919e49b93a83701cf09d23bab022c59c2bdd14"
+"belongsTo":     "ID_b4919e49b93a83701cf09d23bab022c59c2bdd14",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_1783acc07ae49f16427a09c73b39d8cb38044cf0",
 "qualifiedName": "Prawn.Graphics.Dash.__dummy__",
@@ -365,7 +437,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_48dd02a3a13cba2a12d39e7bfade9539f2c7355c"
+"belongsTo":     "ID_48dd02a3a13cba2a12d39e7bfade9539f2c7355c",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_40c22fa73e726f5f216edbc1b5a76b69cac0b1a5",
 "qualifiedName": "Prawn.Graphics.JoinStyle.__dummy__",
@@ -374,7 +449,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_a4b20a4e904b07eecfec590f7091434e92d4485f"
+"belongsTo":     "ID_a4b20a4e904b07eecfec590f7091434e92d4485f",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_2abc92cf703231bd15b9c005663d0ce92619b580",
 "qualifiedName": "Prawn.Graphics.Patterns.Gradient",
@@ -383,7 +461,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_41666de9f7046738c9922bad7ed59c2ef9a79142"
+"belongsTo":     "ID_41666de9f7046738c9922bad7ed59c2ef9a79142",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5bf7b39cf362a7b7366cd5741088d6b3aac80c23",
 "qualifiedName": "Prawn.Graphics.Patterns.GradientStop",
@@ -392,7 +473,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_41666de9f7046738c9922bad7ed59c2ef9a79142"
+"belongsTo":     "ID_41666de9f7046738c9922bad7ed59c2ef9a79142",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_403396ee9da5dae9ec07967bb32b2b8244f4e7a5",
 "qualifiedName": "Prawn.Graphics.Patterns.__dummy__",
@@ -401,7 +485,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_41666de9f7046738c9922bad7ed59c2ef9a79142"
+"belongsTo":     "ID_41666de9f7046738c9922bad7ed59c2ef9a79142",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_22c291f96efa2d13e7c2022174d7ddda2df0e6a1",
 "qualifiedName": "Prawn.Graphics.Transformation.__dummy__",
@@ -410,7 +497,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_61f8e2e99fc1c419f454cb23928544ac34672e79"
+"belongsTo":     "ID_61f8e2e99fc1c419f454cb23928544ac34672e79",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e20815df3706449c090fa05258fab55823a5290e",
 "qualifiedName": "Prawn.Graphics.Transparency.__dummy__",
@@ -419,7 +509,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_0a4492a96dbf81fe72aa7cb665adaeba5b879e6f"
+"belongsTo":     "ID_0a4492a96dbf81fe72aa7cb665adaeba5b879e6f",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_dd1adf5c0f2627eca20da88462d8f2f00e56a0f5",
 "qualifiedName": "Prawn.Graphics.__dummy__",
@@ -428,7 +521,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_8518232cf8f875abd3c142ae0e9eaa73eff4fb84"
+"belongsTo":     "ID_8518232cf8f875abd3c142ae0e9eaa73eff4fb84",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d2c96900a47d84d66f1c8ed6ddb205300706b3c6",
 "qualifiedName": "Prawn.ImageHandler",
@@ -437,7 +533,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a"
+"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_d409bfdf1f8ba55bbf8688ca8d34ca10a5e515a2",
 "qualifiedName": "Prawn.Images.Image",
@@ -446,7 +545,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_68c54d2eea97e2a9ce22ac3cc54ff24ed1e03274"
+"belongsTo":     "ID_68c54d2eea97e2a9ce22ac3cc54ff24ed1e03274",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_c9fea12b5075cf152c1a2928a697d853ddf5caa1",
 "qualifiedName": "Prawn.Images.JPG",
@@ -455,7 +557,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_68c54d2eea97e2a9ce22ac3cc54ff24ed1e03274"
+"belongsTo":     "ID_68c54d2eea97e2a9ce22ac3cc54ff24ed1e03274",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_5149e106aa3f15b623ca28ee2ad27ba5ceed879f",
 "qualifiedName": "Prawn.Images.PNG",
@@ -464,7 +569,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_68c54d2eea97e2a9ce22ac3cc54ff24ed1e03274"
+"belongsTo":     "ID_68c54d2eea97e2a9ce22ac3cc54ff24ed1e03274",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ba0982d946394400116eac2c334f805fef57749b",
 "qualifiedName": "Prawn.Images.__dummy__",
@@ -473,7 +581,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_68c54d2eea97e2a9ce22ac3cc54ff24ed1e03274"
+"belongsTo":     "ID_68c54d2eea97e2a9ce22ac3cc54ff24ed1e03274",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_89987186f56b023619a6858257397c7ca19909e7",
 "qualifiedName": "Prawn.Measurements.__dummy__",
@@ -482,7 +593,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_52f9b58cda9c9b10001768fd94474c53ff9ed0ec"
+"belongsTo":     "ID_52f9b58cda9c9b10001768fd94474c53ff9ed0ec",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_8d590a5c03aeb48f1232e3da4e753155086615bb",
 "qualifiedName": "Prawn.Outline",
@@ -491,7 +605,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a"
+"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_091d7734794a7f86012b33c3c57611d6f3c45c80",
 "qualifiedName": "Prawn.Repeater",
@@ -500,7 +617,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a"
+"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_6d88cf738aa1b381e574e237a44eb1978e4aa84f",
 "qualifiedName": "Prawn.SoftMask.__dummy__",
@@ -509,7 +629,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_da49a809c5ee53512ed12be418e27efd7d1f617d"
+"belongsTo":     "ID_da49a809c5ee53512ed12be418e27efd7d1f617d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_73ede614370aff486d611dedf4fd85bbb63bcd96",
 "qualifiedName": "Prawn.Stamp.__dummy__",
@@ -518,7 +641,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_209aa4ffc950712029c77ddce78eb80182366e1d"
+"belongsTo":     "ID_209aa4ffc950712029c77ddce78eb80182366e1d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_9669280abf38a19ca1ca161c1b7aa3dd7e180559",
 "qualifiedName": "Prawn.SynchronizedCache",
@@ -527,7 +653,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a"
+"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_6d05b92baa719d05e6ec993d2da19023c70dce3f",
 "qualifiedName": "Prawn.Text.Box",
@@ -536,7 +665,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_aa95f821e8166bda711e31b912679ee5131eeab6"
+"belongsTo":     "ID_aa95f821e8166bda711e31b912679ee5131eeab6",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f461294ffbc7f18fe403bbc8a4b9372863cf23ef",
 "qualifiedName": "Prawn.Text.Formatted.Arranger",
@@ -545,7 +677,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865"
+"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_cebdc5e08d27f211eb0a399ddec0058bb211f9ff",
 "qualifiedName": "Prawn.Text.Formatted.Box",
@@ -554,7 +689,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865"
+"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7a9aedf329365cda5c0f674ab0881512d222932f",
 "qualifiedName": "Prawn.Text.Formatted.Fragment",
@@ -563,7 +701,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865"
+"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_030ec6156aaf74aac88d1ed527edd486cd8bc232",
 "qualifiedName": "Prawn.Text.Formatted.LineWrap",
@@ -572,7 +713,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865"
+"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_1cb0c5cce62d3a15d69544ce33828db0ddf1047b",
 "qualifiedName": "Prawn.Text.Formatted.Parser",
@@ -581,7 +725,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865"
+"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ca476a446988cbcbfa740961fb6636dfe5b97b2d",
 "qualifiedName": "Prawn.Text.Formatted.Wrap.__dummy__",
@@ -590,7 +737,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_914d4c9741368ed3e1f7d51af2fab2d791065b66"
+"belongsTo":     "ID_914d4c9741368ed3e1f7d51af2fab2d791065b66",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_3249edfc90b94bdaf007ee9d3ee7059fec23d157",
 "qualifiedName": "Prawn.Text.Formatted.__dummy__",
@@ -599,7 +749,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865"
+"belongsTo":     "ID_df3bb5e43a9abc28a690bb291f2e97036c85f865",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_7e027cfc8acbd247409eee972dc1dab92d5fdfe1",
 "qualifiedName": "Prawn.Text.__dummy__",
@@ -608,7 +761,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_aa95f821e8166bda711e31b912679ee5131eeab6"
+"belongsTo":     "ID_aa95f821e8166bda711e31b912679ee5131eeab6",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e2658059de560036aa9f98371a2c304e4f8790aa",
 "qualifiedName": "Prawn.ThreadLocalCache",
@@ -617,7 +773,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a"
+"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_265cee096529f2b82d40e51e96fd353fa34dc3ac",
 "qualifiedName": "Prawn.TransformationStack.__dummy__",
@@ -626,7 +785,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_70ef6a912fda741459ff1e8f94e6f6428b4b7819"
+"belongsTo":     "ID_70ef6a912fda741459ff1e8f94e6f6428b4b7819",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_f6538bee3afdfaea0152797741a4d6b86f2b29f1",
 "qualifiedName": "Prawn.View.__dummy__",
@@ -635,7 +797,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_1d4c2e7e4449df15c0067df4ed001b9d86f4a31d"
+"belongsTo":     "ID_1d4c2e7e4449df15c0067df4ed001b9d86f4a31d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_1a1ed3d62ef4458a7d4c94084578d237c9997735",
 "qualifiedName": "Prawn.__dummy__",
@@ -644,7 +809,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a"
+"belongsTo":     "ID_306b218dbccecacafe50d43c620ad3069a7afa8a",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_39db03fdbf8448e09a6e14aae0ad6ac12cccec7e",
 "qualifiedName": "root.Arcfour",
@@ -653,7 +821,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_dc76e9f0c0006e8f919e0c515c66dbba3982f785"
+"belongsTo":     "ID_dc76e9f0c0006e8f919e0c515c66dbba3982f785",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_08df10034d04f4851767abffe9319bc4281838a2",
 "qualifiedName": "root.Numeric",
@@ -662,7 +833,10 @@
 "modifiers":     "",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_dc76e9f0c0006e8f919e0c515c66dbba3982f785"
+"belongsTo":     "ID_dc76e9f0c0006e8f919e0c515c66dbba3982f785",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_66e87af24d8aebeec2cb023a346d9b97d200eacc",
 "qualifiedName": "Prawn.__dummy__.debug()",

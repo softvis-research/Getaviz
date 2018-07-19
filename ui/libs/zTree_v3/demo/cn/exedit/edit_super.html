@@ -6,9 +6,9 @@
 	<link rel="stylesheet" href="../../../css/demo.css" type="text/css">
 	<link rel="stylesheet" href="../../../css/zTreeStyle/zTreeStyle.css" type="text/css">
 	<script type="text/javascript" src="../../../js/jquery-1.4.4.min.js"></script>
-	<script type="text/javascript" src="../../../js/jquery.ztree.core-3.5.js"></script>
-	<script type="text/javascript" src="../../../js/jquery.ztree.excheck-3.5.js"></script>
-	<script type="text/javascript" src="../../../js/jquery.ztree.exedit-3.5.js"></script>
+	<script type="text/javascript" src="../../../js/jquery.ztree.core.js"></script>
+	<script type="text/javascript" src="../../../js/jquery.ztree.excheck.js"></script>
+	<script type="text/javascript" src="../../../js/jquery.ztree.exedit.js"></script>
 	<SCRIPT type="text/javascript">
 		<!--
 		var setting = {
@@ -61,7 +61,14 @@
 			showLog("[ "+getTime()+" beforeEditName ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
 			var zTree = $.fn.zTree.getZTreeObj("treeDemo");
 			zTree.selectNode(treeNode);
-			return confirm("进入节点 -- " + treeNode.name + " 的编辑状态吗？");
+			setTimeout(function() {
+				if (confirm("进入节点 -- " + treeNode.name + " 的编辑状态吗？")) {
+					setTimeout(function() {
+						zTree.editName(treeNode);
+					}, 0);
+				}
+			}, 0);
+			return false;
 		}
 		function beforeRemove(treeId, treeNode) {
 			className = (className === "dark" ? "":"dark");
@@ -77,9 +84,11 @@
 			className = (className === "dark" ? "":"dark");
 			showLog((isCancel ? "<span style='color:red'>":"") + "[ "+getTime()+" beforeRename ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name + (isCancel ? "</span>":""));
 			if (newName.length == 0) {
-				alert("节点名称不能为空.");
-				var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-				setTimeout(function(){zTree.editName(treeNode)}, 10);
+				setTimeout(function() {
+					var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+					zTree.cancelEditName();
+					alert("节点名称不能为空.");
+				}, 0);
 				return false;
 			}
 			return true;

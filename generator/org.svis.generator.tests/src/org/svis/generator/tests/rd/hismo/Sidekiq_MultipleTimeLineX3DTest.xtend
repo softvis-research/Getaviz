@@ -17,7 +17,7 @@ class Sidekiq_MultipleTimeLineX3DTest {
 	}
      
     @Test
-    def testX3DOM() {
+    def testX3D() {
     	var File file1 = null
         var File file2 = null
         try {

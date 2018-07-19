@@ -7,10 +7,12 @@ import java.io.File
 import java.io.FileNotFoundException
 import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
+import org.svis.generator.SettingsConfiguration
 
 class BankTest {
 	@BeforeClass
 	def static launch() {
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Dynamix2RD.mwe2", "-p", "famixPath=testdata/bank/input/famixDyn",
 			"dynamixPath=testdata/bank/input/dynamix","outputPath=output/rd/dynamix/bank/original"])
 	}

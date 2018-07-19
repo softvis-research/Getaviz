@@ -18,11 +18,31 @@ import org.apache.commons.lang3.StringUtils
 import org.svis.xtext.famix.FAMIXStructure
 import org.svis.xtext.famix.impl.FAMIXAttributeImpl
 import org.svis.xtext.famix.impl.FAMIXMethodImpl
+import org.svis.xtext.famix.FAMIXAntipattern
+import org.svis.xtext.famix.FAMIXComponent
+import org.svis.xtext.famix.FAMIXPath
+import org.svis.xtext.hismo.HISMOClassVersion
+import org.svis.xtext.hismo.HISMONamespaceVersion
+import org.svis.generator.rd.m2m.RGBColor
 
 class FamixUtils {
 	val log = LogFactory::getLog(class)
 	val typesMap = newHashMap('String' -> 128.0, 'byte' -> 8.0, 'short' -> 16.0, 'int' -> 32.0,
 		'long' -> 64.0, 'float' -> 32.0, 'double' -> 64.0, 'boolean' -> 4.0, 'char' -> 16.0)
+		
+	def getGradient(double value) {
+		val red = 255 * value
+		val green = 255 * (1 - value)
+		val color = new RGBColor(red, green, 0)
+		return color
+	}
+	
+	def getBlueGradient(double value){
+		val red = 202 * value
+		val green = 202 * value
+		val color = new RGBColor(red, green, 206)
+		return color
+	}
 
 	def getAttributeSize(FAMIXElement element) {
 		switch(element) {
@@ -99,6 +119,11 @@ class FamixUtils {
 			FAMIXEnum:					return el.id
 			FAMIXParameterizedType:		return el.id
 			FAMIXAnnotationType:		return el.id
+			FAMIXAntipattern:			return el.id
+			FAMIXComponent:				return el.id
+			FAMIXPath:					return el.id
+			HISMOClassVersion:			return el.id
+			HISMONamespaceVersion:		return el.id
 			default: log.warn("Forgot" + el.class + " in FamixUtils.getId")
 		}
 	}
@@ -113,7 +138,16 @@ class FamixUtils {
 			FAMIXEnum:					return el.fqn
 			FAMIXParameterizedType:		return el.fqn
 			FAMIXAnnotationType:		return el.fqn
+			FAMIXComponent:				return el.fqn
+			FAMIXAntipattern:			return el.fqn
 			default: log.warn("Forgot" + el.class + " in FamixUtils.getFqn")
 		}
+	}
+	
+	def checkNull(String string) {
+		if(string === null) {
+			return ""
+		}
+		return string
 	}
 }

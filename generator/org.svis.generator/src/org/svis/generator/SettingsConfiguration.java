@@ -46,6 +46,25 @@ public class SettingsConfiguration {
 	public void loadDefault() {
 		loadConfig("../org.svis.generator.releng/settings.properties");
 	}
+	
+	public Boolean showHistories() {
+		return config.getBoolean("history.show_histories", true);
+	}
+	
+	public String getTimeFormat() {
+		return config.getString("history.time_format", "yyyy-MM-dd'T'HH:mm");
+	}
+	
+	public ShowVersions getShowVersions() {
+		switch(config.getString("history.show_versions", "all")) {
+			case "latest": return ShowVersions.LATEST;
+			default: return ShowVersions.ALL;
+		}
+	}
+	
+	public Boolean showNamespaceVersions() {
+		return config.getBoolean("history.show_namespace_versions", false);
+	}
 
 	public String getRepositoryName() {
 		return config.getString("history.repository_name", "");
@@ -73,13 +92,33 @@ public class SettingsConfiguration {
 			return OutputFormat.X3D;
 		}
 	}
-
+	
+	public Boolean convertToMultipart() {
+		return config.getBoolean("convert_to_multipart", false);
+	}
+	
+	public Boolean writeToDatabase() {
+		return config.getBoolean("write_to_database", false);
+	}
+	
 	public boolean isHidePrivateElements() {
 		return config.getBoolean("structure.hide_private_elements", false);
 	}
 
 	public String getParserAsString() {
 		return config.getString("structure.parser", "verveinej");
+	}
+	
+	public Boolean recreateFamix() {
+		return config.getBoolean("structure.recreate_famix", false);
+	}
+	
+	public Boolean containsProjects() {
+		return config.getBoolean("structure.containes_projects", false);
+	}
+	
+	public Boolean showClassMembers() {
+		return config.getBoolean("structure.show_class_members", true);
 	}
 	
 	public FamixParser getParser() {
@@ -403,6 +442,21 @@ public class SettingsConfiguration {
 	public String getCityColorAsPercentage(String name) {
 		return getColorFormatted(getCityColor(name));
 	}
+	
+	public RDClassSize getRDClassSize() {
+		switch(config.getString("rd.class_size", "none")) {
+			case "number_of_statements": return RDClassSize.NUMBER_OF_STATEMENTS;
+			case "betweenness_centrality": return RDClassSize.BETWEENNESS_CENTRALITY;
+			default: return RDClassSize.NONE;
+		}
+	}
+	
+	public ClassHeight getRDClassHeight() {
+		switch(config.getString("rd.class_height", "static")) {
+			case "number_of_incidents": return ClassHeight.NUMBER_OF_INCIDENTS;
+			default: return ClassHeight.STATIC;
+		}
+	}
 
 	public double getRDDataFactor() {
 		return config.getDouble("rd.data_factor", 4.0);
@@ -503,6 +557,18 @@ public class SettingsConfiguration {
 	public String getRDNamespaceColorAsPercentage() {
 		return getColorFormatted(getRDNamespaceColor());
 	}
+	
+	public Color getRDProjectColor() {
+		return getColor(getRDProjectColorHex());
+	}
+
+	public String getRDProjectColorHex() {
+		return config.getString("rd.color.project", "#353559");
+	}
+
+	public String getRDProjectColorAsPercentage() {
+		return getColorFormatted(getRDProjectColor());
+	}
 
 	public Color getRDMethodInvocationColor() {
 		return getColor(config.getString("rd.color.method_invocation", "#780a32"));
@@ -510,6 +576,14 @@ public class SettingsConfiguration {
 
 	public String getRDMethodInvocationColorAsPercentage() {
 		return getColorFormatted(getRDMethodInvocationColor());
+	}
+	
+	public ClassColorMetric getRDClassColorMetric() {
+		switch(config.getString("rd.class_color_metric", "static")) {
+			case "stk": return ClassColorMetric.STK;
+			case "change_frequency": return ClassColorMetric.CHANGE_FREQUENCY;
+			default: return ClassColorMetric.STATIC;
+		}
 	}
 
 	public boolean isMethodDisks() {
@@ -1159,5 +1233,21 @@ public class SettingsConfiguration {
 			NONE,
 			NOS;
 		}
+	}
+	
+	public static enum RDClassSize {
+		NONE, BETWEENNESS_CENTRALITY, NUMBER_OF_STATEMENTS;
+	}
+	
+	public static enum ShowVersions {
+		ALL, LATEST;
+	}
+	
+	public static enum ClassHeight {
+		NUMBER_OF_INCIDENTS, STATIC;
+	}
+	
+	public static enum ClassColorMetric {
+		STK, STATIC, CHANGE_FREQUENCY;
 	}
 }
