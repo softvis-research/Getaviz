@@ -2,7 +2,6 @@ module org.svis.generator.run.Famix2Hismo
 
 var projectName = "org.svis.generator.run"
 var runtimeProject = "../${projectName}"
-var configPath = "./metadata.json"
 
 
 /**
@@ -21,9 +20,8 @@ Workflow {
 	}
 	
 	// Reads multiple famix models
-	component = org.svis.generator.ReaderWithConfig {
+	component =  org.eclipse.xtext.mwe.Reader {
 		register = org.svis.xtext.FamixStandaloneSetup {}
-		config = configPath
 		loadResource = {
 			slot = "famix"
 		}
@@ -36,7 +34,6 @@ Workflow {
 	
 	// Transforms multiple famix models into hismo
 	component = org.svis.generator.hismo.s2m.Famix2Hismo {
-		config = configPath
 		modelSlot = "famix"
 	}
 	

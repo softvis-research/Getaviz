@@ -5,7 +5,6 @@ var outputPath = "./output/plant/famix"
 //var runtimeProject = "../${projectName}"
 var texturSourcePath = "org.svis.generator/src/org/svis/generator/plant/m2t/textures"
 var texturDestinyPath = "org.svis.generator.run/output/plant/famix/pics"
-var configPath = "./input/famix/plantConfig.json"
 
 Workflow {
 
@@ -27,7 +26,6 @@ Workflow {
 	// transform famix into disks (s2m)
 	component = org.svis.generator.plant.s2m.Famix2Plant {
 		modelSlot = "famix"
-		config = configPath
 	}
 	
 	// write metaData
@@ -48,7 +46,6 @@ Workflow {
 	// calculate  layout (m2m)
 	component = org.svis.generator.plant.m2m.Plant2Plant {
 		modelSlot = "plant"
-		config = configPath
 	}
 	
 	component = org.eclipse.emf.mwe.utils.Writer {
