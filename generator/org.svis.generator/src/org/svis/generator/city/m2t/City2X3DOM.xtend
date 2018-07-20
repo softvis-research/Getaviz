@@ -4,8 +4,6 @@ import java.util.List
 import org.apache.commons.logging.LogFactory
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.EcoreUtil2
-import org.svis.generator.city.CitySettings
-import org.svis.generator.city.CitySettings.Panels
 import org.svis.generator.city.m2m.CityLayout
 import org.svis.generator.city.m2m.Rectangle
 import org.svis.xtext.city.Building
@@ -13,13 +11,15 @@ import org.svis.xtext.city.BuildingSegment
 import org.svis.xtext.city.Entity
 import org.svis.xtext.city.PanelSeparatorBox
 import org.svis.xtext.city.PanelSeparatorCylinder
-import org.svis.generator.city.CitySettings.BuildingType
 import org.svis.xtext.city.District
+import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.BuildingType
 
 class City2X3DOM {
 	val log = LogFactory::getLog(getClass)
+	val config = SettingsConfiguration.instance
 
-	def	toX3DOMBody(Resource resource) {
+	def toX3DOMBody(Resource resource) {
 		log.info("City2X3DOM has started")
 		val entities = EcoreUtil2::getAllContentsOfType(resource.contents.head, Entity)
 		val rootEntity = CityLayout::rootRectangle
@@ -29,11 +29,11 @@ class City2X3DOM {
 	}
 
 	def String settingsInfo() '''
-		<SettingsInfo ClassElements='«CitySettings::CLASS_ELEMENTS_MODE»' SortModeCoarse='«CitySettings::CLASS_ELEMENTS_SORT_MODE_COARSE»' SortModeFine='«CitySettings::CLASS_ELEMENTS_SORT_MODE_FINE»' SortModeFineReversed='«CitySettings::CLASS_ELEMENTS_SORT_MODE_FINE_DIRECTION_REVERSED»' Scheme='«CitySettings::SCHEME»' ShowBuildingBase='«CitySettings::SHOW_BUILDING_BASE»'
-		«IF CitySettings::BUILDING_TYPE == BuildingType.CITY_BRICKS»
-			BrickLayout='«CitySettings::BRICK_LAYOUT»'
-		«ELSEIF CitySettings::BUILDING_TYPE == BuildingType.CITY_PANELS»
-			AttributesAsCylinders='«CitySettings::SHOW_ATTRIBUTES_AS_CYLINDERS»' PanelSeparatorMode='«CitySettings::PANEL_SEPARATOR_MODE»'
+		<SettingsInfo ClassElements='«config.classElementsMode»' SortModeCoarse='«config.classElementsSortModeCoarse»' SortModeFine='«config.classElementsSortModeFine»' SortModeFineReversed='«config.classElementsSortModeFineDirectionReversed»' Scheme='«config.scheme»' ShowBuildingBase='«config.showBuildingBase»'
+		«IF config.buildingType == BuildingType.CITY_BRICKS»
+			BrickLayout='«config.brickLayout»'
+		«ELSEIF config.buildingType == BuildingType.CITY_PANELS»
+			AttributesAsCylinders='«config.showAttributesAsCylinders»' PanelSeparatorMode='«config.panelSeparatorMode»'
 		«ELSE»
 		«ENDIF»
 		/>
@@ -57,10 +57,10 @@ class City2X3DOM {
 				«toDistrict(entity)»
 			«ENDIF»
 			«IF entity.type == "FAMIX.Class" || entity.type == "FAMIX.ParameterizableClass"»
-				«IF CitySettings::BUILDING_TYPE == BuildingType.CITY_ORIGINAL || CitySettings::SHOW_BUILDING_BASE»
+				«IF config.buildingType == BuildingType.CITY_ORIGINAL || config.showBuildingBase»
 					«toBuilding(entity)»
 				«ENDIF»
-				«IF CitySettings::BUILDING_TYPE === BuildingType.CITY_DYNAMIC»
+				«IF config.buildingType === BuildingType.CITY_DYNAMIC»
 					«FOR bs: (entity as District).entities»
 						«toBuilding(bs)»
 					«ENDFOR»
@@ -77,25 +77,25 @@ class City2X3DOM {
 	'''
 
 	def String toDistrict(Entity district) '''
-			<Transform id='«district.id»' translation='«district.position.x +" "+ district.position.y +" "+ district.position.z»'>
-				<Shape>
-					<Box size='«district.width +" "+ district.height +" "+ district.length»'></Box>
-					<Appearance>
-						<Material diffuseColor='«district.color»'></Material>
-					</Appearance>
-				</Shape>
-			</Transform>
+		<Transform id='«district.id»' translation='«district.position.x +" "+ district.position.y +" "+ district.position.z»'>
+			<Shape>
+				<Box size='«district.width +" "+ district.height +" "+ district.length»'></Box>
+				<Appearance>
+					<Material diffuseColor='«district.color»'></Material>
+				</Appearance>
+			</Shape>
+		</Transform>
 	'''
-	
+
 	def String toBuilding(Entity building) '''
-			<Transform id='«building.id»' translation='«building.position.x +" "+ building.position.y +" "+ building.position.z»'>
-				<Shape>
-					<Box size='«building.width +" "+ building.height +" "+ building.length»'></Box>
-					<Appearance>
-						<Material id='«building.id»_MATERIAL' diffuseColor='«building.color»'></Material>
-					</Appearance>
-				</Shape>
-			</Transform>
+		<Transform id='«building.id»' translation='«building.position.x +" "+ building.position.y +" "+ building.position.z»'>
+			<Shape>
+				<Box size='«building.width +" "+ building.height +" "+ building.length»'></Box>
+				<Appearance>
+					<Material id='«building.id»_MATERIAL' diffuseColor='«building.color»'></Material>
+				</Appearance>
+			</Shape>
+		</Transform>
 	'''
 
 	def String toBuildingSegment(BuildingSegment bs) '''
@@ -107,33 +107,33 @@ class City2X3DOM {
 		«var length = bs.length»
 			<Transform id='«bs.id»' translation='«x +" "+ y +" "+ z»'>
 				<Shape>
-				«IF CitySettings::BUILDING_TYPE == BuildingType.CITY_PANELS
+				«IF config.buildingType == BuildingType.CITY_PANELS
 						&& bs.type == "FAMIX.Attribute"
-						&& CitySettings::SHOW_ATTRIBUTES_AS_CYLINDERS»
+						&& config.showAttributesAsCylinders»
 					<Cylinder radius='«width/2»' height='«height»'></Cylinder>
 				«ELSE»
 					<Box size='«width +" "+ height +" "+ length»'></Box>
 				«ENDIF»
-					<Appearance>
-						<Material diffuseColor='«bs.color»'></Material>
+				<Appearance>
+					<Material diffuseColor='«bs.color»'></Material>
 					</Appearance>
 				</Shape>
 			</Transform>
 			«FOR separator : bs.separator»
-			<Transform translation='«separator.position.x +" "+ separator.position.y +" "+ separator.position.z»'>
-				<Shape>
-				«IF separator instanceof PanelSeparatorCylinder»
-					«val separatorC = separator»
-					<Cylinder radius='«separatorC.radius»' height='«Panels::SEPARATOR_HEIGHT»'></Cylinder>
-				«ELSE»
-					«val separatorB = separator as PanelSeparatorBox»
-					<Box size='«separatorB.width +" "+ Panels::SEPARATOR_HEIGHT + " "+ separatorB.length»'></Box>
-				«ENDIF»
+				<Transform translation='«separator.position.x +" "+ separator.position.y +" "+ separator.position.z»'>
+					<Shape>
+					«IF separator instanceof PanelSeparatorCylinder»
+						«val separatorC = separator»
+						<Cylinder radius='«separatorC.radius»' height='«config.panelSeparatorHeight»'></Cylinder>
+					«ELSE»
+						«val separatorB = separator as PanelSeparatorBox»
+						<Box size='«separatorB.width +" "+ config.panelSeparatorHeight + " "+ separatorB.length»'></Box>
+					«ENDIF»
 					<Appearance>
-						<Material diffuseColor='«CitySettings::COLOR_BLACK.asPercentage»'></Material>
-					</Appearance>
-				</Shape>
-			</Transform>
+						<Material diffuseColor='«config.getCityColorAsPercentage("black")»'></Material>
+						</Appearance>
+					</Shape>
+				</Transform>
 			«ENDFOR»
 	'''
 }

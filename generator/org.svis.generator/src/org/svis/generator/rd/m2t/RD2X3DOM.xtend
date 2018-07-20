@@ -4,17 +4,17 @@ import java.util.List
 import org.eclipse.emf.common.util.EList
 import org.svis.xtext.rd.Disk
 import org.svis.xtext.rd.DiskSegment
-import org.svis.generator.rd.RDSettings
 import org.svis.xtext.rd.DiskSegmentInvocation
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.EcoreUtil2
 import org.svis.generator.rd.m2m.RD2RD4Dynamix
 import org.svis.xtext.rd.DiskVersion
 import org.svis.xtext.rd.Version
-import org.svis.generator.rd.RDSettings.Variant
 import java.util.ArrayList
 import org.apache.commons.logging.LogFactory
-import org.svis.generator.rd.RDSettings.EvolutionRepresentation
+import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.EvolutionRepresentation
+import org.svis.generator.SettingsConfiguration.Variant
 
 class RD2X3DOM {
 	
@@ -27,6 +27,7 @@ class RD2X3DOM {
 	val multipleDisks = new ArrayList<Disk>
 	val multipleDiskSegments = new ArrayList<DiskSegment>
 	val log = LogFactory::getLog(class)
+	val config = SettingsConfiguration.instance
 	
 	def toX3DOMBody(Resource resource) {
 		log.info("RD2X3DOM has started")
@@ -38,11 +39,11 @@ class RD2X3DOM {
 			multipleDiskSegments += EcoreUtil2::getAllContentsOfType(root, DiskSegment)
 		}
 		var boolean withScale = false
-		switch(RDSettings::EVOLUTION_REPRESENTATION){
+		switch(config.evolutionRepresentation){
 			case MULTIPLE_DYNAMIC_EVOLUTION,
 			case MULTIPLE_TIME_LINE: {
 				disks = multipleDisks
-				if(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::MULTIPLE_DYNAMIC_EVOLUTION){
+				if(config.evolutionRepresentation == EvolutionRepresentation::MULTIPLE_DYNAMIC_EVOLUTION){
 					diskSegments = multipleDiskSegments
 					withScale = true
 				}
@@ -62,7 +63,7 @@ class RD2X3DOM {
 	def private toX3DOMRD(List<Disk> disks,boolean withScale) '''
 		«FOR disk : disks»
 			«toX3DOMDisk(disk,withScale)»
-			«IF(disk.diskVersions.size != 0 && !(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::DYNAMIC_EVOLUTION))»«toDiskVersions(disk.diskVersions,heightMultiplier,offset)»«ENDIF»
+			«IF(disk.diskVersions.size != 0 && !(config.evolutionRepresentation == EvolutionRepresentation::DYNAMIC_EVOLUTION))»«toDiskVersions(disk.diskVersions,heightMultiplier,offset)»«ENDIF»
 		«ENDFOR»
 	'''
 
@@ -78,7 +79,7 @@ class RD2X3DOM {
 								solid='true'
 								height='«disk.height»'
 								outerradius='«disk.radius»'
-								innerradius='«disk.radius - RDSettings::RING_WIDTH»'></RectangularTorus>
+								innerradius='«disk.radius - config.RDRingWidth»'></RectangularTorus>
 							<Appearance>
 									<Material id='«disk.id»__MATERIAL'
 										diffuseColor='«disk.color»'
@@ -98,7 +99,7 @@ class RD2X3DOM {
 		«FOR segment : segments»
 			<Transform id='«segment.id»'>
 				<Transform rotation='0 1 0 «segment.anglePosition»'> 
-				<Transform translation='0 « (segment.height- RDSettings::HEIGHT)/2.0 » 0'>
+				<Transform translation='0 « (segment.height- config.RDHeight)/2.0 » 0'>
 				<Transform id='«segment.id»_SCALE' 
 				scale='1 1 1'
 				>
@@ -107,8 +108,8 @@ class RD2X3DOM {
 					solid='true'
 					height='«segment.height»'
 					angle='«segment.angle»'
-					«IF(RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::DYNAMIC_EVOLUTION
-						|| RDSettings::EVOLUTION_REPRESENTATION == EvolutionRepresentation::MULTIPLE_DYNAMIC_EVOLUTION)»
+					«IF(config.evolutionRepresentation == EvolutionRepresentation::DYNAMIC_EVOLUTION
+						|| config.evolutionRepresentation == EvolutionRepresentation::MULTIPLE_DYNAMIC_EVOLUTION)»
 					outerradius='0.0'
 					«ELSE»
 					outerradius='«segment.outerRadius»'
@@ -130,7 +131,7 @@ class RD2X3DOM {
 	
 	def private diskSegmentInvocationsX3Dom(Resource resource,List<DiskSegment> diskSegments){
 		val diskSegmentInvocations = EcoreUtil2::getAllContentsOfType(resource.contents.head, DiskSegmentInvocation).clone.toList
-		if(diskSegmentInvocations.size == 0 || RDSettings::VARIANT == Variant::DYNAMIC) {
+		if(diskSegmentInvocations.size == 0 || config.variant == Variant::DYNAMIC) {
 			return newLinkedList
 		}
 		return 	rd2rd4dynamix.prepareDiskSegmentInvocations(1,18,diskSegmentInvocations)
@@ -148,7 +149,7 @@ class RD2X3DOM {
 					<Shape>
 					<Group USE='«segment.id»__RECTANGULARTORUS'></Group>
 										<Appearance>
-												<Material diffuseColor='«RDSettings.METHOD_INVOCATION_COLOR»'></Material>
+												<Material diffuseColor='«config.RDMethodInvocationColorAsPercentage»'></Material>
 										</Appearance>
 					
 					</Shape>

@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
 import org.junit.AfterClass
-import org.svis.generator.famix.FAMIXSettings
+import org.svis.generator.SettingsConfiguration
 
 class Bank_HiddenPrivatesTest {
 	
@@ -30,7 +30,8 @@ class Bank_HiddenPrivatesTest {
 	
 	@BeforeClass
 	def static void launch() {
-		FAMIXSettings::HIDE_PRIVATE_ELEMENTS = true
+		//FAMIXSettings::HIDE_PRIVATE_ELEMENTS = true
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankHiddenPrivatesTest.properties")
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p", "inputPath=testdata/bank/input/famix", "outputPath=" + path])
@@ -238,6 +239,6 @@ class Bank_HiddenPrivatesTest {
     
 	@AfterClass
 	def static void end(){
-		FAMIXSettings::HIDE_PRIVATE_ELEMENTS = false
+//		FAMIXSettings::HIDE_PRIVATE_ELEMENTS = false
 	}
 }

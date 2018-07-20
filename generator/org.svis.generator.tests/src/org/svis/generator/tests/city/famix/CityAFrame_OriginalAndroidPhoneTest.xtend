@@ -16,9 +16,7 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
-import org.svis.generator.city.CitySettings
-import org.svis.generator.city.CitySettings.BuildingType
-import org.svis.generator.city.CitySettings.OutputFormat
+import org.svis.generator.SettingsConfiguration
 
 class CityAFrame_OriginalAndroidPhoneTest {
 	
@@ -31,10 +29,8 @@ class CityAFrame_OriginalAndroidPhoneTest {
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
-		CitySettings::OUTPUT_FORMAT = OutputFormat::AFrame
-		CitySettings::BUILDING_TYPE = BuildingType.CITY_ORIGINAL
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/android_phone/input/CityAFrameOriginalAndroidPhoneTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/city/Famix2City.mwe2", "-p", "inputPath=testdata/android_phone/input/famix", "outputPath=./output/city/famix/aframe/original/android_phone"])
-		CitySettings::OUTPUT_FORMAT = OutputFormat::X3D
 		json = JSONUtil::read("./output/city/famix/aframe/original/android_phone/metaData.json")
 	}
 

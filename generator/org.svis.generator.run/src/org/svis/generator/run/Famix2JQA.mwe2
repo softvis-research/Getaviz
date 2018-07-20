@@ -1,0 +1,29 @@
+module org.svis.generator.run.rd
+
+var projectName = "org.svis.generator.run"
+var inputPath = "./input/famix"
+var runtimeProject = "../${projectName}"
+
+Workflow {
+
+	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
+    	platformUri = "${runtimeProject}/.."
+    	registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
+	}
+	
+	component =  org.eclipse.xtext.mwe.Reader {
+		path = "${inputPath}"
+		register = org.svis.xtext.FamixStandaloneSetupGenerated {}
+		loadResource = {
+			slot = "famix"
+		}
+	}
+
+	// support lazy loading of textual models
+	component = org.svis.generator.ResolveLazyComponent {}
+	
+	// delete unnecessary objects
+	component = org.svis.generator.famix.Famix2Famix {
+		modelSlot = "famix"
+	}
+}

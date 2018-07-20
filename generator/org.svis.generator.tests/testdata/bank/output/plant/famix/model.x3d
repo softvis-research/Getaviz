@@ -36,7 +36,7 @@
 			rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='0.545 0.27 0.074' />
+				<Material diffuseColor='0.5450980392156862 0.26666666666666666 0.07450980392156863' />
 			</Appearance>
 			<cone />
 		</Shape>
@@ -48,7 +48,7 @@
 		rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='1 1 0' />
+				<Material diffuseColor='1.0 1.0 0.0' />
 			</Appearance>
 			<Cylinder height='0.5' radius='2'/>
 		</Shape>
@@ -183,7 +183,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -199,7 +199,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -215,7 +215,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -231,7 +231,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -247,7 +247,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -263,7 +263,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -279,7 +279,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -295,7 +295,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -311,7 +311,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -327,7 +327,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -343,7 +343,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -359,7 +359,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -375,7 +375,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -391,7 +391,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -407,7 +407,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -423,7 +423,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -439,7 +439,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -455,7 +455,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -471,7 +471,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -487,7 +487,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -503,7 +503,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -519,7 +519,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -554,7 +554,7 @@ rotation='1 0 0 1.57' >
 			rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='0.545 0.27 0.074' />
+				<Material diffuseColor='0.5450980392156862 0.26666666666666666 0.07450980392156863' />
 			</Appearance>
 			<cone />
 		</Shape>
@@ -566,7 +566,7 @@ rotation='1 0 0 1.57' >
 		rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='1 1 0' />
+				<Material diffuseColor='1.0 1.0 0.0' />
 			</Appearance>
 			<Cylinder height='0.5' radius='2'/>
 		</Shape>
@@ -633,7 +633,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -649,7 +649,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -665,7 +665,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -681,7 +681,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -697,7 +697,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -713,7 +713,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -729,7 +729,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -745,7 +745,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -761,7 +761,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -777,7 +777,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -802,7 +802,7 @@ rotation='1 0 0 1.57' >
 			rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='0.545 0.27 0.074' />
+				<Material diffuseColor='0.5450980392156862 0.26666666666666666 0.07450980392156863' />
 			</Appearance>
 			<cone />
 		</Shape>
@@ -814,7 +814,7 @@ rotation='1 0 0 1.57' >
 		rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='1 1 0' />
+				<Material diffuseColor='1.0 1.0 0.0' />
 			</Appearance>
 			<Cylinder height='0.5' radius='2'/>
 		</Shape>
@@ -898,7 +898,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -914,7 +914,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -930,7 +930,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -946,7 +946,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -962,7 +962,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -978,7 +978,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -994,7 +994,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1010,7 +1010,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1026,7 +1026,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1042,7 +1042,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1058,7 +1058,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1074,7 +1074,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1109,7 +1109,7 @@ rotation='1 0 0 1.57' >
 			rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='0.545 0.27 0.074' />
+				<Material diffuseColor='0.5450980392156862 0.26666666666666666 0.07450980392156863' />
 			</Appearance>
 			<cone />
 		</Shape>
@@ -1121,7 +1121,7 @@ rotation='1 0 0 1.57' >
 		rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='1 1 0' />
+				<Material diffuseColor='1.0 1.0 0.0' />
 			</Appearance>
 			<Cylinder height='0.5' radius='2'/>
 		</Shape>
@@ -1205,7 +1205,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1221,7 +1221,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1237,7 +1237,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1253,7 +1253,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1269,7 +1269,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1285,7 +1285,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1301,7 +1301,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1317,7 +1317,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1333,7 +1333,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1349,7 +1349,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1365,7 +1365,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1381,7 +1381,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1406,7 +1406,7 @@ rotation='1 0 0 1.57' >
 			rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='0.545 0.27 0.074' />
+				<Material diffuseColor='0.5450980392156862 0.26666666666666666 0.07450980392156863' />
 			</Appearance>
 			<cone />
 		</Shape>
@@ -1418,7 +1418,7 @@ rotation='1 0 0 1.57' >
 		rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='1 1 0' />
+				<Material diffuseColor='1.0 1.0 0.0' />
 			</Appearance>
 			<Cylinder height='0.5' radius='2'/>
 		</Shape>
@@ -1434,7 +1434,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1450,7 +1450,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1466,7 +1466,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1482,7 +1482,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1507,7 +1507,7 @@ rotation='1 0 0 1.57' >
 			rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='0.545 0.27 0.074' />
+				<Material diffuseColor='0.5450980392156862 0.26666666666666666 0.07450980392156863' />
 			</Appearance>
 			<cone />
 		</Shape>
@@ -1519,7 +1519,7 @@ rotation='1 0 0 1.57' >
 		rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='1 1 0' />
+				<Material diffuseColor='1.0 1.0 0.0' />
 			</Appearance>
 			<Cylinder height='0.5' radius='2'/>
 		</Shape>
@@ -1535,7 +1535,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1551,7 +1551,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1567,7 +1567,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1583,7 +1583,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1608,7 +1608,7 @@ rotation='1 0 0 1.57' >
 			rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='0.545 0.27 0.074' />
+				<Material diffuseColor='0.5450980392156862 0.26666666666666666 0.07450980392156863' />
 			</Appearance>
 			<cone />
 		</Shape>
@@ -1620,7 +1620,7 @@ rotation='1 0 0 1.57' >
 		rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='1 1 0' />
+				<Material diffuseColor='1.0 1.0 0.0' />
 			</Appearance>
 			<Cylinder height='0.5' radius='2'/>
 		</Shape>
@@ -1636,7 +1636,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1652,7 +1652,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1668,7 +1668,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1684,7 +1684,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1709,7 +1709,7 @@ rotation='1 0 0 1.57' >
 			rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='0.545 0.27 0.074' />
+				<Material diffuseColor='0.5450980392156862 0.26666666666666666 0.07450980392156863' />
 			</Appearance>
 			<cone />
 		</Shape>
@@ -1721,7 +1721,7 @@ rotation='1 0 0 1.57' >
 		rotation='1 0 0 3.14'>
 			<Shape>
 			<Appearance>
-				<Material diffuseColor='1 1 0' />
+				<Material diffuseColor='1.0 1.0 0.0' />
 			</Appearance>
 			<Cylinder height='0.5' radius='2'/>
 		</Shape>
@@ -1771,7 +1771,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1787,7 +1787,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1803,7 +1803,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 -0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1819,7 +1819,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 -0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1835,7 +1835,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1851,7 +1851,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>
@@ -1867,7 +1867,7 @@ rotation='1 0 0 1.57' >
 	<transform rotation='0 1 0 0.05'>
 		<Shape>
 		<Appearance>
-			<Material diffuseColor='0 1 0' />
+			<Material diffuseColor='0.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.05 0.05 1.5'  />
 		</Shape>
@@ -1883,7 +1883,7 @@ rotation='1 0 0 1.57' >
 <transform rotation='0 0 1 0.05'>
 	<Shape>
 		<Appearance>
-			<Material diffuseColor='1 1 0' />
+			<Material diffuseColor='1.0 1.0 0.0' />
 		</Appearance>
 		<box size='0.15 0.15 0.15'  />
 	</Shape>

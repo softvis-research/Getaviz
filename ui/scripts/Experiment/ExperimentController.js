@@ -46,12 +46,12 @@ var experimentController = (function() {
 		
 		var taskFieldTextDiv = document.createElement("DIV");
 		taskFieldTextDiv.id = "taskFieldText";
-		taskFieldTextDiv.innerHTML = "Aufgabe";
+		taskFieldTextDiv.innerHTML = "Step";
 		experimentHeaderDiv.appendChild(taskFieldTextDiv);
 		
 		var taskSolvedButton = document.createElement("INPUT");
 		taskSolvedButton.id = "taskSolvedButton";
-		taskSolvedButton.value = "Aufgabe abgeschlossen!";
+		taskSolvedButton.value = "Done";
 		taskSolvedButton.type = "button";		
 		experimentHeaderDiv.appendChild(taskSolvedButton);
 		
@@ -63,7 +63,7 @@ var experimentController = (function() {
 		experimentControllerDiv.appendChild(taskDialogDiv);
 		
 		var taskDialogTitleDiv = document.createElement("DIV");
-		taskDialogTitleDiv.innerHTML = "Aufgabe";
+		taskDialogTitleDiv.innerHTML = "Step";
 		taskDialogDiv.appendChild(taskDialogTitleDiv);
 		
 		var taskDialogTextDiv = document.createElement("DIV");
@@ -92,13 +92,7 @@ var experimentController = (function() {
 		$("#taskSolvedButton").click(taskSolvedButtonClick);
 		
 		//taskdialog
-		$("#taskDialog").jqxWindow({ height: 1000, width: 700, theme: 'metro', isModal: true, autoOpen: false, resizable: false, okButton: $('#button_ok') });					
-		$('#taskDialog').on('close', function (event) {
-			if(event.args.dialogResult.None) {
-				$("#taskDialog").jqxWindow('open');
-			}
-		});
-		
+		$("#taskDialog").jqxWindow({ height: 1000, width: 700, theme: 'metro', isModal: true, autoOpen: false, resizable: false, showCloseButton: false, okButton: $('#button_ok') });
 		$("#button_ok").jqxButton({ theme: "metro", width: "50px" });		
 		$("#button_ok").click(function () {		
 			if(stepTime != 0){
@@ -117,8 +111,8 @@ var experimentController = (function() {
 	
 	function taskSolvedButtonClick(event){
 		
-		if($("#taskSolvedButton")[0].value == "Aufgabe abgeschlossen!"){
-			$("#taskSolvedButton")[0].value = "Sicher?"
+		if($("#taskSolvedButton")[0].value == "Done"){
+			$("#taskSolvedButton")[0].value = "Sure?"
 			setTimeout(resetSolvedButton, 3000);
 		} else {
 			nextStep();		
@@ -200,7 +194,7 @@ var experimentController = (function() {
 	
 	
 	function resetSolvedButton(){
-		$("#taskSolvedButton")[0].value = "Aufgabe abgeschlossen!";
+		$("#taskSolvedButton")[0].value = "Done";
 	}
 	
 	

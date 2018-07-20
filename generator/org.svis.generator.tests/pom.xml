@@ -94,7 +94,8 @@
        				<excludes> 
 <!--       				https://bitbucket.org/rimue/generator/wiki/Testprocess -->
 <!--   						<exclude>**/dynamix/**</exclude> -->
- 						<exclude>**/rd/famix/RD2DatabaseTest.java</exclude> -->
+ 						<exclude>**/rd/famix/RD2DatabaseTest.java</exclude>
+<!--   						<exclude>**/hismo/**</exclude>  -->
 <!-- 						<exclude>**/city/**</exclude> -->
 <!-- 						<exclude>**/multisphere/**</exclude> -->
        				</excludes>

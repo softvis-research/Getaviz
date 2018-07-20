@@ -3,15 +3,12 @@ package org.svis.generator.tests.city.dynamix
 import static org.junit.Assert.*
 import org.junit.Test
 import org.junit.BeforeClass
-import org.custommonkey.xmlunit.XMLUnit
 import java.io.File
 import java.io.FileNotFoundException
 import org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher
 import org.apache.commons.io.FileUtils
 import org.svis.generator.tests.helper.JSONUtil
-import org.svis.generator.city.CitySettings
-import org.svis.generator.city.CitySettings.BuildingType
-
+import org.svis.generator.SettingsConfiguration
 
 class Bank_MethodInvocationTest {
 	
@@ -19,13 +16,10 @@ class Bank_MethodInvocationTest {
 	
 	@BeforeClass
 	def static void launch() {
-		XMLUnit::ignoreWhitespace = true
-		XMLUnit::ignoreComments = true
-		CitySettings::BUILDING_TYPE = BuildingType.CITY_DYNAMIC
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankMethodInvocationTest.properties")
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/city/Dynamix2City.mwe2", "-p", "inputPath=testdata/bank/input/famixDyn",
 			"dynamixPath=testdata/bank/input/dynamix","outputPath=output/city/dynamix/bank/method_invocation"])
 		json = JSONUtil::read("./output/city/dynamix/bank/method_invocation/metaData.json")
-		CitySettings::BUILDING_TYPE = BuildingType.CITY_ORIGINAL
 	}
 
 	@Test

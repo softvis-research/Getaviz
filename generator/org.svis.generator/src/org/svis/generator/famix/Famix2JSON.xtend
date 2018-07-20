@@ -24,10 +24,14 @@ import org.svis.xtext.famix.FAMIXType
 import org.svis.xtext.famix.IntegerReference
 import org.svis.xtext.famix.FAMIXAccess
 import org.eclipse.xtext.EcoreUtil2
-import org.svis.generator.FamixUtils
 import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4
 import javax.inject.Inject
 import org.svis.xtext.famix.FAMIXFileAnchor
+import org.svis.xtext.famix.FAMIXAntipattern
+import org.svis.xtext.famix.FAMIXRole
+import org.svis.xtext.famix.FAMIXStructure
+import org.svis.xtext.famix.FAMIXComponent
+import org.svis.generator.FamixUtils
 
 class Famix2JSON implements IGenerator2 {
 
@@ -59,6 +63,12 @@ class Famix2JSON implements IGenerator2 {
 		log.info("Famix2JSON has finished.")
 	}
 	
+	def String toJSON2 (Iterable<FAMIXAntipattern> list)  '''
+		«FOR el : list BEFORE "[{" SEPARATOR "\n},{" AFTER "}]"»
+			«toMetaData(el)»
+		«ENDFOR»
+	'''
+	
 	def String toJSON (Iterable<FAMIXElement> list)  '''
 		«FOR el : list BEFORE "[{" SEPARATOR "\n},{" AFTER "}]"»
 			«toMetaData(el)»
@@ -76,6 +86,22 @@ class Famix2JSON implements IGenerator2 {
 		«ENDIF»
 	'''
 	
+	def dispatch private toMetaData(FAMIXAntipattern antipattern) '''
+		"id":				"«antipattern.id»",
+		"qualifiedName": 	"antipattern.«antipattern.type».«antipattern.name»",
+		"name":         	"antipattern.«antipattern.type».«antipattern.name»",
+		"type": 			"«antipattern.type»",
+		"belongsTo": 		""
+	'''
+	
+	def dispatch private toMetaData(FAMIXComponent component) '''
+		"id":				"«component.id»",
+		"qualifiedName": 	"«component.id»",
+		"name":         	"«component.id»",
+		"type": 			"component",
+		"belongsTo": 		""
+	'''
+	
 	def dispatch private toMetaData(FAMIXClass c)'''
 		"id":            "«c.id»",
 		"qualifiedName": "«c.fqn»",
@@ -84,7 +110,14 @@ class Famix2JSON implements IGenerator2 {
 		"modifiers":     "«c.modifiers.removeBrackets»",
 		"subClassOf":    "«c.superClasses»",
 		"superClassOf":  "«c.subClasses»",
-		"belongsTo":     "«c.container.ref.id»"
+		"belongsTo":     "«c.container.ref.id»",
+		"antipattern":	 "«toString(c.antipattern)»",
+		"roles":	 	 "«toString2(c.antipattern, c)»",
+		«IF c.scc !== null»
+		"component":	 "«((c.scc.ref) as FAMIXComponent).id»"
+		«ELSE»
+		"component":	 ""
+		«ENDIF»
 	'''
 	
 	def dispatch private toMetaData(FAMIXParameterizableClass pc)'''
@@ -96,6 +129,7 @@ class Famix2JSON implements IGenerator2 {
 		"subClassOf":    "«pc.superClasses»",
 		"superClassOf":  "«pc.subClasses»",
 		"belongsTo":     "«pc.container.ref.id»"
+«««		"antipattern":	 "«toString(pc.antipattern)»"
 	'''
 	
 	def dispatch private toMetaData(FAMIXAttribute a)'''
@@ -159,7 +193,31 @@ class Famix2JSON implements IGenerator2 {
 	def dispatch private toMetaData(FAMIXFileAnchor el) '''
 		
 	'''
+
+	def private toString (List<IntegerReference> list) { 
+    	val tmp = newArrayList 
+    	list.forEach[el| 
+      	tmp += el.ref.id 
+    	]     
+    	return tmp.removeBrackets
+	}
 	
+	def private toString2 (List<IntegerReference> list, FAMIXStructure s) { 
+    	val tmp = newArrayList 
+    		list.forEach[el|
+    			val antipattern = el.ref as FAMIXAntipattern
+    			val roles = antipattern.roles as List<IntegerReference>
+    			roles.forEach[ r |
+    				val role = r.ref as FAMIXRole
+    				if(role.element.ref == s) {
+    					tmp += role.role
+   					}
+    			]
+    			 
+ 	 		]     
+    	return tmp.removeBrackets
+   	}
+   	
 	def private getSuperClasses(FAMIXElement element) {
 		val tmp = newArrayList
 		inheritances.filter[subclass.ref === element].forEach[ tmp += superclass.ref.id ]

@@ -20,14 +20,11 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello World"
   save: "Save"
   back: "Back"
   edit: "Edit"
   show: "Show"
   cancel: "Cancel"
-  title: "Title"
-  description: "Description"
   actions: "Actions"
   destroy: "Delete"
   confirm: "Are you sure?"
@@ -35,93 +32,57 @@ en:
   proceed: "Proceed"
   save_and_proceed: "Save and proceed"
   your_answer: "Your answer"
-  reload_warning_heading: "Notice"
+  add_answer: "Add answer"
+  answer_text: "answer text"
+  answer_type: "answer type"
+  add_possibilities: "Add answer possiblility"
+  remove_answer: "Remove answer"
+  correct_answer_string: "Correct answer text"
+  correct_answer_value_max: "Correct answer number maximum"
+  correct_answer_value_min: "Correct answer number minimum"
+  default: "Default"
+  import: "Import"
+  is_correct_choice: "Correct Choice"
+  max: "Maximum"
+  min: "Minimum"
+  placeholder: "Placeholder"
+  remove_possibilities: "Delete Possibility"
+  step: "Step"
+  timeout: "Timeout"
+  max_mistakes: "Maximum number of mistakes"
   reload_warning_text: "The pages of the experiment cannot be loaded twice. Please refrain from reloading the page."
-  activerecord:
-    models:
-      test: Test
-      experiment_test: Experiment test
-      participant: participant
-      question: Question
-      scene: Scene
-      scene_test: Scenen test
-      test: Test
-      text: Text
-      experiment: Experiment
-      assigner: Assigner
-  experiment_test:
-    successful_updated: "Experiment test successfully created"
-    successful_created: "Experiment test successfully actualized"
   participants:
     successful_updated: "Participant successfully created"
     successful_created: "Participant successfully actualized"
     participant: "Participant"
     edit: "Edit participant"
     new: "Create participant"
-    name: "Name"
-    description: "Description"
-    id: "ID"
-    created_at: "Created at"
   questions:
     successful_created: "Question successfully created"
     successful_updated: "Question successfully actualized"
     questions: "Questions"
     question: "Question"
-    edit: "Edit question"
-    new: "Created question"
-    name: "Name"
-    description: "Description"
     id: "ID"
     created_at: "Created at"
     question_text: "Question text"
     question_type: "Question type"
-    option: "Option"
-    from: "from"
-    to: "to"
-    granularity: "Granularity"
   scenes:
     successful_created: "Scene successfully created"
     successful_updated: "Scene successfully actualized"
     scenes: "Scenen"
     scene: "Scene"
-    edit: "Edit Scene"
     new: "New Scene"
-    use_url: "Use URL"
     url: "URL"
     goto_url: "Goto Scene-URL"
-    scene_file: "Scene file"
-    scenefile_file_name: "Scene file"
-    scene_file_file_name: "Scene file name"
-    scene_file_file_size: "File size"
-    scene_file_content_type: "Content type"
     name: "Name"
     description: "Description"
     id: "ID"
-    created_at: "Created at"
-    scene_file_updated_at: "Updated at"
     dummy_text: "Dummy Text"
-    detailed_scene: "Detailed Scene"
-    scene_start: "Scene start ->"
-    scene_end: "<- Scene ende"
     remarks: "Remarks"
     mapping: "Mapping"
   scene_tests:
-    successful_created: "Scene test successfully created"
-    successful_updated: "Scenen test successfully actualized"
-    scene_test: "Scene test"
-    scene_tests: "Scene tests"
-    assigner: "Assigner"
-    scenes: "Scenes"
-    tests: "Tests"
-    test: "Test"
     edit: "Edit Scene test"
     new: "New Scene test"
-    title: "Name"
-    name: "Name"
-    description: "Description"
-    id: "ID"
-    created_at: "Created at"
-    scene_file_updated_at: "Changed at"
     dummy_text: "Dummy text"
   tests:
     name: "Name"
@@ -130,15 +91,12 @@ en:
     id: "ID"
     created_at: "Created at"
     new: "New test"
-    test: "Test"
-    questions: "Question"
-    metadata: "Metadata"
     edit: "Edit test"
-    selected_questions: "Selected questions"
-    not_selected_questions: "Not selected questions"
-    successful_created: "Test successfully created"
-    successful_updated: "Test successfully actualized"
   steps:
+    id: "ID"
+    steps: "Steps"
+    title: "Title"
+    use_parent_scene: "Use parent scene"
     type: "Type"
     step: "Name"
     description: "Description"
@@ -146,13 +104,10 @@ en:
     textual_elements: "Textual Elements"
     sub_steps: "Substeps"
     created_at: "created at"
-    new: "New text"
-    text: "Text"
-    successful_created: "Text successfully created"
-    successful_updated: "Text successfully actualized"
+    successful_created: "Step successfully created"
+    successful_updated: "Step successfully actualized"
   texts:
     title: "Name"
-    name: "Name"
     html: "HTML"
     edit: "Edit text"
     texts: "texts"
@@ -179,33 +134,246 @@ en:
     description: "Description"
     created_at: "Created at"
     conduct: "Conduct"
-    results: "Results"
     new: "New experiment"
-    participant_viewed: "Participant viewed the followin scenes: "
-    experiment_id: "ID"
-    scene: "Scene"
-    no_scenes: "No scenes"
-    question: "Question"
-    answer: "Answer"
-    time_needed: "Time needed"
     metadata: "Metadata"
     steps: "Steps"
+    results: "Results"
   assigners:
     assigner: "Assigner"
     name: "Name"
     description: "Description"
     id: "ID"
     created_at: "Created at"
+  questionaires:
+    description: "Description"
+    metadata: "Metadata"
+    name: "Name"
+    not_selected_questions: "Not selected questions"
+    questionaire: "Questionaire"
+    questions: "Questions"
+    selected_questions: "Selected Questions"
+    successful_created: "Questionaire successful created"
+    successful_updated: "Questionaire successful updated"
   layout:
     experiments: "Experiments"
     scenes: "Scenes"
-    tests: "Tests"
-    scene_tests: "Scene tests"
     other: "Other"
+    steps: "Steps"
     questions: "Questions"
+    questionaires: "Questionaires"
     static_texts: "Static texts"
     admin_off: "Admin-Mode off"
     title: "EvalServer"
     sidebar: "Sidebar"
-    title_long: "Evaluation server"
     admin_on: "Admin-Mode on"
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "Validation failed: %{errors}"
+        restrict_dependent_destroy:
+          has_one: "Cannot delete record because a dependent %{record} exists"
+          has_many: "Cannot delete record because dependent %{record} exist"
+  date:
+    abbr_day_names:
+    - Sun
+    - Mon
+    - Tue
+    - Wed
+    - Thu
+    - Fri
+    - Sat
+    abbr_month_names:
+    -
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec
+    day_names:
+    - Sunday
+    - Monday
+    - Tuesday
+    - Wednesday
+    - Thursday
+    - Friday
+    - Saturday
+    formats:
+      default: "%Y-%m-%d"
+      long: "%B %d, %Y"
+      short: "%b %d"
+    month_names:
+    -
+    - January
+    - February
+    - March
+    - April
+    - May
+    - June
+    - July
+    - August
+    - September
+    - October
+    - November
+    - December
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: about 1 hour
+        other: about %{count} hours
+      about_x_months:
+        one: about 1 month
+        other: about %{count} months
+      about_x_years:
+        one: about 1 year
+        other: about %{count} years
+      almost_x_years:
+        one: almost 1 year
+        other: almost %{count} years
+      half_a_minute: half a minute
+      less_than_x_minutes:
+        one: less than a minute
+        other: less than %{count} minutes
+      less_than_x_seconds:
+        one: less than 1 second
+        other: less than %{count} seconds
+      over_x_years:
+        one: over 1 year
+        other: over %{count} years
+      x_days:
+        one: 1 day
+        other: "%{count} days"
+      x_minutes:
+        one: 1 minute
+        other: "%{count} minutes"
+      x_months:
+        one: 1 month
+        other: "%{count} months"
+      x_years:
+        one: 1 year
+        other: "%{count} years"
+      x_seconds:
+        one: 1 second
+        other: "%{count} seconds"
+    prompts:
+      day: Day
+      hour: Hour
+      minute: Minute
+      month: Month
+      second: Seconds
+      year: Year
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: must be accepted
+      blank: can't be blank
+      present: must be blank
+      confirmation: doesn't match %{attribute}
+      empty: can't be empty
+      equal_to: must be equal to %{count}
+      even: must be even
+      exclusion: is reserved
+      greater_than: must be greater than %{count}
+      greater_than_or_equal_to: must be greater than or equal to %{count}
+      inclusion: is not included in the list
+      invalid: is invalid
+      less_than: must be less than %{count}
+      less_than_or_equal_to: must be less than or equal to %{count}
+      model_invalid: "Validation failed: %{errors}"
+      not_a_number: is not a number
+      not_an_integer: must be an integer
+      odd: must be odd
+      required: must exist
+      taken: has already been taken
+      too_long:
+        one: is too long (maximum is 1 character)
+        other: is too long (maximum is %{count} characters)
+      too_short:
+        one: is too short (minimum is 1 character)
+        other: is too short (minimum is %{count} characters)
+      wrong_length:
+        one: is the wrong length (should be 1 character)
+        other: is the wrong length (should be %{count} characters)
+      other_than: must be other than %{count}
+    template:
+      body: 'There were problems with the following fields:'
+      header:
+        one: 1 error prohibited this %{model} from being saved
+        other: "%{count} errors prohibited this %{model} from being saved"
+  helpers:
+    select:
+      prompt: Please select
+    submit:
+      create: Create %{model}
+      submit: Save %{model}
+      update: Update %{model}
+  number:
+    currency:
+      format:
+        delimiter: ","
+        format: "%u%n"
+        precision: 2
+        separator: "."
+        significant: false
+        strip_insignificant_zeros: false
+        unit: "$"
+    format:
+      delimiter: ","
+      precision: 3
+      separator: "."
+      significant: false
+      strip_insignificant_zeros: false
+    human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Billion
+          million: Million
+          quadrillion: Quadrillion
+          thousand: Thousand
+          trillion: Trillion
+          unit: ''
+      format:
+        delimiter: ''
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Byte
+            other: Bytes
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+    percentage:
+      format:
+        delimiter: ''
+        format: "%n%"
+    precision:
+      format:
+        delimiter: ''
+  support:
+    array:
+      last_word_connector: ", and "
+      two_words_connector: " and "
+      words_connector: ", "
+  time:
+    am: am
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%B %d, %Y %H:%M"
+      short: "%d %b %H:%M"
+    pm: pm

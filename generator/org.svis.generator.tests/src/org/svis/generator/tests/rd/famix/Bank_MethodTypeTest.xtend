@@ -16,9 +16,7 @@ import static com.jayway.jsonpath.matchers.JsonPathMatchers.hasJsonPath
 import static org.hamcrest.Matchers.*
 import static org.junit.Assert.assertThat
 import org.svis.generator.tests.helper.JSONUtil
-import org.svis.generator.rd.RDSettings
-import org.junit.AfterClass
-import org.svis.generator.famix.FAMIXSettings
+import org.svis.generator.SettingsConfiguration
 
 class Bank_MethodTypeTest {
 	
@@ -30,8 +28,7 @@ class Bank_MethodTypeTest {
 	
 	@BeforeClass
 	def static void launch() {
-		RDSettings::METHOD_TYPE_MODE = true
-		FAMIXSettings::HIDE_PRIVATE_ELEMENTS = true
+		SettingsConfiguration.getInstance("../org.svis.generator.tests/testdata/bank/input/BankMethodTypeTest.properties")
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD.mwe2", "-p", "inputPath=testdata/bank/input/famix", "outputPath=" + path])
@@ -235,10 +232,4 @@ class Bank_MethodTypeTest {
     	
 		assertEquals(FileUtils.checksumCRC32(file1), FileUtils.checksumCRC32(file2))
 	}
-    
-    @AfterClass
-    def static void end(){
-    	RDSettings::METHOD_TYPE_MODE = false
-    	FAMIXSettings::HIDE_PRIVATE_ELEMENTS = false
-    }
 }

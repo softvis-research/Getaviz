@@ -11,7 +11,7 @@ class Step < ApplicationRecord
   has_many :scenes, :through => :step_scenes
   
   acts_as_list :scope => :parent_step
-  belongs_to :parent_step, :class_name => 'GroupedStep'
+  belongs_to :parent_step, :class_name => 'GroupedStep', :optional => true
   has_many :sub_steps, :foreign_key => :parent_step_id, :class_name => 'Step'
   
 

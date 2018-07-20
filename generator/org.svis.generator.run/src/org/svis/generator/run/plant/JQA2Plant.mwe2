@@ -1,0 +1,139 @@
+module org.svis.generator.run.plant
+
+var projectName = "org.svis.generator.run"
+var outputPath = "./output/plant/famix"
+//var runtimeProject = "../${projectName}"
+var texturSourcePath = "org.svis.generator/src/org/svis/generator/plant/m2t/textures"
+var texturDestinyPath = "org.svis.generator.run/output/plant/famix/pics"
+
+Workflow {
+
+	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
+//    	platformUri = "${runtimeProject}/.."
+		platformUri = "../org.svis.generator.run/.."
+    	registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
+	}
+
+	// support lazy loading of textual models
+	component = org.svis.generator.ResolveLazyComponent {}
+	
+	// delete unnecessary objects
+	component = org.svis.generator.famix.JQA2Famix {
+		modelSlot = "famix"
+//		config = configPath
+	}
+	
+	// transform famix into disks (s2m)
+	component = org.svis.generator.plant.s2m.Famix2Plant {
+		modelSlot = "famix"
+	}
+	
+	// write metaData
+	component = org.eclipse.xtext.generator.GeneratorComponent {
+		register = org.svis.generator.famix.Famix2JSONStandaloneSetup {}
+		slot = 'metadata'
+		outlet = {
+			path = "${outputPath}"
+		}
+	}
+
+	// write out resulting model 
+	component = org.eclipse.emf.mwe.utils.Writer {
+		modelSlot = "plantwriter"
+		uri = "${outputPath}/plant.xml"	
+	}
+
+	// calculate  layout (m2m)
+	component = org.svis.generator.plant.m2m.Plant2Plant {
+		modelSlot = "plant"
+	}
+	
+	component = org.eclipse.emf.mwe.utils.Writer {
+		modelSlot = "plantextendedwriter"
+		uri = "${outputPath}/plantextended.xml"
+		cloneSlotContents = true
+	}
+
+	// model2X3D (m2t)
+	component = org.eclipse.xtext.generator.GeneratorComponent {
+		register = org.svis.generator.plant.m2t.Plant2X3DStandaloneSetup {}
+		slot = 'plantextended'
+		outlet = {
+			path = "${outputPath}"
+		}			
+	}
+	// copy textures: -----------------------------------------------------------
+	// ToDo: copy just used textures.
+	// ToDo: read all files automatically 
+	// copy textures in output path:
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/bloom.png"
+		destiny = "${texturDestinyPath}/bloom.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/grassTexture.png"
+		destiny = "${texturDestinyPath}/grassTexture.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/lilacPetal.png"
+		destiny = "${texturDestinyPath}/lilacPetal.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/plant.png"
+		destiny = "${texturDestinyPath}/plant.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/pollball.png"
+		destiny = "${texturDestinyPath}/pollball.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/ground.png"
+		destiny = "${texturDestinyPath}/ground.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/freeGrass.png"
+		destiny = "${texturDestinyPath}/freeGrass.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/freeGrass.png"
+		destiny = "${texturDestinyPath}/freeGrass.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/whitePetal.png"
+		destiny = "${texturDestinyPath}/whitePetal.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/redPetal.png"
+		destiny = "${texturDestinyPath}/redPetal.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/bluePetal.png"
+		destiny = "${texturDestinyPath}/bluePetal.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/plantHeadBrown.png"
+		destiny = "${texturDestinyPath}/plantHeadBrown.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/junctionGreen.png"
+		destiny = "${texturDestinyPath}/junctionGreen.png"
+	}
+	component = org.svis.generator.plant.m2t.FileManager{
+		trash = projectName
+		source = "${texturSourcePath}/junctionHeadTopPart.png"
+		destiny = "${texturDestinyPath}/junctionHeadTopPart.png"
+	}
+}

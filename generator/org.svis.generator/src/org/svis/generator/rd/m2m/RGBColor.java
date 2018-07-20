@@ -1,5 +1,7 @@
 package org.svis.generator.rd.m2m;
 
+//import java.awt.Color;
+
 public class RGBColor {
 	private final double lowerBound =0;
 	private final double upperBound =255;
@@ -17,6 +19,7 @@ public class RGBColor {
 		this.g = checkRanges(g);
 		this.b = checkRanges(b);
 	}
+	
 	private double r;
 	private double g;
 	private double b;

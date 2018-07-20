@@ -4,44 +4,44 @@ import java.util.List
 import org.apache.commons.logging.LogFactory
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.EcoreUtil2
-import org.svis.generator.city.CitySettings
-import org.svis.generator.city.CitySettings.Panels
 import org.svis.xtext.city.Building
 import org.svis.xtext.city.BuildingSegment
 import org.svis.xtext.city.Entity
 import org.svis.xtext.city.PanelSeparatorBox
 import org.svis.xtext.city.PanelSeparatorCylinder
-import org.svis.generator.city.CitySettings.BuildingType
 import org.svis.xtext.city.District
+import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.BuildingType
 
 class City2AFrame {
-	
-	val log = LogFactory::getLog(getClass)
 
-	def	toAFrameBody(Resource resource) {
+	val log = LogFactory::getLog(getClass)
+	val config = SettingsConfiguration.instance
+
+	def toAFrameBody(Resource resource) {
 		log.info("City2AFrame has started")
 		val entities = EcoreUtil2::getAllContentsOfType(resource.contents.head, Entity)
 		val Body = entities.toAFrameModel()
 		log.info("City2AFrame has finished")
 		return Body
 	}
-	
-		// transform logic
+
+	// transform logic
 	def String toAFrameModel(List<Entity> entities) '''
 		«FOR entity : entities»
 			«IF entity.type == "FAMIX.Namespace"»
 				«toDistrict(entity)»
 			«ENDIF»
 			«IF entity.type == "FAMIX.Class" || entity.type == "FAMIX.ParameterizableClass"»
-				«IF CitySettings::BUILDING_TYPE == BuildingType.CITY_ORIGINAL || CitySettings::SHOW_BUILDING_BASE»
+				«IF config.buildingType == BuildingType.CITY_ORIGINAL || config.showBuildingBase»
 					«toBuilding(entity)»
 				«ENDIF»
-				«IF CitySettings::BUILDING_TYPE === BuildingType.CITY_DYNAMIC»
+				«IF config.buildingType === BuildingType.CITY_DYNAMIC»
 					«FOR bs: (entity as District).entities»
 						«toBuilding(bs)»
 					«ENDFOR»
 				«ENDIF»
-				«IF(CitySettings::BUILDING_TYPE == BuildingType::CITY_FLOOR)»
+				«IF(config.buildingType == BuildingType::CITY_FLOOR)»
 					«FOR floor: (entity as Building).methods»
 						«toFloor(floor)»
 					«ENDFOR»	
@@ -49,7 +49,7 @@ class City2AFrame {
 						«toChimney(chimney)»
 					«ENDFOR»
 				«ENDIF»	
-				«IF(CitySettings::BUILDING_TYPE == BuildingType::CITY_BRICKS || CitySettings::BUILDING_TYPE == BuildingType::CITY_PANELS)»
+				«IF(config.buildingType == BuildingType::CITY_BRICKS || config.buildingType == BuildingType::CITY_PANELS)»
 					«FOR bs: (entity as Building).methods»
 						«toBuildingSegment(bs)»
 					«ENDFOR»
@@ -60,7 +60,7 @@ class City2AFrame {
 			«ENDIF»
 		«ENDFOR»
 	'''
-	
+
 	def String toDistrict(Entity district) '''
 		<a-box position="«district.position.x + " " + district.position.y + " " + district.position.z»"
 			width="«district.width»"
@@ -72,7 +72,7 @@ class City2AFrame {
 			flat-shading="true">
 		</a-box>
 	'''
-	
+
 	def String toBuilding(Entity building) '''
 		<a-box position="«building.position.x + " " + building.position.y + " " + building.position.z»"
 				width="«building.width»"
@@ -86,9 +86,9 @@ class City2AFrame {
 	'''
 
 	def String toBuildingSegment(BuildingSegment bs) '''
-			«IF CitySettings::BUILDING_TYPE == BuildingType.CITY_PANELS
+			«IF config.buildingType == BuildingType.CITY_PANELS
 					&& bs.type == "FAMIX.Attribute"
-					&& CitySettings::SHOW_ATTRIBUTES_AS_CYLINDERS»
+					&& config.showAttributesAsCylinders»
 				<a-cylinder position="«bs.position.x + " " + bs.position.y + " " + bs.position.z»"
 					 radius="«bs.width/2»"
 					 height="«bs.height»" 
@@ -115,8 +115,8 @@ class City2AFrame {
 				«val separatorC = separator»
 				<a-cylinder position="«separator.position.x + " " + separator.position.y + " " + separator.position.z»"
 					 radius="«separatorC.radius»" 
-					 height="«Panels::SEPARATOR_HEIGHT»" 
-					 color="«CitySettings::COLOR_BLACK_HEX»"
+					 height="«config.panelSeparatorHeight»" 
+					 color="«config.getCityColorHex("black")»"
 					 shader="flat"
 					 fog="false"
 					 flat-shading="true"
@@ -127,9 +127,9 @@ class City2AFrame {
 				«val separatorB = separator as PanelSeparatorBox»
 				<a-box position="«separator.position.x + " " + separator.position.y + " " + separator.position.z»"
 						width="«separatorB.width»"
-						height="«Panels::SEPARATOR_HEIGHT»"
+						height="«config.panelSeparatorHeight»"
 						depth="«separatorB.length»"
-						color="«CitySettings::COLOR_BLACK_HEX»"
+						color="«config.getCityColorHex("black")»"
 						shader="flat"
 						fog="false"
 						flat-shading="true">
@@ -137,27 +137,28 @@ class City2AFrame {
 			«ENDIF»
 		«ENDFOR»
 	'''
-		def toFloor(BuildingSegment floor) '''
-				<a-box position="«floor.position.x + " " + floor.position.y + " " + floor.position.z»"
-					width="«floor.width»"
-					height="«floor.height»"
-					depth="«floor.length»"
-					color="«floor.color»"
-					shader="flat"
-					fog="false"
-					flat-shading="true">
-				</a-box>
+
+	def toFloor(BuildingSegment floor) '''
+			<a-box position="«floor.position.x + " " + floor.position.y + " " + floor.position.z»"
+				width="«floor.width»"
+				height="«floor.height»"
+				depth="«floor.length»"
+				color="«floor.color»"
+				shader="flat"
+				fog="false"
+				flat-shading="true">
+			</a-box>
 	'''
-	
+
 	def toChimney(BuildingSegment chimney) '''
-				<a-box position="«chimney.position.x + " " + chimney.position.y + " " + chimney.position.z»"
-					width="«chimney.width»"
-					height="«chimney.height»"
-					depth="«chimney.length»"
-					color="«chimney.color»"
-					shader="flat"
-					fog="false"
-					flat-shading="true">
-				</a-box>
+			<a-box position="«chimney.position.x + " " + chimney.position.y + " " + chimney.position.z»"
+				width="«chimney.width»"
+				height="«chimney.height»"
+				depth="«chimney.length»"
+				color="«chimney.color»"
+				shader="flat"
+				fog="false"
+				flat-shading="true">
+			</a-box>
 	'''
 }

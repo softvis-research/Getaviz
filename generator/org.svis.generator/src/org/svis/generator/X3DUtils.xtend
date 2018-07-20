@@ -2,12 +2,13 @@ package org.svis.generator
 
 import java.text.SimpleDateFormat
 import java.util.Date
-import org.svis.generator.rd.RDSettings
-import org.svis.generator.rd.RDSettings.Variant
-import org.svis.generator.city.CitySettings
-import org.svis.generator.city.CitySettings.BuildingType
+import org.svis.generator.SettingsConfiguration.Variant
+import org.svis.generator.SettingsConfiguration.BuildingType
+import org.eclipse.xtext.generator.IFileSystemAccess2
+import java.io.File
 
 class X3DUtils {
+	val config = SettingsConfiguration.instance
 
 	def String toX3DHead() '''
 		<?xml version="1.0" encoding="UTF-8"?>
@@ -38,9 +39,9 @@ class X3DUtils {
 		<title>X3DOM-SVIS</title> 			
 		<script type='text/javascript' src='http://x3dom.org/release/x3dom-full.js'> </script> 
 		<link rel='stylesheet' type='text/css' href='http://www.x3dom.org/download/x3dom.css'></link> 
-		«IF(RDSettings::VARIANT == Variant::DYNAMIC || CitySettings::BUILDING_TYPE == BuildingType::CITY_DYNAMIC)»
-		<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-		<script type='text/javascript' src='./anifra-minified.js'> </script>
+		«IF (config.variant == Variant::DYNAMIC || config.buildingType == BuildingType::CITY_DYNAMIC)»
+			<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+			<script type='text/javascript' src='./anifra-minified.js'> </script>
 		«ENDIF»
 		<style>
 		#x3droot {
@@ -68,32 +69,32 @@ class X3DUtils {
 		</body> 
 		</html>    
 	'''
-	
+
 	def toAFrameHead() '''
-	<!DOCTYPE html>
-	<html>
-	  <head>
-	    <meta charset="utf-8">
-	    <title>Ring</title>
-	    <meta name="description" content="Ring - A-Frame">
-	    <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
-	  </head>
-	  <body>
-	    <a-scene altspace scale="0.001 0.001 0.001" light="defaultLightsEnabled: false" stats>
-	    <a-entity position="0 0 200">
-	      <a-camera></a-camera>
-	    </a-entity>
+		<!DOCTYPE html>
+		<html>
+		  <head>
+		    <meta charset="utf-8">
+		    <title>Ring</title>
+		    <meta name="description" content="Ring - A-Frame">
+		    <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+		  </head>
+		  <body>
+		    <a-scene altspace scale="0.001 0.001 0.001" light="defaultLightsEnabled: false" stats>
+		    <a-entity position="0 0 200">
+		      <a-camera></a-camera>
+		    </a-entity>
 	'''
-	
+
 	def toAFrameTail() '''
-		</a-scene>
-	  </body>
-	</html>
+			</a-scene>
+		  </body>
+		</html>
 	'''
 
 	def toAnimationFramework() '''
-		«IF(RDSettings::VARIANT == Variant::DYNAMIC || CitySettings::BUILDING_TYPE == BuildingType::CITY_DYNAMIC)»
-		«toAnimationFramework("events.js")»
+		«IF (config.variant == Variant::DYNAMIC || config.buildingType == BuildingType::CITY_DYNAMIC)»
+			«toAnimationFramework("events.js")»
 		«ENDIF»
 	'''
 
@@ -106,4 +107,46 @@ class X3DUtils {
 			  <LabelEventHandler></LabelEventHandler>
 			</AnimationFramework>
 	'''
+	
+	def toD3Head()'''
+	import React, { Component } from 'react';
+	import './App.css';
+	import { InteractiveForceGraph, ForceGraphNode, ForceGraphLink, ForceGraphArrowLink } from 'react-vis-force';
+	
+	class App extends Component {
+	  render() {
+	    return (
+	      <div className="App">
+	
+	        <p className="App-intro">
+	          Prototype 1:  <a href="https://github.com/uber/react-vis-force">react-vis-force</a>
+	        </p>
+			<div>
+			<InteractiveForceGraph
+				simulationOptions={{ height: 600, width: 800 }}
+				labelAttr="label"
+				onSelectNode={(node) => console.log(node)}
+				highlightDependencies="true"
+				zoom="true"
+			>
+	'''
+	
+	def toD3Tail() '''
+			</InteractiveForceGraph>
+			</div>
+	      </div>
+	
+	    );
+	  }
+	}
+	
+	export default App;
+	'''
+	
+	def convertToMultipart(IFileSystemAccess2 fsa) {
+		val processBuilder = new ProcessBuilder("./aopt-idmap-sapd.bat")
+ 		val directory = new File(fsa.getURI("aopt-idmap-sapd.bat").path.replace("%20", " ")).parentFile
+ 		processBuilder.directory (directory)
+		processBuilder.start
+	}
 }

@@ -23,7 +23,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_bdd240c8fe7174e6ac1cfdd5282de76eb7ad6815"
+"belongsTo":     "ID_bdd240c8fe7174e6ac1cfdd5282de76eb7ad6815",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_26f25e4da4c82dc2370f3bde0201e612dd88c04c",
 "qualifiedName": "bank.customer.BusinessCustomer",
@@ -32,7 +35,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_4481fcdc97864a546f67c76536e0308a3058f75d"
+"belongsTo":     "ID_4481fcdc97864a546f67c76536e0308a3058f75d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_9fa088272bab165867bfaddcfbf58d6a7d5d45a2",
 "qualifiedName": "bank.customer.PrivateCustomer",
@@ -41,7 +47,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_4481fcdc97864a546f67c76536e0308a3058f75d"
+"belongsTo":     "ID_4481fcdc97864a546f67c76536e0308a3058f75d",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_ecbec7f0190fc1c903a87797d35427dc7a1f240b",
 "qualifiedName": "bank.products.AbstractProduct",
@@ -50,7 +59,10 @@
 "modifiers":     "public, abstract",
 "subClassOf":    "",
 "superClassOf":  "ID_9e346826c780b8b1975dc8906296cc47974ccd4e, ID_e14c10820a526fde0ea0beee073b947e1ca67a4a, ID_fba940eea4ca7f9002bc529bbb0cbc8fc0423985",
-"belongsTo":     "ID_052028080c3d64381f56397d59113102bf4e5921"
+"belongsTo":     "ID_052028080c3d64381f56397d59113102bf4e5921",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_e14c10820a526fde0ea0beee073b947e1ca67a4a",
 "qualifiedName": "bank.products.Account",
@@ -59,7 +71,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_ecbec7f0190fc1c903a87797d35427dc7a1f240b",
 "superClassOf":  "",
-"belongsTo":     "ID_052028080c3d64381f56397d59113102bf4e5921"
+"belongsTo":     "ID_052028080c3d64381f56397d59113102bf4e5921",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_9e346826c780b8b1975dc8906296cc47974ccd4e",
 "qualifiedName": "bank.products.BankBook",
@@ -68,7 +83,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_ecbec7f0190fc1c903a87797d35427dc7a1f240b",
 "superClassOf":  "",
-"belongsTo":     "ID_052028080c3d64381f56397d59113102bf4e5921"
+"belongsTo":     "ID_052028080c3d64381f56397d59113102bf4e5921",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_fba940eea4ca7f9002bc529bbb0cbc8fc0423985",
 "qualifiedName": "bank.products.Credit",
@@ -77,7 +95,10 @@
 "modifiers":     "public",
 "subClassOf":    "ID_ecbec7f0190fc1c903a87797d35427dc7a1f240b",
 "superClassOf":  "",
-"belongsTo":     "ID_052028080c3d64381f56397d59113102bf4e5921"
+"belongsTo":     "ID_052028080c3d64381f56397d59113102bf4e5921",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_841936e6f873f49a85e18a4a94df5d7dfe591edf",
 "qualifiedName": "bank.products.Transaction",
@@ -86,7 +107,10 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
-"belongsTo":     "ID_052028080c3d64381f56397d59113102bf4e5921"
+"belongsTo":     "ID_052028080c3d64381f56397d59113102bf4e5921",
+"antipattern":	 "",
+"roles":	 	 "",
+"component":	 ""
 },{
 "id":            "ID_78cd3ffe06ad51757c7facd4bbfdd3130313e03b",
 "qualifiedName": "bank.products.AbstractProduct.transaction(bank.products.Transaction)",

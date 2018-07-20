@@ -11,13 +11,11 @@ import org.apache.commons.io.FileUtils
 
 class RD2DatabaseTest {
 	
-	
 	@BeforeClass
 	def static void launch() {
 		XMLUnit::ignoreWhitespace = true
 		XMLUnit::ignoreComments = true
 		new Mwe2Launcher().run(#["../org.svis.generator.run/src/org/svis/generator/run/rd/Famix2RD2DB.mwe2", "-p","configPath=testdata/bank/input/famix/config.json", "path=testdata/bank/input/famix"])
-		//val rd = XMLUnit::buildControlDocument(Files::toString(new File(path + "rd.xml"), Charset.forName("UTF-8")))
 	}	
 	
 	

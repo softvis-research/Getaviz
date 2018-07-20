@@ -57,12 +57,25 @@ group :development do
   gem 'listen'
 end
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_bot'
+  gem 'factory_bot_rails'
+  gem 'faker'
+  gem 'database_cleaner'
+  gem "i18n-tasks"
+  gem 'capybara'
+  gem 'simplecov', require: false
+  gem 'brakeman', require: false
+  gem 'capybara-screenshot', :group => :test
+end
+
 gem "font-awesome-rails"
 gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem 'bootstrap-sass', '~> 3.2.0'
 gem "paperclip", "~> 4.1"
-gem "nokogiri"
+gem "nokogiri", '1.8.1'
 gem "rubyzip"
 gem "actionmailer"
 #gem "jquery-sortable-rails"

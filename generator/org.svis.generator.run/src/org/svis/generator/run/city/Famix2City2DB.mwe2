@@ -1,7 +1,6 @@
 module org.svis.generator.run.city
 
 var inputPath = "./input/famix"
-var configPath = "config.json"
 
 Workflow {
 
@@ -11,7 +10,7 @@ Workflow {
 	}
 
 	//input for reader
-	component = org.svis.generator.ReaderWithConfig {
+	component = org.eclipse.xtext.mwe.Reader {
 		path = "${inputPath}"
 		register = org.svis.xtext.FamixStandaloneSetup {}
 		loadResource = {
@@ -34,7 +33,6 @@ Workflow {
 	
 	component = org.svis.generator.famix.Famix2DB {
 		modelSlot = 'metadata'
-		config = configPath
 	}
 
 	//transformation 2: from City to City

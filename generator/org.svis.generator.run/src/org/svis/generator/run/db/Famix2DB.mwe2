@@ -1,7 +1,6 @@
 module org.svis.generator.run.db
 
 var path = "./input/famix"
-var configPath = "config.json"
 
 Workflow {
 
@@ -10,7 +9,7 @@ Workflow {
     	registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
 	}
 	
-	component = org.svis.generator.ReaderWithConfig {
+	component = org.eclipse.xtext.mwe.Reader {
 		path = "${path}"
 		register = org.svis.xtext.FamixStandaloneSetupGenerated {}
 		loadResource = {
@@ -24,13 +23,11 @@ Workflow {
 	// delete unnecessary objects
 	component = org.svis.generator.famix.Famix2Famix {
 		modelSlot = "famix"
-		config = configPath
 	}
 		
 	// transform famix into disks (s2m)
 	component = org.svis.generator.rd.s2m.Famix2RD {
 		modelSlot = "famix"
-		config = configPath
 	}
 	
 	//transformation 1: from FAMIX to CITY
@@ -40,7 +37,6 @@ Workflow {
 	
 	component = org.svis.generator.famix.Famix2DB {
 		modelSlot = "famix"
-		config = configPath
 	}
 
 	// calculate rd layout (m2m)
@@ -50,7 +46,6 @@ Workflow {
 
 	component = org.svis.generator.rd.m2t.RD2DB {
 		modelSlot = 'rdextended'
-		config = configPath
 	}
 	
 	//transformation 2: from City to City
@@ -60,6 +55,5 @@ Workflow {
 	
 	component = org.svis.generator.city.m2t.City2DB {
 		modelSlot = 'CITYv2'
-		config = configPath
 	}
 }

@@ -1,0 +1,54 @@
+module org.svis.generator.run.Famix2Hismo
+
+var projectName = "org.svis.generator.run"
+var runtimeProject = "../${projectName}"
+
+
+/**
+ * This workflow is only for testing purposes
+ * 
+ * The generated famix model by VerveineJ-1.0 is not deterministic. The IDs change with every run.
+ * Therefore the verveinej step (Commit2Famix) is skipped in this workflow. If you want to write a testcase for the hismo model,
+ * you have to provide the famix files in the testdata folder. The entry famixPath in the json config have to point to this directory
+ */
+
+Workflow {
+	bean = org.eclipse.emf.mwe.utils.StandaloneSetup {
+		platformUri = "${runtimeProject}/.."
+		registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
+		registerGeneratedEPackage = "org.svis.xtext.hismo.HismoPackage"
+	}
+	
+	// Reads multiple famix models
+	component =  org.eclipse.xtext.mwe.Reader {
+		register = org.svis.xtext.FamixStandaloneSetup {}
+		loadResource = {
+			slot = "famix"
+		}
+	}
+	
+	component = org.svis.generator.famix.Famix2Famix {
+		//config = configPath
+		modelSlot = "famix"
+	}
+	
+	// Transforms multiple famix models into hismo
+	component = org.svis.generator.hismo.s2m.Famix2Hismo {
+		modelSlot = "famix"
+	}
+	
+	//write .hismo File
+	component = org.eclipse.xtext.generator.GeneratorComponent {
+		register = org.svis.generator.hismo.m2t.GenerateHismoStandaloneSetup {}
+		slot = 'hismoextended'
+		outlet = {
+			path = "./output"
+		}
+	}
+
+	// Writes out resulting hismo model
+//	component = org.svis.extractor.hismo.UTF8Writer {
+	//	config = configPath
+	//	modelSlot = "hismowriter"
+	//}
+}

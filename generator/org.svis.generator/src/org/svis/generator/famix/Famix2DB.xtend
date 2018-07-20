@@ -8,7 +8,6 @@ import org.svis.xtext.famix.FAMIXMethod
 import org.svis.xtext.famix.FAMIXAttribute
 import org.svis.xtext.famix.FAMIXEnumValue
 import org.neo4j.graphdb.ConstraintViolationException
-import org.svis.generator.WorkflowComponentWithConfig
 import org.eclipse.emf.mwe.core.WorkflowContext
 import org.eclipse.emf.mwe.core.monitor.ProgressMonitor
 import org.eclipse.emf.mwe.core.issues.Issues
@@ -20,8 +19,13 @@ import org.svis.lib.database.Database
 import org.neo4j.graphdb.GraphDatabaseService
 import java.util.Map
 import org.svis.lib.database.DBConnector
+import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
+import org.svis.generator.SettingsConfiguration
+import org.apache.commons.logging.LogFactory
 
-class Famix2DB extends WorkflowComponentWithConfig  {
+class Famix2DB extends WorkflowComponentWithModelSlot  {
+	val config = SettingsConfiguration.instance
+	val log = LogFactory::getLog(class)
 	var GraphDatabaseService graphDb
 	var DBConnector dbconnector 
 	var Node rootNode
@@ -76,12 +80,12 @@ class Famix2DB extends WorkflowComponentWithConfig  {
 		val Map<String, String> nodeProperties = newHashMap
 		nodeProperties.put("repositoryName", config.repositoryName)
  	    nodeProperties.put("repositoryOwner", config.repositoryOwner)
- 		nodeProperties.put("systemId", config.systemID)
- 		nodeProperties.put("repositoryUrl", config.repositoryUrl)
- 		nodeProperties.put("language", config.language)
- 		nodeProperties.put("commitOrder", config.commitOrder.toString)
- 		nodeProperties.put("snapshotId", config.snapshotID)
- 		nodeProperties.put("commit" , config.commit)
+ 		//nodeProperties.put("systemId", config.systemID)
+ 		//nodeProperties.put("repositoryUrl", config.repositoryUrl)
+ 		//nodeProperties.put("language", config.language)
+ 		//nodeProperties.put("commitOrder", config.commitOrder.toString)
+ 		//nodeProperties.put("snapshotId", config.snapshotID)
+ 		//nodeProperties.put("commit" , config.commit)
  		return nodeProperties
 	}
 	

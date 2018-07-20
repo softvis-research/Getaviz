@@ -12,7 +12,7 @@ Workflow {
     	registerGeneratedEPackage = "org.svis.xtext.famix.FamixPackage"
 	}
 	
-	component = org.svis.generator.ReaderWithConfig {
+	component = org.eclipse.xtext.mwe.Reader {
 		path = "${inputPath}"
 		register = org.svis.xtext.FamixStandaloneSetupGenerated {}
 		loadResource = {

@@ -15,10 +15,11 @@ import org.svis.xtext.famix.Root
 import org.svis.xtext.graph.Model
 import org.svis.xtext.graph.Node
 import org.svis.xtext.graph.impl.GraphFactoryImpl
-import org.svis.generator.WorkflowComponentWithConfig
+import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
+import org.apache.commons.logging.LogFactory
 
-class Famix2Graph extends WorkflowComponentWithConfig{
-	
+class Famix2Graph extends WorkflowComponentWithModelSlot {
+	val log = LogFactory::getLog(class)
 	val graphFactory = new GraphFactoryImpl()
 	var Document famixDocument
 	var Model graphRoot

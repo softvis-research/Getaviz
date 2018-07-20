@@ -10,7 +10,7 @@ class PlantShapePetal {
 
 	public final String DEFAULT = "DEFAULT";
 	public final String DEFAULT_WITH_CYLINDER = "DEFAULT_WITH_CYLINDER";
-	public final String REALITIC_PETAL = "REALITIC_PETAL";
+	public final String REALITIC_PETAL = "REALISTIC_PETAL";
 	
 	/**
 	 * Get shape string for shapeID. 
