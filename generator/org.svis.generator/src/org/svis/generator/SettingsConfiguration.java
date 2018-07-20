@@ -20,7 +20,7 @@ public class SettingsConfiguration {
 	public static SettingsConfiguration getInstance() {
 		if (instance == null) {
 			instance = new SettingsConfiguration();
-			loadConfig("../org.svis.generator.releng/settings.properties");
+			loadConfig("../org.svis.generator.run/input/settings.properties");
 		}
 		return instance;
 	}
