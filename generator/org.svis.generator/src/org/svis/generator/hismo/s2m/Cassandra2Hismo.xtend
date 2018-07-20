@@ -151,7 +151,7 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		ctx.set("hismo", hismoList)
 		ctx.set("metadata", resource)
 			
-		log.info("Cassandra2RD has finished.")
+		log.info("Cassandra2Hismo has finished.")
 	}
 	
 	def void createParent(String fqn) {
