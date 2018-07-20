@@ -162,7 +162,7 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		if(parentHistory === null) {
 			createParent(parentFQN)
 			parentHistory = toNamespaceHistory(parentFQN)
-			toNamespaceVersion(parentHistory, "foobar", "0")
+			toNamespaceVersion(parentHistory, "2018-01-01", "0")
 		}
 	}
 	
