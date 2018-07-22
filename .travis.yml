@@ -1,18 +1,18 @@
 before_script:
-  - cp evaluationserver/config/database.travis.yml evaluationserver/config/database.yml
-  - "mysql -e 'create database eval_server_test;'"
-  - cd evaluationserver/
-  - bundle install
-env: 
-  - RAILS_ENV=test
+- cp evaluationserver/config/database.travis.yml evaluationserver/config/database.yml
+- mysql -e 'create database eval_server_test;'
+- cd evaluationserver/
+- bundle install
+env:
+  secure: nORg4JK8fXngpOkR0BZvp7+byh4/4dAOpAdyNfJSeS/FSQHJnfxXcpX7L4Q+pBVbKGa+ZF/iOo9qwy/x3b+bw9rjohQTb7Iv1nAH8mP0gK9mUCXoO77r/CjtoYZu7/f1XqQYopYhX+1QXYF/UuvoKCrJdSMwgRRV9xzUGK2/v2I0d/i22dKKig9MIvkuRDjzGcIQ/nrThN7IoH+ihv5uRnxe85U0lY0fZkh0pUyuRQ/xIiclgN+A+qnvS31MY7LoHNEVMxuBdOp2esPB8agV7uRjng4ZZzfAi2QfmO2eoBkCLwy2zbYpvwyNnNwojdhs8ffWGa+a+KPYnaVPpdJE+fTpVxZU8BbgzkyvHau1XL51Q/WLHfnmwcLWAujcLZhULtuJNsEDtdG1wORQfplEjC2JHHy/PAawXeqbZa1eU9E1EOH3C6RXAhUFh3TH6bKpUibPA3TakwPwtk2JgbitfPQQwBn7rTPaJRQclSdlt0mXtmUI3+4pAwy9lgiquqML2Z8jocOuBuNzXtPcffkl4uWPgsiQ6ijcv+FMprPoLC9fUT7BMiqyWXnakBMNkPL5bFWFhdfXLLvAur9MWwm9NhvOkUlvPofi7asrfaiWwu5fYf9P9SFKH5AISF2dpWApmIjl7o/kjB+Q2R6b+6mIgKkCp+qBQaOX/Pd+ld6jGLg=
 language: ruby
 rvm:
-  - 2.5.0
+- 2.5.0
 script:
-  - bundle exec rails db:migrate RAILS_ENV=test
-  - bundle exec rspec
+- bundle exec rails db:migrate RAILS_ENV=test
+- bundle exec rspec
 after_failure:
-  - "mysql -e 'show databases;'"
-  - "cat ./config/database.yml"
-  - "echo $RAILS_ENV"
-  - "bundle exec rake --version"
+- mysql -e 'show databases;'
+- cat ./config/database.yml
+- echo $RAILS_ENV
+- bundle exec rake --version
