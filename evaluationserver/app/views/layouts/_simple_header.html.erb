@@ -18,6 +18,7 @@
 		  <li><%= link_to t(:experiments, scope: :layout), experiments_path %></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
+			 <%= render :partial => "navbar_gdpr_links" %>
         <li><%= link_to t(:admin_on, scope: :layout), admin_mode_on_path %></li>
       </ul>
     </div><!-- /.navbar-collapse -->
