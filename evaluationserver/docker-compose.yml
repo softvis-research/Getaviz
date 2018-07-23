@@ -1,7 +1,7 @@
 version: "3"
 services:
     db:
-        image: mysql
+        image: mysql:5.7
         environment:
             MYSQL_ROOT_PASSWORD: dbpassword_for_user
             MYSQL_DATABASE: eval_server_development
