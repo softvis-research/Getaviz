@@ -10,7 +10,6 @@ import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
 import javax.inject.Inject
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.SettingsConfiguration.Variant
@@ -43,6 +42,8 @@ class RDOutput implements IGenerator2 {
 				fsa.generateFile("model.x3d", toX3DHead 
 					+ rd2x3d.toX3DBody(resource)
 					+ toX3DTail)
+				val script = Paths.get("../org.svis.generator/resource/aopt-idmap-sapd.bat")
+				fsa.generateFile("aopt-idmap-sapd.bat", Files.newInputStream(script))
 				if(config.convertToMultipart) {
 					fsa.convertToMultipart
 			 	}
@@ -56,8 +57,8 @@ class RDOutput implements IGenerator2 {
 
 				if (config.variant == Variant::DYNAMIC) {
 					fsa.generateFile("events.js", "[ " + rd2js.toJSBody(resource) + " ]")
-					val Path p1 = Paths.get("../org.svis.generator/resource/anifra-minified.js")
-					fsa.generateFile("anifra-minified.js", Files.newInputStream(p1))
+					val anifra = Paths.get("../org.svis.generator/resource/anifra-minified.js")
+					fsa.generateFile("anifra-minified.js", Files.newInputStream(anifra))
 				}
 			}
 			case SimpleGlyphsJson: {
