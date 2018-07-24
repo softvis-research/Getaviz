@@ -15,6 +15,7 @@ import org.svis.generator.famix.Famix2Famix
 import org.svis.generator.rd.m2m.RD2RD4Dynamix
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.SettingsConfiguration.EvolutionRepresentation
+import org.svis.generator.SettingsConfiguration.ClassHeight
 
 class RD2X3D {
 	val config = SettingsConfiguration.instance
@@ -46,14 +47,16 @@ class RD2X3D {
 
 	def String toRD(List<Disk> disks) '''
 		«FOR disk : disks»
-		  	«IF(config.showHistories)»
+  			«IF(config.RDClassHeight === ClassHeight::NUMBER_OF_INCIDENTS && disk.type == "FAMIX.Class")»
+				«toLayer(disk)»
+  			«ELSE»
 				«toDisk(disk)»
-				«toSegment(disk.data)»
-				«toSegment(disk.methods)»
-				«FOR segment : disk.methods»
-					«segment.invocations.toSegmentInvocation(segment)»
-				«ENDFOR»
 			«ENDIF»
+			«toSegment(disk.data)»
+			«toSegment(disk.methods)»
+			«FOR segment : disk.methods»
+				«segment.invocations.toSegmentInvocation(segment)»
+			«ENDFOR»
 			«toDiskVersions(disk)»
 		«ENDFOR»
 	'''
@@ -80,6 +83,55 @@ class RD2X3D {
 				</Appearance>
 			</Shape>
 		</Transform>
+		</Transform>
+	'''
+	
+	def String toLayer(Disk disk) '''
+		<Transform DEF='«disk.id»'>
+			<Transform scale='1 1 «disk.height»'>
+				<Transform translation='«disk.position.x + " " + disk.position.y + " " + disk.position.z»'>
+					<Shape>
+						<Extrusion
+							convex='true'
+							solid='true'
+							crossSection='«disk.crossSection»'
+							spine='«disk.spine»'
+							creaseAngle='1'
+							beginCap='true'
+							endCap='true'></Extrusion>
+						<Appearance>
+								<Material
+									diffuseColor='«disk.color»'
+									transparency='«disk.transparency»'
+								></Material>
+						</Appearance>
+					</Shape>
+				</Transform>
+			</Transform>
+		</Transform>
+		<Transform DEF='«disk.id»_2'>
+			<Transform scale='1 1 «disk.height»'>
+				<Transform translation='«disk.position.x + " " + disk.position.y + " " + disk.position.z»'>
+					<Transform translation='0 0 «disk.height»'> 
+						<Shape>
+							<Extrusion
+								convex='true'
+								solid='true'
+								crossSection='«disk.crossSection»'
+								spine='«disk.spine»'
+								creaseAngle='1'
+								beginCap='true'
+								endCap='true'></Extrusion>
+							<Appearance>
+									<Material
+										diffuseColor='1 0 0'
+										transparency='«disk.transparency»'
+									></Material>
+							</Appearance>
+						</Shape>
+					</Transform>
+				</Transform>
+			</Transform>
 		</Transform>
 	'''
 
@@ -138,30 +190,29 @@ class RD2X3D {
 		«ENDFOR»
 	'''
 
-	def String toMethodInvocation(EList<DiskSegmentInvocation> invocations, DiskInstance instance) {
-		'''
-			«FOR invocation : invocations»
-				<Transform DEF='«famix.createID(invocation.fqn)»' 
-					translation='«invocation.position.x + " " + invocation.position.y + " " +
-				invocation.position.z»' rotation='0 0 1 1.57'  scale='1 1 «invocation.length»'>
-				<Shape>
-					<Extrusion
-						convex='true'
-						solid='true'
-						crossSection='«(instance.eContainer as Disk).crossSection»'
-						spine='«(instance.eContainer as Disk).spine»'
-						creaseAngle='1'
-						beginCap='true'
-						endCap='true'/>
-					<Appearance>
-						<Material
-							diffuseColor='«(instance.eContainer as Disk).color»'
-							transparency='0'/>
-					</Appearance>
-				</Shape>
-			</Transform>
-		«ENDFOR»
-	'''	}
+	def String toMethodInvocation(EList<DiskSegmentInvocation> invocations, DiskInstance instance) '''
+		«FOR invocation : invocations»
+			<Transform DEF='«famix.createID(invocation.fqn)»' 
+				translation='«invocation.position.x + " " + invocation.position.y + " " +
+			invocation.position.z»' rotation='0 0 1 1.57'  scale='1 1 «invocation.length»'>
+			<Shape>
+				<Extrusion
+					convex='true'
+					solid='true'
+					crossSection='«(instance.eContainer as Disk).crossSection»'
+					spine='«(instance.eContainer as Disk).spine»'
+					creaseAngle='1'
+					beginCap='true'
+					endCap='true'/>
+				<Appearance>
+					<Material
+						diffuseColor='«(instance.eContainer as Disk).color»'
+						transparency='0'/>
+				</Appearance>
+			</Shape>
+		</Transform>
+	«ENDFOR»
+	'''
 	
 
 	def String toSegmentInvocation(EList<DiskSegmentInvocation> invocations, DiskSegment segment) '''		
