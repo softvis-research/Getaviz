@@ -661,6 +661,30 @@ public class SettingsConfiguration {
 			return Variant.STATIC;
 		}
 	}
+	
+	public Color getRDOpenNonSecurityIssuesColor() {
+		return getColor(getRDOpenNonSecurityIssuesColorHex());
+	}
+	
+	public String getRDOpenNonSecurityIssuesColorAsPercentage(){
+		return getColorFormatted(getRDOpenNonSecurityIssuesColor());
+	}
+	
+	public String getRDOpenNonSecurityIssuesColorHex() {
+		return config.getString("rd.color.open_non_security_issues", "#0000FF");
+	}
+	
+	public Color getRDOpenSecurityIssuesColor() {
+		return getColor(getRDOpenSecurityIssuesColorHex());
+	}
+	
+	public String getRDOpenSecurityIssuesColorAsPercentage(){
+		return getColorFormatted(getRDOpenSecurityIssuesColor());
+	}
+	
+	public String getRDOpenSecurityIssuesColorHex() {
+		return config.getString("rd.color.open_security_issues", "#FFA500");
+	}
 
 	public String getPackageShape() {
 		String value = config.getString("plant.package.shape", "default");

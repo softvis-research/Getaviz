@@ -101,7 +101,7 @@ class RD2X3D {
 							endCap='true'></Extrusion>
 						<Appearance>
 								<Material
-									diffuseColor='«disk.color»'
+									diffuseColor='«config.RDOpenSecurityIssuesColorAsPercentage»'
 									transparency='«disk.transparency»'
 								></Material>
 						</Appearance>
@@ -124,7 +124,7 @@ class RD2X3D {
 								endCap='true'></Extrusion>
 							<Appearance>
 									<Material
-										diffuseColor='1 0 0'
+										diffuseColor='«config.RDOpenNonSecurityIssuesColorAsPercentage»'
 										transparency='«disk.transparency»'
 									></Material>
 							</Appearance>
