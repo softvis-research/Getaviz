@@ -17,6 +17,8 @@ Disk:
 	'(' 'fqn' fqn=MSESTRING ')'
 	'(' 'hash' id=STRING ')'
 	'(' 'height' height=Decimal ')'
+	'(' 'height2' height2=Decimal ')'
+	'(' 'height3' height3=Decimal ')'
 	'(' 'radius' radius=Decimal ')'
 	'(' 'type' type=MSESTRING ')'
 	'(' 'level' level=INT ')'
@@ -30,6 +32,8 @@ Disk:
 	('(' 'maxLevel' maxLevel=INT ')')?
 	('(' 'signature' signature=MSESTRING ')')?
 	('(' 'color' color=MSESTRING ')')?
+	('(' 'color2' color2=MSESTRING ')')?
+	('(' 'color3' color3=MSESTRING ')')?
 	('(' 'ringWidth' ringWidth = Decimal ')')?
 	('(' 'transparency' transparency=Decimal ')')?
 	('(' 'position' position=Position ')')?
