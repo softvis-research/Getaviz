@@ -43,6 +43,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Collections
 import java.time.LocalDate
 import org.svis.generator.SettingsConfiguration.ShowVersions
+import org.svis.generator.SettingsConfiguration.ClassHeight
+import org.svis.generator.SettingsConfiguration.RDClassSize
 
 class Hismo2RD extends WorkflowComponentWithModelSlot {
 	val config = SettingsConfiguration.instance
@@ -235,7 +237,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.type = "FAMIX.Namespace"
 		disk.level = level
 		disk.ringWidth = config.RDRingWidth
-		disk.id = famix.createID(disk.fqn)
+		disk.id = hismoNamespace.id
 		disk.height = config.RDHeight
 		disk.transparency = config.RDNamespaceTransparency
 		
@@ -269,7 +271,7 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		diskDocument.disks += disk
 		return disk
 	}
-	
+
 	def private Disk toDisk(HISMOClassVersion classVersion, int level) {
 		val disk = diskFactory.createDisk
 		disk.name = classVersion.name
@@ -281,17 +283,12 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 		disk.id = classVersion.id
 		
 		val history = classVersion.parentHistory.ref as HISMOClassHistory
-		
-		switch(config.RDClassHeight) {
-			case STATIC: disk.height = config.RDHeight
-			case NUMBER_OF_INCIDENTS: {
-				val sum = history.avgNumberOfOpenIncidents + history.avgNumberOfClosedIncidents + history.numberOfOpenSecurityIncidents + history.numberOfClosedSecurityIncidents
-				if(sum < config.RDHeight) {
-					disk.height = config.RDHeight
-				} else {
-					disk.height = sum
-				}
-			}
+		disk.height = config.RDHeight
+		if(config.RDClassHeight === ClassHeight::NUMBER_OF_INCIDENTS) {
+				disk.height2 = history.avgNumberOfOpenIncidents
+				disk.color2 = config.RDOpenNonSecurityIssuesColorAsPercentage
+				disk.height3 = history.numberOfOpenSecurityIncidents
+				disk.color3 = config.RDOpenSecurityIssuesColorAsPercentage
 		}
 		disk.transparency = config.RDClassTransparency
 		switch(config.RDClassSize) {
@@ -427,14 +424,14 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
 			}
 			return sum
 		} else {
-			switch(config.RDClassSize) {
-				case BETWEENNESS_CENTRALITY: return Double.parseDouble(version.betweennessCentrality)
-				case NUMBER_OF_STATEMENTS: {
-					val sum = 500 + classHistory.classVersions.map[ref as HISMOClassVersion]
-						.filter[it.timestamp <= version.timestamp]
-						.map[evolutionNumberOfStatements].reduce[ a, b | a + b ]
-					return sum
-				}
+			if(config.RDClassSize == RDClassSize::BETWEENNESS_CENTRALITY) {
+				return Double.parseDouble(version.betweennessCentrality)
+			}
+			if(config.RDClassSize == RDClassSize::NUMBER_OF_STATEMENTS) {
+				val sum = 500 + classHistory.classVersions.map[ref as HISMOClassVersion]
+					.filter[it.timestamp <= version.timestamp]
+					.map[evolutionNumberOfStatements].reduce[ a, b | a + b ]
+				return sum
 			}
 		}
 	}
@@ -488,7 +485,6 @@ class Hismo2RD extends WorkflowComponentWithModelSlot {
    		val versions = hismoAttributeVersions.filter[
 			parentHistory.ref === attribute
 		].filterNull
-		//versions.forEach[v|log.info("Version " + v)]
 		versions.forEach[diskSegment.versions += toVersion(attribute)]
 		return diskSegment
 	}
