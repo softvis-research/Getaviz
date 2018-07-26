@@ -33,6 +33,7 @@ HISMONamespaceHistory:
     '(HISMO.NamespaceHistory'
 	'(id:' name=INT_ID ')'
 	('(name:' value= MSESTRING ')')?
+	('(' 'hash' id = STRING ')')?
 	('(containingNamespaceHistory' containingNamespaceHistory=IntegerReference ')')? //parent
 	('(namespaceHistories' namespaceHistories+=IntegerReference* ')')?
 	('(namespaceVersions' namespaceVersions+=IntegerReference* ')')?
