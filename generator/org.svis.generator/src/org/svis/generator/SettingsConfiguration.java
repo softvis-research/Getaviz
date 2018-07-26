@@ -51,6 +51,10 @@ public class SettingsConfiguration {
 		return config.getBoolean("history.show_histories", true);
 	}
 	
+	public Boolean showNamespaceHistories() {
+		return config.getBoolean("history.show_namespace_histories", true);
+	}
+	
 	public String getTimeFormat() {
 		return config.getString("history.time_format", "yyyy-MM-dd'T'HH:mm");
 	}
@@ -632,12 +636,8 @@ public class SettingsConfiguration {
 		}
 	}
 
-	public String getEvolutionRepresentationAsString() {
-		return config.getString("rd.evolution_representation", "time_line");
-	}
-
 	public EvolutionRepresentation getEvolutionRepresentation() {
-		switch (getEvolutionRepresentationAsString()) {
+		switch (config.getString("rd.evolution_representation", "time_line")) {
 		case "dynamic_evolution":
 			return EvolutionRepresentation.DYNAMIC_EVOLUTION;
 		case "multiple_time_line":
