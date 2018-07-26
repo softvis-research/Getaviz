@@ -87,13 +87,39 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 	            		if(old) {
 	            			if(security_relevant) {
 	            				closedSecurityIncidents++
+	            				// just for improving generating example data
+	            				// remove for productive use
+	            				closedSecurityIncidents++
+	            				closedSecurityIncidents++
+	            				closedSecurityIncidents++
 	            			} else {
-	            				closedIncidents++	
+	            				closedIncidents++
+	            				// just for improving generating example data
+	            				// remove for productive use
+	            				closedIncidents++
+	            				closedIncidents++
+	            				closedIncidents++
+	            				closedIncidents++
+	            				closedIncidents++
 	            			}
 	            		} else {
 	            			if(security_relevant) {
-	            				openSecurityIncidents++            				
+	            				openSecurityIncidents++
+	            				// just for improving generating example data
+	            				// remove for productive use
+	            				openSecurityIncidents++     
+	            				openSecurityIncidents++
+	            				openSecurityIncidents++
+	            				openSecurityIncidents++      				
 	            			} else {
+	            				openIncidents++
+	            				// just for improving generating example data
+	            				// remove for productive use
+	            				openIncidents++
+	            				openIncidents++
+	            				openIncidents++
+	            				openIncidents++
+	            				openIncidents++
 	            				openIncidents++
 	            			}
 	            		}
@@ -203,6 +229,7 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		val namespaceHistory = hismoFactory.createHISMONamespaceHistory 
 		namespaceHistory.value = fqn
 		namespaceHistory.name = famix.createID(fqn)
+		namespaceHistory.id = famix.createID(fqn)
 		hismoDocument.elements += namespaceHistory
 		return namespaceHistory
 	}
