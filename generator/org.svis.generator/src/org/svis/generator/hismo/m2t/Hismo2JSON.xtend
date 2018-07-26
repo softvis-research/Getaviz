@@ -81,8 +81,8 @@ class Hismo2JSON implements IGenerator2 {
 		// elements.removeAll(paths)
 		if (config.showVersions == ShowVersions::LATEST) {
 			val latestClassVersions = newArrayList
-			val List<HISMONamespaceVersion> latestNamespaceVersions = newArrayList
-			val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			val latestNamespaceVersions = newArrayList
+			val formatter = DateTimeFormatter.ofPattern(config.timeFormat);
 			var namespaceVersions = elements.filter(HISMONamespaceVersion)
 			elements.filter(HISMOClassHistory).forEach [ history |
 				var versions = history.classVersions.map[ref as HISMOClassVersion].clone
@@ -103,8 +103,10 @@ class Hismo2JSON implements IGenerator2 {
 			elements.addAll(latestClassVersions)
 			elements.addAll(latestNamespaceVersions)
 		}
-		if (config.showHistories == false) {
+		if (config.showNamespaceHistories == false) {
 			elements.removeIf[it instanceof HISMONamespaceHistory]
+		}
+		if (config.showHistories == false) {
 			elements.removeIf[it instanceof HISMOClassHistory]
 			elements.removeIf[it instanceof HISMOMethodHistory]
 			elements.removeIf[it instanceof HISMOAttributeHistory]
@@ -190,7 +192,7 @@ class Hismo2JSON implements IGenerator2 {
 	'''
 
 	def dispatch private toMetaData(HISMONamespaceHistory nh) '''
-		"id":			 "«famix.createID(nh.qualifiedName)»",
+		"id":			 "«nh.id»",
 		"qualifiedName": "«nh.qualifiedName»",
 		«IF (!nh.namespaceVersions.isEmpty)»
 			"name":			 "«(nh.namespaceVersions.get(0).ref as HISMONamespaceVersion).value»",
@@ -199,7 +201,6 @@ class Hismo2JSON implements IGenerator2 {
 		«ENDIF»
 		"type":			 "FAMIX.Namespace",
 		"belongsTo":     ""
-		
 	'''
 
 	def dispatch private toMetaData(HISMOClassHistory ch) '''
@@ -311,6 +312,42 @@ class Hismo2JSON implements IGenerator2 {
 	def private toMetaData2(HISMOClassVersion cv) '''
 		«val history = cv.parentHistory.ref as HISMOClassHistory»
 		"id":			 "«cv.id»_2",
+		"qualifiedName": "«cv.value»",
+		"name":			 "«cv.value»",
+		"type":			 "FAMIX.Class",
+		"modifiers":     "",
+		"subClassOf":    "",
+		"superClassOf":  "",
+		«IF (cv.container !== null)»
+			"belongsTo":     "«cv.container.ref.id»",
+		«ELSE»
+			"belongsTo":	 "",
+		«ENDIF»
+		"version":		 "«cv.commitId»",
+		«IF cv.antipattern !== null»
+			"antipattern":	 "«FOR pattern : cv.antipattern SEPARATOR ","»«(pattern.ref as FAMIXAntipattern).id»«ENDFOR»",
+		«ELSE»
+			"antipattern":	 "",
+		«ENDIF»
+		"reaches":		 "«getPaths(cv)»",
+		"roles":	 	 "«toString2(cv.antipattern, cv)»",
+		«IF cv.scc !== null»
+			"component":	 "«((cv.scc.ref) as FAMIXComponent).id»",
+		«ELSE»
+			"component":	 "",
+		«ENDIF»
+		«IF cv.betweennessCentrality !== null»
+			"betweennessCentrality":	«cv.betweennessCentrality»,
+		«ELSE»
+			"betweennessCentrality":	"",
+		«ENDIF»
+		"numberOfClosedIssues":	«history.avgNumberOfClosedIncidents»,
+		"numberOfOpenIssues": «history.avgNumberOfOpenIncidents»,
+		"numberOfClosedSecurityIssues": «history.numberOfClosedSecurityIncidents»,
+		"numberOfOpenSecurityIssues": 	«history.numberOfOpenSecurityIncidents»,
+		"issues": "«(cv.parentHistory.ref as HISMOClassHistory).issues.removeBrackets»"
+		},{
+		"id":			 "«cv.id»_3",
 		"qualifiedName": "«cv.value»",
 		"name":			 "«cv.value»",
 		"type":			 "FAMIX.Class",
