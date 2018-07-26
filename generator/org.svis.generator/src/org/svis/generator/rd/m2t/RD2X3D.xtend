@@ -47,10 +47,9 @@ class RD2X3D {
 
 	def String toRD(List<Disk> disks) '''
 		«FOR disk : disks»
+			«toDisk(disk)»
   			«IF(config.RDClassHeight === ClassHeight::NUMBER_OF_INCIDENTS && disk.type == "FAMIX.Class")»
 				«toLayer(disk)»
-  			«ELSE»
-				«toDisk(disk)»
 			«ENDIF»
 			«toSegment(disk.data)»
 			«toSegment(disk.methods)»
@@ -87,32 +86,11 @@ class RD2X3D {
 	'''
 	
 	def String toLayer(Disk disk) '''
-		<Transform DEF='«disk.id»'>
-			<Transform scale='1 1 «disk.height»'>
-				<Transform translation='«disk.position.x + " " + disk.position.y + " " + disk.position.z»'>
-					<Shape>
-						<Extrusion
-							convex='true'
-							solid='true'
-							crossSection='«disk.crossSection»'
-							spine='«disk.spine»'
-							creaseAngle='1'
-							beginCap='true'
-							endCap='true'></Extrusion>
-						<Appearance>
-								<Material
-									diffuseColor='«config.RDOpenSecurityIssuesColorAsPercentage»'
-									transparency='«disk.transparency»'
-								></Material>
-						</Appearance>
-					</Shape>
-				</Transform>
-			</Transform>
-		</Transform>
+	«IF disk.height2 > 0»
 		<Transform DEF='«disk.id»_2'>
-			<Transform scale='1 1 «disk.height»'>
-				<Transform translation='«disk.position.x + " " + disk.position.y + " " + disk.position.z»'>
-					<Transform translation='0 0 «disk.height»'> 
+			<Transform translation='0 0 «disk.height»'>
+				<Transform scale='1 1 «disk.height2»'>
+					<Transform translation='«disk.position.x + " " + disk.position.y + " " + disk.position.z»'>
 						<Shape>
 							<Extrusion
 								convex='true'
@@ -124,7 +102,7 @@ class RD2X3D {
 								endCap='true'></Extrusion>
 							<Appearance>
 									<Material
-										diffuseColor='«config.RDOpenNonSecurityIssuesColorAsPercentage»'
+										diffuseColor='«disk.color2»'
 										transparency='«disk.transparency»'
 									></Material>
 							</Appearance>
@@ -133,6 +111,33 @@ class RD2X3D {
 				</Transform>
 			</Transform>
 		</Transform>
+		«ENDIF»
+		«IF disk.height3 > 0»
+		<Transform DEF='«disk.id»_3'>
+			<Transform translation='0 0 «disk.height + disk.height2»'> 
+				<Transform scale='1 1 «disk.height3»'>
+					<Transform translation='«disk.position.x + " " + disk.position.y + " " + disk.position.z»'>
+						<Shape>
+							<Extrusion
+								convex='true'
+								solid='true'
+								crossSection='«disk.crossSection»'
+								spine='«disk.spine»'
+								creaseAngle='1'
+								beginCap='true'
+								endCap='true'></Extrusion>
+							<Appearance>
+									<Material
+										diffuseColor='«disk.color3»'
+										transparency='«disk.transparency»'
+									></Material>
+							</Appearance>
+						</Shape>
+					</Transform>
+				</Transform>
+			</Transform>
+		</Transform>
+		«ENDIF»
 	'''
 
 	def String toSegment(EList<DiskSegment> segments) '''
