@@ -64,6 +64,11 @@ a {
     overflow: hidden;
 }
 
+h4 {
+    margin-left: 25px;
+    margin-bottom: -15px;
+}
+
 div {
     font-family: 'Open Sans', sans-serif;
     color: #767676;
