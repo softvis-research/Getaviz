@@ -133,12 +133,13 @@ var events = (function() {
     //Config events
     //**************
 	
-	var configTypes = {
+	const configTypes = {
 		weight				: { name: "weight"},
 		innerClasses		: { name: "innerClasses"},
 		parentInnerClasses	: { name: "parentInnerClases"},
 		bundledEdges		: { name: "bundledEdges"},
-		issues				: { name: "issues"}
+		issues				: { name: "issues"},
+		changeFrequency		: { name: "changeFrequency"}
 	};
 	events.config = {};
 	var configTypeArray = Object.keys(configTypes);
