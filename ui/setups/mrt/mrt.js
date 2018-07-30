@@ -11,6 +11,10 @@
             logWarningConsole: true,
             logErrorConsole: true,
         },
+        {
+            name: "configurationController",
+            changeFrequency: true
+        },
         {	name: 	"canvasHoverController",
             hoverColor: "orangered",
             showVersion: false,
@@ -204,16 +208,31 @@
                                         expanders: [{
                                             name: "issueExplorer",
                                             title: "Issue Explorer",
-                                            controllers: [{name: "issueExplorerController"}]
-                                        }],
+                                            controllers: [{name: "issueExplorerController"}],
+                                        }]
                                     },
                                     second: {
                                         orientation: "horizontal",
-                                        expanders: [{
-                                            name: "legend",
-                                            title: "Legend",
-                                            controllers: [{name: "legendController"}]
-                                        }],
+                                        area: {
+                                            orientation: "horizontal", collapsible: false,
+                                            first: {
+                                                size: "50%",
+                                                collapsible: false,
+                                                expanders: [{
+                                                    name: "Configuration",
+                                                    title: "Configuration",
+                                                    controllers: [{name: "configurationController"}],
+                                                }]
+                                            },
+                                            second: {
+                                                orientation: "horizontal",
+                                                expanders: [{
+                                                    name: "legend",
+                                                    title: "Legend",
+                                                    controllers: [{name: "legendController"}]
+                                                }],
+                                            },
+                                        },
                                     },
                                 },
                             },
