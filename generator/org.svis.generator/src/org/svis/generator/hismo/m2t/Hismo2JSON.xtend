@@ -307,7 +307,12 @@ class Hismo2JSON implements IGenerator2 {
 		"numberOfOpenIssues": «history.avgNumberOfOpenIncidents»,
 		"numberOfClosedSecurityIssues": «history.numberOfClosedSecurityIncidents»,
 		"numberOfOpenSecurityIssues": 	«history.numberOfOpenSecurityIncidents»,
-		"issues": "«(cv.parentHistory.ref as HISMOClassHistory).issues.removeBrackets»"
+		"issues": "«(cv.parentHistory.ref as HISMOClassHistory).issues.removeBrackets»",
+		«IF cv.changeFrequency !== null»
+		"changeFrequency": "«cv.changeFrequency»"
+		«ELSE»
+		"changeFrequency": ""
+		«ENDIF»
 	'''
 	def private toMetaData2(HISMOClassVersion cv) '''
 		«val history = cv.parentHistory.ref as HISMOClassHistory»
@@ -345,7 +350,12 @@ class Hismo2JSON implements IGenerator2 {
 		"numberOfOpenIssues": «history.avgNumberOfOpenIncidents»,
 		"numberOfClosedSecurityIssues": «history.numberOfClosedSecurityIncidents»,
 		"numberOfOpenSecurityIssues": 	«history.numberOfOpenSecurityIncidents»,
-		"issues": "«(cv.parentHistory.ref as HISMOClassHistory).issues.removeBrackets»"
+		"issues": "«(cv.parentHistory.ref as HISMOClassHistory).issues.removeBrackets»",
+		«IF cv.changeFrequency !== null»
+		"changeFrequency": "«cv.changeFrequency»"
+		«ELSE»
+		"changeFrequency": ""
+		«ENDIF»
 		},{
 		"id":			 "«cv.id»_3",
 		"qualifiedName": "«cv.value»",
@@ -381,7 +391,12 @@ class Hismo2JSON implements IGenerator2 {
 		"numberOfOpenIssues": «history.avgNumberOfOpenIncidents»,
 		"numberOfClosedSecurityIssues": «history.numberOfClosedSecurityIncidents»,
 		"numberOfOpenSecurityIssues": 	«history.numberOfOpenSecurityIncidents»,
-		"issues": "«(cv.parentHistory.ref as HISMOClassHistory).issues.removeBrackets»"
+		"issues": "«(cv.parentHistory.ref as HISMOClassHistory).issues.removeBrackets»",
+		«IF cv.changeFrequency !== null»
+		"changeFrequency": "«cv.changeFrequency»"
+		«ELSE»
+		"changeFrequency": ""
+		«ENDIF»
 	'''
 
 	def dispatch private toMetaData(HISMOMethodVersion mv) '''

@@ -116,6 +116,7 @@ HISMOClassVersion:
 	('(betweennessCentrality' betweennessCentrality = MSESTRING ')')?
 	('(' 'STK-Rank' stkRank = MSESTRING ')')?
 	('(evolutionNumberOfStatements' evolutionNumberOfStatements=INT ')' )? //Sum of absolute Changes in subsequent Versions
+	('(changeFrequency' changeFrequency = MSESTRING ')')?
 	')';
 
 HISMOMethodVersion:
