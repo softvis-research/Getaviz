@@ -2,19 +2,19 @@ var events = (function() {
 
 	
 	//events
-	var events = { };
+	let events = { };
 
 
     //***************
     //state events
     //***************
-	var statesArray = Object.keys(model.states);
+	const statesArray = Object.keys(model.states);
 	
 	statesArray.forEach(function(stateName){
 	
-		var state = model.states[stateName];
+		let state = model.states[stateName];
 		
-		var on = {
+		let on = {
 			name : "on" + state.name.charAt(0).toUpperCase() + state.name.slice(1) + "Event",
 			
 			subscribe : function(listener){
@@ -30,7 +30,7 @@ var events = (function() {
 			}	
 		};
 		
-		var off = {
+		let off = {
 			name : "off" + state.name + "Event",
 			
 			subscribe : function(listener){
@@ -62,7 +62,7 @@ var events = (function() {
     //log events
     //**************
 
-    var logTypes = {
+    const logTypes = {
 		info			: { name: "info"},
 		warning			: { name: "warning"},
 		error			: { name: "error"},
@@ -74,12 +74,12 @@ var events = (function() {
 
 	events.log = {};
 
-	var logTypeArray = Object.keys(logTypes);
+	const logTypeArray = Object.keys(logTypes);
 
 	logTypeArray.forEach(function(logTypeName){
-		var logType = logTypes[logTypeName];
+		const logType = logTypes[logTypeName];
 		
-		var log = {
+		const log = {
 			type : "log" + logType.name.charAt(0).toUpperCase() + logType.name.slice(1) + "Event",
 			
 			subscribe : function(listener){
@@ -91,7 +91,7 @@ var events = (function() {
 				//no listener subscribed? 
 				//-> endless loop warning 
 				//-> output on console 
-				var eventListenerArray = eventMap.get(this);
+				let eventListenerArray = eventMap.get(this);
 				if(eventListenerArray === undefined){
 					if(logEvent.text){
 						console.log("NO LOGGER for " + this.type + " subscribed! - " + logEvent.text); 
@@ -115,7 +115,7 @@ var events = (function() {
 
 	events.ui = {};
 
-	var buttonClick = {
+	const buttonClick = {
 		type : "buttonClickEvent",
 		
 		subscribe : function(listener){
@@ -136,18 +136,17 @@ var events = (function() {
 	const configTypes = {
 		weight				: { name: "weight"},
 		innerClasses		: { name: "innerClasses"},
-		parentInnerClasses	: { name: "parentInnerClases"},
 		bundledEdges		: { name: "bundledEdges"},
-		issues				: { name: "issues"},
-		changeFrequency		: { name: "changeFrequency"}
+		filterSettings		: { name: "filterSettings"},
+        issues              : { name: "issues"}
 	};
 	events.config = {};
-	var configTypeArray = Object.keys(configTypes);
+	const configTypeArray = Object.keys(configTypes);
 
 	configTypeArray.forEach(function(configTypeName){
-		var configType = configTypes[configTypeName];
+		const configType = configTypes[configTypeName];
 	
-		var config = {
+		const config = {
 			type : "config" + configType.name.charAt(0).toUpperCase() + configType.name.slice(1) + "Event",
 			
 			subscribe : function(listener){
@@ -159,7 +158,7 @@ var events = (function() {
 				//no listener subscribed? 
 				//-> endless loop warning 
 				//-> output on console 
-				var eventListenerArray = eventMap.get(this);
+				let eventListenerArray = eventMap.get(this);
 				if(eventListenerArray === undefined){
 					if(logEvent.text){
 						console.log("NO LOGGER for " + this.type + " subscribed! - " + logEvent.text); 
@@ -176,10 +175,10 @@ var events = (function() {
 	});
 	
 	//event to listener map
-	var eventMap = new Map();
+	let eventMap = new Map();
 	
 	//event to model listener map
-	var eventModelMap = new Map();
+	let eventModelMap = new Map();
 	
 	function subscribeEvent(eventType, listener) {
 		
@@ -188,7 +187,7 @@ var events = (function() {
 			return;
 		}		
 		
-		var eventListenerArray = eventMap.get(eventType);
+		let eventListenerArray = eventMap.get(eventType);
 			
 		if(eventListenerArray === undefined){
 			eventListenerArray = [];
@@ -199,7 +198,7 @@ var events = (function() {
 		}
 		
 		if(listener in eventListenerArray){
-			events.log.warning.publish({ text: "listener allready subscribes"});
+			events.log.warning.publish({ text: "listener already subscribes"});
 			return;
 		} 
 		
@@ -214,7 +213,7 @@ var events = (function() {
 			return;
 		}	
 
-		var eventListenerArray = eventMap.get(eventType);
+		let eventListenerArray = eventMap.get(eventType);
 		if(eventListenerArray === undefined || !listener in eventListenerArray){
 			events.log.warning.publish({ text: "unsubscribe not subscribed listener: " + listener.toString()});
 			return;
@@ -238,7 +237,7 @@ var events = (function() {
 	
 	function publishEvent(eventType, applicationEvent){
 						
-		var eventListenerArray = eventMap.get(eventType);
+		let eventListenerArray = eventMap.get(eventType);
 		
 		if(eventListenerArray === undefined){
 			events.log.warning.publish({ text: "no listener subscribed"});
