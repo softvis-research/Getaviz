@@ -3,8 +3,12 @@ var configurationController = (function() {
     //config parameters
     let controllerConfig = {
         changeFrequency : false,
-        antipattern: false
+        antipattern: false,
+        issues: false
     };
+
+    let minChangeFrequency = 0;
+    let issuesFilter = "showAll";
 
 	function initialize(setupConfig){
         application.transferConfigParams(setupConfig, controllerConfig);
@@ -19,6 +23,44 @@ var configurationController = (function() {
             prepareVisibilityLevelMenu(rootDiv);
             prepareBundledEdgesCheckbox(rootDiv);
         }
+        if(controllerConfig.issues) {
+            prepareIssuesFilter(rootDiv);
+        }
+    }
+
+    function prepareIssuesFilter(rootDiv) {
+	    const divElement = document.createElement("DIV");
+	    const h = document.createElement("H4");
+	    const textNode = document.createTextNode("Issues Filter");
+	    h.appendChild(textNode);
+	    rootDiv.appendChild(h);
+        rootDiv.appendChild(divElement);
+        prepareIssuesRadioButton(divElement, "showAll", "Show all classes", true);
+        prepareIssuesRadioButton(divElement, "showOpen", "Show classes with open issues", false);
+        prepareIssuesRadioButton(divElement, "showOpenSecurity", "Show classes with open security issues", false);
+    }
+
+    function prepareIssuesRadioButton(rootDiv, filter, text, checked){
+        const jqxId = "#" + filter;
+        let divElement = document.createElement("DIV");
+        const textNode = document.createTextNode(text);
+        divElement.appendChild(textNode);
+        divElement.id = filter;
+        rootDiv.appendChild(divElement);
+        $(jqxId).jqxRadioButton({ theme: "metro"});
+        if(checked) {
+            $(jqxId).jqxRadioButton('check');
+        }
+        $(jqxId).bind('checked', function () {
+            issuesFilter = filter;
+            //settingsChanged(issuesFilter, minChangeFrequency);
+            const applicationEvent = {
+                sender: configurationController,
+                changeFrequency: minChangeFrequency,
+                issuesFilter: issuesFilter
+            };
+            events.config.filterSettings.publish(applicationEvent);
+        });
     }
 
     function prepareChangeFrequency(rootDiv){
@@ -27,7 +69,7 @@ var configurationController = (function() {
         let divElement = document.createElement("DIV");
         const h = document.createElement("H4");
         const textNode = document.createTextNode("Minimal change frequency of classes");
-        h.appendChild(textNode)
+        h.appendChild(textNode);
         rootDiv.appendChild(h);
         divElement.id = id;
         rootDiv.appendChild(divElement);
@@ -49,12 +91,14 @@ var configurationController = (function() {
                 return "";
             }
         });
-        $(jqxId).bind('checked', function (event) {
+        $(jqxId).bind('slideEnd', function (event) {
+            minChangeFrequency = event.args.value;
             const applicationEvent = {
                 sender: configurationController,
-                entities: [value]
+                changeFrequency: minChangeFrequency,
+                issuesFilter: issuesFilter
             };
-            events.config.changeFrequency.publish(applicationEvent);
+            events.config.filterSettings.publish(applicationEvent);
         });
     }
 
@@ -109,6 +153,95 @@ var configurationController = (function() {
             };
             events.config.bundledEdges.publish(applicationEvent);
         });
+    }
+
+    function settingsChanged(issueFilter, changeFrequency) {
+        const entities = model.getEntitiesByType("Class");
+        let hideEntities = [];
+        let fadeEntities = [];
+        if(issueFilter === "showAll") {
+            entities.forEach(function(entity){
+                if(entity.changeFrequency >= changeFrequency) {
+                    if(entity.filtered) {
+                        fadeEntities.push(entity);
+                    }
+                } else {
+                    if(!entity.filtered) {
+                        hideEntities.push(entity);
+                    }
+                }
+            });
+        } else {
+            if(issueFilter === "showOpen") {
+                entities.forEach(function(entity){
+                    if(entity.changeFrequency >= changeFrequency) {
+                        let foundOpenIssues = false;
+                        entity.issues.forEach(function(issueId) {
+                            if(issueId !== "") {
+                                const issue = model.getIssuesById(issueId);
+                                if (issue.open) {
+                                    foundOpenIssues = true;
+                                }
+                            }
+                        });
+                        if(foundOpenIssues) {
+                            if(entity.filtered) {
+                                fadeEntities.push(entity);
+                            }
+                        } else {
+                            if(!entity.filtered) {
+                                hideEntities.push(entity);
+                            }
+                        }
+                    } else {
+                        if(!entity.filtered) {
+                            hideEntities.push(entity);
+                        }
+                    }
+                });
+            } else {
+                entities.forEach(function (entity) {
+                    if (entity.changeFrequency >= changeFrequency) {
+                        let foundOpenIssues = false;
+                        entity.issues.forEach(function (issueId) {
+                            if (issueId !== "") {
+                                const issue = model.getIssuesById(issueId);
+                                if (issue.open && issue.security) {
+                                    foundOpenIssues = true;
+                                }
+                            }
+                        });
+                        if (foundOpenIssues) {
+                            if(entity.filtered) {
+                                fadeEntities.push(entity);
+                            }
+                        } else {
+                            if(!entity.filtered) {
+                                hideEntities.push(entity);
+                            }
+                        }
+                    } else {
+                        if(!entity.filtered) {
+                            hideEntities.push(entity);
+                        }
+                    }
+                });
+            }
+        }
+        if(hideEntities.length > 0) {
+            const hideEvent = {
+                sender: configurationController,
+                entities: hideEntities
+            };
+            events.filtered.on.publish(hideEvent);
+        }
+        if(fadeEntities.length > 0) {
+            const fadeEvent = {
+                sender: configurationController,
+                entities: fadeEntities
+            };
+            events.filtered.off.publish(fadeEvent);
+        }
     }
 	
 	function reset(){
