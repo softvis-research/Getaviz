@@ -13,7 +13,8 @@
         },
         {
             name: "configurationController",
-            changeFrequency: true
+            changeFrequency: true,
+            issues: true
         },
         {	name: 	"canvasHoverController",
             hoverColor: "orangered",
@@ -104,7 +105,8 @@
         },
         {	name: 	"packageExplorerController",
             projectIcon: "setups/mrt/project.png",
-            typeIcon: "setups/mrt/class.png"
+            typeIcon: "setups/mrt/class.png",
+            elementsSelectable: false
         },
         {	name: 	"issueExplorerController",
         }, {
@@ -151,7 +153,16 @@
 
     uis: [{
         name: "MRT",
-        navigation: { type:	"examine" },
+       // navigation: { type:	"examine" },
+        navigation: {
+            //examine, walk, fly, helicopter, lookAt, turntable, game
+            type: "turntable",
+
+            //turntable last 2 values - accepted values are between 0 and PI - 0.0 - 1,5 at Y-axis
+            typeParams: "0.0 0.0 0.001 1.5",
+
+            //speed: 10
+        },
         area: {
             name: "top",
             orientation: "horizontal",
@@ -160,17 +171,18 @@
             first: {
                 name: "top",
                 size: "50px",
+                collapsible: false,
                 controllers: [{name: "searchController"}]
             },
             second: {
-                collapsible: false,
                 size: "80%",
+                collapsible: false,
                 area: {
-                    //	orientation: "vertical",
+                   // orientation: "vertical",
                     name: "topDown",
+                    size: "20%",
                     first: {
                         size: "20%",
-                        collapsible: false,
                         expanders: [{
                             name: "packageExplorer",
                             title: "Package Explorer",
@@ -203,7 +215,7 @@
                                 area: {
                                     orientation: "horizontal",
                                     first: {
-                                        size: "65%",
+                                        size: "50%",
                                         collapsible: false,
                                         expanders: [{
                                             name: "issueExplorer",
@@ -214,9 +226,10 @@
                                     second: {
                                         orientation: "horizontal",
                                         area: {
-                                            orientation: "horizontal", collapsible: false,
+                                            orientation: "horizontal",
+                                            collapsible: false,
                                             first: {
-                                                size: "50%",
+                                                size: "70%",
                                                 collapsible: false,
                                                 expanders: [{
                                                     name: "Configuration",
