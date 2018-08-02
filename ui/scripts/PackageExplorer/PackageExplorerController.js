@@ -1,18 +1,17 @@
 var packageExplorerController = (function() {
     
-	var packageExplorerTreeID = "packageExplorerTree";
-	var jQPackageExplorerTree = "#packageExplorerTree";
+	let packageExplorerTreeID = "packageExplorerTree";
+	let jQPackageExplorerTree = "#packageExplorerTree";
 	
-	var tree;
-	
+	let tree;
 
-
-	var controllerConfig = {
+	let controllerConfig = {
 		projectIcon: 	"scripts/PackageExplorer/images/project.png",
 		packageIcon: 	"scripts/PackageExplorer/images/package.png",
 		typeIcon: 		"scripts/PackageExplorer/images/type.png",
 		fieldIcon: 		"scripts/PackageExplorer/images/field.png",
-		methodIcon:		"scripts/PackageExplorer/images/method.png"
+		methodIcon:		"scripts/PackageExplorer/images/method.png",
+        elementsSelectable: true
 	};
 	
 	function initialize(setupConfig){
@@ -20,12 +19,11 @@ var packageExplorerController = (function() {
     }
 	
 	function activate(rootDiv){
-
-				//create zTree div-container
-		var zTreeDiv = document.createElement("DIV");
+        //create zTree div-container
+		let zTreeDiv = document.createElement("DIV");
 		zTreeDiv.id = "zTreeDiv";
 				
-		var packageExplorerTreeUL = document.createElement("UL");
+		let packageExplorerTreeUL = document.createElement("UL");
 		packageExplorerTreeUL.id = packageExplorerTreeID;
 		packageExplorerTreeUL.setAttribute("class", "ztree");
 				
@@ -43,8 +41,8 @@ var packageExplorerController = (function() {
     
     function prepareTreeView() {
         
-        var entities = model.getAllEntities();        		
-        var items = [];
+        let entities = model.getAllEntities();
+        let items = [];
 		
 		//build items for ztree
 		entities.forEach(function(entity) {
@@ -154,8 +152,7 @@ var packageExplorerController = (function() {
 						sortStringB = "0" + b.name.toUpperCase();
 						break;
 				}
-				
-				
+
 				if (sortStringA < sortStringB){
 					return -1;
 				}
@@ -170,7 +167,7 @@ var packageExplorerController = (function() {
 		//zTree settings
 		var settings = {
             check: {
-                enable: true,
+                enable: controllerConfig.elementsSelectable,
                 chkboxType: {"Y": "ps", "N": "s"}
             },
             data: {
