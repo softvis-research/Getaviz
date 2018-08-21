@@ -16,10 +16,18 @@ FAMIXElement:
 	FAMIXParameterizedType | FAMIXAnnotationInstance | FAMIXAnnotationInstanceAttribute | FAMIXAnnotationTypeAttribute |
 	FAMIXLocalVariable | FAMIXImplicitVariable | FAMIXType | FAMIXParameterType |
 	FAMIXJavaSourceLanguage | FAMIXDeclaredException | FAMIXThrownException | FAMIXCaughtException | FAMIXEnumValue | 
-	FAMIXAntipattern | FAMIXPath | FAMIXRole | FAMIXComponent;
+	FAMIXAntipattern | FAMIXPath | FAMIXRole | FAMIXComponent |
+	
+	//ABAP
+	FAMIXDevclass | FAMIXReport | FAMIXDataElement | FAMIXTable | FAMIXABAPStruc |
+	FAMIXStrucElement | FAMIXFunctionModule
+;
 	
 FAMIXStructure:
-	FAMIXClass | FAMIXParameterizableClass | FAMIXEnum | FAMIXAnnotationType
+	FAMIXClass | FAMIXParameterizableClass | FAMIXEnum | FAMIXAnnotationType |
+	
+	//ABAP
+	FAMIXMessageClass | FAMIXFunctionGroup
 ;
 
 /** Explenation of different identifiers
@@ -38,6 +46,7 @@ FAMIXNamespace:
 	('(' 'fqn' fqn = MSESTRING ')')?
 	('(' 'isStub' isStub=Boolean ')')?
 	('(' 'parentScope' parentScope=IntegerReference ')')?
+	('(' 'iteration' iteration=INT ')')? //ABAP
 	')';
 
 FAMIXFileAnchor:
@@ -65,6 +74,7 @@ FAMIXClass:
 	('(' 'numberOfAntipattern' noa=INT ')')?
 	('(' 'betweennessCentrality' betweennessCentrality = MSESTRING ')')?
 	('(' 'STK-Rank' stkRank = MSESTRING ')')?
+	('(' 'iteration' iteration=INT ')')? //ABAP
 	')';
 
 FAMIXParameterizableClass:
@@ -103,6 +113,7 @@ FAMIXMethod:
 	('(' 'MethodType' MethodType = MethodType ')')?
 	('(' 'sourceAnchor' sourceAnchor=IntegerReference ')')?
 	('(' 'accessesVariable' accessesVar = IntegerReference ')')?
+	('(' 'iteration' iteration=INT ')')? //ABAP
 	')';
 
 FAMIXInvocation:
@@ -128,6 +139,8 @@ FAMIXAttribute:
 	'(' 'parentType' parentType=IntegerReference ')'
 	('(' 'sourceAnchor' sourceAnchor=IntegerReference ')')?
 	('(' 'getterSetter' getterSetter += IntegerReference* ')')?
+	('(' 'dataType' datatype=MSESTRING ')')? //ABAP
+	('(' 'iteration' iteration=INT ')')? //ABAP
 	')';	
 
 FAMIXAccess:
@@ -366,6 +379,113 @@ FAMIXPath:
 	'(' 'end' end = IntegerReference ')'
 	('(' 'antipattern' antipattern = IntegerReference ')')?
 	')';
+	
+	
+	
+//	ABAP extensions
+FAMIXDevclass:
+    '(FAMIX.Devclass'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    ('(' 'isStub' isStub=Boolean ')')?
+    ('(' 'parentScope' parentScope=IntegerReference ')')?
+    ('(' 'iteration' iteration=INT ')')? 
+    ')';
+
+FAMIXReport:
+    '(FAMIX.Report'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'numberOfStatements' numberOfStatements=INT ')')?
+    ('(' 'iteration' iteration=INT ')')? 
+    ')';
+    
+FAMIXDataElement:
+    '(FAMIX.DataElement'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'dataType' datatype=MSESTRING ')')?
+    ('(' 'iteration' iteration=INT ')')? 
+    ')';  
+    
+FAMIXTable:
+    '(FAMIX.Table'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'numberOfColumns' numberOfColumns=INT ')')?
+    ('(' 'rowCategory' rowCategory=INT ')')?
+    ('(' 'iteration' iteration=INT ')')? 
+    ')';
+    
+FAMIXABAPStruc:
+    '(FAMIX.ABAPStructure'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'iteration' iteration=INT ')')? 
+    ')';
+    
+FAMIXStrucElement:
+    '(FAMIX.StrucElement'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'dataType' datatype=MSESTRING ')')?
+    ('(' 'dataElement' dataElement=IntegerReference ')')?
+    ('(' 'iteration' iteration=INT ')')? 
+    ')'; 
+    
+FAMIXMessageClass:
+    '(FAMIX.MessageClass'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'numberOfMessages' numberOfMessages=INT ')')?
+    ('(' 'iteration' iteration=INT ')')? 
+    ')';
+
+FAMIXFunctionGroup:
+    '(FAMIX.FunctionGroup'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'iteration' iteration=INT ')')? 
+    ')';    
+
+FAMIXFunctionModule:
+    '(FAMIX.FunctionModule'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    ('(' 'numberOfStatements' numberOfStatements=INT ')')?
+    '(' 'parentType' parentType=IntegerReference ')'
+    ('(' 'iteration' iteration=INT ')')?
+    ')';
+
+// End of ABAP extensions     
+    
+    
+    	
 	
 enum MethodType:
 	Unknown | Setter | Getter | Constructor;	
