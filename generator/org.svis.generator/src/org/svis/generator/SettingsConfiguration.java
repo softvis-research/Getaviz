@@ -113,6 +113,10 @@ public class SettingsConfiguration {
 		return config.getBoolean("structure.recreate_famix", false);
 	}
 	
+	public Boolean hasAnchors() {
+		return config.getBoolean("structure.has_anchors", true);
+	}
+	
 	public Boolean containsProjects() {
 		return config.getBoolean("structure.containes_projects", false);
 	}
@@ -127,6 +131,8 @@ public class SettingsConfiguration {
 			return FamixParser.JDT2FAMIX;
 		case "jqa_bytecode":
 			return FamixParser.JQA_BYTECODE;
+		case "abap":
+			return FamixParser.ABAP;
 		default:
 			return FamixParser.VERVEINEJ;
 		}
@@ -949,7 +955,7 @@ public class SettingsConfiguration {
 	}
 	
 	public static enum FamixParser {	
-		JDT2FAMIX, VERVEINEJ, JQA_BYTECODE;	
+		JDT2FAMIX, VERVEINEJ, JQA_BYTECODE, ABAP;	
 	}
 	
 	public static enum MetricRepresentation {

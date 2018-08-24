@@ -20,7 +20,7 @@ FAMIXElement:
 	
 	//ABAP
 	FAMIXDevclass | FAMIXReport | FAMIXDataElement | FAMIXTable | FAMIXABAPStruc |
-	FAMIXStrucElement | FAMIXFunctionModule
+	FAMIXStrucElement | FAMIXFunctionModule | FAMIXFormroutine
 ;
 	
 FAMIXStructure:
@@ -481,6 +481,17 @@ FAMIXFunctionModule:
     '(' 'parentType' parentType=IntegerReference ')'
     ('(' 'iteration' iteration=INT ')')?
     ')';
+
+FAMIXFormroutine:
+	'(FAMIX.Formroutine' 
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    ('(' 'numberOfStatements' numberOfStatements=INT ')')?
+    '(' 'parentType' parentType=IntegerReference ')'
+    ('(' 'iteration' iteration=INT ')')?
+')';
 
 // End of ABAP extensions     
     

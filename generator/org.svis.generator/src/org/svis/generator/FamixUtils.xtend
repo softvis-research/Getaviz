@@ -11,6 +11,9 @@ import org.svis.xtext.famix.FAMIXNamespace
 import org.svis.xtext.famix.FAMIXParameterizableClass
 import org.svis.xtext.famix.FAMIXParameterizedType
 import org.svis.xtext.famix.FAMIXPrimitiveType
+import org.svis.xtext.famix.FAMIXReport //ABAP
+import org.svis.xtext.famix.FAMIXMessageClass //ABAP
+import org.svis.xtext.famix.FAMIXFunctionGroup //ABAP
 import org.svis.xtext.rd.DiskSegment
 import org.eclipse.emf.common.util.EList
 import org.apache.commons.logging.LogFactory
@@ -86,6 +89,8 @@ class FamixUtils {
 			FAMIXParameterizableClass: 	return "FAMIX.ParameterizableClass"
 			FAMIXEnum: 					return "FAMIX.Enum"
 			FAMIXAnnotationType: 		return "FAMIX.AnnotationType"
+			FAMIXMessageClass:		    return "FAMIX.MessageClass"
+			FAMIXFunctionGroup:			return "FAMIX.FunctionGroup"
 		}
 	}
 	
@@ -124,6 +129,7 @@ class FamixUtils {
 			FAMIXPath:					return el.id
 			HISMOClassVersion:			return el.id
 			HISMONamespaceVersion:		return el.id
+			FAMIXReport:				return el.id
 			default: log.warn("Forgot" + el.class + " in FamixUtils.getId")
 		}
 	}
@@ -140,6 +146,7 @@ class FamixUtils {
 			FAMIXAnnotationType:		return el.fqn
 			FAMIXComponent:				return el.fqn
 			FAMIXAntipattern:			return el.fqn
+			FAMIXReport:				return el.id
 			default: log.warn("Forgot" + el.class + " in FamixUtils.getFqn")
 		}
 	}
