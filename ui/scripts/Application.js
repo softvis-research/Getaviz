@@ -25,19 +25,34 @@ $(document).ready(function () {
 function initializeApplication(metaDataJson){
 
     //wait for canvas to be loaded full here...
-	var canvas = document.getElementById("x3dom-x3dElement-canvas");	
+	var canvas = document.getElementById(canvasId);
 	if(!canvas){
 		setTimeout(function(){initializeApplication(metaDataJson);}, 100);
 		return;
 	}
+
 	//create entity model
 	model.initialize(metaDataJson);
 
-	//start action controller
-	actionController.initialize();
+	//switch to differentiate between x3dom and a-frame (specified in index.html/aframe.html)
+	if(visMode) {
+        switch (visMode) {
+        	case "aframe": {
+				aframeActionController.initialize();
+				aframeCanvasManipulator.initialize();
+				break;
+			}
+            case "x3dom":
+            default: {
+                //start action controller
+                actionController.initialize();
 
-	//initialize canvas manipulator
-	canvasManipulator.initialize();
+                //initialize canvas manipulator
+                canvasManipulator.initialize();
+                break;
+            }
+        }
+    }
 
 	//initialize application
 	application.initialize();
@@ -73,8 +88,8 @@ var application = (function() {
 	//initilize application
 	//*******************	
 	
-	function initialize(){						
-		
+	function initialize(){
+
 		//parse setup if defined
 		if(!window["setup"]){
 			events.log.error.publish({ text: "No setup configured"});
@@ -95,12 +110,11 @@ var application = (function() {
 		if( currentUIConfig === null){
 			events.log.error.publish({ text: "No UI config in setup found"});
 			return;
-		}		
-				
-		
+		}
+
 		//initialize controllers
-		setup.controllers.forEach(function(controller){				
-			loadAndInitializeController(controller);			
+		setup.controllers.forEach(function(controller){
+			loadAndInitializeController(controller);
 		});		
 		
 		//for ajax loading 
@@ -115,7 +129,7 @@ var application = (function() {
 			setTimeout(startConfigParsingAfterControllerLoading, 1);
 			return;
 		}
-		
+
 		//get body and canvas elements
 		bodyElement = document.body; 	
 		canvasElement = document.getElementById("canvas");
@@ -134,7 +148,7 @@ var application = (function() {
 			parseUIConfig(currentUIConfig.name, currentUIConfig, uiDIV);
 
 			//activate controller
-			activateController();	
+			activateController();
 
 			events.log.info.publish({ text: "new config loaded: " + currentUIConfig.name });			
 		} catch(err) {
@@ -217,7 +231,7 @@ var application = (function() {
 	//*******************
 	
 	function parseUIConfig(configName, configPart, parent){
-		
+
 		//areas
 		if(configPart.area !== undefined){
 			var area = configPart.area;
@@ -318,7 +332,8 @@ var application = (function() {
 	
 	function loadAndInitializeController(controller){
 		var controllerName = controller.name;
-				
+        if(visMode == "aframe") console.debug("loadAndInitializeController("+controller.name+")");
+
 		//controller allready loaded by html-file?
 		if(window[controllerName]){
 			var controllerObject = window[controllerName];
@@ -337,7 +352,7 @@ var application = (function() {
 	
 	function setActivateController(controller, parent){
 		
-		var controllerName = controller.name;		
+		var controllerName = controller.name;
 		var controllerObject = controllers.get(controllerName);
 		
 		if(controllerObject === undefined){
@@ -374,7 +389,7 @@ var application = (function() {
 	}
 
 	function activateController(){
-		
+        console.debug(arguments.callee.name);
 		newActiveControllers.forEach(function(controllerObject){
 			if(controllerObject.activate){
 				var controllerDiv = activeControllers.get(controllerObject);

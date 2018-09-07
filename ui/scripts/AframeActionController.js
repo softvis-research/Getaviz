@@ -1,4 +1,4 @@
-var actionController = (function() {
+var aframeActionController = (function() {
 			
 
 //*********************************
@@ -102,8 +102,8 @@ var actionController = (function() {
 				return true;
 			}
 
-			eventObject.cancelBubble = true;
-			eventObject.stopPropagation(); 
+			//eventObject.cancelBubble = true;
+			//eventObject.stopPropagation();
 			return false;					
 		};
 
@@ -121,8 +121,8 @@ var actionController = (function() {
 				return true;
 			}
 
-			eventObject.cancelBubble = true;
-			eventObject.stopPropagation(); 
+			//eventObject.cancelBubble = true;
+			//eventObject.stopPropagation();
 			return false;			
 		};
 
@@ -136,8 +136,8 @@ var actionController = (function() {
 				return true;
 			}
 
-			eventObject.cancelBubble = true;
-			eventObject.stopPropagation(); 
+			//eventObject.cancelBubble = true;
+			//eventObject.stopPropagation();
 			return false;				
 		}; 
 
