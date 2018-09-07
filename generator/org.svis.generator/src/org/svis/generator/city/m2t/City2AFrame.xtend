@@ -68,7 +68,6 @@ class City2AFrame {
 			depth="«district.length»"
 			color="«district.color»"
 			shader="flat"
-			fog="false"
 			flat-shading="true">
 		</a-box>
 	'''
@@ -80,7 +79,6 @@ class City2AFrame {
 				depth="«building.length»"
 				color="«building.color»"
 				shader="flat"
-				fog="false"
 				flat-shading="true">
 		</a-box>
 	'''
@@ -94,7 +92,6 @@ class City2AFrame {
 					 height="«bs.height»" 
 					 color="«bs.color»"
 					 shader="flat"
-					 fog="false"
 					 flat-shading="true"
 					 segments-height="2"
 					 segments-radial="20">
@@ -106,7 +103,6 @@ class City2AFrame {
 						depth="«bs.length»"
 						color="«bs.color»"
 						shader="flat"
-						fog="false"
 						flat-shading="true">
 				</a-box>
 			«ENDIF»
@@ -118,7 +114,6 @@ class City2AFrame {
 					 height="«config.panelSeparatorHeight»" 
 					 color="«config.getCityColorHex("black")»"
 					 shader="flat"
-					 fog="false"
 					 flat-shading="true"
 					 segments-height="2"
 					 segments-radial="20">
@@ -131,7 +126,6 @@ class City2AFrame {
 						depth="«separatorB.length»"
 						color="«config.getCityColorHex("black")»"
 						shader="flat"
-						fog="false"
 						flat-shading="true">
 				</a-box>
 			«ENDIF»
@@ -145,7 +139,6 @@ class City2AFrame {
 				depth="«floor.length»"
 				color="«floor.color»"
 				shader="flat"
-				fog="false"
 				flat-shading="true">
 			</a-box>
 	'''
@@ -157,7 +150,6 @@ class City2AFrame {
 				depth="«chimney.length»"
 				color="«chimney.color»"
 				shader="flat"
-				fog="false"
 				flat-shading="true">
 			</a-box>
 	'''
