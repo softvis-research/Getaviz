@@ -2,8 +2,6 @@ var experimentController = (function() {
 		
 	var experimentControllerDiv;
 	
-	var config;
-	
 	var stepOrder;
 	var stepOrderIterator = 0;
 	
@@ -13,7 +11,7 @@ var experimentController = (function() {
 	var stepTime = 0;
 	var stepTextTime = 0;
 
-	let controllerConfig = {
+	var controllerConfig = {
 		showBackButton: false,
 		showSureButton: true,
 		showPopup: true,
@@ -32,10 +30,7 @@ var experimentController = (function() {
 		document.getElementsByTagName("head")[0].appendChild(cssLink);
 				
 		//interactionLogger.logConfig(config.clickConnector, config.clickTransparency, config.taskOrder.toString());
-		
-		//parse config
-	//	config = setupConfig;
-		
+
 		stepOrder = setupConfig.stepOrder;
 		steps = setupConfig.steps;
 		
@@ -133,10 +128,11 @@ var experimentController = (function() {
 	
 	function taskSolvedButtonClick(event) {
 
-        if ($("#taskSolvedButton")[0].value == "Done") {
+        if ($("#taskSolvedButton")[0].value == "Next" && controllerConfig.showSureButton) {
             $("#taskSolvedButton")[0].value = "Sure?"
             setTimeout(resetSolvedButton, 3000);
         } else {
+
             nextStep();
         }
     }
@@ -146,7 +142,7 @@ var experimentController = (function() {
 	}
 
 	function resetSolvedButton() {
-		if ($('#taskSolvedButton')[0].value != 'Next') $('#taskSolvedButton')[0].value = 'Next';
+		if ($('#taskSolvedButton')[0].value !== 'Next') $('#taskSolvedButton')[0].value = 'Next';
 	}
 	
 	function nextStep(){
