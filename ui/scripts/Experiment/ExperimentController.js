@@ -15,7 +15,6 @@ var experimentController = (function() {
 		showBackButton: false,
 		showSureButton: true,
 		showPopup: true,
-		showTimer: true
 	};
 
 
@@ -198,8 +197,9 @@ var experimentController = (function() {
 		textArray.forEach(function(text){
 			fullText = fullText + text + "<br/>";
 		});
-		
-		//showPopup(fullText, posx, posy, width, height, time);
+		if(controllerConfig.showPopup) {
+            showPopup(fullText, posx, posy, width, height, time);
+        }
 		setText(fullText);				
 	}
 	
