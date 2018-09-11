@@ -12,10 +12,20 @@ var experimentController = (function() {
 	
 	var stepTime = 0;
 	var stepTextTime = 0;
-	
-	function initialize(controllerConfig){
 
-		var cssLink = document.createElement("link");
+	let controllerConfig = {
+		showBackButton: false,
+		showSureButton: true,
+		showPopup: true,
+		showTimer: true
+	};
+
+
+    function initialize(setupConfig){
+
+        application.transferConfigParams(setupConfig, controllerConfig);
+
+        var cssLink = document.createElement("link");
 		cssLink.type = "text/css";
 		cssLink.rel = "stylesheet";
 		cssLink.href = "scripts/Experiment/ec.css";
@@ -24,13 +34,13 @@ var experimentController = (function() {
 		//interactionLogger.logConfig(config.clickConnector, config.clickTransparency, config.taskOrder.toString());
 		
 		//parse config
-		config = controllerConfig;
+	//	config = setupConfig;
 		
-		stepOrder = controllerConfig.stepOrder;				
-		steps = controllerConfig.steps;
+		stepOrder = setupConfig.stepOrder;
+		steps = setupConfig.steps;
 		
-		stepTextTime = controllerConfig.taskTextButtonTime;
-		stepTime = controllerConfig.taskTime;
+		stepTextTime = setupConfig.taskTextButtonTime;
+		stepTime = setupConfig.taskTime;
 		
 		//events
 		events.marked.on.subscribe(onEntityMarked);
@@ -54,12 +64,14 @@ var experimentController = (function() {
 		taskSolvedButton.value = "Next";
 		taskSolvedButton.type = "button";		
 		experimentHeaderDiv.appendChild(taskSolvedButton);
-		
-		var backButton = document.createElement('INPUT');
-		backButton.id = 'backButton';
-		backButton.value = 'Back';
-		backButton.type = 'button';
-		experimentHeaderDiv.appendChild(backButton);
+
+		if(controllerConfig.showBackButton) {
+            var backButton = document.createElement('INPUT');
+            backButton.id = 'backButton';
+            backButton.value = 'Back';
+            backButton.type = 'button';
+            experimentHeaderDiv.appendChild(backButton);
+        }
 		
 		//taskdialog
 		var taskDialogDiv = document.createElement("DIV");
@@ -96,8 +108,10 @@ var experimentController = (function() {
 		$('#taskSolvedButton').jqxButton({ theme: 'metro' });
 		$('#taskSolvedButton').click(taskSolvedButtonClick);
 
-		$('#backButton').jqxButton({ theme: 'metro' });
-		$('#backButton').click(backButtonClick);
+		if(controllerConfig.showBackButton) {
+            $('#backButton').jqxButton({theme: 'metro'});
+            $('#backButton').click(backButtonClick);
+        }
 		
 		//taskdialog
 		$("#taskDialog").jqxWindow({ height: 1000, width: 700, theme: 'metro', isModal: true, autoOpen: false, resizable: false, showCloseButton: false, okButton: $('#button_ok') });
