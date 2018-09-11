@@ -2,8 +2,6 @@ var experimentController = (function() {
 		
 	var experimentControllerDiv;
 	
-	var config;
-	
 	var stepOrder;
 	var stepOrderIterator = 0;
 	
@@ -12,25 +10,31 @@ var experimentController = (function() {
 	
 	var stepTime = 0;
 	var stepTextTime = 0;
-	
-	function initialize(controllerConfig){
 
-		var cssLink = document.createElement("link");
+	var controllerConfig = {
+		showBackButton: false,
+		showSureButton: true,
+		showPopup: true,
+	};
+
+
+    function initialize(setupConfig){
+
+        application.transferConfigParams(setupConfig, controllerConfig);
+
+        var cssLink = document.createElement("link");
 		cssLink.type = "text/css";
 		cssLink.rel = "stylesheet";
 		cssLink.href = "scripts/Experiment/ec.css";
 		document.getElementsByTagName("head")[0].appendChild(cssLink);
 				
 		//interactionLogger.logConfig(config.clickConnector, config.clickTransparency, config.taskOrder.toString());
+
+		stepOrder = setupConfig.stepOrder;
+		steps = setupConfig.steps;
 		
-		//parse config
-		config = controllerConfig;
-		
-		stepOrder = controllerConfig.stepOrder;				
-		steps = controllerConfig.steps;
-		
-		stepTextTime = controllerConfig.taskTextButtonTime;
-		stepTime = controllerConfig.taskTime;
+		stepTextTime = setupConfig.taskTextButtonTime;
+		stepTime = setupConfig.taskTime;
 		
 		//events
 		events.marked.on.subscribe(onEntityMarked);
@@ -51,10 +55,17 @@ var experimentController = (function() {
 		
 		var taskSolvedButton = document.createElement("INPUT");
 		taskSolvedButton.id = "taskSolvedButton";
-		taskSolvedButton.value = "Done";
+		taskSolvedButton.value = "Next";
 		taskSolvedButton.type = "button";		
 		experimentHeaderDiv.appendChild(taskSolvedButton);
-		
+
+		if(controllerConfig.showBackButton) {
+            var backButton = document.createElement('INPUT');
+            backButton.id = 'backButton';
+            backButton.value = 'Back';
+            backButton.type = 'button';
+            experimentHeaderDiv.appendChild(backButton);
+        }
 		
 		//taskdialog
 		var taskDialogDiv = document.createElement("DIV");
@@ -88,8 +99,13 @@ var experimentController = (function() {
 		parent.appendChild(experimentControllerDiv);
 		
 		//taskFieldText and solvedButton
-		$("#taskSolvedButton").jqxButton({ theme: "metro"});
-		$("#taskSolvedButton").click(taskSolvedButtonClick);
+		$('#taskSolvedButton').jqxButton({ theme: 'metro' });
+		$('#taskSolvedButton').click(taskSolvedButtonClick);
+
+		if(controllerConfig.showBackButton) {
+            $('#backButton').jqxButton({theme: 'metro'});
+            $('#backButton').click(backButtonClick);
+        }
 		
 		//taskdialog
 		$("#taskDialog").jqxWindow({ height: 1000, width: 700, theme: 'metro', isModal: true, autoOpen: false, resizable: false, showCloseButton: false, okButton: $('#button_ok') });
@@ -109,14 +125,23 @@ var experimentController = (function() {
 	}
 	
 	
-	function taskSolvedButtonClick(event){
-		
-		if($("#taskSolvedButton")[0].value == "Done"){
-			$("#taskSolvedButton")[0].value = "Sure?"
-			setTimeout(resetSolvedButton, 3000);
-		} else {
-			nextStep();		
-		}		
+	function taskSolvedButtonClick(event) {
+
+        if ($("#taskSolvedButton")[0].value == "Next" && controllerConfig.showSureButton) {
+            $("#taskSolvedButton")[0].value = "Sure?"
+            setTimeout(resetSolvedButton, 3000);
+        } else {
+
+            nextStep();
+        }
+    }
+
+	function backButtonClick(event) {
+		previousStep();
+	}
+
+	function resetSolvedButton() {
+		if ($('#taskSolvedButton')[0].value !== 'Next') $('#taskSolvedButton')[0].value = 'Next';
 	}
 	
 	function nextStep(){
@@ -126,8 +151,14 @@ var experimentController = (function() {
 		setNextStep();
 		
 		setStepTexts(currentStep.text, 100, 100, 1000, 300, stepTextTime);		
+	}
 		
-		application.loadUIConfig(currentStep.ui);
+	function previousStep() {
+		stopTaskTimer();
+
+		setPreviousStep();
+
+		setStepTexts(currentStep.text, 100, 100, 1000, 300, stepTextTime);
 	}
 		
 	function setNextStep(){
@@ -144,6 +175,20 @@ var experimentController = (function() {
 		});		
 	}
 	
+	function setPreviousStep() {
+		if (stepOrderIterator > 1) {
+			stepOrderIterator = stepOrderIterator - 1;
+
+			var nextStepByStepOrder = stepOrder[stepOrderIterator - 1];
+
+			steps.forEach(function(step) {
+				if (step.number == nextStepByStepOrder) {
+					currentStep = step;
+					return;
+				}
+			});
+		}
+	}
 	
 	function setStepTexts(textArray, posx, posy, width, height, time){
 		
@@ -152,8 +197,9 @@ var experimentController = (function() {
 		textArray.forEach(function(text){
 			fullText = fullText + text + "<br/>";
 		});
-		
-		showPopup(fullText, posx, posy, width, height, time);
+		if(controllerConfig.showPopup) {
+            showPopup(fullText, posx, posy, width, height, time);
+        }
 		setText(fullText);				
 	}
 	
@@ -193,9 +239,9 @@ var experimentController = (function() {
 	}
 	
 	
-	function resetSolvedButton(){
-		$("#taskSolvedButton")[0].value = "Done";
-	}
+	//function resetSolvedButton(){
+	//	$("#taskSolvedButton")[0].value = "Next";
+	//}
 	
 	
 	
@@ -285,6 +331,7 @@ var experimentController = (function() {
         initialize: initialize,
 		activate: activate
     };
-})();
+}
+)();
 
 

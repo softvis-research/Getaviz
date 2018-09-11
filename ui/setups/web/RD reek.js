@@ -31,7 +31,11 @@
 
 		{ 	name: 	"canvasFlyToController" 
 		},
-	
+        {
+            name: 'filterController',
+            devMode: false,
+            configuration: 'default.json'
+        },
 		{	name: 	"searchController" 
 		},
 
@@ -210,11 +214,11 @@
             ],
         }
 	],
-	
-	
-	
 
-	uis: [
+
+
+
+    uis: [
 
 
         {
@@ -237,11 +241,11 @@
                 resizable: false,
                 collapsible: false,
                 first: {
-                    size: "75px",
+                    size: "25px",
                     collapsible: false,
                     controllers: [
                         {name: "menuController"},
-                        {name: "searchController"},
+                        //{name: "searchController"},
                         {name: "emailController"},
                     ],
                 },
@@ -261,13 +265,13 @@
                                 name: "packagePanel",
                                 first: {
                                     collapsible: false,
-                                    size: "65%",
+                                    size: "33%",
                                     expanders: [
                                         {
-                                            name: "packageExplorer",
-                                            title: "Package Explorer",
+                                            name: "filterExplorer",
+                                            title: "Filter",
                                             controllers: [
-                                                {name: "packageExplorerController"}
+                                                {name: "filterController"}
                                             ],
                                         }
                                     ]
@@ -277,22 +281,44 @@
                                     area: {
                                         orientation: "horizontal",
                                         name: "legendPanel",
-                                        size: "100%%",
+                                        size: "50%%",
                                         collapsible: false,
                                         first: {
-                                            size: "100%",
+                                            size: "50%",
                                             expanders: [
                                                 {
-                                                    name: "legend",
-                                                    title: "Legend",
-
+                                                    name: "packageExplorer",
+                                                    title: "Package Explorer",
                                                     controllers: [
-                                                        {name: "legendController"}
+                                                        {name: "packageExplorerController"}
                                                     ],
                                                 },
                                             ]
                                         },
                                         second: {
+                                            size: "50%",
+                                            area: {
+                                                orientation: "horizontal",
+                                                name: "legendPanel2",
+                                                size: "100%",
+                                                collapsible: false,
+                                                first: {
+                                                    size: "100%",
+                                                    expanders: [
+                                                        {
+                                                            name: "legend",
+                                                            title: "Legend",
+
+                                                            controllers: [
+                                                                {name: "legendController"}
+                                                            ],
+                                                        },
+                                                    ]
+                                                },
+                                                second: {
+
+                                                }
+                                            },
                                         },
                                     }
                                 },
@@ -363,5 +389,5 @@
                 }
             }
         }
-	]
+    ]
 };
