@@ -1,16 +1,16 @@
 var canvasMarkController = (function() {
     
 	 
-	var SELECTION_MODES = {
+	let SELECTION_MODES = {
 		UP 			: "UP",
 		DOWN 		: "DOWN",
 		DURATION	: "DURATION"
 	};
 	
 	//config parameters	
-	var controllerConfig = {		
+	var controllerConfig = {
 		setCenterOfRotation : false,
-        markingColor: "darkred",
+        markingColor: "green",
     	selectionMouseKey: 2,
 		selectionMode: SELECTION_MODES.UP,
 		selectionDurationSeconds: 0.5,
@@ -18,7 +18,7 @@ var canvasMarkController = (function() {
 		showProgressBar: false,
 	};
 
-	var downActionEventObject;
+	let downActionEventObject;
     
 	function initialize(setupConfig){	
 
@@ -38,7 +38,7 @@ var canvasMarkController = (function() {
     }
 		
 	function reset(){
-		var markedEntities = events.marked.getEntities();		
+		let markedEntities = events.marked.getEntities();
 		
 		canvasManipulator.resetColorOfEntities(markedEntities);	
 	}
@@ -113,7 +113,7 @@ var canvasMarkController = (function() {
 
 	function handleOnClick(eventObject) {            
 				
-		var applicationEvent = {			
+		let applicationEvent = {
 			sender: canvasMarkController,
 			entities: [eventObject.entity]
 		};
@@ -135,7 +135,7 @@ var canvasMarkController = (function() {
 
 
 	function onEntityMarked(applicationEvent) {
-		var entity = applicationEvent.entities[0];	
+		let entity = applicationEvent.entities[0];
 		
 		if(entity.hovered){
 			canvasManipulator.unhighlightEntities([entity]);			
@@ -144,7 +144,7 @@ var canvasMarkController = (function() {
 	}
 
 	function onEntityUnmarked(applicationEvent) {
-		var entity = applicationEvent.entities[0];
+		let entity = applicationEvent.entities[0];
 		canvasManipulator.resetColorOfEntities([entity]);	
 	}
 
@@ -152,14 +152,14 @@ var canvasMarkController = (function() {
 
 	function showProgressBar(eventObject){
 		
-		var canvas = document.getElementById("canvas");
+		let canvas = document.getElementById("canvas");
 		
-		var progressBarDivElement = document.createElement("DIV");
+		let progressBarDivElement = document.createElement("DIV");
 		progressBarDivElement.id = "progressBarDiv";
 		
 		canvas.appendChild(progressBarDivElement);
 
-		var progressBar = $("#progressBarDiv");
+		let progressBar = $('#progressBarDiv');
 
 		progressBar.jqxProgressBar({ 
 			width: 				250, 
@@ -185,13 +185,13 @@ var canvasMarkController = (function() {
 
 	function hideProgressBar(){		
 		
-		var progressBarDivElement = document.getElementById("progressBarDiv");
+		let progressBarDivElement = document.getElementById("progressBarDiv");
 
 		if(!progressBarDivElement){
 			return;
 		}	
 
-		var canvas = document.getElementById("canvas");		
+		let canvas = document.getElementById("canvas");
 		canvas.removeChild(progressBarDivElement);
 	}
 		
