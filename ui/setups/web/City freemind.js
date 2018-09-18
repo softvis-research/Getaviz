@@ -180,26 +180,26 @@
             name: "legendController",
             entries: [{
                 name: "Package",
-                icon: "setups/web/package.png"
+                icon: "grayCircle"
             }, {
                 name: "Type",
-                icon: "setups/web/type.png",
+                icon: "purpleCircle",
             }, {
                 name: "Navigation",
-                icon: "setups/web/navigation.png",
+                icon: "navigation",
                 entries: [
                     {
                         name: "Rotate",
-                        icon: "setups/web/left.png"
+                        icon: "leftMouseButton"
                     }, {
                         name: "Center",
-                        icon: "setups/web/double.png"
+                        icon: "doubleClick"
                     }, {
                         name: "Move",
-                        icon: "setups/web/middle.png"
+                        icon: "midMouseButton"
                     }, {
                         name: "Zoom",
-                        icon: "setups/web/zoom.png"
+                        icon: "scrolling"
                     }]
             }
             ],

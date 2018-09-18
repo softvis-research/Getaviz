@@ -1,9 +1,27 @@
 var legendController = (function() {
     
-	var versionExplorerTreeID = "legendTree";
-	var jQVersionExplorerTree = "#" + versionExplorerTreeID;
-	var tree;
-	var items = [];
+	let versionExplorerTreeID = "legendTree";
+	let jQVersionExplorerTree = "#" + versionExplorerTreeID;
+	let tree;
+	let items = [];
+
+	let icons = {
+        redCircle: 	        "scripts/Legend/images/circle_red.png",
+        blueCircle: 	    "scripts/Legend/images/circle_blue.png",
+        greenCircle: 	    "scripts/Legend/images/circle_green.png",
+        grayCircle: 	    "scripts/Legend/images/circle_gray.png",
+        purpleCircle:       "scripts/Legend/images/circle_purple.png",
+        yellowCircle:       "scripts/Legend/images/circle_yellow.png",
+        lightBlueCircle:    "scripts/Legend/images/circle_blue_light.png",
+        greenRedGradient: 	"scripts/Legend/images/gradient_green-red.png",
+        circleWidth:        "scripts/Legend/images/circle_width.png",
+        navigation:         "scripts/Legend/images/navigation.png",
+        leftMouseButton:    "scripts/Legend/images/left.png",
+        rightMouseButton:   "scripts/Legend/images/right.png",
+        midMouseButton:     "scripts/Legend/images/middle.png",
+        doubleClick:        "scripts/Legend/images/double.png",
+        scrolling:          "scripts/Legend/images/scrolling.png"
+    };
     var controllerConfig = {
         entries: []
     };
@@ -11,13 +29,13 @@ var legendController = (function() {
 	function initialize(setupConfig){
         application.transferConfigParams(setupConfig, controllerConfig);
     }
-	
+
 	function activate(rootDiv){
 		//create zTree div-container
-		var zTreeDiv = document.createElement("DIV");
+		let zTreeDiv = document.createElement("DIV");
 		zTreeDiv.id = "zTreeDiv";
 
-		var versionExplorerTreeUL = document.createElement("UL");
+		let versionExplorerTreeUL = document.createElement("UL");
 		versionExplorerTreeUL.id = versionExplorerTreeID;
 		versionExplorerTreeUL.setAttribute("class", "ztree");
 
@@ -27,16 +45,16 @@ var legendController = (function() {
 	    //create zTree
 		prepareTreeView();
     }
-	
+
 	function reset(){
 	    prepareTreeView();
 	}
 
 	function createItem(entry, parent) {
-        var item = { id: entry.name, parentId: parent, name: entry.name, iconSkin: "zt", icon: entry.icon, open: true, glossary: entry.glossary };
+        let item = { id: entry.name, parentId: parent, name: entry.name, iconSkin: "zt", icon: icons[entry.icon], open: true, glossary: entry.glossary };
         items.push(item);
         if(entry.entries !== undefined) {
-            var parentid = entry.name;
+            let parentid = entry.name;
             entry.entries.forEach(function(entry){
                 createItem(entry, parentid);
             });
