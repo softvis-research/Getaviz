@@ -312,7 +312,6 @@ class Hismo2JSON implements IGenerator2 {
 		"changeFrequency": "«cv.changeFrequency»"
 		«ELSE»
 		"changeFrequency": ""
-		«log.info(cv.id + "XXX" + cv.changeFrequency)»
 		«ENDIF»
 	'''
 	def private toMetaData2(HISMOClassVersion cv) '''
