@@ -83,6 +83,9 @@ var packageExplorerController = (function() {
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.packageIcon, iconSkin: "zt"};
 						break;
 					case "Class":
+                        if(entity.id.endsWith("_2") || entity.id.endsWith("_3")){
+                            break;
+                        };
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
 						break;
 					case  "ParameterizableClass":
@@ -222,7 +225,6 @@ var packageExplorerController = (function() {
 			sender: packageExplorerController,
 			entities: [model.getEntityById(treeNode.id)]
 		};
-		
 		events.selected.on.publish(applicationEvent);
     }
 	

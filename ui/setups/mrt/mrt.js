@@ -17,78 +17,9 @@
             issues: true
         },
         {	name: 	"canvasHoverController",
-            hoverColor: "orangered",
+            hoverColor: "#833f88",
             showVersion: false,
             showIssues: true
-        },
-        {	name: 	"canvasMarkController",
-            markingColor: "orangered",
-            //TODO pars by config
-            eventHandler: [{
-                handler : "onEntityMarked",
-                event 	: events.marked.on
-            },{
-                handler : "onEntityUnmarked",
-                event 	: events.marked.off
-            }],
-
-            //as function
-            actionEventCoupling:	function(controller){
-                actionController.actions.mouse.key[2].up.subscribe(function(actionEvent){
-                    if(!actionEvent.entity){
-                        return;
-                    }
-
-                    if(!actionController.actions.keyboard.key[32].pressed){
-                        return;
-                    }
-
-                    var entity = actionEvent.entity;
-
-                    var applicationEvent = {
-                        sender		: canvasMarkController,
-                        entities	: [entity]
-                    };
-
-                    if(entity.marked){
-                        events.marked.off.publish(applicationEvent);
-                    } else {
-                        events.marked.on.publish(applicationEvent);
-                    }
-                });
-
-                events.marked.on.subscribe(controller.onEntityMarked);
-                events.marked.off.subscribe(controller.onEntityUnmarked);
-            },
-
-            //as config
-            //TODO pars by actionEventMapper
-            actionEventCouplingConfig: [{
-                event		: events.marked.off,
-
-                constraints	: [{
-                    action : actionController.actions.mouse.key[2].up
-                }, {
-                    entity : [{
-                        marked	: true
-                    }]
-                }, {
-                    pressed : actionController.actions.keyboard.key[32].pressed
-                }]
-            }, {
-                event		: events.marked.on,
-
-                constraints	: [{
-                    action : actionController.actions.mouse.key[2].up
-                }, {
-                    entity : [{
-                        marked	: false
-                    }]
-                }, {
-                    pressed : actionController.actions.keyboard.key[32].pressed
-                }],
-            }],
-
         },
         {	name: 	"canvasFilterController"
         },
@@ -96,10 +27,6 @@
             targetType: "Namespace"
         },
         { 	name: 	"canvasResetViewController"
-        },
-        {
-            name: "canvasSelectController",
-            color: "orangered"
         },
         {	name: 	"searchController"
         },
@@ -121,15 +48,16 @@
                 name: "Class",
                 icon: "setups/mrt/class.png",
                 entries: [{
-                    name: "Number of related issues",
-                    icon: "setups/mrt/issues.png"
-                }, {
-                    name: "Change Frequency",
-                    icon: "setups/mrt/frequency.png"
+                    name: "Lines of Code",
+                    icon: "setups/mrt/size.png"
                 },{
-                    name: "Selection",
-                    icon: "setups/mrt/selection.png"
-                }]
+                    name: "Number of open issues",
+                    icon: "setups/mrt/issues.png"
+                },{
+                    name: "Number of open security issues",
+                    icon: "setups/mrt/security_issues.png"
+                }
+                ]
             }, {
                 name: "Navigation",
                 icon: "setups/mrt/navigation.png",
@@ -137,9 +65,6 @@
                     {
                         name: "Rotate",
                         icon: "setups/mrt/left.png"
-                    }, {
-                        name: "Center",
-                        icon: "setups/mrt/double.png"
                     }, {
                         name: "Move",
                         icon: "setups/mrt/middle.png"
@@ -204,9 +129,7 @@
                                     {name: "defaultLogger"},
                                     {name: "canvasHoverController"},
                                     {name: "canvasFilterController"},
-                                    {name: "canvasMarkController"},
-                                    {name: "canvasFlyToController"},
-                                    {name: "canvasSelectController"}
+                                    {name: "canvasFlyToController"}
                                 ]
                             },
                             second: {
@@ -215,7 +138,7 @@
                                 area: {
                                     orientation: "horizontal",
                                     first: {
-                                        size: "50%",
+                                        //size: "33%",
                                         collapsible: false,
                                         expanders: [{
                                             name: "issueExplorer",
@@ -229,7 +152,7 @@
                                             orientation: "horizontal",
                                             collapsible: false,
                                             first: {
-                                                size: "70%",
+                                                size: "45%",
                                                 collapsible: false,
                                                 expanders: [{
                                                     name: "Configuration",

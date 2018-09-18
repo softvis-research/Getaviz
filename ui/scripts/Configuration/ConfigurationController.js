@@ -31,7 +31,7 @@ var configurationController = (function() {
     function prepareIssuesFilter(rootDiv) {
 	    const divElement = document.createElement("DIV");
 	    const h = document.createElement("H4");
-	    const textNode = document.createTextNode("Issues Filter");
+	    const textNode = document.createTextNode("Class Filter");
 	    h.appendChild(textNode);
 	    rootDiv.appendChild(h);
         rootDiv.appendChild(divElement);
@@ -86,8 +86,8 @@ var configurationController = (function() {
             ticksPosition: 'bottom',
             showRange: true,
             tickLabelFormatFunction: function (value) {
-                if (value == 0) return "No changes";
-                if (value == 1) return "Daily changes";
+                if (value == 0) return "min";
+                if (value == 1) return "max";
                 return "";
             }
         });

@@ -258,7 +258,7 @@ class Hismo2JSON implements IGenerator2 {
 		"id":			 "«nv.id»",
 		"qualifiedName": "«nv.value»",
 		"name":			 "«nv.value»",
-		«IF (config.containsProjects)»
+		«IF (config.containsProjects && nv.container === null)»
 			"type":			 "FAMIX.Project",
 		«ELSE»
 			"type":			 "FAMIX.Namespace",
@@ -312,6 +312,7 @@ class Hismo2JSON implements IGenerator2 {
 		"changeFrequency": "«cv.changeFrequency»"
 		«ELSE»
 		"changeFrequency": ""
+		«log.info(cv.id + "XXX" + cv.changeFrequency)»
 		«ENDIF»
 	'''
 	def private toMetaData2(HISMOClassVersion cv) '''

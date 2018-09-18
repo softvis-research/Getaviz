@@ -62,7 +62,6 @@ class RD2X3D {
 
 	def String toDisk(Disk disk) '''
 		<Transform translation='«disk.position.x + " " + disk.position.y + " " + disk.position.z»' 
-			rotation='0 0 1 1.57' 
 			scale='1 1 «disk.height»'>
 		<Transform DEF='«disk.id»'>
 			<Shape>
@@ -144,7 +143,7 @@ class RD2X3D {
 		«FOR segment : segments»
 			<Transform  translation='«(segment.
 			eContainer as Disk).position.x + " " + (segment.eContainer as Disk).position.y + " " +
-			(segment.eContainer as Disk).position.z»' rotation='0 0 1 1.57'>
+			(segment.eContainer as Disk).position.z»'>
 			<Transform DEF='«segment.id»'>	
 				<Shape>
 					<Extrusion
@@ -173,7 +172,7 @@ class RD2X3D {
 			if(instance.position !== null){'''
 				<Transform DEF='«famix.createID(instance.fqn)»'
 					translation='«instance.position.x + " " + instance.position.y + " " + instance.position.z»' 
-					rotation='0 0 1 1.57' scale='1 1 «instance.length»'>
+					scale='1 1 «instance.length»'>
 					<Shape>
 						<Extrusion
 							convex='true'
@@ -199,7 +198,7 @@ class RD2X3D {
 		«FOR invocation : invocations»
 			<Transform DEF='«famix.createID(invocation.fqn)»' 
 				translation='«invocation.position.x + " " + invocation.position.y + " " +
-			invocation.position.z»' rotation='0 0 1 1.57'  scale='1 1 «invocation.length»'>
+			invocation.position.z»' scale='1 1 «invocation.length»'>
 			<Shape>
 				<Extrusion
 					convex='true'
@@ -224,7 +223,7 @@ class RD2X3D {
 		«FOR invocation : invocations»
 			<Transform DEF='«famix.createID(invocation.fqn)»' 
 				translation='«invocation.position.x + " " + invocation.position.y + " " + invocation.position.z»' 
-				rotation='0 0 1 1.57' scale='1 1 «invocation.length»'>
+				scale='1 1 «invocation.length»'>
 				<Shape>
 					<Extrusion
 						convex='true'
@@ -247,7 +246,7 @@ class RD2X3D {
 	def String toDiskVersions(Disk disk) '''
 		«FOR version : disk.diskVersions.sortBy[level]»
 			«IF (version.scale > 0)»
-				<Transform translation='«disk.position.x + " " + disk.position.y + " " + (version.level*60 + 10)»' rotation='0 0 1 1.57'>
+				<Transform translation='«disk.position.x + " " + disk.position.y + " " + (version.level*60 + 10)»'>
 				<Transform scale='«version.scale» «version.scale» 1'>
 					<Transform DEF='«version.id»'>
 						<Shape>

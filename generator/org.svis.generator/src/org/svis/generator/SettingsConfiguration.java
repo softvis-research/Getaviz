@@ -13,6 +13,7 @@ import org.svis.generator.SettingsConfiguration.Panels.SeparatorModes;
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
 	private static SettingsConfiguration instance = null;
+	private String classColor = "";
 
 	private SettingsConfiguration() {
 	}
