@@ -40,37 +40,37 @@
             name: "legendController",
             entries: [{
                 name: "Project",
-                icon: "setups/mrt/project.png"
+                icon: "blackCircle"
             }, {
                 name: "Package",
-                icon: "setups/mrt/package.png"
+                icon: "grayCircle"
             }, {
                 name: "Class",
-                icon: "setups/mrt/class.png",
+                icon: "purpleCircle",
                 entries: [{
                     name: "Lines of Code",
-                    icon: "setups/mrt/size.png"
+                    icon: "circleWidth"
                 },{
                     name: "Number of open issues",
-                    icon: "setups/mrt/issues.png"
+                    icon: "blueCylinderHeight"
                 },{
                     name: "Number of open security issues",
-                    icon: "setups/mrt/security_issues.png"
+                    icon: "orangeCylinderHeight"
                 }
                 ]
             }, {
                 name: "Navigation",
-                icon: "setups/mrt/navigation.png",
+                icon: "navigation",
                 entries: [
                     {
                         name: "Rotate",
-                        icon: "setups/mrt/left.png"
+                        icon: "leftMouseButton"
                     }, {
                         name: "Move",
-                        icon: "setups/mrt/middle.png"
+                        icon: "midMouseButton"
                     }, {
                         name: "Zoom",
-                        icon: "setups/mrt/zoom.png"
+                        icon: "scrolling"
                     }]
             }
             ],
