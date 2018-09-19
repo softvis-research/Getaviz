@@ -232,7 +232,7 @@
                 type: "turntable",
 
                 //turntable last 2 values - accepted values are between 0 and PI - 0.0 - 1,5 at Y-axis
-                typeParams: "0.0 0.0 1.57 3.1",
+                typeParams: "0.0 0.0 0.001 1.5",
 
                 //speed: 10
             },
