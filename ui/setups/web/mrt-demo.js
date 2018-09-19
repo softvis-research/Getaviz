@@ -31,8 +31,8 @@
         {	name: 	"searchController"
         },
         {	name: 	"packageExplorerController",
-            projectIcon: "setups/mrt/project.png",
-            typeIcon: "setups/mrt/class.png",
+            projectIcon: "scripts/PackageExplorer/images/circle_black.png",
+            typeIcon: "scripts/PackageExplorer/images/type.png",
             elementsSelectable: false
         },
         {	name: 	"issueExplorerController",
