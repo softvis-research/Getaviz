@@ -92,7 +92,7 @@ var sourceCodeController = (function(){
 
     function resetSourceCode(){
         lastObject = {file: null, classEntity: null, entity: null};        
-        //let codeTag = $("#codeTag")[0].textContent = "";
+        //var codeTag = $("#codeTag")[0].textContent = "";
 		
         if(codeWindow) {
             codeWindow.reset();
