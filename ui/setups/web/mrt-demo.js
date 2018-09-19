@@ -1,108 +1,40 @@
 ﻿var setup = {
 
-	controllers: [
+    controllers: [
 
-		{ 	name: 	"defaultLogger",
+        { 	name: 	"defaultLogger",
 
-			logActionConsole	: false,
-			logActionEventConsole	:  true,
-			logEventConsole		: false,
-			logInfoConsole : true,
+            logActionConsole	: false,
+            logActionEventConsole	:  true,
+            logEventConsole		: false,
+            logInfoConsole : true,
             logWarningConsole: true,
             logErrorConsole: true,
-			logErrorEventConsole: true
-		},
-		{	name: 	"canvasHoverController",
-			hoverColor: "orangered",
-			showVersion: false,
-			showIssues: true
-		},
-		{	name: 	"canvasMarkController",
-            markingColor: "orangered",
-			//TODO pars by config
-			eventHandler: [{
-				handler : "onEntityMarked",
-				event 	: events.marked.on
-			},{
-				handler : "onEntityUnmarked",
-				event 	: events.marked.off
-			}],
-
-			//as function
-			actionEventCoupling:	function(controller){
-				actionController.actions.mouse.key[2].up.subscribe(function(actionEvent){
-					if(!actionEvent.entity){
-						return;
-					}
-
-					if(!actionController.actions.keyboard.key[32].pressed){
-						return;
-					}
-
-					var entity = actionEvent.entity;
-
-					var applicationEvent = {
-						sender		: canvasMarkController,
-						entities	: [entity]
-					};
-
-					if(entity.marked){
-						events.marked.off.publish(applicationEvent);
-					} else {
-						events.marked.on.publish(applicationEvent);
-					}
-				});
-
-				events.marked.on.subscribe(controller.onEntityMarked);
-				events.marked.off.subscribe(controller.onEntityUnmarked);
-			},
-
-			//as config
-			//TODO pars by actionEventMapper
-			actionEventCouplingConfig: [{
-				event		: events.marked.off,
-
-				constraints	: [{
-					action : actionController.actions.mouse.key[2].up
-				}, {
-					entity : [{
-						marked	: true
-					}]
-				}, {
-					pressed : actionController.actions.keyboard.key[32].pressed
-				}]
-			}, {
-				event		: events.marked.on,
-
-				constraints	: [{
-					action : actionController.actions.mouse.key[2].up
-				}, {
-					entity : [{
-						marked	: false
-					}]
-				}, {
-					pressed : actionController.actions.keyboard.key[32].pressed
-				}],
-			}],
-
-		},
-		{	name: 	"canvasFilterController"
-		},
-		{ 	name: 	"canvasFlyToController" ,
-			targetType: "Namespace"
-		},
-		{ 	name: 	"canvasResetViewController"
-		},
-        {
-            name: "canvasSelectController",
-            color: "orangered"
         },
-		{	name: 	"searchController"
-		},
+        {
+            name: "configurationController",
+            changeFrequency: true,
+            issues: true
+        },
+        {	name: 	"canvasHoverController",
+            hoverColor: "#833f88",
+            showVersion: false,
+            showIssues: true
+        },
+        {	name: 	"canvasFilterController"
+        },
+        { 	name: 	"canvasFlyToController" ,
+            targetType: "Namespace"
+        },
+        { 	name: 	"canvasResetViewController"
+        },
+        {	name: 	"searchController"
+        },
         {	name: 	"packageExplorerController",
             projectIcon: "setups/mrt/project.png",
-            typeIcon: "setups/mrt/class.png"
-		},
+            typeIcon: "setups/mrt/class.png",
+            elementsSelectable: false
+        },
         {	name: 	"issueExplorerController",
         }, {
             name: 'experimentController',
@@ -130,10 +62,12 @@
                         'The visualization represents the structure of a software system. ' +
                         'Packages are represented by grey disks, which can contain inner packages as well. ' +
                         'Classes are visualized by smaller disks inside the package disks. ' +
-                        'The color, ranging from gray to blue, represents how often the class has been changed. ' +
+                        // 'The color, ranging from gray to blue, represents how often the class has been changed. ' +
                         'The size represents the lines of code.' +
                         'The height depicts the number of issues in which the class is referenced. ' +
-                        'So, high blue classes are often changed and error-prone. ',
+                        'The blue bar represents open issues, that are not security relevant. ' +
+                        'The orange bar represents open security issues.' +
+                        'If a class has no open issues at all, only the blue class disk is shown. ',
                         '',
                         'Press Done if you are familiar with the visualization and the legend.'
 
@@ -146,7 +80,6 @@
                         '',
                         '',
                         'While pressing the left mouse button, you can rotate the visualization.',
-                        'With a double click you can centre the clicked position.',
                         'While pressing the middle mouse button, you can move the visualization without rotation.',
                         'You can zoom in and zoom out by scrolling down and scrolling up.',
                         '',
@@ -159,8 +92,8 @@
                         'Tutorial: Package Explorer and Search',
                         '',
                         'On the left panel you find the Package Explorer which shows all packages and classes. ' +
-                        'You can hide elements. ' +
-                        'By clicking on an element, the corresponding disk is highlighted.' +
+                        //'You can hide elements. ' +
+                        //'By clicking on an element, the corresponding disk is highlighted.' +
                         'Additionally, you can search for elements using the search bar.',
                         '',
                         'Press Done if you are familiar with the Package Explorer.'
@@ -178,53 +111,73 @@
                         'Congratulations! You have finished the tutorial.'
                     ]
                 },
+                {
+                    number: 50,
+                    text: [
+                        'Tutorial: Configuration',
+                        '',
+                        'On the right panel you also find some configuration option to filter which classes are shown' +
+                        '' +
+                        'By increasing the minimal change classes that have been rarely changed will be hidden.' +
+                            '' +
+                        'If you only want to see classes that have at least one open issue or at least one security issue, select the corresponding option' +
+                        '',
+                        'Congratulations! You have finished the tutorial.'
+                    ]
+                },
             ]
-        },
-        {
+        },{
             name: "legendController",
             entries: [{
                 name: "Project",
-                icon: "setups/mrt/project.png"
+                icon: "blackCircle"
             }, {
                 name: "Package",
-                icon: "setups/mrt/package.png"
+                icon: "grayCircle"
             }, {
                 name: "Class",
-                icon: "setups/mrt/class.png",
+                icon: "purpleCircle",
                 entries: [{
-                    name: "Number of related issues",
-                    icon: "setups/mrt/issues.png"
-                }, {
-                    name: "Change Frequency",
-                    icon: "setups/mrt/frequency.png"
+                    name: "Lines of Code",
+                    icon: "circleWidth"
                 },{
-                    name: "Selection",
-                    icon: "setups/mrt/selection.png"
-                }]
+                    name: "Number of open issues",
+                    icon: "blueCylinderHeight"
+                },{
+                    name: "Number of open security issues",
+                    icon: "orangeCylinderHeight"
+                }
+                ]
             }, {
                 name: "Navigation",
-                icon: "setups/mrt/navigation.png",
+                icon: "navigation",
                 entries: [
                     {
                         name: "Rotate",
-                        icon: "setups/mrt/left.png"
-                    }, {
-                        name: "Center",
-                        icon: "setups/mrt/double.png"
+                        icon: "leftMouseButton"
                     }, {
                         name: "Move",
-                        icon: "setups/mrt/middle.png"
+                        icon: "midMouseButton"
                     }, {
                         name: "Zoom",
-                        icon: "setups/mrt/zoom.png"
+                        icon: "scrolling"
                     }]
             }
             ],
         }],
 
-	uis: [{
-		name: "MRT",
-		navigation: { type:	"examine" },
+    uis: [{
+        name: "MRT",
+        // navigation: { type:	"examine" },
+        navigation: {
+            //examine, walk, fly, helicopter, lookAt, turntable, game
+            type: "turntable",
+
+            //turntable last 2 values - accepted values are between 0 and PI - 0.0 - 1,5 at Y-axis
+            typeParams: "0.0 0.0 0.001 1.5",
+
+            //speed: 10
+        },
         area: {
             name: "top",
             orientation: "horizontal",
@@ -239,24 +192,28 @@
                 ]
             },
             second: {
-                size: "25px",
+                size: "50px",
                 collapsible: false,
                 area: {
                     name: "top2",
                     orientation: "horizontal",
+                    resizable: false,
+                    collapsible: false,
                     first: {
+                        name: "top3",
                         size: "50px",
+                        collapsible: false,
                         controllers: [{name: "searchController"}]
                     },
                     second: {
-                        collapsible: false,
                         size: "80%",
+                        collapsible: false,
                         area: {
-                            //	orientation: "vertical",
+                            // orientation: "vertical",
                             name: "topDown",
+                            size: "20%",
                             first: {
                                 size: "20%",
-                                collapsible: false,
                                 expanders: [{
                                     name: "packageExplorer",
                                     title: "Package Explorer",
@@ -278,9 +235,7 @@
                                             {name: "defaultLogger"},
                                             {name: "canvasHoverController"},
                                             {name: "canvasFilterController"},
-                                            {name: "canvasMarkController"},
-                                            {name: "canvasFlyToController"},
-                                            {name: "canvasSelectController"}
+                                            {name: "canvasFlyToController"}
                                         ]
                                     },
                                     second: {
@@ -289,21 +244,37 @@
                                         area: {
                                             orientation: "horizontal",
                                             first: {
-                                                size: "65%",
+                                                //size: "33%",
                                                 collapsible: false,
                                                 expanders: [{
                                                     name: "issueExplorer",
                                                     title: "Issue Explorer",
-                                                    controllers: [{name: "issueExplorerController"}]
-                                                }],
+                                                    controllers: [{name: "issueExplorerController"}],
+                                                }]
                                             },
                                             second: {
                                                 orientation: "horizontal",
-                                                expanders: [{
-                                                    name: "legend",
-                                                    title: "Legend",
-                                                    controllers: [{name: "legendController"}]
-                                                }],
+                                                area: {
+                                                    orientation: "horizontal",
+                                                    collapsible: false,
+                                                    first: {
+                                                        size: "36%",
+                                                        collapsible: false,
+                                                        expanders: [{
+                                                            name: "Configuration",
+                                                            title: "Configuration",
+                                                            controllers: [{name: "configurationController"}],
+                                                        }]
+                                                    },
+                                                    second: {
+                                                        orientation: "horizontal",
+                                                        expanders: [{
+                                                            name: "legend",
+                                                            title: "Legend",
+                                                            controllers: [{name: "legendController"}]
+                                                        }],
+                                                    },
+                                                },
                                             },
                                         },
                                     },
@@ -312,7 +283,7 @@
                         },
                     },
                 },
-			},
-		},
-	}],
+            },
+        },
+    }],
 };
