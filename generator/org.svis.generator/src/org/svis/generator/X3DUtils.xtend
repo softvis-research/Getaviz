@@ -21,13 +21,9 @@ class X3DUtils {
 			</head>
 		    <ContextSetup zWriteTrans='false'/>
 		<Scene>
-		<Transform rotation='0 0 1 -1.57'>
-		<Transform rotation='0 1 0 -1.57'>
 	'''
 
 	def String toX3DTail() '''
-			</Transform>
-			</Transform>
 			<Background DEF="_Background" groundColor='1.0000000 1.0000000 1.0000000' skyColor='1.0000000 1.0000000 1.0000000'/>
 			</Scene>
 		</X3D>
