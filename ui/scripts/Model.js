@@ -1,27 +1,29 @@
 var model = (function() {
 
 	//states
-	var states = {
+	const states = {
 		selected 		: { name: "selected" },
 		marked 			: { name: "marked" },
 		hovered 		: { name: "hovered" },
 		filtered 		: { name: "filtered" },
+        tmpFiltered     : { name: "tmpFiltered"},
 		added			: { name: "added" },
 		componentSelected : { name: "componentSelected" },
 		antipattern     : { name: "antipattern" },
 		versionSelected : { name: "versionSelected" }
     };
 
-	var entitiesById = new Map();
-	var eventEntityMap = new Map();
-    var entitiesByVersion = new Map();
-    var entitiesByIssue = new Map();
-	var selectedVersions = [];
-	var selectedIssues = [];
-	var issues = [];
-	var paths = [];
-	var labels = [];
-        
+	let entitiesById = new Map();
+	let eventEntityMap = new Map();
+    let entitiesByVersion = new Map();
+    let entitiesByIssue = new Map();
+	let selectedVersions = [];
+	let selectedIssues = [];
+	let issues = [];
+	let issuesById = new Map();
+	let paths = [];
+	let labels = [];
+
 	function initialize(famixModel) {            
 		//create initial entites from famix elements 
 		famixModel.forEach(function(element) {
@@ -30,7 +32,7 @@ var model = (function() {
 				console.log("element.type undefined");
 			}
 
-			var entity = createEntity(
+			let entity = createEntity(
 				element.type.substring(element.type.indexOf(".") + 1), 
 				element.id, 
 				element.name, 
@@ -71,7 +73,7 @@ var model = (function() {
                     entity.security = (element.security === "true");
 					entity.qualifiedName = entity.id;
 					issues.push(entity);
-
+                    issuesById.set(entity.id, entity);
 					break;
 
 				case "path":
@@ -121,6 +123,7 @@ var model = (function() {
 					entity.component = element.component;
                     entity.version = element.version;
 					entity.betweennessCentrality = element.betweennessCentrality;
+					entity.changeFrequency = element.changeFrequency;
 					if(entity.version !== undefined) {
 						if(entitiesByVersion.has(entity.version)) {
 							let map = entitiesByVersion.get(entity.version);
@@ -173,11 +176,11 @@ var model = (function() {
 				case "Method":
 					entity.signature = element.signature;
 					
-					var pathParts = entity.qualifiedName.split("_");
-					var pathString = pathParts[0];					
-					var path = pathString.split(".");
+					let pathParts = entity.qualifiedName.split("_");
+					let pathString = pathParts[0];
+					let path = pathString.split(".");
 					path = path.splice(0, path.length - 1);
-					var methodSignature = entity.signature.split(" ");
+					let methodSignature = entity.signature.split(" ");
 					methodSignature = methodSignature.splice(1, methodSignature.length);
 					
 					entity.qualifiedName = "";
@@ -219,7 +222,7 @@ var model = (function() {
 			if(entity.belongsTo === undefined || entity.belongsTo === "root" ){
 				delete entity.belongsTo;
 			} else {
-				var parent = entitiesById.get(entity.belongsTo);		
+				let parent = entitiesById.get(entity.belongsTo);
 				if(parent === undefined)		{
 					events.log.error.publish({ text: "Parent of " + entity.name + " not defined" });
 				} else {
@@ -228,8 +231,8 @@ var model = (function() {
 				}
 			}
 
-			var superTypes = [];
-			var subTypes = [];
+			let superTypes = [];
+			let subTypes = [];
 			
 			switch(entity.type) {
 				case "Project":
@@ -239,31 +242,21 @@ var model = (function() {
 					break;
                             
                 case "component":
-                    var components = [];
+                    let components = [];
                     entity.components.forEach(function(componentId) {
-                       var relatedEntity = entitiesById.get(componentId.trim());
+                       const relatedEntity = entitiesById.get(componentId.trim());
                        if(relatedEntity !== undefined) {
                            components.push(relatedEntity);
                        }
                     });
                     entity.components = components;
-                    //entity.version = version;
-//                                 var paths = new Array();
-//                                         entity.paths.forEach(function(roleID
-//                                         ) {
-                                //var role = entitiesById.get(roleID.trim());
-//                                             var role = roleID.trim();
-//                                             if(role !== undefined) {
-//                                                 roles.push(role)
-//                                             }
-//                                         });
                     break;
                                 
                                 
 				case "Class":
 					superTypes = [];
 					entity.superTypes.forEach(function(superTypeId){
-						var relatedEntity = entitiesById.get(superTypeId.trim());
+						const relatedEntity = entitiesById.get(superTypeId.trim());
 						if(relatedEntity !== undefined){
 							superTypes.push(relatedEntity);
 						}
@@ -272,37 +265,37 @@ var model = (function() {
 					
 					subTypes = [];
 					entity.subTypes.forEach(function(subTypesId){
-						var relatedEntity = entitiesById.get(subTypesId.trim());
+						const relatedEntity = entitiesById.get(subTypesId.trim());
 						if(relatedEntity !== undefined){
 							subTypes.push(relatedEntity);
 						}
 					});
 					entity.subTypes = subTypes;
                                         
-                    var reaches = [];
+                    let reaches = [];
 					entity.reaches.forEach(function(reachesId){
-						var relatedEntity = entitiesById.get(reachesId.trim());
+						const relatedEntity = entitiesById.get(reachesId.trim());
 						if(relatedEntity !== undefined){
 							reaches.push(relatedEntity);
 							relatedEntity.reachedBy.push(entity);
 						}
 					});
 					entity.reaches = reaches;
-					var antipatterns = [];
+					let antipatterns = [];
 					entity.antipattern.forEach(function(antipatternID
 					) {
-						var antipattern = entitiesById.get(antipatternID.trim());
+						let antipattern = entitiesById.get(antipatternID.trim());
 						if(antipattern !== undefined) {
 							antipatterns.push(antipattern);
 						}
 					});
 					entity.antipattern = antipatterns;
 					
-					var roles = [];
+					let roles = [];
 					entity.roles.forEach(function(roleID
 					) {
 						//var role = entitiesById.get(roleID.trim());
-						var role = roleID.trim();
+						const role = roleID.trim();
 						if(role !== undefined) {
 							roles.push(role);
 						}
@@ -314,7 +307,7 @@ var model = (function() {
 				case  "ParameterizableClass":
 					superTypes = [];
 					entity.superTypes.forEach(function(superTypeId){
-						var relatedEntity = entitiesById.get(superTypeId.trim());
+						let relatedEntity = entitiesById.get(superTypeId.trim());
 						if(relatedEntity !== undefined){
 							superTypes.push(relatedEntity);
 						}
@@ -323,7 +316,7 @@ var model = (function() {
 					
 					subTypes = [];
 					entity.subTypes.forEach(function(subTypesId){
-						var relatedEntity = entitiesById.get(subTypesId.trim());
+						let relatedEntity = entitiesById.get(subTypesId.trim());
 						if(relatedEntity !== undefined){
 							subTypes.push(relatedEntity);
 						}
@@ -333,9 +326,9 @@ var model = (function() {
 					break;			
 				
 				case "Attribute":	
-					var accessedBy = [];
+					let accessedBy = [];
 					entity.accessedBy.forEach(function(accessedById){
-						var relatedEntity = entitiesById.get(accessedById.trim());
+						let relatedEntity = entitiesById.get(accessedById.trim());
 						if(relatedEntity !== undefined){
 							accessedBy.push(relatedEntity);
 						}
@@ -345,27 +338,27 @@ var model = (function() {
 					break;
 				
 				case "Method":
-					var calls = [];
+					let calls = [];
 					entity.calls.forEach(function(callsId){
-						var relatedEntity = entitiesById.get(callsId.trim());
+						let relatedEntity = entitiesById.get(callsId.trim());
 						if(relatedEntity !== undefined){
 							calls.push(relatedEntity);
 						}
 					});
 					entity.calls = calls;
 					
-					var calledBy = [];
+					let calledBy = [];
 					entity.calledBy.forEach(function(calledById){
-						var relatedEntity = entitiesById.get(calledById.trim());
+						let relatedEntity = entitiesById.get(calledById.trim());
 						if(relatedEntity !== undefined){
 							calledBy.push(relatedEntity);
 						}
 					});
 					entity.calledBy = calledBy;
 					
-					var accesses = [];
+					let accesses = [];
 					entity.accesses.forEach(function(accessesId){
-						var relatedEntity = entitiesById.get(accessesId.trim());
+						let relatedEntity = entitiesById.get(accessesId.trim());
 						if(relatedEntity !== undefined){
 							accesses.push(relatedEntity);
 						}
@@ -387,12 +380,12 @@ var model = (function() {
 						
 						
 		//subscribe for changing status of entities on events
-		var eventArray = Object.keys(states);			
+		let eventArray = Object.keys(states);
 		eventArray.forEach(function(eventName){
 			
-			var event = events[eventName];
+			let event = events[eventName];
 			
-			var eventMap = new Map();
+			let eventMap = new Map();
 			eventEntityMap.set(event, eventMap);
 			
 			event.on.subscribe(function(applicationEvent){
@@ -426,7 +419,7 @@ var model = (function() {
 	
 	
 	function createEntity(type, id, name, qualifiedName, belongsTo){
-		var entity = {
+		let entity = {
 			type: type,
 			id: id,
 			name: name,
@@ -435,7 +428,7 @@ var model = (function() {
 			children: []						
 		};
 		
-		var statesArray = Object.keys(states);		
+		const statesArray = Object.keys(states);
 		statesArray.forEach(function(stateName){
 			entity[stateName] = false;
 		});
@@ -452,13 +445,13 @@ var model = (function() {
 	
 	
 	function getAllParentsOfEntity(entity){
-		var parents = [];
+		let parents = [];
 		
 		if(entity.belongsTo !== undefined && entity.belongsTo !== ""){
-			var parent = entity.belongsTo;
+			const parent = entity.belongsTo;
 			parents.push(parent);
 			
-			var parentParents = getAllParentsOfEntity(parent);			
+			const parentParents = getAllParentsOfEntity(parent);
 			parents = parents.concat(parentParents);			
 		}				
 	
@@ -473,6 +466,10 @@ var model = (function() {
 	function getEntityById(id){
 		return entitiesById.get(id);
 	}
+
+    function getIssuesById(id){
+        return issuesById.get(id);
+    }
 	
 	function getAllVersions() {
             return entitiesByVersion;
@@ -483,7 +480,7 @@ var model = (function() {
     }
 
 	function getAllSecureEntities(){
-	    var entities = [];
+	    let entities = [];
 	    entitiesById.forEach(function(entity){
             if(entity.type === "Class" && entity.numberOfOpenSecurityIssues === 0){
                 entities.push(entity);
@@ -493,7 +490,7 @@ var model = (function() {
     }
 
     function getAllCorrectEntities(){
-        var entities = [];
+        let entities = [];
         entitiesById.forEach(function(entity){
             if(entity.type === "Class" && entity.numberOfOpenIssues === 0 && entity.numberOfOpenSecurityIssues === 0){
                 entities.push(entity);
@@ -503,7 +500,7 @@ var model = (function() {
     }
 	
 	function getEntitiesByComponent(component) {
-            var entities = [];
+            let entities = [];
             entitiesById.forEach(function(entity) {
                 if(entity.component === component) {
                     entities.push(entity);
@@ -513,7 +510,7 @@ var model = (function() {
         }
 
         function getRole(start, pattern) {
-	        var result = "";
+	        let result = "";
             paths.forEach(function(path){
                 if(start === path.start && path.belongsTo.id === pattern) {
                    result = path.role;
@@ -523,8 +520,8 @@ var model = (function() {
 		}
 
     function getRoleBetween(start, end) {
-        for(var i = 0; i < paths.length; ++i) {
-			var path = paths[i];
+        for(let i = 0; i < paths.length; ++i) {
+			const path = paths[i];
             if(path.start === start && path.end === end) {
                 return path.role;
             }
@@ -532,7 +529,7 @@ var model = (function() {
     }
 
         function getPaths(start, pattern) {
-			var targets = [];
+			let targets = [];
 			paths.forEach(function(path){
 				if(start === path.start && path.belongsTo.id === pattern) {
 					targets.push((path.end));
@@ -542,12 +539,12 @@ var model = (function() {
 		}
 
         function getEntitiesByAntipattern(antipatternID) {
-            var entities = [];
+            let entities = [];
             entitiesById.forEach(function(entity) {
-                var antipattern = [];
+                let antipattern = [];
                 if(entity.type === "Class") {
                     antipattern = entity.antipattern;
-                    for(var i = 0; i < antipattern.length; i++) {
+                    for(let i = 0; i < antipattern.length; i++) {
                         if(antipattern[i].id === antipatternID) {
                             entities.push(entity);
                         }
@@ -558,14 +555,14 @@ var model = (function() {
         }
         
     function removeVersion(version) {
-        var index = selectedVersions.indexOf(version);
+        const index = selectedVersions.indexOf(version);
         if (index > -1) {
             selectedVersions.splice(index, 1);
         }
     }
 
     function removeIssue(issue) {
-        var index = selectedIssues.indexOf(issue);
+        const index = selectedIssues.indexOf(issue);
         if (index > -1) {
             selectedIssues.splice(index, 1);
         }
@@ -583,8 +580,8 @@ var model = (function() {
 		return eventEntityMap.get(stateEventObject);
 	}
 	
-	function getEntitiesByVersion(versionid){
-        return entitiesByVersion.get(versionid);
+	function getEntitiesByVersion(versionId){
+        return entitiesByVersion.get(versionId);
     }
 
     function getEntitiesByIssue(issue){
@@ -592,7 +589,7 @@ var model = (function() {
     }
 
     function getEntitiesByType(type) {
-		var entities = [];
+		let entities = [];
 		entitiesById.forEach(function(value){
 			if(value.type === type){
 				entities.push(value)
@@ -618,7 +615,7 @@ var model = (function() {
 		
 		getAllEntities				: getAllEntities,
         getAllSecureEntities        : getAllSecureEntities,
-        getAllCorrectEntities        : getAllCorrectEntities,
+        getAllCorrectEntities       : getAllCorrectEntities,
         getEntityById				: getEntityById,
 		getEntitiesByState			: getEntitiesByState,
 		getEntitiesByComponent		: getEntitiesByComponent,
@@ -629,6 +626,7 @@ var model = (function() {
         getAllParentsOfEntity       : getAllParentsOfEntity,
         getAllVersions              : getAllVersions,
 		getAllIssues				: getAllIssues,
+        getIssuesById               : getIssuesById,
 		createEntity				: createEntity,
 		removeEntity				: removeEntity,
 		

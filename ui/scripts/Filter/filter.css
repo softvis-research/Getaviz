@@ -1,0 +1,363 @@
+/* parent div */
+
+#filterContainer {
+	width: 100%;
+	min-height: 220px;
+}
+
+/* workaround to use container margins properly */
+
+#filterContainer::before {
+	clear: both;
+	content: '';
+	display: table;
+	height: 0;
+}
+
+/* div for actions at the bottom */
+
+.toolbar {
+	background-color: #1faeff;
+	margin-bottom: 5px;
+	width: 100%;
+
+	padding: 0 0 0 5px;
+	color: white;
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: center;
+	align-content: center;
+}
+
+.toolbar > span {
+	width: auto;
+	flex-grow: 1;
+	background-color: white;
+	border: 1px solid #808080;
+	color: #808080;
+	margin: 0 5px 5px 0;
+	padding: 5px 10px;
+	cursor: pointer;
+	text-align: center;
+}
+
+/* note when filter is empty */
+
+.note {
+	margin: 5px 5px 0 5px;
+	padding: 5px;
+	border: solid 1px #aaaaaa;
+	color: #808080;
+}
+
+/* div for actions at the bottom */
+
+.bottomAction {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	align-content: center;
+
+	margin: 15px 5px 0 5px;
+	width: calc(100% - 10px);
+	height: 50px;
+	padding: 0 10px;
+	border: solid 1px #aaaaaa;
+	color: #808080;
+	cursor: pointer;
+
+	box-shadow: 0px 0px 5px #aaaaaa;
+	transition: box-shadow 0.5s;
+}
+
+.bottomAction:hover {
+	box-shadow: 0px 0px 10px #909090;
+}
+
+.bottomAction > img {
+	margin-right: 10px;
+	width: 24px;
+	height: 24px;
+}
+
+.bottomAction > span {
+	font-size: 14px;
+}
+
+/* div that contains all containers */
+
+#containerDiv {
+	width: 100%;
+}
+
+/* container */
+
+.container {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	align-content: flex-start;
+
+	border: solid 1px #aaaaaa;
+	color: white;
+	margin: 5px;
+
+	box-shadow: 0px 0px 5px #aaaaaa;
+	transition: box-shadow 0.5s;
+}
+
+.container:hover {
+	box-shadow: 0px 0px 10px #909090;
+}
+
+.container.faulty {
+	border-right: 5px solid red;
+}
+
+.containerHeader {
+	width: 100%;
+	/*height: 48px;*/
+	padding: 5px;
+	background-color: #aaaaaa;
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+	align-content: center;
+}
+
+.containerHeader > *:nth-child(2) {
+	flex-grow: 100;
+}
+
+.containerHeader > *:not(:last-child) {
+	margin-right: 5px;
+}
+
+.stackedElements {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	align-content: center;
+}
+
+.stackedElements > button {
+	font-size: 12px;
+	padding: 0;
+}
+
+.stackedElements > button:first-child {
+	margin-bottom: 5px;
+}
+
+.stackedElements > .transformationSelect {
+	width: 100% !important;
+	border: 0 !important;
+	margin-bottom: 5px;
+}
+
+.stackedElements > .placeholder {
+	height: 15px;
+}
+
+.stackedElements > .includeChildsCheckbox {
+	width: 100% !important;
+	margin-top: 5px;
+	color: #808080;
+}
+
+.invertCheckbox,
+.relationsCheckbox {
+	color: white;
+	width: 100% !important;
+}
+
+.checkboxGroup {
+	width: 100%;
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	align-content: center;
+}
+
+.moveButton {
+	padding: 0;
+}
+
+.moveDownImage {
+	margin-left: -1px;
+	width: 15px;
+}
+
+.moveUpImage,
+.removeImage,
+.removeLayerImage,
+.deactivateImage {
+	margin-top: -1px;
+	margin-left: -1px;
+	width: 15px;
+}
+
+/* correct jqx checkbox auto alignment */
+.checkboxes > * > div:first-child {
+	margin: 0 10px 0 0;
+}
+
+.invertCheckbox > div:first-child,
+.relationsCheckbox > div:first-child {
+	margin: 0 5px 0 0;
+}
+
+.checkboxes {
+	width: 100% !important;
+	margin-top: 5px;
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	align-content: center;
+}
+
+.checkboxes > .includeChildsCheckbox {
+	color: #808080;
+}
+
+/* jqx dropdownlist */
+.jqx-listbox {
+	width: 105px !important;
+	height: 140px !important;
+}
+
+/* jqx dropdownlist header */
+.jqx-dropdownlist-content {
+	width: auto !important;
+}
+
+/* jqx dropdownlist head when expanded */
+.jqx-rc-b-expanded {
+	background-color: white;
+	color: #808080;
+}
+
+/* jqx dropdownlist item */
+.jqx-item {
+	background-color: white;
+}
+
+/* jqx dropdownlist item when selected */
+.jqx-listitem-state-selected {
+	background-color: #aaaaaa;
+	color: white;
+	border: 0;
+}
+
+/* remove unnecessary border for expander content */
+.jqx-expander-content {
+	border: none;
+}
+
+.addButton {
+	font-size: 14px;
+	padding: 0;
+}
+
+.openButton {
+	font-size: 12px;
+	padding: 0;
+}
+
+.removeContainerButton {
+	font-size: 10px;
+	padding: 1px;
+}
+
+/* layer */
+
+.searchField,
+.searchDiv {
+	width: 100%;
+}
+
+.actionLayer {
+	width: 100%;
+	height: 30px;
+	padding: 0 3px;
+	color: #808080;
+	cursor: pointer;
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	align-content: center;
+}
+
+.actionLayer.faulty {
+	border-right: 5px solid red;
+}
+
+.actionLayer > img {
+	margin-right: 8px;
+	width: 20px;
+	height: 20px;
+}
+
+.actionLayer > span {
+	font-size: 12px;
+}
+
+.layerContainer {
+	width: 100%;
+}
+
+.layer {
+	margin-top: 5px;
+	width: 100%;
+	padding: 5px;
+	border-bottom: solid 1px #aaaaaa;
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	align-items: center;
+	align-content: center;
+}
+
+.layer.faulty {
+	border-right: 5px solid red;
+}
+
+.layerContainer > .layer:first-child {
+	margin-top: 0;
+}
+
+.layer > *:nth-child(1) {
+	flex-grow: 100;
+}
+
+.layer > *:not(:last-child) {
+	margin-right: 5px;
+}
+
+.removeLayerButton {
+	font-size: 12px;
+	padding: 0;
+}

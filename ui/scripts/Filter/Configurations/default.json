@@ -1,0 +1,17 @@
+{
+	"containers": [
+		{
+			"activated": true,
+			"type": 0,
+			"relations": false,
+			"inverted": false,
+			"layers": [
+				{
+					"activated": true,
+					"query": "",
+					"includeChilds": true
+				}
+			]
+		}
+	]
+}

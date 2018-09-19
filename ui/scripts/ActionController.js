@@ -577,7 +577,7 @@ var actionController = (function() {
 				events.log.error.publish({ text: err.message });
 			}	
 		});		
-	}	
+	}
 
 	function scrollAction(action, eventObject){
 		

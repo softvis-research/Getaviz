@@ -15,6 +15,7 @@ import org.svis.generator.famix.Famix2Famix
 import org.svis.generator.rd.m2m.RD2RD4Dynamix
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.SettingsConfiguration.EvolutionRepresentation
+import org.svis.generator.SettingsConfiguration.ClassHeight
 
 class RD2X3D {
 	val config = SettingsConfiguration.instance
@@ -45,22 +46,26 @@ class RD2X3D {
 	}
 
 	def String toRD(List<Disk> disks) '''
+		<Transform rotation='0 0 1 -1.57'>
+		<Transform rotation='0 1 0 -1.57'>
 		«FOR disk : disks»
-		  	«IF(config.showHistories)»
-				«toDisk(disk)»
-				«toSegment(disk.data)»
-				«toSegment(disk.methods)»
-				«FOR segment : disk.methods»
-					«segment.invocations.toSegmentInvocation(segment)»
-				«ENDFOR»
+			«toDisk(disk)»
+  			«IF(config.RDClassHeight === ClassHeight::NUMBER_OF_INCIDENTS && disk.type == "FAMIX.Class")»
+				«toLayer(disk)»
 			«ENDIF»
+			«toSegment(disk.data)»
+			«toSegment(disk.methods)»
+			«FOR segment : disk.methods»
+				«segment.invocations.toSegmentInvocation(segment)»
+			«ENDFOR»
 			«toDiskVersions(disk)»
 		«ENDFOR»
+		</Transform>
+		</Transform>
 	'''
 
 	def String toDisk(Disk disk) '''
 		<Transform translation='«disk.position.x + " " + disk.position.y + " " + disk.position.z»' 
-			rotation='0 0 1 1.57' 
 			scale='1 1 «disk.height»'>
 		<Transform DEF='«disk.id»'>
 			<Shape>
@@ -82,12 +87,67 @@ class RD2X3D {
 		</Transform>
 		</Transform>
 	'''
+	
+	def String toLayer(Disk disk) '''
+	«IF disk.height2 > 0»
+		<Transform DEF='«disk.id»_2'>
+			<Transform translation='0 0 «disk.height»'>
+				<Transform scale='1 1 «disk.height2»'>
+					<Transform translation='«disk.position.x + " " + disk.position.y + " " + disk.position.z»'>
+						<Shape>
+							<Extrusion
+								convex='true'
+								solid='true'
+								crossSection='«disk.crossSection»'
+								spine='«disk.spine»'
+								creaseAngle='1'
+								beginCap='true'
+								endCap='true'></Extrusion>
+							<Appearance>
+									<Material
+										diffuseColor='«disk.color2»'
+										transparency='«disk.transparency»'
+									></Material>
+							</Appearance>
+						</Shape>
+					</Transform>
+				</Transform>
+			</Transform>
+		</Transform>
+		«ENDIF»
+		«IF disk.height3 > 0»
+		<Transform DEF='«disk.id»_3'>
+			<Transform translation='0 0 «disk.height + disk.height2»'> 
+				<Transform scale='1 1 «disk.height3»'>
+					<Transform translation='«disk.position.x + " " + disk.position.y + " " + disk.position.z»'>
+						<Shape>
+							<Extrusion
+								convex='true'
+								solid='true'
+								crossSection='«disk.crossSection»'
+								spine='«disk.spine»'
+								creaseAngle='1'
+								beginCap='true'
+								endCap='true'></Extrusion>
+							<Appearance>
+									<Material
+										diffuseColor='«disk.color3»'
+										transparency='«disk.transparency»'
+									></Material>
+							</Appearance>
+						</Shape>
+					</Transform>
+				</Transform>
+			</Transform>
+		</Transform>
+		«ENDIF»
+	'''
 
 	def String toSegment(EList<DiskSegment> segments) '''
 		«FOR segment : segments»
 			<Transform  translation='«(segment.
 			eContainer as Disk).position.x + " " + (segment.eContainer as Disk).position.y + " " +
-			(segment.eContainer as Disk).position.z»' rotation='0 0 1 1.57'>
+			(segment.eContainer as Disk).position.z»'>
 			<Transform DEF='«segment.id»'>	
 				<Shape>
 					<Extrusion
@@ -116,7 +176,7 @@ class RD2X3D {
 			if(instance.position !== null){'''
 				<Transform DEF='«famix.createID(instance.fqn)»'
 					translation='«instance.position.x + " " + instance.position.y + " " + instance.position.z»' 
-					rotation='0 0 1 1.57' scale='1 1 «instance.length»'>
+					scale='1 1 «instance.length»'>
 					<Shape>
 						<Extrusion
 							convex='true'
@@ -138,37 +198,36 @@ class RD2X3D {
 		«ENDFOR»
 	'''
 
-	def String toMethodInvocation(EList<DiskSegmentInvocation> invocations, DiskInstance instance) {
-		'''
-			«FOR invocation : invocations»
-				<Transform DEF='«famix.createID(invocation.fqn)»' 
-					translation='«invocation.position.x + " " + invocation.position.y + " " +
-				invocation.position.z»' rotation='0 0 1 1.57'  scale='1 1 «invocation.length»'>
-				<Shape>
-					<Extrusion
-						convex='true'
-						solid='true'
-						crossSection='«(instance.eContainer as Disk).crossSection»'
-						spine='«(instance.eContainer as Disk).spine»'
-						creaseAngle='1'
-						beginCap='true'
-						endCap='true'/>
-					<Appearance>
-						<Material
-							diffuseColor='«(instance.eContainer as Disk).color»'
-							transparency='0'/>
-					</Appearance>
-				</Shape>
-			</Transform>
-		«ENDFOR»
-	'''	}
+	def String toMethodInvocation(EList<DiskSegmentInvocation> invocations, DiskInstance instance) '''
+		«FOR invocation : invocations»
+			<Transform DEF='«famix.createID(invocation.fqn)»' 
+				translation='«invocation.position.x + " " + invocation.position.y + " " +
+			invocation.position.z»' scale='1 1 «invocation.length»'>
+			<Shape>
+				<Extrusion
+					convex='true'
+					solid='true'
+					crossSection='«(instance.eContainer as Disk).crossSection»'
+					spine='«(instance.eContainer as Disk).spine»'
+					creaseAngle='1'
+					beginCap='true'
+					endCap='true'/>
+				<Appearance>
+					<Material
+						diffuseColor='«(instance.eContainer as Disk).color»'
+						transparency='0'/>
+				</Appearance>
+			</Shape>
+		</Transform>
+	«ENDFOR»
+	'''
 	
 
 	def String toSegmentInvocation(EList<DiskSegmentInvocation> invocations, DiskSegment segment) '''		
 		«FOR invocation : invocations»
 			<Transform DEF='«famix.createID(invocation.fqn)»' 
 				translation='«invocation.position.x + " " + invocation.position.y + " " + invocation.position.z»' 
-				rotation='0 0 1 1.57' scale='1 1 «invocation.length»'>
+				scale='1 1 «invocation.length»'>
 				<Shape>
 					<Extrusion
 						convex='true'
@@ -191,7 +250,7 @@ class RD2X3D {
 	def String toDiskVersions(Disk disk) '''
 		«FOR version : disk.diskVersions.sortBy[level]»
 			«IF (version.scale > 0)»
-				<Transform translation='«disk.position.x + " " + disk.position.y + " " + (version.level*60 + 10)»' rotation='0 0 1 1.57'>
+				<Transform translation='«disk.position.x + " " + disk.position.y + " " + (version.level*60 + 10)»'>
 				<Transform scale='«version.scale» «version.scale» 1'>
 					<Transform DEF='«version.id»'>
 						<Shape>

@@ -6,6 +6,7 @@ import org.svis.generator.SettingsConfiguration.Variant
 import org.svis.generator.SettingsConfiguration.BuildingType
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import java.io.File
+import org.apache.commons.io.FileUtils
 
 class X3DUtils {
 	val config = SettingsConfiguration.instance
@@ -145,7 +146,13 @@ class X3DUtils {
 	
 	def convertToMultipart(IFileSystemAccess2 fsa) {
 		val processBuilder = new ProcessBuilder("./aopt-idmap-sapd.bat")
+		val script = new File(fsa.getURI("aopt-idmap-sapd.bat").path)
+		script.executable = true
  		val directory = new File(fsa.getURI("aopt-idmap-sapd.bat").path.replace("%20", " ")).parentFile
+ 		val binGeo = new File(directory.path + "/binGeo")
+ 		if(binGeo.exists) {
+ 			FileUtils::cleanDirectory(binGeo)
+ 		}
  		processBuilder.directory (directory)
 		processBuilder.start
 	}

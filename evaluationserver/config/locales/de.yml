@@ -157,6 +157,8 @@ de:
    successful_created: "Fragebogen erfolgreich erfolgt"
    successful_updated: "Fragebogen erfolgreich aktualisiert"
   layout:
+    privacy_declaration: "Datenschutzerklärung"
+    imprint: "Impressum"
     experiments: "Experimente"
     scenes: "Szenen"
     steps: "Schritte"

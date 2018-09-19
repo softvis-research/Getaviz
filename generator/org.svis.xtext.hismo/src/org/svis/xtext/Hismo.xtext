@@ -33,6 +33,7 @@ HISMONamespaceHistory:
     '(HISMO.NamespaceHistory'
 	'(id:' name=INT_ID ')'
 	('(name:' value= MSESTRING ')')?
+	('(' 'hash' id = STRING ')')?
 	('(containingNamespaceHistory' containingNamespaceHistory=IntegerReference ')')? //parent
 	('(namespaceHistories' namespaceHistories+=IntegerReference* ')')?
 	('(namespaceVersions' namespaceVersions+=IntegerReference* ')')?
@@ -115,6 +116,7 @@ HISMOClassVersion:
 	('(betweennessCentrality' betweennessCentrality = MSESTRING ')')?
 	('(' 'STK-Rank' stkRank = MSESTRING ')')?
 	('(evolutionNumberOfStatements' evolutionNumberOfStatements=INT ')' )? //Sum of absolute Changes in subsequent Versions
+	('(changeFrequency' changeFrequency = MSESTRING ')')?
 	')';
 
 HISMOMethodVersion:

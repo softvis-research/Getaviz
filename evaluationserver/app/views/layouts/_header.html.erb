@@ -29,7 +29,8 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><%= link_to t(:admin_off, scope: :layout), admin_mode_off_path %></li>
+			 <%= render :partial => "navbar_gdpr_links" %>
+			 <li><%= link_to t(:admin_off, scope: :layout), admin_mode_off_path %></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

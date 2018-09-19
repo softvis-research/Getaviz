@@ -74,8 +74,8 @@ gem "font-awesome-rails"
 gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem 'bootstrap-sass', '~> 3.2.0'
-gem "paperclip", "~> 4.1"
-gem "nokogiri", '1.8.1'
+gem "paperclip"
+gem "nokogiri"
 gem "rubyzip"
 gem "actionmailer"
 #gem "jquery-sortable-rails"
