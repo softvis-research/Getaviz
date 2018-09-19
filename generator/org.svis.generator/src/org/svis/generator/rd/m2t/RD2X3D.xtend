@@ -46,6 +46,8 @@ class RD2X3D {
 	}
 
 	def String toRD(List<Disk> disks) '''
+		<Transform rotation='0 0 1 -1.57'>
+		<Transform rotation='0 1 0 -1.57'>
 		«FOR disk : disks»
 			«toDisk(disk)»
   			«IF(config.RDClassHeight === ClassHeight::NUMBER_OF_INCIDENTS && disk.type == "FAMIX.Class")»
@@ -58,6 +60,8 @@ class RD2X3D {
 			«ENDFOR»
 			«toDiskVersions(disk)»
 		«ENDFOR»
+		</Transform>
+		</Transform>
 	'''
 
 	def String toDisk(Disk disk) '''
