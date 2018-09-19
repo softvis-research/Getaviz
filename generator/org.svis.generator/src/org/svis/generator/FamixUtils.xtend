@@ -24,6 +24,7 @@ import org.svis.xtext.famix.FAMIXPath
 import org.svis.xtext.hismo.HISMOClassVersion
 import org.svis.xtext.hismo.HISMONamespaceVersion
 import org.svis.generator.rd.m2m.RGBColor
+import org.svis.xtext.hismo.HISMONamespaceHistory
 
 class FamixUtils {
 	val log = LogFactory::getLog(class)
@@ -124,6 +125,7 @@ class FamixUtils {
 			FAMIXPath:					return el.id
 			HISMOClassVersion:			return el.id
 			HISMONamespaceVersion:		return el.id
+			HISMONamespaceHistory:		return el.id
 			default: log.warn("Forgot" + el.class + " in FamixUtils.getId")
 		}
 	}

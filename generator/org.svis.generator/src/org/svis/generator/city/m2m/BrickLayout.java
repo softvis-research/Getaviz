@@ -3,6 +3,7 @@ package org.svis.generator.city.m2m;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.svis.generator.SettingsConfiguration;
+import org.svis.generator.SettingsConfiguration.ClassElementsModes;
 import org.svis.generator.city.CityDebugUtils;
 import org.svis.generator.city.CityUtils;
 import org.svis.xtext.city.Building;
@@ -59,14 +60,14 @@ public class BrickLayout {
 
 		// Get elements for modeling
 		EList<BuildingSegment> classElements = new BasicEList<BuildingSegment>();
-		switch (config.getClassElementsModeAsString()) {
-			case "attributes_only":
+		switch (config.getClassElementsMode()) {
+			case ATTRIBUTES_ONLY:
 				classElements.addAll(b.getData());
 				break;
-			case "methods_only":
+			case METHODS_ONLY:
 				classElements.addAll(b.getMethods());
 				break;
-			case "methods_and_attributes":
+			case METHODS_AND_ATTRIBUTES:
 				classElements.addAll(b.getData());
 				classElements.addAll(b.getMethods());
 				break;

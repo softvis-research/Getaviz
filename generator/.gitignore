@@ -36,5 +36,7 @@ test-xtend-gen/
 **/xtext/*RuntimeModule.xtend
 .antlr-generator-3.2.0-patch.jar
 
-# Ignore default models
+# Ignore default models, but not properties
 org.svis.generator.run/input
+!*.properties
+

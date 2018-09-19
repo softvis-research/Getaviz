@@ -9,15 +9,13 @@ var sourceCodeController = (function(){
 
 
     //config parameters	
-	var controllerConfig = {		
+	let controllerConfig = {
 		fileType : "java",
         url: "",
 	};
     
-	function initialize(setupConfig){	
-
-		application.transferConfigParams(setupConfig, controllerConfig);	
-				
+	function initialize(setupConfig){
+		application.transferConfigParams(setupConfig, controllerConfig);
 	}
 	
 	function activate(rootDiv){
@@ -39,7 +37,6 @@ var sourceCodeController = (function(){
 				cssLink.rel = "stylesheet";
 				cssLink.href = "libs/prism/prismPluginCodeController.css";
 				document.getElementsByTagName("head")[0].appendChild(cssLink);
-				
 				
 				//create html elements
 				let codeViewDiv = document.createElement("DIV");
@@ -70,21 +67,14 @@ var sourceCodeController = (function(){
 
                 let codeTag = document.createElement("CODE");
                 codeTag.id = "codeTag";
-    
                 
                 codePre.appendChild(codeTag);
                 codeValueDiv.appendChild(codePre);
                 codeViewDiv.appendChild(codeValueDiv);
 
-
-
-
-
-				rootDiv.appendChild(codeViewDiv);			
-
+				rootDiv.appendChild(codeViewDiv);
             });
 		});
-
 
         events.selected.on.subscribe(onEntitySelected);
     }
@@ -125,7 +115,7 @@ var sourceCodeController = (function(){
 
     function onEntitySelected(applicationEvent) {
 		
-        let entity = applicationEvent.entities[0];
+        const entity = applicationEvent.entities[0];
 
        	if (entity.type === "Namespace"){
 			// Package 
@@ -140,7 +130,7 @@ var sourceCodeController = (function(){
 		}		
 		
 		// ersetze . durch / und fuege .java an -> file
-        let javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;
+        const javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;
 
         displayCode(javaCodeFile, classEntity, entity);          
     }
@@ -162,7 +152,7 @@ var sourceCodeController = (function(){
     }     
 
     function publishOnEntitySelected(entityId){
-        let applicationEvent = {
+        const applicationEvent = {
             sender: sourceCodeController,
             entities: [model.getEntityById(entityId)]
         };

@@ -10,10 +10,13 @@ import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
 import javax.inject.Inject
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.SettingsConfiguration.Variant
+import org.apache.commons.io.FileUtils
+import java.io.File
+import java.nio.file.attribute.PosixFileAttributes
+import java.nio.file.attribute.PosixFilePermission
 
 class RDOutput implements IGenerator2 {
 	val config = SettingsConfiguration.instance
@@ -43,6 +46,13 @@ class RDOutput implements IGenerator2 {
 				fsa.generateFile("model.x3d", toX3DHead 
 					+ rd2x3d.toX3DBody(resource)
 					+ toX3DTail)
+				fsa.generateFile("aopt-idmap-sapd.bat", "")
+				FileUtils::copyFile(new File("../org.svis.generator/resource/aopt-idmap-sapd.bat"), new File(fsa.getURI("aopt-idmap-sapd.bat").path.replace("%20", " ")))
+				val path = Paths::get(fsa.getURI("aopt-idmap-sapd.bat").path.replace("%20", " "))
+				val perms = Files.readAttributes(path,PosixFileAttributes).permissions()
+        		perms.add(PosixFilePermission.OWNER_EXECUTE);
+        		perms.add(PosixFilePermission.GROUP_EXECUTE);
+        		Files.setPosixFilePermissions(path, perms);
 				if(config.convertToMultipart) {
 					fsa.convertToMultipart
 			 	}
@@ -56,8 +66,8 @@ class RDOutput implements IGenerator2 {
 
 				if (config.variant == Variant::DYNAMIC) {
 					fsa.generateFile("events.js", "[ " + rd2js.toJSBody(resource) + " ]")
-					val Path p1 = Paths.get("../org.svis.generator/resource/anifra-minified.js")
-					fsa.generateFile("anifra-minified.js", Files.newInputStream(p1))
+					val anifra = Paths.get("../org.svis.generator/resource/anifra-minified.js")
+					fsa.generateFile("anifra-minified.js", Files.newInputStream(anifra))
 				}
 			}
 			case SimpleGlyphsJson: {

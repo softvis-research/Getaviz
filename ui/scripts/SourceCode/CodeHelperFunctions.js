@@ -15,12 +15,12 @@ var codeHelperFunction =(function(){
 
     // display and highlight Code    
     function displayCode(file, classEntity, entity, callBackFunction){
-		var codeTag = $("#codeTag").get(0);   
-		var xhttp = new XMLHttpRequest();
+		const codeTag = $("#codeTag").get(0);
+		const xhttp = new XMLHttpRequest();
 		
 
         xhttp.onreadystatechange = function(){			
-			if (xhttp.readyState == 4 && xhttp.status == 200) {
+			if (xhttp.readyState === 4 && xhttp.status === 200) {
 
 				codeTag.textContent = xhttp.responseText;
 
@@ -39,10 +39,10 @@ var codeHelperFunction =(function(){
                     addInteraction(classEntity, callBackFunction);
 
                 });     
-			} else if (xhttp.readyState == 4 && xhttp.status == 404){
+			} else if (xhttp.readyState === 4 && xhttp.status === 404){
 				codeTag.textContent = "Error: " + file + ", file not found!";
 			}
-		}
+		};
 
 		xhttp.open("GET", file, true);
 		xhttp.send();
@@ -52,13 +52,13 @@ var codeHelperFunction =(function(){
 
     // alle Textnodes in ein span-Tag integrieren
     function textNodesToSpan(){
-        var codeTag = $("#codeTag").get(0);
-        var codeTagChilds = codeTag.childNodes;        
-        for (var i=0; i<codeTagChilds.length; i++){                        
-            if (codeTagChilds[i].nodeName == "#text" &&
+        const codeTag = $("#codeTag").get(0);
+        const codeTagChilds = codeTag.childNodes;
+        for (const i=0; i<codeTagChilds.length; i++){
+            if (codeTagChilds[i].nodeName === "#text" &&
                 codeTagChilds[i].textContent.trim().length>0){                                                    
-                    var span = document.createElement("span");
-                    var textNode = document.createTextNode(codeTagChilds[i].textContent);
+                    const span = document.createElement("span");
+                    const textNode = document.createTextNode(codeTagChilds[i].textContent);
                     span.appendChild(textNode);                    
                     codeTag.replaceChild(span, codeTagChilds[i]);
             }
@@ -74,7 +74,7 @@ var codeHelperFunction =(function(){
             // RegExp: finde nur 'at': \b -> "whole word only"-Match
             var reg = new RegExp('\\b'+entity.name+'\\b', 'g');
             for( var i=0; i<codeTagChilds.length; i++ ){
-                if( codeTagChilds[i].textContent.search(reg)>=0 && codeTagChilds[i].className == "" ){                    					
+                if( codeTagChilds[i].textContent.search(reg)>=0 && codeTagChilds[i].className === "" ){
                     codeTagChilds[i].className += " codeControllerHighlightAttribute";
                 }
             }   

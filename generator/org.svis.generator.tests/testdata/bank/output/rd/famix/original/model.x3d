@@ -7,8 +7,9 @@
 	</head>
     <ContextSetup zWriteTrans='false'/>
 <Scene>
+<Transform rotation='0 0 1 -1.57'>
+<Transform rotation='0 1 0 -1.57'>
 <Transform translation='0.0 0.0 0.0' 
-	rotation='0 0 1 1.57' 
 	scale='1 1 1.0'>
 <Transform DEF='ID_bdd240c8fe7174e6ac1cfdd5282de76eb7ad6815'>
 	<Shape>
@@ -30,7 +31,6 @@
 </Transform>
 </Transform>
 <Transform translation='19.107099088834143 4.243261788682041 0.0' 
-	rotation='0 0 1 1.57' 
 	scale='1 1 1.0'>
 <Transform DEF='ID_527aa1c76ab5cca95e6dbfcea35a5d2d9f5d737f'>
 	<Shape>
@@ -51,7 +51,7 @@
 	</Shape>
 </Transform>
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_378ed8adfffc2de1bfd23cb72bef113d8e2ac58b'>	
 	<Shape>
 		<Extrusion
@@ -71,7 +71,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_4ece969a895e6ec11e96612d2a45b1a0acc47942'>	
 	<Shape>
 		<Extrusion
@@ -91,7 +91,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_cc266d70c84afda695fa63dd8acbee9624f2092a'>	
 	<Shape>
 		<Extrusion
@@ -111,7 +111,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_e511c29ffb94450ed119cc73fc706d047e45800f'>	
 	<Shape>
 		<Extrusion
@@ -131,7 +131,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_3eaddf68cce19ade935a238d2ed45cf76b27416e'>	
 	<Shape>
 		<Extrusion
@@ -151,7 +151,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_4862d1a456a6673eb3424c5f0c4248adf01a23cf'>	
 	<Shape>
 		<Extrusion
@@ -171,7 +171,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_26f6f03c78d810161eae7a7ff5534fd588bc80af'>	
 	<Shape>
 		<Extrusion
@@ -191,7 +191,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_19fdcf3c56394fcdd0c6179bad9ca8c87b4c8228'>	
 	<Shape>
 		<Extrusion
@@ -211,7 +211,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_3dbf08a296ea12b3d7da059af2c7343c26780d29'>	
 	<Shape>
 		<Extrusion
@@ -231,7 +231,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_61c70ba0ef686b48fead0df0364453c5afb83618'>	
 	<Shape>
 		<Extrusion
@@ -251,7 +251,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_f734e3036b271f56e1dbb9ca69f4aa920b2f98c2'>	
 	<Shape>
 		<Extrusion
@@ -271,7 +271,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_86d6c1788619dad7ac26b6e15d350d143c7871dc'>	
 	<Shape>
 		<Extrusion
@@ -291,7 +291,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_e73864b238f8e1eb24957648d47fb9c528dd02ff'>	
 	<Shape>
 		<Extrusion
@@ -311,7 +311,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_119adb8ccd123c522bc2026f3c4542a65094c714'>	
 	<Shape>
 		<Extrusion
@@ -331,7 +331,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_994a3789160d04dfc93a3be914f46c023d4f9d20'>	
 	<Shape>
 		<Extrusion
@@ -351,7 +351,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_e20ab372c6a66256b020d616f2f16f5283df0364'>	
 	<Shape>
 		<Extrusion
@@ -371,7 +371,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_a874289371d9f390c9f8b6daccf26dfb5a7ba1cf'>	
 	<Shape>
 		<Extrusion
@@ -391,7 +391,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='19.107099088834143 4.243261788682041 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='19.107099088834143 4.243261788682041 0.0'>
 <Transform DEF='ID_4fc014fa15b9c096498e3b0c73e352b1b030875b'>	
 	<Shape>
 		<Extrusion
@@ -412,7 +412,6 @@
 </Transform>	
 </Transform>
 <Transform translation='1.2516411148545228E-15 18.747541748211805 0.0' 
-	rotation='0 0 1 1.57' 
 	scale='1 1 1.0'>
 <Transform DEF='ID_4481fcdc97864a546f67c76536e0308a3058f75d'>
 	<Shape>
@@ -434,7 +433,6 @@
 </Transform>
 </Transform>
 <Transform translation='1.6898515514680439E-15 25.66603250757774 0.0' 
-	rotation='0 0 1 1.57' 
 	scale='1 1 1.0'>
 <Transform DEF='ID_26f25e4da4c82dc2370f3bde0201e612dd88c04c'>
 	<Shape>
@@ -455,7 +453,7 @@
 	</Shape>
 </Transform>
 </Transform>
-<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0'>
 <Transform DEF='ID_4d08a19b31cdb900d36f69756e8323ca65e9186b'>	
 	<Shape>
 		<Extrusion
@@ -475,7 +473,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0'>
 <Transform DEF='ID_60e93a9ac46923cab21c9b4ca6bd6b4fdcd2d552'>	
 	<Shape>
 		<Extrusion
@@ -495,7 +493,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0'>
 <Transform DEF='ID_11629cab6286835bcf468dd158c63816c6bc8b50'>	
 	<Shape>
 		<Extrusion
@@ -515,7 +513,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0'>
 <Transform DEF='ID_a3359592b6cf8cc9db859ab29c099f6bac4e7073'>	
 	<Shape>
 		<Extrusion
@@ -535,7 +533,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0'>
 <Transform DEF='ID_2ff793ad7485749918f01f511c989ceec094cfc5'>	
 	<Shape>
 		<Extrusion
@@ -555,7 +553,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0'>
 <Transform DEF='ID_d2955e64b6776b754f9d69f8f480a62f849584ca'>	
 	<Shape>
 		<Extrusion
@@ -575,7 +573,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0'>
 <Transform DEF='ID_10765258b141addc153f07acfb7ed26b00fe22fb'>	
 	<Shape>
 		<Extrusion
@@ -595,7 +593,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 25.66603250757774 0.0'>
 <Transform DEF='ID_4c3a759a929fdfc8754f03495aa0d746592eab6a'>	
 	<Shape>
 		<Extrusion
@@ -616,7 +614,6 @@
 </Transform>	
 </Transform>
 <Transform translation='1.6898515514680439E-15 12.305108524921327 0.0' 
-	rotation='0 0 1 1.57' 
 	scale='1 1 1.0'>
 <Transform DEF='ID_9fa088272bab165867bfaddcfbf58d6a7d5d45a2'>
 	<Shape>
@@ -637,7 +634,7 @@
 	</Shape>
 </Transform>
 </Transform>
-<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0'>
 <Transform DEF='ID_4754aad0f8ca2e5adb39c097f3221eda4c82877d'>	
 	<Shape>
 		<Extrusion
@@ -657,7 +654,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0'>
 <Transform DEF='ID_2f90fe03451cdda1f5129e993c409ab531118027'>	
 	<Shape>
 		<Extrusion
@@ -677,7 +674,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0'>
 <Transform DEF='ID_0166fed357196a09244efe558dbeb27e6e0d646b'>	
 	<Shape>
 		<Extrusion
@@ -697,7 +694,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0'>
 <Transform DEF='ID_0cf4af5bed915ef9b74c93b2c50852c21f2d5364'>	
 	<Shape>
 		<Extrusion
@@ -717,7 +714,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0'>
 <Transform DEF='ID_01de56af912219c3217ee6d97c38f3731fb4052c'>	
 	<Shape>
 		<Extrusion
@@ -737,7 +734,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0'>
 <Transform DEF='ID_a9a2c0261fbc4981279fc288ed89617ba4f5acf8'>	
 	<Shape>
 		<Extrusion
@@ -757,7 +754,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0'>
 <Transform DEF='ID_ca33f0111d29b1cc3827500605a2db32311317ce'>	
 	<Shape>
 		<Extrusion
@@ -777,7 +774,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0'>
 <Transform DEF='ID_ebace4173ecbaaa72dafda3332424aa4a233d1fc'>	
 	<Shape>
 		<Extrusion
@@ -797,7 +794,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0'>
 <Transform DEF='ID_fc94cf011272f8e738d5600f64861a4a0d2cc6d2'>	
 	<Shape>
 		<Extrusion
@@ -817,7 +814,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='1.6898515514680439E-15 12.305108524921327 0.0'>
 <Transform DEF='ID_30d036adadb7267f6f05ca698d5ce93e8bc0a42f'>	
 	<Shape>
 		<Extrusion
@@ -838,7 +835,6 @@
 </Transform>	
 </Transform>
 <Transform translation='1.2516411148545228E-15 -15.360923982656413 0.0' 
-	rotation='0 0 1 1.57' 
 	scale='1 1 1.0'>
 <Transform DEF='ID_052028080c3d64381f56397d59113102bf4e5921'>
 	<Shape>
@@ -860,7 +856,6 @@
 </Transform>
 </Transform>
 <Transform translation='-3.188451924377767 -17.829067591361486 0.0' 
-	rotation='0 0 1 1.57' 
 	scale='1 1 1.0'>
 <Transform DEF='ID_ecbec7f0190fc1c903a87797d35427dc7a1f240b'>
 	<Shape>
@@ -881,7 +876,7 @@
 	</Shape>
 </Transform>
 </Transform>
-<Transform  translation='-3.188451924377767 -17.829067591361486 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -17.829067591361486 0.0'>
 <Transform DEF='ID_dce8b98f162544734c5aacebb0a3731ee104eb77'>	
 	<Shape>
 		<Extrusion
@@ -901,7 +896,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -17.829067591361486 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -17.829067591361486 0.0'>
 <Transform DEF='ID_c7bc3b30c85e34e537f5ada76dafa4bb3f77646b'>	
 	<Shape>
 		<Extrusion
@@ -921,7 +916,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -17.829067591361486 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -17.829067591361486 0.0'>
 <Transform DEF='ID_d000974f136a59142bde8224bcef9590d038eb8a'>	
 	<Shape>
 		<Extrusion
@@ -941,7 +936,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -17.829067591361486 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -17.829067591361486 0.0'>
 <Transform DEF='ID_37834fec4533797c12daa8509eb11587547caac1'>	
 	<Shape>
 		<Extrusion
@@ -961,7 +956,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -17.829067591361486 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -17.829067591361486 0.0'>
 <Transform DEF='ID_78cd3ffe06ad51757c7facd4bbfdd3130313e03b'>	
 	<Shape>
 		<Extrusion
@@ -981,7 +976,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -17.829067591361486 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -17.829067591361486 0.0'>
 <Transform DEF='ID_ffec14a7831c9af6e99a59101779abcfbc7be97f'>	
 	<Shape>
 		<Extrusion
@@ -1001,7 +996,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -17.829067591361486 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -17.829067591361486 0.0'>
 <Transform DEF='ID_c0536af5045f9030acfa718623dec662d3f00112'>	
 	<Shape>
 		<Extrusion
@@ -1021,7 +1016,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -17.829067591361486 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -17.829067591361486 0.0'>
 <Transform DEF='ID_500db1187a5b547cb7d799c03f327421766bfc2a'>	
 	<Shape>
 		<Extrusion
@@ -1041,7 +1036,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -17.829067591361486 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -17.829067591361486 0.0'>
 <Transform DEF='ID_a113953a4fd76dc7bd442656a08af378baed6667'>	
 	<Shape>
 		<Extrusion
@@ -1061,7 +1056,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -17.829067591361486 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -17.829067591361486 0.0'>
 <Transform DEF='ID_61658aef236e200a9ffa30030e7cb0549bef0d4f'>	
 	<Shape>
 		<Extrusion
@@ -1082,7 +1077,6 @@
 </Transform>	
 </Transform>
 <Transform translation='5.6428633098241 -10.554549425372043 0.0' 
-	rotation='0 0 1 1.57' 
 	scale='1 1 1.0'>
 <Transform DEF='ID_e14c10820a526fde0ea0beee073b947e1ca67a4a'>
 	<Shape>
@@ -1103,7 +1097,7 @@
 	</Shape>
 </Transform>
 </Transform>
-<Transform  translation='5.6428633098241 -10.554549425372043 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='5.6428633098241 -10.554549425372043 0.0'>
 <Transform DEF='ID_ef646766f217c78d4a7ce6bd849dc15f9cc6f676'>	
 	<Shape>
 		<Extrusion
@@ -1123,7 +1117,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='5.6428633098241 -10.554549425372043 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='5.6428633098241 -10.554549425372043 0.0'>
 <Transform DEF='ID_feafc0fa0ada80b19459ccf9116eb24e8a40f9a7'>	
 	<Shape>
 		<Extrusion
@@ -1144,7 +1138,6 @@
 </Transform>	
 </Transform>
 <Transform translation='8.165602145059532 -19.241936835647977 0.0' 
-	rotation='0 0 1 1.57' 
 	scale='1 1 1.0'>
 <Transform DEF='ID_9e346826c780b8b1975dc8906296cc47974ccd4e'>
 	<Shape>
@@ -1165,7 +1158,7 @@
 	</Shape>
 </Transform>
 </Transform>
-<Transform  translation='8.165602145059532 -19.241936835647977 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='8.165602145059532 -19.241936835647977 0.0'>
 <Transform DEF='ID_9ede89834e464def4f7d991a98d3117a8368f701'>	
 	<Shape>
 		<Extrusion
@@ -1185,7 +1178,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='8.165602145059532 -19.241936835647977 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='8.165602145059532 -19.241936835647977 0.0'>
 <Transform DEF='ID_b9fc03fe668187e6e2a0df760fec7a785ba7be12'>	
 	<Shape>
 		<Extrusion
@@ -1206,7 +1199,6 @@
 </Transform>	
 </Transform>
 <Transform translation='3.5906957943405793 -27.046111560061654 0.0' 
-	rotation='0 0 1 1.57' 
 	scale='1 1 1.0'>
 <Transform DEF='ID_fba940eea4ca7f9002bc529bbb0cbc8fc0423985'>
 	<Shape>
@@ -1227,7 +1219,7 @@
 	</Shape>
 </Transform>
 </Transform>
-<Transform  translation='3.5906957943405793 -27.046111560061654 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='3.5906957943405793 -27.046111560061654 0.0'>
 <Transform DEF='ID_17bd18bd602e8e22b6c1db22c5d32a02542ed1ed'>	
 	<Shape>
 		<Extrusion
@@ -1247,7 +1239,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='3.5906957943405793 -27.046111560061654 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='3.5906957943405793 -27.046111560061654 0.0'>
 <Transform DEF='ID_862a6bda25d2fa6e5fd13100124371357cb1d769'>	
 	<Shape>
 		<Extrusion
@@ -1268,7 +1260,6 @@
 </Transform>	
 </Transform>
 <Transform translation='-3.188451924377767 -5.00175673677219 0.0' 
-	rotation='0 0 1 1.57' 
 	scale='1 1 1.0'>
 <Transform DEF='ID_841936e6f873f49a85e18a4a94df5d7dfe591edf'>
 	<Shape>
@@ -1289,7 +1280,7 @@
 	</Shape>
 </Transform>
 </Transform>
-<Transform  translation='-3.188451924377767 -5.00175673677219 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -5.00175673677219 0.0'>
 <Transform DEF='ID_772a992774d132a9f8417a602abf7174e7ef4a94'>	
 	<Shape>
 		<Extrusion
@@ -1309,7 +1300,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -5.00175673677219 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -5.00175673677219 0.0'>
 <Transform DEF='ID_dbe90bb7628212f56ef88f4a152bc0fe402f350b'>	
 	<Shape>
 		<Extrusion
@@ -1329,7 +1320,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -5.00175673677219 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -5.00175673677219 0.0'>
 <Transform DEF='ID_647ebb197e6830e3aa6b55b554cfe16547b5d634'>	
 	<Shape>
 		<Extrusion
@@ -1349,7 +1340,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -5.00175673677219 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -5.00175673677219 0.0'>
 <Transform DEF='ID_b855b93bf7c9e35b15e205e2fa18853a05d54af0'>	
 	<Shape>
 		<Extrusion
@@ -1369,7 +1360,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -5.00175673677219 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -5.00175673677219 0.0'>
 <Transform DEF='ID_c01f09c13775d8d9ba1a4e431bdd87296d4e8a52'>	
 	<Shape>
 		<Extrusion
@@ -1389,7 +1380,7 @@
 	</Shape>
 </Transform>	
 </Transform>
-<Transform  translation='-3.188451924377767 -5.00175673677219 0.0' rotation='0 0 1 1.57'>
+<Transform  translation='-3.188451924377767 -5.00175673677219 0.0'>
 <Transform DEF='ID_bbe92ce041d250f5715b879320bc543d0054e9f7'>	
 	<Shape>
 		<Extrusion
@@ -1408,6 +1399,8 @@
 		</Appearance>
 	</Shape>
 </Transform>	
+</Transform>
+</Transform>
 </Transform>
 	<Background DEF="_Background" groundColor='1.0000000 1.0000000 1.0000000' skyColor='1.0000000 1.0000000 1.0000000'/>
 	</Scene>

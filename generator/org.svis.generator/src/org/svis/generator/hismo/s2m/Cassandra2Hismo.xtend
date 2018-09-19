@@ -87,13 +87,39 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 	            		if(old) {
 	            			if(security_relevant) {
 	            				closedSecurityIncidents++
+	            				// just for improving generating example data
+	            				// remove for productive use
+	            				closedSecurityIncidents++
+	            				closedSecurityIncidents++
+	            				closedSecurityIncidents++
 	            			} else {
-	            				closedIncidents++	
+	            				closedIncidents++
+	            				// just for improving generating example data
+	            				// remove for productive use
+	            				closedIncidents++
+	            				closedIncidents++
+	            				closedIncidents++
+	            				closedIncidents++
+	            				closedIncidents++
 	            			}
 	            		} else {
 	            			if(security_relevant) {
-	            				openSecurityIncidents++            				
+	            				openSecurityIncidents++
+	            				// just for improving generating example data
+	            				// remove for productive use
+	            				openSecurityIncidents++     
+	            				openSecurityIncidents++
+	            				openSecurityIncidents++
+	            				openSecurityIncidents++      				
 	            			} else {
+	            				openIncidents++
+	            				// just for improving generating example data
+	            				// remove for productive use
+	            				openIncidents++
+	            				openIncidents++
+	            				openIncidents++
+	            				openIncidents++
+	            				openIncidents++
 	            				openIncidents++
 	            			}
 	            		}
@@ -151,10 +177,11 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		ctx.set("hismo", hismoList)
 		ctx.set("metadata", resource)
 			
-		log.info("Cassandra2RD has finished.")
+		log.info("Cassandra2Hismo has finished.")
 	}
 	
 	def void createParent(String fqn) {
+		log.info("create Parent: " + fqn)
 		val index = fqn.lastIndexOf(".")
 		if(index < 0) return
 		val parentFQN = fqn.substring(0, index)
@@ -162,7 +189,7 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		if(parentHistory === null) {
 			createParent(parentFQN)
 			parentHistory = toNamespaceHistory(parentFQN)
-			toNamespaceVersion(parentHistory, "foobar", "0")
+			toNamespaceVersion(parentHistory, "2018-01-01", "0")
 		}
 	}
 	
@@ -177,10 +204,25 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 	}
 	
 	def void setParentVersion() {
+		val namespaceVersions = hismoDocument.elements.filter(HISMONamespaceVersion)
 		hismoDocument.elements.filter(HISMOClassVersion).forEach[classVersion|
-			val history = classVersion.parentHistory.ref as HISMOClassHistory
-			classVersion.container = (history.containingNamespaceHistory.ref as HISMONamespaceHistory)
-			.namespaceVersions.map[ref as HISMONamespaceVersion].last.createReference
+			//val history = classVersion.parentHistory.ref as HISMOClassHistory
+			val fqn = classVersion.name.substring(0, classVersion.name.length -5)
+			log.info("test: " + fqn)
+			val index = fqn.lastIndexOf(".")
+			val parentFQN = classVersion.name.substring(0, index)
+			//log.info("classfqn: " + classVersion.name)
+			log.info("parent: " + parentFQN)
+		//	val namespaceVersions = (history.containingNamespaceHistory.ref as HISMONamespaceHistory)
+		//							.namespaceVersions.map[ref as HISMONamespaceVersion]
+			val parents = namespaceVersions.filter[value == parentFQN]
+			log.info("parents: " + parents.length)
+			classVersion.container = parents.last.createReference
+			log.info("cassandra2hismo")
+			log.info("class id:" + classVersion.id)
+			if(classVersion.container !== null) {
+				log.info("container: " + classVersion.container.ref)
+			}
 		]
 		hismoDocument.elements.filter(HISMONamespaceVersion).forEach[namespaceVersion|
 			val history = namespaceVersion.parentHistory.ref as HISMONamespaceHistory
@@ -203,6 +245,7 @@ class Cassandra2Hismo extends WorkflowComponentWithModelSlot {
 		val namespaceHistory = hismoFactory.createHISMONamespaceHistory 
 		namespaceHistory.value = fqn
 		namespaceHistory.name = famix.createID(fqn)
+		namespaceHistory.id = famix.createID(fqn)
 		hismoDocument.elements += namespaceHistory
 		return namespaceHistory
 	}
