@@ -5,7 +5,7 @@
 	TODO in application auslagern
 -->
 <script type="text/javascript">
-    var modelUrl = "data/aframe";
+    var modelUrl = "data/aframe/modelSmall";
     var metaDataJsonUrl  = modelUrl + "/metaData.json";
 
     var canvasId = "aframe-canvas";
@@ -24,7 +24,8 @@
     <script type="text/javascript" src="libs/handlebars-v2.0.0.js"></script>
 
     <!--A-Frame-->
-    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+    <script src="libs/aframe/aframe-v0.8.2.min.js"></script>
+    <!--<script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>-->
 
     <!--jqwidgets-->
     <script type="text/javascript" src="libs/jqwidgets/jqxcore.js"></script>
@@ -85,7 +86,7 @@
 <div id="canvas">
     <script>
         $(function(){
-            $("#canvas").load("data/aframe/modelSmall/model.html");
+            $("#canvas").load(modelUrl + "/model.html");
 
         });
     </script>
