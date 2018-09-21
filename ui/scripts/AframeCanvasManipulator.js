@@ -1,4 +1,4 @@
-var aframeCanvasManipulator = (function() {
+var canvasManipulator = (function() {
     
 	var colors = {
 		darkred: "darkred",

@@ -1,4 +1,4 @@
-var aframeActionController = (function() {
+var actionController = (function() {
 			
 
 //*********************************
@@ -84,7 +84,7 @@ var aframeActionController = (function() {
 //*********************************	
 	
 	function initialize(){
-		
+		console.debug(arguments.callee.name);
 		//canvas actions
 		var canvas = document.getElementById(canvasId);
 	

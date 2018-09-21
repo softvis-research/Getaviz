@@ -9,6 +9,7 @@
     var metaDataJsonUrl  = modelUrl + "/metaData.json";
 
     var canvasId = "aframe-canvas";
+
     var visMode = "aframe";
 </script>
 
@@ -23,8 +24,7 @@
     <script type="text/javascript" src="libs/handlebars-v2.0.0.js"></script>
 
     <!--A-Frame-->
-    <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
-    <!--a frame already gets imported with the model-->
+    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
 
     <!--jqwidgets-->
     <script type="text/javascript" src="libs/jqwidgets/jqxcore.js"></script>
@@ -72,6 +72,7 @@
     <script type="text/javascript" src="scripts/AframeCanvasManipulator.js"></script>
     <script type="text/javascript" src="scripts/Application.js"></script>
     <script type="text/javascript" src="scripts/AframeActionController.js"></script>
+    <script type="text/javascript" src="scripts/aframe-orbit-camera-component.js"></script>
 
 
     <link rel="stylesheet" href="Style.css" type="text/css" />
@@ -84,7 +85,7 @@
 <div id="canvas">
     <script>
         $(function(){
-            $("#canvas").load("data/aframe/model.html");
+            $("#canvas").load("data/aframe/modelSmall/model.html");
 
         });
     </script>
