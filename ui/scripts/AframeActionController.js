@@ -84,7 +84,7 @@ var actionController = (function() {
 //*********************************	
 	
 	function initialize(){
-		
+		console.debug(arguments.callee.name);
 		//canvas actions
 		var canvas = document.getElementById(canvasId);
 	
@@ -102,8 +102,8 @@ var actionController = (function() {
 				return true;
 			}
 
-			eventObject.cancelBubble = true;
-			eventObject.stopPropagation(); 
+			//eventObject.cancelBubble = true;
+			//eventObject.stopPropagation();
 			return false;					
 		};
 
@@ -121,8 +121,8 @@ var actionController = (function() {
 				return true;
 			}
 
-			eventObject.cancelBubble = true;
-			eventObject.stopPropagation(); 
+			//eventObject.cancelBubble = true;
+			//eventObject.stopPropagation();
 			return false;			
 		};
 
@@ -136,8 +136,8 @@ var actionController = (function() {
 				return true;
 			}
 
-			eventObject.cancelBubble = true;
-			eventObject.stopPropagation(); 
+			//eventObject.cancelBubble = true;
+			//eventObject.stopPropagation();
 			return false;				
 		}; 
 
