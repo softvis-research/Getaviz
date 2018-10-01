@@ -24,7 +24,7 @@ An academic publication about Getaviz you can find [here](https://www.researchga
 
 ### Main Contributors
 
-Getaviz is developed by the research group [Software Visualization In 3D And Virtual Reality](https://home.uni-leipzig.de/svis/) of Leipzig University. It has been developed over several years and is the basic for many scientific publications. In 2018 we released Getaviz as open source to simplify collaboration and practical use of our research prototype. 
+Getaviz is developed by the research group [Visual Software Analytics](https://home.uni-leipzig.de/svis/) of Leipzig University. It has been developed over several years and is the basic for many scientific publications. In 2018 we released Getaviz as open source to simplify collaboration and practical use of our research prototype. 
 
 Currently, four developers are contributung actively to Getaviz:
 * [Richard Müller](https://github.com/rmllr)
