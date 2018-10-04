@@ -50,6 +50,21 @@ import org.apache.commons.logging.LogFactory
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.SettingsConfiguration.FamixParser
 
+//ABAP
+import org.svis.xtext.famix.FAMIXDictionaryData
+import org.svis.xtext.famix.FAMIXReport 
+import org.svis.xtext.famix.FAMIXDataElement
+import org.svis.xtext.famix.FAMIXTable
+import org.svis.xtext.famix.FAMIXABAPStruc
+import org.svis.xtext.famix.FAMIXStrucElement
+import org.svis.xtext.famix.FAMIXFunctionGroup
+import org.svis.xtext.famix.FAMIXFunctionModule
+import org.svis.xtext.famix.FAMIXFormroutine
+import org.svis.xtext.famix.FAMIXMessageClass 
+
+
+
+
 class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val log = LogFactory::getLog(class)
 	var GraphDatabaseService graph
@@ -72,11 +87,29 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val Map<String, Node> nodes = newHashMap
 	val config = SettingsConfiguration.instance;
 	
+	//ABAP
+	val List<FAMIXReport> reports = newArrayList 
+	val List<FAMIXDataElement> dataElements = newArrayList 
+	val List<FAMIXTable> tables = newArrayList 
+	val List<FAMIXABAPStruc> abapStrucs = newArrayList 
+	val List<FAMIXStrucElement> abapStrucElem = newArrayList 
+	val List<FAMIXFunctionModule> functionModules = newArrayList
+	val List<FAMIXFormroutine> formroutines = newArrayList
+	val List<FAMIXMessageClass> messageClasses = newArrayList
+	val List<FAMIXFunctionGroup> functionGroups = newArrayList
+	 
+	
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Famix2Famix has started.")
 		val resourceList = ctx.get("famix") as List<?>
+				
 		if (resourceList.size == 1) {
-			val famixRoot = run((resourceList as List<Root>).head)
+			var Root famixRoot
+			if(config.parser == FamixParser::ABAP){
+				famixRoot = runAbap((resourceList as List<Root>).head)
+			}else{
+				famixRoot = run((resourceList as List<Root>).head)
+			}
 			ctx.set("famix", famixRoot)
 			val resource = new ResourceImpl()
 			resource.contents += famixRoot
@@ -98,7 +131,115 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		}
 		log.info("Famix2Famix has finished.")
 	}
+	
+	//ABAP logic. Delete after updating extractor in CCLM
+	def private runAbap(Root famixRoot){
+		val famixDocument = famixRoot.document
+		famixDocument.elements.removeAll(Collections::singleton(null))
+		
+		val Set<FAMIXNamespace> packages = newLinkedHashSet
+		
+		famixDocument.elements.filter(FAMIXPath).forEach[path|
+			path.id = createID(path.name + path.start.ref.name + path.end.ref.name);
+		]
+		
+		
+		//val reports = famixDocument.elements.filter(FAMIXReport).toList
+		
+		
+		famixDocument.elements.forEach[element|
+			switch element {
+				FAMIXAttribute: attributes.add(element)					
+				FAMIXMethod: methods.add(element)
+				FAMIXReport: reports.add(element)
+				FAMIXDataElement: dataElements.add(element)
+				FAMIXTable: tables.add(element)
+				FAMIXABAPStruc: abapStrucs.add(element)
+				FAMIXStrucElement: abapStrucElem.add(element)
+				FAMIXFunctionModule: functionModules.add(element)
+				FAMIXFormroutine: formroutines.add(element)
+				FAMIXMessageClass: messageClasses.add(element)
+				FAMIXFunctionGroup: functionGroups.add(element)
+				FAMIXStructure: {
+					if(element.container !== null){
+						structures.add(element)
+					}
+				}
+			}
+			
+		]
+		
+		
+		
+		val allPackages = famixDocument.elements.filter(FAMIXNamespace).toSet
+		allStructures += famixDocument.elements.filter(FAMIXStructure).filter[container !== null]
+		
+		
+		allPackages.forEach[getPackages]
+		rootPackages.forEach[setQualifiedName]
+		methods.forEach[setQualifiedName]
+		attributes.forEach[setQualifiedNameAbap]
+		enumValues.forEach[setQualifiedName]
+		
+		reports.forEach[setQualifiedName]
+		dataElements.forEach[setQualifiedName]
+		tables.forEach[setQualifiedName]
+		abapStrucs.forEach[setQualifiedName]
+		abapStrucElem.forEach[setQualifiedName]
+		functionModules.forEach[setQualifiedName]
+		functionGroups.forEach[setQualifiedName]
+		formroutines.forEach[setQualifiedName]
+		messageClasses.forEach[setQualifiedName]
+	
+		
+		famixDocument.elements.clear
+		famixDocument.elements.addAll(rootPackages)
+		famixDocument.elements.addAll(subPackages)
+		famixDocument.elements.addAll(structures)
+				
+		famixDocument.elements.addAll(methods)
+		famixDocument.elements.addAll(reports)
+		famixDocument.elements.addAll(attributes)
+		famixDocument.elements.addAll(dataElements)
+		famixDocument.elements.addAll(tables)
+		famixDocument.elements.addAll(abapStrucs)
+		famixDocument.elements.addAll(abapStrucElem)
+		famixDocument.elements.addAll(enumValues)
+		famixDocument.elements.addAll(invocations)
+		famixDocument.elements.addAll(antipattern)
+		famixDocument.elements.addAll(components)
+		famixDocument.elements.addAll(functionModules)
+		famixDocument.elements.addAll(functionGroups)
+		famixDocument.elements.addAll(formroutines)
+		famixDocument.elements.addAll(messageClasses)
+		
+		rootPackages.clear
+		subPackages.clear
+		allStructures.clear
+		methods.clear
+		reports.clear
+		dataElements.clear
+		tables.clear
+		abapStrucs.clear
+		abapStrucElem.clear
+		attributes.clear
+		enumValues.clear
+		structures.clear
+		antiMethods.clear
+		antipattern.clear
+		components.clear
+		functionModules.clear
+		functionGroups.clear
+		formroutines.clear
+		messageClasses.clear
+		return famixRoot
+	} //End of ABAP logic
+	
 
+		
+	
+	
+	//Default 
 	def private toInvocation(FAMIXMethod m1, FAMIXMethod m2) {
 		val invocation = famixFactory.createFAMIXInvocation
 		invocation.name = m2.name + 2000000
@@ -165,25 +306,41 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 			path.id = createID(path.name + path.start.ref.name + path.end.ref.name);
 		]
 		
-		fileAnchors.forEach[f|
-			val element = f.element.ref
-			switch element {
-				FAMIXAttribute: attributes.add(element)
-				FAMIXMethod: methods.add(element)
-				FAMIXStructure: {
-					if(element.container !== null) {
-						structures.add(element)
+		
+		if (config.hasAnchors()){
+			fileAnchors.forEach[f|
+				val element = f.element.ref
+				switch element {
+					FAMIXAttribute: attributes.add(element)
+					FAMIXMethod: methods.add(element)
+					FAMIXStructure: {
+						if(element.container !== null) {
+							structures.add(element)
+						}
+					}
+					FAMIXComment, FAMIXLocalVariable, FAMIXAnnotationTypeAttribute: {} // do nothing, just to prevent them from being treaded in default
+					default: {
+						log.warn("Famix2Famix: forgot " + element.class)
+						log.info(element.name)
+						log.info(element.toString)
 					}
 				}
-				FAMIXComment, FAMIXLocalVariable, FAMIXAnnotationTypeAttribute: {} // do nothing, just to prevent them from being treaded in default
-				default: {
-					log.warn("Famix2Famix: forgot " + element.class)
-					log.info(element.name)
-					log.info(element.toString)
+			]
+		 }else{		 	
+			famixDocument.elements.forEach[element|
+				switch element {
+					FAMIXAttribute: attributes.add(element)
+					FAMIXMethod: methods.add(element)
+					FAMIXStructure: {
+						if(element.container !== null){
+							structures.add(element)
+						}
+					}
 				}
-			}
-		]
-
+			]
+		}
+		
+		
 		structures.forEach [ s |
 			val ref = s.container.ref
 			switch ref {
@@ -670,6 +827,47 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		}
 		attribute.id = createID(attribute.fqn)
 	}
+	
+	//ABAP
+	def setQualifiedNameAbap(FAMIXAttribute attribute) {
+		val ref = attribute.parentType.ref
+		switch (ref) {
+			FAMIXClass: attribute.fqn = ref.fqn + "." + attribute.value
+			FAMIXReport: attribute.fqn = ref.fqn + "." + attribute.value
+			FAMIXFunctionModule: attribute.fqn = ref.fqn + "." + attribute.value
+			FAMIXMethod: attribute.fqn = ref.fqn + "." + attribute.value
+			default: log.error("ERROR qualifiedName(FAMIXAttribute famixAttribute): " + attribute.value)
+		}
+		attribute.id = createID(attribute.fqn)
+	}
+	
+	//ABAP
+	def setQualifiedName(FAMIXDictionaryData dd){
+		//val ref = dd.container.ref
+		dd.fqn = "." + dd.value
+		dd.id = createID(dd.fqn)
+	} 
+	
+	def setQualifiedName(FAMIXFunctionModule fm){
+		fm.fqn = "." + fm.value
+		fm.id = createID(fm.fqn)
+	}
+	
+	def setQualifiedName(FAMIXFunctionGroup fg){
+		fg.fqn = "." + fg.value
+		fg.id = createID(fg.fqn)
+	}
+	
+	def setQualifiedName(FAMIXFormroutine fr){
+		fr.fqn = "." + fr.value
+		fr.id = createID(fr.fqn)
+	}
+	
+	def setQualifiedName(FAMIXMessageClass ms){
+		ms.fqn = "." + ms.value
+		ms.id = createID(ms.fqn)
+	}
+	
 
 	def private setQualifiedName(FAMIXEnumValue enumValue) {
 		val ref = enumValue.parentEnum.ref

@@ -33,6 +33,18 @@ import org.svis.xtext.famix.FAMIXStructure
 import org.svis.xtext.famix.FAMIXComponent
 import org.svis.generator.FamixUtils
 
+//ABAP
+import org.svis.xtext.famix.FAMIXReport
+import org.svis.xtext.famix.FAMIXDataElement
+import org.svis.xtext.famix.FAMIXTable
+import org.svis.xtext.famix.FAMIXABAPStruc
+import org.svis.xtext.famix.FAMIXStrucElement
+import org.svis.xtext.famix.FAMIXFunctionGroup
+import org.svis.xtext.famix.FAMIXFunctionModule
+import org.svis.xtext.famix.FAMIXFormroutine
+import org.svis.xtext.famix.FAMIXMessageClass
+
+
 class Famix2JSON implements IGenerator2 {
 
 	@Inject extension FamixUtils util
@@ -74,6 +86,7 @@ class Famix2JSON implements IGenerator2 {
 			«toMetaData(el)»
 		«ENDFOR»
 	'''
+	
 	def dispatch private toMetaData(FAMIXNamespace p)'''
 		"id":            "«p.id»",
 		"qualifiedName": "«p.fqn»",
@@ -120,6 +133,7 @@ class Famix2JSON implements IGenerator2 {
 		«ENDIF»
 	'''
 	
+	 
 	def dispatch private toMetaData(FAMIXParameterizableClass pc)'''
 		"id":            "«pc.id»",
 		"qualifiedName": "«pc.fqn»",
@@ -190,9 +204,106 @@ class Famix2JSON implements IGenerator2 {
 		"belongsTo":     "«el.container.ref.id»"
 	'''
 	
+	
 	def dispatch private toMetaData(FAMIXFileAnchor el) '''
 		
 	'''
+
+
+	//ABAP	
+	def dispatch private toMetaData(FAMIXReport r)'''
+		"id":            "«r.id»",
+		"qualifiedName": "«r.fqn»",
+		"name":          "«r.value»",
+		"type":          "FAMIX.Report",
+		"belongsTo":     "«r.container.ref.id»",
+		"iteration": 	 "«r.iteration»"
+	'''
+	
+	//ABAP
+	def dispatch private toMetaData(FAMIXDataElement de)'''
+		"id":            "«de.id»",
+		"qualifiedName": "«de.fqn»",
+		"name":          "«de.value»",
+		"type":          "FAMIX.DataElement",
+		"belongsTo":     "«de.container.ref.id»",
+		"iteration": 	 "«de.iteration»"
+	'''
+	 
+	//ABAP 
+	def dispatch private toMetaData(FAMIXTable t)'''
+		"id":            "«t.id»",
+		"qualifiedName": "«t.fqn»",
+		"name":          "«t.value»",
+		"type":          "FAMIX.Table",
+		"belongsTo":     "«t.container.ref.id»",
+		"iteration": 	 "«t.iteration»"
+	'''
+	
+	//ABAP 
+	def dispatch private toMetaData(FAMIXABAPStruc abs)'''
+		"id":            "«abs.id»",
+		"qualifiedName": "«abs.fqn»",
+		"name":          "«abs.value»",
+		"type":          "FAMIX.ABAPStructure",
+		"belongsTo":     "«abs.container.ref.id»",
+		"iteration": 	 "«abs.iteration»"
+	'''
+	
+	//ABAP
+	def dispatch private toMetaData(FAMIXStrucElement se)'''
+		"id":            "«se.id»",
+		"qualifiedName": "«se.fqn»",
+		"name":          "«se.value»",
+		"type":          "FAMIX.ABAPStrucElement",
+		"belongsTo":     "«se.container.ref.id»",
+		"iteration": 	 "«se.iteration»"
+	'''
+	
+	
+	//ABAP
+	def dispatch private toMetaData(FAMIXFunctionGroup fg)'''
+		"id":            "«fg.id»",
+		"qualifiedName": "«fg.fqn»",
+		"name":          "«fg.value»",
+		"type":          "FAMIX.FunctionGroup",
+		"belongsTo":     "«fg.container.ref.id»",
+		"iteration": 	 "«fg.iteration»"
+	'''
+	
+	//ABAP
+	def dispatch private toMetaData(FAMIXFunctionModule fm)'''
+		"id":            "«fm.id»",
+		"qualifiedName": "«fm.fqn»",
+		"name":          "«fm.value»",
+		"type":          "FAMIX.FunctionModule",
+		"numberOfStatements": "«fm.numberOfStatements»",
+		"belongsTo":     "«fm.parentType.ref.id»",
+		"iteration": 	 "«fm.iteration»"
+	'''
+	
+	//ABAP
+	def dispatch private toMetaData(FAMIXFormroutine fr)'''
+		"id":            "«fr.id»",
+		"qualifiedName": "«fr.fqn»",
+		"name":          "«fr.value»",
+		"type":          "FAMIX.Formroutine",
+		"numberOfStatements": "«fr.numberOfStatements»",
+		"belongsTo":     "«fr.parentType.ref.id»",
+		"iteration": 	 "«fr.iteration»"
+	'''
+
+	//ABAP
+	def dispatch private toMetaData(FAMIXMessageClass mc)'''
+		"id":            "«mc.id»",
+		"qualifiedName": "«mc.fqn»",
+		"name":          "«mc.value»",
+		"type":          "FAMIX.MessageClass",
+		"numberOfMessages": "«mc.numberOfMessages»",
+		"belongsTo":     "«mc.container.ref.id»",
+		"iteration": 	 "«mc.iteration»"
+	'''
+
 
 	def private toString (List<IntegerReference> list) { 
     	val tmp = newArrayList 
@@ -289,4 +400,6 @@ class Famix2JSON implements IGenerator2 {
 		}
 		return types.trim
 	}
+	
+	
 }
