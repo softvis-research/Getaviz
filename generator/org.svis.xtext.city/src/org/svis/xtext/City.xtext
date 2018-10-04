@@ -40,6 +40,9 @@ District: // no LOC, height has to be static
 		('(' 'entities' entities+=Entity* ')')?
 		('(' 'instances' instances+=Instance* ')')? //dynamix
 		('(' 'parent' parent=[Entity] ')')?
+		('(' 'notInOrigin' notInOrigin=BOOLEAN ')')? //ABAP
+		('(' 'hasDatabases' hasDatabases=BOOLEAN ')')? //ABAP
+		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? //ABAP
 	')';
 
 Building:
@@ -72,6 +75,7 @@ Building:
 		('(' 'parent' parent=[Entity] ')')?
 		('(' 'sideCapacity' sideCapacity=INT ')')?
 		('(' 'numberOfStatements' numberOfStatements=INT ')')?
+		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? //ABAP
 	')';
 
 //Specifies the methods/attributes as blocks (or bricks, panels, segments)
@@ -105,6 +109,7 @@ BuildingSegment:
 		('(' 'references' references+=Reference* ')')? //possibly unreliable, when reference is nested in another entity
 		('(' 'entities' entities+=Entity* ')')? //no use yet. but keep it for later additions
 		('(' 'parent' parent=[Entity] ')')?
+		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? // ABAP
 	')';
 
 Parameter:
@@ -198,7 +203,14 @@ Position:
 	'\'' x=DECIMAL '_' y=DECIMAL '_' z=DECIMAL '\'';
 
 Reference:
-	'(' 'ref:' name=INT_ID ')' '(' 'fqn:' fqn=MSESTRING ')' '(' 'type' type=MSESTRING ')';
+	'(' 'ref:' name=INT_ID ')' 
+	'(' 'fqn:' fqn=MSESTRING ')' 
+	'(' 'type' type=MSESTRING ')';
+
+ABAPReference:
+	'(' 'id:' name=INT_ID ')' 
+	'(' 'parent:' parent=[Entity] ')' 
+	'(' 'target:' target=[Entity] ')';
 
 INT_ID returns ecore::EString:
 	'^'? INT;
@@ -217,7 +229,8 @@ Invocation:
 	'(' 'stop' stop=Timestamp ')'
 	('(' 'length' length=INT ')')?
 	('(' 'position' position=Position ')')?
-	('(' 'caller' caller=INT_ID ')')?;
+	('(' 'caller' caller=INT_ID ')')?
+	('(' 'index' index=INT ')')?;
 
 Instance:
 	'(' 'ref:' name=INT_ID ')' '(' 'index' index=INT ')';

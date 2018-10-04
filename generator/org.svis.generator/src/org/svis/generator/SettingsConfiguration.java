@@ -109,6 +109,11 @@ public class SettingsConfiguration {
 		return config.getString("structure.parser", "verveinej");
 	}
 	
+	public String getAbapRepresentation() {
+		return config.getString("city.represent_abap", "source");
+	}
+	
+	
 	public Boolean recreateFamix() {
 		return config.getBoolean("structure.recreate_famix", false);
 	}
@@ -123,6 +128,21 @@ public class SettingsConfiguration {
 	
 	public Boolean showClassMembers() {
 		return config.getBoolean("structure.show_class_members", true);
+	}
+	
+	public Boolean showEmptyDistricts() {
+		return config.getBoolean("city.show_empty_districts", false);
+	}
+	
+	//city.represent_abap = source
+
+	public AbapCityRepresentation getAbap_representation() {
+		switch (getAbapRepresentation()) {
+		case "code_logic":
+			return AbapCityRepresentation.CODE_LOGIC;
+		default:
+			return AbapCityRepresentation.SOURCE;
+		}
 	}
 	
 	public FamixParser getParser() {
@@ -956,6 +976,10 @@ public class SettingsConfiguration {
 	
 	public static enum FamixParser {	
 		JDT2FAMIX, VERVEINEJ, JQA_BYTECODE, ABAP;	
+	}
+	
+	public static enum AbapCityRepresentation {
+		SOURCE, CODE_LOGIC;
 	}
 	
 	public static enum MetricRepresentation {

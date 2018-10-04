@@ -27,8 +27,6 @@ import org.svis.xtext.famix.FAMIXInvocation
 import org.svis.xtext.famix.FAMIXPrimitiveType
 import org.svis.xtext.famix.FAMIXType
 import org.svis.xtext.famix.FAMIXParameterType
-import org.svis.xtext.famix.FAMIXReport //ABAP
-import org.svis.xtext.famix.FAMIXFunctionModule //ABAP
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.apache.commons.beanutils.BeanComparator
 import org.eclipse.emf.common.util.ECollections
@@ -52,6 +50,21 @@ import org.apache.commons.logging.LogFactory
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.SettingsConfiguration.FamixParser
 
+//ABAP
+import org.svis.xtext.famix.FAMIXDictionaryData
+import org.svis.xtext.famix.FAMIXReport 
+import org.svis.xtext.famix.FAMIXDataElement
+import org.svis.xtext.famix.FAMIXTable
+import org.svis.xtext.famix.FAMIXABAPStruc
+import org.svis.xtext.famix.FAMIXStrucElement
+import org.svis.xtext.famix.FAMIXFunctionGroup
+import org.svis.xtext.famix.FAMIXFunctionModule
+import org.svis.xtext.famix.FAMIXFormroutine
+import org.svis.xtext.famix.FAMIXMessageClass 
+
+
+
+
 class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val log = LogFactory::getLog(class)
 	var GraphDatabaseService graph
@@ -73,6 +86,18 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	var int i = 0
 	val Map<String, Node> nodes = newHashMap
 	val config = SettingsConfiguration.instance;
+	
+	//ABAP
+	val List<FAMIXReport> reports = newArrayList 
+	val List<FAMIXDataElement> dataElements = newArrayList 
+	val List<FAMIXTable> tables = newArrayList 
+	val List<FAMIXABAPStruc> abapStrucs = newArrayList 
+	val List<FAMIXStrucElement> abapStrucElem = newArrayList 
+	val List<FAMIXFunctionModule> functionModules = newArrayList
+	val List<FAMIXFormroutine> formroutines = newArrayList
+	val List<FAMIXMessageClass> messageClasses = newArrayList
+	val List<FAMIXFunctionGroup> functionGroups = newArrayList
+	 
 	
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Famix2Famix has started.")
@@ -111,11 +136,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	def private runAbap(Root famixRoot){
 		val famixDocument = famixRoot.document
 		famixDocument.elements.removeAll(Collections::singleton(null))
-		// elements we do not want
-		val List<FAMIXStructure> structuresToDelete = newArrayList
-		val fileAnchors = famixDocument.elements.filter(FAMIXFileAnchor).filter[element !== null].toList
-		antipattern = famixDocument.elements.filter(FAMIXAntipattern).toList
-		components = famixDocument.elements.filter(FAMIXComponent).toList
+		
 		val Set<FAMIXNamespace> packages = newLinkedHashSet
 		
 		famixDocument.elements.filter(FAMIXPath).forEach[path|
@@ -123,276 +144,96 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		]
 		
 		
-		if (config.hasAnchors()){
-			fileAnchors.forEach[f|
-				val element = f.element.ref
-				switch element {
-					FAMIXAttribute: attributes.add(element)
-					FAMIXMethod: methods.add(element)
-					FAMIXStructure: {
-						if(element.container !== null) {
-							structures.add(element)
-						}
-					}
-					FAMIXComment, FAMIXLocalVariable, FAMIXAnnotationTypeAttribute: {} // do nothing, just to prevent them from being treaded in default
-					default: {
-						log.warn("Famix2Famix: forgot " + element.class)
-						log.info(element.name)
-						log.info(element.toString)
-					}
-				}
-			]
-		 }else{		 	
-			famixDocument.elements.forEach[element|
-				switch element {
-					FAMIXAttribute: attributes.add(element)
-					FAMIXMethod: methods.add(element)
-					FAMIXStructure: {
-						if(element.container !== null){
-							structures.add(element)
-						}
-					}
-				}
-			]
-		}
+		//val reports = famixDocument.elements.filter(FAMIXReport).toList
 		
 		
-		structures.forEach [ s |
-			val ref = s.container.ref
-			switch ref {
-				FAMIXNamespace: packages.add(ref)
-				FAMIXMethod: structuresToDelete.add(s)
-				FAMIXEnum: structuresToDelete.add(s)
+		famixDocument.elements.forEach[element|
+			switch element {
+				FAMIXAttribute: attributes.add(element)					
+				FAMIXMethod: methods.add(element)
+				FAMIXReport: reports.add(element)
+				FAMIXDataElement: dataElements.add(element)
+				FAMIXTable: tables.add(element)
+				FAMIXABAPStruc: abapStrucs.add(element)
+				FAMIXStrucElement: abapStrucElem.add(element)
+				FAMIXFunctionModule: functionModules.add(element)
+				FAMIXFormroutine: formroutines.add(element)
+				FAMIXMessageClass: messageClasses.add(element)
+				FAMIXFunctionGroup: functionGroups.add(element)
+				FAMIXStructure: {
+					if(element.container !== null){
+						structures.add(element)
+					}
+				}
 			}
+			
 		]
-		// delete anonymous classes and their methods and attributes
-		methods.removeIf([
-			structuresToDelete.contains(parentType.ref) || parentType.ref instanceof FAMIXParameterizedType
-		])
-		attributes.removeIf([structuresToDelete.contains(parentType.ref)])
-		structures.removeIf([structuresToDelete.contains(container.ref)])
-		structures -= structuresToDelete
-
-		enumValues += famixDocument.elements.filter(FAMIXEnumValue).filter[structures.contains(parentEnum.ref)]
-		famixDocument.elements.filter(FAMIXParameter).filter[methods.contains(parentBehaviouralEntity.ref)].forEach [ p |
-			val m = p.parentBehaviouralEntity.ref as FAMIXMethod
-			val l = parameters.get(m)
-			if (l === null) {
-				val l2 = #[p]
-				parameters.put(m, l2)
-			} else {
-				val List<FAMIXParameter> l2 = newLinkedList
-				l2.addAll(l)
-				l2.add(p)
-				parameters.replace(m, l2)
-			}
-		]
-		if (config.hidePrivateElements) {
-			deletePrivates
-		}
+		
+		
+		
 		val allPackages = famixDocument.elements.filter(FAMIXNamespace).toSet
 		allStructures += famixDocument.elements.filter(FAMIXStructure).filter[container !== null]
-		val BeanComparator<FAMIXElement> nameComparator = new BeanComparator("name")
-		val accesses = famixDocument.elements.filter(FAMIXAccess)
-							.filter[methods.contains(accessor.ref)]
-							.filter[attributes.contains(variable.ref)]
-							.sortWith(nameComparator)
-		invocations += famixDocument.elements.filter(FAMIXInvocation)
-							.filter[methods.contains(candidates.ref)]
-							.filter[methods.contains(sender.ref)]
-							.sortWith(nameComparator)
-		val inheritances = famixDocument.elements.filter(FAMIXInheritance)
-							.filter[structures.contains(superclass.ref)]
-							.filter[structures.contains(subclass.ref)]
-							.sortWith(nameComparator)
+		
+		
 		allPackages.forEach[getPackages]
 		rootPackages.forEach[setQualifiedName]
 		methods.forEach[setQualifiedName]
 		attributes.forEach[setQualifiedNameAbap]
 		enumValues.forEach[setQualifiedName]
-
-		removeDuplicates()
-		if (config.methodTypeMode) {
-			methods.forEach[setMethodType(accesses)]
-			attributes.forEach[setCalledBy]
-			deletePrivateAttributes(accesses)
-		}
-		val BeanComparator<FAMIXElement> comparator = new BeanComparator("fqn")
-		if(config.parser == FamixParser::JDT2FAMIX) {
-			methods.forEach [
-				val sourceAnchor = it.sourceAnchor.ref as FAMIXFileAnchor
-				val numberOfLines = sourceAnchor.endline - sourceAnchor.startline + 1
-				it.numberOfStatements = numberOfLines
-			]
-		}
-		if (config.attributeSortSize) {
-			Collections::sort(attributes, new Comparator<FAMIXAttribute>() {
-				override compare(FAMIXAttribute attribute1, FAMIXAttribute attribute2) {
-					val diffLength = attribute1.value.length - attribute2.value.length
-					if (diffLength == 0) {
-						return attribute1.value.compareToIgnoreCase(attribute2.value)
-					}
-					return diffLength * -1
-				}
-			})
-		} else {
-			Collections::sort(attributes, comparator)
-		}
-
-		structures.removeIf[fqn === null]
-		Collections::sort(structures, comparator)
-		Collections::sort(enumValues, comparator)
-
-		val comparator2 = new BeanComparator("numberOfStatements")
-		Collections::sort(methods, comparator2)
-		rootPackages.clear
-		subPackages.clear
-		packages.forEach[getPackages]
-		if (config.isMasterRoot && rootPackages.size > 1) {
-			val Master = createMasterRoot
-			rootPackages.forEach[setParentScopeRoots(it, Master)]
-			rootPackages.forEach[subPackages += it]
-			rootPackages.clear
-			rootPackages += Master
-		}
-		if (config.mergePackages) {
-			rootPackages.forEach[findPackagesToMerge]
-			packagesToMerge.forEach[removePackages]
-			packagesToMerge.forEach[mergePackages]
-		}
 		
-		val paths = famixDocument.elements.filter(FAMIXPath).filter[start.ref !== null].filter[end.ref !== null].toList
+		reports.forEach[setQualifiedName]
+		dataElements.forEach[setQualifiedName]
+		tables.forEach[setQualifiedName]
+		abapStrucs.forEach[setQualifiedName]
+		abapStrucElem.forEach[setQualifiedName]
+		functionModules.forEach[setQualifiedName]
+		functionGroups.forEach[setQualifiedName]
+		formroutines.forEach[setQualifiedName]
+		messageClasses.forEach[setQualifiedName]
+	
 		
 		famixDocument.elements.clear
 		famixDocument.elements.addAll(rootPackages)
 		famixDocument.elements.addAll(subPackages)
-		ECollections::sort(famixDocument.elements, comparator)
-		famixDocument.elements.addAll(paths)
 		famixDocument.elements.addAll(structures)
-		
-		val componentsToDelete = newHashSet
-		components.forEach[component|
-			val oldPaths = newLinkedList
-			val classes = newHashSet
-			component.path.forEach[ref|
-				val path = ref.ref as FAMIXPath
-				val start = path.start.ref as FAMIXClass
-				val end = path.end.ref as FAMIXClass
-				if(start.container !== null && end.container !== null) {
-					if(start.container.ref == end || end.container.ref == start){
-						oldPaths += ref
-					} else {
-						classes += start
-						classes += end
-					}
-				}
-			]
-			component.path.removeAll(oldPaths)			
-			component.elements.removeIf[el| classes.contains(el.ref) == false]
-			if(component.path.isNullOrEmpty || component.elements.isNullOrEmpty) {
-				componentsToDelete += component
-			}
-		]
-		
-		famixDocument.elements.removeAll(componentsToDelete)
-		components.removeAll(componentsToDelete)
-		
-		val List<String> strings = newLinkedList
-		components.forEach[component |
-			component.id = component.name.createID
-			component.elements.forEach[el, index |
-				strings += el.ref.name
-				val structure = el.ref as FAMIXClass
-				val ref = famixFactory.createIntegerReference
-				ref.ref = component
-				structure.scc = ref
-			]
-		]
-		
-		antipattern.forEach[p, j|
-			val currentPattern = p
-			currentPattern.id = currentPattern.name.createID
-			val Map<String, FAMIXMethod> methods_ = newHashMap
-			val List<IntegerReference> pathsToDelete = newLinkedList
-			p.path.forEach[n, index|
-				val node  = n.ref as FAMIXPath
-				val start_id = (node.start.ref as FAMIXStructure).name
-				var foundStart = true
-				var foundEnd = true
-				var FAMIXMethod start_method
-				var FAMIXMethod end_method
-				if (methods_.containsKey(start_id)) {
-					start_method = methods_.get(start_id)
-				} else {
-					foundStart = !structures.filter[name == start_id].isNullOrEmpty
-					if(foundStart) {
-						val start_class = structures.filter[name == start_id].get(0)
-						start_method = toMethod(start_class, j, index, p.type, currentPattern.id)
-						methods_.put(start_id, start_method)
-						addAntipattern(start_class, currentPattern)
-					}
-				}
 				
-				val end_id = (node.end.ref as FAMIXStructure).name
-				if (methods_.containsKey(end_id)) {
-					end_method = methods_.get(end_id)
-				} else {
-					foundEnd = !structures.filter[name == end_id].nullOrEmpty
-					if(foundEnd) {					
-						val end_class = structures.filter[name == end_id].get(0)
-						end_method = toMethod(end_class, j, index, p.type, currentPattern.id)
-						methods_.put(end_id, end_method)
-						addAntipattern(end_class, currentPattern)
-					}
-				}
-				if (foundStart && foundEnd) {
-					toInvocation(start_method, end_method)
-				} else {
-					pathsToDelete += n
-				}
-			]
-			
-			p.path.removeAll(pathsToDelete)
-			paths.removeAll(pathsToDelete)
-		]
-	
 		famixDocument.elements.addAll(methods)
+		famixDocument.elements.addAll(reports)
 		famixDocument.elements.addAll(attributes)
+		famixDocument.elements.addAll(dataElements)
+		famixDocument.elements.addAll(tables)
+		famixDocument.elements.addAll(abapStrucs)
+		famixDocument.elements.addAll(abapStrucElem)
 		famixDocument.elements.addAll(enumValues)
 		famixDocument.elements.addAll(invocations)
-		famixDocument.elements.addAll(accesses)
-		famixDocument.elements.addAll(inheritances)
-		famixDocument.elements.addAll(fileAnchors)
 		famixDocument.elements.addAll(antipattern)
 		famixDocument.elements.addAll(components)
-
-		if (config.writeToDatabase) {
-			graph = Database::getInstance(config.databaseName)
-			val document = famixRoot.document
-			var tx = graph.beginTx
-			try {
-				rootPackages.forEach[toDB(it, null)]
-				document.elements.filter(FAMIXInvocation).forEach[toDB(it)]
-				document.elements.filter(FAMIXInheritance).forEach[toDB(it)]
-				document.elements.filter(FAMIXAccess).forEach[toDB(it)]
-				tx.success
-			} finally {
-				tx.close
-			}
-		}
-
+		famixDocument.elements.addAll(functionModules)
+		famixDocument.elements.addAll(functionGroups)
+		famixDocument.elements.addAll(formroutines)
+		famixDocument.elements.addAll(messageClasses)
+		
 		rootPackages.clear
 		subPackages.clear
 		allStructures.clear
 		methods.clear
+		reports.clear
+		dataElements.clear
+		tables.clear
+		abapStrucs.clear
+		abapStrucElem.clear
 		attributes.clear
 		enumValues.clear
 		structures.clear
 		antiMethods.clear
 		antipattern.clear
 		components.clear
+		functionModules.clear
+		functionGroups.clear
+		formroutines.clear
+		messageClasses.clear
 		return famixRoot
-	}
+	} //End of ABAP logic
 	
 
 		
@@ -987,6 +828,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		attribute.id = createID(attribute.fqn)
 	}
 	
+	//ABAP
 	def setQualifiedNameAbap(FAMIXAttribute attribute) {
 		val ref = attribute.parentType.ref
 		switch (ref) {
@@ -998,6 +840,34 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		}
 		attribute.id = createID(attribute.fqn)
 	}
+	
+	//ABAP
+	def setQualifiedName(FAMIXDictionaryData dd){
+		//val ref = dd.container.ref
+		dd.fqn = "." + dd.value
+		dd.id = createID(dd.fqn)
+	} 
+	
+	def setQualifiedName(FAMIXFunctionModule fm){
+		fm.fqn = "." + fm.value
+		fm.id = createID(fm.fqn)
+	}
+	
+	def setQualifiedName(FAMIXFunctionGroup fg){
+		fg.fqn = "." + fg.value
+		fg.id = createID(fg.fqn)
+	}
+	
+	def setQualifiedName(FAMIXFormroutine fr){
+		fr.fqn = "." + fr.value
+		fr.id = createID(fr.fqn)
+	}
+	
+	def setQualifiedName(FAMIXMessageClass ms){
+		ms.fqn = "." + ms.value
+		ms.id = createID(ms.fqn)
+	}
+	
 
 	def private setQualifiedName(FAMIXEnumValue enumValue) {
 		val ref = enumValue.parentEnum.ref

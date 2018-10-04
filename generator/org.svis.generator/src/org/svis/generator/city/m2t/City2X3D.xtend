@@ -54,11 +54,13 @@ class City2X3D {
 
 	// transform logic
 	def String toX3DModel(List<Entity> entities) '''
-		«FOR entity : entities»
-			«IF entity.type == "FAMIX.Namespace"»
+  		«FOR entity : entities»
+			«IF entity.type == "FAMIX.Namespace" || entity.type == "dataElementDistrict" || entity.type == "reportDistrict"
+				|| entity.type == "classDistrict" || entity.type == "functionGroupDistrict" || entity.type == "abapStrucDistrict"»
 				«toDistrict(entity)»
 			«ENDIF»
-			«IF entity.type == "FAMIX.Class" || entity.type == "FAMIX.ParameterizableClass"»
+			«IF entity.type == "FAMIX.Class" || entity.type == "FAMIX.DataElement" || entity.type == "FAMIX.Report"
+			 	|| entity.type == "FAMIX.FunctionGroup" || entity.type == "FAMIX.ABAPStruc"»
 				«IF config.buildingType == BuildingType.CITY_ORIGINAL || config.showBuildingBase»
 					«toBuilding(entity)»
 				«ENDIF»

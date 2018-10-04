@@ -444,10 +444,12 @@ class City2City extends WorkflowComponentWithModelSlot {
 		val bHeight = b.height
 		val bWidth = b.width
 		// val bLength = b.length
+		
 		val bPosX = b.position.x
 		val bPosY = b.position.y
 		val bPosZ = b.position.z
 
+		
 		val chimneys = b.data
 		// val chimneyNumber = chimneys.length
 		var courner1 = newArrayList()

@@ -146,7 +146,7 @@ class FamixUtils {
 			FAMIXAnnotationType:		return el.fqn
 			FAMIXComponent:				return el.fqn
 			FAMIXAntipattern:			return el.fqn
-			FAMIXReport:				return el.id
+			FAMIXReport:				return el.fqn
 			default: log.warn("Forgot" + el.class + " in FamixUtils.getFqn")
 		}
 	}

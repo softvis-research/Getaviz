@@ -11,7 +11,7 @@ Document:
 	'(' elements+=FAMIXElement* ')';
 	
 FAMIXElement:
-	FAMIXStructure | FAMIXFileAnchor | FAMIXInvocation | FAMIXAttribute | FAMIXInheritance |
+	FAMIXStructure | FAMIXDictionaryData | FAMIXFileAnchor | FAMIXInvocation | FAMIXAttribute | FAMIXInheritance |
 	FAMIXAccess | FAMIXNamespace | FAMIXMethod | FAMIXPrimitiveType | FAMIXComment | FAMIXParameter | FAMIXReference |
 	FAMIXParameterizedType | FAMIXAnnotationInstance | FAMIXAnnotationInstanceAttribute | FAMIXAnnotationTypeAttribute |
 	FAMIXLocalVariable | FAMIXImplicitVariable | FAMIXType | FAMIXParameterType |
@@ -19,8 +19,7 @@ FAMIXElement:
 	FAMIXAntipattern | FAMIXPath | FAMIXRole | FAMIXComponent |
 	
 	//ABAP
-	FAMIXDevclass | FAMIXReport | FAMIXDataElement | FAMIXTable | FAMIXABAPStruc |
-	FAMIXStrucElement | FAMIXFunctionModule | FAMIXFormroutine
+	FAMIXFunctionModule | FAMIXFormroutine
 ;
 	
 FAMIXStructure:
@@ -28,6 +27,11 @@ FAMIXStructure:
 	
 	//ABAP
 	FAMIXMessageClass | FAMIXFunctionGroup
+;
+
+//ABAP
+FAMIXDictionaryData:
+	FAMIXReport | FAMIXDataElement | FAMIXTable | FAMIXABAPStruc | FAMIXStrucElement
 ;
 
 /** Explenation of different identifiers
@@ -383,17 +387,6 @@ FAMIXPath:
 	
 	
 //	ABAP extensions
-FAMIXDevclass:
-    '(FAMIX.Devclass'
-    '(' 'id:' name=INT_ID ')'
-    '(' 'name' value=MSESTRING ')'
-    ('(' 'hash' id = STRING ')')?
-    ('(' 'fqn' fqn = MSESTRING ')')?
-    ('(' 'isStub' isStub=Boolean ')')?
-    ('(' 'parentScope' parentScope=IntegerReference ')')?
-    ('(' 'iteration' iteration=INT ')')? 
-    ')';
-
 FAMIXReport:
     '(FAMIX.Report'
     '(' 'id:' name=INT_ID ')'
@@ -446,6 +439,7 @@ FAMIXStrucElement:
     ('(' 'fqn' fqn = MSESTRING ')')?
     '(' 'container' container=IntegerReference ')'
     ('(' 'dataType' datatype=MSESTRING ')')?
+    ('(' 'declaredType' declaredType=IntegerReference ')')?
     ('(' 'dataElement' dataElement=IntegerReference ')')?
     ('(' 'iteration' iteration=INT ')')? 
     ')'; 
@@ -477,6 +471,7 @@ FAMIXFunctionModule:
     '(' 'name' value=MSESTRING ')'
     ('(' 'hash' id = STRING ')')?
     ('(' 'fqn' fqn = MSESTRING ')')?
+    ('(' 'declaredType' declaredType=IntegerReference ')')?
     ('(' 'numberOfStatements' numberOfStatements=INT ')')?
     '(' 'parentType' parentType=IntegerReference ')'
     ('(' 'iteration' iteration=INT ')')?
@@ -488,6 +483,7 @@ FAMIXFormroutine:
 	'(' 'name' value=MSESTRING ')'
 	('(' 'hash' id = STRING ')')?
     ('(' 'fqn' fqn = MSESTRING ')')?
+    ('(' 'declaredType' declaredType=IntegerReference ')')?
     ('(' 'numberOfStatements' numberOfStatements=INT ')')?
     '(' 'parentType' parentType=IntegerReference ')'
     ('(' 'iteration' iteration=INT ')')?

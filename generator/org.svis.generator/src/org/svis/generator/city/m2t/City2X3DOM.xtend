@@ -53,7 +53,7 @@ class City2X3DOM {
 	// transform logic
 	def String toX3DOMModel(List<Entity> entities) '''
 		«FOR entity : entities»
-			«IF entity.type == "FAMIX.Namespace"»
+			«IF entity.type == "FAMIX.Namespace" || entity.type == "FAMIX:Report"»
 				«toDistrict(entity)»
 			«ENDIF»
 			«IF entity.type == "FAMIX.Class" || entity.type == "FAMIX.ParameterizableClass"»
