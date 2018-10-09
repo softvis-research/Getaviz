@@ -14,6 +14,7 @@ import org.svis.xtext.city.PanelSeparatorCylinder
 import org.svis.xtext.city.District
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.SettingsConfiguration.BuildingType
+import org.svis.generator.SettingsConfiguration.FamixParser
 
 class City2X3D {
 
@@ -56,11 +57,13 @@ class City2X3D {
 	def String toX3DModel(List<Entity> entities) '''
   		«FOR entity : entities»
 			«IF entity.type == "FAMIX.Namespace" || entity.type == "dataElementDistrict" || entity.type == "reportDistrict"
-				|| entity.type == "classDistrict" || entity.type == "functionGroupDistrict" || entity.type == "abapStrucDistrict"»
+				|| entity.type == "classDistrict" || entity.type == "functionGroupDistrict" || entity.type == "abapStrucDistrict"
+				|| entity.type == "tableDistrict"»
 				«toDistrict(entity)»
 			«ENDIF»
 			«IF entity.type == "FAMIX.Class" || entity.type == "FAMIX.DataElement" || entity.type == "FAMIX.Report"
-			 	|| entity.type == "FAMIX.FunctionGroup" || entity.type == "FAMIX.ABAPStruc"»
+			 	|| entity.type == "FAMIX.FunctionGroup" || entity.type == "FAMIX.ABAPStruc"
+			 	|| entity.type == "FAMIX.Table"»
 				«IF config.buildingType == BuildingType.CITY_ORIGINAL || config.showBuildingBase»
 					«toBuilding(entity)»
 				«ENDIF»
@@ -98,7 +101,11 @@ class City2X3D {
 				<Shape>
 					<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
 					<Appearance>
+					«IF(config.parser == FamixParser::ABAP && config.abapShowTextures && entity.textureURL !== null && entity.textureURL != "")»
+						<ImageTexture url='«entity.textureURL»'></ImageTexture>
+					«ELSE»
 						<Material diffuseColor='«entity.color»'></Material>
+					«ENDIF»
 					</Appearance>
 				</Shape>
 			</Transform>
@@ -109,7 +116,11 @@ class City2X3D {
 		<Group DEF='«entity.id»'>
 			<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
 				<Shape>
-					<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+					«IF entity.type == "FAMIX.DataElement"»
+						<Cone bottomRadius='«entity.width»'></Cone>
+					«ELSE»
+						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+					«ENDIF»
 					<Appearance>
 						<Material diffuseColor='«entity.color»'></Material>
 					</Appearance>

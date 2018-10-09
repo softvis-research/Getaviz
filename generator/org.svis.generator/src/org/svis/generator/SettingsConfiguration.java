@@ -133,8 +133,6 @@ public class SettingsConfiguration {
 	public Boolean showEmptyDistricts() {
 		return config.getBoolean("city.show_empty_districts", false);
 	}
-	
-	//city.represent_abap = source
 
 	public AbapCityRepresentation getAbap_representation() {
 		switch (getAbapRepresentation()) {
@@ -468,6 +466,66 @@ public class SettingsConfiguration {
 	public String getCityColorAsPercentage(String name) {
 		return getColorFormatted(getCityColor(name));
 	}
+	
+	public Color getClassDistrictColor() {
+		return getColor(config.getString("city.abap.classDistrict.color", "#FFCC99"));
+	}
+	
+	public Color getReportDistrictColor() {
+		return getColor(config.getString("city.abap.reportDistrict.color", "#FF99FF"));
+	}
+	
+	public Color getFunctionGroupDistrictColor() {
+		return getColor(config.getString("city.abap.functionGroupDistrict.color", "#CCFF99"));
+	}
+	
+	public Color getDataElementDistrictColor() {
+		return getColor(config.getString("city.abap.dataElementDistrict.color", "#9999FF"));
+	}
+	
+	public Color getAbapStrucDistrictColor() {
+		return getColor(config.getString("city.abap.abapStrucDistrict.color", "#99CCFF"));
+	}
+	
+	public Color getTableDistrictColor() {
+		return getColor(config.getString("city.abap.tableDistrict.color", "##CCCCCC"));
+	}
+	
+	
+	/*
+	 * 	public String getPackageOddTexture() {
+		return config.getString("plant.package.odd_texture", "<ImageTexture url='pics/ground.png' scale='false' />");
+	}
+	 */
+	
+	public boolean getAbapShowTextures() {
+		return config.getBoolean("city.abap.showTextures", false);
+	}
+	
+	public String getClassDistrictTexture() {
+		return config.getString("city.abap.classDistrict.texture", null);
+	}
+	
+	public String getReportDistrictTexture() {
+		return config.getString("city.abap.reportDistrict.texture", null);
+	}
+	
+	public String getFunctionGroupDistrictTexture() {
+		return config.getString("city.abap.functionGroupDistrict.texture", null);
+	}
+	
+	public String getDataElementDistrictTexture() {
+		return config.getString("city.abap.dataElementDistrict.texture", null);
+	}
+	
+	public String getAbapStrucDistrictTexture() {
+		return config.getString("city.abap.abapStrucDistrict.texture", null);
+	}
+	
+	public String getTableDistrictTexture() {
+		return config.getString("city.abap.tableDistrict.texture", null);
+	}
+	
 	
 	public RDClassSize getRDClassSize() {
 		switch(config.getString("rd.class_size", "none")) {

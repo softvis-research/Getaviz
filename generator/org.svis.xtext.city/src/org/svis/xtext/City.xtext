@@ -28,6 +28,7 @@ District: // no LOC, height has to be static
 		('(' 'maxLevel' maxLevel=INT ')')?
 		('(' 'signature' signature=MSESTRING ')')?
 		('(' 'color' color=MSESTRING ')')?
+		('(' 'textureURL' textureURL=MSESTRING ')')?
 		('(' 'transparency' transparency=DECIMAL ')')?
 		('(' 'position' position=Position ')')?
 		('(' 'labelPosition' labelPosition=Position ')')?
@@ -60,6 +61,7 @@ Building:
 		('(' 'maxLevel' maxLevel=INT ')')?
 		('(' 'signature' signature=MSESTRING ')')?
 		('(' 'color' color=MSESTRING ')')?
+		('(' 'textureURL' textureURL=MSESTRING ')')?
 		('(' 'transparency' transparency=DECIMAL ')')?
 		('(' 'position' position=Position ')')?
 		('(' 'labelPosition' labelPosition=Position ')')?
@@ -94,6 +96,7 @@ BuildingSegment:
 		('(' 'maxLevel' maxLevel=INT ')')?
 		('(' 'signature' signature=MSESTRING ')')?
 		('(' 'color' color=MSESTRING ')')?
+		('(' 'textureURL' textureURL=MSESTRING ')')?
 		('(' 'transparency' transparency=DECIMAL ')')?
 		('(' 'position' position=Position ')')?
 		('(' 'separator'  separator += PanelSeparator ')')?
@@ -125,6 +128,7 @@ Parameter:
 		'(' 'level' level=INT ')'
 		('(' 'maxLevel' maxLevel=INT ')')?
 		('(' 'color' color=MSESTRING ')')?
+		('(' 'textureURL' textureURL=MSESTRING ')')?
 		('(' 'transparency' transparency=DECIMAL ')')?
 		('(' 'position' position=Position ')')?
 		('(' 'labelPosition' labelPosition=Position ')')?
@@ -146,6 +150,7 @@ LocalVariable:
 		'(' 'level' level=INT ')'
 		('(' 'maxLevel' maxLevel=INT ')')?
 		('(' 'color' color=MSESTRING ')')?
+		('(' 'textureURL' textureURL=MSESTRING ')')?
 		('(' 'transparency' transparency=DECIMAL ')')?
 		('(' 'position' position=Position ')')?
 		('(' 'labelPosition' labelPosition=Position ')')?
@@ -196,6 +201,7 @@ EntitySegment:
 		('(' 'signature' signature=MSESTRING ')')? // temporary for dynamix->resolve it via fqn
 		('(' 'invocations' invocations+=Invocation* ')')? // dynamix
 		('(' 'color' color=MSESTRING ')')?
+		('(' 'textureURL' textureURL=MSESTRING ')')?
 		('(' 'labelPosition' labelPosition=Position ')')?
 	')';
 

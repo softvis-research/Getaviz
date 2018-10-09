@@ -20,6 +20,7 @@ import org.svis.generator.SettingsConfiguration.BuildingType
 import org.svis.generator.SettingsConfiguration.Original.BuildingMetric
 import org.svis.generator.SettingsConfiguration.ClassElementsModes
 import org.svis.generator.SettingsConfiguration.Panels.SeparatorModes
+import org.codehaus.plexus.logging.console.ConsoleLogger
 
 class City2City extends WorkflowComponentWithModelSlot {
 
@@ -119,7 +120,27 @@ class City2City extends WorkflowComponentWithModelSlot {
 		} else if (config.outputFormat == OutputFormat::AFrame) {
 			d.color = config.packageColorHex
 		} else {
-			d.color = PCKG_colors.get(d.level - 1).asPercentage
+			if(d.type == "classDistrict"){
+				d.color = new RGBColor(config.classDistrictColor).asPercentage
+				d.textureURL = config.classDistrictTexture
+			}else if(d.type == "reportDistrict"){
+				d.color = new RGBColor(config.reportDistrictColor).asPercentage
+				d.textureURL = config.reportDistrictTexture
+			}else if(d.type == "dataElementDistrict"){
+				d.color = new RGBColor(config.dataElementDistrictColor).asPercentage
+				d.textureURL = config.dataElementDistrictTexture
+			}else if(d.type == "functionGroupDistrict"){
+				d.color = new RGBColor(config.functionGroupDistrictColor).asPercentage
+				d.textureURL = config.functionGroupDistrictTexture
+			}else if(d.type == "abapStrucDistrict"){
+				d.color = new RGBColor(config.abapStrucDistrictColor).asPercentage
+				d.textureURL = config.abapStrucDistrictTexture
+			}else if(d.type == "tableDistrict"){
+				d.color = new RGBColor(config.tableDistrictColor).asPercentage
+				d.textureURL = config.tableDistrictTexture
+			}else{
+				d.color = PCKG_colors.get(d.level - 1).asPercentage
+			}
 		}
 	}
 

@@ -98,7 +98,7 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		fileAnchors += famixDocument.elements.filter(FAMIXFileAnchor).filterNull
 		
 		//Logic for ABAP code
-		var Famix2City_abap f2c_abap = new Famix2City_abap(cityDocument, famixDocument)
+		//var Famix2City_abap f2c_abap = new Famix2City_abap(cityDocument, famixDocument)
 
 		rootPackages += famixDocument.elements.filter(FAMIXNamespace).filter[parentScope === null]
 		subPackages += famixDocument.elements.filter(FAMIXNamespace).filter[parentScope !== null]
@@ -229,6 +229,17 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 					newDistrict.entities.add(abapStrucDistrict)
 				}
 				
+				if (tables.filter[container.ref == elem].length != 0){
+					val tablesDistrict = cityFactory.createDistrict
+					tablesDistrict.name = newDistrict.name + "_tableDistrict"
+					tablesDistrict.type = "tableDistrict"
+					tablesDistrict.level = level + 1
+					tablesDistrict.id = elem.id + "_00007"
+					
+					//tables.filter
+					newDistrict.entities.add(tablesDistrict)
+				}
+				
 				
 			}
 		}
@@ -238,13 +249,6 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 	}
 	
 	
-	/**
-	 * Sets values for current data element
-	 * 
-	 * @param elem Source class for the building
-	 * @param level Hierarchy level of the building
-	 * @return new Building
-	 */
 	def Building toBuilding(FAMIXReport elem, int level){
 		val newBuilding = cityFactory.createBuilding
 		newBuilding.name = elem.name
@@ -483,6 +487,7 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		newBuildingSegment.id = famixAttribute.id
 	}
 	
+	
 	//ABAP
 	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXFormroutine famixFormroutine) {
 		newBuildingSegment.name = famixFormroutine.name
@@ -505,4 +510,10 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		newBuildingSegment.id = famixStrucElem.id
 	}
 
+	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toChimney(FAMIXDataElement famixDataElem) {
+		newBuildingSegment.name = famixDataElem.name
+		newBuildingSegment.value = famixDataElem.value
+		newBuildingSegment.fqn = famixDataElem.fqn
+		newBuildingSegment.id = famixDataElem.id
+	}
 }
