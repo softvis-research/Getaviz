@@ -168,6 +168,9 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 				structures.filter[container.ref === elem].forEach[newDistrict.entities += toBuilding(level + 1)]
 				subPackages.filter[parentScope.ref === elem].forEach[newDistrict.entities += toDistrict(level + 1)]
 			} else {
+				
+				//Sub packages
+				subPackages.filter[parentScope.ref === elem].forEach[newDistrict.entities += toDistrict(level + 1)]
 			
 				//Reports (+forms)
 				if (reports.filter[container.ref == elem].length != 0){
@@ -218,6 +221,7 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 					newDistrict.entities.add(functionGroupDistrict)
 				}
 				
+				//Abap Structures
 				if (abapStrucs.filter[container.ref == elem].length != 0){
 					val abapStrucDistrict = cityFactory.createDistrict
 					abapStrucDistrict.name = newDistrict.name + "_abapStrucDistrict"
@@ -229,6 +233,7 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 					newDistrict.entities.add(abapStrucDistrict)
 				}
 				
+				//DB Tables
 				if (tables.filter[container.ref == elem].length != 0){
 					val tablesDistrict = cityFactory.createDistrict
 					tablesDistrict.name = newDistrict.name + "_tableDistrict"
@@ -260,6 +265,10 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		newBuilding.methodCounter = formroutines.filter[parentType.ref == elem].length
 		
 		formroutines.filter[parentType.ref == elem].forEach[newBuilding.methods.add(toFloor)]
+		if(config.showReportAttributes){
+			newBuilding.dataCounter = attributes.filter[parentType.ref == elem].length
+			attributes.filter[parentType.ref == elem].forEach[newBuilding.data.add(toChimney)]
+		}
 		
 		return newBuilding
 	}
