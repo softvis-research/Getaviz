@@ -143,6 +143,10 @@ public class SettingsConfiguration {
 		}
 	}
 	
+	public boolean getShowReportAttributes() {
+		return config.getBoolean("city.abap.showReportAttributes", false);
+	}
+	
 	public FamixParser getParser() {
 		switch (getParserAsString()) {
 		case "jdt2famix":
@@ -155,7 +159,7 @@ public class SettingsConfiguration {
 			return FamixParser.VERVEINEJ;
 		}
 	}
-
+	
 	public boolean isAttributeSortSize() {
 		return config.getBoolean("structure.attribute_sort_size", false);
 	}
@@ -490,13 +494,6 @@ public class SettingsConfiguration {
 	public Color getTableDistrictColor() {
 		return getColor(config.getString("city.abap.tableDistrict.color", "##CCCCCC"));
 	}
-	
-	
-	/*
-	 * 	public String getPackageOddTexture() {
-		return config.getString("plant.package.odd_texture", "<ImageTexture url='pics/ground.png' scale='false' />");
-	}
-	 */
 	
 	public boolean getAbapShowTextures() {
 		return config.getBoolean("city.abap.showTextures", false);
