@@ -125,7 +125,8 @@ public class CityLayout {
 			} else {
 				if (child.getType().equals("FAMIX.Namespace") || child.getType().equals("dataElementDistrict") 
 						|| child.getType().equals("reportDistrict") || child.getType().equals("classDistrict")
-						|| child.getType().equals("functionGroupDistrict") || child.getType().equals("abapStrucDistrict")) {
+						|| child.getType().equals("functionGroupDistrict") || child.getType().equals("abapStrucDistrict")
+						|| child.getType().equals("tableDistrict")) {
 					if (DEBUG) {
 						System.out.println("\t\t\t" + info + "layOut(" + child.getFqn() + ")-call, recursive.");
 					}
@@ -275,7 +276,8 @@ public class CityLayout {
 			} else {
 				if (child.getType().equals("FAMIX.Namespace") || child.getType().equals("dataElementDistrict") 
 						|| child.getType().equals("reportDistrict") || child.getType().equals("classDistrict")
-						|| child.getType().equals("functionGroupDistrict") || child.getType().equals("abapStrucDistrict")) {
+						|| child.getType().equals("functionGroupDistrict") || child.getType().equals("abapStrucDistrict")
+						|| child.getType().equals("tableDistrict")) {
 					if (DEBUG) {
 						System.out.println("\t\t\t" + info + "layOut(" + child.getFqn() + ")-call, recursive.");
 					}
@@ -537,7 +539,8 @@ public class CityLayout {
 			} else {
 				if (e.getType().equals("FAMIX.Namespace") || e.getType().equals("dataElementDistrict") 
 						|| e.getType().equals("reportDistrict") || e.getType().equals("classDistrict")
-						|| e.getType().equals("functionGroupDistrict") || e.getType().equals("abapStrucDistrict")) {
+						|| e.getType().equals("functionGroupDistrict") || e.getType().equals("abapStrucDistrict")
+						|| e.getType().equals("tableDistrict")) {
 					double newUpperLeftX = e.getPosition().getX() - e.getWidth() / 2;
 					double newUpperLeftZ = e.getPosition().getZ() - e.getLength() / 2;
 					double newUpperLeftY = e.getPosition().getY() - e.getHeight() / 2;
