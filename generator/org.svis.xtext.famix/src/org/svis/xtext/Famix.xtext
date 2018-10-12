@@ -31,7 +31,7 @@ FAMIXStructure:
 
 //ABAP
 FAMIXDictionaryData:
-	FAMIXReport | FAMIXDataElement | FAMIXTable | FAMIXABAPStruc | FAMIXStrucElement
+	FAMIXReport | FAMIXDataElement | FAMIXTable | FAMIXABAPStruc | FAMIXStrucElement | FAMIXDomain | FAMIXTableType
 ;
 
 /** Explenation of different identifiers
@@ -144,6 +144,7 @@ FAMIXAttribute:
 	('(' 'sourceAnchor' sourceAnchor=IntegerReference ')')?
 	('(' 'getterSetter' getterSetter += IntegerReference* ')')?
 	('(' 'dataType' datatype=MSESTRING ')')? //ABAP
+	('(' 'ddicType' dataElement=IntegerReference ')')? //ABAP
 	('(' 'iteration' iteration=INT ')')? //ABAP
 	')';	
 
@@ -406,6 +407,20 @@ FAMIXDataElement:
     ('(' 'fqn' fqn = MSESTRING ')')?
     '(' 'container' container=IntegerReference ')'
     ('(' 'dataType' datatype=MSESTRING ')')?
+    ('(' 'domain' domain=MSESTRING ')')?  //('(' 'domain' domain=IntegerReference ')')?
+    ('(' 'iteration' iteration=INT ')')? 
+    ')';  
+
+FAMIXDomain:
+    '(FAMIX.Domain'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'dataType' datatype=MSESTRING ')')?
+    ('(' 'length' length=MSESTRING ')')?
+    ('(' 'decimals' decimals=MSESTRING ')')?
     ('(' 'iteration' iteration=INT ')')? 
     ')';  
     
@@ -421,6 +436,19 @@ FAMIXTable:
     ('(' 'iteration' iteration=INT ')')? 
     ')';
     
+FAMIXTableType:
+	'(FAMIX.TableType'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'numberOfColumns' numberOfColumns=INT ')')?
+    ('(' 'rowType' rowType=MSESTRING ')')?
+    ('(' 'rowCategory' rowCategory=INT ')')?
+    ('(' 'iteration' iteration=INT ')')? 
+    ')';
+
 FAMIXABAPStruc:
     '(FAMIX.ABAPStructure'
     '(' 'id:' name=INT_ID ')'

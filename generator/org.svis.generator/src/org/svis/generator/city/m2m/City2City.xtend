@@ -21,6 +21,8 @@ import org.svis.generator.SettingsConfiguration.Original.BuildingMetric
 import org.svis.generator.SettingsConfiguration.ClassElementsModes
 import org.svis.generator.SettingsConfiguration.Panels.SeparatorModes
 import org.codehaus.plexus.logging.console.ConsoleLogger
+import org.svis.generator.SettingsConfiguration.FamixParser
+import org.eclipse.emf.common.util.EList
 
 class City2City extends WorkflowComponentWithModelSlot {
 
@@ -120,24 +122,14 @@ class City2City extends WorkflowComponentWithModelSlot {
 		} else if (config.outputFormat == OutputFormat::AFrame) {
 			d.color = config.packageColorHex
 		} else {
-			if(d.type == "classDistrict"){
-				d.color = new RGBColor(config.classDistrictColor).asPercentage
-				d.textureURL = config.classDistrictTexture
-			}else if(d.type == "reportDistrict"){
-				d.color = new RGBColor(config.reportDistrictColor).asPercentage
-				d.textureURL = config.reportDistrictTexture
-			}else if(d.type == "dataElementDistrict"){
-				d.color = new RGBColor(config.dataElementDistrictColor).asPercentage
-				d.textureURL = config.dataElementDistrictTexture
-			}else if(d.type == "functionGroupDistrict"){
-				d.color = new RGBColor(config.functionGroupDistrictColor).asPercentage
-				d.textureURL = config.functionGroupDistrictTexture
-			}else if(d.type == "abapStrucDistrict"){
-				d.color = new RGBColor(config.abapStrucDistrictColor).asPercentage
-				d.textureURL = config.abapStrucDistrictTexture
-			}else if(d.type == "tableDistrict"){
-				d.color = new RGBColor(config.tableDistrictColor).asPercentage
-				d.textureURL = config.tableDistrictTexture
+			if(config.parser == FamixParser::ABAP){
+				// Use color for district, if it's set
+				if(config.getAbapDistrictColor(d.type) !== null){
+					d.color = new RGBColor(config.getAbapDistrictColor(d.type)).asPercentage;
+					d.textureURL = config.getAbapDistrictTexture(d.type);
+				}else{
+					d.color = PCKG_colors.get(d.level - 1).asPercentage
+				}
 			}else{
 				d.color = PCKG_colors.get(d.level - 1).asPercentage
 			}
@@ -200,12 +192,21 @@ class City2City extends WorkflowComponentWithModelSlot {
 		}
 
 		// set counters to zero, to let them vanish in city2.xml (optional)
-		b.dataCounter = 0
+		//b.dataCounter = 0  // we use this to define if class/report has attributes
 		b.methodCounter = 0
 		if (config.outputFormat == OutputFormat::AFrame) {
 			b.color = config.classColorHex
 		} else {
-			b.color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0 // pko 2016
+			if(config.parser == FamixParser::ABAP){
+				// Use color for building, if it's set
+				if(config.getAbapBuildingColor(b.type) !== null){
+					b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
+				}else{
+					b.color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0
+				}
+			}else{
+				b.color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0 // pko 2016
+			}
 		}
 	}
 
@@ -431,7 +432,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 		val bPosX = b.position.x
 		val bPosY = b.position.y
 		val bPosZ = b.position.z
-
+		
 		val floors = b.methods
 		val floorNumber = floors.length
 
@@ -446,7 +447,16 @@ class City2City extends WorkflowComponentWithModelSlot {
 			if (config.outputFormat == OutputFormat::AFrame) {
 				floor.color = "#1485CC"
 			} else {
-				floor.color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0
+				if(config.parser == FamixParser::ABAP){
+					// Use color for building, if it's set
+					if(config.getAbapBuildingSegmentColor(b.type) !== null){
+						floor.color = new RGBColor(config.getAbapBuildingSegmentColor(b.type)).asPercentage;
+					}else{
+						floor.color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0
+					}
+				}else{
+					floor.color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0
+				}
 			}
 			floor.position = cityFactory.createPosition
 			floor.position.x = bPosX
@@ -481,10 +491,16 @@ class City2City extends WorkflowComponentWithModelSlot {
 		var chimneyCounter = 0
 
 		for (chimney : chimneys) {
-
-			chimney.height = 1
+	
+			if(config.parser == FamixParser::ABAP && config.showAttributesBelowBuildings){
+				chimney.height = config.attributesBelowBuildingsHeight - 0.5
+			}else{
+				chimney.height = config.attributesHeight
+			}
 			chimney.width = 0.5
 			chimney.length = 0.5
+			
+			
 
 			if (config.outputFormat == OutputFormat::AFrame) {
 				chimney.color = "#FFFC19"
@@ -507,11 +523,12 @@ class City2City extends WorkflowComponentWithModelSlot {
 			}
 			chimneyCounter++
 		}
+		
 
 		chimneyCounter = 0
 		for (chimney : courner1) {
 			chimney.position.x = (bPosX - ( bWidth / 2) ) + 0.5 + (1 * chimneyCounter)
-			chimney.position.y = (bPosY + ( bHeight / 2) ) + 0.5
+			chimney.position.y = getYforChimney(b, chimney)
 			chimney.position.z = (bPosZ - ( bWidth / 2) ) + 0.5
 			chimneyCounter++
 		}
@@ -519,7 +536,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 		chimneyCounter = 0
 		for (chimney : courner2) {
 			chimney.position.x = (bPosX + ( bWidth / 2) ) - 0.5
-			chimney.position.y = (bPosY + ( bHeight / 2) ) + 0.5
+			chimney.position.y = getYforChimney(b, chimney)
 			chimney.position.z = (bPosZ - ( bWidth / 2) ) + 0.5 + (1 * chimneyCounter)
 			chimneyCounter++
 		}
@@ -527,7 +544,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 		chimneyCounter = 0
 		for (chimney : courner3) {
 			chimney.position.x = (bPosX + ( bWidth / 2) ) - 0.5 - (1 * chimneyCounter)
-			chimney.position.y = (bPosY + ( bHeight / 2) ) + 0.5
+			chimney.position.y = getYforChimney(b, chimney)
 			chimney.position.z = (bPosZ + ( bWidth / 2) ) - 0.5
 			chimneyCounter++
 		}
@@ -535,9 +552,21 @@ class City2City extends WorkflowComponentWithModelSlot {
 		chimneyCounter = 0
 		for (chimney : courner4) {
 			chimney.position.x = (bPosX - ( bWidth / 2) ) + 0.5
-			chimney.position.y = (bPosY + ( bHeight / 2) ) + 0.5
+			chimney.position.y = getYforChimney(b, chimney)
 			chimney.position.z = (bPosZ + ( bWidth / 2) ) - 0.5 - (1 * chimneyCounter)
 			chimneyCounter++
+		}	
+	}
+	
+	
+	// Display chimneys at the top/bottom (depends on settings)
+	def double getYforChimney(Building b, BuildingSegment chimney){
+		
+		if(config.parser == FamixParser::ABAP && config.showAttributesBelowBuildings){
+			return (b.position.y - ( b.height / 2) ) - (chimney.height / 2 + 0.25)
+		}else{
+			return (b.position.y + ( b.height / 2) ) + 0.5 //Original
 		}
+
 	}
 }

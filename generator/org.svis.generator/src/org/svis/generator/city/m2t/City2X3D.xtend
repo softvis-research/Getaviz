@@ -58,12 +58,12 @@ class City2X3D {
   		«FOR entity : entities»
 			«IF entity.type == "FAMIX.Namespace" || entity.type == "dataElementDistrict" || entity.type == "reportDistrict"
 				|| entity.type == "classDistrict" || entity.type == "functionGroupDistrict" || entity.type == "abapStrucDistrict"
-				|| entity.type == "tableDistrict"»
+				|| entity.type == "tableDistrict" || entity.type == "domainDistrict" || entity.type == "dcDataDistrict"»
 				«toDistrict(entity)»
 			«ENDIF»
 			«IF entity.type == "FAMIX.Class" || entity.type == "FAMIX.DataElement" || entity.type == "FAMIX.Report"
 			 	|| entity.type == "FAMIX.FunctionGroup" || entity.type == "FAMIX.ABAPStruc"
-			 	|| entity.type == "FAMIX.Table"»
+			 	|| entity.type == "FAMIX.Table" || entity.type == "FAMIX.Domain"»
 				«IF config.buildingType == BuildingType.CITY_ORIGINAL || config.showBuildingBase»
 					«toBuilding(entity)»
 				«ENDIF»
