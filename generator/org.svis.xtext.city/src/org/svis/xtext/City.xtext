@@ -32,8 +32,7 @@ District: // no LOC, height has to be static
 		('(' 'transparency' transparency=DECIMAL ')')?
 		('(' 'position' position=Position ')')?
 		('(' 'labelPosition' labelPosition=Position ')')?
-		('(' 'data' data+=EntitySegment* ')')? //for CITY: no use yet. but keep it for later additions
-		('(' 'dataCounter' dataCounter=DECIMAL ')')
+		('(' 'data' data+=EntitySegment* ')')? //for CITY: no use yet. but keep it for later addition
 		('(' 'methods' methods+=EntitySegment* ')')?
 		('(' 'methodCounter' methodCounter=DECIMAL ')')
 		('(' 'enums' enums+=EntitySegment* ')')?
@@ -44,6 +43,7 @@ District: // no LOC, height has to be static
 		('(' 'notInOrigin' notInOrigin=BOOLEAN ')')? //ABAP
 		('(' 'hasDatabases' hasDatabases=BOOLEAN ')')? //ABAP
 		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? //ABAP
+		('(' 'dataCounter' dataCounter=DECIMAL ')')?
 	')';
 
 Building:
@@ -66,7 +66,6 @@ Building:
 		('(' 'position' position=Position ')')?
 		('(' 'labelPosition' labelPosition=Position ')')?
 		('(' 'data' data+=BuildingSegment* ')')?
-		('(' 'dataCounter' dataCounter=INT ')')
 		('(' 'methods' methods+=BuildingSegment* ')')?
 		('(' 'methodCounter' methodCounter=INT ')')
 		('(' 'enums' enums+=EntitySegment* ')')?
@@ -78,6 +77,7 @@ Building:
 		('(' 'sideCapacity' sideCapacity=INT ')')?
 		('(' 'numberOfStatements' numberOfStatements=INT ')')?
 		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? //ABAP
+		('(' 'dataCounter' dataCounter=DECIMAL ')')?
 	')';
 
 //Specifies the methods/attributes as blocks (or bricks, panels, segments)
@@ -113,6 +113,7 @@ BuildingSegment:
 		('(' 'entities' entities+=Entity* ')')? //no use yet. but keep it for later additions
 		('(' 'parent' parent=[Entity] ')')?
 		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? // ABAP
+		('(' 'dataCounter' dataCounter=DECIMAL ')')?
 	')';
 
 Parameter:
@@ -125,6 +126,7 @@ Parameter:
 		'(' 'width' width=DECIMAL ')'
 		'(' 'length' length=DECIMAL ')'
 		'(' 'height' height=DECIMAL ')'
+		('(' 'dataCounter' dataCounter=DECIMAL ')')?
 		'(' 'level' level=INT ')'
 		('(' 'maxLevel' maxLevel=INT ')')?
 		('(' 'color' color=MSESTRING ')')?
@@ -147,6 +149,7 @@ LocalVariable:
 		'(' 'width' width=DECIMAL ')'
 		'(' 'length' length=DECIMAL ')'
 		'(' 'height' height=DECIMAL ')'
+		('(' 'dataCounter' dataCounter=INT ')')?
 		'(' 'level' level=INT ')'
 		('(' 'maxLevel' maxLevel=INT ')')?
 		('(' 'color' color=MSESTRING ')')?
@@ -197,6 +200,7 @@ EntitySegment:
 		'(' 'width' width=DECIMAL ')'
 		'(' 'loc' loc=DECIMAL ')'
 		('(' 'position' position=Position ')')?
+		('(' 'dataCounter' dataCounter=INT ')')?
 		('(' 'length' length=DECIMAL ')')? //ggf als PflichtElement
 		('(' 'signature' signature=MSESTRING ')')? // temporary for dynamix->resolve it via fqn
 		('(' 'invocations' invocations+=Invocation* ')')? // dynamix

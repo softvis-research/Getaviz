@@ -54,6 +54,7 @@ import org.svis.generator.SettingsConfiguration.FamixParser
 import org.svis.xtext.famix.FAMIXDictionaryData
 import org.svis.xtext.famix.FAMIXReport 
 import org.svis.xtext.famix.FAMIXDataElement
+import org.svis.xtext.famix.FAMIXDomain
 import org.svis.xtext.famix.FAMIXTable
 import org.svis.xtext.famix.FAMIXABAPStruc
 import org.svis.xtext.famix.FAMIXStrucElement
@@ -90,6 +91,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	//ABAP
 	val List<FAMIXReport> reports = newArrayList 
 	val List<FAMIXDataElement> dataElements = newArrayList 
+	val List<FAMIXDomain> domains = newArrayList
 	val List<FAMIXTable> tables = newArrayList 
 	val List<FAMIXABAPStruc> abapStrucs = newArrayList 
 	val List<FAMIXStrucElement> abapStrucElem = newArrayList 
@@ -153,6 +155,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 				FAMIXMethod: methods.add(element)
 				FAMIXReport: reports.add(element)
 				FAMIXDataElement: dataElements.add(element)
+				FAMIXDomain: domains.add(element)
 				FAMIXTable: tables.add(element)
 				FAMIXABAPStruc: abapStrucs.add(element)
 				FAMIXStrucElement: abapStrucElem.add(element)
@@ -183,6 +186,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		
 		reports.forEach[setQualifiedName]
 		dataElements.forEach[setQualifiedName]
+		domains.forEach[setQualifiedName]
 		tables.forEach[setQualifiedName]
 		abapStrucs.forEach[setQualifiedName]
 		abapStrucElem.forEach[setQualifiedName]
@@ -201,6 +205,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		famixDocument.elements.addAll(reports)
 		famixDocument.elements.addAll(attributes)
 		famixDocument.elements.addAll(dataElements)
+		famixDocument.elements.addAll(domains)
 		famixDocument.elements.addAll(tables)
 		famixDocument.elements.addAll(abapStrucs)
 		famixDocument.elements.addAll(abapStrucElem)
@@ -219,6 +224,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		methods.clear
 		reports.clear
 		dataElements.clear
+		domains.clear
 		tables.clear
 		abapStrucs.clear
 		abapStrucElem.clear

@@ -11,6 +11,7 @@ import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.svis.generator.SettingsConfiguration;
 import org.svis.generator.SettingsConfiguration.BuildingType;
+import org.svis.generator.SettingsConfiguration.FamixParser;
 import org.svis.xtext.city.CityFactory;
 import org.svis.xtext.city.Document;
 import org.svis.xtext.city.Entity;
@@ -126,7 +127,8 @@ public class CityLayout {
 				if (child.getType().equals("FAMIX.Namespace") || child.getType().equals("dataElementDistrict") 
 						|| child.getType().equals("reportDistrict") || child.getType().equals("classDistrict")
 						|| child.getType().equals("functionGroupDistrict") || child.getType().equals("abapStrucDistrict")
-						|| child.getType().equals("tableDistrict")) {
+						|| child.getType().equals("tableDistrict") || child.getType().equals("domainDistrict")
+						|| child.getType().equals("dcDataDistrict")) {
 					if (DEBUG) {
 						System.out.println("\t\t\t" + info + "layOut(" + child.getFqn() + ")-call, recursive.");
 					}
@@ -277,7 +279,8 @@ public class CityLayout {
 				if (child.getType().equals("FAMIX.Namespace") || child.getType().equals("dataElementDistrict") 
 						|| child.getType().equals("reportDistrict") || child.getType().equals("classDistrict")
 						|| child.getType().equals("functionGroupDistrict") || child.getType().equals("abapStrucDistrict")
-						|| child.getType().equals("tableDistrict")) {
+						|| child.getType().equals("tableDistrict") || child.getType().equals("domainDistrict")
+						|| child.getType().equals("dcDataDistrict")) {
 					if (DEBUG) {
 						System.out.println("\t\t\t" + info + "layOut(" + child.getFqn() + ")-call, recursive.");
 					}
@@ -497,7 +500,18 @@ public class CityLayout {
 		newPos.setX(fitNode.getRectangle().getCenterX() - config.getBuildingHorizontalGap() / 2); // width
 		newPos.setZ(fitNode.getRectangle().getCenterY() - config.getBuildingHorizontalGap() / 2); // length
 		newPos.setY((el.getEntityLink().getHeight() / 2)); // height
-
+		
+		 
+		//Attributes below buildings (ABAP only), for: Classes, Reports
+		if(config.getParser() == FamixParser.ABAP && config.getShowAttributesBelowBuildings() && el.getEntityLink().getDataCounter() != 0) {
+			if((el.getEntityLink().getType().equals("FAMIX.Class") || el.getEntityLink().getType().equals("FAMIX.Report"))) {
+					
+					newPos.setY((el.getEntityLink().getHeight() / 2) + config.getAttributesBelowBuildingsHeight());
+			}
+		}
+		
+		
+		
 		el.getEntityLink().setPosition(newPos);
 		if (DEBUG) {
 			System.out.println("\n\t\t" + info + "Entity " + el.getEntityLink().getFqn() + " [checkVALUES]: ("
@@ -505,6 +519,7 @@ public class CityLayout {
 					+ el.getEntityLink().getPosition().getZ() + ")\n");
 		}
 	}
+	
 
 	private static void updateCovrec(CityKDTreeNode fitNode, Rectangle covrec) {
 		double newX = (fitNode.getRectangle().getBottomRightX() > covrec.getBottomRightX()
@@ -540,7 +555,8 @@ public class CityLayout {
 				if (e.getType().equals("FAMIX.Namespace") || e.getType().equals("dataElementDistrict") 
 						|| e.getType().equals("reportDistrict") || e.getType().equals("classDistrict")
 						|| e.getType().equals("functionGroupDistrict") || e.getType().equals("abapStrucDistrict")
-						|| e.getType().equals("tableDistrict")) {
+						|| e.getType().equals("tableDistrict") || e.getType().equals("domainDistrict") 
+						|| e.getType().equals("dcDataDistrict")) {
 					double newUpperLeftX = e.getPosition().getX() - e.getWidth() / 2;
 					double newUpperLeftZ = e.getPosition().getZ() - e.getLength() / 2;
 					double newUpperLeftY = e.getPosition().getY() - e.getHeight() / 2;
@@ -548,5 +564,5 @@ public class CityLayout {
 				}
 			}
 		}
-	}
+	} // End of adjustPositions
 }

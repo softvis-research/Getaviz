@@ -36,6 +36,7 @@ import org.svis.generator.FamixUtils
 //ABAP
 import org.svis.xtext.famix.FAMIXReport
 import org.svis.xtext.famix.FAMIXDataElement
+import org.svis.xtext.famix.FAMIXDomain
 import org.svis.xtext.famix.FAMIXTable
 import org.svis.xtext.famix.FAMIXABAPStruc
 import org.svis.xtext.famix.FAMIXStrucElement
@@ -228,6 +229,16 @@ class Famix2JSON implements IGenerator2 {
 		"type":          "FAMIX.DataElement",
 		"belongsTo":     "«de.container.ref.id»",
 		"iteration": 	 "«de.iteration»"
+	'''
+	
+	//ABAP
+	def dispatch private toMetaData(FAMIXDomain d)'''
+		"id":            "«d.id»",
+		"qualifiedName": "«d.fqn»",
+		"name":          "«d.value»",
+		"type":          "FAMIX.DataElement",
+		"belongsTo":     "«d.container.ref.id»",
+		"iteration": 	 "«d.iteration»"
 	'''
 	 
 	//ABAP 
