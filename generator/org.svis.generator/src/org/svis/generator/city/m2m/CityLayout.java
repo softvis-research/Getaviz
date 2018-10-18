@@ -124,10 +124,8 @@ public class CityLayout {
 					arrangeChildren(child);
 				}
 			} else {
-				if (child.getType().equals("FAMIX.Namespace") || child.getType().equals("dataElementDistrict") 
-						|| child.getType().equals("reportDistrict") || child.getType().equals("classDistrict")
-						|| child.getType().equals("functionGroupDistrict") || child.getType().equals("abapStrucDistrict")
-						|| child.getType().equals("tableDistrict") || child.getType().equals("domainDistrict")
+				if (child.getType().equals("FAMIX.Namespace")  || child.getType().equals("reportDistrict") || child.getType().equals("classDistrict")
+						|| child.getType().equals("functionGroupDistrict") || child.getType().equals("tableDistrict") 
 						|| child.getType().equals("dcDataDistrict")) {
 					if (DEBUG) {
 						System.out.println("\t\t\t" + info + "layOut(" + child.getFqn() + ")-call, recursive.");
@@ -276,10 +274,8 @@ public class CityLayout {
 					arrangeChildren(child);
 				}
 			} else {
-				if (child.getType().equals("FAMIX.Namespace") || child.getType().equals("dataElementDistrict") 
-						|| child.getType().equals("reportDistrict") || child.getType().equals("classDistrict")
-						|| child.getType().equals("functionGroupDistrict") || child.getType().equals("abapStrucDistrict")
-						|| child.getType().equals("tableDistrict") || child.getType().equals("domainDistrict")
+				if (child.getType().equals("FAMIX.Namespace") || child.getType().equals("reportDistrict") || child.getType().equals("classDistrict")
+						|| child.getType().equals("functionGroupDistrict") || child.getType().equals("tableDistrict") 
 						|| child.getType().equals("dcDataDistrict")) {
 					if (DEBUG) {
 						System.out.println("\t\t\t" + info + "layOut(" + child.getFqn() + ")-call, recursive.");
@@ -504,7 +500,8 @@ public class CityLayout {
 		 
 		//Attributes below buildings (ABAP only), for: Classes, Reports
 		if(config.getParser() == FamixParser.ABAP && config.getShowAttributesBelowBuildings() && el.getEntityLink().getDataCounter() != 0) {
-			if((el.getEntityLink().getType().equals("FAMIX.Class") || el.getEntityLink().getType().equals("FAMIX.Report"))) {
+			if(el.getEntityLink().getType().equals("FAMIX.Class") || el.getEntityLink().getType().equals("FAMIX.Report")
+				|| el.getEntityLink().getType().equals("FAMIX.FunctionGroup")) {
 					
 					newPos.setY((el.getEntityLink().getHeight() / 2) + config.getAttributesBelowBuildingsHeight());
 			}
@@ -552,10 +549,8 @@ public class CityLayout {
 					adjustPositions(e.getEntities(), newUpperLeftX, newUpperLeftY, newUpperLeftZ);
 				}
 			} else {
-				if (e.getType().equals("FAMIX.Namespace") || e.getType().equals("dataElementDistrict") 
-						|| e.getType().equals("reportDistrict") || e.getType().equals("classDistrict")
-						|| e.getType().equals("functionGroupDistrict") || e.getType().equals("abapStrucDistrict")
-						|| e.getType().equals("tableDistrict") || e.getType().equals("domainDistrict") 
+				if (e.getType().equals("FAMIX.Namespace") || e.getType().equals("reportDistrict") || e.getType().equals("classDistrict")
+						|| e.getType().equals("functionGroupDistrict") || e.getType().equals("tableDistrict") 
 						|| e.getType().equals("dcDataDistrict")) {
 					double newUpperLeftX = e.getPosition().getX() - e.getWidth() / 2;
 					double newUpperLeftZ = e.getPosition().getZ() - e.getLength() / 2;

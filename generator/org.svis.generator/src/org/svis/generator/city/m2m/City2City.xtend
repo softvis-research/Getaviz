@@ -188,16 +188,25 @@ class City2City extends WorkflowComponentWithModelSlot {
 		if (b.methodCounter == 0) {
 			b.height = config.heightMin
 		} else {
-			b.height = b.methodCounter
+			if(config.parser == FamixParser::ABAP){
+				switch(b.type){
+					//case "FAMIX.TableType": b.height = b.methodCounter * 2 + 2//+ b.methodCounter * 0.5
+					default: b.height = b.methodCounter
+				}
+			}else{
+				b.height = b.methodCounter
+			}
+			
 		}
 
 		// set counters to zero, to let them vanish in city2.xml (optional)
-		//b.dataCounter = 0  // we use this to define if class/report has attributes
-		b.methodCounter = 0
+		b.dataCounter = 0 
+		
 		if (config.outputFormat == OutputFormat::AFrame) {
 			b.color = config.classColorHex
 		} else {
 			if(config.parser == FamixParser::ABAP){
+				
 				// Use color for building, if it's set
 				if(config.getAbapBuildingColor(b.type) !== null){
 					b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
@@ -442,26 +451,59 @@ class City2City extends WorkflowComponentWithModelSlot {
 			floorCounter++
 
 			floor.height = bHeight / ( floorNumber + 2 ) * 0.80
-			floor.width = bWidth * 1.1
-			floor.length = bLength * 1.1
-			if (config.outputFormat == OutputFormat::AFrame) {
-				floor.color = "#1485CC"
-			} else {
-				if(config.parser == FamixParser::ABAP){
-					// Use color for building, if it's set
-					if(config.getAbapBuildingSegmentColor(b.type) !== null){
-						floor.color = new RGBColor(config.getAbapBuildingSegmentColor(b.type)).asPercentage;
-					}else{
-						floor.color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0
-					}
+			
+			if(config.parser == FamixParser::ABAP){
+				
+				// Adjust height for some elements
+				switch b.type{
+					case "FAMIX.ABAPStruc" : floor.height = config.strucElemHeight
+					case "FAMIX.TableType" : floor.height = config.strucElemHeight
+					default: floor.height = bHeight / ( floorNumber + 2 ) * 0.80
+					
+				}
+				
+				
+				// Type is used to define shape in x3d
+				floor.parentType = b.type
+				
+				// Use color for building segments, if it's set
+				if(config.getAbapBuildingSegmentColor(b.type) !== null){
+					floor.color = new RGBColor(config.getAbapBuildingSegmentColor(b.type)).asPercentage;
 				}else{
 					floor.color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0
 				}
+				
+				// Set position	
+				floor.width = bWidth * 1.1
+				floor.length = bLength * 1.1
+				
+				floor.position = cityFactory.createPosition
+				
+				var newYPos = (bPosY - ( bHeight / 2) ) + bHeight / ( floorNumber + 2 ) * floorCounter + floorCounter - 1
+				
+				switch b.type{
+					case "FAMIX.ABAPStruc" : floor.position.y = newYPos
+					case "FAMIX.TableType" : floor.position.y = newYPos
+					default: floor.position.y = (bPosY - ( bHeight / 2) ) + bHeight / ( floorNumber + 2 ) * floorCounter
+				}
+			}else{
+				if (config.outputFormat == OutputFormat::AFrame) {
+					floor.color = "#1485CC"
+				} else {
+					floor.color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0
+				}
+				
+							
+				floor.width = bWidth * 1.1
+				floor.length = bLength * 1.1
+				
+				floor.position = cityFactory.createPosition
+				floor.position.y = (bPosY - ( bHeight / 2) ) + bHeight / ( floorNumber + 2 ) * floorCounter
+				
 			}
-			floor.position = cityFactory.createPosition
+			
 			floor.position.x = bPosX
-			floor.position.y = (bPosY - ( bHeight / 2) ) + bHeight / ( floorNumber + 2 ) * floorCounter
-			floor.position.z = bPosZ
+			floor.position.z = bPosZ			
 
 		}
 
@@ -559,7 +601,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 	}
 	
 	
-	// Display chimneys at the top/bottom (depends on settings)
+	// Display chimneys at top/bottom (depends on settings)
 	def double getYforChimney(Building b, BuildingSegment chimney){
 		
 		if(config.parser == FamixParser::ABAP && config.showAttributesBelowBuildings){

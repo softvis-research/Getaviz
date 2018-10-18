@@ -114,6 +114,7 @@ BuildingSegment:
 		('(' 'parent' parent=[Entity] ')')?
 		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? // ABAP
 		('(' 'dataCounter' dataCounter=DECIMAL ')')?
+		('(' 'parentType' parentType=MSESTRING ')')?
 	')';
 
 Parameter:
@@ -207,6 +208,7 @@ EntitySegment:
 		('(' 'color' color=MSESTRING ')')?
 		('(' 'textureURL' textureURL=MSESTRING ')')?
 		('(' 'labelPosition' labelPosition=Position ')')?
+		('(' 'parentType' parentType=MSESTRING ')')?
 	')';
 
 Position:

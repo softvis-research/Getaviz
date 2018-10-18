@@ -62,6 +62,8 @@ import org.svis.xtext.famix.FAMIXFunctionGroup
 import org.svis.xtext.famix.FAMIXFunctionModule
 import org.svis.xtext.famix.FAMIXFormroutine
 import org.svis.xtext.famix.FAMIXMessageClass 
+import org.svis.xtext.famix.FAMIXTableType
+import org.svis.xtext.famix.FAMIXTypeOf
 
 
 
@@ -99,7 +101,9 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val List<FAMIXFormroutine> formroutines = newArrayList
 	val List<FAMIXMessageClass> messageClasses = newArrayList
 	val List<FAMIXFunctionGroup> functionGroups = newArrayList
-	 
+	val List<FAMIXTableType> tableTypes = newArrayList
+	val List<FAMIXTypeOf> typeOf	= newArrayList
+	
 	
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
 		log.info("Famix2Famix has started.")
@@ -140,6 +144,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		famixDocument.elements.removeAll(Collections::singleton(null))
 		
 		val Set<FAMIXNamespace> packages = newLinkedHashSet
+		val List<FAMIXABAPStruc> abapStrucsTmp = newArrayList
 		
 		famixDocument.elements.filter(FAMIXPath).forEach[path|
 			path.id = createID(path.name + path.start.ref.name + path.end.ref.name);
@@ -157,12 +162,14 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 				FAMIXDataElement: dataElements.add(element)
 				FAMIXDomain: domains.add(element)
 				FAMIXTable: tables.add(element)
-				FAMIXABAPStruc: abapStrucs.add(element)
+				FAMIXABAPStruc: abapStrucsTmp.add(element)
 				FAMIXStrucElement: abapStrucElem.add(element)
+				FAMIXTableType: tableTypes.add(element)
 				FAMIXFunctionModule: functionModules.add(element)
 				FAMIXFormroutine: formroutines.add(element)
 				FAMIXMessageClass: messageClasses.add(element)
 				FAMIXFunctionGroup: functionGroups.add(element)
+				FAMIXTypeOf:	typeOf.add(element)
 				FAMIXStructure: {
 					if(element.container !== null){
 						structures.add(element)
@@ -183,18 +190,19 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		methods.forEach[setQualifiedName]
 		attributes.forEach[setQualifiedNameAbap]
 		enumValues.forEach[setQualifiedName]
-		
 		reports.forEach[setQualifiedName]
 		dataElements.forEach[setQualifiedName]
+		tableTypes.forEach[setQualifiedName]
 		domains.forEach[setQualifiedName]
 		tables.forEach[setQualifiedName]
-		abapStrucs.forEach[setQualifiedName]
+		abapStrucsTmp.forEach[setQualifiedName]
 		abapStrucElem.forEach[setQualifiedName]
 		functionModules.forEach[setQualifiedName]
 		functionGroups.forEach[setQualifiedName]
 		formroutines.forEach[setQualifiedName]
 		messageClasses.forEach[setQualifiedName]
 	
+		abapStrucsTmp.forEach[updateAbapStrucs]
 		
 		famixDocument.elements.clear
 		famixDocument.elements.addAll(rootPackages)
@@ -209,6 +217,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		famixDocument.elements.addAll(tables)
 		famixDocument.elements.addAll(abapStrucs)
 		famixDocument.elements.addAll(abapStrucElem)
+		famixDocument.elements.addAll(tableTypes)
 		famixDocument.elements.addAll(enumValues)
 		famixDocument.elements.addAll(invocations)
 		famixDocument.elements.addAll(antipattern)
@@ -217,6 +226,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		famixDocument.elements.addAll(functionGroups)
 		famixDocument.elements.addAll(formroutines)
 		famixDocument.elements.addAll(messageClasses)
+		famixDocument.elements.addAll(typeOf)
 		
 		rootPackages.clear
 		subPackages.clear
@@ -226,8 +236,10 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		dataElements.clear
 		domains.clear
 		tables.clear
+		abapStrucsTmp.clear
 		abapStrucs.clear
 		abapStrucElem.clear
+		tableTypes.clear
 		attributes.clear
 		enumValues.clear
 		structures.clear
@@ -238,12 +250,10 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		functionGroups.clear
 		formroutines.clear
 		messageClasses.clear
+		typeOf.clear
 		return famixRoot
 	} //End of ABAP logic
-	
-
 		
-	
 	
 	//Default 
 	def private toInvocation(FAMIXMethod m1, FAMIXMethod m2) {
@@ -835,19 +845,25 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	}
 	
 	//ABAP
+	def updateAbapStrucs(FAMIXABAPStruc struc){
+		if(abapStrucElem.filter[container.ref.name == struc.name].length != 0){
+			abapStrucs.add(struc)
+		}
+	}
+	
 	def setQualifiedNameAbap(FAMIXAttribute attribute) {
 		val ref = attribute.parentType.ref
 		switch (ref) {
 			FAMIXClass: attribute.fqn = ref.fqn + "." + attribute.value
 			FAMIXReport: attribute.fqn = ref.fqn + "." + attribute.value
-			FAMIXFunctionModule: attribute.fqn = ref.fqn + "." + attribute.value
+			FAMIXFunctionGroup: attribute.fqn = ref.fqn + "." + attribute.value
 			FAMIXMethod: attribute.fqn = ref.fqn + "." + attribute.value
 			default: log.error("ERROR qualifiedName(FAMIXAttribute famixAttribute): " + attribute.value)
 		}
 		attribute.id = createID(attribute.fqn)
 	}
 	
-	//ABAP
+	//ABAP	
 	def setQualifiedName(FAMIXDictionaryData dd){
 		//val ref = dd.container.ref
 		dd.fqn = "." + dd.value

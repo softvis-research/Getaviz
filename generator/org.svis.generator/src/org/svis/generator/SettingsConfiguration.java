@@ -155,6 +155,14 @@ public class SettingsConfiguration {
 		return config.getBoolean("city.abap.showFugrAttributes", false);
 	}
 	
+	public boolean isShowOwnTablesDistrict() {
+		return config.getBoolean("city.abap.tablesOwnDistrict", false);
+	}
+	
+	public boolean isShowTablesDUnderMainD() {
+		return config.getBoolean("city.abap.tablesDUnderMainD", false);
+	}
+	
 	public FamixParser getParser() {
 		switch (getParserAsString()) {
 		case "jdt2famix":
@@ -178,6 +186,10 @@ public class SettingsConfiguration {
 	
 	public double getAttributesBelowBuildingsHeight() {
 		return config.getDouble("city.abap.attributesBelowBuildingsHeight", 2);
+	}
+	
+	public double getStrucElemHeight() {
+		return config.getDouble("city.abap.strucElemHeight", 1);
 	}
 
 	public boolean isMasterRoot() {
@@ -522,6 +534,10 @@ public class SettingsConfiguration {
 			if(config.getString("city.abap.class.color").equals("")) return null;
 			return getColor(config.getString("city.abap.class.color", "#c5cae9"));
 			
+		}else if(type.equals("FAMIX.Interface")) {
+			if(config.getString("city.abap.interfaces.color").equals("")) return null;
+			return getColor(config.getString("city.abap.interfaces.color", "#c5cae9"));
+			
 		}else if(type.equals("FAMIX.ABAPStructure")) {
 			if(config.getString("city.abap.structure.color").equals("")) return null;
 			return getColor(config.getString("city.abap.structure.color", "#c5cae9"));
@@ -560,6 +576,10 @@ public class SettingsConfiguration {
 			if(config.getString("city.abap.class_method.color").equals("")) return null;
 			return getColor(config.getString("city.abap.class_method.color", "#c5cae9"));
 			
+		}else if(type.equals("FAMIX.Interface")) {
+			if(config.getString("city.abap.class_interface.color").equals("")) return null;
+			return getColor(config.getString("city.abap.class_interface.color", "#c5cae9"));
+			
 		}else if(type.equals("FAMIX.FunctionGroup")) {
 			if(config.getString("city.abap.fumo.color").equals("")) return null;
 			return getColor(config.getString("city.abap.fumo.color", "#c5cae9"));
@@ -567,6 +587,10 @@ public class SettingsConfiguration {
 		}else if(type.equals("FAMIX.ABAPStruc")) {
 			if(config.getString("city.abap.structure_elem.color").equals("")) return null;
 			return getColor(config.getString("city.abap.structure_elem.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.TableType")) {
+			if(config.getString("city.abap.tstructure_elem.color").equals("")) return null;
+			return getColor(config.getString("city.abap.tstructure_elem.color", "#c5cae9"));
 			
 		}else {
 			return null;

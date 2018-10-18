@@ -44,6 +44,8 @@ import org.svis.xtext.famix.FAMIXFunctionGroup
 import org.svis.xtext.famix.FAMIXFunctionModule
 import org.svis.xtext.famix.FAMIXFormroutine
 import org.svis.xtext.famix.FAMIXMessageClass
+import org.svis.xtext.famix.FAMIXTableType
+import org.svis.xtext.famix.FAMIXTypeOf
 
 
 class Famix2JSON implements IGenerator2 {
@@ -120,7 +122,11 @@ class Famix2JSON implements IGenerator2 {
 		"id":            "«c.id»",
 		"qualifiedName": "«c.fqn»",
 		"name":          "«c.value»",
-		"type":          "FAMIX.Class",
+		«IF c.isInterface == "true"»
+		"type": 		 "FAMIX.Interface",
+		«ELSE»
+		"type": 		 "FAMIX.Class",
+		«ENDIF»
 		"modifiers":     "«c.modifiers.removeBrackets»",
 		"subClassOf":    "«c.superClasses»",
 		"superClassOf":  "«c.subClasses»",
@@ -232,11 +238,21 @@ class Famix2JSON implements IGenerator2 {
 	'''
 	
 	//ABAP
+	def dispatch private toMetaData(FAMIXTableType tt)'''
+		"id":            "«tt.id»",
+		"qualifiedName": "«tt.fqn»",
+		"name":          "«tt.value»",
+		"type":          "FAMIX.TableType",
+		"belongsTo":     "«tt.container.ref.id»",
+		"iteration": 	 "«tt.iteration»"
+	'''
+	
+	//ABAP
 	def dispatch private toMetaData(FAMIXDomain d)'''
 		"id":            "«d.id»",
 		"qualifiedName": "«d.fqn»",
 		"name":          "«d.value»",
-		"type":          "FAMIX.DataElement",
+		"type":          "FAMIX.Domain",
 		"belongsTo":     "«d.container.ref.id»",
 		"iteration": 	 "«d.iteration»"
 	'''
@@ -313,6 +329,13 @@ class Famix2JSON implements IGenerator2 {
 		"numberOfMessages": "«mc.numberOfMessages»",
 		"belongsTo":     "«mc.container.ref.id»",
 		"iteration": 	 "«mc.iteration»"
+	'''
+	
+	def dispatch private toMetaData(FAMIXTypeOf to)'''
+		"id":            "«to.id»",
+		"type":          "FAMIX.TypeOf",
+		"element":     	 "«to.element»",
+		"typeOf": 	     "«to.typeOf»"
 	'''
 
 

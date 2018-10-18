@@ -16,7 +16,7 @@ FAMIXElement:
 	FAMIXParameterizedType | FAMIXAnnotationInstance | FAMIXAnnotationInstanceAttribute | FAMIXAnnotationTypeAttribute |
 	FAMIXLocalVariable | FAMIXImplicitVariable | FAMIXType | FAMIXParameterType |
 	FAMIXJavaSourceLanguage | FAMIXDeclaredException | FAMIXThrownException | FAMIXCaughtException | FAMIXEnumValue | 
-	FAMIXAntipattern | FAMIXPath | FAMIXRole | FAMIXComponent |
+	FAMIXAntipattern | FAMIXPath | FAMIXRole | FAMIXComponent | FAMIXTypeOf |
 	
 	//ABAP
 	FAMIXFunctionModule | FAMIXFormroutine
@@ -515,7 +515,17 @@ FAMIXFormroutine:
     ('(' 'numberOfStatements' numberOfStatements=INT ')')?
     '(' 'parentType' parentType=IntegerReference ')'
     ('(' 'iteration' iteration=INT ')')?
-')';
+	')';
+	
+FAMIXTypeOf:
+	'(FAMIX.TypeOf'
+	'(' 'id:' name=INT_ID ')'
+	('(' 'hash' id = STRING ')')?
+	('(' 'fqn' fqn = MSESTRING ')')?
+	('(' 'element' element=IntegerReference ')')
+	('(' 'typeOf' typeOf=IntegerReference ')')
+	')';
+
 
 // End of ABAP extensions     
     
