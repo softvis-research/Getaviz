@@ -56,14 +56,15 @@ class City2X3D {
 	// transform logic
 	def String toX3DModel(List<Entity> entities) '''
   		«FOR entity : entities»
-			«IF entity.type == "FAMIX.Namespace" || entity.type == "dataElementDistrict" || entity.type == "reportDistrict"
-				|| entity.type == "classDistrict" || entity.type == "functionGroupDistrict" || entity.type == "abapStrucDistrict"
-				|| entity.type == "tableDistrict" || entity.type == "domainDistrict" || entity.type == "dcDataDistrict"»
+			«IF entity.type == "FAMIX.Namespace"  || entity.type == "reportDistrict"
+				|| entity.type == "classDistrict" || entity.type == "functionGroupDistrict" 
+				|| entity.type == "tableDistrict" || entity.type == "dcDataDistrict"»
 				«toDistrict(entity)»
 			«ENDIF»
-			«IF entity.type == "FAMIX.Class" || entity.type == "FAMIX.DataElement" || entity.type == "FAMIX.Report"
-			 	|| entity.type == "FAMIX.FunctionGroup" || entity.type == "FAMIX.ABAPStruc"
-			 	|| entity.type == "FAMIX.Table" || entity.type == "FAMIX.Domain"»
+			«IF entity.type == "FAMIX.Class" || entity.type == "FAMIX.Interface"|| entity.type == "FAMIX.DataElement" 
+				|| entity.type == "FAMIX.Report" || entity.type == "FAMIX.FunctionGroup" 
+				|| entity.type == "FAMIX.ABAPStruc"	|| entity.type == "FAMIX.Table" 
+				|| entity.type == "FAMIX.Domain" || entity.type == "FAMIX.TableType"»
 				«IF config.buildingType == BuildingType.CITY_ORIGINAL || config.showBuildingBase»
 					«toBuilding(entity)»
 				«ENDIF»
@@ -98,26 +99,46 @@ class City2X3D {
 	def String toDistrict(Entity entity) '''
 		<Group DEF='«entity.id»'>
 			<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
-				<Shape>
-					<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
-					<Appearance>
-					«IF(config.parser == FamixParser::ABAP && config.abapShowTextures && entity.textureURL !== null && entity.textureURL != "")»
-						<ImageTexture url='«entity.textureURL»'></ImageTexture>
-					«ELSE»
-						<Material diffuseColor='«entity.color»'></Material>
-					«ENDIF»
-					</Appearance>
-				</Shape>
+				«IF (config.parser == FamixParser::ABAP)»
+					«toAbapDistrict(entity)»
+				«ELSE»
+					<Shape>
+						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+						<Appearance>
+							<Material diffuseColor='«entity.color»'></Material>
+						</Appearance>
+					</Shape>
+				«ENDIF»
 			</Transform>
 		</Group>
+	'''
+	
+	// Own logic for ABAP Districts
+	def String toAbapDistrict(Entity entity) '''
+		<Shape>
+			«IF entity.type == "tableDistrict"»	
+				<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+			«ELSE»
+				<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+			«ENDIF»
+		
+			
+			<Appearance>
+				«IF(config.abapShowTextures && entity.textureURL !== null && entity.textureURL != "")»
+					<ImageTexture url='«entity.textureURL»'></ImageTexture>
+				«ELSE»
+					<Material diffuseColor='«entity.color»'></Material>
+				«ENDIF»
+			</Appearance>
+		</Shape>
 	'''
 	
 	def String toBuilding(Entity entity) '''
 		<Group DEF='«entity.id»'>
 			<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
 				<Shape>
-					«IF entity.type == "FAMIX.DataElement"»
-						<Cone bottomRadius='«entity.width»'></Cone>
+					«IF config.parser == FamixParser::ABAP»
+						«abapBuildingShape(entity)»
 					«ELSE»
 						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
 					«ENDIF»
@@ -128,7 +149,24 @@ class City2X3D {
 			</Transform>
 		</Group>
 	'''
-
+	
+	// Own logic for ABAP Buildings shapes
+	def String abapBuildingShape(Entity entity)'''
+		«IF entity.type == "FAMIX.Interface"»
+			<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+		«ELSEIF entity.type == "FAMIX.DataElement"»
+			<Cone bottomRadius='«entity.width»'></Cone>
+		«ELSEIF entity.type == "FAMIX.ABAPStruc"»
+		
+		«ELSEIF entity.type == "FAMIX.TableType"»
+			<Cylinder radius='«entity.width/2»' height='«entity.height»'></Cylinder>
+		«ELSEIF entity.type == "FAMIX.Table"»
+			<Cylinder radius='«entity.width/2»' height='«entity.height + 2»'></Cylinder>
+		«ELSE»
+			<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>				
+		«ENDIF»
+	'''
+	
 	def String toBuildingSegment(BuildingSegment entity) '''
 		«var x = entity.position.x»
 		«var y = entity.position.y»
@@ -169,11 +207,16 @@ class City2X3D {
 			«ENDFOR»
 		</Group>
 	'''
+	
 	def toFloor(BuildingSegment floor) '''
 		<Group DEF='«floor.id»'>
 			<Transform translation='«floor.position.x +" "+ floor.position.y +" "+ floor.position.z»'>
 				<Shape>
-					<Box size='«floor.width +" "+ floor.height +" "+ floor.length»'></Box>
+					«IF config.parser == FamixParser::ABAP»
+						«toAbapFloor(floor)»
+					«ELSE»
+						<Box size='«floor.width +" "+ floor.height +" "+ floor.length»'></Box>
+					«ENDIF»
 					<Appearance>
 						<Material diffuseColor='«floor.color»'></Material>
 					</Appearance>
@@ -182,6 +225,18 @@ class City2X3D {
 		</Group>
 	'''
 	
+	// Own logic for ABAP floors (Methods, forms)
+	def toAbapFloor(BuildingSegment floor) '''
+		«IF floor.parentType == "FAMIX.ABAPStruc"»
+			<Cone bottomRadius='«floor.width + 0.25»' height='«floor.height»'></Cone>
+		«ELSEIF floor.parentType == "FAMIX.TableType"»
+			<Cone bottomRadius='«floor.width + 0.25»' height='«floor.height»'></Cone>
+		«ELSE»
+			<Box size='«floor.width +" "+ floor.height +" "+ floor.length»'></Box>
+		«ENDIF»
+	'''
+	
+		
 	def toChimney(BuildingSegment chimney) '''
 		<Group DEF='«chimney.id»'>
 			<Transform translation='«chimney.position.x +" "+ chimney.position.y +" "+ chimney.position.z»'>

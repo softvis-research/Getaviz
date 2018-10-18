@@ -35,6 +35,7 @@ import org.svis.xtext.famix.FAMIXFunctionGroup
 import org.svis.xtext.famix.FAMIXFunctionModule
 import org.svis.xtext.famix.FAMIXFormroutine
 import org.svis.xtext.famix.FAMIXMessageClass 
+import org.svis.xtext.famix.FAMIXTypeOf
 
 
 class FamixUtils {
@@ -147,6 +148,7 @@ class FamixUtils {
 			FAMIXFunctionModule:		return el.id
 			FAMIXFormroutine:			return el.id
 			FAMIXMessageClass:			return el.id
+			FAMIXTypeOf:				return el.id
 			default: log.warn("Forgot" + el.class + " in FamixUtils.getId")
 		}
 	}

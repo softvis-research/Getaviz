@@ -47,6 +47,8 @@ import org.svis.xtext.famix.FAMIXFunctionGroup
 import org.svis.xtext.famix.FAMIXFunctionModule
 import org.svis.xtext.famix.FAMIXFormroutine
 import org.svis.xtext.famix.FAMIXMessageClass 
+import org.svis.xtext.famix.FAMIXTableType 
+import org.svis.xtext.famix.FAMIXTypeOf
 
 
 class Famix2City extends WorkflowComponentWithModelSlot {
@@ -86,6 +88,8 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 	val List<FAMIXFormroutine> formroutines = newArrayList
 	val List<FAMIXMessageClass> messageClasses = newArrayList
 	val List<FAMIXFunctionGroup> functionGroups = newArrayList
+	val List<FAMIXTableType> tableTypes = newArrayList
+	val List<FAMIXTypeOf> typeOf = newArrayList
 	
 
 	override protected invokeInternal(WorkflowContext ctx, ProgressMonitor monitor, Issues issues) {
@@ -131,9 +135,14 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		functionGroups   += famixDocument.elements.filter(FAMIXFunctionGroup)
 		functionModules  += famixDocument.elements.filter(FAMIXFunctionModule)
 		messageClasses   += famixDocument.elements.filter(FAMIXMessageClass)
+		tableTypes		 += famixDocument.elements.filter(FAMIXTableType)
+		typeOf			 += famixDocument.elements.filter(FAMIXTypeOf)
 		
-		dcData	 		 += dataElements + domains + abapStrucs  
+		dcData	 		 += dataElements + domains + abapStrucs + tableTypes 
 		
+		if(!config.showOwnTablesDistrict){
+			dcData += tables
+		}
 		
 		rootPackages.forEach[toDistrict(1)]
 		//cityDocument = f2c_abap.abapToModel()
@@ -226,31 +235,26 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 					newDistrict.entities.add(functionGroupDistrict)
 				}
 				
-				//DB Tables
-				if (tables.filter[container.ref == elem].length != 0){
-					val tableDistrict = cityFactory.createDistrict
-					tableDistrict.name = newDistrict.name + "_tableDistrict"
-					tableDistrict.type = "tableDistrict"
-					tableDistrict.level = level + 1
-					tableDistrict.id = elem.id + "_00006"
-					
-					tables.filter[container.ref == elem].forEach[tableDistrict.entities += toBuilding(level + 2)]
-					newDistrict.entities.add(tableDistrict)
+				//DB Tables - only if we need own district
+				if(config.showOwnTablesDistrict){
+					if (tables.filter[container.ref == elem].length != 0){
+						val tableDistrict = cityFactory.createDistrict
+						tableDistrict.name = newDistrict.name + "_tableDistrict"
+						tableDistrict.type = "tableDistrict"
+						tableDistrict.level = level + 1
+						tableDistrict.id = elem.id + "_00006"
+						
+						tables.filter[container.ref == elem].forEach[tableDistrict.entities += toBuilding(level + 2)]
+						newDistrict.entities.add(tableDistrict)
+					}
 				}
-								
-				
+												
 			}
 		}
 		
 		cityDocument.entities += newDistrict
 		return newDistrict
 	}
-	
-	/*def Building toBuilding(FAMIXTable elem, int level){
-		val newBuilding = cityFactory.createBuilding
-		
-		return newBuilding
-	}*/
 	
 	def Building toBuilding(FAMIXReport elem, int level){
 		val newBuilding = cityFactory.createBuilding
@@ -300,10 +304,21 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
 		newBuilding.level = level
 		newBuilding.id = elem.id
-		//newBuilding.dataCounter = 15  //- width/length
+		//newBuilding.dataCounter = 1  //- width/length
 		
 		if(newBuilding.type == "FAMIX.ABAPStruc"){
-			abapStrucElem.filter[container.ref == elem].forEach[newBuilding.methods.add(toFloor)]
+			newBuilding.methodCounter = abapStrucElem.filter[container.ref == elem].length
+			abapStrucElem.filter[container.ref == elem].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+		}
+		
+		if(newBuilding.type == "FAMIX.TableType"){
+			var tableTypeOf = typeOf.filter[element.ref == elem]
+			 
+			for (tty : tableTypeOf){
+				newBuilding.methodCounter = abapStrucElem.filter[container.ref == tty.typeOf.ref].length
+				abapStrucElem.filter[container.ref == tty.typeOf.ref].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+			}	
+			
 		}
 		
 		return newBuilding
@@ -339,6 +354,67 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		return newDistrict
 	}
 
+
+def private Building toBuilding(FAMIXClass elem, int level) {
+		val newBuilding = cityFactory.createBuilding
+		newBuilding.name = elem.name
+		newBuilding.value = elem.value
+		newBuilding.fqn = elem.fqn
+		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		
+		// Is interface?
+		if(elem.isInterface == "true") {
+			newBuilding.type = "FAMIX.Interface"
+		}else{
+			newBuilding.type = "FAMIX.Class"
+		}
+
+		newBuilding.level = level
+		newBuilding.id = elem.id
+//		newBuilding.dataCounter = 0
+//		newBuilding.methodCounter = 0
+		inheritances.filter[subclass.ref === elem].forEach [ i |
+			val inheritance = cityFactory.createReference
+			inheritance.type = "Inheritance"
+			inheritance.name = i.superclass.ref.name
+			inheritance.fqn = i.superclass.ref.fqn
+			newBuilding.references += inheritance
+		]
+
+//		Currently no further class specifics, such as inner classes, handled
+//		structures.filter[container.ref.equals(elem)].
+//			forEach[newBuilding.entities.add(toBuilding(level + 1))]
+		val currentMethods = methods.filter[parentType.ref === elem]
+		val currentAttributes = attributes.filter[parentType.ref === elem]
+
+		newBuilding.dataCounter = currentAttributes.length
+		newBuilding.methodCounter = currentMethods.length
+
+		if (config.buildingType == BuildingType::CITY_FLOOR) {
+			methods.filter[parentType.ref.equals(elem)].forEach[newBuilding.methods.add(toFloor)]
+			attributes.filter[parentType.ref.equals(elem)].forEach[newBuilding.data.add(toChimney)]
+		} else {
+			if (config.originalBuildingMetric == BuildingMetric::NOS) {
+				newBuilding.numberOfStatements = currentMethods.fold(0)[sum, method|sum + method.numberOfStatements]
+			}
+
+			if (config.classElementsMode === ClassElementsModes::METHODS_AND_ATTRIBUTES ||
+				config.classElementsMode === ClassElementsModes::METHODS_ONLY) {
+				currentMethods.forEach[newBuilding.methods += toBuildingSegment_Method(newBuilding, level + 1)]
+			}
+
+			// methods.filter[parentType.ref.equals(elem)].
+			// forEach[newBuilding.methods.add(toBuildingSegment_Method(newBuilding, level + 1))]
+			if (config.classElementsMode === ClassElementsModes::METHODS_AND_ATTRIBUTES ||
+				config.classElementsMode === ClassElementsModes::ATTRIBUTES_ONLY) {
+				currentAttributes.forEach[newBuilding.data += toBuildingSegment_Attribute(newBuilding, level + 1)]
+			}
+		// attributes.filter[parentType.ref.equals(elem)].
+		// forEach[newBuilding.data.add(toBuildingSegment_Attribute(newBuilding, level + 1))]
+		}
+		return newBuilding
+	}
+
 	/**
 	 * Sets values for current class and searches for nested elements
 	 * 
@@ -352,6 +428,12 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		newBuilding.value = elem.value
 		newBuilding.fqn = elem.fqn
 		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		/*if(newBuilding.type == "FAMIX.Class"){
+			val FAMIXClass classBuilding = elem
+		}*/
+		//val isInterface = elem.isInterface
+		//newBuilding.type = (elem.) ? "FAMIX.Interface" : "FAMIX.Class"
+		
 		newBuilding.level = level
 		newBuilding.id = elem.id
 //		newBuilding.dataCounter = 0
@@ -498,10 +580,10 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		newBuildingSegment.id = famixFuncModule.id
 	} 
 	
-	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXStrucElement famixStrucElem) {
+	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXStrucElement famixStrucElem, String buildingId) {
 		newBuildingSegment.name = famixStrucElem.name
 		newBuildingSegment.value = famixStrucElem.value
 		newBuildingSegment.fqn = famixStrucElem.fqn
-		newBuildingSegment.id = famixStrucElem.id
+		newBuildingSegment.id = famixStrucElem.id + "_" + buildingId
 	}
 }
