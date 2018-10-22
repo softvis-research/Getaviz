@@ -491,6 +491,7 @@ public class CityLayout {
 	}
 
 	private static void setNewPosition(Rectangle el, CityKDTreeNode fitNode) {
+		
 		Position newPos = cityFactory.createPosition();
 		// mapping 2D rectangle on 3D building
 		newPos.setX(fitNode.getRectangle().getCenterX() - config.getBuildingHorizontalGap() / 2); // width
@@ -498,16 +499,20 @@ public class CityLayout {
 		newPos.setY((el.getEntityLink().getHeight() / 2)); // height
 		
 		 
-		//Attributes below buildings (ABAP only), for: Classes, Reports
-		if(config.getParser() == FamixParser.ABAP && config.getShowAttributesBelowBuildings() && el.getEntityLink().getDataCounter() != 0) {
-			if(el.getEntityLink().getType().equals("FAMIX.Class") || el.getEntityLink().getType().equals("FAMIX.Report")
-				|| el.getEntityLink().getType().equals("FAMIX.FunctionGroup")) {
-					
+		// ABAP additional logic
+		if(config.getParser() == FamixParser.ABAP){
+			
+			// Attributes below buildings (ABAP only), for: Classes, Reports
+			if(config.getShowAttributesBelowBuildings() && el.getEntityLink().getDataCounter() != 0){
+				if(el.getEntityLink().getType().equals("FAMIX.Class") || el.getEntityLink().getType().equals("FAMIX.Report")
+					|| el.getEntityLink().getType().equals("FAMIX.FunctionGroup")) {
+							
 					newPos.setY((el.getEntityLink().getHeight() / 2) + config.getAttributesBelowBuildingsHeight());
+				}
 			}
-		}
-		
-		
+			
+			
+		}// /End of ABAP logic
 		
 		el.getEntityLink().setPosition(newPos);
 		if (DEBUG) {

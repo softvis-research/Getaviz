@@ -28,14 +28,16 @@ import org.svis.generator.rd.m2m.RGBColor
 //ABAP
 import org.svis.xtext.famix.FAMIXReport 
 import org.svis.xtext.famix.FAMIXDataElement
+import org.svis.xtext.famix.FAMIXDomain
 import org.svis.xtext.famix.FAMIXTable
+import org.svis.xtext.famix.FAMIXTableElement
+import org.svis.xtext.famix.FAMIXTableType
 import org.svis.xtext.famix.FAMIXABAPStruc
 import org.svis.xtext.famix.FAMIXStrucElement
 import org.svis.xtext.famix.FAMIXFunctionGroup
 import org.svis.xtext.famix.FAMIXFunctionModule
 import org.svis.xtext.famix.FAMIXFormroutine
 import org.svis.xtext.famix.FAMIXMessageClass 
-import org.svis.xtext.famix.FAMIXTypeOf
 
 
 class FamixUtils {
@@ -139,16 +141,19 @@ class FamixUtils {
 			FAMIXPath:					return el.id
 			HISMOClassVersion:			return el.id
 			HISMONamespaceVersion:		return el.id
+			
 			FAMIXReport:				return el.id
 			FAMIXDataElement:			return el.id
+			FAMIXDomain:				return el.id
 			FAMIXTable:					return el.id
+			FAMIXTableElement:			return el.id
+			FAMIXTableType:				return el.id
 			FAMIXABAPStruc:				return el.id
 			FAMIXStrucElement:			return el.id
 			FAMIXFunctionGroup:			return el.id
 			FAMIXFunctionModule:		return el.id
 			FAMIXFormroutine:			return el.id
 			FAMIXMessageClass:			return el.id
-			FAMIXTypeOf:				return el.id
 			default: log.warn("Forgot" + el.class + " in FamixUtils.getId")
 		}
 	}
@@ -165,9 +170,13 @@ class FamixUtils {
 			FAMIXAnnotationType:		return el.fqn
 			FAMIXComponent:				return el.fqn
 			FAMIXAntipattern:			return el.fqn
+			
 			FAMIXReport:				return el.fqn
 			FAMIXDataElement:			return el.fqn
+			FAMIXDomain:				return el.fqn
 			FAMIXTable:					return el.fqn
+			FAMIXTableElement:			return el.fqn
+			FAMIXTableType:				return el.fqn
 			FAMIXABAPStruc:				return el.fqn
 			FAMIXStrucElement:			return el.fqn
 			FAMIXFunctionGroup:			return el.fqn

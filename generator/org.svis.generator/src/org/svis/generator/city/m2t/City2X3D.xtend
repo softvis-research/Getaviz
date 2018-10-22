@@ -161,7 +161,7 @@ class City2X3D {
 		«ELSEIF entity.type == "FAMIX.TableType"»
 			<Cylinder radius='«entity.width/2»' height='«entity.height»'></Cylinder>
 		«ELSEIF entity.type == "FAMIX.Table"»
-			<Cylinder radius='«entity.width/2»' height='«entity.height + 2»'></Cylinder>
+			<Cylinder radius='«entity.width/2»' height='«entity.height»'></Cylinder>
 		«ELSE»
 			<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>				
 		«ENDIF»
@@ -228,9 +228,11 @@ class City2X3D {
 	// Own logic for ABAP floors (Methods, forms)
 	def toAbapFloor(BuildingSegment floor) '''
 		«IF floor.parentType == "FAMIX.ABAPStruc"»
-			<Cone bottomRadius='«floor.width + 0.25»' height='«floor.height»'></Cone>
+			<Cone bottomRadius='«floor.width»' height='«floor.height»'></Cone>
 		«ELSEIF floor.parentType == "FAMIX.TableType"»
-			<Cone bottomRadius='«floor.width + 0.25»' height='«floor.height»'></Cone>
+			<Cone bottomRadius='«floor.width»' height='«floor.height»'></Cone>
+		«ELSEIF floor.parentType == "FAMIX.Table"»
+			<Cylinder height='«floor.height»' radius='«floor.width»'></Cylinder>
 		«ELSE»
 			<Box size='«floor.width +" "+ floor.height +" "+ floor.length»'></Box>
 		«ENDIF»
