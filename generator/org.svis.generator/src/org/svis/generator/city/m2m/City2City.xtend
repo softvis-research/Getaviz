@@ -193,35 +193,38 @@ class City2City extends WorkflowComponentWithModelSlot {
 		}
 		
 		
-		if(config.parser == FamixParser::ABAP){
-			if(b.type == "FAMIX.ABAPStruc" || b.type == "FAMIX.TableType"){
-				b.height = b.methodCounter * config.strucElemHeight 
-			
-				if(config.strucElemHeight <= 1){
-					b.height = b.height + 1
-				}	
-			}		
-		}
-
-
 		//b.dataCounter = 0 // set counters to zero, to let them vanish in city2.xml (optional)
 		// we use dataCounter to show attributes under buildings. 
 		
-		if (config.outputFormat == OutputFormat::AFrame) {
+		
+		b.color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0 // pko 2016
+		if(config.outputFormat == OutputFormat::AFrame){
 			b.color = config.classColorHex
-		} else {
-			if(config.parser == FamixParser::ABAP){
-				
-				// Use color for building, if it's set
-				if(config.getAbapBuildingColor(b.type) !== null){
-					b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
-				}else{
-					b.color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0
-				}
-			}else{
-				b.color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0 // pko 2016
-			}
 		}
+		
+		
+		// ABAP Logic
+		if(config.parser == FamixParser::ABAP){
+			// Edit height
+			if(b.type == "FAMIX.ABAPStruc" || b.type == "FAMIX.TableType"){
+				b.height = b.methodCounter * config.strucElemHeight 
+				
+				if(config.strucElemHeight <= 1 || b.methodCounter == 0){
+					b.height = b.height + 1
+				}	
+			}
+			
+			// Use color for building, if it's set
+			if(config.getAbapBuildingColor(b.type) !== null){
+				b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
+			}
+			
+			// Edit transparency 	
+			/*if(b.eContainer.eContainer.notInOrigin == "true"){
+				b.color = "#000000"
+			}*/			
+		}
+		
 	}
 
 	def private setBuildingAttributesPanels(Building b) {

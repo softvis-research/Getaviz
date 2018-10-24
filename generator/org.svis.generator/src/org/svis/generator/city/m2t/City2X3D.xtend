@@ -127,7 +127,7 @@ class City2X3D {
 				«IF(config.abapShowTextures && entity.textureURL !== null && entity.textureURL != "")»
 					<ImageTexture url='«entity.textureURL»'></ImageTexture>
 				«ELSE»
-					<Material diffuseColor='«entity.color»'></Material>
+					<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
 				«ENDIF»
 			</Appearance>
 		</Shape>
@@ -143,7 +143,7 @@ class City2X3D {
 						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
 					«ENDIF»
 					<Appearance>
-						<Material diffuseColor='«entity.color»'></Material>
+						<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
 					</Appearance>
 				</Shape>
 			</Transform>
@@ -157,7 +157,7 @@ class City2X3D {
 		«ELSEIF entity.type == "FAMIX.DataElement"»
 			<Cone bottomRadius='«entity.width»'></Cone>
 		«ELSEIF entity.type == "FAMIX.ABAPStruc"»
-		
+			
 		«ELSEIF entity.type == "FAMIX.TableType"»
 			<Cylinder radius='«entity.width/2»' height='«entity.height»'></Cylinder>
 		«ELSEIF entity.type == "FAMIX.Table"»

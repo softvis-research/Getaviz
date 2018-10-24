@@ -177,6 +177,9 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		newDistrict.type = CityUtils.getFamixClassString(elem.class.simpleName)
 		newDistrict.level = level
 		newDistrict.id = elem.id
+		if(elem.iteration >= 1){
+			newDistrict.notInOrigin = "true"
+		}
 
 		if (config.buildingType == BuildingType::CITY_DYNAMIC) {
 			structures.filter[container.ref === elem].forEach[newDistrict.entities += toDistrict(level + 1)]

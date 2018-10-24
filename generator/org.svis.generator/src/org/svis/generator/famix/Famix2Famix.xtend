@@ -49,6 +49,7 @@ import org.eclipse.emf.mwe.core.lib.WorkflowComponentWithModelSlot
 import org.apache.commons.logging.LogFactory
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.SettingsConfiguration.FamixParser
+import org.svis.xtext.famix.FAMIXReference
 
 //ABAP
 import org.svis.xtext.famix.FAMIXDictionaryData
@@ -80,7 +81,9 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val List<FAMIXEnumValue> enumValues = newArrayList
 	val List<FAMIXStructure> structures = newArrayList
 	val List<FAMIXNamespace> packagesToMerge = newArrayList
-
+	val List<FAMIXReference> references = newArrayList
+	val List<FAMIXInheritance> inheritances = newArrayList
+	
 	val Map<FAMIXMethod, List<FAMIXParameter>> parameters = newHashMap 
 	val List<FAMIXInvocation> invocations = newArrayList
 	val static famixFactory = new FamixFactoryImpl()
@@ -169,6 +172,8 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 				FAMIXFunctionGroup: functionGroups.add(element)
 				FAMIXTableElement: tableElements.add(element)
 				FAMIXTypeOf: typeOf.add(element)
+				FAMIXReference: references.add(element)
+				FAMIXInheritance: inheritances.add(element)
 				FAMIXStructure: {
 					if(element.container !== null){
 						structures.add(element)
@@ -208,6 +213,8 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		famixDocument.elements.addAll(rootPackages)
 		famixDocument.elements.addAll(subPackages)
 		famixDocument.elements.addAll(structures)
+		famixDocument.elements.addAll(references)
+		famixDocument.elements.addAll(inheritances)
 				
 		famixDocument.elements.addAll(methods)
 		famixDocument.elements.addAll(reports)
@@ -232,6 +239,8 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		rootPackages.clear
 		subPackages.clear
 		allStructures.clear
+		references.clear
+		inheritances.clear
 		methods.clear
 		reports.clear
 		dataElements.clear
