@@ -31,7 +31,8 @@ FAMIXStructure:
 
 //ABAP
 FAMIXDictionaryData:
-	FAMIXReport | FAMIXDataElement | FAMIXTable | FAMIXABAPStruc | FAMIXStrucElement | FAMIXDomain | FAMIXTableType
+	FAMIXReport | FAMIXDataElement | FAMIXTable | FAMIXABAPStruc | FAMIXStrucElement | FAMIXDomain | FAMIXTableType |
+	FAMIXTableElement
 ;
 
 /** Explenation of different identifiers
@@ -407,7 +408,7 @@ FAMIXDataElement:
     ('(' 'fqn' fqn = MSESTRING ')')?
     '(' 'container' container=IntegerReference ')'
     ('(' 'dataType' datatype=MSESTRING ')')?
-    ('(' 'domain' domain=MSESTRING ')')?  //('(' 'domain' domain=IntegerReference ')')?
+    ('(' 'domain' domain=MSESTRING ')')? 
     ('(' 'iteration' iteration=INT ')')? 
     ')';  
 
@@ -468,7 +469,7 @@ FAMIXStrucElement:
     '(' 'container' container=IntegerReference ')'
     ('(' 'dataType' datatype=MSESTRING ')')?
     ('(' 'declaredType' declaredType=IntegerReference ')')?
-    ('(' 'dataElement' dataElement=IntegerReference ')')?
+    ('(' 'dataElement' dataElement=MSESTRING ')')?
     ('(' 'iteration' iteration=INT ')')? 
     ')'; 
     
@@ -520,13 +521,23 @@ FAMIXFormroutine:
 FAMIXTypeOf:
 	'(FAMIX.TypeOf'
 	'(' 'id:' name=INT_ID ')'
-	('(' 'hash' id = STRING ')')?
 	('(' 'fqn' fqn = MSESTRING ')')?
 	('(' 'element' element=IntegerReference ')')
 	('(' 'typeOf' typeOf=IntegerReference ')')
 	')';
 
-
+FAMIXTableElement:
+    '(FAMIX.TableElement'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'dataElement' dataElement=MSESTRING ')')?
+    ('(' 'structure' structure=MSESTRING ')')?
+    ('(' 'iteration' iteration=INT ')')?
+    ')';
+    
 // End of ABAP extensions     
     
     

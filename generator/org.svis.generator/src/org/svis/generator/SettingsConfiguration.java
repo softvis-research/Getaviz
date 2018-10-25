@@ -157,11 +157,7 @@ public class SettingsConfiguration {
 	
 	public boolean isShowOwnTablesDistrict() {
 		return config.getBoolean("city.abap.tablesOwnDistrict", false);
-	}
-	
-	public boolean isShowTablesDUnderMainD() {
-		return config.getBoolean("city.abap.tablesDUnderMainD", false);
-	}
+	}							  
 	
 	public FamixParser getParser() {
 		switch (getParserAsString()) {
@@ -190,6 +186,14 @@ public class SettingsConfiguration {
 	
 	public double getStrucElemHeight() {
 		return config.getDouble("city.abap.strucElemHeight", 1);
+	}
+	
+	public boolean isNotInOriginTransparent() {
+		return config.getBoolean("city.abap.notInOrigin_transparent", true);
+	}
+	
+	public double getNotInOriginTransparentValue() {
+		return config.getDouble("city.abap.notInOrigin_transparent_value ", 0.4);
 	}
 
 	public boolean isMasterRoot() {
@@ -589,8 +593,12 @@ public class SettingsConfiguration {
 			return getColor(config.getString("city.abap.structure_elem.color", "#c5cae9"));
 			
 		}else if(type.equals("FAMIX.TableType")) {
-			if(config.getString("city.abap.tstructure_elem.color").equals("")) return null;
+			if(config.getString("city.abap.tableType_elem.color").equals("")) return null;
 			return getColor(config.getString("city.abap.tstructure_elem.color", "#c5cae9"));
+		
+		}else if(type.equals("FAMIX.Table")) {
+			if(config.getString("city.abap.table_elem.color").equals("")) return null;
+			return getColor(config.getString("city.abap.table_elem.color", "#c5cae9"));
 			
 		}else {
 			return null;

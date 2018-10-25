@@ -105,7 +105,7 @@ class City2X3D {
 					<Shape>
 						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
 						<Appearance>
-							<Material diffuseColor='«entity.color»'></Material>
+							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
 						</Appearance>
 					</Shape>
 				«ENDIF»
@@ -127,7 +127,7 @@ class City2X3D {
 				«IF(config.abapShowTextures && entity.textureURL !== null && entity.textureURL != "")»
 					<ImageTexture url='«entity.textureURL»'></ImageTexture>
 				«ELSE»
-					<Material diffuseColor='«entity.color»'></Material>
+					<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
 				«ENDIF»
 			</Appearance>
 		</Shape>
@@ -143,7 +143,7 @@ class City2X3D {
 						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
 					«ENDIF»
 					<Appearance>
-						<Material diffuseColor='«entity.color»'></Material>
+						<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
 					</Appearance>
 				</Shape>
 			</Transform>
@@ -155,13 +155,13 @@ class City2X3D {
 		«IF entity.type == "FAMIX.Interface"»
 			<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
 		«ELSEIF entity.type == "FAMIX.DataElement"»
-			<Cone bottomRadius='«entity.width»'></Cone>
+			<Cone bottomRadius='«entity.width»' height='«entity.height»' ></Cone>
 		«ELSEIF entity.type == "FAMIX.ABAPStruc"»
-		
+			
 		«ELSEIF entity.type == "FAMIX.TableType"»
 			<Cylinder radius='«entity.width/2»' height='«entity.height»'></Cylinder>
 		«ELSEIF entity.type == "FAMIX.Table"»
-			<Cylinder radius='«entity.width/2»' height='«entity.height + 2»'></Cylinder>
+			<Cylinder radius='«entity.width/2»' height='«entity.height»'></Cylinder>
 		«ELSE»
 			<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>				
 		«ENDIF»
@@ -228,9 +228,11 @@ class City2X3D {
 	// Own logic for ABAP floors (Methods, forms)
 	def toAbapFloor(BuildingSegment floor) '''
 		«IF floor.parentType == "FAMIX.ABAPStruc"»
-			<Cone bottomRadius='«floor.width + 0.25»' height='«floor.height»'></Cone>
+			<Cone bottomRadius='«floor.width»' height='«floor.height»'></Cone>
 		«ELSEIF floor.parentType == "FAMIX.TableType"»
-			<Cone bottomRadius='«floor.width + 0.25»' height='«floor.height»'></Cone>
+			<Cone bottomRadius='«floor.width»' height='«floor.height»'></Cone>
+		«ELSEIF floor.parentType == "FAMIX.Table"»
+			<Cylinder height='«floor.height»' radius='«floor.width»'></Cylinder>
 		«ELSE»
 			<Box size='«floor.width +" "+ floor.height +" "+ floor.length»'></Box>
 		«ENDIF»

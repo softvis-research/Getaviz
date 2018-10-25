@@ -76,6 +76,7 @@ Building:
 		('(' 'parent' parent=[Entity] ')')?
 		('(' 'sideCapacity' sideCapacity=INT ')')?
 		('(' 'numberOfStatements' numberOfStatements=INT ')')?
+		('(' 'notInOrigin' notInOrigin=BOOLEAN ')')? //ABAP
 		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? //ABAP
 		('(' 'dataCounter' dataCounter=DECIMAL ')')?
 	')';

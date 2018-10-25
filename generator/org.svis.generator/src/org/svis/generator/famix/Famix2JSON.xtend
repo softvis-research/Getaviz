@@ -32,6 +32,9 @@ import org.svis.xtext.famix.FAMIXRole
 import org.svis.xtext.famix.FAMIXStructure
 import org.svis.xtext.famix.FAMIXComponent
 import org.svis.generator.FamixUtils
+import org.svis.generator.SettingsConfiguration
+import org.svis.generator.SettingsConfiguration.FamixParser
+import org.svis.xtext.famix.FAMIXReference
 
 //ABAP
 import org.svis.xtext.famix.FAMIXReport
@@ -46,27 +49,36 @@ import org.svis.xtext.famix.FAMIXFormroutine
 import org.svis.xtext.famix.FAMIXMessageClass
 import org.svis.xtext.famix.FAMIXTableType
 import org.svis.xtext.famix.FAMIXTypeOf
+import org.svis.xtext.famix.FAMIXTableElement
 
 
 class Famix2JSON implements IGenerator2 {
 
 	@Inject extension FamixUtils util
-
+	
+	val config = SettingsConfiguration.instance;
 	val log = LogFactory::getLog(class)
 	val List<FAMIXAccess> accesses = newArrayList
 	val List<FAMIXInvocation> invocations = newArrayList
 	val List<FAMIXInheritance> inheritances = newArrayList
+	val List<FAMIXTypeOf> typeOfs = newArrayList
+	val List<FAMIXReference> references = newArrayList
 	
 	override doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext ig) {
 		val elements = EcoreUtil2::getAllContentsOfType(resource.contents.head, FAMIXElement)
 		accesses.addAll(elements.filter(FAMIXAccess))
 		invocations.addAll(elements.filter(FAMIXInvocation))
 		inheritances.addAll(elements.filter(FAMIXInheritance))
+		references.addAll(elements.filter(FAMIXReference))
+		typeOfs.addAll(elements.filter(FAMIXTypeOf))
+		
 		elements.removeAll(elements.filter(FAMIXFileAnchor))
 		
 		elements.removeAll(accesses)
 		elements.removeAll(invocations)
 		elements.removeAll(inheritances)
+		elements.removeAll(typeOfs)
+		elements.removeAll(references)
 		
 		fsa.generateFile("metaData.json", elements.toJSON)
 	}
@@ -100,6 +112,7 @@ class Famix2JSON implements IGenerator2 {
 		«ELSE»
 		"belongsTo":     "root"
 		«ENDIF»
+		"iteration":     "«p.iteration»"
 	'''
 	
 	def dispatch private toMetaData(FAMIXAntipattern antipattern) '''
@@ -138,6 +151,7 @@ class Famix2JSON implements IGenerator2 {
 		«ELSE»
 		"component":	 ""
 		«ENDIF»
+		"iteration":     "«c.iteration»"
 	'''
 	
 	 
@@ -163,7 +177,9 @@ class Famix2JSON implements IGenerator2 {
 		"declaredType":  "«a.declaredType.ref.type»",
 		«ENDIF»		
 		"accessedBy":	 "«a.accessedBy»",
+		"typeOf":		 "«a.typeOf»",
 		"belongsTo":     "«a.parentType.ref.id»"
+		"iteration":     "«a.iteration»"
 	'''
 	
 	def dispatch private toMetaData(FAMIXMethod m)'''
@@ -181,6 +197,7 @@ class Famix2JSON implements IGenerator2 {
 		"calledBy":		 "«m.calledBy»",
 		"accesses":	 	 "«m.accesses»",
 		"belongsTo":     "«m.parentType.ref.id»"
+		"iteration":     "«m.iteration»"
 	'''
 	
 	def dispatch private toMetaData(FAMIXEnum e)'''
@@ -215,8 +232,7 @@ class Famix2JSON implements IGenerator2 {
 	def dispatch private toMetaData(FAMIXFileAnchor el) '''
 		
 	'''
-
-
+	
 	//ABAP	
 	def dispatch private toMetaData(FAMIXReport r)'''
 		"id":            "«r.id»",
@@ -224,6 +240,7 @@ class Famix2JSON implements IGenerator2 {
 		"name":          "«r.value»",
 		"type":          "FAMIX.Report",
 		"belongsTo":     "«r.container.ref.id»",
+		"calledBy":		 "«r.calledBy»",
 		"iteration": 	 "«r.iteration»"
 	'''
 	
@@ -234,6 +251,10 @@ class Famix2JSON implements IGenerator2 {
 		"name":          "«de.value»",
 		"type":          "FAMIX.DataElement",
 		"belongsTo":     "«de.container.ref.id»",
+		«IF de.domain !== null»
+		"domain":		 "«de.domain»",
+		«ENDIF»
+		"typeOf":		 "«de.typeOf»",
 		"iteration": 	 "«de.iteration»"
 	'''
 	
@@ -244,6 +265,7 @@ class Famix2JSON implements IGenerator2 {
 		"name":          "«tt.value»",
 		"type":          "FAMIX.TableType",
 		"belongsTo":     "«tt.container.ref.id»",
+		"typeOf":		 "«tt.typeOf»",
 		"iteration": 	 "«tt.iteration»"
 	'''
 	
@@ -282,8 +304,9 @@ class Famix2JSON implements IGenerator2 {
 		"id":            "«se.id»",
 		"qualifiedName": "«se.fqn»",
 		"name":          "«se.value»",
-		"type":          "FAMIX.ABAPStrucElement",
+		"type":          "FAMIX.StrucElement",
 		"belongsTo":     "«se.container.ref.id»",
+		"typeOf":		 "«se.typeOf»",
 		"iteration": 	 "«se.iteration»"
 	'''
 	
@@ -306,6 +329,7 @@ class Famix2JSON implements IGenerator2 {
 		"type":          "FAMIX.FunctionModule",
 		"numberOfStatements": "«fm.numberOfStatements»",
 		"belongsTo":     "«fm.parentType.ref.id»",
+		"calledBy":		 "«fm.calledBy»",
 		"iteration": 	 "«fm.iteration»"
 	'''
 	
@@ -331,13 +355,27 @@ class Famix2JSON implements IGenerator2 {
 		"iteration": 	 "«mc.iteration»"
 	'''
 	
+	//ABAP
 	def dispatch private toMetaData(FAMIXTypeOf to)'''
 		"id":            "«to.id»",
 		"type":          "FAMIX.TypeOf",
-		"element":     	 "«to.element»",
-		"typeOf": 	     "«to.typeOf»"
+		"element":     	 "«to.element.ref.id»",
+		"typeOf": 	     "«to.typeOf.ref.id»"
 	'''
 
+	//ABAP
+	def dispatch private toMetaData(FAMIXTableElement te)'''
+		"id":            "«te.id»",
+		"qualifiedName": "«te.fqn»",
+		"name":          "«te.value»",
+		"type":          "FAMIX.TableElement",
+		"belongsTo":     "«te.container.ref.id»",
+		«IF te.dataElement !== null»
+			"dataElement":   "«te.dataElement»",
+		«ENDIF»
+		"typeOf":		 "«te.typeOf»",
+		"iteration": 	 "«te.iteration»"
+	'''
 
 	def private toString (List<IntegerReference> list) { 
     	val tmp = newArrayList 
@@ -375,7 +413,7 @@ class Famix2JSON implements IGenerator2 {
 		return tmp.removeBrackets
 	}
 	
-	def private getCalls(FAMIXMethod method) {
+	def private getCalls(FAMIXMethod method) {  
 		val tmp = newArrayList
 		invocations.filter[sender.ref === method].forEach[ tmp += candidates.ref.id ]
 		return tmp.removeBrackets
@@ -384,6 +422,24 @@ class Famix2JSON implements IGenerator2 {
 	def private getCalledBy(FAMIXMethod method) {
 		val tmp = newArrayList
 		invocations.filter[candidates.ref === method].forEach[ tmp += sender.ref.id ]
+		return tmp.removeBrackets
+	}
+	
+	def private getCalledBy(FAMIXElement element){
+		val tmp = newArrayList
+		references.filter[target.ref.id == element.id].forEach[ tmp += source.ref.id ]
+		return tmp.removeBrackets
+	}
+	
+	def private getTypeOf(FAMIXElement famixElement){
+		val tmp = newArrayList
+		val lookup = newHashSet
+		// Add types without duplicates
+		typeOfs.filter[element.ref.id == famixElement.id].forEach[ 
+			if(lookup += typeOf.ref.id){
+				tmp += typeOf.ref.id
+			}
+		]
 		return tmp.removeBrackets
 	}
 	

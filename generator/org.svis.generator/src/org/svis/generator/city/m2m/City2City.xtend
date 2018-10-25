@@ -123,12 +123,18 @@ class City2City extends WorkflowComponentWithModelSlot {
 			d.color = config.packageColorHex
 		} else {
 			if(config.parser == FamixParser::ABAP){
-				// Use color for district, if it's set
+				
+				// Set color, if defined
 				if(config.getAbapDistrictColor(d.type) !== null){
 					d.color = new RGBColor(config.getAbapDistrictColor(d.type)).asPercentage;
 					d.textureURL = config.getAbapDistrictTexture(d.type);
 				}else{
 					d.color = PCKG_colors.get(d.level - 1).asPercentage
+				}
+				
+				// Set transparency
+				if(config.isNotInOriginTransparent() && d.notInOrigin == "true"){
+					d.transparency = config.getNotInOriginTransparentValue()
 				}
 			}else{
 				d.color = PCKG_colors.get(d.level - 1).asPercentage
@@ -177,6 +183,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 	}
 
 	def void setBuildingAttributesFloors(Building b) {
+		
 		if (b.dataCounter < 2) { // pko 2016
 			b.width = 2 // TODO in settings datei aufnehmen
 			b.length = 2
@@ -188,35 +195,48 @@ class City2City extends WorkflowComponentWithModelSlot {
 		if (b.methodCounter == 0) {
 			b.height = config.heightMin
 		} else {
-			if(config.parser == FamixParser::ABAP){
-				switch(b.type){
-					//case "FAMIX.TableType": b.height = b.methodCounter * 2 + 2//+ b.methodCounter * 0.5
-					default: b.height = b.methodCounter
-				}
-			}else{
-				b.height = b.methodCounter
+			b.height = b.methodCounter			
+		}
+		
+		
+		//b.dataCounter = 0 // set counters to zero, to let them vanish in city2.xml (optional)
+		// we use dataCounter to show attributes under buildings. 
+		
+		
+		b.color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0 // pko 2016
+		if(config.outputFormat == OutputFormat::AFrame){
+			b.color = config.classColorHex
+		}
+		
+		
+		// ABAP Logic
+		if(config.parser == FamixParser::ABAP){
+			// Edit height
+			if(b.type == "FAMIX.ABAPStruc" || b.type == "FAMIX.TableType"){
+				b.height = b.methodCounter * config.strucElemHeight 
+				
+				if(config.strucElemHeight <= 1 || b.methodCounter == 0){
+					b.height = b.height + 1
+				}	
+			}else if(b.type == "FAMIX.DataElement"){
+				b.height = 1
+				b.width = 1.25
+			}
+			
+			
+			
+			// Use color for building, if it's set
+			if(config.getAbapBuildingColor(b.type) !== null){
+				b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
+			}
+			
+			// Edit transparency 	
+			if(config.isNotInOriginTransparent() && b.notInOrigin == "true"){
+				b.transparency = config.getNotInOriginTransparentValue()
 			}
 			
 		}
-
-		// set counters to zero, to let them vanish in city2.xml (optional)
-		b.dataCounter = 0 
 		
-		if (config.outputFormat == OutputFormat::AFrame) {
-			b.color = config.classColorHex
-		} else {
-			if(config.parser == FamixParser::ABAP){
-				
-				// Use color for building, if it's set
-				if(config.getAbapBuildingColor(b.type) !== null){
-					b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
-				}else{
-					b.color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0
-				}
-			}else{
-				b.color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0 // pko 2016
-			}
-		}
 	}
 
 	def private setBuildingAttributesPanels(Building b) {
@@ -449,57 +469,51 @@ class City2City extends WorkflowComponentWithModelSlot {
 
 		for (floor : floors) {
 			floorCounter++
-
+		
+		// Set standard values
 			floor.height = bHeight / ( floorNumber + 2 ) * 0.80
-			
+			floor.width = bWidth * 1.1
+			floor.length = bLength * 1.1
+			floor.color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0
+			floor.position = cityFactory.createPosition
+			floor.position.y = (bPosY - ( bHeight / 2) ) + bHeight / ( floorNumber + 2 ) * floorCounter
+								
+		//Edit values for ABAP	
 			if(config.parser == FamixParser::ABAP){
-				
-				// Adjust height for some elements
-				switch b.type{
-					case "FAMIX.ABAPStruc" : floor.height = config.strucElemHeight
-					case "FAMIX.TableType" : floor.height = config.strucElemHeight
-					default: floor.height = bHeight / ( floorNumber + 2 ) * 0.80
-					
-				}
-				
 				
 				// Type is used to define shape in x3d
 				floor.parentType = b.type
 				
+				var newBHeight = bHeight + config.strucElemHeight				 
+				var newYPos = (bPosY - ( newBHeight / 2) ) + newBHeight / ( floorNumber + 2 ) * floorCounter
+				
+				//Make changes for specific types 
+				if(b.type == "FAMIX.ABAPStruc"){
+					floor.height = config.strucElemHeight
+					floor.position.y = newYPos + 0.5
+					
+				}else if(b.type == "FAMIX.TableType"){
+					floor.height = config.strucElemHeight
+					floor.position.y = newYPos + 0.5
+					
+				}else if(b.type == "FAMIX.Table"){
+					floor.width = bWidth * 0.55
+				}
+						
+				
 				// Use color for building segments, if it's set
 				if(config.getAbapBuildingSegmentColor(b.type) !== null){
 					floor.color = new RGBColor(config.getAbapBuildingSegmentColor(b.type)).asPercentage;
-				}else{
-					floor.color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0
-				}
+				}			
 				
-				// Set position	
-				floor.width = bWidth * 1.1
-				floor.length = bLength * 1.1
 				
-				floor.position = cityFactory.createPosition
-				
-				var newYPos = (bPosY - ( bHeight / 2) ) + bHeight / ( floorNumber + 2 ) * floorCounter + floorCounter - 1
-				
-				switch b.type{
-					case "FAMIX.ABAPStruc" : floor.position.y = newYPos
-					case "FAMIX.TableType" : floor.position.y = newYPos
-					default: floor.position.y = (bPosY - ( bHeight / 2) ) + bHeight / ( floorNumber + 2 ) * floorCounter
-				}
+		// Edit values for other languages
 			}else{
 				if (config.outputFormat == OutputFormat::AFrame) {
 					floor.color = "#1485CC"
-				} else {
-					floor.color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0
 				}
 				
-							
-				floor.width = bWidth * 1.1
-				floor.length = bLength * 1.1
-				
-				floor.position = cityFactory.createPosition
 				floor.position.y = (bPosY - ( bHeight / 2) ) + bHeight / ( floorNumber + 2 ) * floorCounter
-				
 			}
 			
 			floor.position.x = bPosX
