@@ -112,6 +112,7 @@ class Famix2JSON implements IGenerator2 {
 		«ELSE»
 		"belongsTo":     "root"
 		«ENDIF»
+		"iteration":     "«p.iteration»"
 	'''
 	
 	def dispatch private toMetaData(FAMIXAntipattern antipattern) '''
@@ -150,6 +151,7 @@ class Famix2JSON implements IGenerator2 {
 		«ELSE»
 		"component":	 ""
 		«ENDIF»
+		"iteration":     "«c.iteration»"
 	'''
 	
 	 
@@ -177,6 +179,7 @@ class Famix2JSON implements IGenerator2 {
 		"accessedBy":	 "«a.accessedBy»",
 		"typeOf":		 "«a.typeOf»",
 		"belongsTo":     "«a.parentType.ref.id»"
+		"iteration":     "«a.iteration»"
 	'''
 	
 	def dispatch private toMetaData(FAMIXMethod m)'''
@@ -194,6 +197,7 @@ class Famix2JSON implements IGenerator2 {
 		"calledBy":		 "«m.calledBy»",
 		"accesses":	 	 "«m.accesses»",
 		"belongsTo":     "«m.parentType.ref.id»"
+		"iteration":     "«m.iteration»"
 	'''
 	
 	def dispatch private toMetaData(FAMIXEnum e)'''
@@ -409,7 +413,7 @@ class Famix2JSON implements IGenerator2 {
 		return tmp.removeBrackets
 	}
 	
-	def private getCalls(FAMIXMethod method) {
+	def private getCalls(FAMIXMethod method) {  
 		val tmp = newArrayList
 		invocations.filter[sender.ref === method].forEach[ tmp += candidates.ref.id ]
 		return tmp.removeBrackets

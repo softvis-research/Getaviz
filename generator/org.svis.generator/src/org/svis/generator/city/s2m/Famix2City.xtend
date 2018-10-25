@@ -200,6 +200,9 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 					dcDataDistrict.type = "dcDataDistrict"
 					dcDataDistrict.id = elem.id + "_00002"
 					dcDataDistrict.level = level + 1
+					if(elem.iteration >= 1){
+						dcDataDistrict.notInOrigin = "true"
+					}
 					
 					dcData.filter[container.ref == elem].forEach[dcDataDistrict.entities += toBuilding(level + 2)]
 					newDistrict.entities.add(dcDataDistrict)
@@ -212,6 +215,9 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 					reportDistrict.type = "reportDistrict"
 					reportDistrict.id = elem.id + "_00003"
 					reportDistrict.level = level + 1
+					if(elem.iteration >= 1){
+						reportDistrict.notInOrigin = "true"
+					}
 					
 					reports.filter[container.ref == elem].forEach[reportDistrict.entities += toBuilding(level + 2)]
 					newDistrict.entities.add(reportDistrict)
@@ -224,6 +230,9 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 					classDistrict.type = "classDistrict"
 					classDistrict.level = level + 1
 					classDistrict.id = elem.id + "_00004"
+					if(elem.iteration >= 1){
+						classDistrict.notInOrigin = "true"
+					}
 					
 					classes.filter[container.ref === elem].forEach[classDistrict.entities += toBuilding(level + 2)]
 					newDistrict.entities.add(classDistrict)
@@ -236,6 +245,9 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 					functionGroupDistrict.type = "functionGroupDistrict"
 					functionGroupDistrict.level = level + 1
 					functionGroupDistrict.id = elem.id + "_00005"
+					if(elem.iteration >= 1){
+						functionGroupDistrict.notInOrigin = "true"
+					}
 					
 					functionGroups.filter[container.ref === elem].forEach[functionGroupDistrict.entities += toBuilding(level + 2)]
 					newDistrict.entities.add(functionGroupDistrict)
@@ -249,6 +261,9 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 						tableDistrict.type = "tableDistrict"
 						tableDistrict.level = level + 1
 						tableDistrict.id = elem.id + "_00006"
+						if(elem.iteration >= 1){
+							tableDistrict.notInOrigin = "true"
+						}
 						
 						tables.filter[container.ref == elem].forEach[tableDistrict.entities += toBuilding(level + 2)]
 						newDistrict.entities.add(tableDistrict)
@@ -272,6 +287,9 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		newBuilding.id = elem.id
 		newBuilding.methodCounter = formroutines.filter[parentType.ref == elem].length
 		newBuilding.dataCounter = attributes.filter[parentType.ref === elem].length
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
 		
 		formroutines.filter[parentType.ref == elem].forEach[newBuilding.methods.add(toFloor)]
 		if(config.showReportAttributes){
@@ -292,6 +310,9 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		newBuilding.id = elem.id
 		newBuilding.methodCounter = functionModules.filter[parentType.ref == elem].length
 		newBuilding.dataCounter = attributes.filter[parentType.ref === elem].length
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
 		
 		functionModules.filter[parentType.ref == elem].forEach[newBuilding.methods.add(toFloor)]
 		if(config.showFugrAttributes){
@@ -311,6 +332,9 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		newBuilding.level = level
 		newBuilding.id = elem.id
 		//newBuilding.dataCounter = 1  //- width/length
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
 		
 		//ABAPStruc segments
 		if(newBuilding.type == "FAMIX.ABAPStruc"){
@@ -368,6 +392,9 @@ def private Building toBuilding(FAMIXClass elem, int level) {
 		newBuilding.value = elem.value
 		newBuilding.fqn = elem.fqn
 		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
 		
 		// Is interface?
 		if(elem.isInterface == "true") {
@@ -428,7 +455,6 @@ def private Building toBuilding(FAMIXClass elem, int level) {
 		newBuilding.value = elem.value
 		newBuilding.fqn = elem.fqn
 		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
-
 		
 		newBuilding.level = level
 		newBuilding.id = elem.id
@@ -485,9 +511,11 @@ def private Building toBuilding(FAMIXClass elem, int level) {
 		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
 		newBuilding.level = level
 		newBuilding.id = elem.id
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
 
 		return newBuilding
-
 	}
 	
 	/**

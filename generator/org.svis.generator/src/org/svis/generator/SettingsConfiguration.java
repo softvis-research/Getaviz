@@ -187,6 +187,14 @@ public class SettingsConfiguration {
 	public double getStrucElemHeight() {
 		return config.getDouble("city.abap.strucElemHeight", 1);
 	}
+	
+	public boolean isNotInOriginTransparent() {
+		return config.getBoolean("city.abap.notInOrigin_transparent", true);
+	}
+	
+	public double getNotInOriginTransparentValue() {
+		return config.getDouble("city.abap.notInOrigin_transparent_value ", 0.4);
+	}
 
 	public boolean isMasterRoot() {
 		return config.getBoolean("structure.master_root", false);

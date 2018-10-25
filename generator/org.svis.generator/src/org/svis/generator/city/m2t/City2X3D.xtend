@@ -105,7 +105,7 @@ class City2X3D {
 					<Shape>
 						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
 						<Appearance>
-							<Material diffuseColor='«entity.color»'></Material>
+							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
 						</Appearance>
 					</Shape>
 				«ENDIF»
@@ -155,7 +155,7 @@ class City2X3D {
 		«IF entity.type == "FAMIX.Interface"»
 			<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
 		«ELSEIF entity.type == "FAMIX.DataElement"»
-			<Cone bottomRadius='«entity.width»'></Cone>
+			<Cone bottomRadius='«entity.width»' height='«entity.height»' ></Cone>
 		«ELSEIF entity.type == "FAMIX.ABAPStruc"»
 			
 		«ELSEIF entity.type == "FAMIX.TableType"»

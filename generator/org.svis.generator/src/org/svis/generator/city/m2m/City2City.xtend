@@ -123,12 +123,18 @@ class City2City extends WorkflowComponentWithModelSlot {
 			d.color = config.packageColorHex
 		} else {
 			if(config.parser == FamixParser::ABAP){
-				// Use color for district, if it's set
+				
+				// Set color, if defined
 				if(config.getAbapDistrictColor(d.type) !== null){
 					d.color = new RGBColor(config.getAbapDistrictColor(d.type)).asPercentage;
 					d.textureURL = config.getAbapDistrictTexture(d.type);
 				}else{
 					d.color = PCKG_colors.get(d.level - 1).asPercentage
+				}
+				
+				// Set transparency
+				if(config.isNotInOriginTransparent() && d.notInOrigin == "true"){
+					d.transparency = config.getNotInOriginTransparentValue()
 				}
 			}else{
 				d.color = PCKG_colors.get(d.level - 1).asPercentage
@@ -212,7 +218,12 @@ class City2City extends WorkflowComponentWithModelSlot {
 				if(config.strucElemHeight <= 1 || b.methodCounter == 0){
 					b.height = b.height + 1
 				}	
+			}else if(b.type == "FAMIX.DataElement"){
+				b.height = 1
+				b.width = 1.25
 			}
+			
+			
 			
 			// Use color for building, if it's set
 			if(config.getAbapBuildingColor(b.type) !== null){
@@ -220,9 +231,10 @@ class City2City extends WorkflowComponentWithModelSlot {
 			}
 			
 			// Edit transparency 	
-			/*if(b.eContainer.eContainer.notInOrigin == "true"){
-				b.color = "#000000"
-			}*/			
+			if(config.isNotInOriginTransparent() && b.notInOrigin == "true"){
+				b.transparency = config.getNotInOriginTransparentValue()
+			}
+			
 		}
 		
 	}
