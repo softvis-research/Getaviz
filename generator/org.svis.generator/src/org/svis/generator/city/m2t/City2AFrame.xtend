@@ -62,7 +62,8 @@ class City2AFrame {
 	'''
 
 	def String toDistrict(Entity district) '''
-		<a-box position="«district.position.x + " " + district.position.y + " " + district.position.z»"
+		<a-box id="«district.id»" 
+			position="«district.position.x + " " + district.position.y + " " + district.position.z»"
 			width="«district.width»"
 			height="«district.height»"
 			depth="«district.length»"
@@ -73,7 +74,8 @@ class City2AFrame {
 	'''
 
 	def String toBuilding(Entity building) '''
-		<a-box position="«building.position.x + " " + building.position.y + " " + building.position.z»"
+		<a-box id="«building.id»"
+				position="«building.position.x + " " + building.position.y + " " + building.position.z»"
 				width="«building.width»"
 				height="«building.height»"
 				depth="«building.length»"
@@ -87,7 +89,8 @@ class City2AFrame {
 			«IF config.buildingType == BuildingType.CITY_PANELS
 					&& bs.type == "FAMIX.Attribute"
 					&& config.showAttributesAsCylinders»
-				<a-cylinder position="«bs.position.x + " " + bs.position.y + " " + bs.position.z»"
+				<a-cylinder id="«bs.id»" 
+					 position="«bs.position.x + " " + bs.position.y + " " + bs.position.z»"
 					 radius="«bs.width/2»"
 					 height="«bs.height»" 
 					 color="«bs.color»"
@@ -97,7 +100,8 @@ class City2AFrame {
 					 segments-radial="20">
 				</a-cylinder>
 			«ELSE»
-				<a-box position="«bs.position.x + " " + bs.position.y + " " + bs.position.z»"
+				<a-box id="«bs.id»"
+						position="«bs.position.x + " " + bs.position.y + " " + bs.position.z»"
 						width="«bs.width»"
 						height="«bs.height»"
 						depth="«bs.length»"
@@ -133,7 +137,8 @@ class City2AFrame {
 	'''
 
 	def toFloor(BuildingSegment floor) '''
-			<a-box position="«floor.position.x + " " + floor.position.y + " " + floor.position.z»"
+			<a-box id="«floor.id»" 
+				position="«floor.position.x + " " + floor.position.y + " " + floor.position.z»"
 				width="«floor.width»"
 				height="«floor.height»"
 				depth="«floor.length»"
@@ -144,7 +149,8 @@ class City2AFrame {
 	'''
 
 	def toChimney(BuildingSegment chimney) '''
-			<a-box position="«chimney.position.x + " " + chimney.position.y + " " + chimney.position.z»"
+			<a-box id="«chimney.id»"
+				position="«chimney.position.x + " " + chimney.position.y + " " + chimney.position.z»"
 				width="«chimney.width»"
 				height="«chimney.height»"
 				depth="«chimney.length»"
