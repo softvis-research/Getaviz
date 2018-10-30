@@ -225,9 +225,6 @@ var actionController = (function () {
         });
 
         canvas.setAttribute("mouselistener", "");
-        canvas.querySelectorAll("a-box").forEach(function(box) {
-            box.setAttribute("mouselistener", "");
-        });
     }
 
 
