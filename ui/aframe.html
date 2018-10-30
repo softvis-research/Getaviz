@@ -5,7 +5,7 @@
 	TODO in application auslagern
 -->
 <script type="text/javascript">
-    var modelUrl = "data/aframe/modelSmall";
+    var modelUrl = "data/aframe/model1";
     var metaDataJsonUrl  = modelUrl + "/metaData.json";
 
     var canvasId = "aframe-canvas";
@@ -49,9 +49,9 @@
     <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.metro.css" type="text/css" />
 
     <script type="text/javascript" src="scripts/CanvasFilter/CanvasFilterController.js"></script>
-    <script type="text/javascript" src="scripts/CanvasMark/CanvasMarkController.js"></script>
+    <script type="text/javascript" src="scripts/CanvasMark/AframeCanvasMarkController.js"></script>
     <script type="text/javascript" src="scripts/CanvasFlyTo/CanvasFlyToController.js"></script>
-    <script type="text/javascript" src="scripts/CanvasHover/CanvasHoverController.js"></script>
+    <script type="text/javascript" src="scripts/CanvasHover/AframeCanvasHoverController.js"></script>
     <script type="text/javascript" src="scripts/CanvasSelect/CanvasSelectController.js"></script>
     <script type="text/javascript" src="scripts/CanvasResetView/CanvasResetViewController.js"></script>
     <script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>
@@ -87,7 +87,6 @@
     <script>
         $(function(){
             $("#canvas").load(modelUrl + "/model.html");
-
         });
     </script>
 </div>

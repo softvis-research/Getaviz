@@ -58,10 +58,10 @@ var canvasManipulator = (function() {
 		});
 
 		var parts = multiPart.getParts(entitiyIds);
-		if(parts === null){
-			events.log.error.publish({ text: "CanvasManipualtor - unhighlightEntities - parts for entityIds not found"});
-			return;
-		}
+		if(parts === null) {
+            events.log.error.publish({text: "CanvasManipualtor - unhighlightEntities - parts for entityIds not found"});
+            return;
+        }
 
 		parts.unhighlight();
 	}
@@ -231,7 +231,6 @@ var canvasManipulator = (function() {
 		var centerOfPart = getCenterOfEntity(entity);
 
 		viewpoint.setCenterOfRotation(centerOfPart);
-
 		if(setFocus){
 			var mat = viewarea.getViewMatrix().inverse();
 
@@ -255,7 +254,6 @@ var canvasManipulator = (function() {
 		var entityPart = getPart(entity);
 		var volumeOfPart = entityPart.getVolume();
 		var centerOfPart = volumeOfPart.center;
-
 		return centerOfPart;
 	}
 
@@ -266,7 +264,6 @@ var canvasManipulator = (function() {
 			var part = multiPart.getParts([entity.id]);			
 			entity.part = part;
 		}
-		
 		return entity.part;
 	}
 	
@@ -276,8 +273,7 @@ var canvasManipulator = (function() {
 		//->Heilung durch Dopplung	
 		if(parts.ids.length == 1){
 			parts.ids.push(parts.ids[0]);	
-		}	
-		
+		}
 		parts.setDiffuseColor(color);
 	}
 	
@@ -287,8 +283,7 @@ var canvasManipulator = (function() {
 		//->Heilung durch Dopplung
 		if(parts.ids.length == 1){
 			parts.ids.push(parts.ids[0]);	
-		}							
-				
+		}
 		parts.setTransparency(value);
     }
 
@@ -298,8 +293,7 @@ var canvasManipulator = (function() {
 		//->Heilung durch Dopplung
 		if(parts.ids.length == 1){
 			parts.ids.push(parts.ids[0]);	
-		}							
-				
+		}
 		parts.setVisibility(visibility);
 	}
 

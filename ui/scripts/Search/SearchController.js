@@ -68,8 +68,6 @@ var searchController = (function() {
 	}
     
     function initializeSearch() {
-
-		console.debug("SearchController.js: initializeSearch() - begin");
         
         suggestions = new Bloodhound({
             datumTokenizer: function(entity) {
@@ -117,9 +115,6 @@ var searchController = (function() {
 		$(jQsearchInputID).on("typeahead:closed", function(event, suggestion, dataset) {
 			rootDivElement.parentElement.style.overflow = "hidden";
         });
-
-
-        console.debug("SearchController.js: initializeSearch() - end");
     }
     
     function selectEntity(id) {     
