@@ -1,333 +1,211 @@
-var canvasManipulator = (function() {
-    
-	var colors = {
-		darkred: "darkred",
-		black: "black",
-		orange: "orange",
-		darkorange: "darkorange"
-	}
+var canvasManipulator = (function () {
 
-	var x3domRuntime;
-	var viewarea;
-	var viewpoint;
+    var colors = {
+        darkred: "darkred",
+        black: "black",
+        orange: "orange",
+        darkorange: "darkorange"
+    }
 
-	var initialCenterOfRotation;
+    var scene = {};
+    var threeJSScene = {};
 
+    var camera;
+    var initialCameraView;
 
-	function initialize(){
+    function initialize() {
 
-	}
+        scene = document.getElementById(canvasId);
+        threeJSScene = scene.object3D;
+        camera = document.getElementById("camera");
 
-	function reset(){
-	}
-	
+    }
 
+    function reset() {
 
-	//manipulate
-	function highlightEntities(entities, color){
+    }
 
-		var entitiyIds = new Array();
-		entities.forEach(function(entity){
-			entitiyIds.push(entity.id);
-		});
-
-		var parts = multiPart.getParts(entitiyIds);
-		if(parts === null){
-			events.log.error.publish({ text: "CanvasManipualtor - highlightEntities - parts for entityIds not found"});
-			return;
-		}
-
-		parts.unhighlight();
-		parts.highlight(color);
-	}
-
-
-	function unhighlightEntities(entities){
-
-		var entitiyIds = new Array();
-		entities.forEach(function(entity){
-			entitiyIds.push(entity.id);
-		});
-
-		var parts = multiPart.getParts(entitiyIds);
-		if(parts === null){
-			events.log.error.publish({ text: "CanvasManipualtor - unhighlightEntities - parts for entityIds not found"});
-			return;
-		}
-
-		parts.unhighlight();
-	}
-
-
-
-	function changeTransparencyOfEntities(entities, value){
-		var entitiyIds = [];
-		entities.forEach(function(entity){			
-			var part = multiPart.getParts([entity.id]);	
-			if(part == null){
-				return;
-			}		
-			entity.oldTransparency = part.getTransparency();
-
-			entitiyIds.push(entity.id);
-		});
-
-		var parts = multiPart.getParts(entitiyIds);
-		if(parts === null){
-			events.log.error.publish({ text: "CanvasManipualtor - changeTransparencyOfEntities - parts for entityIds not found"});
-			return;
-		}
-		setTransparency(parts, value);
-	}
-
-	function resetTransparencyOfEntities(entities){
-
-		var oldTransparencyMap = new Map();
-
-		entities.forEach(function(entity){
-			
-			if(!entity.oldTransparency){
-				return;
-			}
-			var oldTransparency = entity.oldTransparency;
-			
-			if(oldTransparencyMap.has(oldTransparency)){
-				oldTransparencyMap.get(oldTransparency).push(entity.id);
-			} else {
-				oldTransparencyMap.set(oldTransparency, [entity.id]);
-			}
-		});
-
-		oldTransparencyMap.forEach(function(entitiyIds, oldTransparency, map){
-			var parts = multiPart.getParts(entitiyIds);		
-			if(parts === null){
-				events.log.error.publish({ text: "CanvasManipualtor - resetTransparencyOfEntities - parts for entityIds not found"});
-				return;
-			}	
-			setTransparency(parts, oldTransparency);
-		});
-	}
-
-
-
-	function changeColorOfEntities(entities, color){
-		var entitiyIds = [];
-		entities.forEach(function(entity){
-			var part = multiPart.getParts([entity.id]);		
-			if(part == null){
-				return;
-			}	
-			if(!entity.oldColor){
-				entity.oldColor = part.getDiffuseColor().toString();
-			}
-			entitiyIds.push(entity.id);
+    //  working - save old transparency in case it is not 0?
+    function changeTransparencyOfEntities(entities, value) {
+        entities.forEach(function (entity) {
+            let component = document.getElementById(entity.id);
+            if (component == undefined) {
+                events.log.error.publish({text: "CanvasManipualtor - changeTransparencyOfEntities - components for entityIds not found"});
+                return;
+            }
+            setTransparency(component, value);
         });
+    }
 
-		var parts = multiPart.getParts(entitiyIds);
-		if(parts === null){
-			events.log.error.publish({ text: "CanvasManipualtor - changeColorOfEntities - parts for entityIds not found"});
-			return;
-		}
-		setColor(parts, color);
-	}
-
-
-	function resetColorOfEntities(entities){
-		//sort each entity by its old color for performance
-		var oldColorMap = new Map();
-		entities.forEach(function(entity){
-            if(entity.oldColor == null){
-				return;
-			}
-			var oldColor = entity.oldColor;
-			
-			if(oldColorMap.has(oldColor)){
-				oldColorMap.get(oldColor).push(entity.id);
-			} else {
-				oldColorMap.set(oldColor, [entity.id]);
-			}
-
-			entity.oldColor = null;
-		});
-
-		oldColorMap.forEach(function(entitiyIds, oldColor, map){
-			var parts = multiPart.getParts(entitiyIds);		
-			if(parts === undefined){
-				events.log.error.publish({ text: "CanvasManipualtor - resetColorOfEntities - parts for entityIds not found"});
-				return;
-			}
-			setColor(parts, oldColor);
-		});
-	}
-
-	function hideEntities(entities){
-		var entitiyIds = new Array();
-		entities.forEach(function(entity){
-			entitiyIds.push(entity.id);
-		});
-
-		var parts = multiPart.getParts(entitiyIds);
-		if(parts === undefined){
-			events.log.error.publish({ text: "CanvasManipualtor - hideEntities - parts for entityIds not found"});
-			return;
-		}
-		setVisibility(parts, false);
-	}
-
-
-	function showEntities(entities){
-		var entitiyIds = new Array();
-		entities.forEach(function(entity){
-			entitiyIds.push(entity.id);
-		});
-
-		var parts = multiPart.getParts(entitiyIds);
-		if(parts === undefined){
-			events.log.error.publish({ text: "CanvasManipualtor - showEntities - parts for entityIds not found"});
-			return;
-		}
-		setVisibility(parts, true);
-	}
-	
-	
-
-	function flyToEntity(entity){
-		var part = getPart(entity);
-		if (part == undefined) {
-			events.log.error.publish({ text: "CanvasManipualtor - resetColflyToEntityorOfEntities - parts for entityIds not found"});
-			return;
-		}
-		
-		part.fit();		
-	}
-	
-
-
-	function addElement(element){
-		var addedElements = document.getElementById("addedElements");
-		addedElements.appendChild(element);
-	}
-	
-	function removeElement(element){
-		var addedElements = document.getElementById("addedElements");
-		addedElements.removeChild(element);
-	}
-
-
-	
-	//From X3dom coding
-	//x3dom.DefaultNavigation.prototype.onDoubleClick = function (view, x, y)
-	
-	function setCenterOfRotation(entity, setFocus){
-		
-		var centerOfPart = getCenterOfEntity(entity);
-
-		viewpoint.setCenterOfRotation(centerOfPart);
-
-		if(setFocus){
-			var mat = viewarea.getViewMatrix().inverse();
-
-			var from = mat.e3();
-			var at = viewarea._pick;
-			var up = mat.e1();
-
-			var norm = mat.e0().cross(up).normalize();
-			// get distance between look-at point and viewing plane
-			var dist = norm.dot(viewarea._pick.subtract(from));
-			
-			from = at.addScaled(norm, -dist);
-			mat = x3dom.fields.SFMatrix4f.lookAt(from, at, up);
-
-			viewarea.animateTo(mat.inverse(), viewpoint);
-		}
-	}
-
-	
-	function getCenterOfEntity(entity){
-		var entityPart = getPart(entity);
-		var volumeOfPart = entityPart.getVolume();
-		var centerOfPart = volumeOfPart.center;
-
-		return centerOfPart;
-	}
-
-
-	//Helper
-	function getPart(entity){
-		if (entity.part == undefined){
-			var part = multiPart.getParts([entity.id]);			
-			entity.part = part;
-		}
-		
-		return entity.part;
-	}
-	
-	function setColor(parts, color){
-				
-		//Fehler in Methode setDiffuseColor bei nur einem übergebenem Part
-		//->Heilung durch Dopplung	
-		if(parts.ids.length == 1){
-			parts.ids.push(parts.ids[0]);	
-		}	
-		
-		parts.setDiffuseColor(color);
-	}
-	
-	function setTransparency(parts, value) {
-				
-		//Fehler in Methode setTransparency bei nur einem übergebenem Part
-		//->Heilung durch Dopplung
-		if(parts.ids.length == 1){
-			parts.ids.push(parts.ids[0]);	
-		}							
-				
-		parts.setTransparency(value);
+    //  working
+    function resetTransparencyOfEntities(entities) {
+        entities.forEach(function (entity) {
+            let component = document.getElementById(entity.id);
+            if (component == undefined) {
+                events.log.error.publish({text: "CanvasManipualtor - resetTransparencyOfEntities - components for entityIds not found"});
+                return;
+            }
+            setTransparency(component, 1);
+        });
     }
 
 
-	function setVisibility(parts, visibility) {
-		//Fehler in Methode setVisibility bei nur einem übergebenem Part
-		//->Heilung durch Dopplung
-		if(parts.ids.length == 1){
-			parts.ids.push(parts.ids[0]);	
-		}							
-				
-		parts.setVisibility(visibility);
-	}
+    //	working
+    function changeColorOfEntities(entities, color) {
+        entities.forEach(function (entity) {
+            //	in x3dom this function would get entities of the model to change the color of the related object
+            //	for reference in canvasHoverController.js: var entity = model.getEntityById(multipartEvent.partID);
+            //	this entity gets handed over to the ActionController.js as part of an ApplicationEvent
+            if (!(entity == undefined)) {
+                var component = document.getElementById(entity.id);
+            }
+            if (component == undefined) {
+                events.log.error.publish({text: "CanvasManipualtor - changeColorOfEntities - components for entityIds not found"});
+                return;
+            }
+            setColor(component, color);
+        });
+    }
 
-	function getElementIds(){
-		return multiPart.getIdList();
-	}
-	
-	
-	
-	return {
-		initialize						: initialize,
-		reset							: reset,
-        colors							: colors,
+    //	working
+    function resetColorOfEntities(entities) {
+        entities.forEach(function (entity) {
+            let component = document.getElementById(entity.id);
+            if (component == undefined) {
+                events.log.error.publish({text: "CanvasManipualtor - resetColorOfEntities - components for entityIds not found"});
+                return;
+            }
+            setColor(component, component.getAttribute("color"));
+        });
+    }
 
-		highlightEntities 				: highlightEntities,
-		unhighlightEntities				: unhighlightEntities,
+    //  working
+    function hideEntities(entities) {
+        entities.forEach(function (entity) {
+            let component = document.getElementById(entity.id);
+            if (component == undefined) {
+                events.log.error.publish({text: "CanvasManipualtor - hideEntities - components for entityIds not found"});
+                return;
+            }
+            setVisibility(component, false)
+        });
+    }
 
-		changeTransparencyOfEntities	: changeTransparencyOfEntities,
-		resetTransparencyOfEntities		: resetTransparencyOfEntities,	
+    //  working
+    function showEntities(entities) {
+        entities.forEach(function (entity) {
+            let component = document.getElementById(entity.id);
+            if (component == undefined) {
+                events.log.error.publish({text: "CanvasManipualtor - showEntities - components for entityIds not found"});
+                return;
+            }
+            setVisibility(component, true)
+        });
+    }
 
-		changeColorOfEntities 			: changeColorOfEntities,
-		resetColorOfEntities			: resetColorOfEntities,
-	
-		hideEntities					: hideEntities,
-		showEntities					: showEntities,
+    //  after clicking an entity fit the camera to show this entity (angle stays the same)
+    //  not working
+    function flyToEntity(entity) {
+        /*document.querySelector("#camera").object3D.position = {x: 1, y: 2, z: 3};
+        console.debug(document.querySelector("#camera").object3D.position);*/
+    }
 
-		flyToEntity						: flyToEntity,
+    function addElement(element) {
+        var addedElements = document.getElementById("addedElements");
+        addedElements.appendChild(element);
+    }
 
-		addElement						: addElement,
-		removeElement					: removeElement,
+    function removeElement(element) {
+        var addedElements = document.getElementById("addedElements");
+        addedElements.removeChild(element);
+    }
 
 
-		setCenterOfRotation				: setCenterOfRotation,
-		getCenterOfEntity				: getCenterOfEntity,
-		
-		getElementIds					: getElementIds,
-    };    		 
-	    
+    //  not working yet
+    //  gets called from Mark- and SelectController if specified in the config
+    function setCenterOfRotation(entity, setFocus) {
+        var centerOfPart = getCenterOfEntity(entity);
+
+        viewpoint.setCenterOfRotation(centerOfPart);
+
+        if (setFocus) {
+            var mat = viewarea.getViewMatrix().inverse();
+
+            var from = mat.e3();
+            var at = viewarea._pick;
+            var up = mat.e1();
+
+            var norm = mat.e0().cross(up).normalize();
+            // get distance between look-at point and viewing plane
+            var dist = norm.dot(viewarea._pick.subtract(from));
+
+            from = at.addScaled(norm, -dist);
+            mat = x3dom.fields.SFMatrix4f.lookAt(from, at, up);
+
+            viewarea.animateTo(mat.inverse(), viewpoint);
+        }
+    }
+
+
+    function getCenterOfEntity(entity) {
+        var entityPart = getPart(entity);
+        var volumeOfPart = entityPart.getVolume();
+        var centerOfPart = volumeOfPart.center;
+
+        return centerOfPart;
+    }
+
+
+    //Helper
+    function getPart(entity) {
+        if (entity.part == undefined) {
+            var part = multiPart.getParts([entity.id]);
+            entity.part = part;
+        }
+
+        return entity.part;
+    }
+
+    //	working
+    function setColor(object, color) {
+        object.setAttribute('material', {
+            color: color
+        });
+    }
+
+    function setTransparency(object, value) {
+        object.setAttribute('material', {
+            opacity: value
+        });
+    }
+
+
+    function setVisibility(object, visibility) {
+        object.setAttribute("visible", visibility);
+    }
+
+    return {
+        initialize: initialize,
+        reset: reset,
+        colors: colors,
+
+        changeTransparencyOfEntities: changeTransparencyOfEntities,
+        resetTransparencyOfEntities: resetTransparencyOfEntities,
+
+        changeColorOfEntities: changeColorOfEntities,
+        resetColorOfEntities: resetColorOfEntities,
+
+        hideEntities: hideEntities,
+        showEntities: showEntities,
+
+        flyToEntity: flyToEntity,
+
+        addElement: addElement,
+        removeElement: removeElement,
+
+
+        setCenterOfRotation: setCenterOfRotation,
+        getCenterOfEntity: getCenterOfEntity,
+    };
+
 })();

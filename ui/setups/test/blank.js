@@ -5,10 +5,15 @@ var setup = {
             logActionConsole	: false,
             logEventConsole		: false
         },
+        {	name: 	"canvasMarkController",
+            selectionMode: "DURATION",					//TODO Constants - UP - DOWN - DURATION
+            selectionDurationSeconds: 0.5,
+            selectionMoveAllowed: false,
+            showProgressBar: true,
+        },
         {
-            name: "searchController",
+            name: "searchController"
         }
-
     ],
 
 
@@ -24,7 +29,7 @@ var setup = {
                     size: "10%",
                     collapsible: false,
                     controllers: [
-                        { name: "searchController"},
+                        { name: "searchController"}
                     ]
                 },
                 second: {
@@ -34,7 +39,8 @@ var setup = {
                     canvas: {},
 
                     controllers: [
-                        { name: "defaultLogger" },
+                        { name: "canvasMarkController" },
+                        { name: "defaultLogger" }
                     ],
                 }
             }

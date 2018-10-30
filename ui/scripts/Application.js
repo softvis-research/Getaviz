@@ -33,7 +33,6 @@ function initializeApplication(metaDataJson){
 	//create entity model
 	model.initialize(metaDataJson);
 
-	console.debug("Initialize ActionController");
 	actionController.initialize();
 	canvasManipulator.initialize();
 
@@ -384,7 +383,6 @@ var application = (function() {
 		newActiveControllers.forEach(function(controllerObject){
 			if(controllerObject.activate){
 				var controllerDiv = activeControllers.get(controllerObject);
-				console.debug(controllerObject);
 
 				controllerObject.activate(controllerDiv);
 			}	
