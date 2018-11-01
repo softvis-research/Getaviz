@@ -86,7 +86,7 @@ var actionController = (function() {
 	function initialize(){
 		
 		//canvas actions
-		var canvas = document.getElementById("x3dom-x3dElement-canvas");
+		var canvas = document.getElementById(canvasId);
 	
 		//mousedown
 		canvas.onmousedown = function(eventObject){			

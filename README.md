@@ -1,6 +1,6 @@
 ﻿# Getaviz
 
-Getaviz is a toolset for designing, generating, and exploring software visualizations in 2D, 3D, and virtual reality (VR), supporting structural, behavioral and evolutional visualizations. An **online demo** of Getaviz you can find [here](https://home.uni-leipzig.de/svis/getaviz/Index.html).
+Getaviz is a toolset for designing, generating, and exploring software visualizations in 2D, 3D, and virtual reality (VR), supporting structural, behavioral and evolutional visualizations. An **online demo** of Getaviz you can find [here](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind).
 
 ## Features
 * Supported languages: Java, Ruby, and C#  
@@ -27,8 +27,8 @@ An academic publication about Getaviz you can find [here](https://www.researchga
 Getaviz is developed by the research group [Visual Software Analytics](https://home.uni-leipzig.de/svis/) at Leipzig University. It has been developed over several years and is the basic for many scientific publications. In 2018 we released Getaviz as open source to simplify collaboration and practical use of our research prototype. 
 
 Currently, four developers are contributung actively to Getaviz:
-* Dr. Richard Müller
-* Dr. Jan Schilbach
+* [Richard Müller](https://github.com/rmllr)
+* Jan Schilbach
 * Pascal Kovacs
 * David Baum
 
@@ -46,8 +46,14 @@ Many thanks to all the contributors who have improved Getaviz by implementing ne
 
 ## How do I get set up? ###
 
-The recommended way is **not** to clone this repository, but to follow the instructions under [Oomph Setup](../../wiki/Oomph%20Setup).
+The recommended way is **not** to clone this repository, but to follow the instructions under [Installation & Setup](../../wiki/Installation-&-Setup).
 Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.md with further instructions and documentation.
+
+## Docker ##
+
+Getaviz can also be run via Docker. We provide containers via Docker Hub.
+* Evaluation server: https://hub.docker.com/r/getaviz/evaluationserver/
+* User Interface: https://hub.docker.com/r/getaviz/ui/
 
 ## Wiki
 
