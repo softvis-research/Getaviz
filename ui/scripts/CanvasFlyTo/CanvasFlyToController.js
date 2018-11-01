@@ -1,7 +1,7 @@
 var canvasFlyToController = (function() {
     
 	//config parameters	
-	var controllerConfig = {
+	const controllerConfig = {
 		parentLevel: 0,
 		targetType: "any"
 	};
@@ -17,7 +17,6 @@ var canvasFlyToController = (function() {
 		events.componentSelected.on.subscribe(onComponentSelected);
 		events.antipattern.on.subscribe(onAntipatternSelected);
         events.versionSelected.on.subscribe(onVersionSelected);
-		//events.versionSelected.off.subscribe(offVersionSelected);
 	}
 
 	function deactivate(){
@@ -25,19 +24,18 @@ var canvasFlyToController = (function() {
 		events.componentSelected.on.unsubscribe(onComponentSelected);
 		events.antipattern.on.unsubscribe(onAntipatternSelected);
         events.versionSelected.on.unsubscribe(onVersionSelected);
-		//events.versionSelected.off.unsubscribe(offVersionSelected);
 	}
 	
 	function onVersionSelected(applicationEvent) {
-		var version = applicationEvent.entities[0];
-		var entities = model.getEntitiesByVersion(version);
-		var namespace = entities[0];
-		var found = false;
+		const version = applicationEvent.entities[0];
+		const entities = model.getEntitiesByVersion(version);
+		let namespace = entities[0];
+		let found = false;
 		
-		for(var i = 0; i < entities.length && found == false; ++i) {
-			if(entities[i].type == "Namespace") {
-				var count = (entities[i].qualifiedName.match(/\./g) || []).length;
-				if(count == 0) {
+		for(let i = 0; i < entities.length && found === false; ++i) {
+			if(entities[i].type === "Namespace") {
+				const count = (entities[i].qualifiedName.match(/\./g) || []).length;
+				if(count === 0) {
 					namespace = entities[i];
 					found = true;
 				}
@@ -47,78 +45,78 @@ var canvasFlyToController = (function() {
 	}
         
     function onAntipatternSelected(applicationEvent) {
-        var entity = applicationEvent.entities[0];
-        var classes = model.getEntitiesByAntipattern(entity.id);
-        var parents = new Map();
-        for(var i = 0; i < classes.length; i++) {
-            var cparents = model.getAllParentsOfEntity(classes[i]);
+        const entity = applicationEvent.entities[0];
+        const classes = model.getEntitiesByAntipattern(entity.id);
+        const parents = new Map();
+        for(let i = 0; i < classes.length; i++) {
+            const cParents = model.getAllParentsOfEntity(classes[i]);
             parents.set(classes[i].id, 1);
-            for(var j = 0; j < cparents.length; j++) {
-                if(parents.has(cparents[j].id)){
-                    var value = parents.get(cparents[j].id);
-                    parents.set(cparents[j].id, value +1);
+            for(let j = 0; j < cParents.length; j++) {
+                if(parents.has(cParents[j].id)){
+                    const value = parents.get(cParents[j].id);
+                    parents.set(cParents[j].id, value +1);
                 } else {
-                    parents.set(cparents[j].id, 1);
+                    parents.set(cParents[j].id, 1);
                 }
             }
         }
-        var result = "";
+        let result = "";
 
-        var max = 0;
+        let max = 0;
         parents.forEach(function (key, value) {
             if(key > max) {
                 result = value;
                 max = key;
             }
         });
-        var final = model.getEntityById(result);
+        const final = model.getEntityById(result);
         canvasManipulator.flyToEntity(final);
     }
 	
 	function onComponentSelected(applicationEvent) {
-		var entity = applicationEvent.entities[0];
-		var classes = model.getEntitiesByComponent(entity.id);
+		const entity = applicationEvent.entities[0];
+		const classes = model.getEntitiesByComponent(entity.id);
 
-		var parents = new Map();
-		for(var i = 0; i < classes.length; i++) {
-			var cparents = model.getAllParentsOfEntity(classes[i]);
+		const parents = new Map();
+		for(let i = 0; i < classes.length; i++) {
+			const cParents = model.getAllParentsOfEntity(classes[i]);
 			parents.set(classes[i].id, 1);
-			for(var j = 0; j < cparents.length; j++) {
-				if(parents.has(cparents[j].id)){
-					var value = parents.get(cparents[j].id);
-					parents.set(cparents[j].id, value +1);
+			for(let j = 0; j < cParents.length; j++) {
+				if(parents.has(cParents[j].id)){
+					const value = parents.get(cParents[j].id);
+					parents.set(cParents[j].id, value +1);
 				} else {
-					parents.set(cparents[j].id, 1);
+					parents.set(cParents[j].id, 1);
 				}
 			}
 		}
-		var result = "";
+		let result = "";
 
-		var max = 0;
+		let max = 0;
 		parents.forEach(function (key, value) {
 			if(key > max) {
 				result = value;
 				max = key;
 			}
 		});
-		var final = model.getEntityById(result);
+		const final = model.getEntityById(result);
 		canvasManipulator.flyToEntity(final);
     }
 	
 	function onEntitySelected(applicationEvent) {		
-		var entity = applicationEvent.entities[0];
-		var parent;				
-		var parentLevel = 0;
+		let entity = applicationEvent.entities[0];
+		let parent;
+		let parentLevel = 0;
 		while(parentLevel < controllerConfig.parentLevel){
 			parent = entity.belongsTo;
-			if(parent == undefined){
+			if(parent === undefined){
 				break;
 			}
 			entity = parent;
 			parentLevel = parentLevel + 1;
 		}
 		
-		if(controllerConfig.targetType == "any") {
+		if(controllerConfig.targetType === "any") {
 			canvasManipulator.flyToEntity(entity);
         } else {
 			flyToParentEntity(entity);
@@ -126,7 +124,7 @@ var canvasFlyToController = (function() {
 	}
 	
 	function flyToParentEntity(entity) {
-		if(entity.type == controllerConfig.targetType) {
+		if(entity.type === controllerConfig.targetType) {
 			canvasManipulator.flyToEntity(entity);
         } else {
             flyToParentEntity(entity.belongsTo);

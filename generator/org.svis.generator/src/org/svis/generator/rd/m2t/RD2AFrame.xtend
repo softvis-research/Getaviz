@@ -53,8 +53,8 @@ class RD2AFrame {
 			}
 			default: {}
 		}
-		val body = toX3DOMRD(disks,withScale)
-			+ toDiskSegmentInvocation(diskSegmentInvocationsX3Dom(resource,diskSegments),diskSegments) 
+		val body = toX3DOMRD(disks,withScale) + ""
+			//+ toDiskSegmentInvocation(diskSegmentInvocationsX3Dom(resource,diskSegments),diskSegments) 
 		log.info("RD2AFrame has finished")
 		return body	
 	}
@@ -62,18 +62,18 @@ class RD2AFrame {
 	def private toX3DOMRD(List<Disk> disks,boolean withScale) '''
 		«FOR disk : disks»
 			«toX3DOMDisk(disk,withScale)»
-			«IF(disk.diskVersions.size != 0 && !(config.evolutionRepresentation == EvolutionRepresentation::DYNAMIC_EVOLUTION))»«toDiskVersions(disk.diskVersions,heightMultiplier,offset)»«ENDIF»
+			«IF(disk.diskVersions.size != 0 && !(config.evolutionRepresentation == EvolutionRepresentation::DYNAMIC_EVOLUTION))»«/*toDiskVersions(disk.diskVersions,heightMultiplier,offset)*/»«ENDIF»
 		«ENDFOR»
 	'''
 
 	def private toX3DOMDisk(Disk disk, boolean withScale) '''
 		«IF disk.radius - config.RDRingWidth == 0»
-			<a-circle position="«disk.position.x + " " + disk.position.y + " " + disk.position.z»"
+			<a-circle id="«disk.id»"
+			    position="«disk.position.x + " " + disk.position.y + " " + disk.position.z»"
 				radius="«disk.radius»" 
 				color="«disk.color »"
 				shader="flat"
 				buffer="true"
-				fog="false"
 				flat-shading="true"
 				depth-test="false"
 				depth-write="false"
@@ -82,13 +82,13 @@ class RD2AFrame {
 				«toX3DOMSegment(disk.methods)»
 			</a-circle>
 		«ELSE»
-			<a-ring position="«disk.position.x + " " + disk.position.y + " " + disk.position.z»"
+			<a-ring id="«disk.id»"
+			    position="«disk.position.x + " " + disk.position.y + " " + disk.position.z»"
 				radius-inner="«disk.radius - config.RDRingWidth»"
 				radius-outer="«disk.radius»" 
 				color="«disk.color »"
 				shader="flat"
 				buffer="true"
-				fog="false"
 				flat-shading="true"
 				depth-test="false"
 				depth-write="false"
@@ -129,12 +129,11 @@ class RD2AFrame {
 	def private toX3DOMSegment(EList<DiskSegment> segments) '''
 		«FOR segment : segments»
 			«IF segment.innerRadius == 0»
-			<a-circle
+			<a-circle id="«segment.id»" 
 				radius="«segment.outerRadius»" 
 				color="«segment.color »"
 				theta-start="«segment.anglePosition»"
 				theta-length="«segment.angle»"
-				fog="false"
 				shader="flat"
 				buffer="true"
 				flat-shading="true"
@@ -143,11 +142,10 @@ class RD2AFrame {
 				segments="«(segment.angle/20).intValue+1»">
 			</a-circle>
 			«ELSE»
-			<a-ring
+			<a-ring id="«segment.id»" 
 				radius-inner="«segment.innerRadius»"
 				radius-outer="«segment.outerRadius»" 
 				color="«segment.color »"
-				fog="false"
 				shader="flat"
 				buffer="true"
 				flat-shading="true"
@@ -203,7 +201,7 @@ class RD2AFrame {
 	}	
 
 	
-	def String toDiskSegmentInvocation(List<DiskSegmentInvocation> invocations,List<DiskSegment> diskSegments) '''
+	/*def String toDiskSegmentInvocation(List<DiskSegmentInvocation> invocations,List<DiskSegment> diskSegments) '''
 		«FOR invocation : invocations»
 			«val segment = diskSegments.findFirst[ds| ds.invocations.contains(invocation)] »
 				<Transform translation='«(segment.eContainer as Disk).position.x + " " + (segment.eContainer as Disk).position.y + " " +
@@ -221,9 +219,9 @@ class RD2AFrame {
 				</Transform>
 				</Transform>
 		«ENDFOR»
-	'''
+	'''*/
 		
-	def private toDiskVersions(EList<DiskVersion> diskVersions,int heightMultiplier,int offset) '''
+	/*def private toDiskVersions(EList<DiskVersion> diskVersions,int heightMultiplier,int offset) '''
 		«FOR diskVersion :	diskVersions.sortBy[v| v.level]»
 		«IF (diskVersion.scale > 0) »
 		<Transform translation='«(diskVersion.eContainer as Disk).position.x + " " + (diskVersion.eContainer as Disk).position.y + " " +
@@ -245,9 +243,9 @@ class RD2AFrame {
 		</Transform>
 		«ENDIF»
 		«ENDFOR»
-	'''
+	'''*/
 
-	def private toDiskSegmentVersion(Version version) '''
+	/*def private toDiskSegmentVersion(Version version) '''
 		«IF (version !== null && version.scale > 0) »
 			<Transform rotation='0 1 0 «(version.eContainer as DiskSegment).anglePosition»'> 
 				<Shape id='«(version.eContainer as DiskSegment).id»_MUUPSHAPE'>
@@ -265,5 +263,5 @@ class RD2AFrame {
 					</Shape>
 			</Transform>
 		«ENDIF»
-	'''
+	'''*/
 }

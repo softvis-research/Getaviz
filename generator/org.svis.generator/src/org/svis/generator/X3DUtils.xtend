@@ -6,6 +6,7 @@ import org.svis.generator.SettingsConfiguration.Variant
 import org.svis.generator.SettingsConfiguration.BuildingType
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import java.io.File
+import org.apache.commons.io.FileUtils
 
 class X3DUtils {
 	val config = SettingsConfiguration.instance
@@ -76,14 +77,33 @@ class X3DUtils {
 		  <head>
 		    <meta charset="utf-8">
 		    <title>Ring</title>
-		    <meta name="description" content="Ring - A-Frame">
-		    <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+		    <meta name="description" content="Getaviz">
 		  </head>
 		  <body>
-		    <a-scene altspace scale="0.001 0.001 0.001" light="defaultLightsEnabled: false" stats>
-		    <a-entity position="0 0 200">
-		      <a-camera></a-camera>
-		    </a-entity>
+		    <a-scene id="aframe-canvas"
+		    	light="defaultLightsEnabled: false"
+		    	cursor="rayOrigin: mouse"
+		    	embedded="true"
+		    >
+		    <a-entity
+		    	id="camera"
+		    	camera="fov: 80; zoom: 1;"
+		    	position="44.0 20.0 44.0"
+		    	rotation="0 -90 0"
+		    	orbit-camera="
+		        	target: 15.0 1.5 15.0;
+		            enableDamping: true;
+		            dampingFactor: 0.25;
+		            rotateSpeed: 0.25;
+		            panSpeed: 0.25;
+		            invertZoom: true;
+		            logPosition: false;
+		            minDistance:0;
+		            maxDistance:1000;
+		            "
+		    	mouse-cursor=""
+		    	>
+		    	</a-entity>
 	'''
 
 	def toAFrameTail() '''
@@ -145,7 +165,13 @@ class X3DUtils {
 	
 	def convertToMultipart(IFileSystemAccess2 fsa) {
 		val processBuilder = new ProcessBuilder("./aopt-idmap-sapd.bat")
+		val script = new File(fsa.getURI("aopt-idmap-sapd.bat").path)
+		script.executable = true
  		val directory = new File(fsa.getURI("aopt-idmap-sapd.bat").path.replace("%20", " ")).parentFile
+ 		val binGeo = new File(directory.path + "/binGeo")
+ 		if(binGeo.exists) {
+ 			FileUtils::cleanDirectory(binGeo)
+ 		}
  		processBuilder.directory (directory)
 		processBuilder.start
 	}

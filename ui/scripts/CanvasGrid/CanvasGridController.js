@@ -1,20 +1,20 @@
 var canvasGridController = function() {
 
-    var globalExtent = [0.0,0.0,0.0];
-    var globalCenter = [0.0,0.0,0.0];
+    const globalExtent = [0.0,0.0,0.0];
+    const globalCenter = [0.0,0.0,0.0];
 
-    var minValues = [0.0,0.0,0.0];
-    var maxValues = [0.0,0.0,0.0];
+    let minValues = [0.0,0.0,0.0];
+    let maxValues = [0.0,0.0,0.0];
 
-    var isGridDrawn = false; 
+    let isGridDrawn = false;
 
-    var lineDistance        = "20";
-    var lineThickness       = "0.3";
-    var thickLineInterval   = "5";
+    let lineDistance        = "20";
+    let lineThickness       = "0.3";
+    let thickLineInterval   = "5";
 
 
 
-    function initialize(config){				
+    function initialize(){
 		loadPositionData(multipartJsonUrl);				
 	}
 
@@ -42,7 +42,7 @@ var canvasGridController = function() {
             $("#gridSettingsWindow").jqxWindow("open");
         });
 
-        $("#applyGridSettings").click(function(event) {
+        $("#applyGridSettings").click(function() {
 
             // format and save inputs
             lineDistance = Math.abs(Math.round($("#lineDistance").jqxInput("val")));
@@ -115,25 +115,25 @@ var canvasGridController = function() {
         
         */
 
-        var gridSettingsWindowDiv = document.createElement("DIV");
+        let gridSettingsWindowDiv = document.createElement("DIV");
         rootDiv.appendChild(gridSettingsWindowDiv);
         gridSettingsWindowDiv.id = "gridSettingsWindow";
 
-            var gridSettingsTitleDiv = document.createElement("DIV");            
+            let gridSettingsTitleDiv = document.createElement("DIV");
             gridSettingsWindowDiv.appendChild(gridSettingsTitleDiv);
             gridSettingsTitleDiv.innerHTML = "Grid Settings";
 
-            var gridSettingsContentDiv = document.createElement("DIV");
+            let gridSettingsContentDiv = document.createElement("DIV");
             gridSettingsWindowDiv.appendChild(gridSettingsContentDiv);
 
-                var gridSettingsTable =  document.createElement("TABLE");
+                let gridSettingsTable =  document.createElement("TABLE");
                 gridSettingsContentDiv.appendChild(gridSettingsTable);
 
                     //Line Distance
-                    var gridSettingsTableRow = document.createElement("TR");
+                    let gridSettingsTableRow = document.createElement("TR");
                     gridSettingsTable.appendChild(gridSettingsTableRow);
                         
-                        var gridSettingsTableData = document.createElement("TD");
+                        let gridSettingsTableData = document.createElement("TD");
                         gridSettingsTableRow.appendChild(gridSettingsTableData);
 
                         gridSettingsTableData.style = "width: 135px;";
@@ -142,7 +142,7 @@ var canvasGridController = function() {
                         gridSettingsTableData = document.createElement("TD");
                         gridSettingsTableRow.appendChild(gridSettingsTableData);
 
-                            var gridSettingsTableDataInput = document.createElement("INPUT");
+                            let gridSettingsTableDataInput = document.createElement("INPUT");
                             gridSettingsTableData.appendChild(gridSettingsTableDataInput);
 
                             gridSettingsTableDataInput.id = "lineDistance";
@@ -206,13 +206,13 @@ var canvasGridController = function() {
 
                             
 
-                var gridSettingsApplyInput = document.createElement("INPUT");
+                let gridSettingsApplyInput = document.createElement("INPUT");
                 gridSettingsContentDiv.appendChild(gridSettingsApplyInput);
                 gridSettingsApplyInput.type = "button";
                 gridSettingsApplyInput.id = "applyGridSettings";
                 gridSettingsApplyInput.value = "Draw";                
 
-                var gridSettingsCancelInput = document.createElement("INPUT");
+                let gridSettingsCancelInput = document.createElement("INPUT");
                 gridSettingsContentDiv.appendChild(gridSettingsCancelInput);
                 gridSettingsCancelInput.type = "button";
                 gridSettingsCancelInput.id = "cancelGridSettings";
@@ -222,7 +222,7 @@ var canvasGridController = function() {
 
 
 
-    function loadPositionData(filePath){
+    function loadPositionData(){
         // calculate maximum extents of model   
        
         // read multipart file and calculate maximum extent
@@ -234,12 +234,12 @@ var canvasGridController = function() {
             });
 
             // calculate global center
-            for (i = 0; i < 3; i++) {
+            for (let i = 0; i < 3; i++) {
                 globalCenter[i] = Math.abs(minValues[i] - maxValues[i]) / 2 + minValues[i];
             }
 
-            // calculate extents from maxima
-            for(i = 0; i < 3; i++) {
+            // calculate extents from maximum
+            for(let i = 0; i < 3; i++) {
                 globalExtent[i] = Math.abs(minValues[i] - maxValues[i]);
             }
 
@@ -254,25 +254,25 @@ var canvasGridController = function() {
 
     function addLinesHelper(minValues, maxValues) {
         // calculate maxExtent of model and overall quantiy of lines
-        var maxExtent = calcMaxExtent();
+        let maxExtent = calcMaxExtent();
 
         // round maxExtent up to next multiple of lineDistance
-        var finalExtent = Math.ceil(maxExtent/lineDistance) * lineDistance + (2*lineDistance);
+        let finalExtent = Math.ceil(maxExtent/lineDistance) * lineDistance + (2*lineDistance);
 
         // calculate translation on z axis
-        var translZ = "0";
+        let translZ = "0";
         if(gridInFront)
             translZ = parseFloat(maxValues[2] + lineThickness / 2).toString();
         else
             translZ = parseFloat(minValues[2] - lineThickness / 2).toString();
 
         // get gridContainer, move it to the center of the model and empty it
-        container = document.getElementById("addedElements");
+        let container = document.getElementById("addedElements");
         container.setAttribute("translation", globalCenter[0] + ", " + globalCenter[1] + ", " + translZ);
         delLines();
 
         // add new lines
-        for (i = (-(finalExtent/lineDistance/2)); i <= (finalExtent/lineDistance/2); i++) {
+        for (let i = (-(finalExtent/lineDistance/2)); i <= (finalExtent/lineDistance/2); i++) {
             container.appendChild(createLine(true, lineDistance, finalExtent, i));
             container.appendChild(createLine(false, lineDistance, finalExtent, i));
         }
@@ -281,7 +281,7 @@ var canvasGridController = function() {
     // delete lines
     function delLines() {
         // get gridContainer
-        container = document.getElementById("addedElements");
+        const container = document.getElementById("addedElements");
 
         // delete all childs
         while (container.firstChild) {
@@ -292,23 +292,23 @@ var canvasGridController = function() {
     // create line
     function createLine(orientation, interval, maxExtent, lineNumber) {
         // define color and thickness of lines
-        var col = "0 0 0";
-        var thick = lineThickness;
-        var doubleThick = (3 * parseFloat(thick)).toString();
+        let col = "0 0 0";
+        let thick = lineThickness;
+        let doubleThick = (3 * parseFloat(thick)).toString();
 
         // create nodes
-        var transform = document.createElement('Transform');
-        var shape = document.createElement('Shape');
-        var appearance = document.createElement('Appearance');
-        var material = document.createElement('Material');
-        var box = document.createElement('Box');
+        let transform = document.createElement('Transform');
+        let shape = document.createElement('Shape');
+        let appearance = document.createElement('Appearance');
+        let material = document.createElement('Material');
+        let box = document.createElement('Box');
 
         // set color and render attribute
         transform.setAttribute("render", "true");
         material.setAttribute("diffuseColor", col);
 
         // shift fractional line numbers to integers -> modulo still works
-        if (lineNumber % 1 != 0) {
+        if (lineNumber % 1 !== 0) {
             lineNumber += 0.5;
         }
 
@@ -320,7 +320,7 @@ var canvasGridController = function() {
             transform.setAttribute("translation", "0 " + (i*interval).toString() + " 0");
 
             // every n-th line is thicker
-            if (lineNumber % thickLineInterval == 0)
+            if (lineNumber % thickLineInterval === 0)
                 box.setAttribute("size", (maxExtent).toString() + ", " + doubleThick + ", " + thick);
             else
                 box.setAttribute("size", (maxExtent).toString() + ", " + thick + ", " + thick);
@@ -332,7 +332,7 @@ var canvasGridController = function() {
             transform.setAttribute("translation", (i*interval).toString() + " 0 0");
 
             // every n-th line is thicker
-            if (lineNumber % thickLineInterval == 0)
+            if (lineNumber % thickLineInterval === 0)
                 box.setAttribute("size", doubleThick + ", " + (maxExtent).toString() + ", " + thick);
             else
                 box.setAttribute("size", thick + ", " + (maxExtent).toString() + ", " + thick);
@@ -349,7 +349,7 @@ var canvasGridController = function() {
 
     // select biggest value of all extents
     function calcMaxExtent() {
-        var maxExtent = 0.0;
+        let maxExtent = 0.0;
 
         for (i = 0; i < 3; i++) {
             if (globalExtent[i] > maxExtent)
@@ -369,13 +369,13 @@ var canvasGridController = function() {
 
         // branch for negative and positive values and save maxima
         if (par) {
-            for (i = 0; i < 3; i++) {
+            for (let i = 0; i < 3; i++) {
                 if (young[i] > old[i])
                     old[i] = young[i];
             }
         }
         else {
-            for (i = 0; i < 3; i++) {
+            for (let i = 0; i < 3; i++) {
                 if (young[i] < old[i])
                     old[i] = young[i];
             }

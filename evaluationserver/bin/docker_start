@@ -9,6 +9,13 @@ bundle install --jobs 4 --retry 3
 echo "Clearing logs"
 bin/rake log:clear
 
+production="production"
+
+if [ "$RAILS_ENV" == "$production" ]
+then
+bin/rails assets:precompile
+fi
+
 echo "Setting up new db if one doesn't exist"
 bundle exec rake db:migrate
 

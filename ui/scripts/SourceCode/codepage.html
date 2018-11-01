@@ -13,8 +13,7 @@
             
 
             function displayCode(file, classEntity, entity){
-                file = "../../" + file;
-                codeHelperFunction.displayCode(file, classEntity, entity, publishOnEntitySelected);                
+                codeHelperFunction.displayCode(file, classEntity, entity, publishOnEntitySelected);
             }
 
             
@@ -22,7 +21,7 @@
                 var applicationEvent = {			
                     sender: opener.codeController,
                     entities: [opener.model.getEntityById(entityId)]
-                }	
+                };
                 
                 opener.events.selected.on.publish(applicationEvent);	
             }

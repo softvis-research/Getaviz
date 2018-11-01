@@ -2,22 +2,20 @@ var sourceCodeController = (function(){
 
 
     // extra Fenster zur Darstellung des Quellcodes, bietet mehr Platz
-    var codeWindow = null;
+    let codeWindow = null;
     // Welche Klasse, Type(Klasse, Methode, Attribut), Attributename
-    var lastObject = {file: null, classEntity: null, entity: null};
+    let lastObject = {file: null, classEntity: null, entity: null};
     
 
 
     //config parameters	
-	var controllerConfig = {		
+	let controllerConfig = {
 		fileType : "java",
         url: "",
 	};
     
-	function initialize(setupConfig){	
-
-		application.transferConfigParams(setupConfig, controllerConfig);	
-				
+	function initialize(setupConfig){
+		application.transferConfigParams(setupConfig, controllerConfig);
 	}
 	
 	function activate(rootDiv){
@@ -27,31 +25,30 @@ var sourceCodeController = (function(){
 			$.getScript("scripts/SourceCode/CodeHelperFunctions.js", function(){	
 				
 				//load zTree css-files
-				cssLink = document.createElement("link");
+				let cssLink = document.createElement("link");
 				cssLink.type = "text/css";
 				cssLink.rel = "stylesheet";
 				cssLink.href = "libs/prism/prism.css";
 				document.getElementsByTagName("head")[0].appendChild(cssLink);
 				
 				
-				var cssLink = document.createElement("link");
+				cssLink = document.createElement("link");
 				cssLink.type = "text/css";
 				cssLink.rel = "stylesheet";
 				cssLink.href = "libs/prism/prismPluginCodeController.css";
 				document.getElementsByTagName("head")[0].appendChild(cssLink);
 				
-				
 				//create html elements
-				var codeViewDiv = document.createElement("DIV");
+				let codeViewDiv = document.createElement("DIV");
 				codeViewDiv.id = "codeViewDiv";
 
                 //button                                
-                var codeWindowButton = document.createElement("BUTTON");
+                let codeWindowButton = document.createElement("BUTTON");
                 codeWindowButton.type = "button";
                 codeWindowButton.style = "width: 98%;height: 25px;margin: 2px 0px -2px 2px;";
                 codeWindowButton.addEventListener("click", openWindow, false);
 
-                var fullScreenImage = document.createElement("IMG");
+                let fullScreenImage = document.createElement("IMG");
                 fullScreenImage.src = "scripts/SourceCode/images/fullscreen.png";
                 fullScreenImage.style = "width: 25px; height: 20px;";
                 
@@ -60,31 +57,24 @@ var sourceCodeController = (function(){
 
 
                 //codeField
-                var codeValueDiv = document.createElement("DIV");
+                let codeValueDiv = document.createElement("DIV");
                 codeValueDiv.id = "codeValueDiv";
                 
-                var codePre = document.createElement("PRE");
+                let codePre = document.createElement("PRE");
                 codePre.className = "line-numbers language-java";
                 codePre.id = "codePre";
                 codePre.style = "overflow:auto;";
 
-                var codeTag = document.createElement("CODE");
+                let codeTag = document.createElement("CODE");
                 codeTag.id = "codeTag";
-    
                 
                 codePre.appendChild(codeTag);
                 codeValueDiv.appendChild(codePre);
                 codeViewDiv.appendChild(codeValueDiv);
 
-
-
-
-
-				rootDiv.appendChild(codeViewDiv);			
-
+				rootDiv.appendChild(codeViewDiv);
             });
 		});
-
 
         events.selected.on.subscribe(onEntitySelected);
     }
@@ -102,7 +92,7 @@ var sourceCodeController = (function(){
 
     function resetSourceCode(){
         lastObject = {file: null, classEntity: null, entity: null};        
-        var codeTag = $("#codeTag")[0].textContent = "";
+        //var codeTag = $("#codeTag")[0].textContent = "";
 		
         if(codeWindow) {
             codeWindow.reset();
@@ -125,7 +115,7 @@ var sourceCodeController = (function(){
 
     function onEntitySelected(applicationEvent) {
 		
-        var entity = applicationEvent.entities[0];
+        const entity = applicationEvent.entities[0];
 
        	if (entity.type === "Namespace"){
 			// Package 
@@ -134,20 +124,20 @@ var sourceCodeController = (function(){
 		}
 		// classEntity = Klasse, in der sich das selektierte Element befindet
 		// inner Klassen werden auf Hauptklasse aufgeloest
-		var classEntity = entity;
+		let classEntity = entity;
 		while( classEntity.type !== "Class" ){
 			classEntity = classEntity.belongsTo;
 		}		
 		
 		// ersetze . durch / und fuege .java an -> file
-        var javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;
+        const javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;
 
         displayCode(javaCodeFile, classEntity, entity);          
     }
 
     function displayCode(file, classEntity, entity){
-        if (controllerConfig.url == "") {
-            file = modelUrl + "/src/" + file;
+        if (controllerConfig.url === "") {
+            file = "../../" + modelUrl + "/src/" + file;
         } else {
             file = controllerConfig.url + file;
         }
@@ -162,10 +152,10 @@ var sourceCodeController = (function(){
     }     
 
     function publishOnEntitySelected(entityId){
-        var applicationEvent = {			
+        const applicationEvent = {
             sender: sourceCodeController,
             entities: [model.getEntityById(entityId)]
-        }	
+        };
         
         events.selected.on.publish(applicationEvent);	
     } 

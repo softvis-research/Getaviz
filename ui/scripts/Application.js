@@ -220,6 +220,9 @@ var application = (function() {
 		//areas
 		if(configPart.area !== undefined){
 			var area = configPart.area;
+			if(area.orientation === undefined) {
+				area.orientation = "vertical"
+			}
 			
 			var splitterName = configName + "_" + area.name;
 			var splitterId = "#" + splitterName;

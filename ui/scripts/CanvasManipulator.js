@@ -1,17 +1,16 @@
 var canvasManipulator = (function() {
     
-	var colors = {
+	let colors = {
 		darkred: "darkred",
 		black: "black",
 		orange: "orange",
 		darkorange: "darkorange"
-	}
+	};
 
-	var x3domRuntime;
-	var viewarea;
-	var viewpoint;
-
-	var initialCenterOfRotation;
+	let x3domRuntime;
+	let viewarea;
+	let viewpoint;
+	let initialCenterOfRotation;
 
 
 	function initialize(){
@@ -25,7 +24,6 @@ var canvasManipulator = (function() {
 
 	function reset(){
 		document.getElementById("x3dElement").runtime.showAll("negZ");
-		
 		viewpoint.setCenterOfRotation(initialCenterOfRotation);
 	}
 	
@@ -34,12 +32,12 @@ var canvasManipulator = (function() {
 	//manipulate
 	function highlightEntities(entities, color){
 
-		var entitiyIds = new Array();
+		const entityIds = [];
 		entities.forEach(function(entity){
-			entitiyIds.push(entity.id);
+			entityIds.push(entity.id);
 		});
 
-		var parts = multiPart.getParts(entitiyIds);
+		const parts = multiPart.getParts(entityIds);
 		if(parts === null){
 			events.log.error.publish({ text: "CanvasManipualtor - highlightEntities - parts for entityIds not found"});
 			return;
@@ -52,16 +50,16 @@ var canvasManipulator = (function() {
 
 	function unhighlightEntities(entities){
 
-		var entitiyIds = new Array();
+		const entityIds = [];
 		entities.forEach(function(entity){
-			entitiyIds.push(entity.id);
+			entityIds.push(entity.id);
 		});
 
-		var parts = multiPart.getParts(entitiyIds);
-		if(parts === null) {
-            events.log.error.publish({text: "CanvasManipualtor - unhighlightEntities - parts for entityIds not found"});
-            return;
-        }
+		const parts = multiPart.getParts(entityIds);
+		if(parts === null){
+			events.log.error.publish({ text: "CanvasManipualtor - unhighlightEntities - parts for entityIds not found"});
+			return;
+		}
 
 		parts.unhighlight();
 	}
@@ -69,18 +67,18 @@ var canvasManipulator = (function() {
 
 
 	function changeTransparencyOfEntities(entities, value){
-		var entitiyIds = [];
+		let entityIds = [];
 		entities.forEach(function(entity){			
-			var part = multiPart.getParts([entity.id]);	
+			const part = multiPart.getParts([entity.id]);
 			if(part == null){
 				return;
 			}		
 			entity.oldTransparency = part.getTransparency();
 
-			entitiyIds.push(entity.id);
+			entityIds.push(entity.id);
 		});
 
-		var parts = multiPart.getParts(entitiyIds);
+		const parts = multiPart.getParts(entityIds);
 		if(parts === null){
 			events.log.error.publish({ text: "CanvasManipualtor - changeTransparencyOfEntities - parts for entityIds not found"});
 			return;
@@ -90,14 +88,14 @@ var canvasManipulator = (function() {
 
 	function resetTransparencyOfEntities(entities){
 
-		var oldTransparencyMap = new Map();
+		const oldTransparencyMap = new Map();
 
 		entities.forEach(function(entity){
 			
 			if(!entity.oldTransparency){
 				return;
 			}
-			var oldTransparency = entity.oldTransparency;
+			const oldTransparency = entity.oldTransparency;
 			
 			if(oldTransparencyMap.has(oldTransparency)){
 				oldTransparencyMap.get(oldTransparency).push(entity.id);
@@ -106,8 +104,8 @@ var canvasManipulator = (function() {
 			}
 		});
 
-		oldTransparencyMap.forEach(function(entitiyIds, oldTransparency, map){
-			var parts = multiPart.getParts(entitiyIds);		
+		oldTransparencyMap.forEach(function(entityIds, oldTransparency, map){
+			const parts = multiPart.getParts(entityIds);
 			if(parts === null){
 				events.log.error.publish({ text: "CanvasManipualtor - resetTransparencyOfEntities - parts for entityIds not found"});
 				return;
@@ -119,19 +117,19 @@ var canvasManipulator = (function() {
 
 
 	function changeColorOfEntities(entities, color){
-		var entitiyIds = [];
+		const entityIds = [];
 		entities.forEach(function(entity){
-			var part = multiPart.getParts([entity.id]);		
+			const part = multiPart.getParts([entity.id]);
 			if(part == null){
 				return;
 			}	
 			if(!entity.oldColor){
 				entity.oldColor = part.getDiffuseColor().toString();
 			}
-			entitiyIds.push(entity.id);
+			entityIds.push(entity.id);
         });
 
-		var parts = multiPart.getParts(entitiyIds);
+		const parts = multiPart.getParts(entityIds);
 		if(parts === null){
 			events.log.error.publish({ text: "CanvasManipualtor - changeColorOfEntities - parts for entityIds not found"});
 			return;
@@ -142,24 +140,24 @@ var canvasManipulator = (function() {
 
 	function resetColorOfEntities(entities){
 		//sort each entity by its old color for performance
-		var oldColorMap = new Map();
+		const oldColorMap = new Map();
 		entities.forEach(function(entity){
             if(entity.oldColor == null){
 				return;
 			}
-			var oldColor = entity.oldColor;
+			const oldColor = entity.oldColor;
 			
 			if(oldColorMap.has(oldColor)){
 				oldColorMap.get(oldColor).push(entity.id);
 			} else {
-				oldColorMap.set(oldColor, [entity.id]);
+			    oldColorMap.set(oldColor, [entity.id]);
 			}
 
 			entity.oldColor = null;
 		});
 
 		oldColorMap.forEach(function(entitiyIds, oldColor, map){
-			var parts = multiPart.getParts(entitiyIds);		
+			const parts = multiPart.getParts(entitiyIds);
 			if(parts === undefined){
 				events.log.error.publish({ text: "CanvasManipualtor - resetColorOfEntities - parts for entityIds not found"});
 				return;
@@ -169,12 +167,12 @@ var canvasManipulator = (function() {
 	}
 
 	function hideEntities(entities){
-		var entitiyIds = new Array();
+		const entityIds = new Array();
 		entities.forEach(function(entity){
-			entitiyIds.push(entity.id);
+			entityIds.push(entity.id);
 		});
 
-		var parts = multiPart.getParts(entitiyIds);
+		const parts = multiPart.getParts(entityIds);
 		if(parts === undefined){
 			events.log.error.publish({ text: "CanvasManipualtor - hideEntities - parts for entityIds not found"});
 			return;
@@ -184,12 +182,12 @@ var canvasManipulator = (function() {
 
 
 	function showEntities(entities){
-		var entitiyIds = new Array();
+		const entityIds = new Array();
 		entities.forEach(function(entity){
-			entitiyIds.push(entity.id);
+			entityIds.push(entity.id);
 		});
 
-		var parts = multiPart.getParts(entitiyIds);
+		const parts = multiPart.getParts(entityIds);
 		if(parts === undefined){
 			events.log.error.publish({ text: "CanvasManipualtor - showEntities - parts for entityIds not found"});
 			return;
@@ -200,8 +198,8 @@ var canvasManipulator = (function() {
 	
 
 	function flyToEntity(entity){
-		var part = getPart(entity);
-		if (part == undefined) {
+	    const part = getPart(entity);
+		if (part === undefined) {
 			events.log.error.publish({ text: "CanvasManipualtor - resetColflyToEntityorOfEntities - parts for entityIds not found"});
 			return;
 		}
@@ -212,12 +210,12 @@ var canvasManipulator = (function() {
 
 
 	function addElement(element){
-		var addedElements = document.getElementById("addedElements");
+		const addedElements = document.getElementById("addedElements");
 		addedElements.appendChild(element);
 	}
 	
 	function removeElement(element){
-		var addedElements = document.getElementById("addedElements");
+		const addedElements = document.getElementById("addedElements");
 		addedElements.removeChild(element);
 	}
 
@@ -228,19 +226,19 @@ var canvasManipulator = (function() {
 	
 	function setCenterOfRotation(entity, setFocus){
 		
-		var centerOfPart = getCenterOfEntity(entity);
+		const centerOfPart = getCenterOfEntity(entity);
 
 		viewpoint.setCenterOfRotation(centerOfPart);
 		if(setFocus){
-			var mat = viewarea.getViewMatrix().inverse();
+			let mat = viewarea.getViewMatrix().inverse();
 
-			var from = mat.e3();
-			var at = viewarea._pick;
-			var up = mat.e1();
+			let from = mat.e3();
+			const at = viewarea._pick;
+			const up = mat.e1();
 
-			var norm = mat.e0().cross(up).normalize();
+			const norm = mat.e0().cross(up).normalize();
 			// get distance between look-at point and viewing plane
-			var dist = norm.dot(viewarea._pick.subtract(from));
+			const dist = norm.dot(viewarea._pick.subtract(from));
 			
 			from = at.addScaled(norm, -dist);
 			mat = x3dom.fields.SFMatrix4f.lookAt(from, at, up);
@@ -251,17 +249,19 @@ var canvasManipulator = (function() {
 
 	
 	function getCenterOfEntity(entity){
-		var entityPart = getPart(entity);
-		var volumeOfPart = entityPart.getVolume();
-		var centerOfPart = volumeOfPart.center;
+
+		const entityPart = getPart(entity);
+		const volumeOfPart = entityPart.getVolume();
+		const centerOfPart = volumeOfPart.center;
+
 		return centerOfPart;
 	}
 
 
 	//Helper
 	function getPart(entity){
-		if (entity.part == undefined){
-			var part = multiPart.getParts([entity.id]);			
+		if (entity.part === undefined){
+			const part = multiPart.getParts([entity.id]);
 			entity.part = part;
 		}
 		return entity.part;
@@ -271,7 +271,7 @@ var canvasManipulator = (function() {
 				
 		//Fehler in Methode setDiffuseColor bei nur einem übergebenem Part
 		//->Heilung durch Dopplung	
-		if(parts.ids.length == 1){
+		if(parts.ids.length === 1){
 			parts.ids.push(parts.ids[0]);	
 		}
 		parts.setDiffuseColor(color);
@@ -281,7 +281,7 @@ var canvasManipulator = (function() {
 				
 		//Fehler in Methode setTransparency bei nur einem übergebenem Part
 		//->Heilung durch Dopplung
-		if(parts.ids.length == 1){
+		if(parts.ids.length === 1){
 			parts.ids.push(parts.ids[0]);	
 		}
 		parts.setTransparency(value);
@@ -291,7 +291,7 @@ var canvasManipulator = (function() {
 	function setVisibility(parts, visibility) {
 		//Fehler in Methode setVisibility bei nur einem übergebenem Part
 		//->Heilung durch Dopplung
-		if(parts.ids.length == 1){
+		if(parts.ids.length === 1){
 			parts.ids.push(parts.ids[0]);	
 		}
 		parts.setVisibility(visibility);
