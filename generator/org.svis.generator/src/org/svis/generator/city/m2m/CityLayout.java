@@ -503,10 +503,14 @@ public class CityLayout {
 		if(config.getParser() == FamixParser.ABAP){
 			
 			// Attributes below buildings (ABAP only), for: Classes, Reports
-			if(config.getShowAttributesBelowBuildings() && el.getEntityLink().getDataCounter() != 0){
-				if(el.getEntityLink().getType().equals("FAMIX.Class") || el.getEntityLink().getType().equals("FAMIX.Report")
-					|| el.getEntityLink().getType().equals("FAMIX.FunctionGroup")) {
-							
+			if(config.isShowAttributesBelowBuildings() && el.getEntityLink().getDataCounter() != 0){
+				if(el.getEntityLink().getType().equals("FAMIX.Class")) {
+					newPos.setY((el.getEntityLink().getHeight() / 2) + config.getAttributesBelowBuildingsHeight());
+					
+				}else if(el.getEntityLink().getType().equals("FAMIX.Report") && config.isShowReportAttributes()) {
+					newPos.setY((el.getEntityLink().getHeight() / 2) + config.getAttributesBelowBuildingsHeight());
+					
+				}else if(el.getEntityLink().getType().equals("FAMIX.FunctionGroup") && config.isShowFugrAttributes()) {
 					newPos.setY((el.getEntityLink().getHeight() / 2) + config.getAttributesBelowBuildingsHeight());
 				}
 			}

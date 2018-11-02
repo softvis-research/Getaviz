@@ -107,12 +107,7 @@ public class SettingsConfiguration {
 
 	public String getParserAsString() {
 		return config.getString("structure.parser", "verveinej");
-	}
-	
-	public String getAbapRepresentation() {
-		return config.getString("city.represent_abap", "source");
-	}
-	
+	}	
 	
 	public Boolean recreateFamix() {
 		return config.getBoolean("structure.recreate_famix", false);
@@ -132,31 +127,6 @@ public class SettingsConfiguration {
 	
 	public Boolean showEmptyDistricts() {
 		return config.getBoolean("city.show_empty_districts", false);
-	}
-
-	public AbapCityRepresentation getAbap_representation() {
-		switch (getAbapRepresentation()) {
-		case "code_logic":
-			return AbapCityRepresentation.CODE_LOGIC;
-		default:
-			return AbapCityRepresentation.SOURCE;
-		}
-	}
-	
-	public boolean getShowAttributesBelowBuildings() {
-		return config.getBoolean("city.abap.attributesBelowBuildings", false);
-	}
-	
-	public boolean getShowReportAttributes() {
-		return config.getBoolean("city.abap.showReportAttributes", false);
-	}
-	
-	public boolean getShowFugrAttributes() {
-		return config.getBoolean("city.abap.showFugrAttributes", false);
-	}
-	
-	public boolean isShowOwnTablesDistrict() {
-		return config.getBoolean("city.abap.tablesOwnDistrict", false);
 	}							  
 	
 	public FamixParser getParser() {
@@ -178,22 +148,6 @@ public class SettingsConfiguration {
 	
 	public double getAttributesHeight() {
 		return config.getDouble("city.attributes_height", 0.5);
-	}
-	
-	public double getAttributesBelowBuildingsHeight() {
-		return config.getDouble("city.abap.attributesBelowBuildingsHeight", 2);
-	}
-	
-	public double getStrucElemHeight() {
-		return config.getDouble("city.abap.strucElemHeight", 1);
-	}
-	
-	public boolean isNotInOriginTransparent() {
-		return config.getBoolean("city.abap.notInOrigin_transparent", true);
-	}
-	
-	public double getNotInOriginTransparentValue() {
-		return config.getDouble("city.abap.notInOrigin_transparent_value ", 0.4);
 	}
 
 	public boolean isMasterRoot() {
@@ -503,132 +457,7 @@ public class SettingsConfiguration {
 		return getColorFormatted(getCityColor(name));
 	}
 	
-	public Color getAbapDistrictColor(String type) {
-		if(type.equals("classDistrict")) {
-			if(config.getString("city.abap.classDistrict.color").equals("")) return null;
-			return getColor(config.getString("city.abap.classDistrict.color", "#9499b7"));
-		}else if(type.equals("reportDistrict")){
-			
-			if(config.getString("city.abap.reportDistrict.color").equals("")) return null;
-			return getColor(config.getString("city.abap.reportDistrict.color", "#9499b7"));
-		}else if(type.equals("dcDataDistrict")){
-			
-			if(config.getString("city.abap.dictionaryDataDistrict.color").equals("")) return null;
-			return getColor(config.getString("city.abap.dictionaryDataDistrict.color", "#9499b7"));
-		}else if(type.equals("functionGroupDistrict")){
-			
-			if(config.getString("city.abap.functionGroupDistrict.color").equals("")) return null;
-			return getColor(config.getString("city.abap.functionGroupDistrict.color", "#9499b7"));
-			
-		}else if(type.equals("tableDistrict")){
-			if(config.getString("city.abap.tableDistrict.color").equals("")) return null;
-			return getColor(config.getString("city.abap.tableDistrict.color", "#9499b7"));
-			
-		}else {
-			return null;
-		}
-	}
 	
-	public Color getAbapBuildingColor(String type) {
-		if(type.equals("FAMIX.Report")) {
-			if(config.getString("city.abap.report.color").equals("")) return null;
-			return getColor(config.getString("city.abap.report.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.Class")) {
-			if(config.getString("city.abap.class.color").equals("")) return null;
-			return getColor(config.getString("city.abap.class.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.Interface")) {
-			if(config.getString("city.abap.interfaces.color").equals("")) return null;
-			return getColor(config.getString("city.abap.interfaces.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.ABAPStructure")) {
-			if(config.getString("city.abap.structure.color").equals("")) return null;
-			return getColor(config.getString("city.abap.structure.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.TableType")) {
-			if(config.getString("city.abap.table_type.color").equals("")) return null;
-			return getColor(config.getString("city.abap.table_type.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.Table")) {
-			if(config.getString("city.abap.table.color").equals("")) return null;
-			return getColor(config.getString("city.abap.table.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.FunctionGroup")) {
-			if(config.getString("city.abap.fugr.color").equals("")) return null;
-			return getColor(config.getString("city.abap.fugr.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.DataElement")) {
-			if(config.getString("city.abap.dataElement.color").equals("")) return null;
-			return getColor(config.getString("city.abap.dataElement.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.Domain")) {
-			if(config.getString("city.abap.domain.color").equals("")) return null;
-			return getColor(config.getString("city.abap.domain.color", "#c5cae9"));
-			
-		}else {
-			return null;
-		}
-	}
-	
-	public Color getAbapBuildingSegmentColor(String type) { 		
-		if(type.equals("FAMIX.Report")) {
-			if(config.getString("city.abap.report_form.color").equals("")) return null;
-			return getColor(config.getString("city.abap.report_form.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.Class")) {
-			if(config.getString("city.abap.class_method.color").equals("")) return null;
-			return getColor(config.getString("city.abap.class_method.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.Interface")) {
-			if(config.getString("city.abap.class_interface.color").equals("")) return null;
-			return getColor(config.getString("city.abap.class_interface.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.FunctionGroup")) {
-			if(config.getString("city.abap.fumo.color").equals("")) return null;
-			return getColor(config.getString("city.abap.fumo.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.ABAPStruc")) {
-			if(config.getString("city.abap.structure_elem.color").equals("")) return null;
-			return getColor(config.getString("city.abap.structure_elem.color", "#c5cae9"));
-			
-		}else if(type.equals("FAMIX.TableType")) {
-			if(config.getString("city.abap.tableType_elem.color").equals("")) return null;
-			return getColor(config.getString("city.abap.tstructure_elem.color", "#c5cae9"));
-		
-		}else if(type.equals("FAMIX.Table")) {
-			if(config.getString("city.abap.table_elem.color").equals("")) return null;
-			return getColor(config.getString("city.abap.table_elem.color", "#c5cae9"));
-			
-		}else {
-			return null;
-		}
-	}
-	
-	public boolean getAbapShowTextures() {
-		return config.getBoolean("city.abap.showTextures", false);
-	}
-	
-	public String getAbapDistrictTexture(String type) {
-		if(type == "classDistrict") {
-			return config.getString("city.abap.classDistrict.texture", null);
-			
-		}else if(type == "reportDistrict"){
-			return config.getString("city.abap.reportDistrict.texture", null);
-			
-		}else if(type == "dcDataDistrict"){
-			return config.getString("city.abap.dictionaryDataDistrict.texture", null);
-			
-		}else if(type == "functionGroupDistrict"){
-			return config.getString("city.abap.functionGroupDistrict.texture", null);
-			
-		}else if(type == "tableDistrict"){
-			return config.getString("city.abap.tableDistrict.texture", null);
-			
-		}else {
-			return null;
-		}
-	}	
 	
 	public RDClassSize getRDClassSize() {
 		switch(config.getString("rd.class_size", "none")) {
@@ -1139,10 +968,6 @@ public class SettingsConfiguration {
 		JDT2FAMIX, VERVEINEJ, JQA_BYTECODE, ABAP;	
 	}
 	
-	public static enum AbapCityRepresentation {
-		SOURCE, CODE_LOGIC;
-	}
-	
 	public static enum MetricRepresentation {
 		NONE, HEIGHT, LUMINANCE, FREQUENCY
 	}	
@@ -1441,4 +1266,189 @@ public class SettingsConfiguration {
 	public static enum ClassColorMetric {
 		STK, STATIC, CHANGE_FREQUENCY;
 	}
+	
+	
+	
+	
+	//ABAP specific settings
+	
+	public static enum AbapCityRepresentation {
+		SOURCE, CODE_LOGIC;
+	}
+	
+	public String getAbapRepresentation() {
+		return config.getString("city.represent_abap", "source");
+	}
+	
+	public AbapCityRepresentation getAbap_representation() {
+		switch (getAbapRepresentation()) {
+		case "code_logic":
+			return AbapCityRepresentation.CODE_LOGIC;
+		default:
+			return AbapCityRepresentation.SOURCE;
+		}
+	}
+	
+	public boolean isShowAttributesBelowBuildings() {
+		return config.getBoolean("city.abap.attributesBelowBuildings", false);
+	}
+	
+	public double getAttributesBelowBuildingsHeight() {
+		return config.getDouble("city.abap.attributesBelowBuildingsHeight", 2);
+	}
+	
+	public boolean isShowReportAttributes() {
+		return config.getBoolean("city.abap.showReportAttributes", false);
+	}
+	
+	public boolean isShowFugrAttributes() {
+		return config.getBoolean("city.abap.showFugrAttributes", false);
+	}
+	
+	public boolean isShowOwnTablesDistrict() {
+		return config.getBoolean("city.abap.tablesOwnDistrict", false);
+	}
+	
+	public double getStrucElemHeight() {
+		return config.getDouble("city.abap.strucElemHeight", 1);
+	}
+	
+	public boolean isNotInOriginTransparent() {
+		return config.getBoolean("city.abap.notInOrigin_transparent", true);
+	}
+	
+	public double getNotInOriginTransparentValue() {
+		return config.getDouble("city.abap.notInOrigin_transparent_value", 0.4);
+	}
+	
+	public double getNotInOriginSCBuildingHeight() {
+		return config.getDouble("city.abap.notInOrigin_min_scBuilding_height", 4);
+	}
+	
+	public Color getAbapDistrictColor(String type) {
+		if(type.equals("classDistrict")) {
+			if(config.getString("city.abap.classDistrict.color").equals("")) return null;
+			return getColor(config.getString("city.abap.classDistrict.color", "#9499b7"));
+		}else if(type.equals("reportDistrict")){
+			
+			if(config.getString("city.abap.reportDistrict.color").equals("")) return null;
+			return getColor(config.getString("city.abap.reportDistrict.color", "#9499b7"));
+		}else if(type.equals("dcDataDistrict")){
+			
+			if(config.getString("city.abap.dictionaryDataDistrict.color").equals("")) return null;
+			return getColor(config.getString("city.abap.dictionaryDataDistrict.color", "#9499b7"));
+		}else if(type.equals("functionGroupDistrict")){
+			
+			if(config.getString("city.abap.functionGroupDistrict.color").equals("")) return null;
+			return getColor(config.getString("city.abap.functionGroupDistrict.color", "#9499b7"));
+			
+		}else if(type.equals("tableDistrict")){
+			if(config.getString("city.abap.tableDistrict.color").equals("")) return null;
+			return getColor(config.getString("city.abap.tableDistrict.color", "#9499b7"));
+			
+		}else {
+			return null;
+		}
+	}
+	
+	public Color getAbapBuildingColor(String type) {
+		if(type.equals("FAMIX.Report")) {
+			if(config.getString("city.abap.report.color").equals("")) return null;
+			return getColor(config.getString("city.abap.report.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.Class")) {
+			if(config.getString("city.abap.class.color").equals("")) return null;
+			return getColor(config.getString("city.abap.class.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.Interface")) {
+			if(config.getString("city.abap.interfaces.color").equals("")) return null;
+			return getColor(config.getString("city.abap.interfaces.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.ABAPStructure")) {
+			if(config.getString("city.abap.structure.color").equals("")) return null;
+			return getColor(config.getString("city.abap.structure.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.TableType")) {
+			if(config.getString("city.abap.table_type.color").equals("")) return null;
+			return getColor(config.getString("city.abap.table_type.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.Table")) {
+			if(config.getString("city.abap.table.color").equals("")) return null;
+			return getColor(config.getString("city.abap.table.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.FunctionGroup")) {
+			if(config.getString("city.abap.fugr.color").equals("")) return null;
+			return getColor(config.getString("city.abap.fugr.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.DataElement")) {
+			if(config.getString("city.abap.dataElement.color").equals("")) return null;
+			return getColor(config.getString("city.abap.dataElement.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.Domain")) {
+			if(config.getString("city.abap.domain.color").equals("")) return null;
+			return getColor(config.getString("city.abap.domain.color", "#c5cae9"));
+			
+		}else {
+			return null;
+		}
+	}
+	
+	public Color getAbapBuildingSegmentColor(String type) { 		
+		if(type.equals("FAMIX.Report")) {
+			if(config.getString("city.abap.report_form.color").equals("")) return null;
+			return getColor(config.getString("city.abap.report_form.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.Class")) {
+			if(config.getString("city.abap.class_method.color").equals("")) return null;
+			return getColor(config.getString("city.abap.class_method.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.Interface")) {
+			if(config.getString("city.abap.interface_method.color").equals("")) return null;
+			return getColor(config.getString("city.abap.interface_method.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.FunctionGroup")) {
+			if(config.getString("city.abap.fumo.color").equals("")) return null;
+			return getColor(config.getString("city.abap.fumo.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.ABAPStruc")) {
+			if(config.getString("city.abap.structure_elem.color").equals("")) return null;
+			return getColor(config.getString("city.abap.structure_elem.color", "#c5cae9"));
+			
+		}else if(type.equals("FAMIX.TableType")) {
+			if(config.getString("city.abap.tableType_elem.color").equals("")) return null;
+			return getColor(config.getString("city.abap.tableType_elem.color", "#c5cae9"));
+		
+		}else if(type.equals("FAMIX.Table")) {
+			if(config.getString("city.abap.table_elem.color").equals("")) return null;
+			return getColor(config.getString("city.abap.table_elem.color", "#c5cae9"));
+			
+		}else {
+			return null;
+		}
+	}
+	
+	public boolean isAbapShowTextures() {
+		return config.getBoolean("city.abap.showTextures", false);
+	}
+	
+	public String getAbapDistrictTexture(String type) {
+		if(type == "classDistrict") {
+			return config.getString("city.abap.classDistrict.texture", null);
+			
+		}else if(type == "reportDistrict"){
+			return config.getString("city.abap.reportDistrict.texture", null);
+			
+		}else if(type == "dcDataDistrict"){
+			return config.getString("city.abap.dictionaryDataDistrict.texture", null);
+			
+		}else if(type == "functionGroupDistrict"){
+			return config.getString("city.abap.functionGroupDistrict.texture", null);
+			
+		}else if(type == "tableDistrict"){
+			return config.getString("city.abap.tableDistrict.texture", null);
+			
+		}else {
+			return null;
+		}
+	}	
 }

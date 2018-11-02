@@ -108,9 +108,9 @@ class Famix2JSON implements IGenerator2 {
 		"name":          "«p.value»",
 		"type":          "FAMIX.Namespace",
 		«IF p.parentScope !== null»
-		"belongsTo":     "«p.parentScope.ref.id»"
+		"belongsTo":     "«p.parentScope.ref.id»",
 		«ELSE»
-		"belongsTo":     "root"
+		"belongsTo":     "root",
 		«ENDIF»
 		"iteration":     "«p.iteration»"
 	'''
@@ -147,9 +147,9 @@ class Famix2JSON implements IGenerator2 {
 		"antipattern":	 "«toString(c.antipattern)»",
 		"roles":	 	 "«toString2(c.antipattern, c)»",
 		«IF c.scc !== null»
-		"component":	 "«((c.scc.ref) as FAMIXComponent).id»"
+		"component":	 "«((c.scc.ref) as FAMIXComponent).id»",
 		«ELSE»
-		"component":	 ""
+		"component":	 "",
 		«ENDIF»
 		"iteration":     "«c.iteration»"
 	'''
@@ -168,18 +168,21 @@ class Famix2JSON implements IGenerator2 {
 	'''
 	
 	def dispatch private toMetaData(FAMIXAttribute a)'''
-		"id":            "«a.id»",
-		"qualifiedName": "«a.fqn»",
-		"name":          "«a.value»",
-		"type":          "FAMIX.Attribute",
-		"modifiers":     "«a.modifiers.removeBrackets»",
+		"id":             "«a.id»",
+		"qualifiedName":  "«a.fqn»",
+		"name":           "«a.value»",
+		"type":           "FAMIX.Attribute",
+		"modifiers":      "«a.modifiers.removeBrackets»",
 		«IF a.declaredType !== null»
-		"declaredType":  "«a.declaredType.ref.type»",
+		"declaredType":   "«a.declaredType.ref.type»",
 		«ENDIF»		
-		"accessedBy":	 "«a.accessedBy»",
-		"typeOf":		 "«a.typeOf»",
-		"belongsTo":     "«a.parentType.ref.id»"
-		"iteration":     "«a.iteration»"
+		«IF a.sourceCodeDefined !== null»
+		"sourceCodeDefined": "«a.sourceCodeDefined»",
+		«ENDIF»
+		"accessedBy":	  "«a.accessedBy»",
+		"typeOf":		  "«a.typeOf»",
+		"belongsTo":      "«a.parentType.ref.id»",
+		"iteration":      "«a.iteration»"
 	'''
 	
 	def dispatch private toMetaData(FAMIXMethod m)'''
@@ -196,7 +199,7 @@ class Famix2JSON implements IGenerator2 {
 		"calls":		 "«m.calls»",
 		"calledBy":		 "«m.calledBy»",
 		"accesses":	 	 "«m.accesses»",
-		"belongsTo":     "«m.parentType.ref.id»"
+		"belongsTo":     "«m.parentType.ref.id»",
 		"iteration":     "«m.iteration»"
 	'''
 	
@@ -276,6 +279,9 @@ class Famix2JSON implements IGenerator2 {
 		"name":          "«d.value»",
 		"type":          "FAMIX.Domain",
 		"belongsTo":     "«d.container.ref.id»",
+		"datatype":		 "«d.datatype»",
+		"length":		 "«d.length»",
+		"decimals":		 "«d.decimals»",
 		"iteration": 	 "«d.iteration»"
 	'''
 	 
@@ -433,13 +439,7 @@ class Famix2JSON implements IGenerator2 {
 	
 	def private getTypeOf(FAMIXElement famixElement){
 		val tmp = newArrayList
-		val lookup = newHashSet
-		// Add types without duplicates
-		typeOfs.filter[element.ref.id == famixElement.id].forEach[ 
-			if(lookup += typeOf.ref.id){
-				tmp += typeOf.ref.id
-			}
-		]
+		typeOfs.filter[element.ref.id == famixElement.id].forEach[ tmp += typeOf.ref.id ]
 		return tmp.removeBrackets
 	}
 	
