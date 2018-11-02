@@ -16,10 +16,10 @@ FAMIXElement:
 	FAMIXParameterizedType | FAMIXAnnotationInstance | FAMIXAnnotationInstanceAttribute | FAMIXAnnotationTypeAttribute |
 	FAMIXLocalVariable | FAMIXImplicitVariable | FAMIXType | FAMIXParameterType |
 	FAMIXJavaSourceLanguage | FAMIXDeclaredException | FAMIXThrownException | FAMIXCaughtException | FAMIXEnumValue | 
-	FAMIXAntipattern | FAMIXPath | FAMIXRole | FAMIXComponent | FAMIXTypeOf |
+	FAMIXAntipattern | FAMIXPath | FAMIXRole | FAMIXComponent | 
 	
 	//ABAP
-	FAMIXFunctionModule | FAMIXFormroutine
+	FAMIXReport | FAMIXFormroutine | FAMIXFunctionModule | FAMIXTypeOf  
 ;
 	
 FAMIXStructure:
@@ -31,7 +31,7 @@ FAMIXStructure:
 
 //ABAP
 FAMIXDictionaryData:
-	FAMIXReport | FAMIXDataElement | FAMIXTable | FAMIXABAPStruc | FAMIXStrucElement | FAMIXDomain | FAMIXTableType |
+	FAMIXDataElement | FAMIXTable | FAMIXABAPStruc | FAMIXStrucElement | FAMIXDomain | FAMIXTableType |
 	FAMIXTableElement
 ;
 
@@ -145,7 +145,8 @@ FAMIXAttribute:
 	('(' 'sourceAnchor' sourceAnchor=IntegerReference ')')?
 	('(' 'getterSetter' getterSetter += IntegerReference* ')')?
 	('(' 'dataType' datatype=MSESTRING ')')? //ABAP
-	('(' 'ddicType' dataElement=IntegerReference ')')? //ABAP
+	('(' 'dataElement' dataElement=MSESTRING ')')? //ABAP
+	('(' 'sourceCodeDefined' sourceCodeDefined=Boolean ')')? //ABAP
 	('(' 'iteration' iteration=INT ')')? //ABAP
 	')';	
 
@@ -470,6 +471,7 @@ FAMIXStrucElement:
     ('(' 'dataType' datatype=MSESTRING ')')?
     ('(' 'declaredType' declaredType=IntegerReference ')')?
     ('(' 'dataElement' dataElement=MSESTRING ')')?
+    ('(' 'structure' structure=MSESTRING ')')?
     ('(' 'iteration' iteration=INT ')')? 
     ')'; 
     

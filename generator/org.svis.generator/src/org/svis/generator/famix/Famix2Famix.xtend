@@ -207,7 +207,8 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		formroutines.forEach[setQualifiedName]
 		messageClasses.forEach[setQualifiedName]
 	
-		abapStrucsTmp.forEach[updateAbapStrucs]
+		abapStrucsTmp.forEach[updateAbapStrucs]		
+		
 		
 		famixDocument.elements.clear
 		famixDocument.elements.addAll(rootPackages)
@@ -857,11 +858,15 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	
 	
 	//ABAP
+	//Check if structure has elements. Proceed with those, that aren't empty
 	def updateAbapStrucs(FAMIXABAPStruc struc){
-		if(abapStrucElem.filter[container.ref.name == struc.name].length != 0){
+		var abapStrucElements = abapStrucElem.filter[container.ref.name == struc.name]
+		if(abapStrucElem.filter[container.ref.name == struc.name].length != 0 || struc.iteration != 0){
+		//if(abapStrucElements.length != 0 || struc.iteration != 0)
 			abapStrucs.add(struc)
 		}
 	}
+	
 	
 	def setQualifiedNameAbap(FAMIXAttribute attribute) {
 		val ref = attribute.parentType.ref
@@ -877,23 +882,44 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	
 	//ABAP	
 	def setQualifiedName(FAMIXDictionaryData dd){
-		//val ref = dd.container.ref
-		dd.fqn = "." + dd.value
+		val ref = dd.container.ref
+		if(ref instanceof FAMIXDictionaryData){
+			dd.fqn = ref.fqn + "." + dd.value
+		}else if(ref instanceof FAMIXNamespace){
+			dd.fqn = ref.fqn + "." + dd.value
+		}
 		dd.id = createID(dd.fqn)
 	}  
 	
 	def setQualifiedName(FAMIXFunctionModule fm){
-		fm.fqn = "." + fm.value
+		val ref = fm.parentType.ref
+		if(ref instanceof FAMIXFunctionGroup){
+			fm.fqn = ref.fqn + "." + fm.value
+		}
 		fm.id = createID(fm.fqn)
 	}
 	
 	def setQualifiedName(FAMIXFunctionGroup fg){
-		fg.fqn = "." + fg.value
+		val ref = fg.container.ref
+		if(ref instanceof FAMIXNamespace){
+			fg.fqn = ref.fqn + "." + fg.value
+		}
 		fg.id = createID(fg.fqn)
 	}
 	
+	def setQualifiedName(FAMIXReport re){
+		val ref = re.container.ref
+		if(ref instanceof FAMIXNamespace){
+			re.fqn = ref.fqn + "." + re.value
+		}
+		re.id = createID(re.fqn)
+	}
+	
 	def setQualifiedName(FAMIXFormroutine fr){
-		fr.fqn = "." + fr.value
+		var ref = fr.parentType.ref
+		if(ref instanceof FAMIXReport){
+			fr.fqn = ref.fqn + "." + fr.value
+		}		
 		fr.id = createID(fr.fqn)
 	}
 	
