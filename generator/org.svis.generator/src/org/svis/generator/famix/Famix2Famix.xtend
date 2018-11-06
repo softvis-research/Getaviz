@@ -858,11 +858,9 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	
 	
 	//ABAP
-	//Check if structure has elements. Proceed with those, that aren't empty
+	//Check if structure has elements. Proceed with those, that aren't empty 
 	def updateAbapStrucs(FAMIXABAPStruc struc){
-		var abapStrucElements = abapStrucElem.filter[container.ref.name == struc.name]
 		if(abapStrucElem.filter[container.ref.name == struc.name].length != 0 || struc.iteration != 0){
-		//if(abapStrucElements.length != 0 || struc.iteration != 0)
 			abapStrucs.add(struc)
 		}
 	}

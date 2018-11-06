@@ -8,7 +8,7 @@
 		$setupUrl = "setups/" . $_GET["setup"] . ".js";
 	}	
 
-	$modelUrl = "data/RD bank/model";
+	$modelUrl = "data/ABAP/model";
 	if (isset($_GET["model"])) {
 		$modelUrl = "data/". $_GET["model"] ."/model";
 	}

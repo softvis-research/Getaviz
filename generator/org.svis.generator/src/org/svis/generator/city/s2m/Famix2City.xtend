@@ -344,18 +344,24 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 		
 		//TableType segments
 		if(newBuilding.type == "FAMIX.TableType"){
-			var tableTypeOf = typeOf.filter[element.ref == elem]
-			 
+			val tableTypeOf = typeOf.filter[element.ref == elem]
+
 			for (tty : tableTypeOf){
-				newBuilding.methodCounter = abapStrucElem.filter[container.ref == tty.typeOf.ref].length
-				abapStrucElem.filter[container.ref == tty.typeOf.ref].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+				if(tty.typeOf.ref instanceof FAMIXABAPStruc){
+					newBuilding.methodCounter = abapStrucElem.filter[container.ref == tty.typeOf.ref].length
+					abapStrucElem.filter[container.ref == tty.typeOf.ref].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+				
+				}else if(tty.typeOf.ref instanceof FAMIXTable){
+					newBuilding.methodCounter = tableElements.filter[container.ref == tty.typeOf.ref].length
+					tableElements.filter[container.ref == tty.typeOf.ref].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+				}
 			}	
 		}
 		
 		//Table segments
 		if(newBuilding.type == "FAMIX.Table"){
 			newBuilding.methodCounter = tableElements.filter[container.ref == elem].length
-			tableElements.filter[container.ref == elem].forEach[newBuilding.methods.add(toFloor)]
+			tableElements.filter[container.ref == elem].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
 		}
 		
 		return newBuilding
@@ -611,10 +617,10 @@ def private Building toBuilding(FAMIXClass elem, int level) {
 		newBuildingSegment.id = famixStrucElem.id + "_" + buildingId
 	}
 
-	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXTableElement famixTableElement) {
+	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXTableElement famixTableElement, String buildingId) {
 		newBuildingSegment.name = famixTableElement.name
 		newBuildingSegment.value = famixTableElement.value
 		newBuildingSegment.fqn = famixTableElement.fqn
-		newBuildingSegment.id = famixTableElement.id
+		newBuildingSegment.id = famixTableElement.id + "_" + buildingId
 	} 
 }
