@@ -136,7 +136,9 @@ var actionController = (function () {
                     if (component != null) {
                         hoveredEntity = component;
                     }
-                    hoverAction(actions.mouse, eventObject);
+                    if(eventObject.target.id != canvasId) {
+                        hoverAction(actions.mouse, eventObject);
+                    }
 
                     if (actions.mouse.bubbles) {
                         return true;
@@ -147,7 +149,10 @@ var actionController = (function () {
                     return false;
                 });
                 this.el.addEventListener("mouseleave", function (eventObject) {
-                    unhoverAction(actions.mouse, eventObject);
+                    if(eventObject.target.id != canvasId) {
+                        unhoverAction(actions.mouse, eventObject);
+                    }
+                    hoveredEntity = canvas;
 
                     if (actions.mouse.bubbles) {
                         return true;

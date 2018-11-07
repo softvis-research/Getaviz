@@ -15,6 +15,9 @@ var setup = {
             name: "canvasSelectController"
         },
         {
+            name: "canvasHoverController"
+        },
+        {
             name: "canvasFilterController"
         },
         {
@@ -59,8 +62,9 @@ var setup = {
 
                             controllers: [
                                 { name: "canvasMarkController" },
-                                { name: "canvasSelectController"},
                                 { name: "canvasFilterController"},
+                                { name: "canvasSelectController"},
+                                { name: "canvasHoverController"},
                                 { name: "defaultLogger" }
                             ]
                         }
