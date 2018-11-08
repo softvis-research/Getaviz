@@ -103,6 +103,28 @@ var canvasManipulator = (function () {
         });
     }
 
+    function highlightEntities(entities, color) {
+        entities.forEach(function (entity) {
+            let component = document.getElementById(entity.id);
+            if (component == undefined) {
+                events.log.error.publish({text: "CanvasManipualtor - highlightEntities - components for entityIds not found"});
+                return;
+            }
+            setColor(component, color);
+        });
+    }
+
+    function unhighlightEntities(entities) {
+        entities.forEach(function (entity) {
+            let component = document.getElementById(entity.id);
+            if (component == undefined) {
+                events.log.error.publish({text: "CanvasManipualtor - unhighlightEntities - components for entityIds not found"});
+                return;
+            }
+            setColor(component, component.getAttribute("color"));
+        });
+    }
+
     //  after clicking an entity fit the camera to show this entity (angle stays the same)
     //  not working
     function flyToEntity(entity) {
@@ -168,7 +190,7 @@ var canvasManipulator = (function () {
 
     //	working
     function setColor(object, color) {
-        object.setAttribute('material', {
+        object.setAttribute("material", {
             color: color
         });
     }
@@ -197,6 +219,9 @@ var canvasManipulator = (function () {
 
         hideEntities: hideEntities,
         showEntities: showEntities,
+
+        highlightEntities: highlightEntities,
+        unhighlightEntities: unhighlightEntities,
 
         flyToEntity: flyToEntity,
 
