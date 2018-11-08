@@ -101,15 +101,15 @@ var canvasHoverController = (function() {
 		var entity = model.getEntityById(eventObject.target.id);
 		if(entity === undefined){
 			entity = eventObject.target.id;
-			events.log.error.publish({ text: "Entity of partID " + multipartEvent.partID + " not in model data."});
+			events.log.error.publish({ text: "Entity of partID " + eventObject.target.id + " not in model data."});
 			return;
 		}
 		
 		var applicationEvent = {
 			sender		: canvasHoverController,
 			entities	: [entity],
-			/*posX		: multipartEvent.layerX,
-			posY		: multipartEvent.layerY*/
+			posX		: eventObject.layerX,
+			posY		: eventObject.layerY
 		};
 		events.hovered.on.publish(applicationEvent);		
 	}
@@ -117,7 +117,7 @@ var canvasHoverController = (function() {
 	function handleOnMouseLeave(eventObject) {
 		var entity = model.getEntityById(eventObject.target.id);
 		if(entity === undefined){
-			events.log.error.publish({ text: "Entity of partID " + multipartEvent.partID + " not in model data."});
+			events.log.error.publish({ text: "Entity of partID " + eventObject.target.id + " not in model data."});
 			return;
 		}
 
