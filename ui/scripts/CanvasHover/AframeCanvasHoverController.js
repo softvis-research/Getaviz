@@ -23,15 +23,11 @@ var canvasHoverController = (function() {
 
 		actionController.actions.mouse.hover.subscribe(handleOnMouseEnter);
 		actionController.actions.mouse.unhover.subscribe(handleOnMouseLeave);
-
-		var canvas = document.getElementById("x3dom-x3dElement-canvas");
-		canvas.addEventListener("mousedown", handleOnMousedown, false);
-		canvas.addEventListener("mouseup", handleOnMouseup, false);
 				
 		createTooltipContainer();		
 			
 		events.hovered.on.subscribe(onEntityHover);
-		events.hovered.off.subscribe(onEntityUnhover); 
+		events.hovered.off.subscribe(onEntityUnhover);
 	}
 	
 	function reset(){
@@ -98,7 +94,6 @@ var canvasHoverController = (function() {
 	}
 
 	function handleOnMouseEnter(eventObject) {
-		console.debug(eventObject);
 		if(isInNavigation){
 			return;
 		}        
@@ -116,12 +111,10 @@ var canvasHoverController = (function() {
 			/*posX		: multipartEvent.layerX,
 			posY		: multipartEvent.layerY*/
 		};
-		
 		events.hovered.on.publish(applicationEvent);		
 	}
 
 	function handleOnMouseLeave(eventObject) {
-		
 		var entity = model.getEntityById(eventObject.target.id);
 		if(entity === undefined){
 			events.log.error.publish({ text: "Entity of partID " + multipartEvent.partID + " not in model data."});
@@ -137,7 +130,6 @@ var canvasHoverController = (function() {
 	}
 
 	function onEntityHover(applicationEvent) {
-		console.debug("onEntityHover");
 		var entity = applicationEvent.entities[0];
 
         if(entity === undefined){
