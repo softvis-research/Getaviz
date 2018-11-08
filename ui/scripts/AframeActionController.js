@@ -19,6 +19,9 @@ var actionController = (function () {
     var hoveredEntity = null;
     var latestMouseButtonPressed = null;
 
+    var cursorX = 0;
+    var cursorY = 0;
+
     //actions object
     var actions = {
         mouse: {
@@ -137,6 +140,8 @@ var actionController = (function () {
                         hoveredEntity = component;
                     }
                     if(eventObject.target.id != canvasId) {
+                        eventObject.layerX = cursorX;
+                        eventObject.layerY = cursorY;
                         hoverAction(actions.mouse, eventObject);
                     }
 
@@ -150,6 +155,8 @@ var actionController = (function () {
                 });
                 this.el.addEventListener("mouseleave", function (eventObject) {
                     if(eventObject.target.id != canvasId) {
+                        eventObject.layerX = cursorX;
+                        eventObject.layerY = cursorY;
                         unhoverAction(actions.mouse, eventObject);
                     }
                     hoveredEntity = canvas;
@@ -165,6 +172,8 @@ var actionController = (function () {
                 //  interrupts mousedown events somehow
                 this.el.addEventListener("mousemove", function (eventObject) {
                     moveAction(actions.mouse.move, eventObject);
+                    cursorX = eventObject.layerX;
+                    cursorY = eventObject.layerY;
 
                     if (actions.mouse.move.bubbles) {
                         return true;
