@@ -875,7 +875,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 			FAMIXMethod: attribute.fqn = ref.fqn + "." + attribute.value
 			default: log.error("ERROR qualifiedName(FAMIXAttribute famixAttribute): " + attribute.value)
 		}
-		attribute.id = createID(attribute.fqn)
+		attribute.id = createID(attribute.fqn + "Attribute")
 	}
 	
 	//ABAP	
@@ -885,8 +885,8 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 			dd.fqn = ref.fqn + "." + dd.value
 		}else if(ref instanceof FAMIXNamespace){
 			dd.fqn = ref.fqn + "." + dd.value
-		}
-		dd.id = createID(dd.fqn)
+		}		
+		dd.id = createID(dd.fqn + dd.class.toString)
 	}  
 	
 	def setQualifiedName(FAMIXFunctionModule fm){
@@ -894,7 +894,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		if(ref instanceof FAMIXFunctionGroup){
 			fm.fqn = ref.fqn + "." + fm.value
 		}
-		fm.id = createID(fm.fqn)
+		fm.id = createID(fm.fqn + fm.class.toString)
 	}
 	
 	def setQualifiedName(FAMIXFunctionGroup fg){
@@ -902,7 +902,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		if(ref instanceof FAMIXNamespace){
 			fg.fqn = ref.fqn + "." + fg.value
 		}
-		fg.id = createID(fg.fqn)
+		fg.id = createID(fg.fqn + fg.class.toString)
 	}
 	
 	def setQualifiedName(FAMIXReport re){
@@ -910,7 +910,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		if(ref instanceof FAMIXNamespace){
 			re.fqn = ref.fqn + "." + re.value
 		}
-		re.id = createID(re.fqn)
+		re.id = createID(re.fqn + re.class.toString)
 	}
 	
 	def setQualifiedName(FAMIXFormroutine fr){
@@ -918,7 +918,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		if(ref instanceof FAMIXReport){
 			fr.fqn = ref.fqn + "." + fr.value
 		}		
-		fr.id = createID(fr.fqn)
+		fr.id = createID(fr.fqn + fr.class.toString)
 	}
 	
 	def setQualifiedName(FAMIXMessageClass ms){

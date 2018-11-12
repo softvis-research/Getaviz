@@ -295,6 +295,23 @@ class Famix2JSON implements IGenerator2 {
 		"iteration": 	 "«t.iteration»"
 	'''
 	
+	//ABAP
+	def dispatch private toMetaData(FAMIXTableElement te)'''
+		"id":            "«te.id»",
+		"qualifiedName": "«te.fqn»",
+		"name":          "«te.value»",
+		"type":          "FAMIX.TableElement",
+		"belongsTo":     "«te.container.ref.id»",
+		«IF te.dataElement !== null»
+		"dataElement":   "«te.dataElement»",
+		«ENDIF»
+		"typeOf":		 "«te.typeOf»",
+		«IF te.structure !== null»
+		"structure": 	 "«te.structure»",
+		«ENDIF»
+		"iteration": 	 "«te.iteration»"
+	'''
+	
 	//ABAP 
 	def dispatch private toMetaData(FAMIXABAPStruc abs)'''
 		"id":            "«abs.id»",
@@ -313,6 +330,9 @@ class Famix2JSON implements IGenerator2 {
 		"type":          "FAMIX.StrucElement",
 		"belongsTo":     "«se.container.ref.id»",
 		"typeOf":		 "«se.typeOf»",
+		«IF se.structure !== null»
+		"structure": 	 "«se.structure»",
+		«ENDIF»
 		"iteration": 	 "«se.iteration»"
 	'''
 	
@@ -367,20 +387,6 @@ class Famix2JSON implements IGenerator2 {
 		"type":          "FAMIX.TypeOf",
 		"element":     	 "«to.element.ref.id»",
 		"typeOf": 	     "«to.typeOf.ref.id»"
-	'''
-
-	//ABAP
-	def dispatch private toMetaData(FAMIXTableElement te)'''
-		"id":            "«te.id»",
-		"qualifiedName": "«te.fqn»",
-		"name":          "«te.value»",
-		"type":          "FAMIX.TableElement",
-		"belongsTo":     "«te.container.ref.id»",
-		«IF te.dataElement !== null»
-			"dataElement":   "«te.dataElement»",
-		«ENDIF»
-		"typeOf":		 "«te.typeOf»",
-		"iteration": 	 "«te.iteration»"
 	'''
 
 	def private toString (List<IntegerReference> list) { 

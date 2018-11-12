@@ -23,6 +23,7 @@ import org.svis.generator.SettingsConfiguration.Panels.SeparatorModes
 import org.codehaus.plexus.logging.console.ConsoleLogger
 import org.svis.generator.SettingsConfiguration.FamixParser
 import org.eclipse.emf.common.util.EList
+import org.svis.generator.SettingsConfiguration.AbapCityRepresentation
 
 class City2City extends WorkflowComponentWithModelSlot {
 
@@ -211,42 +212,50 @@ class City2City extends WorkflowComponentWithModelSlot {
 		
 		// ABAP Logic
 		if(config.parser == FamixParser::ABAP){
-		   
-		   // Edit height and width
-			if(b.type == "FAMIX.ABAPStruc" || b.type == "FAMIX.TableType"){
-				b.width = 1.75
+			if(config.abap_representation == AbapCityRepresentation::ADVANCED){
 				
-				b.height = b.methodCounter * config.strucElemHeight 
-				if(config.strucElemHeight <= 1 || b.methodCounter == 0){
-					b.height = b.height + 1
+				b.width = 10
+				b.length = 12
+				
+				
+			}else{ //AbapCityRepresentation::SIMPLE
+				
+				// Edit height and width
+				if(b.type == "FAMIX.ABAPStruc" || b.type == "FAMIX.TableType"){
+					b.width = 1.75
+					
+					b.height = b.methodCounter * config.strucElemHeight 
+					if(config.strucElemHeight <= 1 || b.methodCounter == 0){
+						b.height = b.height + 1
+					}
+					
+				}else if(b.type == "FAMIX.DataElement"){
+					b.height = 1
+					b.width = 1.25
 				}
 				
-			}else if(b.type == "FAMIX.DataElement"){
-				b.height = 1
-				b.width = 1.25
-			}
-			
-			// If not in origin, set new min height
-			if(b.notInOrigin == "true"){
-				if((b.type == "FAMIX.Class" || b.type == "FAMIX.Interface" || b.type == "FAMIX.Report" 
-					|| b.type == "FAMIX.FunctionGroup") && b.height < config.getNotInOriginSCBuildingHeight()){
-					b.height = config.getNotInOriginSCBuildingHeight()
+				// If not in origin, set new min height
+				if(b.notInOrigin == "true"){
+					if((b.type == "FAMIX.Class" || b.type == "FAMIX.Interface" || b.type == "FAMIX.Report" 
+						|| b.type == "FAMIX.FunctionGroup") && b.height < config.getNotInOriginSCBuildingHeight()){
+						b.height = config.getNotInOriginSCBuildingHeight()
+					}
 				}
-			}
-			
-						
-						
-			// Use color for building, if it's set
-			if(config.getAbapBuildingColor(b.type) !== null){
-				b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
-			}
-			
-			
-			// Edit transparency 	
-			if(config.isNotInOriginTransparent() && b.notInOrigin == "true"){
-				b.transparency = config.getNotInOriginTransparentValue()
-			}
-			
+				
+							
+							
+				// Use color for building, if it's set
+				if(config.getAbapBuildingColor(b.type) !== null){
+					b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
+				}
+				
+				
+				// Edit transparency 	
+				if(config.isNotInOriginTransparent() && b.notInOrigin == "true"){
+					b.transparency = config.getNotInOriginTransparentValue()
+				}
+
+			}//End of AbapCityRepresentation::SIMPLE		
 		}// End of ABAP logic
 		
 	}

@@ -15,6 +15,9 @@ import org.svis.xtext.city.District
 import org.svis.generator.SettingsConfiguration
 import org.svis.generator.SettingsConfiguration.BuildingType
 import org.svis.generator.SettingsConfiguration.FamixParser
+import org.svis.generator.SettingsConfiguration.AbapCityRepresentation
+import org.eclipse.jdt.core.dom.SwitchCase
+import org.eclipse.emf.ecore.util.Switch
 
 class City2X3D {
 
@@ -134,23 +137,83 @@ class City2X3D {
 	'''
 	
 	def String toBuilding(Entity entity) '''
+		«IF config.abap_representation == AbapCityRepresentation::ADVANCED»
+			«abapAdvancedBuildings(entity)»
+		«ELSE»
+			<Group DEF='«entity.id»'>
+				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
+					<Shape>
+						«IF config.parser == FamixParser::ABAP»
+							«abapBuildingShape(entity)»
+						«ELSE»
+							<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+						«ENDIF»
+						<Appearance>
+							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
+						</Appearance>
+					</Shape>
+				</Transform>
+			</Group>
+		«ENDIF»
+
+	'''
+	
+	//Advanced ABAP buildings
+	def String abapAdvancedBuildings(Entity entity)'''
+		«IF entity.type == "FAMIX.DataElement"»
+			«abapAdvBuilding_DataElement(entity)»
+		«ENDIF»
+	'''
+	
+	
+	def String abapAdvBuilding_DataElement(Entity entity)
+	'''
+		«var newPosX = 0.0»
+		«var newPosY = 0.0»
+		«var newPosZ = 0.0»
+		«var newWidth = 0.0»
+		«var newHeight = 0.0»
+		«var newLength = 0.0»
+		
+				
 		<Group DEF='«entity.id»'>
-			<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
+			<Transform def='floor' translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
 				<Shape>
-					«IF config.parser == FamixParser::ABAP»
-						«abapBuildingShape(entity)»
-					«ELSE»
-						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
-					«ENDIF»
+					<Box size='«entity.width +" "+ 1 +" "+ entity.length»'></Box>
 					<Appearance>
-						<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
+						<Material diffuseColor='#FFFFCC' transparency='«entity.transparency»'></Material>
+					</Appearance>
+				</Shape>
+			</Transform>
+			
+	
+			«newPosY = 6»
+			«newWidth = 6»
+			«newHeight = 4»
+			«newLength = 8»
+			<Transform def='innerSpace' translation='«entity.position.x +" "+ newPosY +" "+ entity.position.z»'>
+				<Shape>
+					<Box size='«newWidth +" "+ newHeight +" "+ newLength»'></Box>
+					<Appearance>
+						<Material diffuseColor='#FFFF66' transparency='«entity.transparency»'></Material>
+					</Appearance>
+				</Shape>
+			</Transform>
+			
+			«newPosX = 17.5»
+			«newPosY = 6.5»
+			<Transform def='leftFrontWall' translation='«newPosX +" "+ newPosY +" "+ entity.position.z»'>
+				<Shape>
+					<Box size='1 5 1'></Box>
+					<Appearance>
+						<Material diffuseColor='#EEEEEE' transparency='«entity.transparency»'></Material>
 					</Appearance>
 				</Shape>
 			</Transform>
 		</Group>
 	'''
 	
-	// Own logic for ABAP Buildings shapes
+	// Own logic for ABAP buildings shapes
 	def String abapBuildingShape(Entity entity)'''
 		«IF entity.type == "FAMIX.Interface"»
 			<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
