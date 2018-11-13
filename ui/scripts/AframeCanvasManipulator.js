@@ -2,16 +2,19 @@ var canvasManipulator = (function () {
 
     var colors = {
         darkred: "darkred",
+        red: "red",
         black: "black",
         orange: "orange",
         darkorange: "darkorange"
-    }
+    };
 
     var scene = {};
     var threeJSScene = {};
 
     var camera;
     var initialCameraView;
+
+    var testEntity;
 
     function initialize() {
 
@@ -27,12 +30,22 @@ var canvasManipulator = (function () {
 
     //  working - save old transparency in case it is not 0?
     function changeTransparencyOfEntities(entities, value) {
-        entities.forEach(function (entity) {
+        entities.forEach(function (entity2) {
+            //  getting the entity again here, because without it the check if originalTransparency is defined fails sometimes
+            let entity = model.getEntityById(entity2.id);
             let component = document.getElementById(entity.id);
             if (component == undefined) {
                 events.log.error.publish({text: "CanvasManipualtor - changeTransparencyOfEntities - components for entityIds not found"});
                 return;
             }
+            if (entity.originalTransparency === undefined) {
+                entity.originalTransparency = {};
+                entity.currentTransparency = {};
+                if(component.getAttribute("material").opacity) {
+                    entity.originalTransparency = 1 - component.getAttribute("material").opacity;
+                }
+            }
+            entity.currentTransparency = value;
             setTransparency(component, value);
         });
     }
@@ -45,7 +58,10 @@ var canvasManipulator = (function () {
                 events.log.error.publish({text: "CanvasManipualtor - resetTransparencyOfEntities - components for entityIds not found"});
                 return;
             }
-            setTransparency(component, 1);
+            if (!(entity.originalTransparency == undefined)) {
+                entity.currentTransparency = entity.originalTransparency;
+                setTransparency(component, entity.originalTransparency);
+            }
         });
     }
 
@@ -53,21 +69,26 @@ var canvasManipulator = (function () {
     //	working
     function changeColorOfEntities(entities, color) {
         entities.forEach(function (entity) {
-            //	in x3dom this function would get entities of the model to change the color of the related object
-            //	for reference in canvasHoverController.js: var entity = model.getEntityById(multipartEvent.partID);
-            //	this entity gets handed over to the ActionController.js as part of an ApplicationEvent
-            if (!(entity == undefined)) {
-                var component = document.getElementById(entity.id);
+                //	in x3dom this function would get entities of the model to change the color of the related object
+                //	for reference in canvasHoverController.js: var entity = model.getEntityById(multipartEvent.partID);
+                //	this entity gets handed over to the ActionController.js as part of an ApplicationEvent
+                if (!(entity == undefined)) {
+                    var component = document.getElementById(entity.id);
+                }
+                if (component == undefined) {
+                    events.log.error.publish({text: "CanvasManipualtor - changeColorOfEntities - components for entityIds not found"});
+                    return;
+                }
+                if (entity.originalColor == undefined) {
+                    entity.originalColor = component.getAttribute("color");
+                }
+                entity.currentColor = color;
+                setColor(component, color);
             }
-            if (component == undefined) {
-                events.log.error.publish({text: "CanvasManipualtor - changeColorOfEntities - components for entityIds not found"});
-                return;
-            }
-            setColor(component, color);
-        });
+        );
     }
 
-    //	working
+//	working
     function resetColorOfEntities(entities) {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
@@ -75,11 +96,23 @@ var canvasManipulator = (function () {
                 events.log.error.publish({text: "CanvasManipualtor - resetColorOfEntities - components for entityIds not found"});
                 return;
             }
-            setColor(component, component.getAttribute("color"));
+            if (entity.originalColor) {
+                entity.currentColor = entity.originalColor;
+                setColor(component, entity.originalColor);
+            }
         });
     }
 
-    //  working
+    function setColor(object, color) {
+        color == colors.darkred ? color = colors.red : color = color;
+        let colorValues = color.split(" ");
+        if (colorValues.length == 3) {
+            color = "#" + parseInt(colorValues[0]).toString(16) + "" + parseInt(colorValues[1]).toString(16) + "" + parseInt(colorValues[2]).toString(16);
+        }
+        object.setAttribute("color", color);
+    }
+
+//  working
     function hideEntities(entities) {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
@@ -91,7 +124,7 @@ var canvasManipulator = (function () {
         });
     }
 
-    //  working
+//  working
     function showEntities(entities) {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
@@ -104,13 +137,29 @@ var canvasManipulator = (function () {
     }
 
     function highlightEntities(entities, color) {
-        entities.forEach(function (entity) {
+        entities.forEach(function (entity2) {
+            //  getting the entity again here, because without it the check if originalTransparency is defined fails sometimes
+            let entity = model.getEntityById(entity2.id);
             let component = document.getElementById(entity.id);
             if (component == undefined) {
                 events.log.error.publish({text: "CanvasManipualtor - highlightEntities - components for entityIds not found"});
                 return;
             }
+            if (entity.originalColor == undefined) {
+                entity.originalColor = component.getAttribute("color");
+                entity.currentColor = entity.originalColor;
+            }
+            if (entity["originalTransparency"] === undefined) {
+                // in case "material".opacity is undefined originalTransparency gets set to 0 which would be the default value anyways
+                entity.originalTransparency = {};
+                entity.currentTransparency = {};
+                if(component.getAttribute("material").opacity) {
+                    entity.originalTransparency = 1 - component.getAttribute("material").opacity;
+                } else entity.originalTransparency = 0;
+                entity.currentTransparency = entity.originalTransparency;
+            }
             setColor(component, color);
+            setTransparency(component, 0);
         });
     }
 
@@ -121,12 +170,13 @@ var canvasManipulator = (function () {
                 events.log.error.publish({text: "CanvasManipualtor - unhighlightEntities - components for entityIds not found"});
                 return;
             }
-            setColor(component, component.getAttribute("color"));
+            setTransparency(component, entity.currentTransparency);
+            setColor(component, entity.currentColor);
         });
     }
 
-    //  after clicking an entity fit the camera to show this entity (angle stays the same)
-    //  not working
+//  after clicking an entity fit the camera to show this entity (angle stays the same)
+//  not working
     function flyToEntity(entity) {
         /*document.querySelector("#camera").object3D.position = {x: 1, y: 2, z: 3};
         console.debug(document.querySelector("#camera").object3D.position);*/
@@ -143,8 +193,8 @@ var canvasManipulator = (function () {
     }
 
 
-    //  not working yet
-    //  gets called from Mark- and SelectController if specified in the config
+//  not working yet
+//  gets called from Mark- and SelectController if specified in the config
     function setCenterOfRotation(entity, setFocus) {
         var centerOfPart = getCenterOfEntity(entity);
 
@@ -177,33 +227,26 @@ var canvasManipulator = (function () {
         return centerOfPart;
     }
 
-
-    //Helper
-    function getPart(entity) {
-        if (entity.part == undefined) {
-            var part = multiPart.getParts([entity.id]);
-            entity.part = part;
-        }
-
-        return entity.part;
-    }
-
-    //	working
-    function setColor(object, color) {
-        object.setAttribute("material", {
-            color: color
-        });
-    }
-
     function setTransparency(object, value) {
         object.setAttribute('material', {
-            opacity: value
+            opacity: 1 - value
         });
     }
 
 
     function setVisibility(object, visibility) {
         object.setAttribute("visible", visibility);
+    }
+
+    function getElementIds() {
+        let sceneArray = Array.from(scene.children);
+        sceneArray.shift(); // so camera entity needs to be first in model.html
+        sceneArray.pop();  // last element is of class "a-canvas"
+        let elementIds = [];
+        sceneArray.forEach(function (object) {
+            elementIds.push(object.id);
+        });
+        return elementIds;
     }
 
     return {
@@ -231,6 +274,9 @@ var canvasManipulator = (function () {
 
         setCenterOfRotation: setCenterOfRotation,
         getCenterOfEntity: getCenterOfEntity,
+
+        getElementIds: getElementIds
     };
 
-})();
+})
+();
