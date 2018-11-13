@@ -22,7 +22,10 @@
 	
 	var multipartX3dUrl  = "<?php echo $multipartX3dUrl; ?>"; 
 	var multipartJsonUrl = "<?php echo $multipartJsonUrl; ?>"; 
-	var metaDataJsonUrl  = "<?php echo $metaDataJsonUrl; ?>"; 
+	var metaDataJsonUrl  = "<?php echo $metaDataJsonUrl; ?>";
+
+	var canvasId = "x3dom-x3dElement-canvas";
+    var visMode = "x3dom";
 </script>
 
 
