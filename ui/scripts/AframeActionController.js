@@ -96,10 +96,12 @@ var actionController = (function () {
             init: function () {
                 this.el.addEventListener("mouseup", function (eventObject) {
                     //general upAction for controllers
-                    eventObject.component = hoveredEntity;
-                    eventObject.which = latestMouseButtonPressed;
-                    upAction(actions.mouse.key[getMouseButton(eventObject)], eventObject);
-                    upAction(actions.mouse, eventObject);
+                    if(eventObject.target.id != canvasId) {
+                        eventObject.component = hoveredEntity;
+                        eventObject.which = latestMouseButtonPressed;
+                        upAction(actions.mouse.key[getMouseButton(eventObject)], eventObject);
+                        upAction(actions.mouse, eventObject);
+                    }
 
                     /*if (getMouseButton(eventObject) !== undefined) {
 

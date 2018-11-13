@@ -24,6 +24,12 @@ var setup = {
             name: "packageExplorerController"
         },
         {
+            name: "relationHighlightController"
+        },
+        {
+            name: "relationTransparencyController",
+        },
+        {
             name: "searchController"
         }
     ],
@@ -65,6 +71,8 @@ var setup = {
                                 { name: "canvasFilterController"},
                                 { name: "canvasSelectController"},
                                 { name: "canvasHoverController"},
+                                { name: "relationHighlightController"},
+                                { name: "relationTransparencyController"},
                                 { name: "defaultLogger" }
                             ]
                         }
