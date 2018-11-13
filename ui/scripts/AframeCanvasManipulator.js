@@ -21,7 +21,7 @@ var canvasManipulator = (function () {
         scene = document.getElementById(canvasId);
         threeJSScene = scene.object3D;
         camera = document.getElementById("camera");
-
+        
     }
 
     function reset() {
@@ -218,13 +218,55 @@ var canvasManipulator = (function () {
         }
     }
 
+    function createRelation() {
+        let relationObject = document.createElement("a-cylinder");
+        console.debug(relationObject.object3D);
+
+        let sourceCoordinates = getCenterOfEntity(model.getEntityById("ID_26f25e4da4c82dc2370f3bde0201e612dd88c04c"));
+        let targetCoordinates = getCenterOfEntity(model.getEntityById("ID_527aa1c76ab5cca95e6dbfcea35a5d2d9f5d737f"));
+
+        let deltaX = targetCoordinates["x"] - sourceCoordinates["x"];
+        let deltaY = targetCoordinates["y"] - sourceCoordinates["y"];
+        let deltaZ = targetCoordinates["z"] - sourceCoordinates["z"];
+
+        let rotationX = 90*deltaX/Math.sqrt(Math.pow(deltaY, 2)+Math.pow(deltaZ, 2));
+        let rotationY = 90*deltaY/Math.sqrt(Math.pow(deltaX, 2)+Math.pow(deltaZ, 2));
+        let rotationZ = 90*deltaZ/Math.sqrt(Math.pow(deltaX, 2)+Math.pow(deltaY, 2));
+
+        console.debug(rotationX);
+        console.debug(rotationY);
+        console.debug(rotationZ);
+
+
+        let distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2) + Math.pow(deltaZ, 2));
+
+        relationObject.object3D.rotation.set(
+            THREE.Math.degToRad(rotationX),
+            THREE.Math.degToRad(180),
+            THREE.Math.degToRad(0)
+        );
+
+
+        relationObject.setAttribute("position", {
+            x: sourceCoordinates["x"]+deltaX/2,
+            y: sourceCoordinates["y"]+deltaY/2,
+            z: sourceCoordinates["z"]+deltaZ/2
+        });
+        relationObject.setAttribute("material", {color:"cyan"});
+        relationObject.setAttribute("height", distance);
+        relationObject.setAttribute("radius", "0.1");
+        document.getElementById(canvasId).appendChild(relationObject);
+
+    }
+
 
     function getCenterOfEntity(entity) {
-        var entityPart = getPart(entity);
-        var volumeOfPart = entityPart.getVolume();
-        var centerOfPart = volumeOfPart.center;
-
-        return centerOfPart;
+        var middle = new THREE.Vector3();
+        var object = document.getElementById(entity.id).object3DMap.mesh;
+        middle.x = object.geometry.boundingSphere.center["x"];
+        middle.y = object.geometry.boundingSphere.center["y"];
+        middle.z = object.geometry.boundingSphere.center["z"];
+        return object.localToWorld(middle);
     }
 
     function setTransparency(object, value) {
@@ -275,7 +317,9 @@ var canvasManipulator = (function () {
         setCenterOfRotation: setCenterOfRotation,
         getCenterOfEntity: getCenterOfEntity,
 
-        getElementIds: getElementIds
+        getElementIds: getElementIds,
+
+        createRelation : createRelation
     };
 
 })
