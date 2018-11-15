@@ -27,7 +27,10 @@ var setup = {
             name: "relationHighlightController"
         },
         {
-            name: "relationTransparencyController",
+            name: "relationTransparencyController"
+        },
+        {
+            name: "relationConnectorController"
         },
         {
             name: "searchController"
@@ -73,6 +76,7 @@ var setup = {
                                 { name: "canvasHoverController"},
                                 { name: "relationHighlightController"},
                                 { name: "relationTransparencyController"},
+                                { name: "relationConnectorController"},
                                 { name: "defaultLogger" }
                             ]
                         }

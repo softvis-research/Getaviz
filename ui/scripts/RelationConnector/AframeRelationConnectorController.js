@@ -17,7 +17,7 @@ var relationConnectorController = function(){
 	//config parameters	
 	var controllerConfig = {
 		fixPositionZ : false,
-		showInnerRelations : false,
+		showInnerRelations : true,
 		elementShape : "",					//circle, square
 		sourceStartAtParentBorder : false,
 		targetEndAtParentBorder : false,
@@ -29,9 +29,7 @@ var relationConnectorController = function(){
 	
 	function initialize(setupConfig){	
 
-		application.transferConfigParams(setupConfig, controllerConfig);	
-		
-		loadPositionData(multipartJsonUrl);
+		application.transferConfigParams(setupConfig, controllerConfig);
 				
 		events.selected.on.subscribe(onRelationsChanged);
 	}
@@ -50,32 +48,6 @@ var relationConnectorController = function(){
 	
 	function reset(){
 		removeAllConnectors();
-	}
-	
-	function loadPositionData(filePath){
-		$.getJSON( filePath, function( data ) {
-			
-			events.log.info.publish({ text: "connector - loadPositionData"});
-
-			data.mapping.forEach(function(mapping) {
-				
-				var min = parseObjectPosition(mapping.min);
-				var max = parseObjectPosition(mapping.max);
-				
-				var connectorPosition = [];
-				var connectorDistance = [];
-				for (var index = 0; index < min.length; ++index) {						
-					connectorPosition[index] = ( Math.abs( max[index] - min[index] ) / 2 ) + min[index];
-					connectorDistance[index] = Math.abs( max[index] - min[index] ) / 2;
-				}									
-
-				loadedMin.set(mapping.name, min);
-				loadedMax.set(mapping.name, max);
-				loadedPositions.set(mapping.name, connectorPosition);
-				loadedDistances.set(mapping.name, connectorDistance);
-			});			
-			
-		});					
 	}
 	
 	function removeAllConnectors(){	
@@ -116,8 +88,8 @@ var relationConnectorController = function(){
 
 		removeAllConnectors();
 		
-		//get related entites
-		sourceEntity = applicationEvent.entities[0];	
+		//get related entities
+		sourceEntity = applicationEvent.entities[0];
 		
 		events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + sourceEntity.name});
 
@@ -145,7 +117,7 @@ var relationConnectorController = function(){
 				return;
 		}
 
-		events.log.info.publish({ text: "connector - onRelationsChanged - related Entites - " + relatedEntities.length});
+		events.log.info.publish({ text: "connector - onRelationsChanged - related Entities - " + relatedEntities.length});
 		
 		if(relatedEntities.length == 0) {
 			return;
@@ -159,11 +131,10 @@ var relationConnectorController = function(){
 
 
 	function createRelatedConnections(){
+		var relatedEntitiesMap = new Map();
 
-		var relatedEntitesMap = new Map();
-						
 		relatedEntities.forEach(function(relatedEntity){
-			if(relatedEntitesMap.has(relatedEntity)){
+			if(relatedEntitiesMap.has(relatedEntity)){
 				events.log.info.publish({ text: "connector - onRelationsChanged - multiple relation"});
 				return;
 			}
@@ -176,7 +147,7 @@ var relationConnectorController = function(){
 			}
 								
 			//create scene element
-			var connector = createConnector(sourceEntity, relatedEntity);
+			let connector = createConnector(sourceEntity, relatedEntity);
 			
 			//target or source not rendered -> no connector -> remove relatation
 			if( connector === undefined){				
@@ -186,7 +157,6 @@ var relationConnectorController = function(){
 			events.log.info.publish({ text: "connector - onRelationsChanged - create connector"});
 			
 			connectors.push(connector);
-			canvasManipulator.addElement(connector);
 			
 			//create model entity
 			var relation = model.createEntity(
@@ -202,11 +172,11 @@ var relationConnectorController = function(){
 			
 			relations.push(relation);
 			
-			relatedEntitesMap.set(relatedEntity, relatedEntity);
+			relatedEntitiesMap.set(relatedEntity, relatedEntity);
 		});
 		
 		
-		if(relatedEntitesMap.size != 0){
+		if(relatedEntitiesMap.size != 0){
 		
 			var applicationEvent = {			
 				sender: relationConnectorController,
@@ -220,36 +190,41 @@ var relationConnectorController = function(){
 	
 	function createConnector(entity, relatedEntity){
 		//calculate attributes						
-		var sourcePosition = calculateSourcePosition(entity, relatedEntity);
+		var sourcePosition = canvasManipulator.getCenterOfEntity(entity);
 		if( sourcePosition === null ){
 			return;
 		}
 		
-		var targetPosition = calculateTargetPosition(entity, relatedEntity);
+		var targetPosition = canvasManipulator.getCenterOfEntity(relatedEntity);
 		if( targetPosition === null ){
 			return;
 		}
 		
 		var connectorColor = "1 0 0";
 		var connectorSize = 0.5;
-		
+
 		//config
 		if(controllerConfig.fixPositionZ){
-			sourcePosition[2] = controllerConfig.fixPositionZ;
-			targetPosition[2] = controllerConfig.fixPositionZ;
+			sourcePosition[z] = controllerConfig.fixPositionZ;
+			targetPosition[z] = controllerConfig.fixPositionZ;
 		}
-		
+
 		//create element
-		var transform = document.createElement('Transform');
+        var connector = document.createElement("a-entity");
+        connector.setAttribute("line", {
+            start: sourcePosition,
+            end: targetPosition,
+            color: "red"
+        });
 		
-		transform.appendChild(createLine(sourcePosition, targetPosition, connectorColor, connectorSize));
+		document.querySelector("a-scene").appendChild(connector);
 		
-		//config
+		/*//config
 		if(controllerConfig.createEndpoints){
 			transform.appendChild(createEndPoint(sourcePosition, targetPosition, "0 0 0", connectorSize * 2));
-		}
+		}*/
 					
-		return transform;
+		return connector;
 	}
 
 	
