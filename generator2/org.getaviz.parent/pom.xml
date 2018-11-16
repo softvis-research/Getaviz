@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.getaviz</groupId>
+  <artifactId>org.getaviz.parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <name>Getaviz Generator</name>
+  <url>https://github.com/getaviz/Getaviz</url>
+  <packaging>pom</packaging>
+  <modules>
+    <module>../org.getaviz.lib.database</module>
+    <module>../org.getaviz.generator</module>
+  </modules>
+  <properties>
+    <xtend.version>2.15.0</xtend.version>
+    <clean.version>3.0.0</clean.version>
+    <surefire.version>2.19.1</surefire.version>
+    <neo4j.version>3.4.9</neo4j.version>
+    <junit.jupiter.version>5.3.1</junit.jupiter.version>
+    <dependency.locations.enabled>false</dependency.locations.enabled>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+    </dependency>
+  </dependencies>
+</project>
