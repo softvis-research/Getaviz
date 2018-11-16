@@ -1,0 +1,68 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <relativePath>../org.getaviz.parent/pom.xml</relativePath>
+    <groupId>org.getaviz</groupId>
+    <artifactId>org.getaviz.parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <groupId>org.getaviz.lib.database</groupId>
+  <artifactId>org.getaviz.lib.database</artifactId>
+  <name>Getaviz Database Connector</name>
+  <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.neo4j/neo4j -->
+    <dependency>
+      <groupId>org.neo4j</groupId>
+      <artifactId>neo4j</artifactId>
+      <version>3.4.9</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-graphdb-api -->
+    <dependency>
+      <groupId>org.neo4j</groupId>
+      <artifactId>neo4j-graphdb-api</artifactId>
+      <version>${neo4j.version}</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.eclipse.xtend/org.eclipse.xtend.lib -->
+    <dependency>
+      <groupId>org.eclipse.xtend</groupId>
+      <artifactId>org.eclipse.xtend.lib</artifactId>
+      <version>${xtend.version}</version>
+    </dependency>
+  </dependencies>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.xtend</groupId>
+        <artifactId>xtend-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-testCompile</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>${clean.version}</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${basedir}/output</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
