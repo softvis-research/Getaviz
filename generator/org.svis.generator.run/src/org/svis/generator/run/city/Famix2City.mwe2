@@ -28,11 +28,6 @@ Workflow {
 	component = org.svis.generator.famix.Famix2Famix {
 		modelSlot = "famix"
 	}
-
-	//transformation 1: from FAMIX to CITY
-	component = org.svis.generator.city.s2m.Famix2City {
-		modelSlot = "famix"
-	}
 	
 	// write metaData
 	component = org.eclipse.xtext.generator.GeneratorComponent {
@@ -41,6 +36,11 @@ Workflow {
 		outlet = {
 			path = "${outputPath}"
 		}
+	}
+
+	//transformation 1: from FAMIX to CITY
+	component = org.svis.generator.city.s2m.Famix2City {
+		modelSlot = "famix"
 	}
 	
 	//output 1b: model as *.xml
