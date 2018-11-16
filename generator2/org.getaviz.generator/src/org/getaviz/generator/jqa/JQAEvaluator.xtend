@@ -65,15 +65,6 @@ class JQAEvaluator implements Evaluator {
 				} else {
 					return Evaluation.INCLUDE_AND_CONTINUE
 				}
-
-//				val result = graph.execute(
-//					"MATCH (m1:Method)<-[:DECLARES]-(c:Type)-[:EXTENDS]->(p:Type)-[:DECLARES]->(m2) WHERE ID(m1) = " +
-//						node.id + " AND m1.signature = m2.signature RETURN m1")
-//				if (result === null) {
-//					return Evaluation.INCLUDE_AND_CONTINUE
-//				} else {
-//					return Evaluation.EXCLUDE_AND_CONTINUE
-//				}
 			}
 		}
 		return Evaluation.EXCLUDE_AND_PRUNE

@@ -56,7 +56,6 @@ class JQAEnhancement {
 			graph.traversalDescription.depthFirst.relationships(Rels.CONTAINS, Direction.OUTGOING).relationships(
 				Rels.DECLARES, Direction.OUTGOING).uniqueness(Uniqueness.NONE).evaluator(evaluator).traverse(package).
 				nodes.forEach [
-				//	log.debug(id)
 					var fqn = getProperty("fqn", "") as String
 					if (fqn.empty) {
 						val container = getSingleRelationship(Rels.DECLARES, Direction.INCOMING).startNode
@@ -80,9 +79,7 @@ class JQAEnhancement {
 						}
 						setProperty("fqn", fqn)
 					}
-					// fqn = fqn.replace("$", ".")
-					var hash = getProperty("hash", "") as String
-					if (hash.empty) {
+					if (!hasProperty("hash")) {
 						setProperty("hash", createHash(fqn))
 					}
 				]

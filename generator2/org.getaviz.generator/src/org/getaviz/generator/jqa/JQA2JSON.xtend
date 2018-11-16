@@ -193,7 +193,7 @@ class JQA2JSON {
 	
 	def private toMetaDataAnnotation(Node annotation) {
 		var belongsTo = ""
-		val parent = annotation.getRelationships(Direction.INCOMING, Rels.CONTAINS, Rels.DECLARES).head
+		val parent = annotation.getRelationships(Direction.INCOMING, Rels.CONTAINS, Rels.DECLARES).filter[hasProperty("Package")].head
 		if(parent !== null) {
 			belongsTo = parent.startNode.getProperty("hash") as String
 		}			
@@ -300,8 +300,12 @@ class JQA2JSON {
 	def private getParameters(Node method) {
 		val parameterList = newArrayList
 		val list = method.getRelationships(Rels.HAS, Direction.OUTGOING).map[endNode];
-		list.filter[hasLabel(Labels.Parameter)].sortBy[p|p.getProperty("index") as Integer].forEach[p|
-			parameterList += p.getSingleRelationship(Rels.OF_TYPE, Direction.OUTGOING).endNode.getProperty("name") as String
+		list.filter[hasLabel(Labels.Parameter)].sortBy[p|p.getProperty("index", 0) as Integer].forEach[p|
+			try {
+				parameterList += p.getSingleRelationship(Rels.OF_TYPE, Direction.OUTGOING).endNode.getProperty("name") as String
+			} catch (NullPointerException e) {
+				
+			}
 		]
 		return parameterList.removeBrackets
 	}

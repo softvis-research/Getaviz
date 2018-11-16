@@ -31,7 +31,7 @@ class RD2RD {
 	RGBColor[] NS_colors
 
 	new() {
-		log.info("RDModifikation started")
+		log.info("RD2RD started")
 		var tx = graph.beginTx
 		try {
 			var result = graph.execute(
@@ -91,7 +91,7 @@ class RD2RD {
 		} finally {
 			tx.close
 		}
-		log.info("RDModifikation finished")
+		log.info("RD2RD finished")
 	}
 
 	def private setNamespaceColor(Node namespaceDisk) {

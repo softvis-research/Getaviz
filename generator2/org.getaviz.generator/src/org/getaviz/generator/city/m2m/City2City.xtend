@@ -29,7 +29,7 @@ class City2City {
 	var Node model
 		
 	new () {
-		log.info("CityModification started")
+		log.info("City2City started")
 		graph = Database::getInstance(config.databaseName)
 			var tx = graph.beginTx
 			try {
@@ -113,7 +113,7 @@ class City2City {
 			} finally {
 				tx.close
 			}
-			log.info("CityModification finished")
+			log.info("City2City finished")
 	}
 
 	def private void setDistrictAttributes(Path districtPath) {
