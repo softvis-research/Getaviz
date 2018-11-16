@@ -66,8 +66,7 @@ import org.svis.xtext.famix.FAMIXMessageClass
 import org.svis.xtext.famix.FAMIXTableType
 import org.svis.xtext.famix.FAMIXTableElement
 import org.svis.xtext.famix.FAMIXTypeOf
-
-
+import org.svis.xtext.famix.impl.FAMIXFormroutineImpl
 
 class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val log = LogFactory::getLog(class)
@@ -192,22 +191,22 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		allPackages.forEach[getPackages]
 		rootPackages.forEach[setQualifiedName]
 		methods.forEach[setQualifiedName]
-		attributes.forEach[setQualifiedNameAbap]
 		enumValues.forEach[setQualifiedName]
+		messageClasses.forEach[setQualifiedName]
 		reports.forEach[setQualifiedName]
-		dataElements.forEach[setQualifiedName]
-		tableTypes.forEach[setQualifiedName]
-		domains.forEach[setQualifiedName]
+		formroutines.forEach[setQualifiedName]
+		functionGroups.forEach[setQualifiedName]
+		functionModules.forEach[setQualifiedName]
 		tables.forEach[setQualifiedName]
 		tableElements.forEach[setQualifiedName]
+		tableTypes.forEach[setQualifiedName]
 		abapStrucsTmp.forEach[setQualifiedName]
 		abapStrucElem.forEach[setQualifiedName]
-		functionModules.forEach[setQualifiedName]
-		functionGroups.forEach[setQualifiedName]
-		formroutines.forEach[setQualifiedName]
-		messageClasses.forEach[setQualifiedName]
-	
-		abapStrucsTmp.forEach[updateAbapStrucs]		
+		abapStrucsTmp.forEach[updateAbapStrucs]	
+		dataElements.forEach[setQualifiedName]		
+		domains.forEach[setQualifiedName]				
+		attributes.forEach[setQualifiedNameAbap]
+		
 		
 		
 		famixDocument.elements.clear
@@ -871,7 +870,9 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		switch (ref) {
 			FAMIXClass: attribute.fqn = ref.fqn + "." + attribute.value
 			FAMIXReport: attribute.fqn = ref.fqn + "." + attribute.value
+			FAMIXFormroutine: attribute.fqn = ref.fqn + "." + attribute.value
 			FAMIXFunctionGroup: attribute.fqn = ref.fqn + "." + attribute.value
+			FAMIXFunctionModule: attribute.fqn = ref.fqn + "." + attribute.value
 			FAMIXMethod: attribute.fqn = ref.fqn + "." + attribute.value
 			default: log.error("ERROR qualifiedName(FAMIXAttribute famixAttribute): " + attribute.value)
 		}
