@@ -1273,19 +1273,19 @@ public class SettingsConfiguration {
 	//ABAP specific settings
 	
 	public static enum AbapCityRepresentation {
-		SOURCE, CODE_LOGIC;
+		SIMPLE, ADVANCED;
 	}
 	
 	public String getAbapRepresentation() {
-		return config.getString("city.represent_abap", "source");
+		return config.getString("city.abap_representation_mode", "simple");
 	}
 	
 	public AbapCityRepresentation getAbap_representation() {
 		switch (getAbapRepresentation()) {
-		case "code_logic":
-			return AbapCityRepresentation.CODE_LOGIC;
+		case "advanced":
+			return AbapCityRepresentation.ADVANCED;
 		default:
-			return AbapCityRepresentation.SOURCE;
+			return AbapCityRepresentation.SIMPLE;
 		}
 	}
 	

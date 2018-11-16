@@ -144,7 +144,7 @@ FAMIXAttribute:
 	'(' 'parentType' parentType=IntegerReference ')'
 	('(' 'sourceAnchor' sourceAnchor=IntegerReference ')')?
 	('(' 'getterSetter' getterSetter += IntegerReference* ')')?
-	('(' 'dataType' datatype=MSESTRING ')')? //ABAP
+	('(' 'dataType' dataType=MSESTRING ')')? //ABAP
 	('(' 'dataElement' dataElement=MSESTRING ')')? //ABAP
 	('(' 'sourceCodeDefined' sourceCodeDefined=Boolean ')')? //ABAP
 	('(' 'iteration' iteration=INT ')')? //ABAP

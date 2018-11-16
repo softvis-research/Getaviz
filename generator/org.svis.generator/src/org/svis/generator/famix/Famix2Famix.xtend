@@ -66,8 +66,7 @@ import org.svis.xtext.famix.FAMIXMessageClass
 import org.svis.xtext.famix.FAMIXTableType
 import org.svis.xtext.famix.FAMIXTableElement
 import org.svis.xtext.famix.FAMIXTypeOf
-
-
+import org.svis.xtext.famix.impl.FAMIXFormroutineImpl
 
 class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val log = LogFactory::getLog(class)
@@ -192,22 +191,22 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		allPackages.forEach[getPackages]
 		rootPackages.forEach[setQualifiedName]
 		methods.forEach[setQualifiedName]
-		attributes.forEach[setQualifiedNameAbap]
 		enumValues.forEach[setQualifiedName]
+		messageClasses.forEach[setQualifiedName]
 		reports.forEach[setQualifiedName]
-		dataElements.forEach[setQualifiedName]
-		tableTypes.forEach[setQualifiedName]
-		domains.forEach[setQualifiedName]
+		formroutines.forEach[setQualifiedName]
+		functionGroups.forEach[setQualifiedName]
+		functionModules.forEach[setQualifiedName]
 		tables.forEach[setQualifiedName]
 		tableElements.forEach[setQualifiedName]
+		tableTypes.forEach[setQualifiedName]
 		abapStrucsTmp.forEach[setQualifiedName]
 		abapStrucElem.forEach[setQualifiedName]
-		functionModules.forEach[setQualifiedName]
-		functionGroups.forEach[setQualifiedName]
-		formroutines.forEach[setQualifiedName]
-		messageClasses.forEach[setQualifiedName]
-	
-		abapStrucsTmp.forEach[updateAbapStrucs]		
+		abapStrucsTmp.forEach[updateAbapStrucs]	
+		dataElements.forEach[setQualifiedName]		
+		domains.forEach[setQualifiedName]				
+		attributes.forEach[setQualifiedNameAbap]
+		
 		
 		
 		famixDocument.elements.clear
@@ -858,11 +857,9 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	
 	
 	//ABAP
-	//Check if structure has elements. Proceed with those, that aren't empty
+	//Check if structure has elements. Proceed with those, that aren't empty 
 	def updateAbapStrucs(FAMIXABAPStruc struc){
-		var abapStrucElements = abapStrucElem.filter[container.ref.name == struc.name]
 		if(abapStrucElem.filter[container.ref.name == struc.name].length != 0 || struc.iteration != 0){
-		//if(abapStrucElements.length != 0 || struc.iteration != 0)
 			abapStrucs.add(struc)
 		}
 	}
@@ -873,11 +870,13 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		switch (ref) {
 			FAMIXClass: attribute.fqn = ref.fqn + "." + attribute.value
 			FAMIXReport: attribute.fqn = ref.fqn + "." + attribute.value
+			FAMIXFormroutine: attribute.fqn = ref.fqn + "." + attribute.value
 			FAMIXFunctionGroup: attribute.fqn = ref.fqn + "." + attribute.value
+			FAMIXFunctionModule: attribute.fqn = ref.fqn + "." + attribute.value
 			FAMIXMethod: attribute.fqn = ref.fqn + "." + attribute.value
 			default: log.error("ERROR qualifiedName(FAMIXAttribute famixAttribute): " + attribute.value)
 		}
-		attribute.id = createID(attribute.fqn)
+		attribute.id = createID(attribute.fqn + "Attribute")
 	}
 	
 	//ABAP	
@@ -887,8 +886,8 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 			dd.fqn = ref.fqn + "." + dd.value
 		}else if(ref instanceof FAMIXNamespace){
 			dd.fqn = ref.fqn + "." + dd.value
-		}
-		dd.id = createID(dd.fqn)
+		}		
+		dd.id = createID(dd.fqn + dd.class.toString)
 	}  
 	
 	def setQualifiedName(FAMIXFunctionModule fm){
@@ -896,7 +895,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		if(ref instanceof FAMIXFunctionGroup){
 			fm.fqn = ref.fqn + "." + fm.value
 		}
-		fm.id = createID(fm.fqn)
+		fm.id = createID(fm.fqn + fm.class.toString)
 	}
 	
 	def setQualifiedName(FAMIXFunctionGroup fg){
@@ -904,7 +903,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		if(ref instanceof FAMIXNamespace){
 			fg.fqn = ref.fqn + "." + fg.value
 		}
-		fg.id = createID(fg.fqn)
+		fg.id = createID(fg.fqn + fg.class.toString)
 	}
 	
 	def setQualifiedName(FAMIXReport re){
@@ -912,7 +911,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		if(ref instanceof FAMIXNamespace){
 			re.fqn = ref.fqn + "." + re.value
 		}
-		re.id = createID(re.fqn)
+		re.id = createID(re.fqn + re.class.toString)
 	}
 	
 	def setQualifiedName(FAMIXFormroutine fr){
@@ -920,7 +919,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		if(ref instanceof FAMIXReport){
 			fr.fqn = ref.fqn + "." + fr.value
 		}		
-		fr.id = createID(fr.fqn)
+		fr.id = createID(fr.fqn + fr.class.toString)
 	}
 	
 	def setQualifiedName(FAMIXMessageClass ms){
