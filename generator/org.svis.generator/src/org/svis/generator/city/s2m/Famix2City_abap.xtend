@@ -13,13 +13,13 @@ import org.svis.xtext.city.District
 import org.svis.xtext.city.Root
 import org.svis.xtext.city.impl.CityFactoryImpl
 import org.svis.xtext.famix.Document
-import org.svis.xtext.famix.FAMIXClass
 import org.svis.xtext.famix.FAMIXAttribute
 import org.svis.xtext.famix.FAMIXEnum
 import org.svis.xtext.famix.FAMIXEnumValue
 import org.svis.xtext.famix.FAMIXFileAnchor
 import org.svis.xtext.famix.FAMIXInheritance
 import org.svis.xtext.famix.FAMIXLocalVariable
+import org.svis.xtext.famix.FAMIXClass
 import org.svis.xtext.famix.FAMIXMethod
 import org.svis.xtext.famix.FAMIXNamespace
 import org.svis.xtext.famix.FAMIXParameter
@@ -34,20 +34,24 @@ import org.svis.generator.SettingsConfiguration.BuildingType
 import org.svis.generator.SettingsConfiguration.ClassElementsModes
 import org.svis.generator.SettingsConfiguration.Original.BuildingMetric
 import org.svis.generator.SettingsConfiguration.FamixParser
+import static org.apache.commons.codec.digest.DigestUtils.sha1Hex
 import org.svis.generator.SettingsConfiguration.AbapCityRepresentation
-import org.svis.xtext.city.Entity
-import org.eclipse.xtext.EcoreUtil2
 
-//ABAP
-import org.svis.xtext.famix.FAMIXReport
+// ABAP
+import org.svis.xtext.famix.FAMIXReport 
+import org.svis.xtext.famix.FAMIXDictionaryData
 import org.svis.xtext.famix.FAMIXDataElement
+import org.svis.xtext.famix.FAMIXDomain
 import org.svis.xtext.famix.FAMIXTable
-import org.svis.xtext.famix.FAMIXMessageClass
+import org.svis.xtext.famix.FAMIXABAPStruc
+import org.svis.xtext.famix.FAMIXStrucElement
 import org.svis.xtext.famix.FAMIXFunctionGroup
 import org.svis.xtext.famix.FAMIXFunctionModule
-import org.svis.xtext.famix.FAMIXStrucElement
-import org.svis.xtext.famix.FAMIXABAPStruc
 import org.svis.xtext.famix.FAMIXFormroutine
+import org.svis.xtext.famix.FAMIXMessageClass 
+import org.svis.xtext.famix.FAMIXTableType 
+import org.svis.xtext.famix.FAMIXTypeOf
+import org.svis.xtext.famix.FAMIXTableElement
 
 
 
@@ -61,7 +65,6 @@ class Famix2City_abap {
 		subPackages 		+= famixDocument.elements.filter(FAMIXNamespace).filter[parentScope !== null]
 		structures 			+= famixDocument.elements.filter(FAMIXStructure)
  		classes 			+= famixDocument.elements.filter(FAMIXClass)
-//		pClasses += famixDocument.elements.filter(FAMIXParameterizableClass)
 		methods 			+= famixDocument.elements.filter(FAMIXMethod)
 		localVariables 		+= famixDocument.elements.filter(FAMIXLocalVariable)
 		attributes 			+= famixDocument.elements.filter(FAMIXAttribute)
@@ -74,15 +77,25 @@ class Famix2City_abap {
 		parameters 			+= famixDocument.elements.filter(FAMIXParameter)
 		
 		//ABAP
-		reports 	 	 += famixDocument.elements.filter(FAMIXReport) 
-		tables 		     += famixDocument.elements.filter(FAMIXTable)
+		reports 	 	 += famixDocument.elements.filter(FAMIXReport)
+		formroutines	 += famixDocument.elements.filter(FAMIXFormroutine)
+		dataElements	 += famixDocument.elements.filter(FAMIXDataElement)
+		domains			 += famixDocument.elements.filter(FAMIXDomain)
+		tables			 += famixDocument.elements.filter(FAMIXTable)
+		abapStrucs		 += famixDocument.elements.filter(FAMIXABAPStruc)
+		abapStrucElem    += famixDocument.elements.filter(FAMIXStrucElement)
 		functionGroups   += famixDocument.elements.filter(FAMIXFunctionGroup)
 		functionModules  += famixDocument.elements.filter(FAMIXFunctionModule)
-		dataElements	 += famixDocument.elements.filter(FAMIXDataElement)
 		messageClasses   += famixDocument.elements.filter(FAMIXMessageClass)
-		strucs 			 += famixDocument.elements.filter(FAMIXABAPStruc)
-		strucElements 	 += famixDocument.elements.filter(FAMIXStrucElement)
-		formRoutines 	 += famixDocument.elements.filter(FAMIXFormroutine)
+		tableTypes		 += famixDocument.elements.filter(FAMIXTableType)
+		typeOf			 += famixDocument.elements.filter(FAMIXTypeOf)
+		tableElements	 += famixDocument.elements.filter(FAMIXTableElement)
+		
+		dcData	 		 += dataElements + domains + abapStrucs + tableTypes 
+		
+		if(!config.showOwnTablesDistrict){
+			dcData += tables
+		}
 	}
 		
 	val config = SettingsConfiguration.instance
@@ -97,7 +110,6 @@ class Famix2City_abap {
 	val Set<FAMIXNamespace> subPackages = newLinkedHashSet
 	val List<FAMIXStructure> structures = newArrayList
 	val List<FAMIXClass> classes = newArrayList
-//	val List<FAMIXParameterizableClass> pClasses = newArrayList
 	val List<FAMIXMethod> methods = newArrayList
 	val List<FAMIXLocalVariable> localVariables = newArrayList
 	val List<FAMIXAttribute> attributes = newArrayList
@@ -110,29 +122,31 @@ class Famix2City_abap {
 	val List<FAMIXParameter> parameters = newArrayList
 	
 	var org.svis.xtext.city.District originDistrict = cityFactory.createDistrict
-	var List<Entity> entityList = newArrayList
 	
 	//ABAP
-	val List<FAMIXReport> reports = newArrayList
-	val List<FAMIXTable> tables =newArrayList
-	val List<FAMIXDataElement> dataElements = newArrayList
+	val List<FAMIXReport> reports = newArrayList 
+	val List<FAMIXDictionaryData> dcData = newArrayList
+	val List<FAMIXDataElement> dataElements = newArrayList 
+	val List<FAMIXDomain> domains = newArrayList
+	val List<FAMIXTable> tables = newArrayList 
+	val List<FAMIXABAPStruc> abapStrucs = newArrayList 
+	val List<FAMIXStrucElement> abapStrucElem = newArrayList 
+	val List<FAMIXFunctionModule> functionModules = newArrayList
+	val List<FAMIXFormroutine> formroutines = newArrayList
 	val List<FAMIXMessageClass> messageClasses = newArrayList
 	val List<FAMIXFunctionGroup> functionGroups = newArrayList
-	val List<FAMIXFunctionModule> functionModules = newArrayList
-	val List<FAMIXABAPStruc> strucs = newArrayList
-	val List<FAMIXStrucElement> strucElements = newArrayList
-	val List<FAMIXFormroutine> formRoutines = newArrayList
+	val List<FAMIXTableType> tableTypes = newArrayList
+	val List<FAMIXTypeOf> typeOf = newArrayList
+	val List<FAMIXTableElement> tableElements = newArrayList
 	
 	
-	def abapToModel(){
-		
+	def abapToModel(){		
 		// Run transformation 
-		if(config.abap_representation == AbapCityRepresentation::SOURCE){
-			sourceModel()
-		}else if(config.abap_representation == AbapCityRepresentation::CODE_LOGIC){
-			//TODO
-		}
-		
+		if(config.abap_representation == AbapCityRepresentation::SIMPLE){
+			simpleModel()
+		}else if(config.abap_representation == AbapCityRepresentation::ADVANCED){
+			advancedModel()
+		}		
 		
 		return cityDocument
 	}
@@ -144,152 +158,166 @@ class Famix2City_abap {
 	
 	
 	/**
-	 * Transform famix to City, represent as SOURCE
+	 * Transform famix to City, SIMPLE representation
+	 * 1. Group objects by type and art
+	 * 2. Create district for groups
+	 * 3. Use simple forms (city2X3D)
 	 */
-	 def sourceModel(){
-	 	//collection of all originPackages
-		originDistrict.name = 'originPackages'
-		originDistrict.level = 1
-		originDistrict.id = '0'
-		originDistrict.type = 'FAMIX.Namespace'
-		originDistrict.notInOrigin = 'false'
-		originDistrict.hasDatabases = 'false'
-	
-		rootPackages.forEach[toDistrict(2)]
-	 	cityDocument.entities.add(originDistrict)
-	 	
-	 	//entityList is used to attach references to the respecting entities
-		//entityList = EcoreUtil2.getAllContentsOfType(cityDocument, Entity)
-		//references.forEach[toABAPReference()]
-	 }
+	def simpleModel(){
+		rootPackages.forEach[toDistrict(1)]
+	}
 	
 	
 	/**
-	 * Sets values for current package and searches for nested elements
-	 * 
-	 * @param elem Source package for the district
-	 * @param level Hierarchy level of the district
-	 * @return new District
+	 * Transform famix to City, ADVANCED representation
+	 * 1. Build city using dependencies
+	 * 2. Use more complex buildings (city2X3D)
 	 */
-	def District toDistrict(FAMIXNamespace elem, int level) {
+	def advancedModel(){
+		rootPackages.forEach[toAdvancedDistrict(1)]
+	}
+	
+	
+	// Mode: simple
+	def private District toDistrict(FAMIXNamespace elem, int level) {	
 		
-		/*
-		 *	val newDistrict = cityFactory.createDistrict
-			newDistrict.name = elem.name
-			newDistrict.value = elem.value
-			newDistrict.fqn = elem.fqn
-			newDistrict.type = CityUtils.getFamixClassString(elem.class.simpleName)
-			newDistrict.level = level
-			newDistrict.id = elem.id
-		* 
-		*/
-		
+		// Create main district		
 		val newDistrict = cityFactory.createDistrict
 		newDistrict.name = elem.name
 		newDistrict.value = elem.value
-		newDistrict.level = level
 		newDistrict.fqn = elem.fqn
 		newDistrict.type = CityUtils.getFamixClassString(elem.class.simpleName)
-		newDistrict.id = elem.name.toString
+		newDistrict.level = level
+		newDistrict.id = elem.id
 		if(elem.iteration >= 1){
-			newDistrict.notInOrigin = 'true'	
-		}else{
-			newDistrict.notInOrigin = "false";
+			newDistrict.notInOrigin = "true"
 		}
 		
-		val classLibrary = cityFactory.createDistrict
-		classLibrary.name = newDistrict.name + "_classLibrary"
-		classLibrary.level = level
-		classLibrary.type = "classLibrary"
-		classLibrary.id = elem.name + "00001"
-		
-		//val currentAttributes = attributes.filter[parentType.ref === elem]
-		//classes.filter[container.ref.equals(elem)].
-		classes.filter[container.ref == elem].
-			forEach[classLibrary.entities.add(toBuilding_Struct(newDistrict, level + 1))]
-		messageClasses.filter[container.ref == elem].
-			forEach[classLibrary.entities.add(toBuilding_Struct(newDistrict, level + 1))]
+		// Test mode -> Delete for dist		
+		if(!config.abapCityTestMode){
+			//Sub packages
+			subPackages.filter[parentScope.ref === elem].forEach[newDistrict.entities += toDistrict(level + 1)]
 			
-		val functionGroupLibrary = cityFactory.createDistrict
-		functionGroupLibrary.name = newDistrict.name + "_functionGroupLibrary"
-		functionGroupLibrary.level = level
-		functionGroupLibrary.type = "functionGroupLibrary"
-		functionGroupLibrary.id = elem.name + "00002"
-		
-		functionGroups.filter[container.ref == elem].
-			forEach[functionGroupLibrary.entities.add(toBuilding_Struct(newDistrict, level + 1))]
-		
-		val reportLibrary = cityFactory.createDistrict
-		reportLibrary.name = newDistrict.name + "_reportLibrary"
-		reportLibrary.level = level
-		reportLibrary.type = "reportLibrary"
-		reportLibrary.id = elem.name + "00003"
-		
-		reports.filter[container.ref == elem].
-			forEach[reportLibrary.entities.add(toBuilding_Report(newDistrict, level + 1))]
-			
-		val tableLibrary = cityFactory.createDistrict
-		tableLibrary.name = newDistrict.name + "_tableLibrary"
-		tableLibrary.level = level
-		tableLibrary.type = "tableLibrary"
-		tableLibrary.id = elem.name + "00004"
-		
-		tables.filter[container.ref == elem].
-			forEach[tableLibrary.entities.add(toBuilding_Table(newDistrict, level + 1))]
-			
-		val dictionary = cityFactory.createDistrict
-		dictionary.name = newDistrict.name + "_dictionary"
-		dictionary.level = level
-		dictionary.type = "dictionaryLibrary"
-		dictionary.id = elem.name + "00005"
-		
-		dataElements.filter[container.ref == elem].
-			forEach[dictionary.entities.add(toBuilding_dataElement(newDistrict, level + 1))]
-			
-		strucs.filter[container.ref == elem].
-			forEach[dictionary.entities.add(toBuilding_strucs(newDistrict, level + 1))]
-		
-		if(classLibrary.entities.size != 0 || config.showEmptyDistricts()){
-			newDistrict.entities.add(classLibrary)
-		}
-		
-		if(reportLibrary.entities.size != 0 || config.showEmptyDistricts()){
-			newDistrict.entities.add(reportLibrary)
-		}
-		
-		if(functionGroupLibrary.entities.size != 0 || config.showEmptyDistricts()){
-			newDistrict.entities.add(functionGroupLibrary)
-		}
-		
-		if(dictionary.entities.size != 0 || config.showEmptyDistricts()){
-			newDistrict.entities.add(dictionary)
-		}
-		
-		if(tableLibrary.entities.size == 0){
-			newDistrict.hasDatabases = 'false'
-		}
-		newDistrict.entities.add(tableLibrary)
+			//Data Dictionary
+			if (dcData.filter[container.ref == elem].length != 0){
+				val dcDataDistrict = cityFactory.createDistrict
+				dcDataDistrict.name = newDistrict.name + "_dcDataDistrict"
+				dcDataDistrict.type = "dcDataDistrict"
+				dcDataDistrict.id = elem.id + "_00002"
+				dcDataDistrict.level = level + 1
+				if(elem.iteration >= 1){
+					dcDataDistrict.notInOrigin = "true"
+				}
 				
-	//	subPackages.filter[container.ref.equals(elem)].
-	//		forEach[newDistrict.entities.add(toDistrict(level + 1))]
+				dcData.filter[container.ref == elem].forEach[dcDataDistrict.entities += toBuilding(level + 2)]
+				newDistrict.entities.add(dcDataDistrict)
+			}
+			
+			//Reports (+forms)
+			if (reports.filter[container.ref == elem].length != 0){
+				val reportDistrict = cityFactory.createDistrict
+				reportDistrict.name = newDistrict.name + "_reportDistrict"
+				reportDistrict.type = "reportDistrict"
+				reportDistrict.id = elem.id + "_00003"
+				reportDistrict.level = level + 1
+				if(elem.iteration >= 1){
+					reportDistrict.notInOrigin = "true"
+				}
+				
+				reports.filter[container.ref == elem].forEach[reportDistrict.entities += toBuilding(level + 2)]
+				newDistrict.entities.add(reportDistrict)
+			}
+			
+			//Classes (+included methods and attributes)
+			if (classes.filter[container.ref == elem].length != 0){
+				val classDistrict = cityFactory.createDistrict
+				classDistrict.name = newDistrict.name + "_classDistrict"
+				classDistrict.type = "classDistrict"
+				classDistrict.level = level + 1
+				classDistrict.id = elem.id + "_00004"
+				if(elem.iteration >= 1){
+					classDistrict.notInOrigin = "true"
+				}
+				
+				classes.filter[container.ref === elem].forEach[classDistrict.entities += toBuilding(level + 2)]
+				newDistrict.entities.add(classDistrict)
+			}
+			
+			//Function Group (+function Modules)
+			if (functionGroups.filter[container.ref == elem].length != 0){
+				val functionGroupDistrict = cityFactory.createDistrict
+				functionGroupDistrict.name = newDistrict.name + "_functionGroupDistrict"
+				functionGroupDistrict.type = "functionGroupDistrict"
+				functionGroupDistrict.level = level + 1
+				functionGroupDistrict.id = elem.id + "_00005"
+				if(elem.iteration >= 1){
+					functionGroupDistrict.notInOrigin = "true"
+				}
+				
+				functionGroups.filter[container.ref === elem].forEach[functionGroupDistrict.entities += toBuilding(level + 2)]
+				newDistrict.entities.add(functionGroupDistrict)
+			}
+			
+			//DB Tables - only if we need own district
+			if(config.showOwnTablesDistrict){
+				if (tables.filter[container.ref == elem].length != 0){
+					val tableDistrict = cityFactory.createDistrict
+					tableDistrict.name = newDistrict.name + "_tableDistrict"
+					tableDistrict.type = "tableDistrict"
+					tableDistrict.level = level + 1
+					tableDistrict.id = elem.id + "_00006"
+					if(elem.iteration >= 1){
+						tableDistrict.notInOrigin = "true"
+					}
+					
+					tables.filter[container.ref == elem].forEach[tableDistrict.entities += toBuilding(level + 2)]
+					newDistrict.entities.add(tableDistrict)
+				}
+			}
+							
+		} else { // Start test mode
+			if(dataElements.filter[container.ref == elem].length != 0){
+				val dcDataDistrict = cityFactory.createDistrict
+				dcDataDistrict.name = newDistrict.name + "_dcDataDistrict"
+				dcDataDistrict.type = "dcDataDistrict"
+				dcDataDistrict.id = elem.id + "_00002"
+				dcDataDistrict.level = level + 1
+				if(elem.iteration >= 1){
+					dcDataDistrict.notInOrigin = "true"
+				}
+				
+				dataElements.filter[container.ref == elem].forEach[dcDataDistrict.entities += toBuilding(level + 2)]
+				newDistrict.entities.add(dcDataDistrict)
+			}
+		}		
+								
 		
-		if(newDistrict.notInOrigin.equals('true')){
-			cityDocument.entities.add(newDistrict)	
-		}else{
-			originDistrict.entities.add(newDistrict)
-		}
-
+		cityDocument.entities += newDistrict
 		return newDistrict
 	}
 	
-	/**
-	 * Sets values for current class or function group and searches for nested elements
-	 * 
-	 * @param elem Source class for the building
-	 * @param level Hierarchy level of the building
-	 * @return new Building
-	 */
-	def Building toBuilding_Struct(FAMIXStructure elem, District parent, int level) {
+	
+	// Mode: advanced
+	def private District toAdvancedDistrict(FAMIXNamespace elem, int level){
+		val newDistrict = cityFactory.createDistrict
+		newDistrict.name = elem.name
+		newDistrict.value = elem.value
+		newDistrict.fqn = elem.fqn
+		newDistrict.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		newDistrict.level = level
+		newDistrict.id = elem.id
+		if(elem.iteration >= 1){
+			newDistrict.notInOrigin = "true"
+		}
+		
+		
+		cityDocument.entities += newDistrict
+		return newDistrict
+	}
+	
+	// Methods to build buildings
+	
+	def Building toBuilding(FAMIXReport elem, int level){
 		val newBuilding = cityFactory.createBuilding
 		newBuilding.name = elem.name
 		newBuilding.value = elem.value
@@ -297,8 +325,108 @@ class Famix2City_abap {
 		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
 		newBuilding.level = level
 		newBuilding.id = elem.id
-//		newBuilding.dataCounter = 0
-//		newBuilding.methodCounter = 0
+		newBuilding.methodCounter = formroutines.filter[parentType.ref == elem].length
+		newBuilding.dataCounter = attributes.filter[parentType.ref === elem].length
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
+		
+		formroutines.filter[parentType.ref == elem].forEach[newBuilding.methods.add(toFloor)]
+		if(config.showReportAttributes){
+			newBuilding.dataCounter = attributes.filter[parentType.ref == elem].length
+			attributes.filter[parentType.ref == elem].forEach[newBuilding.data.add(toChimney)]
+		}
+		
+		return newBuilding
+	}
+	
+	def Building toBuilding(FAMIXFunctionGroup elem, int level){
+		val newBuilding = cityFactory.createBuilding
+		newBuilding.name = elem.name
+		newBuilding.value = elem.value
+		newBuilding.fqn = elem.fqn
+		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		newBuilding.level = level
+		newBuilding.id = elem.id
+		newBuilding.methodCounter = functionModules.filter[parentType.ref == elem].length
+		newBuilding.dataCounter = attributes.filter[parentType.ref === elem].length
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
+		
+		functionModules.filter[parentType.ref == elem].forEach[newBuilding.methods.add(toFloor)]
+		if(config.showFugrAttributes){
+			newBuilding.dataCounter = attributes.filter[parentType.ref == elem].length
+			attributes.filter[parentType.ref == elem].forEach[newBuilding.data.add(toChimney)]
+		}
+		
+		return newBuilding
+	}
+	
+	def Building toBuilding(FAMIXDictionaryData elem, int level){
+		val newBuilding = cityFactory.createBuilding
+		newBuilding.name = elem.name
+		newBuilding.value = elem.value
+		newBuilding.fqn = elem.fqn
+		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		newBuilding.level = level
+		newBuilding.id = elem.id
+		//newBuilding.dataCounter = 1  //- width/length
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
+		
+		//ABAPStruc segments
+		if(newBuilding.type == "FAMIX.ABAPStruc"){
+			newBuilding.methodCounter = abapStrucElem.filter[container.ref == elem].length
+			abapStrucElem.filter[container.ref == elem].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+		}
+		
+		//TableType segments
+		if(newBuilding.type == "FAMIX.TableType"){
+			val tableTypeOf = typeOf.filter[element.ref == elem]
+
+			for (tty : tableTypeOf){
+				if(tty.typeOf.ref instanceof FAMIXABAPStruc){
+					newBuilding.methodCounter = abapStrucElem.filter[container.ref == tty.typeOf.ref].length
+					abapStrucElem.filter[container.ref == tty.typeOf.ref].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+				
+				}else if(tty.typeOf.ref instanceof FAMIXTable){
+					newBuilding.methodCounter = tableElements.filter[container.ref == tty.typeOf.ref].length
+					tableElements.filter[container.ref == tty.typeOf.ref].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+				}
+			}	
+		}
+		
+		//Table segments
+		if(newBuilding.type == "FAMIX.Table"){
+			newBuilding.methodCounter = tableElements.filter[container.ref == elem].length
+			tableElements.filter[container.ref == elem].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+		}
+		
+		return newBuilding
+	}
+	
+	def private Building toBuilding(FAMIXClass elem, int level) {
+		val newBuilding = cityFactory.createBuilding
+		newBuilding.name = elem.name
+		newBuilding.value = elem.value
+		newBuilding.fqn = elem.fqn
+		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
+		
+		// Is interface?
+		if(elem.isInterface == "true") {
+			newBuilding.type = "FAMIX.Interface"
+		}else{
+			newBuilding.type = "FAMIX.Class"
+		}
+
+		newBuilding.level = level
+		newBuilding.id = elem.id
+
 		inheritances.filter[subclass.ref === elem].forEach [ i |
 			val inheritance = cityFactory.createReference
 			inheritance.type = "Inheritance"
@@ -306,135 +434,68 @@ class Famix2City_abap {
 			inheritance.fqn = i.superclass.ref.fqn
 			newBuilding.references += inheritance
 		]
-	
-		if (newBuilding.type.equals('FAMIX.Class')){
-			newBuilding.dataCounter = attributes.filter[parentType.ref == elem].length
-			newBuilding.methodCounter = methods.filter[parentType.ref == elem].length
-			
-			attributes.filter[parentType.ref == elem].
-				forEach[newBuilding.data.add(toBuildingSegment_Attribute(newBuilding, level + 1))]
-			methods.filter[parentType.ref == elem]
-				.forEach[newBuilding.methods.add(toBuildingSegment_Method(newBuilding, level + 1))]
-							
-		}else if (newBuilding.type.equals('FAMIX.FunctionGroup')){
-			newBuilding.methodCounter = functionModules.filter[parentType.ref.equals(elem)].length
-			
-			functionModules.filter[parentType.ref.equals(elem)].
-				forEach[newBuilding.methods.add(toBuildingSegment_functionModule(newBuilding, level + 1))]
+
+		newBuilding.dataCounter = methods.filter[parentType.ref === elem].length
+		newBuilding.methodCounter = attributes.filter[parentType.ref === elem].length
+
+		if (config.buildingType == BuildingType::CITY_FLOOR) {
+			methods.filter[parentType.ref.equals(elem)].forEach[newBuilding.methods.add(toFloor)]
+			attributes.filter[parentType.ref.equals(elem)].forEach[newBuilding.data.add(toChimney)]
+		} 
+		return newBuilding
+	}
+
+	/**
+	 * Sets values for current class and searches for nested elements
+	 * 
+	 * @param elem Source class for the building
+	 * @param level Hierarchy level of the building
+	 * @return new Building
+	 */
+	def private Building toBuilding(FAMIXStructure elem, int level) {
+		val newBuilding = cityFactory.createBuilding
+		newBuilding.name = elem.name
+		newBuilding.value = elem.value
+		newBuilding.fqn = elem.fqn
+		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		
+		newBuilding.level = level
+		newBuilding.id = elem.id
+		inheritances.filter[subclass.ref === elem].forEach [ i |
+			val inheritance = cityFactory.createReference
+			inheritance.type = "Inheritance"
+			inheritance.name = i.superclass.ref.name
+			inheritance.fqn = i.superclass.ref.fqn
+			newBuilding.references += inheritance
+		]
+
+
+		newBuilding.dataCounter = methods.filter[parentType.ref === elem].length
+		newBuilding.methodCounter = attributes.filter[parentType.ref === elem].length
+
+		if (config.buildingType == BuildingType::CITY_FLOOR) {
+			methods.filter[parentType.ref.equals(elem)].forEach[newBuilding.methods.add(toFloor)]
+			attributes.filter[parentType.ref.equals(elem)].forEach[newBuilding.data.add(toChimney)]
 		}
- 
 		return newBuilding
 	}
 
-	/**
-	 * Sets values for current message class
-	 * 
-	 * @param elem Source message class for the building
-	 * @param level Hierarchy level of the building
-	 * @return new Building
-	 */
-	def Building toBuilding_messageClass(FAMIXMessageClass elem, District parent, int level){
+	def private Building toBuilding(FAMIXMethod elem, District parent, int level) {
 		val newBuilding = cityFactory.createBuilding
 		newBuilding.name = elem.name
 		newBuilding.value = elem.value
 		newBuilding.fqn = elem.fqn
+		newBuilding.signature = elem.signature
 		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
 		newBuilding.level = level
 		newBuilding.id = elem.id
-		newBuilding.dataCounter = elem.numberOfMessages
-		newBuilding.parent = parent
-		
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
+
 		return newBuilding
 	}
 	
-	/**
-	 * Sets values for current report and searches for nested elements
-	 * 
-	 * @param elem Source report for the building
-	 * @param level Hierarchy level of the building
-	 * @return new Building
-	 */
-	def Building toBuilding_Report(FAMIXReport elem, District parent, int level){
-		val newBuilding = cityFactory.createBuilding
-		newBuilding.name = elem.name
-		newBuilding.value = elem.value
-		newBuilding.fqn = elem.fqn
-		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
-		newBuilding.level = level
-		newBuilding.id = elem.id
-		newBuilding.methodCounter = formRoutines.filter[parentType.ref.equals(elem)].length
-		newBuilding.parent = parent
-		
-		formRoutines.filter[parentType.ref.equals(elem)].
-			forEach[newBuilding.methods.add(toBuildingSegment_formRoutine(newBuilding, level + 1))]
-		
-		return newBuilding
-	}
-	
-	/**
-	 * Sets values for current table
-	 * 
-	 * @param elem Source class for the building
-	 * @param level Hierarchy level of the building
-	 * @return new Building
-	 */
-	def Building toBuilding_Table(FAMIXTable elem, District parent, int level){
-		val newBuilding = cityFactory.createBuilding
-		newBuilding.name = elem.name
-		newBuilding.value = elem.value
-		newBuilding.fqn = elem.fqn
-		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
-		newBuilding.level = level
-		newBuilding.id = elem.id
-		newBuilding.dataCounter = elem.numberOfColumns
-		newBuilding.parent = parent
-		
-		return newBuilding
-	}
-
-/**
-	 * Sets values for current data element
-	 * 
-	 * @param elem Source class for the building
-	 * @param level Hierarchy level of the building
-	 * @return new Building
-	 */
-	def Building toBuilding_dataElement(FAMIXDataElement elem, District parent, int level){
-		val newBuilding = cityFactory.createBuilding
-		newBuilding.name = elem.name
-		newBuilding.value = elem.value
-		newBuilding.fqn = elem.fqn
-		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
-		newBuilding.level = level
-		newBuilding.id = elem.id
-		newBuilding.parent = parent
-
-		return newBuilding
-	}
-
-	/**
-	 * Sets values for current abap structures and searches for nested elements
-	 * 
-	 * @param elem Source class for the building
-	 * @param level Hierarchy level of the building
-	 * @return new Building
-	 */
-	def Building toBuilding_strucs(FAMIXABAPStruc elem, District parent, int level){
-		val newBuilding = cityFactory.createBuilding
-		newBuilding.name = elem.name
-		newBuilding.value = elem.value
-		newBuilding.fqn = elem.fqn
-		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
-		newBuilding.level = level
-		newBuilding.id = elem.id
-		newBuilding.parent = parent
-		
-		strucElements.filter[container.ref.equals(elem)].
-			forEach[newBuilding.entities.add(toBuildingSegment_strucElement(newBuilding, level + 1))]
-	
-		return newBuilding
-	}
-
 	/**
 	 * Sets values for current method of the {@code parent} class.
 	 * 
@@ -443,7 +504,7 @@ class Famix2City_abap {
 	 * @return new BuildingSegment
 	 * @see toBuildingSegment_Attribute(FAMIXAttribute, Building, int)
 	 */
-	def BuildingSegment toBuildingSegment_Method(FAMIXMethod elem, Building parent, int level) {
+	def private BuildingSegment toBuildingSegment_Method(FAMIXMethod elem, Building parent, int level) {
 		val newBuildingSegment = cityFactory.createBuildingSegment
 		newBuildingSegment.name = elem.name
 		newBuildingSegment.value = elem.value
@@ -451,52 +512,16 @@ class Famix2City_abap {
 		newBuildingSegment.type = CityUtils.getFamixClassString(elem.class.simpleName)
 		newBuildingSegment.level = level
 		newBuildingSegment.id = elem.id
+		newBuildingSegment.signature = elem.signature
 		newBuildingSegment.modifiers = elem.modifiers.toString
+		newBuildingSegment.numberOfStatements = elem.numberOfStatements
 		newBuildingSegment.parent = parent
-		newBuildingSegment.declaredType = CityUtils.fillDeclaredType(cityFactory.createDeclaredType, elem.declaredType)
-		
-		return newBuildingSegment
-	}
-	
-	/**
-	 * Sets values for current function module of the {@code parent} function group.
-	 * 
-	 * @param elem Source function module for the buildingSegment
-	 * @param level Hierarchy level of the underlying district/package
-	 * @return new BuildingSegment
-	 */
-	def BuildingSegment toBuildingSegment_functionModule(FAMIXFunctionModule elem, Building parent, int level){
-		val newBuildingSegment = cityFactory.createBuildingSegment
-		newBuildingSegment.name = elem.name
-		newBuildingSegment.value = elem.value
-		newBuildingSegment.fqn = elem.fqn
-		newBuildingSegment.type = CityUtils.getFamixClassString(elem.class.simpleName)
-		newBuildingSegment.level = level
-		newBuildingSegment.id = elem.id
-		newBuildingSegment.parent = parent
+		newBuildingSegment.methodKind = elem.kind
 		newBuildingSegment.declaredType = CityUtils.fillDeclaredType(cityFactory.createDeclaredType, elem.declaredType)
 
-		return newBuildingSegment
-	}
-	
-	/**
-	 * Sets values for current formroutine of the {@code parent} report.
-	 * 
-	 * @param elem Source formroutine for the buildingSegment
-	 * @param level Hierarchy level of the underlying district/package
-	 * @return new BuildingSegment
-	 */
-	def BuildingSegment toBuildingSegment_formRoutine(FAMIXFormroutine elem, Building parent, int level){
-		val newBuildingSegment = cityFactory.createBuildingSegment
-		newBuildingSegment.name = elem.name
-		newBuildingSegment.value = elem.value
-		newBuildingSegment.fqn = elem.fqn
-		newBuildingSegment.type = CityUtils.getFamixClassString(elem.class.simpleName)
-		newBuildingSegment.level = level
-		newBuildingSegment.id = elem.id
-		newBuildingSegment.parent = parent
-		newBuildingSegment.declaredType = CityUtils.fillDeclaredType(cityFactory.createDeclaredType, elem.declaredType)
-		
+		newBuildingSegment.localVariableCounter = localVariables.filter[parentBehaviouralEntity.ref === elem].length
+
+		newBuildingSegment.parameterCounter = parameters.filter[parentBehaviouralEntity.ref === elem].length
 
 		return newBuildingSegment
 	}
@@ -509,7 +534,7 @@ class Famix2City_abap {
 	 * @return new BuildingSegment
 	 * @see toBuildingSegment_Method(FAMIXMethod, Building, int)
 	 */
-	def BuildingSegment toBuildingSegment_Attribute(FAMIXAttribute elem, Building parent, int level) {
+	def private BuildingSegment toBuildingSegment_Attribute(FAMIXAttribute elem, Building parent, int level) {
 		val newBuildingSegment = cityFactory.createBuildingSegment
 		newBuildingSegment.name = elem.name
 		newBuildingSegment.value = elem.value
@@ -523,53 +548,8 @@ class Famix2City_abap {
 
 		return newBuildingSegment
 	}
-	
-	/**
-	 * Sets values for current strucElement of the {@code parent} structure.
-	 * 
-	 * @param elem Source method for the buildingSegment
-	 * @param level Hierarchy level of the underlying district/package
-	 * @return new BuildingSegment
-	 */
-	def BuildingSegment toBuildingSegment_strucElement(FAMIXStrucElement elem, Building parent, int level) {
-		val newBuildingSegment = cityFactory.createBuildingSegment
-		newBuildingSegment.name = elem.name
-		newBuildingSegment.value = elem.value
-		newBuildingSegment.fqn = elem.fqn
-		newBuildingSegment.type = CityUtils.getFamixClassString(elem.class.simpleName)
-		newBuildingSegment.level = level
-		newBuildingSegment.id = elem.id
-		newBuildingSegment.parent = parent
-		newBuildingSegment.declaredType = CityUtils.fillDeclaredType(cityFactory.createDeclaredType, elem.declaredType)
-		
-		return newBuildingSegment
-	}
-	
-	/**
-	 * Adds reference to {@code sourceEntity} entity that targets another entity.
-	 * 
-	 * @param elem Source reference
-	 */
-	def void toABAPReference(FAMIXReference elem){
-		/*val newABAPReference = cityFactory.createABAPReference
-		newABAPReference.name = elem.name
-		if(entityList.filter[id.equals(elem.target.ref.name)].size != 0){
-			newABAPReference.target = entityList.filter[id.equals(elem.target.ref.name)].get(0)
-		}
-		
-		var sourceEntity = cityFactory.createEntity
-		if(entityList.filter[id.equals(elem.source.ref.name)].size != 0){
-			sourceEntity = entityList.filter[id.equals(elem.source.ref.name)].get(0)	
-		}
-		
-		newABAPReference.parent = sourceEntity
-		
-		if(newABAPReference.parent != null && newABAPReference.target != null){
-			sourceEntity.abapReferences.add(newABAPReference)	
-		}*/
-	}
-	
-		// pko 2016
+
+	// pko 2016
 	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXMethod famixMethod) {
 		newBuildingSegment.name = famixMethod.name
 		newBuildingSegment.value = famixMethod.value
@@ -586,4 +566,37 @@ class Famix2City_abap {
 		newBuildingSegment.id = famixAttribute.id
 	}
 	
+	
+	//ABAP
+	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXFormroutine famixFormroutine) {
+		newBuildingSegment.name = famixFormroutine.name
+		newBuildingSegment.value = famixFormroutine.value
+		newBuildingSegment.fqn = famixFormroutine.fqn
+		newBuildingSegment.id = famixFormroutine.id
+	} 
+	
+	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXFunctionModule famixFuncModule) {
+		newBuildingSegment.name = famixFuncModule.name
+		newBuildingSegment.value = famixFuncModule.value
+		newBuildingSegment.fqn = famixFuncModule.fqn
+		newBuildingSegment.id = famixFuncModule.id
+	} 
+	
+	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXStrucElement famixStrucElem, String buildingId) {
+		newBuildingSegment.name = famixStrucElem.name
+		newBuildingSegment.value = famixStrucElem.value
+		newBuildingSegment.fqn = famixStrucElem.fqn
+		newBuildingSegment.id = createID(famixStrucElem.id + "_" + buildingId)
+	}
+
+	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXTableElement famixTableElement, String buildingId) {
+		newBuildingSegment.name = famixTableElement.name
+		newBuildingSegment.value = famixTableElement.value
+		newBuildingSegment.fqn = famixTableElement.fqn
+		newBuildingSegment.id = createID(famixTableElement.id + "_" + buildingId)
+	} 
+	
+	def createID(String fqn) {
+		return "ID_" + sha1Hex(fqn + config.repositoryName + config.repositoryOwner)
+	}
 }

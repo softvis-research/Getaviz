@@ -1289,6 +1289,10 @@ public class SettingsConfiguration {
 		}
 	}
 	
+	public boolean isAbapCityTestMode() {
+		return config.getBoolean("city.abap_test_mode", false);
+	}
+	
 	public boolean isShowAttributesBelowBuildings() {
 		return config.getBoolean("city.abap.attributesBelowBuildings", false);
 	}
