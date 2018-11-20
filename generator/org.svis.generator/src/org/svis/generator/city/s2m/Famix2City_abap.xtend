@@ -311,6 +311,20 @@ class Famix2City_abap {
 		}
 		
 		
+		if(dataElements.filter[container.ref == elem].length != 0){
+			val dcDataDistrict = cityFactory.createDistrict
+			dcDataDistrict.name = newDistrict.name + "_dcDataDistrict"
+			dcDataDistrict.type = "dcDataDistrict"
+			dcDataDistrict.id = elem.id + "_00002"
+			dcDataDistrict.level = level + 1
+			if(elem.iteration >= 1){
+				dcDataDistrict.notInOrigin = "true"
+			}
+			
+			dataElements.filter[container.ref == elem].forEach[dcDataDistrict.entities += toBuilding(level + 2)]
+			newDistrict.entities.add(dcDataDistrict)
+		}
+		
 		cityDocument.entities += newDistrict
 		return newDistrict
 	}

@@ -162,7 +162,9 @@ class City2X3D {
 	def String abapAdvancedBuildings(Entity entity)'''
 		«IF entity.type == "FAMIX.DataElement"»
 			<Group DEF='«entity.id»'>
-				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
+				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»' 
+						   scale="0.241931 0.241931 0.241931"
+						   rotation="0.000000 0.707107 0.707107 3.141593">
 					«abapAdvBuilding_DataElement(entity)»
 				</Transform>
 			</Group>

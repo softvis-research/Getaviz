@@ -212,12 +212,16 @@ class City2City extends WorkflowComponentWithModelSlot {
 		
 		// ABAP Logic
 		if(config.parser == FamixParser::ABAP){
-			if(config.abap_representation == AbapCityRepresentation::ADVANCED){
+			if(config.abap_representation == AbapCityRepresentation::ADVANCED){		
 				
-				b.width = 10
-				b.length = 12
-				
-				
+				// We use custom models in advanced mode. Adjust sizes: 
+				if(b.type == "FAMIX.DataElement"){
+					b.width = 90
+					b.length = 90
+				}
+	
+						
+			 // End of AbapCityRepresentation::ADVANCED
 			}else{ //AbapCityRepresentation::SIMPLE
 				
 				// Edit height and width
@@ -241,10 +245,9 @@ class City2City extends WorkflowComponentWithModelSlot {
 						b.height = config.getNotInOriginSCBuildingHeight()
 					}
 				}
-				
+											
 							
-							
-				// Use color for building, if it's set
+				// Use custom colors form settings
 				if(config.getAbapBuildingColor(b.type) !== null){
 					b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
 				}
