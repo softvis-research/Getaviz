@@ -193,18 +193,18 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		methods.forEach[setQualifiedName]
 		enumValues.forEach[setQualifiedName]
 		messageClasses.forEach[setQualifiedName]
-		reports.forEach[setQualifiedName]
-		formroutines.forEach[setQualifiedName]
+		reports.forEach[updParameters]
+		formroutines.forEach[updParameters]
 		functionGroups.forEach[setQualifiedName]
-		functionModules.forEach[setQualifiedName]
-		tables.forEach[setQualifiedName]
-		tableElements.forEach[setQualifiedName]
-		tableTypes.forEach[setQualifiedName]
-		abapStrucsTmp.forEach[setQualifiedName]
-		abapStrucElem.forEach[setQualifiedName]
+		functionModules.forEach[updParameters]
+		tables.forEach[updParameters]
+		tableElements.forEach[updParameters]
+		tableTypes.forEach[updParameters]
+		abapStrucsTmp.forEach[updParameters]
+		abapStrucElem.forEach[updParameters]
 		abapStrucsTmp.forEach[updateAbapStrucs]	
-		dataElements.forEach[setQualifiedName]		
-		domains.forEach[setQualifiedName]				
+		dataElements.forEach[updParameters]		
+		domains.forEach[updParameters]				
 		attributes.forEach[setQualifiedNameAbap]
 		
 		
@@ -734,6 +734,10 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 
 		method.fqn = result
 		method.id = createID(method.fqn)
+		if(method.numberOfStatements >= 2){
+			var nos = method.numberOfStatements - 2
+			method.numberOfStatements = nos
+		}
 	}
 
 	/** 
@@ -880,7 +884,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	}
 	
 	//ABAP	
-	def setQualifiedName(FAMIXDictionaryData dd){
+	def updParameters(FAMIXDictionaryData dd){
 		val ref = dd.container.ref
 		if(ref instanceof FAMIXDictionaryData){
 			dd.fqn = ref.fqn + "." + dd.value
@@ -890,15 +894,19 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		dd.id = createID(dd.fqn + dd.class.toString)
 	}  
 	
-	def setQualifiedName(FAMIXFunctionModule fm){
+	def updParameters(FAMIXFunctionModule fm){
 		val ref = fm.parentType.ref
 		if(ref instanceof FAMIXFunctionGroup){
 			fm.fqn = ref.fqn + "." + fm.value
 		}
 		fm.id = createID(fm.fqn + fm.class.toString)
+		if(fm.numberOfStatements >= 2){
+			var nos = fm.numberOfStatements - 2
+			fm.numberOfStatements = nos
+		}
 	}
 	
-	def setQualifiedName(FAMIXFunctionGroup fg){
+	def updParameters(FAMIXFunctionGroup fg){
 		val ref = fg.container.ref
 		if(ref instanceof FAMIXNamespace){
 			fg.fqn = ref.fqn + "." + fg.value
@@ -906,7 +914,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		fg.id = createID(fg.fqn + fg.class.toString)
 	}
 	
-	def setQualifiedName(FAMIXReport re){
+	def updParameters(FAMIXReport re){
 		val ref = re.container.ref
 		if(ref instanceof FAMIXNamespace){
 			re.fqn = ref.fqn + "." + re.value
@@ -914,17 +922,24 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		re.id = createID(re.fqn + re.class.toString)
 	}
 	
-	def setQualifiedName(FAMIXFormroutine fr){
+	def updParameters(FAMIXFormroutine fr){
 		var ref = fr.parentType.ref
 		if(ref instanceof FAMIXReport){
 			fr.fqn = ref.fqn + "." + fr.value
 		}		
 		fr.id = createID(fr.fqn + fr.class.toString)
+		if(fr.numberOfStatements >= 2){
+			var nos = fr.numberOfStatements - 2
+			fr.numberOfStatements = nos
+		}
 	}
 	
-	def setQualifiedName(FAMIXMessageClass ms){
-		ms.fqn = "." + ms.value
-		ms.id = createID(ms.fqn)
+	def updParameters(FAMIXMessageClass ms){
+		val ref = ms.container.ref
+		if(ref instanceof FAMIXNamespace){
+			ms.fqn = ref.fqn + "." + ms.value
+		}
+		ms.id = createID(ms.fqn + ms.class.toString)
 	}
 		
 	
