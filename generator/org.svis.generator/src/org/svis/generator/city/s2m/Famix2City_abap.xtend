@@ -541,8 +541,14 @@ class Famix2City_abap {
 			newBuilding.notInOrigin = "true"
 		}
 		
-		return newBuilding		
+		if(typeOf.filter[].empty)
+		
+		if(!classes.filter[value.equals(elem.dataType)].empty) {
+			newBuilding.dataCounter = 4
 		}
+		
+		return newBuilding		
+	}
 	
 	/**
 	 * Sets values for current method of the {@code parent} class.
