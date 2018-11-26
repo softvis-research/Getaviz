@@ -46,6 +46,7 @@ import org.svis.xtext.famix.FAMIXStrucElement
 import org.svis.xtext.famix.FAMIXFunctionGroup
 import org.svis.xtext.famix.FAMIXFunctionModule
 import org.svis.xtext.famix.FAMIXFormroutine
+import org.svis.xtext.famix.FAMIXMacro
 import org.svis.xtext.famix.FAMIXMessageClass
 import org.svis.xtext.famix.FAMIXTableType
 import org.svis.xtext.famix.FAMIXTypeOf
@@ -386,6 +387,20 @@ class Famix2JSON implements IGenerator2 {
 		"iteration": 	 "«fr.iteration»"
 	'''
 
+	//ABAP
+	def dispatch private toMetaData(FAMIXMacro ma)'''
+		"id":			 "«ma.id»",
+		"qualifiedName": "«ma.fqn»",
+		"name":          "«ma.value»",
+		"type":          "FAMIX.Macro",
+		"belongsTo":     "«ma.parentType.ref.id»",
+		"calledBy":		 "«ma.calledBy»",
+		«IF ma.numberOfStatements > 0»
+		"numberOfStatements": "«ma.numberOfStatements»",
+		«ENDIF»
+		"iteration": 	 "«ma.iteration»
+	'''
+	
 	//ABAP
 	def dispatch private toMetaData(FAMIXMessageClass mc)'''
 		"id":            "«mc.id»",

@@ -311,6 +311,35 @@ class Famix2City_abap {
 		}
 		
 		
+		domains.filter[container.ref == elem].forEach[
+			val newDomainDistrict = cityFactory.createDistrict
+			newDomainDistrict.name = newDistrict.name + "_domainDistrict"
+			newDomainDistrict.type = "dcDataDistrict"
+			newDomainDistrict.id = elem.id + "_00001"
+			newDomainDistrict.level = level + 1
+			
+			newDomainDistrict.entities += toBuilding(level + 2)	
+			// TODO: find dataElements and bind them to district
+			
+			newDistrict.entities.add(newDomainDistrict)
+		]
+		
+		classes.filter[container.ref == elem].forEach[ class |
+			val newClassDistrict = cityFactory.createDistrict
+			newClassDistrict.name = newDistrict.name + "_classDistrict"
+			newClassDistrict.type = "classDistrict"
+			newClassDistrict.id   = elem.id + "_00002"
+			newClassDistrict.level = level + 1
+			
+//			newClassDistrict.entities += toBuilding(class, level + 2)
+			// TODO: find methods and attributes and bind them to district
+
+			methods.filter[parentType.ref.equals(class)].forEach[newClassDistrict.entities += toBuilding(level + 2)]
+			attributes.filter[parentType.ref.equals(class)].forEach[newClassDistrict.entities += toBuilding(level + 2)]
+		
+			newDistrict.entities.add(newClassDistrict)
+		]
+				
 		cityDocument.entities += newDistrict
 		return newDistrict
 	}
@@ -434,9 +463,12 @@ class Famix2City_abap {
 			inheritance.fqn = i.superclass.ref.fqn
 			newBuilding.references += inheritance
 		]
+		
+		val currentMethods = methods.filter[parentType.ref === elem]
+		val currentAttributes = attributes.filter[parentType.ref === elem]
 
-		newBuilding.dataCounter = methods.filter[parentType.ref === elem].length
-		newBuilding.methodCounter = attributes.filter[parentType.ref === elem].length
+		newBuilding.dataCounter = currentAttributes.length
+		newBuilding.methodCounter = currentMethods.length
 
 		if (config.buildingType == BuildingType::CITY_FLOOR) {
 			methods.filter[parentType.ref.equals(elem)].forEach[newBuilding.methods.add(toFloor)]
@@ -480,7 +512,7 @@ class Famix2City_abap {
 		return newBuilding
 	}
 
-	def private Building toBuilding(FAMIXMethod elem, District parent, int level) {
+	def private Building toBuilding(FAMIXMethod elem, int level) {
 		val newBuilding = cityFactory.createBuilding
 		newBuilding.name = elem.name
 		newBuilding.value = elem.value
@@ -492,9 +524,25 @@ class Famix2City_abap {
 		if(elem.iteration >= 1){
 			newBuilding.notInOrigin = "true"
 		}
+		newBuilding.methodCounter = elem.numberOfStatements
 
 		return newBuilding
 	}
+	
+	def private Building toBuilding(FAMIXAttribute elem, int level) {
+		val newBuilding = cityFactory.createBuilding
+		newBuilding.name = elem.name
+		newBuilding.value = elem.value
+		newBuilding.fqn = elem.fqn
+		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		newBuilding.level = level
+		newBuilding.id = elem.id
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
+		
+		return newBuilding		
+		}
 	
 	/**
 	 * Sets values for current method of the {@code parent} class.
