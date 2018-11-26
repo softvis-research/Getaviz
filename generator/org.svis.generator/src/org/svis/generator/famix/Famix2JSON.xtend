@@ -288,8 +288,9 @@ class Famix2JSON implements IGenerator2 {
 		"id":            "«tty.id»",
 		"qualifiedName": "«tty.fqn»",
 		"name":          "«tty.value»",
-		"type":          "FAMIX.TableType",
-		"belongsTo":     "«tty.container.ref.id»",
+		"type":          "FAMIX.TableTypeElement",
+		"belongsTo":     "«tty.tableType.ref.id»",
+		"structure":	 "«tty.container.ref.id»",
 		"typeOf":		 "«tty.typeOf»",
 		"iteration": 	 "«tty.iteration»"
 	'''

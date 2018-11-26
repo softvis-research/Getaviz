@@ -507,7 +507,7 @@ FAMIXTableTypeElement:
     ('(' 'hash' id = STRING ')')?
     ('(' 'fqn' fqn = MSESTRING ')')
     '(' 'container' container=IntegerReference ')'
-    ('(' 'structure' structure=MSESTRING ')')?
+    ('(' 'tableType' tableType=IntegerReference ')')?
     ('(' 'iteration' iteration=INT ')')? 
     ')';   
     

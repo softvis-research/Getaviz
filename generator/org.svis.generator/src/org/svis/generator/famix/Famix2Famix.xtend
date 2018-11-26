@@ -104,7 +104,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val List<FAMIXMessageClass> messageClasses = newArrayList
 	val List<FAMIXFunctionGroup> functionGroups = newArrayList
 	val List<FAMIXTableType> tableTypes = newArrayList
-	val List<FAMIXTableTypeElement> ttypeElems = newArrayList
+	val List<FAMIXTableTypeElement> ttypeElements = newArrayList
 	val List<FAMIXTableElement> tableElements = newArrayList
 	val List<FAMIXTypeOf> typeOf = newArrayList
 	
@@ -206,7 +206,6 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		tableTypes.forEach[ tty | 
 			updParameters(tty)
 			createTableTypeElements(tty)
-			
 		]
 		dataElements.forEach[updParameters]		
 		domains.forEach[updParameters]				
@@ -237,7 +236,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		famixDocument.elements.addAll(formroutines)
 		famixDocument.elements.addAll(messageClasses)
 		famixDocument.elements.addAll(tableElements)
-		//famixDocument.elements.addAll(ttypeElems)
+		famixDocument.elements.addAll(ttypeElements)
 		famixDocument.elements.addAll(typeOf)
 		
 		rootPackages.clear
@@ -265,7 +264,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		formroutines.clear
 		messageClasses.clear
 		tableElements.clear
-		ttypeElems.clear
+		ttypeElements.clear
 		typeOf.clear
 		return famixRoot
 	} //End of ABAP logic
@@ -905,35 +904,30 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		val tableTypeOf = typeOf.filter[element.ref == tt]
 				
 		// find "parent" elements and add them to the TableTypeElem Array
-		for(tty:tableTypeOf){
+		for(tty : tableTypeOf){
 			if (tty.typeOf.ref instanceof FAMIXABAPStruc) {
 				abapStrucElem.filter[container.ref == tty.typeOf.ref].forEach[ 
-					createTableTypeElem(tt.fqn, tty.element)
+					createTableTypeElement(tty.element)
 				]
 			} else if (tty.typeOf.ref instanceof FAMIXTable) {
 				tableElements.filter[container.ref == tty.typeOf.ref].forEach[ 
-					//createTableTypeElem(tt.fqn, tty.element)
+					createTableTypeElement(tty.element)
 				]
 			}
 		}
 	}
 	
-	def createTableTypeElem(FAMIXDictionaryData dd, String fqn, IntegerReference parentContainer){
-		val ref = dd.container.ref
-		var ttyElem  = famixFactory.createFAMIXTableTypeElement		
+	def createTableTypeElement(FAMIXDictionaryData dd, IntegerReference element){
+		var ttyElement  = famixFactory.createFAMIXTableTypeElement		
 		if (dd instanceof FAMIXStrucElement || dd instanceof FAMIXTableElement){
-			ttyElem.id = dd.id
-			ttyElem.name = dd.name
-			ttyElem.fqn = fqn + "." + dd.value
-			if (parentContainer instanceof FAMIXABAPStruc){
-				
-			}
-			//ttyElem.container = container_id
-			ttypeElems += ttyElem
-		}
-		
-		if(dd instanceof FAMIXStrucElement){
-			dd.container.ref
+			ttyElement.id = dd.id
+			ttyElement.name = dd.name
+			ttyElement.fqn = dd.fqn
+			ttyElement.container = famixFactory.createIntegerReference
+			ttyElement.container.ref = dd.container.ref
+			ttyElement.tableType = famixFactory.createIntegerReference
+			ttyElement.tableType.ref = element.ref
+			ttypeElements += ttyElement
 		}
 	}
 	
