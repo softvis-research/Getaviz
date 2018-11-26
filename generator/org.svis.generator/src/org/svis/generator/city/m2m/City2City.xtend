@@ -216,13 +216,18 @@ class City2City extends WorkflowComponentWithModelSlot {
 				
 				// We use custom models in advanced mode. Adjust sizes: 
 				if(b.type == "FAMIX.DataElement"){
-					b.width = 90
-					b.length = 90
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.height = b.height - (1 + config.getAbapAdvBuldingScale(b.type))
+					
+				} else if(b.type == "FAMIX.Domain"){
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
 				}
 	
 						
 			 // End of AbapCityRepresentation::ADVANCED
-			}else{ //AbapCityRepresentation::SIMPLE
+			} else { //AbapCityRepresentation::SIMPLE
 				
 				// Edit height and width
 				if(b.type == "FAMIX.ABAPStruc" || b.type == "FAMIX.TableType"){
@@ -233,7 +238,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 						b.height = b.height + 1
 					}
 					
-				}else if(b.type == "FAMIX.DataElement"){
+				} else if(b.type == "FAMIX.DataElement"){
 					b.height = 1
 					b.width = 1.25
 				}

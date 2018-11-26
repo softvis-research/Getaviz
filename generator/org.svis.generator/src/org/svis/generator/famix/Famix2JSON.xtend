@@ -48,6 +48,7 @@ import org.svis.xtext.famix.FAMIXFunctionModule
 import org.svis.xtext.famix.FAMIXFormroutine
 import org.svis.xtext.famix.FAMIXMessageClass
 import org.svis.xtext.famix.FAMIXTableType
+import org.svis.xtext.famix.FAMIXTableTypeElement
 import org.svis.xtext.famix.FAMIXTypeOf
 import org.svis.xtext.famix.FAMIXTableElement
 
@@ -281,6 +282,16 @@ class Famix2JSON implements IGenerator2 {
 		"belongsTo":     "«tt.container.ref.id»",
 		"typeOf":		 "«tt.typeOf»",
 		"iteration": 	 "«tt.iteration»"
+	'''
+	
+	def dispatch private toMetaData(FAMIXTableTypeElement tty)'''
+		"id":            "«tty.id»",
+		"qualifiedName": "«tty.fqn»",
+		"name":          "«tty.value»",
+		"type":          "FAMIX.TableType",
+		"belongsTo":     "«tty.container.ref.id»",
+		"typeOf":		 "«tty.typeOf»",
+		"iteration": 	 "«tty.iteration»"
 	'''
 	
 	//ABAP
