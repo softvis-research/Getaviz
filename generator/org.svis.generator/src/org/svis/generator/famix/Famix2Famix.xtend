@@ -52,21 +52,21 @@ import org.svis.generator.SettingsConfiguration.FamixParser
 import org.svis.xtext.famix.FAMIXReference
 
 //ABAP
-import org.svis.xtext.famix.FAMIXDictionaryData
 import org.svis.xtext.famix.FAMIXReport 
+import org.svis.xtext.famix.FAMIXFormroutine
+import org.svis.xtext.famix.FAMIXFunctionGroup
+import org.svis.xtext.famix.FAMIXFunctionModule
+import org.svis.xtext.famix.FAMIXDictionaryData
 import org.svis.xtext.famix.FAMIXDataElement
 import org.svis.xtext.famix.FAMIXDomain
 import org.svis.xtext.famix.FAMIXTable
+import org.svis.xtext.famix.FAMIXTableElement
 import org.svis.xtext.famix.FAMIXABAPStruc
 import org.svis.xtext.famix.FAMIXStrucElement
-import org.svis.xtext.famix.FAMIXFunctionGroup
-import org.svis.xtext.famix.FAMIXFunctionModule
-import org.svis.xtext.famix.FAMIXFormroutine
-import org.svis.xtext.famix.FAMIXMessageClass 
 import org.svis.xtext.famix.FAMIXTableType
-import org.svis.xtext.famix.FAMIXTableElement
+import org.svis.xtext.famix.FAMIXTableTypeElement
 import org.svis.xtext.famix.FAMIXTypeOf
-import org.svis.xtext.famix.impl.FAMIXFormroutineImpl
+import org.svis.xtext.famix.FAMIXMessageClass
 
 class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val log = LogFactory::getLog(class)
@@ -104,6 +104,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val List<FAMIXMessageClass> messageClasses = newArrayList
 	val List<FAMIXFunctionGroup> functionGroups = newArrayList
 	val List<FAMIXTableType> tableTypes = newArrayList
+	val List<FAMIXTableTypeElement> ttypeElems = newArrayList
 	val List<FAMIXTableElement> tableElements = newArrayList
 	val List<FAMIXTypeOf> typeOf = newArrayList
 	
@@ -199,15 +200,17 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		functionModules.forEach[updParameters]
 		tables.forEach[updParameters]
 		tableElements.forEach[updParameters]
-		tableTypes.forEach[updParameters]
 		abapStrucsTmp.forEach[updParameters]
 		abapStrucElem.forEach[updParameters]
-		abapStrucsTmp.forEach[updateAbapStrucs]	
+		abapStrucsTmp.forEach[updateAbapStrucs]
+		tableTypes.forEach[ tty | 
+			updParameters(tty)
+			createTableTypeElements(tty)
+			
+		]
 		dataElements.forEach[updParameters]		
 		domains.forEach[updParameters]				
 		attributes.forEach[setQualifiedNameAbap]
-		
-		
 		
 		famixDocument.elements.clear
 		famixDocument.elements.addAll(rootPackages)
@@ -234,6 +237,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		famixDocument.elements.addAll(formroutines)
 		famixDocument.elements.addAll(messageClasses)
 		famixDocument.elements.addAll(tableElements)
+		//famixDocument.elements.addAll(ttypeElems)
 		famixDocument.elements.addAll(typeOf)
 		
 		rootPackages.clear
@@ -261,6 +265,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		formroutines.clear
 		messageClasses.clear
 		tableElements.clear
+		ttypeElems.clear
 		typeOf.clear
 		return famixRoot
 	} //End of ABAP logic
@@ -886,37 +891,67 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	//ABAP	
 	def updParameters(FAMIXDictionaryData dd){
 		val ref = dd.container.ref
-		if(ref instanceof FAMIXDictionaryData){
+		
+		// set right ref and id
+		if (ref instanceof FAMIXDictionaryData) {
 			dd.fqn = ref.fqn + "." + dd.value
-		}else if(ref instanceof FAMIXNamespace){
+		} else if (ref instanceof FAMIXNamespace) {
 			dd.fqn = ref.fqn + "." + dd.value
 		}		
 		dd.id = createID(dd.fqn + dd.class.toString)
 	}  
 	
+	def createTableTypeElements(FAMIXTableType tt){
+		val tableTypeOf = typeOf.filter[element.ref == tt]
+				
+		// find "parent" elements and add them to the TableTypeElem Array
+		for(tty:tableTypeOf){
+			if (tty.typeOf.ref instanceof FAMIXABAPStruc) {
+				abapStrucElem.filter[container.ref == tty.typeOf.ref].forEach[ 
+					createTableTypeElem(tt.fqn, tty.element)
+				]
+			} else if (tty.typeOf.ref instanceof FAMIXTable) {
+				tableElements.filter[container.ref == tty.typeOf.ref].forEach[ 
+					//createTableTypeElem(tt.fqn, tty.element)
+				]
+			}
+		}
+	}
+	
+	def createTableTypeElem(FAMIXDictionaryData dd, String fqn, IntegerReference parentContainer){
+		val ref = dd.container.ref
+		var ttyElem  = famixFactory.createFAMIXTableTypeElement		
+		if (dd instanceof FAMIXStrucElement || dd instanceof FAMIXTableElement){
+			ttyElem.id = dd.id
+			ttyElem.name = dd.name
+			ttyElem.fqn = fqn + "." + dd.value
+			if (parentContainer instanceof FAMIXABAPStruc){
+				
+			}
+			//ttyElem.container = container_id
+			ttypeElems += ttyElem
+		}
+		
+		if(dd instanceof FAMIXStrucElement){
+			dd.container.ref
+		}
+	}
+	
 	def updParameters(FAMIXFunctionModule fm){
 		val ref = fm.parentType.ref
-		if(ref instanceof FAMIXFunctionGroup){
+		if (ref instanceof FAMIXFunctionGroup) {
 			fm.fqn = ref.fqn + "." + fm.value
 		}
 		fm.id = createID(fm.fqn + fm.class.toString)
-		if(fm.numberOfStatements >= 2){
+		if (fm.numberOfStatements >= 2) {
 			var nos = fm.numberOfStatements - 2
 			fm.numberOfStatements = nos
 		}
 	}
 	
-	def updParameters(FAMIXFunctionGroup fg){
-		val ref = fg.container.ref
-		if(ref instanceof FAMIXNamespace){
-			fg.fqn = ref.fqn + "." + fg.value
-		}
-		fg.id = createID(fg.fqn + fg.class.toString)
-	}
-	
 	def updParameters(FAMIXReport re){
 		val ref = re.container.ref
-		if(ref instanceof FAMIXNamespace){
+		if (ref instanceof FAMIXNamespace) {
 			re.fqn = ref.fqn + "." + re.value
 		}
 		re.id = createID(re.fqn + re.class.toString)
@@ -924,25 +959,15 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	
 	def updParameters(FAMIXFormroutine fr){
 		var ref = fr.parentType.ref
-		if(ref instanceof FAMIXReport){
+		if (ref instanceof FAMIXReport) {
 			fr.fqn = ref.fqn + "." + fr.value
 		}		
 		fr.id = createID(fr.fqn + fr.class.toString)
-		if(fr.numberOfStatements >= 2){
+		if (fr.numberOfStatements >= 2) {
 			var nos = fr.numberOfStatements - 2
 			fr.numberOfStatements = nos
 		}
-	}
-	
-	def updParameters(FAMIXMessageClass ms){
-		val ref = ms.container.ref
-		if(ref instanceof FAMIXNamespace){
-			ms.fqn = ref.fqn + "." + ms.value
-		}
-		ms.id = createID(ms.fqn + ms.class.toString)
-	}
-		
-	
+	}	
 
 	def private setQualifiedName(FAMIXEnumValue enumValue) {
 		val ref = enumValue.parentEnum.ref

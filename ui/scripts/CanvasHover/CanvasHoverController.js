@@ -107,7 +107,7 @@ var canvasHoverController = (function() {
 		if(entity === undefined){
 			entity = multipartEvent.target.id;
 			console.log("entity: " + entity);
-			events.log.error.publish({ text: "Entity of partID " + multipartEvent.partID + " not in model data."});
+			events.log.info.publish({ text: "Entity of partID " + multipartEvent.partID + " not in model data."});
 			return;
 		}
 		

@@ -212,13 +212,22 @@ class City2City extends WorkflowComponentWithModelSlot {
 		
 		// ABAP Logic
 		if(config.parser == FamixParser::ABAP){
-			if(config.abap_representation == AbapCityRepresentation::ADVANCED){
+			if(config.abap_representation == AbapCityRepresentation::ADVANCED){		
 				
-				b.width = 10
-				b.length = 12
-				
-				
-			}else{ //AbapCityRepresentation::SIMPLE
+				// We use custom models in advanced mode. Adjust sizes: 
+				if(b.type == "FAMIX.DataElement"){
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.height = b.height - (1 + config.getAbapAdvBuldingScale(b.type))
+					
+				} else if(b.type == "FAMIX.Domain"){
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+				}
+	
+						
+			 // End of AbapCityRepresentation::ADVANCED
+			} else { //AbapCityRepresentation::SIMPLE
 				
 				// Edit height and width
 				if(b.type == "FAMIX.ABAPStruc" || b.type == "FAMIX.TableType"){
@@ -229,7 +238,7 @@ class City2City extends WorkflowComponentWithModelSlot {
 						b.height = b.height + 1
 					}
 					
-				}else if(b.type == "FAMIX.DataElement"){
+				} else if(b.type == "FAMIX.DataElement"){
 					b.height = 1
 					b.width = 1.25
 				}
@@ -241,10 +250,9 @@ class City2City extends WorkflowComponentWithModelSlot {
 						b.height = config.getNotInOriginSCBuildingHeight()
 					}
 				}
-				
+											
 							
-							
-				// Use color for building, if it's set
+				// Use custom colors form settings
 				if(config.getAbapBuildingColor(b.type) !== null){
 					b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
 				}

@@ -1269,9 +1269,8 @@ public class SettingsConfiguration {
 	
 	
 	
-	
 	//ABAP specific settings
-	
+
 	public static enum AbapCityRepresentation {
 		SIMPLE, ADVANCED;
 	}
@@ -1436,23 +1435,47 @@ public class SettingsConfiguration {
 	}
 	
 	public String getAbapDistrictTexture(String type) {
-		if(type == "classDistrict") {
+		if(type.equals("classDistrict")){
 			return config.getString("city.abap.classDistrict.texture", null);
 			
-		}else if(type == "reportDistrict"){
+		}else if(type.equals("reportDistrict")){
 			return config.getString("city.abap.reportDistrict.texture", null);
 			
-		}else if(type == "dcDataDistrict"){
+		}else if(type.equals("dcDataDistrict")){
 			return config.getString("city.abap.dictionaryDataDistrict.texture", null);
 			
-		}else if(type == "functionGroupDistrict"){
+		}else if(type.equals("functionGroupDistrict")){
 			return config.getString("city.abap.functionGroupDistrict.texture", null);
 			
-		}else if(type == "tableDistrict"){
+		}else if(type.equals("tableDistrict")){
 			return config.getString("city.abap.tableDistrict.texture", null);
 			
 		}else {
 			return null;
 		}
 	}	
+	
+	public double getAbapAdvBuildingDefSize(String type) {
+		if(type.equals("FAMIX.DataElement")){
+			return config.getDouble("city.abap.adv_dataElement_def_size", 20);
+			
+		} else if(type.equals("FAMIX.Domain")){
+			return config.getDouble("city.abap.adv_domain_def_size", 20);
+			
+		} else {
+			return 0;
+		}
+	}
+	
+	public double getAbapAdvBuldingScale(String type) {
+		if(type.equals("FAMIX.DataElement")){
+			return config.getDouble("city.abap.adv_dataElement_scale", 0.241931);
+			
+		} else if(type.equals("FAMIX.Domain")){
+			return config.getDouble("city.abap.adv_domain_scale", 0.008199);
+			
+		} else {
+			return 0;
+		}
+	}
 }

@@ -33,8 +33,6 @@ import org.apache.commons.logging.LogFactory
 import org.svis.generator.SettingsConfiguration.BuildingType
 import org.svis.generator.SettingsConfiguration.ClassElementsModes
 import org.svis.generator.SettingsConfiguration.Original.BuildingMetric
-import org.svis.generator.SettingsConfiguration.FamixParser
-import static org.apache.commons.codec.digest.DigestUtils.sha1Hex
 import org.svis.generator.SettingsConfiguration.AbapCityRepresentation
 
 // ABAP
@@ -311,9 +309,37 @@ class Famix2City_abap {
 		}
 		
 		
+		if(dataElements.filter[container.ref == elem].length != 0){
+			val dcDataDistrict = cityFactory.createDistrict
+			dcDataDistrict.name = newDistrict.name + "_dcDataDistrict"
+			dcDataDistrict.type = "dcDataDistrict"
+			dcDataDistrict.id = elem.id + "_00002"
+			dcDataDistrict.level = level + 1
+			if(elem.iteration >= 1){
+				dcDataDistrict.notInOrigin = "true"
+			}
+			
+			dataElements.filter[container.ref == elem].forEach[dcDataDistrict.entities += toBuilding(level + 2)]
+			newDistrict.entities.add(dcDataDistrict)
+		}
+		
+		if(domains.filter[container.ref == elem].length != 0){
+			val reportDistrict = cityFactory.createDistrict
+				reportDistrict.name = newDistrict.name + "_reportDistrict"
+				reportDistrict.type = "reportDistrict"
+				reportDistrict.id = elem.id + "_00003"
+				reportDistrict.level = level + 1
+				if(elem.iteration >= 1){
+					reportDistrict.notInOrigin = "true"
+				}
+			
+			domains.filter[container.ref == elem].forEach[reportDistrict.entities += toBuilding(level + 2)]
+			newDistrict.entities.add(reportDistrict)			
+		}
+		
 		cityDocument.entities += newDistrict
 		return newDistrict
-	}
+	} // End of Advanced Mode
 	
 	// Methods to build buildings
 	
@@ -379,29 +405,29 @@ class Famix2City_abap {
 		//ABAPStruc segments
 		if(newBuilding.type == "FAMIX.ABAPStruc"){
 			newBuilding.methodCounter = abapStrucElem.filter[container.ref == elem].length
-			abapStrucElem.filter[container.ref == elem].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+			abapStrucElem.filter[container.ref == elem].forEach[newBuilding.methods.add(toFloor)]
 		}
 		
 		//TableType segments
 		if(newBuilding.type == "FAMIX.TableType"){
-			val tableTypeOf = typeOf.filter[element.ref == elem]
+			/*val tableTypeOf = typeOf.filter[element.ref == elem]
 
 			for (tty : tableTypeOf){
 				if(tty.typeOf.ref instanceof FAMIXABAPStruc){
 					newBuilding.methodCounter = abapStrucElem.filter[container.ref == tty.typeOf.ref].length
-					abapStrucElem.filter[container.ref == tty.typeOf.ref].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+					abapStrucElem.filter[container.ref == tty.typeOf.ref].forEach[newBuilding.methods.add(toFloor)]
 				
 				}else if(tty.typeOf.ref instanceof FAMIXTable){
 					newBuilding.methodCounter = tableElements.filter[container.ref == tty.typeOf.ref].length
-					tableElements.filter[container.ref == tty.typeOf.ref].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+					tableElements.filter[container.ref == tty.typeOf.ref].forEach[newBuilding.methods.add(toFloor)]
 				}
-			}	
+			}	*/
 		}
 		
 		//Table segments
 		if(newBuilding.type == "FAMIX.Table"){
 			newBuilding.methodCounter = tableElements.filter[container.ref == elem].length
-			tableElements.filter[container.ref == elem].forEach[newBuilding.methods.add(toFloor(newBuilding.id))]
+			tableElements.filter[container.ref == elem].forEach[newBuilding.methods.add(toFloor)]
 		}
 		
 		return newBuilding
@@ -435,8 +461,11 @@ class Famix2City_abap {
 			newBuilding.references += inheritance
 		]
 
-		newBuilding.dataCounter = methods.filter[parentType.ref === elem].length
-		newBuilding.methodCounter = attributes.filter[parentType.ref === elem].length
+		val currentMethods = methods.filter[parentType.ref === elem]
+		val currentAttributes = attributes.filter[parentType.ref === elem]
+
+		newBuilding.dataCounter = currentAttributes.length
+		newBuilding.methodCounter = currentMethods.length
 
 		if (config.buildingType == BuildingType::CITY_FLOOR) {
 			methods.filter[parentType.ref.equals(elem)].forEach[newBuilding.methods.add(toFloor)]
@@ -582,21 +611,18 @@ class Famix2City_abap {
 		newBuildingSegment.id = famixFuncModule.id
 	} 
 	
-	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXStrucElement famixStrucElem, String buildingId) {
+	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXStrucElement famixStrucElem) {
 		newBuildingSegment.name = famixStrucElem.name
 		newBuildingSegment.value = famixStrucElem.value
 		newBuildingSegment.fqn = famixStrucElem.fqn
-		newBuildingSegment.id = createID(famixStrucElem.id + "_" + buildingId)
+		newBuildingSegment.id = famixStrucElem.id
 	}
 
-	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXTableElement famixTableElement, String buildingId) {
+	def BuildingSegment create newBuildingSegment: cityFactory.createBuildingSegment toFloor(FAMIXTableElement famixTableElement) {
 		newBuildingSegment.name = famixTableElement.name
 		newBuildingSegment.value = famixTableElement.value
 		newBuildingSegment.fqn = famixTableElement.fqn
-		newBuildingSegment.id = createID(famixTableElement.id + "_" + buildingId)
+		newBuildingSegment.id = famixTableElement.id
 	} 
-	
-	def createID(String fqn) {
-		return "ID_" + sha1Hex(fqn + config.repositoryName + config.repositoryOwner)
-	}
+
 }

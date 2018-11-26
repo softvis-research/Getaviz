@@ -128,8 +128,7 @@ var actionController = (function() {
 
 		
 		//mousemove
-		canvas.onmousemove = function(eventObject){
-			
+		canvas.onmousemove = function(eventObject){			
 			moveAction(actions.mouse.move, eventObject);	
 
 			if(actions.mouse.move.bubbles){
@@ -496,6 +495,7 @@ var actionController = (function() {
 		//identify entity		
 		if(eventObject.partID){
 			var entity = model.getEntityById(eventObject.partID);
+			
 			eventObject.entity = entity;
 
 			hoveredEntity = entity;
