@@ -207,63 +207,86 @@ class City2City extends WorkflowComponentWithModelSlot {
 		}
 
 		// ABAP Logic
-		if (config.parser == FamixParser::ABAP) {
-			if (config.abap_representation == AbapCityRepresentation::ADVANCED) {
-
-				b.width = 10
-				b.length = 12
-
-				if (b.type == "FAMIX.Attribute") {
-					if(b.dataCounter == 2.0) {
-						b.height = 4
+		if(config.parser == FamixParser::ABAP){
+			if(config.abap_representation == AbapCityRepresentation::ADVANCED){		
+				
+				// We use custom models in advanced mode. Adjust sizes: 
+				if(b.type == "FAMIX.DataElement"){
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.height = b.height - (1 + config.getAbapAdvBuldingScale(b.type))
+					
+				} else if(b.type == "FAMIX.Domain"){
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+          
+				} else if(b.type == "FAMIX.Attribute") {
+          			if (b.dataCounter == 2.0) {
+              			b.height = 4
+            		}
+               
+               if (b.dataCounter == 3.0) {
+						        b.height = 7
+					     }
+               
+               if (b.dataCounter == 4.0) {
+                    b.height = 10
+               }
+        }
+						
+			 // End of AbapCityRepresentation::ADVANCED
+			} else { //AbapCityRepresentation::SIMPLE
+				
+				// Edit height and width
+				if(b.type == "FAMIX.ABAPStruc" || b.type == "FAMIX.TableType"){
+					b.width = 1.75
+					
+					b.height = b.methodCounter * config.strucElemHeight 
+					if(config.strucElemHeight <= 1 || b.methodCounter == 0){
+						b.height = b.height + 1
 					}
 					
-					if (b.dataCounter == 3.0) {
-						b.height = 7
+				} else if(b.type == "FAMIX.DataElement"){
+					b.height = 1
+					b.width = 1.25
+				}
+				
+				// If not in origin, set new min height
+				if(b.notInOrigin == "true"){
+					if((b.type == "FAMIX.Class" || b.type == "FAMIX.Interface" || b.type == "FAMIX.Report" 
+						|| b.type == "FAMIX.FunctionGroup") && b.height < config.getNotInOriginSCBuildingHeight()){
+						b.height = config.getNotInOriginSCBuildingHeight()
 					}
-					
-					if (b.dataCounter == 4.0) {
-						b.height = 10
+				}
+											
+							
+				// Use custom colors form settings
+				if(config.getAbapBuildingColor(b.type) !== null){
+					b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
+				}
+
+
+				// If not in origin, set new min height
+				if (b.notInOrigin == "true") {
+					if ((b.type == "FAMIX.Class" || b.type == "FAMIX.Interface" || b.type == "FAMIX.Report" ||
+						b.type == "FAMIX.FunctionGroup") && b.height < config.getNotInOriginSCBuildingHeight()) {
+						b.height = config.getNotInOriginSCBuildingHeight()
 					}
 				}
-			}
 
-		} else { // AbapCityRepresentation::SIMPLE
-			// Edit height and width
-			if (b.type == "FAMIX.ABAPStruc" || b.type == "FAMIX.TableType") {
-				b.width = 1.75
-
-				b.height = b.methodCounter * config.strucElemHeight
-				if (config.strucElemHeight <= 1 || b.methodCounter == 0) {
-					b.height = b.height + 1
+				// Use color for building, if it's set
+				if (config.getAbapBuildingColor(b.type) !== null) {
+					b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
+				}
+	
+				// Edit transparency 	
+				if (config.isNotInOriginTransparent() && b.notInOrigin == "true") {
+					b.transparency = config.getNotInOriginTransparentValue()
 				}
 
-			} else if (b.type == "FAMIX.DataElement") {
-				b.height = 1
-				b.width = 1.25
-			}
-
-			// If not in origin, set new min height
-			if (b.notInOrigin == "true") {
-				if ((b.type == "FAMIX.Class" || b.type == "FAMIX.Interface" || b.type == "FAMIX.Report" ||
-					b.type == "FAMIX.FunctionGroup") && b.height < config.getNotInOriginSCBuildingHeight()) {
-					b.height = config.getNotInOriginSCBuildingHeight()
-				}
-			}
-
-			// Use color for building, if it's set
-			if (config.getAbapBuildingColor(b.type) !== null) {
-				b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
-			}
-
-			// Edit transparency 	
-			if (config.isNotInOriginTransparent() && b.notInOrigin == "true") {
-				b.transparency = config.getNotInOriginTransparentValue()
-			}
-
-		} // End of AbapCityRepresentation::SIMPLE		
-	} // End of ABAP logic
-
+			} // End of AbapCityRepresentation::SIMPLE		
+		} // End of ABAP logic
+	}
 
 	def private setBuildingAttributesPanels(Building b) {
 		if (config.showBuildingBase) {

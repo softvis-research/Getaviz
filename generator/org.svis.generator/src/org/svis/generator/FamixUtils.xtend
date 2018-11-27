@@ -32,6 +32,7 @@ import org.svis.xtext.famix.FAMIXDomain
 import org.svis.xtext.famix.FAMIXTable
 import org.svis.xtext.famix.FAMIXTableElement
 import org.svis.xtext.famix.FAMIXTableType
+import org.svis.xtext.famix.FAMIXTableTypeElement
 import org.svis.xtext.famix.FAMIXABAPStruc
 import org.svis.xtext.famix.FAMIXStrucElement
 import org.svis.xtext.famix.FAMIXFunctionGroup
@@ -151,6 +152,7 @@ class FamixUtils {
 			FAMIXTableType:				return el.id
 			FAMIXABAPStruc:				return el.id
 			FAMIXStrucElement:			return el.id
+			FAMIXTableTypeElement:		return el.id
 			FAMIXFunctionGroup:			return el.id
 			FAMIXFunctionModule:		return el.id
 			FAMIXFormroutine:			return el.id
@@ -179,6 +181,7 @@ class FamixUtils {
 			FAMIXTable:					return el.fqn
 			FAMIXTableElement:			return el.fqn
 			FAMIXTableType:				return el.fqn
+			FAMIXTableTypeElement:		return el.fqn
 			FAMIXABAPStruc:				return el.fqn
 			FAMIXStrucElement:			return el.fqn
 			FAMIXFunctionGroup:			return el.fqn
