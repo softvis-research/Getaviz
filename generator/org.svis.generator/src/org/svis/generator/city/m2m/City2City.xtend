@@ -220,11 +220,10 @@ class City2City extends WorkflowComponentWithModelSlot {
 					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
 					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
 				} else if(b.type == "FAMIX.Attribute") {
-          if (b.dataCounter == 4.0) {
-              b.height = 10
-            }
-        }
-	
+          			if (b.dataCounter == 4.0) {
+              			b.height = 10
+            		}
+        		}
 						
 			 // End of AbapCityRepresentation::ADVANCED
 			} else { //AbapCityRepresentation::SIMPLE
@@ -257,32 +256,28 @@ class City2City extends WorkflowComponentWithModelSlot {
 					b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
 				}
 
-			} else if (b.type == "FAMIX.DataElement") {
-				b.height = 1
-				b.width = 1.25
-			}
 
-			// If not in origin, set new min height
-			if (b.notInOrigin == "true") {
-				if ((b.type == "FAMIX.Class" || b.type == "FAMIX.Interface" || b.type == "FAMIX.Report" ||
-					b.type == "FAMIX.FunctionGroup") && b.height < config.getNotInOriginSCBuildingHeight()) {
-					b.height = config.getNotInOriginSCBuildingHeight()
+				// If not in origin, set new min height
+				if (b.notInOrigin == "true") {
+					if ((b.type == "FAMIX.Class" || b.type == "FAMIX.Interface" || b.type == "FAMIX.Report" ||
+						b.type == "FAMIX.FunctionGroup") && b.height < config.getNotInOriginSCBuildingHeight()) {
+						b.height = config.getNotInOriginSCBuildingHeight()
+					}
 				}
-			}
 
-			// Use color for building, if it's set
-			if (config.getAbapBuildingColor(b.type) !== null) {
-				b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
-			}
+				// Use color for building, if it's set
+				if (config.getAbapBuildingColor(b.type) !== null) {
+					b.color = new RGBColor(config.getAbapBuildingColor(b.type)).asPercentage;
+				}
+	
+				// Edit transparency 	
+				if (config.isNotInOriginTransparent() && b.notInOrigin == "true") {
+					b.transparency = config.getNotInOriginTransparentValue()
+				}
 
-			// Edit transparency 	
-			if (config.isNotInOriginTransparent() && b.notInOrigin == "true") {
-				b.transparency = config.getNotInOriginTransparentValue()
-			}
-
-		} // End of AbapCityRepresentation::SIMPLE		
-	} // End of ABAP logic
-
+			} // End of AbapCityRepresentation::SIMPLE		
+		} // End of ABAP logic
+	}
 
 	def private setBuildingAttributesPanels(Building b) {
 		if (config.showBuildingBase) {

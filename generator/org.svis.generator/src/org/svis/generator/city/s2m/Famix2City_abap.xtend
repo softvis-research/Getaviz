@@ -333,11 +333,11 @@ class Famix2City_abap {
 			newClassDistrict.id   = elem.id + "_00002"
 			newClassDistrict.level = level + 1
 			
-//			newClassDistrict.entities += toBuilding(class, level + 2)
+			//newClassDistrict.entities += toBuilding(class, level + 2)
 			// TODO: find methods and attributes and bind them to district
 
-			methods.filter[parentType.ref.equals(class)].forEach[newClassDistrict.entities += toBuilding(level + 2)]
-			attributes.filter[parentType.ref.equals(class)].forEach[newClassDistrict.entities += toBuilding(level + 2)]
+			methods.filter[parentType.ref == class].forEach[newClassDistrict.entities += toBuilding(level + 2)]
+			attributes.filter[parentType.ref == class].forEach[newClassDistrict.entities += toBuilding(level + 2)]
 		
 			newDistrict.entities.add(newClassDistrict)
 		]
@@ -533,7 +533,7 @@ class Famix2City_abap {
 			newBuilding.notInOrigin = "true"
 		}
 		
-		if(typeOf.filter[].empty)
+		//if(typeOf.filter[].empty)
 		
 		if(!classes.filter[value.equals(elem.dataType)].empty) {
 			newBuilding.dataCounter = 4
