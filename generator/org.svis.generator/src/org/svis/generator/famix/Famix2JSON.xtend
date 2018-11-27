@@ -359,7 +359,6 @@ class Famix2JSON implements IGenerator2 {
 		"iteration": 	 "«se.iteration»"
 	'''
 	
-	
 	//ABAP
 	def dispatch private toMetaData(FAMIXFunctionGroup fg)'''
 		"id":            "«fg.id»",
