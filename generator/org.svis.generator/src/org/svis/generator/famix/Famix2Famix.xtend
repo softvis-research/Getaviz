@@ -954,6 +954,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		if(ref instanceof FAMIXMethod){
 			ma.fqn = ref.fqn + "." + ma.value
 		}
+	}
     
 	def updParameters(FAMIXReport re){
 		val ref = re.container.ref
@@ -973,6 +974,8 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 			var nos = fr.numberOfStatements - 2
 			fr.numberOfStatements = nos
 		}
+	
+	}
 
 	def private setQualifiedName(FAMIXEnumValue enumValue) {
 		val ref = enumValue.parentEnum.ref
