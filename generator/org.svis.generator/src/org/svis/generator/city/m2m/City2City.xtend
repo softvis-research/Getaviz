@@ -222,17 +222,17 @@ class City2City extends WorkflowComponentWithModelSlot {
           
 				} else if(b.type == "FAMIX.Attribute") {
           			if (b.dataCounter == 2.0) {
-              			b.height = 4
-            		}
-               
-               if (b.dataCounter == 3.0) {
-						        b.height = 7
-					     }
-               
-               if (b.dataCounter == 4.0) {
-                    b.height = 10
-               }
-        }
+						b.height = 4
+					}
+
+					else if (b.dataCounter == 3.0) {
+						b.height = 7
+					}
+
+					else if (b.dataCounter == 4.0) {
+						b.height = 10
+					}
+				}
 						
 			 // End of AbapCityRepresentation::ADVANCED
 			} else { //AbapCityRepresentation::SIMPLE
