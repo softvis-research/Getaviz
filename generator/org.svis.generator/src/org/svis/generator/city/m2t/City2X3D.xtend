@@ -54,8 +54,8 @@ class City2X3D {
 			<Viewpoint description='Screenshot' position='«-width*0.5 +" "+ ((width+length)/2)*0.75 +" "+ -length*0.5»' orientation='0.1 0.95 0.25 3.8' centerOfRotation='«width/2 +" 0 "+ length/2»'/>
 			<Viewpoint description='Screenshot Opposite Side' position='«width*1.5 +" "+ ((width+length)/2)*0.75 +" "+ length*1.5»' orientation='-0.5 0.85 0.2 0.8' centerOfRotation='«width/2 +" 0 "+ length/2»'/>
 		</Group>
-	'''
-
+	'''	
+	
 	// transform logic
 	def String toX3DModel(List<Entity> entities) '''
   		«FOR entity : entities»
@@ -67,7 +67,8 @@ class City2X3D {
 			«IF entity.type == "FAMIX.Class" || entity.type == "FAMIX.Interface"|| entity.type == "FAMIX.DataElement" 
 				|| entity.type == "FAMIX.Report" || entity.type == "FAMIX.FunctionGroup" 
 				|| entity.type == "FAMIX.ABAPStruc"	|| entity.type == "FAMIX.Table" 
-				|| entity.type == "FAMIX.Domain" || entity.type == "FAMIX.TableType"»
+				|| entity.type == "FAMIX.Domain" || entity.type == "FAMIX.TableType"
+				|| entity.type == "FAMIX.Method" || entity.type == "FAMIX.Attribute"»
 				«IF config.buildingType == BuildingType.CITY_ORIGINAL || config.showBuildingBase»
 					«toBuilding(entity)»
 				«ENDIF»
@@ -173,8 +174,43 @@ class City2X3D {
 			</Group>
 
 		«ELSEIF entity.type == "FAMIX.Domain"»
+			<Group DEF='«entity.id»'>
+				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
+					<Shape>
+						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+						
+						<Appearance>
+							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
+						</Appearance>
+					</Shape>
+				</Transform>
+			</Group>
 			
-		«ENDIF»
+		«ELSEIF entity.type == "FAMIX.Method"»
+			<Group DEF='«entity.id»'>
+				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
+					<Shape>
+						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+						
+						<Appearance>
+							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
+						</Appearance>
+					</Shape>
+				</Transform>
+			</Group>
+
+		«ELSEIF entity.type == "FAMIX.Attribute"»
+			<Group DEF='«entity.id»'>
+				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
+					<Shape>
+						<Cylinder radius='«entity.width/2»' height='«entity.height»'></Cylinder>						
+						<Appearance>
+							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
+						</Appearance>
+					</Shape>
+				</Transform>
+			</Group>
+		«ENDIF»		
 	'''
 	
 	// Return scale for building

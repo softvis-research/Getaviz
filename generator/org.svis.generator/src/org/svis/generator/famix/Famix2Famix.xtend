@@ -56,6 +56,7 @@ import org.svis.xtext.famix.FAMIXReport
 import org.svis.xtext.famix.FAMIXFormroutine
 import org.svis.xtext.famix.FAMIXFunctionGroup
 import org.svis.xtext.famix.FAMIXFunctionModule
+import org.svis.xtext.famix.FAMIXMacro
 import org.svis.xtext.famix.FAMIXDictionaryData
 import org.svis.xtext.famix.FAMIXDataElement
 import org.svis.xtext.famix.FAMIXDomain
@@ -101,6 +102,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	val List<FAMIXStrucElement> abapStrucElem = newArrayList 
 	val List<FAMIXFunctionModule> functionModules = newArrayList
 	val List<FAMIXFormroutine> formroutines = newArrayList
+	val List<FAMIXMacro> macros = newArrayList
 	val List<FAMIXMessageClass> messageClasses = newArrayList
 	val List<FAMIXFunctionGroup> functionGroups = newArrayList
 	val List<FAMIXTableType> tableTypes = newArrayList
@@ -168,6 +170,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 				FAMIXTableType: tableTypes.add(element)
 				FAMIXFunctionModule: functionModules.add(element)
 				FAMIXFormroutine: formroutines.add(element)
+				FAMIXMacro: macros.add(element)
 				FAMIXMessageClass: messageClasses.add(element)
 				FAMIXFunctionGroup: functionGroups.add(element)
 				FAMIXTableElement: tableElements.add(element)
@@ -198,6 +201,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		formroutines.forEach[updParameters]
 		functionGroups.forEach[setQualifiedName]
 		functionModules.forEach[updParameters]
+		macros.forEach[updParameters]
 		tables.forEach[updParameters]
 		tableElements.forEach[updParameters]
 		abapStrucsTmp.forEach[updParameters]
@@ -234,6 +238,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		famixDocument.elements.addAll(functionModules)
 		famixDocument.elements.addAll(functionGroups)
 		famixDocument.elements.addAll(formroutines)
+		famixDocument.elements.addAll(macros)
 		famixDocument.elements.addAll(messageClasses)
 		famixDocument.elements.addAll(tableElements)
 		famixDocument.elements.addAll(ttypeElements)
@@ -262,6 +267,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		functionModules.clear
 		functionGroups.clear
 		formroutines.clear
+		macros.clear
 		messageClasses.clear
 		tableElements.clear
 		ttypeElements.clear
@@ -942,7 +948,13 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 			fm.numberOfStatements = nos
 		}
 	}
-	
+  
+	def updParameters(FAMIXMacro ma){
+		var ref = ma.parentType.ref
+		if(ref instanceof FAMIXMethod){
+			ma.fqn = ref.fqn + "." + ma.value
+		}
+    
 	def updParameters(FAMIXReport re){
 		val ref = re.container.ref
 		if (ref instanceof FAMIXNamespace) {
@@ -961,7 +973,6 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 			var nos = fr.numberOfStatements - 2
 			fr.numberOfStatements = nos
 		}
-	}	
 
 	def private setQualifiedName(FAMIXEnumValue enumValue) {
 		val ref = enumValue.parentEnum.ref

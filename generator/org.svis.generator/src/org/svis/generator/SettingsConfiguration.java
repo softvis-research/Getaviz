@@ -1332,16 +1332,16 @@ public class SettingsConfiguration {
 		if(type.equals("classDistrict")) {
 			if(config.getString("city.abap.classDistrict.color").equals("")) return null;
 			return getColor(config.getString("city.abap.classDistrict.color", "#9499b7"));
-		}else if(type.equals("reportDistrict")){
 			
+		}else if(type.equals("reportDistrict")){			
 			if(config.getString("city.abap.reportDistrict.color").equals("")) return null;
 			return getColor(config.getString("city.abap.reportDistrict.color", "#9499b7"));
-		}else if(type.equals("dcDataDistrict")){
 			
+		}else if(type.equals("dcDataDistrict")){			
 			if(config.getString("city.abap.dictionaryDataDistrict.color").equals("")) return null;
 			return getColor(config.getString("city.abap.dictionaryDataDistrict.color", "#9499b7"));
-		}else if(type.equals("functionGroupDistrict")){
 			
+		}else if(type.equals("functionGroupDistrict")){			
 			if(config.getString("city.abap.functionGroupDistrict.color").equals("")) return null;
 			return getColor(config.getString("city.abap.functionGroupDistrict.color", "#9499b7"));
 			

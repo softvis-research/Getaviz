@@ -312,35 +312,36 @@ class Famix2City_abap {
 			newDistrict.notInOrigin = "true"
 		}
 		
-		
-		if(dataElements.filter[container.ref == elem].length != 0){
-			val dcDataDistrict = cityFactory.createDistrict
-			dcDataDistrict.name = newDistrict.name + "_dcDataDistrict"
-			dcDataDistrict.type = "dcDataDistrict"
-			dcDataDistrict.id = elem.id + "_00002"
-			dcDataDistrict.level = level + 1
-			if(elem.iteration >= 1){
-				dcDataDistrict.notInOrigin = "true"
-			}
+
+		domains.filter[container.ref == elem].forEach[
+			val newDomainDistrict = cityFactory.createDistrict
+			newDomainDistrict.name = newDistrict.name + "_domainDistrict"
+			newDomainDistrict.type = "dcDataDistrict"
+			newDomainDistrict.id = elem.id + "_00001"
+			newDomainDistrict.level = level + 1
 			
-			dataElements.filter[container.ref == elem].forEach[dcDataDistrict.entities += toBuilding(level + 2)]
-			newDistrict.entities.add(dcDataDistrict)
-		}
-		
-		if(domains.filter[container.ref == elem].length != 0){
-			val reportDistrict = cityFactory.createDistrict
-				reportDistrict.name = newDistrict.name + "_reportDistrict"
-				reportDistrict.type = "reportDistrict"
-				reportDistrict.id = elem.id + "_00003"
-				reportDistrict.level = level + 1
-				if(elem.iteration >= 1){
-					reportDistrict.notInOrigin = "true"
-				}
+			newDomainDistrict.entities += toBuilding(level + 2)	
+			// TODO: find dataElements and bind them to district
 			
-			domains.filter[container.ref == elem].forEach[reportDistrict.entities += toBuilding(level + 2)]
-			newDistrict.entities.add(reportDistrict)			
-		}
+			newDistrict.entities.add(newDomainDistrict)
+		]
 		
+		classes.filter[container.ref == elem].forEach[ class |
+			val newClassDistrict = cityFactory.createDistrict
+			newClassDistrict.name = newDistrict.name + "_classDistrict"
+			newClassDistrict.type = "classDistrict"
+			newClassDistrict.id   = elem.id + "_00002"
+			newClassDistrict.level = level + 1
+			
+//			newClassDistrict.entities += toBuilding(class, level + 2)
+			// TODO: find methods and attributes and bind them to district
+
+			methods.filter[parentType.ref.equals(class)].forEach[newClassDistrict.entities += toBuilding(level + 2)]
+			attributes.filter[parentType.ref.equals(class)].forEach[newClassDistrict.entities += toBuilding(level + 2)]
+		
+			newDistrict.entities.add(newClassDistrict)
+		]
+				
 		cityDocument.entities += newDistrict
 		return newDistrict
 	} // End of Advanced Mode
@@ -454,7 +455,7 @@ class Famix2City_abap {
 			inheritance.fqn = i.superclass.ref.fqn
 			newBuilding.references += inheritance
 		]
-
+		
 		val currentMethods = methods.filter[parentType.ref === elem]
 		val currentAttributes = attributes.filter[parentType.ref === elem]
 
@@ -503,7 +504,7 @@ class Famix2City_abap {
 		return newBuilding
 	}
 
-	def private Building toBuilding(FAMIXMethod elem, District parent, int level) {
+	def private Building toBuilding(FAMIXMethod elem, int level) {
 		val newBuilding = cityFactory.createBuilding
 		newBuilding.name = elem.name
 		newBuilding.value = elem.value
@@ -515,8 +516,30 @@ class Famix2City_abap {
 		if(elem.iteration >= 1){
 			newBuilding.notInOrigin = "true"
 		}
+		newBuilding.methodCounter = elem.numberOfStatements
 
 		return newBuilding
+	}
+	
+	def private Building toBuilding(FAMIXAttribute elem, int level) {
+		val newBuilding = cityFactory.createBuilding
+		newBuilding.name = elem.name
+		newBuilding.value = elem.value
+		newBuilding.fqn = elem.fqn
+		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		newBuilding.level = level
+		newBuilding.id = elem.id
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
+		
+		if(typeOf.filter[].empty)
+		
+		if(!classes.filter[value.equals(elem.dataType)].empty) {
+			newBuilding.dataCounter = 4
+		}
+		
+		return newBuilding		
 	}
 	
 	/**

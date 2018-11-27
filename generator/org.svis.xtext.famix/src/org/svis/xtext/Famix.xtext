@@ -19,7 +19,7 @@ FAMIXElement:
 	FAMIXAntipattern | FAMIXPath | FAMIXRole | FAMIXComponent | 
 	
 	//ABAP
-	FAMIXReport | FAMIXFormroutine | FAMIXFunctionModule | FAMIXTypeOf  
+	FAMIXReport | FAMIXFormroutine | FAMIXFunctionModule | FAMIXTypeOf | FAMIXMacro
 ;
 	
 FAMIXStructure:
@@ -36,7 +36,7 @@ FAMIXDictionaryData:
 
 ;
 
-/** Explenation of different identifiers
+/** Explanation of different identifiers
  * 
  * id: id created from VerveineJ, only unique within a FAMIX file
  * name: unqualified name
@@ -532,6 +532,23 @@ FAMIXFunctionModule:
     '(' 'parentType' parentType=IntegerReference ')'
     ('(' 'iteration' iteration=INT ')')?
     ')';
+	
+FAMIXMacro:
+	'(FAMIX.Macro'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    ('(' 'declaredType' declaredType=IntegerReference ')')?
+    ('(' 'numberOfStatements' numberOfStatements=INT ')')?
+    ('(' 'parentType' parentType=IntegerReference ')')?
+    '(' 'defined' defined=Boolean ')'
+    '(' 'called' called=Boolean ')'
+    '(' 'amountOfCalls' amountOfCalls=INT ')'
+    '(' 'redefined' redefined=Boolean ')'
+    '(' 'nested' nested=Boolean ')'
+    ('(' 'iteration' iteration=INT ')')?
+	')';
 	
 FAMIXTypeOf:
 	'(FAMIX.TypeOf'
