@@ -549,7 +549,7 @@ class Famix2City_abap {
 			newBuilding.dataCounter = 1
 		}
 		
-		if(!structures.filter[value.equals(elem.dataType)].empty) {
+		if(!abapStrucs.filter[value.equals(elem.dataType)].empty) {
 			newBuilding.dataCounter = 2
 		}
 		
