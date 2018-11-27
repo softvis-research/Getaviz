@@ -214,6 +214,14 @@ class City2City extends WorkflowComponentWithModelSlot {
 				b.length = 12
 
 				if (b.type == "FAMIX.Attribute") {
+					if(b.dataCounter == 2.0) {
+						b.height = 4
+					}
+					
+					if (b.dataCounter == 3.0) {
+						b.height = 7
+					}
+					
 					if (b.dataCounter == 4.0) {
 						b.height = 10
 					}
