@@ -928,6 +928,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		if (dd instanceof FAMIXStrucElement || dd instanceof FAMIXTableElement){
 			ttyElement.id = dd.id
 			ttyElement.name = dd.name
+			ttyElement.value = dd.value
 			ttyElement.fqn = dd.fqn
 			ttyElement.container = famixFactory.createIntegerReference
 			ttyElement.container.ref = dd.container.ref
