@@ -31,8 +31,9 @@ FAMIXStructure:
 
 //ABAP
 FAMIXDictionaryData:
-	FAMIXDataElement | FAMIXTable | FAMIXABAPStruc | FAMIXStrucElement | FAMIXDomain | FAMIXTableType |
-	FAMIXTableElement
+	FAMIXDomain | FAMIXDataElement | FAMIXTable | FAMIXTableElement | FAMIXABAPStruc | FAMIXStrucElement | 
+	FAMIXTableType | FAMIXTableTypeElement
+
 ;
 
 /** Explanation of different identifiers
@@ -400,7 +401,19 @@ FAMIXReport:
     ('(' 'numberOfStatements' numberOfStatements=INT ')')?
     ('(' 'iteration' iteration=INT ')')? 
     ')';
-    
+
+FAMIXFormroutine:
+	'(FAMIX.Formroutine' 
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    ('(' 'declaredType' declaredType=IntegerReference ')')?
+    ('(' 'numberOfStatements' numberOfStatements=INT ')')?
+    '(' 'parentType' parentType=IntegerReference ')'
+    ('(' 'iteration' iteration=INT ')')?
+	')';
+	    
 FAMIXDataElement:
     '(FAMIX.DataElement'
     '(' 'id:' name=INT_ID ')'
@@ -438,17 +451,16 @@ FAMIXTable:
     ('(' 'iteration' iteration=INT ')')? 
     ')';
     
-FAMIXTableType:
-	'(FAMIX.TableType'
+FAMIXTableElement:
+    '(FAMIX.TableElement'
     '(' 'id:' name=INT_ID ')'
     '(' 'name' value=MSESTRING ')'
     ('(' 'hash' id = STRING ')')?
     ('(' 'fqn' fqn = MSESTRING ')')?
     '(' 'container' container=IntegerReference ')'
-    ('(' 'numberOfColumns' numberOfColumns=INT ')')?
-    ('(' 'rowType' rowType=MSESTRING ')')?
-    ('(' 'rowCategory' rowCategory=INT ')')?
-    ('(' 'iteration' iteration=INT ')')? 
+    ('(' 'dataElement' dataElement=MSESTRING ')')?
+    ('(' 'structure' structure=MSESTRING ')')?
+    ('(' 'iteration' iteration=INT ')')?
     ')';
 
 FAMIXABAPStruc:
@@ -460,7 +472,7 @@ FAMIXABAPStruc:
     '(' 'container' container=IntegerReference ')'
     ('(' 'iteration' iteration=INT ')')? 
     ')';
-    
+        
 FAMIXStrucElement:
     '(FAMIX.StrucElement'
     '(' 'id:' name=INT_ID ')'
@@ -474,18 +486,31 @@ FAMIXStrucElement:
     ('(' 'structure' structure=MSESTRING ')')?
     ('(' 'iteration' iteration=INT ')')? 
     ')'; 
-    
-FAMIXMessageClass:
-    '(FAMIX.MessageClass'
+        
+FAMIXTableType:
+	'(FAMIX.TableType'
     '(' 'id:' name=INT_ID ')'
     '(' 'name' value=MSESTRING ')'
     ('(' 'hash' id = STRING ')')?
     ('(' 'fqn' fqn = MSESTRING ')')?
     '(' 'container' container=IntegerReference ')'
-    ('(' 'numberOfMessages' numberOfMessages=INT ')')?
+    ('(' 'numberOfColumns' numberOfColumns=INT ')')?
+    ('(' 'rowType' rowType=MSESTRING ')')?
+    ('(' 'rowCategory' rowCategory=INT ')')?
     ('(' 'iteration' iteration=INT ')')? 
     ')';
 
+FAMIXTableTypeElement:
+	'(FAMIX.TableTypeElement'
+    '(' 'id:' name=INT_ID ')'
+    '(' 'name' value=MSESTRING ')'
+    ('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'tableType' tableType=IntegerReference ')')?
+    ('(' 'iteration' iteration=INT ')')? 
+    ')';   
+    
 FAMIXFunctionGroup:
     '(FAMIX.FunctionGroup'
     '(' 'id:' name=INT_ID ')'
@@ -507,18 +532,6 @@ FAMIXFunctionModule:
     '(' 'parentType' parentType=IntegerReference ')'
     ('(' 'iteration' iteration=INT ')')?
     ')';
-
-FAMIXFormroutine:
-	'(FAMIX.Formroutine' 
-	'(' 'id:' name=INT_ID ')'
-	'(' 'name' value=MSESTRING ')'
-	('(' 'hash' id = STRING ')')?
-    ('(' 'fqn' fqn = MSESTRING ')')?
-    ('(' 'declaredType' declaredType=IntegerReference ')')?
-    ('(' 'numberOfStatements' numberOfStatements=INT ')')?
-    '(' 'parentType' parentType=IntegerReference ')'
-    ('(' 'iteration' iteration=INT ')')?
-	')';
 	
 FAMIXMacro:
 	'(FAMIX.Macro'
@@ -545,18 +558,16 @@ FAMIXTypeOf:
 	('(' 'typeOf' typeOf=IntegerReference ')')
 	')';
 
-FAMIXTableElement:
-    '(FAMIX.TableElement'
+FAMIXMessageClass:
+    '(FAMIX.MessageClass'
     '(' 'id:' name=INT_ID ')'
     '(' 'name' value=MSESTRING ')'
     ('(' 'hash' id = STRING ')')?
     ('(' 'fqn' fqn = MSESTRING ')')?
     '(' 'container' container=IntegerReference ')'
-    ('(' 'dataElement' dataElement=MSESTRING ')')?
-    ('(' 'structure' structure=MSESTRING ')')?
-    ('(' 'iteration' iteration=INT ')')?
-    ')';
-    
+    ('(' 'numberOfMessages' numberOfMessages=INT ')')?
+    ('(' 'iteration' iteration=INT ')')? 
+    ')';    
 // End of ABAP extensions     
     
     
