@@ -533,24 +533,17 @@ class Famix2City_abap {
 			newBuilding.notInOrigin = "true"
 		}
 		
-//		if(typeOf.filter[].empty) {
-//			
-//		}
-		
-		if(!dataElements.filter[value.equals(elem.dataType)].empty) {
-			newBuilding.dataCounter = 1
-		}
-		
-		if(!abapStrucs.filter[value.equals(elem.dataType)].empty) {
-			newBuilding.dataCounter = 2
-		}
-		
-		if(!tables.filter[value.equals(elem.dataType)].empty || !tableTypes.filter[value.equals(elem.dataType)].empty) {
-			newBuilding.dataCounter = 3
-		}
-		
-		if(!classes.filter[value.equals(elem.dataType)].empty) {
-			newBuilding.dataCounter = 4
+		val dataType = typeOf.findFirst[element.ref == elem]
+
+		if (dataType === null) {
+			newBuilding.dataCounter = 1.0
+		} else if (dataType.typeOf.ref.getClass.toString.contains("FAMIXABAPStruc")) {
+			newBuilding.dataCounter = 2.0
+		} else if (dataType.typeOf.ref.getClass.toString.contains("FAMIXTable") ||
+			dataType.typeOf.ref.getClass.toString.contains("FAMIXTableType")) {
+			newBuilding.dataCounter = 3.0
+		} else if (dataType.typeOf.ref.getClass.toString.contains("FAMIXClass")) {
+			newBuilding.dataCounter = 4.0
 		}
 		
 		return newBuilding		
