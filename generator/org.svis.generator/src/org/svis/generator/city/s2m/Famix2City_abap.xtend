@@ -533,7 +533,21 @@ class Famix2City_abap {
 			newBuilding.notInOrigin = "true"
 		}
 		
-		//if(typeOf.filter[].empty)
+//		if(typeOf.filter[].empty) {
+//			
+//		}
+		
+		if(!dataElements.filter[value.equals(elem.dataType)].empty) {
+			newBuilding.dataCounter = 1
+		}
+		
+		if(!abapStrucs.filter[value.equals(elem.dataType)].empty) {
+			newBuilding.dataCounter = 2
+		}
+		
+		if(!tables.filter[value.equals(elem.dataType)].empty || !tableTypes.filter[value.equals(elem.dataType)].empty) {
+			newBuilding.dataCounter = 3
+		}
 		
 		if(!classes.filter[value.equals(elem.dataType)].empty) {
 			newBuilding.dataCounter = 4
