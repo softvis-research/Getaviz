@@ -1456,12 +1456,14 @@ public class SettingsConfiguration {
 	}	
 	
 	public double getAbapAdvBuildingDefSize(String type) {
-		if(type.equals("FAMIX.DataElement")){
+		if (type.equals("FAMIX.DataElement")) {
 			return config.getDouble("city.abap.adv_dataElement_def_size", 20);
-			
-		} else if(type.equals("FAMIX.Domain")){
+
+		} else if (type.equals("FAMIX.Domain")) {
 			return config.getDouble("city.abap.adv_domain_def_size", 20);
-			
+
+		} else if (type.equals("FAMIX.Method")) {
+			return config.getDouble("city.abap.adv_method_def_size", 20);
 		} else {
 			return 0;
 		}
@@ -1474,6 +1476,8 @@ public class SettingsConfiguration {
 		} else if(type.equals("FAMIX.Domain")){
 			return config.getDouble("city.abap.adv_domain_scale", 0.008199);
 			
+		} else if(type.equals("FAMIX.Method")) {
+			return config.getDouble("city.abap.adv_method_scale", 0.1);
 		} else {
 			return 0;
 		}
