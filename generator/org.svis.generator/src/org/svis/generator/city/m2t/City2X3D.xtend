@@ -193,14 +193,10 @@ class City2X3D {
 						   scale='«getAdvBuildingScale(config.getAbapAdvBuldingScale(entity.type))»'
 						   rotation='0.000000 0.707107 0.707107 3.141593'>
 					«IF defineCMSkyScraper»
-						«CustomModel_SkyScraper::defineSkyScraperBase»
-						«CustomModel_SkyScraper::defineSkyScraperFloor»
-						«CustomModel_SkyScraper::defineSkyScraperRoof»
+						«CustomModel_SkyScraper::defineSkyScraperShape(entity.height, entity.position.y)»
 						«defineCMSkyScraper = false»
 					«ELSE»
-						«CustomModel_SkyScraper::createSkyScraperBase»
-						«CustomModel_SkyScraper::createSkyScraperFloor»
-						«CustomModel_SkyScraper::createSkyScraperRoof»
+						«CustomModel_SkyScraper::createSkyScraperShape(entity.height, entity.position.y)»
 					«ENDIF»	
 				</Transform>
 			</Group>
