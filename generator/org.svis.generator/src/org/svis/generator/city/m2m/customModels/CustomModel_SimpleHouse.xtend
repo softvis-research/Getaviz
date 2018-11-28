@@ -2,7 +2,7 @@ package org.svis.generator.city.m2m.customModels
 
 class CustomModel_SimpleHouse {
 	
-	def static String defineSimpleHauseShape()'''
+	def static String defineSimpleHouseShape()'''
 		<Group DEF="SimpleHouse">
 			<Shape>
 				<Appearance>

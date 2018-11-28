@@ -23,6 +23,7 @@ class City2X3D {
 	val log = LogFactory::getLog(getClass)
 	val config = SettingsConfiguration.instance
 	var defineCMSimpleHouse = true
+	var defineCMSkyScraper = true
 
 	def toX3DBody(Resource resource) {
 		log.info("City2X3D has started.")
@@ -165,7 +166,7 @@ class City2X3D {
 						   scale='«getAdvBuildingScale(config.getAbapAdvBuldingScale(entity.type))»'
 						   rotation='0.000000 0.707107 0.707107 3.141593'>
 					«IF defineCMSimpleHouse»
-						«CustomModel_SimpleHouse::defineSimpleHauseShape»
+						«CustomModel_SimpleHouse::defineSimpleHouseShape»
 						«defineCMSimpleHouse = false»
 					«ELSE»
 						«CustomModel_SimpleHouse::createSimpleHouseShape»
@@ -188,14 +189,19 @@ class City2X3D {
 			
 		«ELSEIF entity.type == "FAMIX.Method"»
 			<Group DEF='«entity.id»'>
-				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
-					<Shape>
-						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
-						
-						<Appearance>
-							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
-						</Appearance>
-					</Shape>
+				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»' 
+						   scale='«getAdvBuildingScale(config.getAbapAdvBuldingScale(entity.type))»'
+						   rotation='0.000000 0.707107 0.707107 3.141593'>
+					«IF defineCMSkyScraper»
+						«CustomModel_SkyScraper::defineSkyScraperBase»
+						«CustomModel_SkyScraper::defineSkyScraperFloor»
+						«CustomModel_SkyScraper::defineSkyScraperRoof»
+						«defineCMSkyScraper = false»
+					«ELSE»
+						«CustomModel_SkyScraper::createSkyScraperBase»
+						«CustomModel_SkyScraper::createSkyScraperFloor»
+						«CustomModel_SkyScraper::createSkyScraperRoof»
+					«ENDIF»	
 				</Transform>
 			</Group>
 
