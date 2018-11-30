@@ -44,6 +44,7 @@ District: // no LOC, height has to be static
 		('(' 'hasDatabases' hasDatabases=BOOLEAN ')')? //ABAP
 		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? //ABAP
 		('(' 'dataCounter' dataCounter=DECIMAL ')')?
+		('(' 'numberOfStatements' numberOfStatements=INT ')')?
 	')';
 
 Building:
