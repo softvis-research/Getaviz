@@ -19,7 +19,7 @@ import org.svis.xtext.city.Position;
 import org.svis.xtext.city.Root;
 import org.svis.xtext.city.impl.CityFactoryImpl;
 
-public class CityLayout {
+public class ABAPCityLayout {
 	private static boolean DEBUG = false;
 	private static boolean DEBUG_Part1 = false;
 	private static boolean DEBUG_Part2 = false;
@@ -41,7 +41,7 @@ public class CityLayout {
 
 		// receives List of ALL CITYelements in the form of the root element
 		arrangeChildren(root.getDocument());
-		adjustPositions(root.getDocument().getEntities(), 0, 0, 0);
+		adjustPositions(root.getDocument().getEntities(), 0, 0);
 
 		if (DEBUG) {
 			System.out.println(info + "cityLayout(root)-exit.");
@@ -496,28 +496,7 @@ public class CityLayout {
 		// mapping 2D rectangle on 3D building
 		newPos.setX(fitNode.getRectangle().getCenterX() - config.getBuildingHorizontalGap() / 2); // width
 		newPos.setZ(fitNode.getRectangle().getCenterY() - config.getBuildingHorizontalGap() / 2); // length
-		newPos.setY((el.getEntityLink().getHeight() / 2)); // height
-		
-		 
-		// ABAP additional logic
-		if(config.getParser() == FamixParser.ABAP){
-			
-			// Attributes below buildings (ABAP only), for: Classes, Reports
-			if(config.isShowAttributesBelowBuildings() && el.getEntityLink().getDataCounter() != 0){
-				if(el.getEntityLink().getType().equals("FAMIX.Class")) {
-					newPos.setY((el.getEntityLink().getHeight() / 2) + config.getAttributesBelowBuildingsHeight());
-					
-				}else if(el.getEntityLink().getType().equals("FAMIX.Report") && config.isShowReportAttributes()) {
-					newPos.setY((el.getEntityLink().getHeight() / 2) + config.getAttributesBelowBuildingsHeight());
-					
-				}else if(el.getEntityLink().getType().equals("FAMIX.FunctionGroup") && config.isShowFugrAttributes()) {
-					newPos.setY((el.getEntityLink().getHeight() / 2) + config.getAttributesBelowBuildingsHeight());
-				}
-			}
-			
-			
-		}// /End of ABAP logic
-		
+
 		el.getEntityLink().setPosition(newPos);
 		if (DEBUG) {
 			System.out.println("\n\t\t" + info + "Entity " + el.getEntityLink().getFqn() + " [checkVALUES]: ("
@@ -536,36 +515,25 @@ public class CityLayout {
 				: covrec.getBottomRightY());
 		covrec.changeRectangle(0, 0, newX, newY);
 		if (DEBUG) {
-			System.out.println(	
+			System.out.println(
 					"\t\t" + info + "CovRec [checkVALUES]: [(" + covrec.getUpperLeftX() + "|" + covrec.getUpperLeftY()
 							+ "), (" + covrec.getBottomRightX() + "|" + covrec.getBottomRightY() + ")]");
 		}
 	}
 
-	private static void adjustPositions(EList<Entity> children, double parentX, double parentY, double parentZ) {
+	private static void adjustPositions(EList<Entity> children, double parentX, double parentZ) {
 		for (Entity e : children) {
 			double centerX = e.getPosition().getX();
 			double centerZ = e.getPosition().getZ();
-			double centerY = e.getPosition().getY();
 			e.getPosition().setX(centerX + parentX + config.getBuildingHorizontalMargin()/*-BLDG_horizontalGap/2*/);
 			e.getPosition().setZ(centerZ + parentZ + config.getBuildingHorizontalMargin()/*-BLDG_horizontalGap/2*/);
-			e.getPosition().setY(centerY + parentY + config.getBuildingVerticalMargin());
-			if (config.getBuildingType() == BuildingType.CITY_DYNAMIC) {
-				if (e.getType().equals("FAMIX.Namespace") || e.getType().equals("FAMIX.Class")) {
-					double newUpperLeftX = e.getPosition().getX() - e.getWidth() / 2;
-					double newUpperLeftZ = e.getPosition().getZ() - e.getLength() / 2;
-					double newUpperLeftY = e.getPosition().getY() - e.getHeight() / 2;
-					adjustPositions(e.getEntities(), newUpperLeftX, newUpperLeftY, newUpperLeftZ);
-				}
-			} else {
-				if (e.getType().equals("FAMIX.Namespace") || e.getType().equals("reportDistrict") || e.getType().equals("classDistrict")
-						|| e.getType().equals("functionGroupDistrict") || e.getType().equals("tableDistrict") 
-						|| e.getType().equals("dcDataDistrict")) {
-					double newUpperLeftX = e.getPosition().getX() - e.getWidth() / 2;
-					double newUpperLeftZ = e.getPosition().getZ() - e.getLength() / 2;
-					double newUpperLeftY = e.getPosition().getY() - e.getHeight() / 2;
-					adjustPositions(e.getEntities(), newUpperLeftX, newUpperLeftY, newUpperLeftZ);
-				}
+			
+			if (e.getType().equals("FAMIX.Namespace") || e.getType().equals("reportDistrict")
+					|| e.getType().equals("classDistrict") || e.getType().equals("functionGroupDistrict")
+					|| e.getType().equals("tableDistrict") || e.getType().equals("dcDataDistrict")) {
+				double newUpperLeftX = e.getPosition().getX() - e.getWidth() / 2;
+				double newUpperLeftZ = e.getPosition().getZ() - e.getLength() / 2;
+				adjustPositions(e.getEntities(), newUpperLeftX, newUpperLeftZ);
 			}
 		}
 	} // End of adjustPositions

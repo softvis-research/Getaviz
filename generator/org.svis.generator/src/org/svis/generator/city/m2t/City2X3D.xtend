@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.EcoreUtil2
 import org.svis.generator.city.m2m.CityLayout
+import org.svis.generator.city.m2m.ABAPCityLayout
 import org.svis.generator.city.m2m.Rectangle
 import org.svis.xtext.city.Building
 import org.svis.xtext.city.BuildingSegment
@@ -28,7 +29,7 @@ class City2X3D {
 	def toX3DBody(Resource resource) {
 		log.info("City2X3D has started.")
 		val entities = EcoreUtil2::getAllContentsOfType(resource.contents.head, Entity)
-		val rootEntity = CityLayout::rootRectangle
+		val rootEntity = ABAPCityLayout::rootRectangle // CityLayout::rootRectangle
 		
 		val Body = viewports(rootEntity) + entities.toX3DModel()
 		log.info("City2X3D has finished.")
@@ -193,10 +194,10 @@ class City2X3D {
 						   scale='«getAdvBuildingScale(config.getAbapAdvBuldingScale(entity.type))»'
 						   rotation='0.000000 0.707107 0.707107 3.141593'>
 					«IF defineCMSkyScraper»
-						«CustomModel_SkyScraper::defineSkyScraperShape(entity.height, entity.position.y)»
+						«CustomModel_SkyScraper::defineSkyScraperShape(config.getAbapAdvBuldingScale(entity.type), entity.numberOfStatements, entity.position.y)»
 						«defineCMSkyScraper = false»
 					«ELSE»
-						«CustomModel_SkyScraper::createSkyScraperShape(entity.height, entity.position.y)»
+						«CustomModel_SkyScraper::createSkyScraperShape(config.getAbapAdvBuldingScale(entity.type), entity.numberOfStatements, entity.position.y)»
 					«ENDIF»	
 				</Transform>
 			</Group>

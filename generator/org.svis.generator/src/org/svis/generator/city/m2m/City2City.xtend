@@ -70,7 +70,9 @@ class City2City extends WorkflowComponentWithModelSlot {
 			districts.forEach[setDistrictAttributes]
 			buildings.forEach[setBuildingAttributes]
 
-			CityLayout::cityLayout(cityRoot)
+//			CityLayout::cityLayout(cityRoot)
+			ABAPCityLayout::cityLayout(cityRoot)
+			CityHeightLayout::cityHeightLayout(cityRoot)
 			switch (config.buildingType) {
 				case CITY_BRICKS:
 					BrickLayout.brickLayout(cityRoot) // Layout for buildingSegments
@@ -231,12 +233,16 @@ class City2City extends WorkflowComponentWithModelSlot {
 						b.height = 10
 					}
 				} else if (b.type == "FAMIX.Method") {
-					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type) * 1.5
 					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
 					if (b.methodCounter == 0) {
-						b.height = config.heightMin
+						b.height = 21 * config.getAbapAdvBuldingScale(b.type) // height of Base (14) plus the height of roof (7)
+//						b.height = config.heightMin
+						b.numberOfStatements = b.methodCounter + 1
 					} else {
-						b.height = b.methodCounter
+						b.height = (14 + 5 * (b.methodCounter - 1) + 7) * config.getAbapAdvBuldingScale(b.type) // remember: roof contains already one floor 
+//						b.height = b.methodCounter
+						b.numberOfStatements = b.methodCounter
 					}
 				}
 						
