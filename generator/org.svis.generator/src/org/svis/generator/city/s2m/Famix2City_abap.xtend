@@ -517,6 +517,7 @@ class Famix2City_abap {
 			newBuilding.notInOrigin = "true"
 		}
 		newBuilding.methodCounter = elem.numberOfStatements
+		newBuilding.visibility = elem.modifiers.findFirst[it == "PRIVATE" || it == "PROTECTED" || it == "PUBLIC"] 
 
 		return newBuilding
 	}
@@ -545,6 +546,8 @@ class Famix2City_abap {
 		} else if (dataType.typeOf.ref.getClass.toString.contains("FAMIXClass")) {
 			newBuilding.dataCounter = 4.0
 		}
+		
+		newBuilding.visibility = elem.modifiers.findFirst[it == "PRIVATE" || it == "PROTECTED" || it == "PUBLIC"] 
 		
 		return newBuilding		
 	}
