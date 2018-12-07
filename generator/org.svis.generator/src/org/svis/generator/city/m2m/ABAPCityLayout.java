@@ -29,10 +29,10 @@ public class ABAPCityLayout {
 	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 	
 	
-/** TODO
- * importing the general size of class members in settings.properties 
- */
-	private static Double memberSize = 32.0;
+///** TODO
+// * importing the general size of class members in settings.properties 
+// */
+//	private static Double memberSize = 32.0;
 
 	/**
 	 * @param root
@@ -552,8 +552,8 @@ public class ABAPCityLayout {
 		// setting district size
 		// maybe adding the margin?
 		Double squareSize = Math.ceil(Math.sqrt(classDistrict.getEntities().size()));
-		double size = squareSize * (memberSize + config.getBuildingHorizontalGap());		
-		classDistrict.setWidth(size + 2 * config.getBuildingHorizontalMargin());
+		double size = squareSize * (config.getAbapClassMemberSideLength() + config.getBuildingHorizontalGap());		
+		classDistrict.setWidth(size + 2 * config.getBuildingHorizontalMargin()); // or size + config.getBuildingHorizontalMargin() + config.getBuildingHorizontalGap() ??
 		classDistrict.setLength(size + 2 * config.getBuildingHorizontalMargin());
 		Rectangle classDistrictSquare = new Rectangle(0, 0, size, size);
 		
@@ -565,15 +565,12 @@ public class ABAPCityLayout {
 		List<Rectangle> protectedMembers = new ArrayList<Rectangle>();
 		List<Rectangle> publicMembers = new ArrayList<Rectangle>();
 		
+		double unitSize = config.getAbapClassMemberSideLength() + config.getBuildingHorizontalGap();
+		
 		// ordering the members as rectangles by visibility
 		for (Entity member : members) {
-			Rectangle square = new Rectangle(0, 0, memberSize + config.getBuildingHorizontalGap(),
-					memberSize + config.getBuildingHorizontalGap());
+			Rectangle square = new Rectangle(0, 0, unitSize, unitSize);
 			square.setEntityLink(member);
-			
-			if (member.getVisibility() == null) {
-				member.setVisibility("PUBLIC");
-			}
 			
 			switch (member.getVisibility()) {
 			case "PRIVATE":
@@ -598,8 +595,25 @@ public class ABAPCityLayout {
 		sortedMembers.addAll(publicMembers);
 		
 		// start algorithm
+		List<String> position = getPositionList(squareSize);
+		
+		// moving the entities to the right place
+		moveElementsToPosition(sortedMembers, position, classDistrictSquare, unitSize, squareSize);
+		
+		// assigning the building parts their right position
+		// maybe doing this in method moveElementsToPosition()
+//		for (Entity member : members) {
+//			EList<Entity> buildingParts = member.getBuildingParts();
+//			for (Entity buildingPart : buildingParts) {
+//				buildingPart.setPosition(member.getPosition());
+//				member.getBuildingParts().add(buildingPart);
+//			}
+//		}
+		
+	}
+	
+	private static List<String> getPositionList(Double squareSize) {
 		int counter = 0;
-		double unitSize = memberSize + config.getBuildingHorizontalGap();
 		List<String> position = new ArrayList<String>();
 		position.add(0, "");
 		position.add(1, "U");
@@ -654,121 +668,7 @@ public class ABAPCityLayout {
 				} 
 			}			
 		}
-		
-		// moving the entities to the right place
-		int eCounter = 0;
-		if (squareSize.intValue() % 2 == 1) {
-			for (Rectangle r : sortedMembers) {
-				if (eCounter == 0) {
-					Position newPos = cityFactory.createPosition();
-					newPos.setX(classDistrictSquare.getCenterX());
-					newPos.setZ(classDistrictSquare.getCenterY());
-					
-					r.getEntityLink().setPosition(newPos);
-					eCounter++;
-				} else {
-					Position newPos = cityFactory.createPosition();
-					newPos.setX(classDistrictSquare.getCenterX());
-					newPos.setZ(classDistrictSquare.getCenterY());
-					for (int i = 0; i < position.get(eCounter).length(); ++i) {
-						char direction = position.get(eCounter).charAt(i);
-						switch (direction) {
-						case 'U':
-							newPos.setZ(newPos.getZ() + unitSize);
-							break;
-						case 'R':
-							newPos.setX(newPos.getX() + unitSize);
-							break;
-						case 'D':
-							newPos.setZ(newPos.getZ() - unitSize);
-							break;
-						case 'L':
-							newPos.setX(newPos.getX() - unitSize);
-							break;
-						}						
-					}
-					r.getEntityLink().setPosition(newPos);
-					eCounter++;
-				}
-			}
-		} else {
-			eCounter++;
-			for (Rectangle r : sortedMembers) {
-				if (eCounter <= 4) {
-					Position newPos = cityFactory.createPosition();
-					newPos.setX(classDistrictSquare.getCenterX());
-					newPos.setZ(classDistrictSquare.getCenterY());
-					
-					switch (position.get(eCounter)) {
-					case "U":
-						newPos.setX(newPos.getX() + unitSize / 2);
-						newPos.setZ(newPos.getZ() + unitSize / 2);
-						break;
-					case "R":
-						newPos.setX(newPos.getX() + unitSize / 2);
-						newPos.setZ(newPos.getZ() - unitSize / 2);
-						break;
-					case "D":
-						newPos.setX(newPos.getX() - unitSize / 2);
-						newPos.setZ(newPos.getZ() - unitSize / 2);
-						break;
-					case "L":
-						newPos.setX(newPos.getX() - unitSize / 2);
-						newPos.setZ(newPos.getZ() + unitSize / 2);
-						break;
-					}
-					
-					r.getEntityLink().setPosition(newPos);
-					eCounter++;
-				} else {
-					Position newPos = cityFactory.createPosition();
-					newPos.setX(classDistrictSquare.getCenterX());
-					newPos.setZ(classDistrictSquare.getCenterY());
-					
-					switch (eCounter % 4) {
-					case 1:
-						newPos.setX(newPos.getX() + unitSize / 2);
-						newPos.setZ(newPos.getZ() + unitSize / 2);
-						break;
-					case 2:
-						newPos.setX(newPos.getX() + unitSize / 2);
-						newPos.setZ(newPos.getZ() - unitSize / 2);
-						break;
-					case 3:
-						newPos.setX(newPos.getX() - unitSize / 2);
-						newPos.setZ(newPos.getZ() - unitSize / 2);
-						break;
-					case 0:
-						newPos.setX(newPos.getX() - unitSize / 2);
-						newPos.setZ(newPos.getZ() + unitSize / 2);
-						break;
-					}
-					
-					for (int i = 0; i < position.get(eCounter).length(); ++i) {
-						char direction = position.get(eCounter).charAt(i);
-						
-						switch (direction) {
-						case 'U':
-							newPos.setZ(newPos.getZ() + unitSize);
-							break;
-						case 'R':
-							newPos.setX(newPos.getX() + unitSize);
-							break;
-						case 'D':
-							newPos.setZ(newPos.getZ() - unitSize);
-							break;
-						case 'L':
-							newPos.setX(newPos.getX() - unitSize);
-							break;
-						}						
-					}
-					
-					r.getEntityLink().setPosition(newPos);
-					eCounter++;
-				}
-			}
-		}		
-		
+		return position;
 	}
 	
 	private static String appendNextCharacter(String string, boolean changeDirection) {
@@ -790,15 +690,119 @@ public class ABAPCityLayout {
 			return string.concat(lastCharacter);
 		}
 	}
+	
+	private static void moveElementsToPosition(List<Rectangle> childrenRectangles, List<String> position, Rectangle districtSquare, double unitSize, Double squareSize) {
+		int counter = 0;
+		if (squareSize.intValue() % 2 == 1) {
+			for (Rectangle r : childrenRectangles) {
+				if (counter == 0) {
+					Position newPos = cityFactory.createPosition();
+					newPos.setX(districtSquare.getCenterX());
+					newPos.setZ(districtSquare.getCenterY());
+					
+					r.getEntityLink().setPosition(newPos);
+					counter++;
+				} else {
+					Position newPos = cityFactory.createPosition();
+					newPos.setX(districtSquare.getCenterX());
+					newPos.setZ(districtSquare.getCenterY());
+					for (int i = 0; i < position.get(counter).length(); ++i) {
+						char direction = position.get(counter).charAt(i);
+						switch (direction) {
+						case 'U':
+							newPos.setZ(newPos.getZ() + unitSize); // you don't need this unitSize necessarily...
+							break;
+						case 'R':
+							newPos.setX(newPos.getX() + unitSize); // you could also write:  newPos.setX(newPos.getX() + r.getWidth())  
+							break;
+						case 'D':
+							newPos.setZ(newPos.getZ() - unitSize); // if you use unitSize, you need not to create one rectangle per entity in arrangeMembers()
+							break;
+						case 'L':
+							newPos.setX(newPos.getX() - unitSize);
+							break;
+						}						
+					}
+					r.getEntityLink().setPosition(newPos);
+					counter++;
+				}
+			}
+		} else {
+			counter++;
+			for (Rectangle r : childrenRectangles) {
+				if (counter <= 4) {
+					Position newPos = cityFactory.createPosition();
+					newPos.setX(districtSquare.getCenterX());
+					newPos.setZ(districtSquare.getCenterY());
+					
+					switch (position.get(counter)) {
+					case "U":
+						newPos.setX(newPos.getX() + unitSize / 2);
+						newPos.setZ(newPos.getZ() + unitSize / 2);
+						break;
+					case "R":
+						newPos.setX(newPos.getX() + unitSize / 2);
+						newPos.setZ(newPos.getZ() - unitSize / 2);
+						break;
+					case "D":
+						newPos.setX(newPos.getX() - unitSize / 2);
+						newPos.setZ(newPos.getZ() - unitSize / 2);
+						break;
+					case "L":
+						newPos.setX(newPos.getX() - unitSize / 2);
+						newPos.setZ(newPos.getZ() + unitSize / 2);
+						break;
+					}
+					
+					r.getEntityLink().setPosition(newPos);
+					counter++;
+				} else {
+					Position newPos = cityFactory.createPosition();
+					newPos.setX(districtSquare.getCenterX());
+					newPos.setZ(districtSquare.getCenterY());
+					
+					switch (counter % 4) {
+					case 1:
+						newPos.setX(newPos.getX() + unitSize / 2);
+						newPos.setZ(newPos.getZ() + unitSize / 2);
+						break;
+					case 2:
+						newPos.setX(newPos.getX() + unitSize / 2);
+						newPos.setZ(newPos.getZ() - unitSize / 2);
+						break;
+					case 3:
+						newPos.setX(newPos.getX() - unitSize / 2);
+						newPos.setZ(newPos.getZ() - unitSize / 2);
+						break;
+					case 0:
+						newPos.setX(newPos.getX() - unitSize / 2);
+						newPos.setZ(newPos.getZ() + unitSize / 2);
+						break;
+					}
+					
+					for (int i = 0; i < position.get(counter).length(); ++i) {
+						char direction = position.get(counter).charAt(i);
+						
+						switch (direction) {
+						case 'U':
+							newPos.setZ(newPos.getZ() + unitSize);
+							break;
+						case 'R':
+							newPos.setX(newPos.getX() + unitSize);
+							break;
+						case 'D':
+							newPos.setZ(newPos.getZ() - unitSize);
+							break;
+						case 'L':
+							newPos.setX(newPos.getX() - unitSize);
+							break;
+						}						
+					}
+					
+					r.getEntityLink().setPosition(newPos);
+					counter++;
+				}
+			}
+		}
+	}
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -194,10 +194,28 @@ class City2X3D {
 						   scale='«getAdvBuildingScale(config.getAbapAdvBuldingScale(entity.type))»'
 						   rotation='0.000000 0.707107 0.707107 3.141593'>
 					«IF defineCMSkyScraper»
-						«CustomModel_SkyScraper::defineSkyScraperShape(config.getAbapAdvBuldingScale(entity.type), entity.numberOfStatements, entity.position.y)»
+«««						«CustomModel_SkyScraper::defineSkyScraperShape(config.getAbapAdvBuldingScale(entity.type), entity.numberOfStatements, entity.position.y)»
 						«defineCMSkyScraper = false»
+						«FOR part : entity.getBuildingParts»
+							«IF part.type == "Base"»
+								«CustomModel_SkyScraper::defineSkyScraperBase(part.height)»
+							«ELSEIF part.type == "Roof"»
+								«CustomModel_SkyScraper::defineSkyScraperRoof(part.height)»
+							«ELSEIF part.type == "Floor"»
+								«CustomModel_SkyScraper::defineSkyScraperFloor(part.height)»
+							«ENDIF»						
+						«ENDFOR»
 					«ELSE»
-						«CustomModel_SkyScraper::createSkyScraperShape(config.getAbapAdvBuldingScale(entity.type), entity.numberOfStatements, entity.position.y)»
+«««						«CustomModel_SkyScraper::createSkyScraperShape(config.getAbapAdvBuldingScale(entity.type), entity.numberOfStatements, entity.position.y)»
+						«FOR part : entity.getBuildingParts»
+							«IF part.type == "Base"»
+								«CustomModel_SkyScraper::createSkyScraperBase(part.height)»
+							«ELSEIF part.type == "Roof"»
+								«CustomModel_SkyScraper::createSkyScraperRoof(part.height)»
+							«ELSEIF part.type == "Floor"»
+								«CustomModel_SkyScraper::createSkyScraperFloor(part.height)»
+							«ENDIF»						
+						«ENDFOR»
 					«ENDIF»	
 				</Transform>
 			</Group>

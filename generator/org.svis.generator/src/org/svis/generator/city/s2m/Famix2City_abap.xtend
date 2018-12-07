@@ -517,7 +517,11 @@ class Famix2City_abap {
 			newBuilding.notInOrigin = "true"
 		}
 		newBuilding.methodCounter = elem.numberOfStatements
-		newBuilding.visibility = elem.modifiers.findFirst[it == "PRIVATE" || it == "PROTECTED" || it == "PUBLIC"] 
+		
+		newBuilding.visibility = elem.modifiers.findFirst[it == "PRIVATE" || it == "PROTECTED" || it == "PUBLIC"]
+		if (newBuilding.visibility === null) {
+			newBuilding.visibility = "PUBLIC"	
+		}			 
 
 		return newBuilding
 	}

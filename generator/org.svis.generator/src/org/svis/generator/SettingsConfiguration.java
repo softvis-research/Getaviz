@@ -1482,4 +1482,20 @@ public class SettingsConfiguration {
 			return 0;
 		}
 	}
+	
+	public double getAbapClassMemberSideLength() {
+		return config.getDouble("city.abap.class_member_side_length", 32);
+	}
+	
+	public double getAbapMethodBaseHeight() {
+		return config.getDouble("city.abap_method.base_height", 14);
+	}
+	
+	public double getAbapMethodFloorHeight() {
+		return config.getDouble("city.abap_method.floor_height", 5);
+	}
+	
+	public double getAbapMethodRoofHeight() {
+		return config.getDouble("city.abap_method.roof_height", 7);
+	}
 }
