@@ -25,6 +25,7 @@ class City2X3D {
 	val config = SettingsConfiguration.instance
 	var defineCMSimpleHouse = true
 	var defineCMSkyScraper = true
+	var defineCMRadioTower = true
 
 	def toX3DBody(Resource resource) {
 		log.info("City2X3D has started.")
@@ -70,7 +71,8 @@ class City2X3D {
 				|| entity.type == "FAMIX.Report" || entity.type == "FAMIX.FunctionGroup" 
 				|| entity.type == "FAMIX.ABAPStruc"	|| entity.type == "FAMIX.Table" 
 				|| entity.type == "FAMIX.Domain" || entity.type == "FAMIX.TableType"
-				|| entity.type == "FAMIX.Method" || entity.type == "FAMIX.Attribute"»
+				|| entity.type == "FAMIX.Method" || entity.type == "FAMIX.Attribute"
+				|| entity.type == "FAMIX.FunctionModule" || entity.type == "FAMIX.Formroutine"»
 				«IF config.buildingType == BuildingType.CITY_ORIGINAL || config.showBuildingBase»
 					«toBuilding(entity)»
 				«ENDIF»
@@ -164,7 +166,7 @@ class City2X3D {
 		«IF entity.type == "FAMIX.DataElement"»
 			<Group DEF='«entity.id»'>
 				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»' 
-						   scale='«getAdvBuildingScale(config.getAbapAdvBuldingScale(entity.type))»'
+						   scale='«getAdvBuildingScale(config.getAbapAdvBuildingScale(entity.type))»'
 						   rotation='0.000000 0.707107 0.707107 3.141593'>
 					«IF defineCMSimpleHouse»
 						«CustomModel_SimpleHouse::defineSimpleHouseShape»
@@ -191,10 +193,10 @@ class City2X3D {
 		«ELSEIF entity.type == "FAMIX.Method"»
 			<Group DEF='«entity.id»'>
 				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»' 
-						   scale='«getAdvBuildingScale(config.getAbapAdvBuldingScale(entity.type))»'
+						   scale='«getAdvBuildingScale(config.getAbapAdvBuildingScale(entity.type))»'
 						   rotation='0.000000 0.707107 0.707107 3.141593'>
 					«IF defineCMSkyScraper»
-«««						«CustomModel_SkyScraper::defineSkyScraperShape(config.getAbapAdvBuldingScale(entity.type), entity.numberOfStatements, entity.position.y)»
+«««						«CustomModel_SkyScraper::defineSkyScraperShape(config.getAbapAdvBuildingScale(entity.type), entity.numberOfStatements, entity.position.y)»
 						«defineCMSkyScraper = false»
 						«FOR part : entity.getBuildingParts»
 							«IF part.type == "Base"»
@@ -206,7 +208,7 @@ class City2X3D {
 							«ENDIF»						
 						«ENDFOR»
 					«ELSE»
-«««						«CustomModel_SkyScraper::createSkyScraperShape(config.getAbapAdvBuldingScale(entity.type), entity.numberOfStatements, entity.position.y)»
+«««						«CustomModel_SkyScraper::createSkyScraperShape(config.getAbapAdvBuildingScale(entity.type), entity.numberOfStatements, entity.position.y)»
 						«FOR part : entity.getBuildingParts»
 							«IF part.type == "Base"»
 								«CustomModel_SkyScraper::createSkyScraperBase(part.height)»
@@ -222,9 +224,58 @@ class City2X3D {
 
 		«ELSEIF entity.type == "FAMIX.Attribute"»
 			<Group DEF='«entity.id»'>
+				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'
+						   scale='«getAdvBuildingScale(config.getAbapAdvBuildingScale(entity.type))»'
+						   rotation='0 0.707107 0.707107 3.141593'>
+					«IF defineCMRadioTower»
+						«defineCMRadioTower = false»
+						«CustomModel_RadioTower::defineRadioTowerBase»
+						«FOR n : 1..entity.height.intValue»
+							«CustomModel_RadioTower::defineRadioTowerFloor(config.getAbapAttributeBaseHeight + (n - 1) * config.getAbapAttributeFloorHeight)»
+						«ENDFOR»
+						«CustomModel_RadioTower::defineRadioTowerRoof(config.getAbapAttributeBaseHeight + entity.height * config.getAbapAttributeFloorHeight)»
+					«ELSE»
+						«CustomModel_RadioTower::createRadioTowerBase»
+						«FOR n : 1..entity.height.intValue»
+							«CustomModel_RadioTower::createRadioTowerFloor(config.getAbapAttributeBaseHeight + (n - 1) * config.getAbapAttributeFloorHeight)»
+						«ENDFOR»
+						«CustomModel_RadioTower::createRadioTowerRoof(config.getAbapAttributeBaseHeight + entity.height * config.getAbapAttributeFloorHeight)»
+					«ENDIF»
+				</Transform>
+			</Group>
+
+		«ELSEIF entity.type == "FAMIX.FunctionModule"»
+			<Group DEF='«entity.id»'>
 				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
 					<Shape>
-						<Cylinder radius='«entity.width/2»' height='«entity.height»'></Cylinder>						
+						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+						
+						<Appearance>
+							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
+						</Appearance>
+					</Shape>
+				</Transform>
+			</Group>
+
+		«ELSEIF entity.type == "FAMIX.Report"»
+			<Group DEF='«entity.id»'>
+				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
+					<Shape>
+						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+						
+						<Appearance>
+							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
+						</Appearance>
+					</Shape>
+				</Transform>
+			</Group>
+			
+		«ELSEIF entity.type == "FAMIX.Formroutine"»
+			<Group DEF='«entity.id»'>
+				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
+					<Shape>
+						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
+						
 						<Appearance>
 							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
 						</Appearance>
@@ -233,7 +284,7 @@ class City2X3D {
 			</Group>
 		«ENDIF»		
 	'''
-	
+		
 	// Return scale for building
 	def String getAdvBuildingScale(double scale)'''
 		«scale + " " + scale +  " " + scale»

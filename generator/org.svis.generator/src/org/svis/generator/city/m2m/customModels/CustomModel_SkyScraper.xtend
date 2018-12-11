@@ -306,22 +306,11 @@ class CustomModel_SkyScraper {
 		«ENDIF»
 		<Group USE="group_ME_method-base"/>
 	'''
-	
-	def static createSkyScraperRoof()'''
-		<Transform translation='0 0 14'>
-			<Group USE="group_ME_method-roof"/>
-		</Transform>
-	'''
+
 	
 	def static createSkyScraperRoof(double height)'''
 		<Transform translation='0 0 «height»'>
 			<Group USE="group_ME_method-roof"/>
-		</Transform>
-	'''
-	
-	def static createSkyScraperFloor()'''
-		<Transform translation='0 0 9'>
-			<Group USE="group_ME_method-floor"/>
 		</Transform>
 	'''
 	
@@ -335,16 +324,5 @@ class CustomModel_SkyScraper {
 		<Transform translation='0 0 «height»'>
 			<Group USE="group_ME_method-base"/>
 		</Transform>
-	'''
-	
-	def static createSkyScraperBase()'''
-		<Transform translation='0 0 -5'>
-			<Group USE="group_ME_method-base"/>
-		</Transform>
-	'''
-	
-	
-	
-	
-	
+	'''	
 }

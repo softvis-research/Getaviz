@@ -1,23 +1,9 @@
 package org.svis.generator.city.m2m;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.eclipse.emf.common.util.EList;
 import org.svis.generator.SettingsConfiguration;
-import org.svis.generator.SettingsConfiguration.BuildingType;
-import org.svis.generator.SettingsConfiguration.FamixParser;
-import org.svis.xtext.city.CityFactory;
-import org.svis.xtext.city.Document;
 import org.svis.xtext.city.Entity;
-import org.svis.xtext.city.Position;
 import org.svis.xtext.city.Root;
-import org.svis.xtext.city.impl.CityFactoryImpl;
 
 public class CityHeightLayout {
 	
@@ -32,8 +18,9 @@ public class CityHeightLayout {
 			double y = e.getPosition().getY();
 			if (e.getType().equals("FAMIX.Namespace") || e.getType().equals("reportDistrict") || e.getType().equals("classDistrict")
 					|| e.getType().equals("functionGroupDistrict") || e.getType().equals("tableDistrict") 
-					|| e.getType().equals("dcDataDistrict")
-					|| e.getType().equals("FAMIX.Attribute") || e.getType().equals("FAMIX.DataElement")  /*they have simple shape yet*/) {
+					|| e.getType().equals("dcDataDistrict") || e.getType().equals("FAMIX.FunctionModule")
+					|| e.getType().equals("FAMIX.Report") || e.getType().equals("FAMIX.Formroutine")
+					|| e.getType().equals("FAMIX.DataElement") /*they have simple shape yet*/) {
 				y = e.getHeight() / 2;
 			}
 			

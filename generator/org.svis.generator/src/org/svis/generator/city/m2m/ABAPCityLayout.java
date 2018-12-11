@@ -280,17 +280,18 @@ public class ABAPCityLayout {
 					arrangeChildren(child);
 				}
 			} else {
-				if (child.getType().equals("FAMIX.Namespace") || child.getType().equals("reportDistrict")
-						|| child.getType().equals("functionGroupDistrict") || child.getType().equals("tableDistrict") 
-						|| child.getType().equals("dcDataDistrict")) {
+				if (child.getType().equals("FAMIX.Namespace") || child.getType().equals("tableDistrict") || child.getType().equals("dcDataDistrict")) {
 					if (DEBUG) {
 						System.out.println("\t\t\t" + info + "layOut(" + child.getFqn() + ")-call, recursive.");
 					}
 					arrangeChildren(child);
-				}
-				else if (child.getType().equals("classDistrict")) {
-					arrangeMembers(child);
-				}
+				} else if (child.getType().equals("classDistrict")) {
+					arrangeClassDistrict(child);
+				} else if (child.getType().equals("functionGroupDistrict")) {
+					arrangeFunctionGroupDistrict(child);
+				} else if (child.getType().equals("reportDistrict")) {
+					arrangeReportDistrict(child);
+				}  
 			}
 			sum_width += child.getWidth() + config.getBuildingHorizontalGap();
 			sum_length += child.getLength() + config.getBuildingHorizontalGap();
@@ -548,7 +549,7 @@ public class ABAPCityLayout {
 	} // End of adjustPositions
 	
 	/** NEW LAYOUT PROCESSING */
-	private static void arrangeMembers(Entity classDistrict) {
+	private static void arrangeClassDistrict(Entity classDistrict) {
 		// setting district size
 		// maybe adding the margin?
 		Double squareSize = Math.ceil(Math.sqrt(classDistrict.getEntities().size()));
@@ -558,9 +559,7 @@ public class ABAPCityLayout {
 		Rectangle classDistrictSquare = new Rectangle(0, 0, size, size);
 		
 		EList<Entity> members = classDistrict.getEntities();
-//		EList<Entity> privateMembers;
-//		EList<Entity> protectedMembers;
-//		EList<Entity> publicMembers;
+		
 		List<Rectangle> privateMembers = new ArrayList<Rectangle>();
 		List<Rectangle> protectedMembers = new ArrayList<Rectangle>();
 		List<Rectangle> publicMembers = new ArrayList<Rectangle>();
@@ -592,24 +591,101 @@ public class ABAPCityLayout {
 		List<Rectangle> sortedMembers = new ArrayList<Rectangle>();
 		sortedMembers.addAll(privateMembers);
 		sortedMembers.addAll(protectedMembers);
-		sortedMembers.addAll(publicMembers);
+//		sortedMembers.addAll(publicMembers);
 		
 		// start algorithm
 		List<String> position = getPositionList(squareSize);
 		
 		// moving the entities to the right place
-		moveElementsToPosition(sortedMembers, position, classDistrictSquare, unitSize, squareSize);
+		moveElementsToPosition(sortedMembers, position, classDistrictSquare, unitSize, squareSize, false);
+		moveElementsToPosition(publicMembers, position, classDistrictSquare, unitSize, squareSize, true);
 		
-		// assigning the building parts their right position
-		// maybe doing this in method moveElementsToPosition()
-//		for (Entity member : members) {
-//			EList<Entity> buildingParts = member.getBuildingParts();
-//			for (Entity buildingPart : buildingParts) {
-//				buildingPart.setPosition(member.getPosition());
-//				member.getBuildingParts().add(buildingPart);
-//			}
-//		}
+	}
+	
+	private static void arrangeFunctionGroupDistrict(Entity functionGroupDistrict) {
+		Double squareSize = Math.ceil(Math.sqrt(functionGroupDistrict.getEntities().size()));
+		double size = squareSize * (config.getAbapFunctionGroupMemberSideLength() + config.getBuildingHorizontalGap());		
+		functionGroupDistrict.setWidth(size + 2 * config.getBuildingHorizontalMargin()); // or size + config.getBuildingHorizontalMargin() + config.getBuildingHorizontalGap() ??
+		functionGroupDistrict.setLength(size + 2 * config.getBuildingHorizontalMargin());
+		Rectangle functionGroupDistrictSquare = new Rectangle(0, 0, size, size);
 		
+		EList<Entity> members = functionGroupDistrict.getEntities();
+		
+		List<Rectangle> privateMembers = new ArrayList<Rectangle>();
+		List<Rectangle> publicMembers = new ArrayList<Rectangle>();
+		
+		double unitSize = config.getAbapFunctionGroupMemberSideLength() + config.getBuildingHorizontalGap();
+		
+		// ordering the members as rectangles by visibility
+		for (Entity member : members) {
+			Rectangle square = new Rectangle(0, 0, unitSize, unitSize);
+			square.setEntityLink(member);
+			
+			switch (member.getType()) {
+			case "FAMIX.Attribute":
+				privateMembers.add(square);
+				break;
+			case "FAMIX.FunctionModule":
+				publicMembers.add(square);
+				break;
+			default:
+				publicMembers.add(square);
+				break;
+			}
+		}
+		
+		// start algorithm
+		List<String> position = getPositionList(squareSize);
+		
+		// moving the entities to the right place
+		moveElementsToPosition(privateMembers, position, functionGroupDistrictSquare, unitSize, squareSize, false);
+		moveElementsToPosition(publicMembers, position, functionGroupDistrictSquare, unitSize, squareSize, true);
+	}
+	
+	private static void arrangeReportDistrict(Entity reportDistrict) {
+		Double squareSize = Math.ceil(Math.sqrt(reportDistrict.getEntities().size()));
+		double size = squareSize * (config.getAbapReportMemberSideLength() + config.getBuildingHorizontalGap());		
+		reportDistrict.setWidth(size + 2 * config.getBuildingHorizontalMargin()); // or size + config.getBuildingHorizontalMargin() + config.getBuildingHorizontalGap() ??
+		reportDistrict.setLength(size + 2 * config.getBuildingHorizontalMargin());
+		Rectangle reportDistrictSquare = new Rectangle(0, 0, size, size);
+		
+		EList<Entity> members = reportDistrict.getEntities();
+		
+		List<Rectangle> privateMembers = new ArrayList<Rectangle>();
+		List<Rectangle> attributes = new ArrayList<Rectangle>();
+		List<Rectangle> forms = new ArrayList<Rectangle>();
+		
+		double unitSize = config.getAbapReportMemberSideLength() + config.getBuildingHorizontalGap();
+		
+		// ordering the members as rectangles by visibility
+		for (Entity member : members) {
+			Rectangle square = new Rectangle(0, 0, unitSize, unitSize);
+			square.setEntityLink(member);
+			
+			switch (member.getType()) {
+			case "FAMIX.Report":
+				privateMembers.add(square);
+				break;
+			case "FAMIX.Attribute":
+				attributes.add(square);
+				break;
+			case "FAMIX.Formroutine":
+				forms.add(square);
+				break;
+			default:
+				forms.add(square);
+				break;
+			}
+		}
+		
+		privateMembers.addAll(attributes);
+		
+		// start algorithm
+		List<String> position = getPositionList(squareSize);
+		
+		// moving the entities to the right place
+		moveElementsToPosition(privateMembers, position, reportDistrictSquare, unitSize, squareSize, false);
+		moveElementsToPosition(forms, position, reportDistrictSquare, unitSize, squareSize, true);
 	}
 	
 	private static List<String> getPositionList(Double squareSize) {
@@ -691,9 +767,20 @@ public class ABAPCityLayout {
 		}
 	}
 	
-	private static void moveElementsToPosition(List<Rectangle> childrenRectangles, List<String> position, Rectangle districtSquare, double unitSize, Double squareSize) {
-		int counter = 0;
-		if (squareSize.intValue() % 2 == 1) {
+	private static void moveElementsToPosition(List<Rectangle> childrenRectangles, List<String> position, Rectangle districtSquare, double unitSize, Double squareSize, boolean reverse) {
+		int counter,
+			counterIncrement;
+		
+		if (reverse) {
+			counter = squareSize.intValue() * squareSize.intValue() - 1;
+			counterIncrement = -1;
+			
+		} else {
+			counter = 0;
+			counterIncrement = 1;
+		}
+		
+		if (squareSize.intValue() % 2 == 1) {			
 			for (Rectangle r : childrenRectangles) {
 				if (counter == 0) {
 					Position newPos = cityFactory.createPosition();
@@ -701,7 +788,7 @@ public class ABAPCityLayout {
 					newPos.setZ(districtSquare.getCenterY());
 					
 					r.getEntityLink().setPosition(newPos);
-					counter++;
+					counter += counterIncrement;
 				} else {
 					Position newPos = cityFactory.createPosition();
 					newPos.setX(districtSquare.getCenterX());
@@ -724,11 +811,12 @@ public class ABAPCityLayout {
 						}						
 					}
 					r.getEntityLink().setPosition(newPos);
-					counter++;
+					counter += counterIncrement;
 				}
 			}
-		} else {
-			counter++;
+		} else {			
+			counter += 1;
+			
 			for (Rectangle r : childrenRectangles) {
 				if (counter <= 4) {
 					Position newPos = cityFactory.createPosition();
@@ -755,7 +843,7 @@ public class ABAPCityLayout {
 					}
 					
 					r.getEntityLink().setPosition(newPos);
-					counter++;
+					counter += counterIncrement;
 				} else {
 					Position newPos = cityFactory.createPosition();
 					newPos.setX(districtSquare.getCenterX());
@@ -800,7 +888,7 @@ public class ABAPCityLayout {
 					}
 					
 					r.getEntityLink().setPosition(newPos);
-					counter++;
+					counter += counterIncrement;
 				}
 			}
 		}

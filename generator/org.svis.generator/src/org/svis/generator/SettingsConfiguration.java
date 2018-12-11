@@ -1458,18 +1458,31 @@ public class SettingsConfiguration {
 	public double getAbapAdvBuildingDefSize(String type) {
 		if (type.equals("FAMIX.DataElement")) {
 			return config.getDouble("city.abap.adv_dataElement_def_size", 20);
-
+			
 		} else if (type.equals("FAMIX.Domain")) {
 			return config.getDouble("city.abap.adv_domain_def_size", 20);
-
+			
 		} else if (type.equals("FAMIX.Method")) {
 			return config.getDouble("city.abap.adv_method_def_size", 20);
+			
+		} else if (type.equals("FAMIX.Attribute")) {
+			return config.getDouble("city.abap.adv_attribute_def_size", 20);
+			
+		} else if (type.equals("FAMIX.FunctionModule")) {
+			return config.getDouble("city.abap.adv_functionModule_def_size", 20);
+			
+		} else if (type.equals("FAMIX.Report")) {
+			return config.getDouble("city.abap.adv_report_def_size", 20);
+		
+		} else if (type.equals("FAMIX.Formroutine")) {
+			return config.getDouble("city.abap.adv_formroutine_def_size", 20);
+			
 		} else {
 			return 0;
 		}
 	}
 	
-	public double getAbapAdvBuldingScale(String type) {
+	public double getAbapAdvBuildingScale(String type) {
 		if(type.equals("FAMIX.DataElement")){
 			return config.getDouble("city.abap.adv_dataElement_scale", 0.241931);
 			
@@ -1478,6 +1491,19 @@ public class SettingsConfiguration {
 			
 		} else if(type.equals("FAMIX.Method")) {
 			return config.getDouble("city.abap.adv_method_scale", 0.1);
+			
+		} else if(type.equals("FAMIX.Attribute")) {
+			return config.getDouble("city.abap.adv_attribute_scale", 0.1);
+			
+		} else if (type.equals("FAMIX.FunctionModule")) {
+			return config.getDouble("city.abap.adv_functionModule_scale", 0.1);
+			
+		} else if (type.equals("FAMIX.Report")) {
+			return config.getDouble("city.abap.adv_report_scale", 0.1);
+		
+		} else if (type.equals("FAMIX.Formroutine")) {
+			return config.getDouble("city.abap.adv_formroutine_scale", 0.1);
+			
 		} else {
 			return 0;
 		}
@@ -1487,15 +1513,35 @@ public class SettingsConfiguration {
 		return config.getDouble("city.abap.class_member_side_length", 32);
 	}
 	
+	public double getAbapFunctionGroupMemberSideLength() {
+		return config.getDouble("city.abap.function_group_member_side_length", 32);
+	}
+	
+	public double getAbapReportMemberSideLength() {
+		return config.getDouble("city.abap.report_member_side_length", 32);
+	}
+	
 	public double getAbapMethodBaseHeight() {
-		return config.getDouble("city.abap_method.base_height", 14);
+		return config.getDouble("city.abap_method_base_height", 14);
 	}
 	
 	public double getAbapMethodFloorHeight() {
-		return config.getDouble("city.abap_method.floor_height", 5);
+		return config.getDouble("city.abap_method_floor_height", 5);
 	}
 	
 	public double getAbapMethodRoofHeight() {
-		return config.getDouble("city.abap_method.roof_height", 7);
+		return config.getDouble("city.abap_method_roof_height", 7);
 	}
-}
+	
+	public double getAbapAttributeBaseHeight() {
+		return config.getDouble("city.abap_attribute_base_height", 21);
+	}
+	
+	public double getAbapAttributeFloorHeight() {
+		return config.getDouble("city.abap_attribute_floor_height", 3);
+	}
+	
+	public double getAbapAttributeRoofHeight() {
+		return config.getDouble("city.abap_attribute_roof_height", 12);
+	}
+}	
