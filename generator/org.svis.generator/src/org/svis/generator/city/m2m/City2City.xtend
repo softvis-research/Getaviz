@@ -219,6 +219,10 @@ class City2City extends WorkflowComponentWithModelSlot {
 				} else if(b.type == "FAMIX.Domain"){
 					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
 					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					
+				} else if(b.type == "typeNames"){
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)	
           
 				} else if(b.type == "FAMIX.Attribute") {
           			if (b.dataCounter == 2.0) {

@@ -55,6 +55,13 @@ import org.svis.xtext.famix.FAMIXTableElement
 
 
 class Famix2City_abap {
+	
+   val String[] typeNames = #["CHAR","INT4","NUMC","ACCP","CLNT","CUKY","CURR","DF16_DEC","DF16_RAW","DF34_DEC","DF34_RAW",
+	                          "DATS","DEC","FLTP","INT1","INT2","INT8","LANG","LCHR","LRAW","QUAN","RAW","RAWSTRING", "SSTRING",
+	                          "STRING","TIMS","UNIT"]
+	                           
+	 
+	
 	//Import: cityDocument, to store all elements from famixDocument
 	new(org.svis.xtext.city.Document imp_cityDocument, Document imp_famixDocument){
 		cityDocument  = imp_cityDocument
@@ -88,11 +95,15 @@ class Famix2City_abap {
 		messageClasses   += famixDocument.elements.filter(FAMIXMessageClass)
 		tableTypes		 += famixDocument.elements.filter(FAMIXTableType)
 		ttyElements	 	 += famixDocument.elements.filter(FAMIXTableTypeElement)
-		typeOf			 += famixDocument.elements.filter(FAMIXTypeOf)
+		typeOfs			 += famixDocument.elements.filter(FAMIXTypeOf)
 		tableElements	 += famixDocument.elements.filter(FAMIXTableElement)
 		
 		
-		dcData	 		 += dataElements + domains + abapStrucs + tableTypes 
+		
+		
+		//dcData	 		 += dataElements + domains + abapStrucs + tableTypes 
+		//dcData	 		 += abapStrucs + tableTypes 
+		dcData	 		     += abapStrucs + tableTypes + tables
 		
 		if(!config.showOwnTablesDistrict){
 			dcData += tables
@@ -137,10 +148,13 @@ class Famix2City_abap {
 	val List<FAMIXMessageClass> messageClasses = newArrayList
 	val List<FAMIXFunctionGroup> functionGroups = newArrayList
 	val List<FAMIXTableType> tableTypes = newArrayList
-	val List<FAMIXTypeOf> typeOf = newArrayList
+	val List<FAMIXTypeOf> typeOfs = newArrayList
 	val List<FAMIXTableElement> tableElements = newArrayList
 	val List<FAMIXTableTypeElement> ttyElements = newArrayList
 	
+	//val String[] typeNames = #["CHAR","INT4","NUMC","ACCP","CLNT","CUKY","CURR","DF16_DEC","DF16_RAW","DF34_DEC","DF34_RAW",
+	//                           "DATS","DEC","FLTP","INT1","INT2","INT8","LANG","LCHR","LRAW","QUAN","RAW","RAWSTRING", "SSTRING",
+	//                           "STRING","TIMS","UNIT"]
 	
 	def abapToModel(){		
 		// Run transformation 
@@ -312,25 +326,65 @@ class Famix2City_abap {
 			newDistrict.notInOrigin = "true"
 		}
 		
-
-		domains.filter[container.ref == elem].forEach[
+		if (dcData.filter[container.ref == elem].length != 0){
+				val dcDataDistrict = cityFactory.createDistrict
+				dcDataDistrict.name = newDistrict.name + "_dcDataDistrict"
+				dcDataDistrict.type = "dcDataDistrict"
+				dcDataDistrict.id = elem.id + "_00001"
+				dcDataDistrict.level = level + 1
+				if(elem.iteration >= 1){
+					dcDataDistrict.notInOrigin = "true"				
+				} 
+				
+				dcData.filter[container.ref == elem].forEach[dcDataDistrict.entities += toBuilding(level + 2)]								
+				newDistrict.entities.add(dcDataDistrict)			
+        }
+              
+              
+		  /* domains.filter[container.ref == elem].forEach[ doma |
 			val newDomainDistrict = cityFactory.createDistrict
 			newDomainDistrict.name = newDistrict.name + "_domainDistrict"
 			newDomainDistrict.type = "dcDataDistrict"
-			newDomainDistrict.id = elem.id + "_00001"
+			newDomainDistrict.id = elem.id + "_00002"
 			newDomainDistrict.level = level + 1
-			
-			newDomainDistrict.entities += toBuilding(level + 2)	
+			if(elem.iteration >= 1){
+			   newDomainDistrict.notInOrigin = "true"
+			   newDomainDistrict.entities += toBuilding(doma, level + 2)
+			   dataElements.filter[domain == doma.value].forEach[newDomainDistrict.entities += toBuilding(level + 2)]
+		       }
+			// newDomainDistrict.entities += toBuilding(level + 2)	
 			// TODO: find dataElements and bind them to district
-			
+	
+			else {
+			   newDomainDistrict.entities += toBuilding(doma, level + 2)			
+	  		   dataElements.filter[container.ref == elem].filter[domain == doma.value].filter[iteration == 0].forEach[newDomainDistrict.entities += toBuilding(level + 2)] 	
+	  		  }
+	 
 			newDistrict.entities.add(newDomainDistrict)
-		]
-		
+		]*/
+		  
+		  typeNames.forEach[ typeName | {
+		  	if (dataElements.filter[container.ref == elem].filter[domain === null].filter[datatype == typeName].length != 0){ 
+		  	val newDataElementDistrict = cityFactory.createDistrict
+				newDataElementDistrict.name = newDistrict.name + "_dataElementDistrict"
+				newDataElementDistrict.type = "dcDataDistrict"
+				newDataElementDistrict.id = elem.id + "_00003"
+				newDataElementDistrict.level = level + 1
+				if(elem.iteration >= 1){
+					newDataElementDistrict.notInOrigin = "true"
+				}
+			    //typeNames.forEach[newDataElementDistrict.entities += toBuilding (typeName, level + 2)]
+				dataElements.filter[container.ref == elem].filter[domain === null].filter[datatype == typeName].forEach[newDataElementDistrict.entities += toBuilding(level + 2)]                        
+				//newDataElementDistrict.entities += toBuilding(typeName, level + 2)
+				newDistrict.entities.add(newDataElementDistrict)
+              }
+		  }]
+		  
 		classes.filter[container.ref == elem].forEach[ class |
 			val newClassDistrict = cityFactory.createDistrict
-			newClassDistrict.name = newDistrict.name + "_classDistrict"
+			newClassDistrict.name = newDistrict.name + "_classDistrict"                                                           
 			newClassDistrict.type = "classDistrict"
-			newClassDistrict.id   = elem.id + "_00002"
+			newClassDistrict.id   = elem.id + "_00004"
 			newClassDistrict.level = level + 1
 			
 			//newClassDistrict.entities += toBuilding(class, level + 2)
@@ -344,9 +398,27 @@ class Famix2City_abap {
 				
 		cityDocument.entities += newDistrict
 		return newDistrict
-	} // End of Advanced Mode
+	}
+	
+	
+	
+	// End of Advanced Mode
 	
 	// Methods to build buildings
+	
+	/*def Building toBuilding(String[] typeNames, int level) {
+	// throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	val newBuilding = cityFactory.createBuilding
+	//newBuilding.name = typeNames.name
+	//newBuilding.value = typeNames.value
+	* newBuilding.fqn = typeNames.fqn
+	* newBuilding.type = City.Utils.getFamixClassString(elem.class.simpleName)
+	newBuilding.level = level 
+	* if(typeNames.iteration >= 1){
+	* newBuilding.notInOrign = "true"
+	* }
+	return newBuilding
+	}*/
 	
 	def Building toBuilding(FAMIXReport elem, int level){
 		val newBuilding = cityFactory.createBuilding
@@ -533,7 +605,7 @@ class Famix2City_abap {
 			newBuilding.notInOrigin = "true"
 		}
 		
-		val dataType = typeOf.findFirst[element.ref == elem]
+		val dataType = typeOfs.findFirst[element.ref == elem]
 
 		if (dataType === null) {
 			newBuilding.dataCounter = 1.0
@@ -548,6 +620,8 @@ class Famix2City_abap {
 		
 		return newBuilding		
 	}
+	
+	
 	
 	/**
 	 * Sets values for current method of the {@code parent} class.

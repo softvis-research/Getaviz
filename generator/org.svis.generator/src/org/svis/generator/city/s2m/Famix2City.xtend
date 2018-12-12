@@ -48,7 +48,6 @@ class Famix2City extends WorkflowComponentWithModelSlot {
 	val Set<FAMIXNamespace> subPackages = newLinkedHashSet
 	val List<FAMIXStructure> structures = newArrayList
 	val List<FAMIXClass> classes = newArrayList
-//	val List<FAMIXParameterizableClass> pClasses = newArrayList
 	val List<FAMIXMethod> methods = newArrayList
 	val List<FAMIXLocalVariable> localVariables = newArrayList
 	val List<FAMIXAttribute> attributes = newArrayList
