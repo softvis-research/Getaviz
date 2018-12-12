@@ -1,0 +1,16 @@
+.codeControllerHighlightAttribute{
+    color: black;
+    background-color: lightblue;
+    text-shadow: none;
+}
+
+.codeControllerHighlightMethod{    
+    color: black;
+    background-color: lightblue;
+    text-shadow: none;
+}
+
+.codeControllerHover:hover{
+    text-decoration: underline;
+}
+

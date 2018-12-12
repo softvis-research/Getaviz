@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link href="../../libs/prism/prism.css" rel="stylesheet" />
+        <link href="../../libs/prism/prismPluginCodeController.css" rel="stylesheet" />
+        <script src="../../libs/prism/prism.js" ></script>
+        <script src="../../libs/jquery-1.11.1.js"></script>
+        <script src="CodeHelperFunctions.js"></script>    
+    </head>
+    <body>                
+        <script>            
+            
+
+            function displayCode(file, classEntity, entity){
+                file = "../../" + file;
+                codeHelperFunction.displayCode(file, classEntity, entity, publishOnEntitySelected);                
+            }
+
+            
+            function publishOnEntitySelected(entityId){
+                var applicationEvent = {			
+                    sender: opener.codeController,
+                    entities: [opener.model.getEntityById(entityId)]
+                }	
+                
+                opener.events.selected.on.publish(applicationEvent);	
+            }
+            
+			function reset(){
+				codeTag = $("#codeTag")[0].textContent = "";
+			}
+        </script>
+        <!-- Display Code -->
+        <div style="width:100%; height:100%;">
+            <pre class="line-numbers language-java"><code id="codeTag"></code></pre>
+        </div>
+    </body>
+</html>
