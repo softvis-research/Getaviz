@@ -561,7 +561,6 @@ public class ABAPCityLayout {
 		EList<Entity> members = classDistrict.getEntities();
 		
 		List<Rectangle> privateMembers = new ArrayList<Rectangle>();
-		List<Rectangle> protectedMembers = new ArrayList<Rectangle>();
 		List<Rectangle> publicMembers = new ArrayList<Rectangle>();
 		
 		double unitSize = config.getAbapClassMemberSideLength() + config.getBuildingHorizontalGap();
@@ -576,7 +575,7 @@ public class ABAPCityLayout {
 				privateMembers.add(square);
 				break;
 			case "PROTECTED":
-				protectedMembers.add(square);
+				privateMembers.add(square);
 				break;
 			case "PUBLIC":
 				publicMembers.add(square);
@@ -587,17 +586,11 @@ public class ABAPCityLayout {
 			}
 		}
 		
-		// merge it to one list
-		List<Rectangle> sortedMembers = new ArrayList<Rectangle>();
-		sortedMembers.addAll(privateMembers);
-		sortedMembers.addAll(protectedMembers);
-//		sortedMembers.addAll(publicMembers);
-		
 		// start algorithm
 		List<String> position = getPositionList(squareSize);
 		
 		// moving the entities to the right place
-		moveElementsToPosition(sortedMembers, position, classDistrictSquare, unitSize, squareSize, false);
+		moveElementsToPosition(privateMembers, position, classDistrictSquare, unitSize, squareSize, false);
 		moveElementsToPosition(publicMembers, position, classDistrictSquare, unitSize, squareSize, true);
 		
 	}
@@ -652,8 +645,7 @@ public class ABAPCityLayout {
 		EList<Entity> members = reportDistrict.getEntities();
 		
 		List<Rectangle> privateMembers = new ArrayList<Rectangle>();
-		List<Rectangle> attributes = new ArrayList<Rectangle>();
-		List<Rectangle> forms = new ArrayList<Rectangle>();
+		List<Rectangle> publicMembers = new ArrayList<Rectangle>();
 		
 		double unitSize = config.getAbapReportMemberSideLength() + config.getBuildingHorizontalGap();
 		
@@ -664,28 +656,26 @@ public class ABAPCityLayout {
 			
 			switch (member.getType()) {
 			case "FAMIX.Report":
-				privateMembers.add(square);
+				privateMembers.add(0, square);
 				break;
 			case "FAMIX.Attribute":
-				attributes.add(square);
+				privateMembers.add(square);
 				break;
 			case "FAMIX.Formroutine":
-				forms.add(square);
+				publicMembers.add(square);
 				break;
 			default:
-				forms.add(square);
+				publicMembers.add(square);
 				break;
 			}
 		}
-		
-		privateMembers.addAll(attributes);
 		
 		// start algorithm
 		List<String> position = getPositionList(squareSize);
 		
 		// moving the entities to the right place
 		moveElementsToPosition(privateMembers, position, reportDistrictSquare, unitSize, squareSize, false);
-		moveElementsToPosition(forms, position, reportDistrictSquare, unitSize, squareSize, true);
+		moveElementsToPosition(publicMembers, position, reportDistrictSquare, unitSize, squareSize, true);
 	}
 	
 	private static List<String> getPositionList(Double squareSize) {
@@ -782,115 +772,83 @@ public class ABAPCityLayout {
 		
 		if (squareSize.intValue() % 2 == 1) {			
 			for (Rectangle r : childrenRectangles) {
-				if (counter == 0) {
-					Position newPos = cityFactory.createPosition();
-					newPos.setX(districtSquare.getCenterX());
-					newPos.setZ(districtSquare.getCenterY());
+				Position newPos = cityFactory.createPosition();
+				newPos = getCenterPosition(squareSize, districtSquare, counter, unitSize);
 					
-					r.getEntityLink().setPosition(newPos);
-					counter += counterIncrement;
-				} else {
-					Position newPos = cityFactory.createPosition();
-					newPos.setX(districtSquare.getCenterX());
-					newPos.setZ(districtSquare.getCenterY());
+				if (counter != 0) {
 					for (int i = 0; i < position.get(counter).length(); ++i) {
-						char direction = position.get(counter).charAt(i);
-						switch (direction) {
-						case 'U':
-							newPos.setZ(newPos.getZ() + unitSize); // you don't need this unitSize necessarily...
-							break;
-						case 'R':
-							newPos.setX(newPos.getX() + unitSize); // you could also write:  newPos.setX(newPos.getX() + r.getWidth())  
-							break;
-						case 'D':
-							newPos.setZ(newPos.getZ() - unitSize); // if you use unitSize, you need not to create one rectangle per entity in arrangeMembers()
-							break;
-						case 'L':
-							newPos.setX(newPos.getX() - unitSize);
-							break;
-						}						
+						char direction = position.get(counter).charAt(i);			
+						makeStep(newPos, direction, unitSize);					
 					}
-					r.getEntityLink().setPosition(newPos);
-					counter += counterIncrement;
 				}
+				
+				r.getEntityLink().setPosition(newPos);
+				counter += counterIncrement;
 			}
 		} else {			
 			counter += 1;
 			
-			for (Rectangle r : childrenRectangles) {
-				if (counter <= 4) {
-					Position newPos = cityFactory.createPosition();
-					newPos.setX(districtSquare.getCenterX());
-					newPos.setZ(districtSquare.getCenterY());
+			for (Rectangle r : childrenRectangles) {				
+				Position newPos = cityFactory.createPosition();
+				newPos = getCenterPosition(squareSize, districtSquare, counter, unitSize);
 					
-					switch (position.get(counter)) {
-					case "U":
-						newPos.setX(newPos.getX() + unitSize / 2);
-						newPos.setZ(newPos.getZ() + unitSize / 2);
-						break;
-					case "R":
-						newPos.setX(newPos.getX() + unitSize / 2);
-						newPos.setZ(newPos.getZ() - unitSize / 2);
-						break;
-					case "D":
-						newPos.setX(newPos.getX() - unitSize / 2);
-						newPos.setZ(newPos.getZ() - unitSize / 2);
-						break;
-					case "L":
-						newPos.setX(newPos.getX() - unitSize / 2);
-						newPos.setZ(newPos.getZ() + unitSize / 2);
-						break;
-					}
-					
-					r.getEntityLink().setPosition(newPos);
-					counter += counterIncrement;
-				} else {
-					Position newPos = cityFactory.createPosition();
-					newPos.setX(districtSquare.getCenterX());
-					newPos.setZ(districtSquare.getCenterY());
-					
-					switch (counter % 4) {
-					case 1:
-						newPos.setX(newPos.getX() + unitSize / 2);
-						newPos.setZ(newPos.getZ() + unitSize / 2);
-						break;
-					case 2:
-						newPos.setX(newPos.getX() + unitSize / 2);
-						newPos.setZ(newPos.getZ() - unitSize / 2);
-						break;
-					case 3:
-						newPos.setX(newPos.getX() - unitSize / 2);
-						newPos.setZ(newPos.getZ() - unitSize / 2);
-						break;
-					case 0:
-						newPos.setX(newPos.getX() - unitSize / 2);
-						newPos.setZ(newPos.getZ() + unitSize / 2);
-						break;
-					}
-					
+				if (counter > 4) {
 					for (int i = 0; i < position.get(counter).length(); ++i) {
-						char direction = position.get(counter).charAt(i);
-						
-						switch (direction) {
-						case 'U':
-							newPos.setZ(newPos.getZ() + unitSize);
-							break;
-						case 'R':
-							newPos.setX(newPos.getX() + unitSize);
-							break;
-						case 'D':
-							newPos.setZ(newPos.getZ() - unitSize);
-							break;
-						case 'L':
-							newPos.setX(newPos.getX() - unitSize);
-							break;
-						}						
+						char direction = position.get(counter).charAt(i);			
+						makeStep(newPos, direction, unitSize);					
 					}
-					
-					r.getEntityLink().setPosition(newPos);
-					counter += counterIncrement;
 				}
+				
+				r.getEntityLink().setPosition(newPos);
+				counter += counterIncrement;
 			}
+		}
+	}
+	
+	private static Position getCenterPosition(Double squareSize, Rectangle districtSquare, int counter, double unitSize) {
+		Position newPos = cityFactory.createPosition();
+		
+		newPos.setX(districtSquare.getCenterX());
+		newPos.setZ(districtSquare.getCenterY());
+		
+		if (squareSize.intValue() % 2 == 0) {
+			switch (counter % 4) {
+			case 1:
+				newPos.setX(newPos.getX() + unitSize / 2);
+				newPos.setZ(newPos.getZ() + unitSize / 2);
+				break;
+			case 2:
+				newPos.setX(newPos.getX() + unitSize / 2);
+				newPos.setZ(newPos.getZ() - unitSize / 2);
+				break;
+			case 3:
+				newPos.setX(newPos.getX() - unitSize / 2);
+				newPos.setZ(newPos.getZ() - unitSize / 2);
+				break;
+			case 0:
+				newPos.setX(newPos.getX() - unitSize / 2);
+				newPos.setZ(newPos.getZ() + unitSize / 2);
+				break;
+			}
+		}
+		
+		return newPos;
+	}
+	
+	private static void makeStep(Position pos, char direction, double length) {
+		switch (direction) {
+		case 'U':
+			pos.setZ(pos.getZ() + length);
+			break;
+		case 'R':
+			pos.setX(pos.getX() + length);
+			break;
+		case 'D':
+			pos.setZ(pos.getZ() - length);
+			break;
+		case 'L':
+			pos.setX(pos.getX() - length);
+			break;
 		}
 	}
 }
