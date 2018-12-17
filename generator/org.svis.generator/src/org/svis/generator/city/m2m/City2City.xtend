@@ -69,10 +69,14 @@ class City2City extends WorkflowComponentWithModelSlot {
 			}
 			districts.forEach[setDistrictAttributes]
 			buildings.forEach[setBuildingAttributes]
+			
+			if (config.parser == FamixParser::ABAP && config.abap_representation == AbapCityRepresentation::ADVANCED) {
+				ABAPCityLayout::cityLayout(cityRoot)
+				CityHeightLayout::cityHeightLayout(cityRoot)
+			} else {
+				CityLayout::cityLayout(cityRoot)
+			}
 
-//			CityLayout::cityLayout(cityRoot)
-			ABAPCityLayout::cityLayout(cityRoot)
-			CityHeightLayout::cityHeightLayout(cityRoot)
 			switch (config.buildingType) {
 				case CITY_BRICKS:
 					BrickLayout.brickLayout(cityRoot) // Layout for buildingSegments

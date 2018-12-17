@@ -158,9 +158,9 @@ class Famix2City_abap {
 	
 	def abapToModel(){		
 		// Run transformation 
-		if(config.abap_representation == AbapCityRepresentation::SIMPLE){
+		if (config.abap_representation == AbapCityRepresentation::SIMPLE) {
 			simpleModel()
-		}else if(config.abap_representation == AbapCityRepresentation::ADVANCED){
+		} else if (config.abap_representation == AbapCityRepresentation::ADVANCED) {
 			advancedModel()
 		}		
 		

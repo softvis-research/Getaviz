@@ -30,7 +30,10 @@ class City2X3D {
 	def toX3DBody(Resource resource) {
 		log.info("City2X3D has started.")
 		val entities = EcoreUtil2::getAllContentsOfType(resource.contents.head, Entity)
-		val rootEntity = ABAPCityLayout::rootRectangle // CityLayout::rootRectangle
+		var rootEntity = CityLayout::rootRectangle
+		if (config.parser == FamixParser::ABAP && config.abap_representation == AbapCityRepresentation::ADVANCED) {
+			rootEntity = ABAPCityLayout::rootRectangle // CityLayout::rootRectangle
+		}
 		
 		val Body = viewports(rootEntity) + entities.toX3DModel()
 		log.info("City2X3D has finished.")
