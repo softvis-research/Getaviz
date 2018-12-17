@@ -1,0 +1,11 @@
+#version: "3.4"
+#services:
+app:
+    restart: always
+    image: php:7.1.11-apache
+    volumes:
+    - ./:/var/www/html
+    ports:
+        - "8082:80"
+        
+# docker-compose up
