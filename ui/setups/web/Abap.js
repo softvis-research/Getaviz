@@ -44,16 +44,12 @@
 		{	name: 	"sourceCodeController",
             url:    "https://raw.githubusercontent.com/softvis-research/freemind-mmx/master/freemind/"
 		},
-		{ 	name: 	"relationConnectorController",		
-						
-			fixPositionZ : 1,
-			showInnerRelations : true,
-			elementShape : "circle",					
-			sourceStartAtParentBorder : true,
-			targetEndAtParentBorder : false,
-			createEndpoints: true,
-		},
+        { 	name: 	"relationConnectorController",
 
+            showInnerRelations: false,
+            sourceStartAtBorder: true,
+            targetEndAtBorder: true,
+        },
 		{ 	name: 	"relationTransparencyController",
 		},
 			
@@ -129,7 +125,7 @@
 						{
 							title: 	"City Floors",
 							link: 	true,
-							url:	"index.php?setup=web/City freemind&model=City%20floor%20freeminds"
+							url:	"index.php?setup=web/City freemind&model=City%20floor%20freemind"
 						},
 						{
 							title: 	"Recursive Disk",
@@ -189,12 +185,6 @@
                 name: "Type",
                 icon: "purpleCircle",
             }, {
-                name: "Method",
-                icon: "lightBlueCircle",
-            }, {
-                name: "Field",
-                icon: "yellowCircle",
-            }, {
                 name: "Navigation",
                 icon: "navigation",
                 entries: [
@@ -215,11 +205,11 @@
             ],
         }
 	],
+	
+	
+	
 
-
-
-
-    uis: [
+	uis: [
 
 
         {
@@ -242,11 +232,11 @@
                 resizable: false,
                 collapsible: false,
                 first: {
-                    size: "25px",
+                    size: "75px",
                     collapsible: false,
                     controllers: [
                         {name: "menuController"},
-                        //{name: "searchController"},
+                        {name: "searchController"},
                         {name: "emailController"},
                     ],
                 },
@@ -266,7 +256,7 @@
                                 name: "packagePanel",
                                 first: {
                                     collapsible: false,
-                                    size: "33%",
+                                    size: "45%",
                                     expanders: [
                                         {
                                             name: "filterExplorer",
@@ -285,7 +275,7 @@
                                         size: "50%%",
                                         collapsible: false,
                                         first: {
-                                            size: "50%",
+                                            size: "70%",
                                             expanders: [
                                                 {
                                                     name: "packageExplorer",
@@ -304,7 +294,7 @@
                                                 size: "100%",
                                                 collapsible: false,
                                                 first: {
-                                                    size: "100%",
+                                                    size: "90%",
                                                     expanders: [
                                                         {
                                                             name: "legend",
@@ -333,7 +323,7 @@
                                 name: "canvas",
                                 size: "50%",
                                 first: {
-                                    size: "80%",
+                                    size: "100%",
                                     collapsible: false,
                                     canvas: {},
                                     controllers: [
@@ -349,40 +339,7 @@
                                     ],
                                 },
                                 second: {
-                                    area: {
-                                        orientation: "horizontal",
-                                        collapsible: false,
-                                        name: "rightPael",
-                                        size: "80%",
-                                        first: {
-                                            size: "80%",
-                                            min: "200",
-                                            oriontation: "horizontal",
-                                            expanders: [
-                                                {
-                                                    name: "CodeViewer",
-                                                    title: "CodeViewer",
-                                                    controllers: [
-                                                        {name: "sourceCodeController"}
-                                                    ],
-                                                },
-                                            ],
-                                        },
-                                        second: {
-                                            size: "20%",
-                                            min: "200",
-                                            oriontation: "horizontal",
-                                            expanders: [
-                                                {
-                                                    name: "systeminfo",
-                                                    title: "Info",
-                                                    controllers: [
-                                                        {name: "systeminfoController"}
-                                                    ],
-                                                },
-                                            ],
-                                        }
-                                    }
+
                                 }
                             }
                         }
