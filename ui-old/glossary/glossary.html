@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Getaviz Glossary</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <!--jqwidgets-->
+    <script type="text/javascript" src="../libs/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="../libs/jqwidgets/jqxexpander.js"></script>
+
+    <link rel="stylesheet" href="../libs/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="../libs/jqwidgets/styles/jqx.metro.css" type="text/css" />
+
+    <link rel="stylesheet" href="Glossary.css" type="text/css" />
+
+    <script type="text/javascript">
+
+        var expanders = [];
+
+        function createExpander(id, title){
+            var expanderId = "#" + id;
+            var expanderDivElement = document.createElement("DIV");
+            expanderDivElement.id = id;
+
+            var expanderHeadDivElement = document.createElement("DIV");
+            expanderHeadDivElement.innerHTML = title;
+            expanderDivElement.appendChild(expanderHeadDivElement);
+
+            var expanderContentDivElement = document.createElement("DIV");
+            expanderDivElement.appendChild(expanderContentDivElement);
+
+            document.body.appendChild(expanderDivElement);
+            $(expanderId).jqxExpander({theme: "metro", width: "50%"});
+            var expanderContent = document.getElementById(id + "_content");
+            $(expanderId).jqxExpander('setContent', expanderContent);
+            return $(expanderId);
+        }
+
+        function updateExpanderStates(){
+            var hash = window.location.hash;
+            expanders.forEach(function(expander){
+                if(expander.selector == hash){
+                    expander.jqxExpander('expand')
+                } else {
+                    expander.jqxExpander('collapse')
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            expanders.push(createExpander("bc", "Betweenness Centrality"));
+            expanders.push(createExpander("cd", "Circular Dependency"));
+            expanders.push(createExpander("stk", "Subtype Knowledge"));
+            expanders.push(createExpander("stkrank", "STK Rank"));
+            expanders.push(createExpander("level", "Visibility Level of Dependencies"));
+            expanders.push(createExpander("selection", "Selection"));
+            updateExpanderStates();
+        });
+
+        document.onvisibilitychange = function() {
+            updateExpanderStates();
+        };
+    </script>
+</head>
+<body class="default">
+<h1>Glossary</h1>
+    <div id="stk_content">
+        In this antipattern [1], types have uses relationships to their subtypes. The presence of STK instances compromises separability of sub- and supertypes.
+        In particular, it implies that there are circular dependencies between the namespaces containing sub- and supertype. Instability in the (generally less abstract)
+        subtype will cause instability in the supertype, and the supertype cannot be used and understood without its subtype.
+        <p/>
+        <image src="stk.png"/>
+
+        <h3>References</h3>
+        <ol>
+            <li> A. J. Riel. Object-Oriented Design Heuristics. Addison-Wesley Longman Publishing Co., Inc., Boston, MA, USA, 1996.</li>
+        </ol>
+    </div>
+    <div id="cd_content">
+        Dependency cycles between namespaces (CD) is a special instance of cycles between modules [1]. Often, only weak circular dependencies between two packages are considered:
+        there must be one path connecting some class in a package A to some class in another package B, and another path connecting some class in B with some class in A.
+        This antipattern is stronger: it requires that there is one path that connects a class in A with a class in B and then returns to A. For instance, it is not possible to
+        break this antipattern by splitting packages. This antipattern is more difficult to remove as the path must be broken through refactoring.
+
+        The presence of this antipattern implies that the participating packages cannot be deployed and maintained separately. In particular, if these namespaces were deployed in
+        several runtime modules (jars), this would create a circular dependency between those jars.
+
+        <p/>
+        <image src="cd.png"/>
+
+        <p/>
+
+        <h3>References</h3>
+        <ol>
+            <li> W. Stevens, G. Myers, and L. Constantine. 1979. Structured design. In Classics in software engineering, Edward Nash Yourdon (Ed.). Yourdon Press, Upper Saddle River, NJ, USA 205-232.</li>
+        </ol>
+    </div>
+    <div id="bc_content">
+        Betweenness centrality [1] is a measure of centrality for every type in a cyclic dependency.
+        To efficiently break a cyclic dependency the most central path(s) have to be removed, therefore the most central types have to be refactored.
+        <p/>
+        In the visualization the betweenness centrality is visualized by the size of a disk.
+        The bigger a disk is, the higher is its betweenness centrality.
+        In the following figure class 4 has the highest betweenness centrality and should be refactored.
+
+        <p/>
+        <image src="bc.png"/>
+
+        <h3>References</h3>
+        <ol>
+            <li> Ulrik Brandes. A Faster Algorithm for Betweenness Centrality. In Journal of Mathematical Sociology. 25(2), pp. 163-177, 2001.</li>
+        </ol>
+    </div>
+    <div id="stkrank_content">
+        The STK Rank indicates which classes of the STK antipattern should be refactored.
+        It is visualized on a color scale ranging from green (low priority) to red (high priority).
+        The supertype will always have the highest priority since it has to be refactored to get rid of the antipattern instance.
+        In contrast, the subtype will always have the lowest priority.
+    </div>
+    <div id="level_content">
+        The visibility level determines if all dependencies between classes are shown, or only important or very important dependencies.
+        The importance of a dependency depends on the two classes it connects.
+        The higher the betweenness centrality or STK Rank respectively of those classes, the more important is the dependency.
+    </div>
+    <div id="selection_content">
+        By clicking on a class disk it gets selected, indicated by blue color.
+        If the selected class is part of an antipattern its dependencies to other classes are shown.
+        This is different from selecting an antipattern in the Antipattern Explorer since not all dependencies of the antipattern are shown.
+        Selecting a class is useful for investigating a specific class in a complex antipattern.
+       <p/>
+        If a class is part of multiple antipattern, only the dependencies of the cyclic dependency are shown.
+
+
+    </div>
+</body>
+</html>

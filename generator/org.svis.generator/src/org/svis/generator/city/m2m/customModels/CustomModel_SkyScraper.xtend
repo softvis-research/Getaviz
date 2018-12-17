@@ -1,8 +1,9 @@
 package org.svis.generator.city.m2m.customModels
 
 class CustomModel_SkyScraper {
-	def static String defineSkyScraperShape(double height, double y) '''
-		<Transform translation='0 0 «9 + 5 * height + 10 * (-y + 3)»'>
+	
+	def static String defineSkyScraperShape(double scale,double nos, double y) '''
+		<Transform translation='0 0 «9 + 5 * nos»'>
 		<Group DEF="group_ME_method-roof">
 			<Shape>
 				<Appearance>
@@ -59,7 +60,7 @@ class CustomModel_SkyScraper {
 			</Shape>
 		</Group>
 		</Transform>
-		<Transform translation='0 0 «14 + 10 * (-y + 3)»'>
+		<Transform translation='0 0 «14»'>
 		<Group DEF="group_ME_method-floor">
 			<Shape>
 				<Appearance>
@@ -99,14 +100,13 @@ class CustomModel_SkyScraper {
 			</Shape>
 		</Group>
 		</Transform>
-		«IF height > 1.0»
-		«FOR i : 1..(height.intValue - 1)»
-			<Transform translation='0 0 «9 + 5 * i + 10 * (-y + 3)»'>
+		«IF nos > 1.0»
+		«FOR i : 1..(nos.intValue - 1)»
+			<Transform translation='0 0 «9 + 5 * i»'>
 				<Group USE="group_ME_method-floor"/>
 			</Transform>
 		«ENDFOR»
 		«ENDIF»
-		<Transform translation='0 0 «10 * (-y + 3)»'>
 		<Group DEF="group_ME_method-base">
 			<Shape>
 				<Appearance>
@@ -145,10 +145,10 @@ class CustomModel_SkyScraper {
 				</IndexedFaceSet>
 			</Shape>
 		</Group>
-		</Transform>
 	'''
 
-	def static String defineSkyScraperRoof()'''
+	def static String defineSkyScraperRoof(double height)'''
+		<Transform translation='0 0 «height»'>
 		<Group DEF="group_ME_method-roof">
 			<Shape>
 				<Appearance>
@@ -204,9 +204,11 @@ class CustomModel_SkyScraper {
 				</IndexedFaceSet>
 			</Shape>
 		</Group>
+		</Transform>
 	'''
 	
-	def static String defineSkyScraperFloor()'''
+	def static String defineSkyScraperFloor(double height)'''
+		<Transform translation='0 0 «height»'>
 		<Group DEF="group_ME_method-floor">
 			<Shape>
 				<Appearance>
@@ -245,9 +247,11 @@ class CustomModel_SkyScraper {
 				</IndexedFaceSet>
 			</Shape>
 		</Group>
+		</Transform>
 	'''
 
-	def static String defineSkyScraperBase()'''
+	def static String defineSkyScraperBase(double height)'''
+		<Transform translation='0 0 «height»'>
 		<Group DEF="group_ME_method-base">
 			<Shape>
 				<Appearance>
@@ -286,66 +290,39 @@ class CustomModel_SkyScraper {
 				</IndexedFaceSet>
 			</Shape>
 		</Group>
+		</Transform>
 	'''
 
-	def static String createSkyScraperShape(double height, double y)'''
-		<Transform translation='0 0 «9 + 5 * height + 10 * (-y + 3)»'>
+	def static String createSkyScraperShape(double scale, double nos, double y)'''
+		<Transform translation='0 0 «9 + 5 * nos»'>
 			<Group USE="group_ME_method-roof"/>
 		</Transform>
-		«IF height > 1.0»
-		«FOR i : 1..(height.intValue - 1)»
-			<Transform translation='0 0 «9 + 5 * i + 10 * (-y + 3)»'>
+		«IF nos > 1.0»
+		«FOR i : 1..(nos.intValue - 1)»
+			<Transform translation='0 0 «9 + 5 * i»'>
 				<Group USE="group_ME_method-floor"/>
 			</Transform>
 		«ENDFOR»
 		«ENDIF»
-		<Transform translation='0 0 «10 * (-y + 3)»'>
-			<Group USE="group_ME_method-base"/>
-		</Transform>
+		<Group USE="group_ME_method-base"/>
 	'''
+
 	
-	def static createSkyScraperRoof()'''
-		<Transform translation='0 0 14'>
+	def static createSkyScraperRoof(double height)'''
+		<Transform translation='0 0 «height»'>
 			<Group USE="group_ME_method-roof"/>
 		</Transform>
 	'''
 	
-	def static createSkyScraperRoof(double height, double y)'''
-		<Transform translation='0 0 «9 + 5 * height + 10 * (-y + 3)»'>
-			<Group USE="group_ME_method-roof"/>
-		</Transform>
-	'''
-	
-	def static createSkyScraperFloor()'''
-		<Transform translation='0 0 9'>
+	def static createSkyScraperFloor(double height)'''
+		<Transform translation='0 0 «height»'>
 			<Group USE="group_ME_method-floor"/>
 		</Transform>
 	'''
 	
-	def static createSkyScraperFloor(double height, double y)'''
-		«IF height > 1.0»
-		«FOR i : 1..(height.intValue - 1)»
-			<Transform translation='0 0 «9 + 5 * i + 10 * (-y + 3)»'>
-				<Group USE="group_ME_method-floor"/>
-			</Transform>
-		«ENDFOR»
-		«ENDIF»
-	'''
-	
-	def static createSkyScraperBase(double y)'''
-		<Transform translation='0 0 «10 * (-y + 3)»'>
+	def static createSkyScraperBase(double height)'''
+		<Transform translation='0 0 «height»'>
 			<Group USE="group_ME_method-base"/>
 		</Transform>
-	'''
-	
-	def static createSkyScraperBase()'''
-		<Transform translation='0 0 -5'>
-			<Group USE="group_ME_method-base"/>
-		</Transform>
-	'''
-	
-	
-	
-	
-	
+	'''	
 }

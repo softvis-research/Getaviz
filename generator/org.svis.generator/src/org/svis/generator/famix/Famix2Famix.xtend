@@ -926,7 +926,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	def createTableTypeElement(FAMIXDictionaryData dd, IntegerReference element){
 		var ttyElement  = famixFactory.createFAMIXTableTypeElement		
 		if (dd instanceof FAMIXStrucElement || dd instanceof FAMIXTableElement){
-			ttyElement.id = dd.id
+			ttyElement.id = createID(dd.id + "TableTypeElement")
 			ttyElement.name = dd.name
 			ttyElement.value = dd.value
 			ttyElement.fqn = dd.fqn

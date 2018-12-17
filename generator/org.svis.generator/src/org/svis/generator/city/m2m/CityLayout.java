@@ -536,7 +536,7 @@ public class CityLayout {
 				: covrec.getBottomRightY());
 		covrec.changeRectangle(0, 0, newX, newY);
 		if (DEBUG) {
-			System.out.println(
+			System.out.println(	
 					"\t\t" + info + "CovRec [checkVALUES]: [(" + covrec.getUpperLeftX() + "|" + covrec.getUpperLeftY()
 							+ "), (" + covrec.getBottomRightX() + "|" + covrec.getBottomRightY() + ")]");
 		}

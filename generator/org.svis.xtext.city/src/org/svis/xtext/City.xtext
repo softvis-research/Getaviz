@@ -44,6 +44,9 @@ District: // no LOC, height has to be static
 		('(' 'hasDatabases' hasDatabases=BOOLEAN ')')? //ABAP
 		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? //ABAP
 		('(' 'dataCounter' dataCounter=DECIMAL ')')?
+		('(' 'numberOfStatements' numberOfStatements=INT ')')?
+		('(' 'visibility' visibility=MSESTRING ')')?
+		('(' 'buildingParts' buildingParts+=Entity* ')')? //for ABAPCity
 	')';
 
 Building:
@@ -79,6 +82,8 @@ Building:
 		('(' 'notInOrigin' notInOrigin=BOOLEAN ')')? //ABAP
 		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? //ABAP
 		('(' 'dataCounter' dataCounter=DECIMAL ')')?
+		('(' 'visibility' visibility=MSESTRING ')')?
+		('(' 'buildingParts' buildingParts+=Entity* ')')? //for ABAPCity
 	')';
 
 //Specifies the methods/attributes as blocks (or bricks, panels, segments)
@@ -116,6 +121,8 @@ BuildingSegment:
 		('(' 'abapReferences' abapReferences+=ABAPReference* ')')? // ABAP
 		('(' 'dataCounter' dataCounter=DECIMAL ')')?
 		('(' 'parentType' parentType=MSESTRING ')')?
+		('(' 'visibility' visibility=MSESTRING ')')?
+		('(' 'buildingParts' buildingParts+=Entity* ')')? //for ABAPCity
 	')';
 
 Parameter:
