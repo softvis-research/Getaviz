@@ -71,7 +71,7 @@ class City2X3D {
 				|| entity.type == "FAMIX.Report" || entity.type == "FAMIX.FunctionGroup" 
 				|| entity.type == "FAMIX.ABAPStruc"	|| entity.type == "FAMIX.Table" 
 				|| entity.type == "FAMIX.Domain" || entity.type == "FAMIX.TableType"
-				|| entity.type == "FAMIX.Method" || entity.type == "FAMIX.Attribute"
+				|| entity.type == "FAMIX.Method" || entity.type == "FAMIX.Attribute" || entity.type == "typeNames" 
 				|| entity.type == "FAMIX.FunctionModule" || entity.type == "FAMIX.Formroutine"»
 				«IF config.buildingType == BuildingType.CITY_ORIGINAL || config.showBuildingBase»
 					«toBuilding(entity)»
@@ -181,8 +181,8 @@ class City2X3D {
 			<Group DEF='«entity.id»'>
 				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
 					<Shape>
-						<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
-						
+					
+						<Cylinder radius='«entity.width/2»' height='«entity.height*4»'></Cylinder>	
 						<Appearance>
 							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
 						</Appearance>
@@ -190,6 +190,19 @@ class City2X3D {
 				</Transform>
 			</Group>
 			
+		«ELSEIF entity.type == "typeNames"»
+		<Group DEF='«entity.id»'>
+		   				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
+		   					<Shape>
+		   					
+		   						<Cylinder radius='«entity.width/2»' height='«entity.height*3»'></Cylinder>	
+		   						<Appearance>
+		   							<Material diffuseColor='«entity.color»' transparency='«entity.transparency»'></Material>
+		   						</Appearance>
+		   					</Shape>
+		   				</Transform>
+		   				</Group>
+		   				
 		«ELSEIF entity.type == "FAMIX.Method"»
 			<Group DEF='«entity.id»'>
 				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»' 

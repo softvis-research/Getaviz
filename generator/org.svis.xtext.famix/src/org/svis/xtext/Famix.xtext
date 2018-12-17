@@ -19,7 +19,7 @@ FAMIXElement:
 	FAMIXAntipattern | FAMIXPath | FAMIXRole | FAMIXComponent | 
 	
 	//ABAP
-	FAMIXReport | FAMIXFormroutine | FAMIXFunctionModule | FAMIXTypeOf | FAMIXMacro
+	FAMIXReport | FAMIXFormroutine | FAMIXFunctionModule | FAMIXTypeOf | FAMIXMacro | TypeNames 
 ;
 	
 FAMIXStructure:
@@ -557,6 +557,15 @@ FAMIXTypeOf:
 	('(' 'element' element=IntegerReference ')')
 	('(' 'typeOf' typeOf=IntegerReference ')')
 	')';
+	
+TypeNames:
+	'(TypeNames'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+	('(' 'iteration' iteration=INT ')')?
+    ')';	
 
 FAMIXMessageClass:
     '(FAMIX.MessageClass'
