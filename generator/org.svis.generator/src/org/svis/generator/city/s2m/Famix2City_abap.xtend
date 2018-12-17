@@ -100,12 +100,17 @@ class Famix2City_abap {
 		
 		
 		
+		if (config.abap_representation == AbapCityRepresentation::SIMPLE) {
+			dcData	 		 += dataElements + domains + abapStrucs + tableTypes
+		} else {
+			
+		}
 		
 		//dcData	 		 += dataElements + domains + abapStrucs + tableTypes 
 		//dcData	 		 += abapStrucs + tableTypes 
-		dcData	 		     += abapStrucs + tableTypes + tables
+		//dcData	 		 += abapStrucs + tableTypes + tables
 		
-		if(!config.showOwnTablesDistrict){
+		if (!config.showOwnTablesDistrict) {
 			dcData += tables
 		}
 	}
