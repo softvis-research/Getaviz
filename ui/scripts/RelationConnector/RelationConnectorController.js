@@ -12,6 +12,10 @@ var relationConnectorController = function(){
 	var loadedDistances = new Map();
 
 	var activated = false;
+
+	const typeProject = ["Class", "Interface", "ParameterizableClass", "Attribute", "Method"];
+	const ddicElements = ["Domain", "DataElement", "StrucElement", "Table", "TableElement", "TableType", "TableTypeElement"];
+	const abapSCElements = ["Report", "Formroutine", "FunctionModule"];
 	
 	
 	//config parameters	
@@ -122,28 +126,31 @@ var relationConnectorController = function(){
 		events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + sourceEntity.name});
 
 		relatedEntities = new Array();
-			
-		switch(sourceEntity.type) {
-			case "Class":
+
+		if (typeProject.includes(sourceEntity.type)) {
+			if (sourceEntity.type == "Class" || sourceEntity.type == "ParameterizableClass" || sourceEntity.type == "Interface") {
 				relatedEntities = relatedEntities.concat(sourceEntity.superTypes);
 				relatedEntities = relatedEntities.concat(sourceEntity.subTypes);
-				break;
-			case  "ParameterizableClass":
-				relatedEntities = relatedEntities.concat(sourceEntity.superTypes);
-				relatedEntities = relatedEntities.concat(sourceEntity.subTypes);
-				break;			
-			case "Attribute":
-				relatedEntities = sourceEntity.accessedBy;
-				break;
-			case "Method":
-				relatedEntities = sourceEntity.accesses;
-				relatedEntities = relatedEntities.concat( sourceEntity.calls );
-				relatedEntities = relatedEntities.concat( sourceEntity.calledBy );			
-				break;
-			
-			default: 				
-				return;
-		}
+			} else if (sourceEntity.type == "Attribute") {
+				//relatedEntities = sourceEntity.accessedBy;
+				relatedEntities = relatedEntities.concat(sourceEntity.accessedBy);
+				relatedEntities = relatedEntities.concat(sourceEntity.typeOf);
+			} else if (sourceEntity.type == "Method") {
+				relatedEntities = relatedEntities.concat(sourceEntity.calls);
+				relatedEntities = relatedEntities.concat(sourceEntity.calledBy);
+			}
+		} else if (abapSCElements.includes(sourceEntity.type)) {
+			relatedEntities = relatedEntities.concat(sourceEntity.calls);
+			relatedEntities = relatedEntities.concat(sourceEntity.calledBy);
+		} else if (ddicElements.includes(sourceEntity.type)) {
+			if (sourceEntity.type == "Domain" || sourceEntity.type == "Table") {
+				relatedEntities = relatedEntities.concat(sourceEntity.typeUsedBy);
+			} else {
+				relatedEntities = relatedEntities.concat(sourceEntity.typeOf);
+				relatedEntities = relatedEntities.concat(sourceEntity.typeUsedBy);
+			}
+		} 
+
 
 		events.log.info.publish({ text: "connector - onRelationsChanged - related Entites - " + relatedEntities.length});
 		
@@ -168,12 +175,16 @@ var relationConnectorController = function(){
 				return;
 			}
 			
-			if(controllerConfig.showInnerRelations === false){
-				if(isTargetChildOfSourceParent(relatedEntity, sourceEntity)){
-					events.log.info.publish({ text: "connector - onRelationsChanged - inner relation"});
-					return;
+			//if (sourceEntity.type != "Domain" && sourceEntity.type != "DataElement") {
+			if (typeProject.includes(sourceEntity.type)) {
+				if(controllerConfig.showInnerRelations === false){
+					if(isTargetChildOfSourceParent(relatedEntity, sourceEntity)){
+						events.log.info.publish({ text: "connector - onRelationsChanged - inner relation"});
+						return;
+					}
 				}
-			}
+			} 
+
 								
 			//create scene element
 			var connector = createConnector(sourceEntity, relatedEntity);
