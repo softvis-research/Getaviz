@@ -1,18 +1,14 @@
 var searchController = (function() {
     
-	var searchInputId = "searchField";
-	var jQsearchInputID = "#searchField";
+	const searchInputId = "searchField";
+	const jQsearchInputID = "#searchField";
 	
-	var suggestions = null;
+	let suggestions = null;
     
-	var rootDivElement;
+	let rootDivElement;
 	
-	var config = {
-		active : true
-	}
-	
-	//config parameters	
-	var controllerConfig = {
+	//config parameters
+	let controllerConfig = {
 		active : true,
 		timeout: false,
 		timeoutTime: 1000
@@ -28,7 +24,7 @@ var searchController = (function() {
 		rootDivElement = rootDiv;
 
 
-		var cssLink = document.createElement("link");
+		const cssLink = document.createElement("link");
 		cssLink.type = "text/css";
 		cssLink.rel = "stylesheet";
 		cssLink.href = "scripts/Search/tt.css";
@@ -40,7 +36,7 @@ var searchController = (function() {
 		rootDiv.setAttribute("ignoreTheme", "true");
         
 		//create search input field
-		var searchInput = document.createElement("INPUT");
+		const searchInput = document.createElement("INPUT");
 		searchInput.id = searchInputId;
 		searchInput.type = "text";
 		
@@ -71,12 +67,12 @@ var searchController = (function() {
         
         suggestions = new Bloodhound({
             datumTokenizer: function(entity) {
-				var tokenizerQN = Bloodhound.tokenizers.whitespace(entity.qualifiedName);
+				const tokenizerQN = Bloodhound.tokenizers.whitespace(entity.qualifiedName);
 								
 				tokenizerQN.push(entity.name);					
 				
-				var splits = entity.qualifiedName.split(".").reverse();				
-				var splitString = "";
+				const splits = entity.qualifiedName.split(".").reverse();
+				let splitString = "";
 				splits.forEach(function(elementString){	
 					splitString = elementString + splitString;				
 					tokenizerQN.push(splitString);
@@ -106,13 +102,13 @@ var searchController = (function() {
 					suggestion: Handlebars.compile('<div class="result"><p class="name">{{name}}</p><p class="qualifiedName">{{qualifiedName}}</p></div>')
 			}
         });
-        $(jQsearchInputID).on("typeahead:selected", function(event, suggestion, dataset) {
+        $(jQsearchInputID).on("typeahead:selected", function(event, suggestion) {
             selectEntity(suggestion.id);							
         });	
-		$(jQsearchInputID).on("typeahead:opened", function(event, suggestion, dataset) {
+		$(jQsearchInputID).on("typeahead:opened", function() {
             rootDivElement.parentElement.style.overflow = "visible";			
         });	
-		$(jQsearchInputID).on("typeahead:closed", function(event, suggestion, dataset) {
+		$(jQsearchInputID).on("typeahead:closed", function() {
 			rootDivElement.parentElement.style.overflow = "hidden";
         });	
 		
@@ -122,17 +118,17 @@ var searchController = (function() {
     
     function selectEntity(id) {     
 	
-		var applicationEvent = {			
+		const applicationEvent = {
 			sender: searchController,
 			entities: [model.getEntityById(id)]
-		}	
+		};
 		
 		events.selected.on.publish(applicationEvent);
     }
 	
 	function onEntitySelected(applicationEvent) {		
 		
-		var entity = applicationEvent.entities[0];
+		const entity = applicationEvent.entities[0];
 		$(jQsearchInputID).val(entity.qualifiedName);			
 	}    
     

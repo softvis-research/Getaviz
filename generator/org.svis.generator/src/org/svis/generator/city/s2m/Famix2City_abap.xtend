@@ -106,14 +106,20 @@ class Famix2City_abap {
 		
 		
 		
+		if (config.abap_representation == AbapCityRepresentation::SIMPLE) {
+			dcData	 		 += dataElements + domains + abapStrucs + tableTypes
+			
+			if (!config.showOwnTablesDistrict) {
+				dcData += tables
+			}
+		} else {
+			dcData	 		 += abapStrucs + tableTypes
+		}
 		
 		//dcData	 		 += dataElements + domains + abapStrucs + tableTypes 
-		dcData	 		 += abapStrucs + tableTypes 
-		//dcData	 		     += abapStrucs + tableTypes + tables
-		
-		if(!config.showOwnTablesDistrict){
-			dcData += tables
-		}
+		//dcData	 		 += abapStrucs + tableTypes 
+		//dcData	 		 += abapStrucs + tableTypes + tables
+
 	}
 		
 	val config = SettingsConfiguration.instance
@@ -168,9 +174,9 @@ class Famix2City_abap {
 	
 	def abapToModel(){		
 		// Run transformation 
-		if(config.abap_representation == AbapCityRepresentation::SIMPLE){
+		if (config.abap_representation == AbapCityRepresentation::SIMPLE) {
 			simpleModel()
-		}else if(config.abap_representation == AbapCityRepresentation::ADVANCED){
+		} else if (config.abap_representation == AbapCityRepresentation::ADVANCED) {
 			advancedModel()
 		}		
 		
@@ -523,7 +529,6 @@ class Famix2City_abap {
 			newClassDistrict.level = level + 1
 			
 			//newClassDistrict.entities += toBuilding(class, level + 2)
-			// TODO: find methods and attributes and bind them to district
 
 			methods.filter[parentType.ref == class].forEach[newClassDistrict.entities += toBuilding(level + 2)]
 			attributes.filter[parentType.ref == class].forEach[newClassDistrict.entities += toBuilding(level + 2)]
@@ -534,6 +539,34 @@ class Famix2City_abap {
 		//shows tables at the main district (level) 
 		tables.filter[container.ref == elem].forEach[newDistrict.entities += toBuilding( level + 2)]	
 			
+
+		functionGroups.filter[container.ref == elem].forEach[ functionGroup |
+			val newFunctionGroupDistrict = cityFactory.createDistrict
+			newFunctionGroupDistrict.name = newDistrict.name + "_functionGroupDistrict"
+			newFunctionGroupDistrict.type = "functionGroupDistrict"
+			newFunctionGroupDistrict.id = elem.id + "_00003"
+			newFunctionGroupDistrict.level = level + 1
+			
+			functionModules.filter[parentType.ref == functionGroup].forEach[newFunctionGroupDistrict.entities += toBuilding(level + 2)]
+			attributes.filter[parentType.ref == functionGroup].forEach[newFunctionGroupDistrict.entities += toBuilding(level + 2)]
+			
+			newDistrict.entities.add(newFunctionGroupDistrict)
+		]
+		
+		reports.filter[container.ref == elem].forEach[ report |
+			val newReportDistrict = cityFactory.createDistrict
+			newReportDistrict.name = newDistrict.name + "_reportDistrict"
+			newReportDistrict.type = "reportDistrict"
+			newReportDistrict.id = elem.id  + "_00004"
+			newReportDistrict.level = level + 1
+			newReportDistrict.entities += toAdvBuilding(report, level + 2)
+			
+			formroutines.filter[parentType.ref == report].forEach[newReportDistrict.entities += toBuilding(level + 2)]
+			attributes.filter[parentType.ref == report].forEach[newReportDistrict.entities += toBuilding(level + 2)]
+			
+			newDistrict.entities.add(newReportDistrict)
+		]
+				
 		cityDocument.entities += newDistrict
 		return newDistrict
 	}
@@ -726,6 +759,11 @@ class Famix2City_abap {
 			newBuilding.notInOrigin = "true"
 		}
 		newBuilding.methodCounter = elem.numberOfStatements
+		
+		newBuilding.visibility = elem.modifiers.findFirst[it == "PRIVATE" || it == "PROTECTED" || it == "PUBLIC"]
+		if (newBuilding.visibility === null) {
+			newBuilding.visibility = "PUBLIC"	
+		}			 
 
 		return newBuilding
 	}
@@ -754,6 +792,56 @@ class Famix2City_abap {
 		} else if (dataType.typeOf.ref.getClass.toString.contains("FAMIXClass")) {
 			newBuilding.dataCounter = 4.0
 		}
+		
+		newBuilding.visibility = elem.modifiers.findFirst[it == "PRIVATE" || it == "PROTECTED" || it == "PUBLIC"] 
+		
+		return newBuilding		
+	}
+	
+	def private Building toBuilding(FAMIXFunctionModule elem, int level) {
+		val newBuilding = cityFactory.createBuilding
+		newBuilding.name = elem.name
+		newBuilding.value = elem.value
+		newBuilding.fqn = elem.fqn
+		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		newBuilding.level = level
+		newBuilding.id = elem.id
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
+		newBuilding.methodCounter = elem.numberOfStatements
+		
+		return newBuilding		
+	}
+	
+	def private Building toBuilding(FAMIXFormroutine elem, int level) {
+		val newBuilding = cityFactory.createBuilding
+		newBuilding.name = elem.name
+		newBuilding.value = elem.value
+		newBuilding.fqn = elem.fqn
+		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		newBuilding.level = level
+		newBuilding.id = elem.id
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
+		newBuilding.methodCounter = elem.numberOfStatements
+		
+		return newBuilding		
+	}
+	
+	def private Building toAdvBuilding(FAMIXReport elem, int level) {
+		val newBuilding = cityFactory.createBuilding
+		newBuilding.name = elem.name
+		newBuilding.value = elem.value
+		newBuilding.fqn = elem.fqn
+		newBuilding.type = CityUtils.getFamixClassString(elem.class.simpleName)
+		newBuilding.level = level
+		newBuilding.id = elem.id
+		if(elem.iteration >= 1){
+			newBuilding.notInOrigin = "true"
+		}
+		newBuilding.methodCounter = elem.numberOfStatements
 		
 		return newBuilding		
 	}

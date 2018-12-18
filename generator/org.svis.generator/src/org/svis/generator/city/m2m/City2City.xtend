@@ -69,8 +69,14 @@ class City2City extends WorkflowComponentWithModelSlot {
 			}
 			districts.forEach[setDistrictAttributes]
 			buildings.forEach[setBuildingAttributes]
+			
+			if (config.parser == FamixParser::ABAP && config.abap_representation == AbapCityRepresentation::ADVANCED) {
+				ABAPCityLayout::cityLayout(cityRoot)
+				CityHeightLayout::cityHeightLayout(cityRoot)
+			} else {
+				CityLayout::cityLayout(cityRoot)
+			}
 
-			CityLayout::cityLayout(cityRoot)
 			switch (config.buildingType) {
 				case CITY_BRICKS:
 					BrickLayout.brickLayout(cityRoot) // Layout for buildingSegments
@@ -212,19 +218,22 @@ class City2City extends WorkflowComponentWithModelSlot {
 				
 				// We use custom models in advanced mode. Adjust sizes: 
 				if(b.type == "FAMIX.DataElement"){
-					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
-					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
-					b.height = b.height - (1 + config.getAbapAdvBuldingScale(b.type))
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type)
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type)
+					b.height = b.height - (1 + config.getAbapAdvBuildingScale(b.type))
 					
 				} else if(b.type == "FAMIX.Domain"){
-					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
-					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type)
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type)
 					
 				} else if(b.type == "typeNames"){
-					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
-					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)	
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type)
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type)	
           
 				} else if(b.type == "FAMIX.Attribute") {
+          			b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type) * 1.5
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type)
+          			
           			if (b.dataCounter == 2.0) {
 						b.height = 4
 					}
@@ -235,15 +244,57 @@ class City2City extends WorkflowComponentWithModelSlot {
 						b.height = 10
 					}
 				} else if (b.type == "FAMIX.Method") {
-					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
-					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuldingScale(b.type)
-					if (b.methodCounter == 0) {
-						b.height = config.heightMin
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type) * 1.5
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type)
+					
+					var base = cityFactory.createBuilding
+					base.height = 0
+					base.type = "Base"
+					b.buildingParts.add(base)
+					
+					if (b.methodCounter <= 1) {	
+						var roof = cityFactory.createBuilding
+						roof.height = config.getAbapMethodBaseHeight
+						roof.type = "Roof"
+						b.buildingParts.add(roof)
 					} else {
-						b.height = b.methodCounter
+						for (var i = 1; i <= b.methodCounter - 1; i++) {
+							var floor = cityFactory.createBuilding
+							floor.height = config.getAbapMethodBaseHeight + (i - 1) * config.getAbapMethodFloorHeight
+							floor.type = "Floor"
+							b.buildingParts.add(floor)
+						}
+						var roof = cityFactory.createBuilding
+						roof.height = config.getAbapMethodBaseHeight + (b.methodCounter - 1) * config.getAbapMethodFloorHeight
+						roof.type = "Roof"
+						b.buildingParts.add(roof)
 					}
-				}
+					
+				} else if (b.type == "FAMIX.FunctionModule") {
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type) //* 1.5
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type)
+					if (b.methodCounter != 0)
+						b.height = b.methodCounter * 10
+					else
+						b.height = config.getHeightMin
 						
+				} else if (b.type == "FAMIX.Report") {
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type) //* 1.5
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type)
+					if (b.methodCounter != 0)
+						b.height = b.methodCounter * 10
+					else
+						b.height = config.getHeightMin
+						
+				} else if (b.type == "FAMIX.Formroutine") {
+					b.width = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type) //* 1.5
+					b.length = config.getAbapAdvBuildingDefSize(b.type) * config.getAbapAdvBuildingScale(b.type)
+					if (b.methodCounter != 0)
+						b.height = b.methodCounter //* 10
+					else
+						b.height = config.getHeightMin
+						
+				}						
 			 // End of AbapCityRepresentation::ADVANCED
 			} else { //AbapCityRepresentation::SIMPLE
 				

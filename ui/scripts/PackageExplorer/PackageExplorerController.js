@@ -4,15 +4,17 @@ var packageExplorerController = (function() {
 	var jQPackageExplorerTree = "#packageExplorerTree";
 	
 	var tree;
-	
-
 
 	var controllerConfig = {
-		projectIcon: 	"scripts/PackageExplorer/images/project.png",
-		packageIcon: 	"scripts/PackageExplorer/images/package.png",
-		typeIcon: 		"scripts/PackageExplorer/images/type.png",
-		fieldIcon: 		"scripts/PackageExplorer/images/field.png",
-		methodIcon:		"scripts/PackageExplorer/images/method.png"
+		projectIcon: 	"scripts/PackageExplorer/images/purple.png",
+		packageIcon: 	"scripts/PackageExplorer/images/grey.png",
+		typeIcon: 		"scripts/PackageExplorer/images/purple.png",
+		fieldIcon: 		"scripts/PackageExplorer/images/yellow.png",
+		methodIcon:		"scripts/PackageExplorer/images/blue.png",
+
+		typeElements: ["Class", "Interface", "ParameterizableClass", "Enum"],
+		methodElements: ["Method", "Report", "Formroutine", "FunctionGroup", "FunctionModule"],
+		fieldElements: ["EnumValue", "Attribute", "Domain", "DataElement", "ABAPStructure", "StrucElement", "Table", "TableType", "TableTypeElement"]
 	};
 	
 	function initialize(setupConfig){
@@ -43,7 +45,10 @@ var packageExplorerController = (function() {
     
     function prepareTreeView() {
         
-        var entities = model.getAllEntities();        		
+		var entities = model.getAllEntities();     
+		/*var typeIconElements = ["Class", "Interface", "ParameterizableClass", "Enum"];  
+		var methodIconElements = ["Method", "Report", "Formroutine", "FunctionGroup", "FunctionModule"]
+		var fieldIconElements = ["EnumValue", "Attribute", "Domain", "DataElement", "ABAPStructure", "StrucElement", "Table", "TableType", "TableTypeElement"]; */		
         var items = [];
 		
 		//build items for ztree
@@ -77,36 +82,19 @@ var packageExplorerController = (function() {
                     }
                 }
             } else {	
-				switch(entity.type) {
-					case "Project":
-						item = { id: entity.id, open: true, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.projectIcon, iconSkin: "zt"};
-						break;
-					case "Namespace":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.packageIcon, iconSkin: "zt"};
-						break;
-					case "Class":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
-						break;
-					case  "ParameterizableClass":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
-						break;
-					case "Enum":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
-						break;
-					case "EnumValue":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt"};
-						break;
-					case "Attribute":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt"};
-						break;
-					case "Method":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt"};
-						break;
-					
-					default: 
-						events.log.warning.publish({ text: "FamixElement not in tree: " + entity.type});
-
-						return;
+				if(entity.type == "Project") {
+					item = { id: entity.id, open: true, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.projectIcon, iconSkin: "zt"};
+				} else if(entity.type == "Namespace") {
+					item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.packageIcon, iconSkin: "zt"};
+				} else if(controllerConfig.typeElements.includes(entity.type)) {
+					item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
+				} else if(controllerConfig.methodElements.includes(entity.type)) {
+					item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt"};
+				} else if(controllerConfig.fieldElements.includes(entity.type)) {
+					item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt"};
+				} else {
+					events.log.warning.publish({ text: "FamixElement not in tree: " + entity.type});
+					return;
 				}
            }
 			if(item !== undefined) {

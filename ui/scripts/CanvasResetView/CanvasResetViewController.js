@@ -1,9 +1,9 @@
 var canvasResetViewController = (function() {
 
 	//config parameters	
-	var controllerConfig = {
+	let controllerConfig = {
 		button : true,
-	}
+	};
 	
 	
 	function initialize(setupConfig){	
@@ -11,7 +11,7 @@ var canvasResetViewController = (function() {
 		application.transferConfigParams(setupConfig, controllerConfig);		
 
 		if(controllerConfig.button){		
-			var cssLink = document.createElement("link");
+			let cssLink = document.createElement("link");
 			cssLink.type = "text/css";
 			cssLink.rel = "stylesheet";
 			cssLink.href = "scripts/CanvasResetView/rv.css";
@@ -25,18 +25,20 @@ var canvasResetViewController = (function() {
 		
 		if(controllerConfig.button){	
 			// style and position
-			var taskDialogOkButton = document.createElement("INPUT");
+			let taskDialogOkButton = document.createElement("INPUT");
 			taskDialogOkButton.id = "resetViewButton";
 			taskDialogOkButton.value = "Reset View";
 			taskDialogOkButton.type = "button";		
-			parent.appendChild(taskDialogOkButton);	
-			
-			$("#resetViewButton").jqxButton({ theme: "metro"});
-			$("#resetViewButton").click(resetApplication);
+			parent.appendChild(taskDialogOkButton);
+
+            let $resetViewButton = $("#resetViewButton").jqxButton({ theme: "metro"});
+
+			//$("#resetViewButton").jqxButton({ theme: "metro"});
+            $resetViewButton.click(resetApplication);
 		}
     }
 	
-	
+
 	function reset(){
 		document.getElementById("x3dElement").runtime.showAll("negZ");
 	}
