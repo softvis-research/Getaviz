@@ -19,7 +19,7 @@ FAMIXElement:
 	FAMIXAntipattern | FAMIXPath | FAMIXRole | FAMIXComponent | 
 	
 	//ABAP
-	FAMIXReport | FAMIXFormroutine | FAMIXFunctionModule | FAMIXTypeOf | FAMIXMacro | TypeNames 
+	FAMIXReport | FAMIXFormroutine | FAMIXFunctionModule | FAMIXTypeOf | FAMIXMacro 
 ;
 	
 FAMIXStructure:
@@ -32,7 +32,8 @@ FAMIXStructure:
 //ABAP
 FAMIXDictionaryData:
 	FAMIXDomain | FAMIXDataElement | FAMIXTable | FAMIXTableElement | FAMIXABAPStruc | FAMIXStrucElement | 
-	FAMIXTableType | FAMIXTableTypeElement
+	FAMIXTableType | FAMIXTableTypeElement 
+	//| FAMIXVirtualDomain
 
 ;
 
@@ -425,6 +426,18 @@ FAMIXDataElement:
     ('(' 'domain' domain=MSESTRING ')')? 
     ('(' 'iteration' iteration=INT ')')? 
     ')';  
+    
+/*FAMIXVirtualDomain:
+	'(FAMIXVirtualDomain'
+	'(' 'id:' name=INT_ID ')'
+	'(' 'name' value=MSESTRING ')'
+	('(' 'hash' id = STRING ')')?
+    ('(' 'fqn' fqn = MSESTRING ')')?
+    '(' 'container' container=IntegerReference ')'
+    ('(' 'dataElement' dataElement=IntegerReference ')')?    
+	('(' 'iteration' iteration=INT ')')?
+    ')';	
+    */
 
 FAMIXDomain:
     '(FAMIX.Domain'
@@ -558,14 +571,6 @@ FAMIXTypeOf:
 	('(' 'typeOf' typeOf=IntegerReference ')')
 	')';
 	
-TypeNames:
-	'(TypeNames'
-	'(' 'id:' name=INT_ID ')'
-	'(' 'name' value=MSESTRING ')'
-	('(' 'hash' id = STRING ')')?
-    ('(' 'fqn' fqn = MSESTRING ')')?
-	('(' 'iteration' iteration=INT ')')?
-    ')';	
 
 FAMIXMessageClass:
     '(FAMIX.MessageClass'

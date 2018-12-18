@@ -96,6 +96,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 	//ABAP
 	val List<FAMIXReport> reports = newArrayList 
 	val List<FAMIXDataElement> dataElements = newArrayList 
+	//val List<FAMIXDataElementDatatype> datatyElements = newArrayList
 	val List<FAMIXDomain> domains = newArrayList
 	val List<FAMIXTable> tables = newArrayList 
 	val List<FAMIXABAPStruc> abapStrucs = newArrayList 
@@ -212,6 +213,10 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 			createTableTypeElements(tty)
 		]
 		dataElements.forEach[updParameters]		
+		 //dataElements.forEach[ dataty | 
+		 //updParameters(dataty)
+		 //createDataElementDatatype(dataty)
+		// ]		
 		domains.forEach[updParameters]				
 		attributes.forEach[setQualifiedNameAbap]
 		
@@ -226,6 +231,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		famixDocument.elements.addAll(reports)
 		famixDocument.elements.addAll(attributes)
 		famixDocument.elements.addAll(dataElements)
+		// famixDocument.elements.addAll(datatypeElements)
 		famixDocument.elements.addAll(domains)
 		famixDocument.elements.addAll(tables)
 		famixDocument.elements.addAll(abapStrucs)
@@ -252,6 +258,7 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 		methods.clear
 		reports.clear
 		dataElements.clear
+		// datatypeElements.clear
 		domains.clear
 		tables.clear
 		abapStrucsTmp.clear
@@ -937,6 +944,18 @@ class Famix2Famix extends WorkflowComponentWithModelSlot {
 			ttypeElements += ttyElement
 		}
 	}
+	 /*def createDataElementDatatype (FamixDictionaryData dd, IntegerReference element) {
+	  var datatyElement = famixfactory.createFAMIXDomain
+	      datatyElement.id = createID("VirtualDomain + index")
+	      datatyElement.name = dd.name
+	     datatyElement.value = dd.value
+	      datatyElement.fqn = dd.fqn 
+	      datatyElement.container = famixFactory.createIntegerReference
+	      datatyElement.container.ref = dd.container.ref
+	      datatypeElements += datatyElement
+	  }
+	  }*/
+	 
 	
 	def updParameters(FAMIXFunctionModule fm){
 		val ref = fm.parentType.ref

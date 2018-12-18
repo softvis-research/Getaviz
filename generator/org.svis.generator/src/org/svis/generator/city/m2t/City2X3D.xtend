@@ -69,7 +69,7 @@ class City2X3D {
 				|| entity.type == "FAMIX.Report" || entity.type == "FAMIX.FunctionGroup" 
 				|| entity.type == "FAMIX.ABAPStruc"	|| entity.type == "FAMIX.Table" 
 				|| entity.type == "FAMIX.Domain" || entity.type == "FAMIX.TableType"
-				|| entity.type == "FAMIX.Method" || entity.type == "FAMIX.Attribute" || entity.type == "typeNames"» 
+				|| entity.type == "FAMIX.Method" || entity.type == "FAMIX.Attribute"» 
 				«IF config.buildingType == BuildingType.CITY_ORIGINAL || config.showBuildingBase»
 					«toBuilding(entity)»
 				«ENDIF»
@@ -187,7 +187,7 @@ class City2X3D {
 				</Transform>
 			</Group>
 			
-		«ELSEIF entity.type == "typeNames"»
+		«ELSEIF entity.type == "FAMIX.VirtualDomain"»
 		<Group DEF='«entity.id»'>
 		   				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
 		   					<Shape>
