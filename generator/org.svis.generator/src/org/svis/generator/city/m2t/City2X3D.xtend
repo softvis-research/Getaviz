@@ -314,7 +314,7 @@ class City2X3D {
 		«ELSEIF entity.type == "FAMIX.DataElement"»
 			<Cone bottomRadius='«entity.width»' height='«entity.height»' ></Cone>
 		«ELSEIF entity.type == "FAMIX.ABAPStruc"»
-			
+			<Cylinder radius='«entity.width/4»' height='«entity.height»'></Cylinder>
 		«ELSEIF entity.type == "FAMIX.TableType"»
 			<Cylinder radius='«entity.width/2»' height='«entity.height»'></Cylinder>
 		«ELSEIF entity.type == "FAMIX.Table"»
