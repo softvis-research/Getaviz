@@ -23,7 +23,7 @@ var relationConnectorController = function(){
 		targetEndAtParentBorder : false,
 		sourceStartAtBorder: false,
 		targetEndAtBorder: false,
-		createEndpoints : true,
+		createEndpoints : false,
 	}
 	
 	
