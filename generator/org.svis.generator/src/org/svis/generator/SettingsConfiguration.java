@@ -1288,6 +1288,24 @@ public class SettingsConfiguration {
 		}
 	}
 	
+	
+	  public static enum DataElementSorting { 
+	       SORTED, UNSORTED;
+	  }
+	  
+	  public String getDtelSorting() {
+	        return config.getString("city.abap_dtelsorting_mode", "unsorted");
+	  }
+	  
+	  public DataElementSorting getDtel_Sorting() {
+	  switch (getDtelSorting()){
+	  case "sorted":
+	    return DataElementSorting.SORTED;
+	  default: 
+	    return DataElementSorting.UNSORTED;
+	    }
+	   }
+	
 	public boolean isAbapCityTestMode() {
 		return config.getBoolean("city.abap_test_mode", false);
 	}

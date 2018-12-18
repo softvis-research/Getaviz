@@ -193,7 +193,7 @@ class City2X3D {
 				</Transform>
 			</Group>
 			
-		«ELSEIF entity.type == "typeNames"»
+		«ELSEIF entity.type == "FAMIX.VirtualDomain"»
 		<Group DEF='«entity.id»'>
 		   				<Transform translation='«entity.position.x +" "+ entity.position.y +" "+ entity.position.z»'>
 		   					<Shape>
