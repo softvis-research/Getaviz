@@ -102,17 +102,18 @@ class Famix2City_abap {
 		
 		if (config.abap_representation == AbapCityRepresentation::SIMPLE) {
 			dcData	 		 += dataElements + domains + abapStrucs + tableTypes
-		} else {
 			
+			if (!config.showOwnTablesDistrict) {
+				dcData += tables
+			}
+		} else {
+			dcData	 		 += abapStrucs + tableTypes
 		}
 		
 		//dcData	 		 += dataElements + domains + abapStrucs + tableTypes 
 		//dcData	 		 += abapStrucs + tableTypes 
 		//dcData	 		 += abapStrucs + tableTypes + tables
-		
-		if (!config.showOwnTablesDistrict) {
-			dcData += tables
-		}
+	
 	}
 		
 	val config = SettingsConfiguration.instance
