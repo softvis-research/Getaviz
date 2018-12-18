@@ -24,21 +24,23 @@ var setup = {
             name: "packageExplorerController"
         },
         {
-            name: "relationHighlightController"
+            name: "relationTransparencyController",
+            fullFadeValue: 0.15,
+            halfFadeValue: 0.45
         },
         {
-            name: "relationTransparencyController"
+            name: "relationHighlightController",
+            unfadeOnHighlight: false
         },
         {
             name: "relationConnectorController",
-            fixPositionZ : false,
+            fixPositionY : false,
             showInnerRelations : true,
-            elementShape : "",					//circle, square
             sourceStartAtParentBorder : false,
             targetEndAtParentBorder : false,
             sourceStartAtBorder: true,
             targetEndAtBorder: true,
-            createEndpoints : true,
+            createEndpoints : true
         },
         {
             name: "searchController"
@@ -68,7 +70,7 @@ var setup = {
                         first: {
                             size: "20%",
                             controllers: [
-                                { name: "packageExplorerController" }
+                                { name: "packageExplorerController" },
                             ]
                         },
                         second: {
