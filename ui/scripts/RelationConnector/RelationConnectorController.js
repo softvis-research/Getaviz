@@ -461,7 +461,7 @@ var relationConnectorController = function(){
 		
 		
 		var AA = 1 + Math.pow(a, 2);
-		var BB = (2 * a * b)
+		var BB = (2 * a * b);
 		var CC = Math.pow(b, 2) - Math.pow(r, 2);
 				
 		var XX = Math.pow(BB, 2) - 4 * AA * CC;

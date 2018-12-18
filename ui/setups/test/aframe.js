@@ -30,7 +30,15 @@ var setup = {
             name: "relationTransparencyController"
         },
         {
-            name: "relationConnectorController"
+            name: "relationConnectorController",
+            fixPositionZ : false,
+            showInnerRelations : true,
+            elementShape : "",					//circle, square
+            sourceStartAtParentBorder : false,
+            targetEndAtParentBorder : false,
+            sourceStartAtBorder: true,
+            targetEndAtBorder: true,
+            createEndpoints : true,
         },
         {
             name: "searchController"
