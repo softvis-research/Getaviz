@@ -308,13 +308,14 @@ class City2X3D {
 
 	
 	// Own logic for ABAP buildings shapes
+	//
 	def String abapBuildingShape(Entity entity)'''
 		«IF entity.type == "FAMIX.Interface"»
 			<Box size='«entity.width +" "+ entity.height +" "+ entity.length»'></Box>
 		«ELSEIF entity.type == "FAMIX.DataElement"»
 			<Cone bottomRadius='«entity.width»' height='«entity.height»' ></Cone>
 		«ELSEIF entity.type == "FAMIX.ABAPStruc"»
-			<Cylinder radius='«entity.width/4»' height='«entity.height»'></Cylinder>
+			<Box size='«entity.width/4 +" "+ entity.height +" "+ entity.length/4»'></Box>
 		«ELSEIF entity.type == "FAMIX.TableType"»
 			<Cylinder radius='«entity.width/2»' height='«entity.height»'></Cylinder>
 		«ELSEIF entity.type == "FAMIX.Table"»
