@@ -14,7 +14,7 @@ var relationConnectorController = function(){
 	var activated = false;
 
 	const typeProject = ["Class", "Interface", "ParameterizableClass", "Attribute", "Method"];
-	const ddicElements = ["Domain", "DataElement", "StrucElement", "Table", "TableElement", "TableType", "TableTypeElement"];
+	const ddicElements = ["Domain", "DataElement", "ABAPStructure", "StrucElement", "Table", "TableElement", "TableType", "TableTypeElement"];
 	const abapSCElements = ["Report", "Formroutine", "FunctionModule"];
 	
 	
@@ -143,7 +143,7 @@ var relationConnectorController = function(){
 			relatedEntities = relatedEntities.concat(sourceEntity.calls);
 			relatedEntities = relatedEntities.concat(sourceEntity.calledBy);
 		} else if (ddicElements.includes(sourceEntity.type)) {
-			if (sourceEntity.type == "Domain" || sourceEntity.type == "Table") {
+			if (sourceEntity.type == "Domain" || sourceEntity.type == "Table" || sourceEntity.type == "ABAPStructure") {
 				relatedEntities = relatedEntities.concat(sourceEntity.typeUsedBy);
 			} else {
 				relatedEntities = relatedEntities.concat(sourceEntity.typeOf);

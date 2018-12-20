@@ -87,7 +87,7 @@ var relationTransparencyController = (function() {
 		
 		relatedEntities = new Array();
 		const typeProject = ["Class", "Interface", "ParameterizableClass", "Attribute", "Method"];
-		const ddicElements = ["Domain", "DataElement", "StrucElement", "Table", "TableElement", "TableType", "TableTypeElement"];
+		const ddicElements = ["Domain", "DataElement", "ABAPStructure", "StrucElement", "Table", "TableElement", "TableType", "TableTypeElement"];
 		const abapSCElements = ["Report", "Formroutine", "FunctionModule"];
 
 		if (typeProject.includes(entity.type)) {
@@ -106,7 +106,7 @@ var relationTransparencyController = (function() {
 			relatedEntities = relatedEntities.concat(entity.calls);
 			relatedEntities = relatedEntities.concat(entity.calledBy);
 		} else if (ddicElements.includes(entity.type)) {
-			if (entity.type == "Domain" || entity.type == "Table") {
+			if (entity.type == "Domain" || entity.type == "Table" || entity.type == "ABAPStructure") {
 				relatedEntities = relatedEntities.concat(entity.typeUsedBy);
 			} else {
 				relatedEntities = relatedEntities.concat(entity.typeOf);

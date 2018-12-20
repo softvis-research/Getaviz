@@ -30,7 +30,7 @@ var model = (function() {
 		
 		const typeStandard = ["text", "issue", "path", "stk", "component"];
 		const typeProject = ["Namespace", "Class", "Interface", "ParameterizableClass", "Attribute", "Method"];
-		const ddicElements = ["Domain", "DataElement", "StrucElement", "Table", "TableElement", "TableType", "TableTypeElement"];
+		const ddicElements = ["Domain", "DataElement", "ABAPStructure", "StrucElement", "Table", "TableElement", "TableType", "TableTypeElement"];
 		const abapSCElements = ["Report", "Formroutine", "FunctionModule"];
 
 		//create initial entites from famix elements 
