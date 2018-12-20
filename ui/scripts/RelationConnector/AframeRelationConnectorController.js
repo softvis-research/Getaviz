@@ -337,7 +337,7 @@ var relationConnectorController = function(){
     function calculateBorderPosition(sourceOfRay, targetOfRay, entity){
 		let object = document.getElementById(entity.id);
 		let raycaster = new THREE.Raycaster();
-		raycaster.set(sourcePosition, targetPosition.subVectors(targetPosition, sourcePosition).normalize());
+		raycaster.set(sourceOfRay, targetOfRay.subVectors(targetOfRay, sourceOfRay).normalize());
 		let intersection = raycaster.intersectObject(object.object3DMap.mesh);
 		return intersection[0].point;
 	}
