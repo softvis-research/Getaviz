@@ -1,5 +1,3 @@
 .directory
 .idea/
-.data/model3
-.data/modelSmall
-.data/standalone
+.data/aframe/..
