@@ -5,7 +5,7 @@
 	TODO in application auslagern
 -->
 <script type="text/javascript">
-    var modelUrl = "data/aframe/model1";
+    var modelUrl = "data/City bank aframe/model";
     var metaDataJsonUrl  = modelUrl + "/metaData.json";
 
     var canvasId = "aframe-canvas";
@@ -63,7 +63,7 @@
     <script type="text/javascript" src="scripts/CanvasSelect/CanvasSelectController.js"></script>
     <script type="text/javascript" src="scripts/CanvasResetView/CanvasResetViewController.js"></script>
     <script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>
-    <script type="text/javascript" src="scripts/RelationConnector/RelationConnectorController.js"></script>
+    <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
     <script type="text/javascript" src="scripts/RelationTransparency/RelationTransparencyController.js"></script>
     <script type="text/javascript" src="scripts/RelationHighlight/RelationHighlightController.js"></script>
     <script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>
@@ -94,7 +94,7 @@
 <div id="canvas">
     <script>
         $(function(){
-            $("#canvas").load(modelUrl + "/model.html");
+            $("#canvas").load(encodeURI(modelUrl + "/model.html"));
         });
     </script>
 </div>

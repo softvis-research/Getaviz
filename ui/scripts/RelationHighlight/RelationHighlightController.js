@@ -2,9 +2,16 @@ var relationHighlightController = function(){
 		
 	var relatedEntities = new Array();
 	var activated = false;
+
+    var controllerConfig = {
+        color : "black",
+        unfadeOnHighlight : true
+    };
 	
-	function initialize(config){		
-		events.selected.on.subscribe(onRelationsChanged);
+	function initialize(setupConfig){
+        application.transferConfigParams(setupConfig, controllerConfig);
+
+        events.selected.on.subscribe(onRelationsChanged);
 	}
 	
 	function activate(){	
@@ -30,7 +37,7 @@ var relationHighlightController = function(){
 			return;
 		}
 
-		var relatedEntitesMap = new Map();
+		var relatedEntitiesMap = new Map();
 		
 		//highlight related entities
 		relatedEntities.forEach(function(relatedEntity){		
@@ -38,14 +45,14 @@ var relationHighlightController = function(){
 				return;
 			}
 			
-			if(relatedEntitesMap.has(relatedEntity)){
+			if(relatedEntitiesMap.has(relatedEntity)){
 				return;
 			}
 
-			relatedEntitesMap.set(relatedEntity, relatedEntity);
+			relatedEntitiesMap.set(relatedEntity, relatedEntity);
 		});
 
-		canvasManipulator.resetColorOfEntities(Array.from(relatedEntitesMap.keys()));
+		canvasManipulator.resetColorOfEntities(Array.from(relatedEntitiesMap.keys()));
 	}
 		
 	
@@ -54,7 +61,7 @@ var relationHighlightController = function(){
 		resetColor();
 		
 		
-		//get related entites
+		//get related entities
 		var entity = applicationEvent.entities[0];	
 		
 		relatedEntities = new Array();
@@ -93,7 +100,7 @@ var relationHighlightController = function(){
 	}
 
 	function highlightRelatedEntities(){
-		var relatedEntitesMap = new Map();
+		var relatedEntitiesMap = new Map();
 		
 		//highlight related entities
 		relatedEntities.forEach(function(relatedEntity){		
@@ -101,14 +108,17 @@ var relationHighlightController = function(){
 				return;
 			}
 			
-			if(relatedEntitesMap.has(relatedEntity)){
+			if(relatedEntitiesMap.has(relatedEntity)){
 				return;
 			}
 
-			relatedEntitesMap.set(relatedEntity, relatedEntity);
+			relatedEntitiesMap.set(relatedEntity, relatedEntity);
 		});
-			
-		canvasManipulator.changeColorOfEntities(Array.from(relatedEntitesMap.keys()), "0 0 0");			
+
+		if(controllerConfig.unfadeOnHighlight) {
+			canvasManipulator.resetTransparencyOfEntities(Array.from(relatedEntitiesMap.keys()));
+		}
+		canvasManipulator.changeColorOfEntities(Array.from(relatedEntitiesMap.keys()), controllerConfig.color);
 	}
 
 		
