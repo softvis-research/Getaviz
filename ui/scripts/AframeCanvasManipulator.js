@@ -18,7 +18,7 @@ var canvasManipulator = (function () {
 
     function initialize() {
 
-        scene = document.getElementById(canvasId);
+        scene = document.querySelector("a-scene");
         threeJSScene = scene.object3D;
         camera = document.getElementById("camera");
 
@@ -188,8 +188,7 @@ var canvasManipulator = (function () {
     }
 
     function removeElement(element) {
-        var addedElements = document.getElementById("addedElements");
-        addedElements.removeChild(element);
+        element.parentNode.removeChild(element);
     }
 
 
@@ -218,13 +217,13 @@ var canvasManipulator = (function () {
         }
     }
 
-
     function getCenterOfEntity(entity) {
-        var entityPart = getPart(entity);
-        var volumeOfPart = entityPart.getVolume();
-        var centerOfPart = volumeOfPart.center;
-
-        return centerOfPart;
+        var center = new THREE.Vector3();
+        var object = document.getElementById(entity.id).object3DMap.mesh;
+        center.x = object.geometry.boundingSphere.center["x"];
+        center.y = object.geometry.boundingSphere.center["y"];
+        center.z = object.geometry.boundingSphere.center["z"];
+        return object.localToWorld(center);
     }
 
     function setTransparency(object, value) {

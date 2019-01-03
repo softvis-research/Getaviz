@@ -23,8 +23,8 @@ var relationConnectorController = function(){
 		targetEndAtParentBorder : false,
 		sourceStartAtBorder: false,
 		targetEndAtBorder: false,
-		createEndpoints : false,
-	}
+		createEndpoints : false
+	};
 	
 	
 	function initialize(setupConfig){	
@@ -116,7 +116,7 @@ var relationConnectorController = function(){
 
 		removeAllConnectors();
 		
-		//get related entites
+		//get related entities
 		sourceEntity = applicationEvent.entities[0];	
 		
 		events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + sourceEntity.name});
@@ -145,7 +145,7 @@ var relationConnectorController = function(){
 				return;
 		}
 
-		events.log.info.publish({ text: "connector - onRelationsChanged - related Entites - " + relatedEntities.length});
+		events.log.info.publish({ text: "connector - onRelationsChanged - related Entities - " + relatedEntities.length});
 		
 		if(relatedEntities.length == 0) {
 			return;
@@ -160,10 +160,10 @@ var relationConnectorController = function(){
 
 	function createRelatedConnections(){
 
-		var relatedEntitesMap = new Map();
+		var relatedEntitiesMap = new Map();
 						
 		relatedEntities.forEach(function(relatedEntity){
-			if(relatedEntitesMap.has(relatedEntity)){
+			if(relatedEntitiesMap.has(relatedEntity)){
 				events.log.info.publish({ text: "connector - onRelationsChanged - multiple relation"});
 				return;
 			}
@@ -202,11 +202,11 @@ var relationConnectorController = function(){
 			
 			relations.push(relation);
 			
-			relatedEntitesMap.set(relatedEntity, relatedEntity);
+			relatedEntitiesMap.set(relatedEntity, relatedEntity);
 		});
 		
 		
-		if(relatedEntitesMap.size != 0){
+		if(relatedEntitiesMap.size != 0){
 		
 			var applicationEvent = {			
 				sender: relationConnectorController,
@@ -238,7 +238,7 @@ var relationConnectorController = function(){
 			sourcePosition[2] = controllerConfig.fixPositionZ;
 			targetPosition[2] = controllerConfig.fixPositionZ;
 		}
-		
+
 		//create element
 		var transform = document.createElement('Transform');
 		
@@ -461,7 +461,7 @@ var relationConnectorController = function(){
 		
 		
 		var AA = 1 + Math.pow(a, 2);
-		var BB = (2 * a * b)
+		var BB = (2 * a * b);
 		var CC = Math.pow(b, 2) - Math.pow(r, 2);
 				
 		var XX = Math.pow(BB, 2) - 4 * AA * CC;
