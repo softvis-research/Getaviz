@@ -30,7 +30,7 @@ Currently, four developers are contributung actively to Getaviz:
 * [Richard Müller](https://github.com/rmllr)
 * Jan Schilbach
 * Pascal Kovacs
-* [David Baum](https://www.wifa.uni-leipzig.de/en/information-systems-institute/se/chair/david-baum.html)
+* [David Baum](http://home.uni-leipzig.de/svis/Research%20Group/#DavidBaum)
 
 Have a look at our [website](https://home.uni-leipzig.de/svis/) for more information about our research group, visualization examples, and our publications. We are looking for collaborations with researchers and developers/companies. If you are interested, please contact us via email.
 
