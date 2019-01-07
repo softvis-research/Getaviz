@@ -1,6 +1,6 @@
-jobs:
+matrix:
   include:
-    - stage: evaluation server
+    - language: ruby
       before_script:
         - cp evaluationserver/config/database.travis.yml evaluationserver/config/database.yml
         - mysql -e 'create database eval_server_test;'
@@ -19,11 +19,10 @@ jobs:
         - cat ./config/database.yml
         - echo $RAILS_ENV
         - bundle exec rake --version
-    - stage: generator
+    - language: java
       before_script:
         - cd generator/org.svis.generator.releng/
         - echo "MAVEN_OPTS='-Xmx4g -XX:MaxPermSize=1g'" > ~/.mavenrc
-      language: java
       jdk:
         - oraclejdk8
       script:
