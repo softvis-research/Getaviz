@@ -33,5 +33,3 @@ matrix:
         - cat ./config/database.yml
         - echo $RAILS_ENV
         - bundle exec rake --version
-notifications:
-  email: false
