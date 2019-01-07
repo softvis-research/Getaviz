@@ -1,13 +1,15 @@
 matrix:
   include:
-    - language: java
+    - name: Generator
+      language: java
       jdk:
         - oraclejdk8
       before_install:
         - cd generator
         - cd org.svis.generator.releng/
         - echo "MAVEN_OPTS='-Xmx4g -XX:MaxPermSize=1g'" > ~/.mavenrc
-    - language: ruby
+    - name: evaluationserver
+      language: ruby
       before_script:
         - cp evaluationserver/config/database.travis.yml evaluationserver/config/database.yml
         - mysql -e 'create database eval_server_test;'
