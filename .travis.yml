@@ -10,7 +10,7 @@ matrix:
     - name: Generator2
       language: java
       before_install:
-        - cd Generator2
+        - cd generator2
         - cd org.getaviz.parent/
       script:
         - mvn clean install -fae
