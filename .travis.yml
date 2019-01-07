@@ -21,7 +21,7 @@ jobs:
         - bundle exec rake --version
     - stage: generator
       before_script:
-        - cd cd generator/org.svis.generator.releng/
+        - cd generator/org.svis.generator.releng/
         - echo "MAVEN_OPTS='-Xmx4g -XX:MaxPermSize=1g'" > ~/.mavenrc
       language: java
       jdk:
