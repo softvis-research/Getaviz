@@ -3,7 +3,7 @@ matrix:
     - language: java
       jdk:
         - oraclejdk8
-      before_script:
+      before_install:
         - cd generator
         - cd org.svis.generator.releng/
         - echo "MAVEN_OPTS='-Xmx4g -XX:MaxPermSize=1g'" > ~/.mavenrc
