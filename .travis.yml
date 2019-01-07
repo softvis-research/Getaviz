@@ -6,8 +6,6 @@ matrix:
       before_script:
         - cd generator/org.svis.generator.releng/
         - echo "MAVEN_OPTS='-Xmx4g -XX:MaxPermSize=1g'" > ~/.mavenrc
-      script:
-        - mvn clean install -fae
     - language: ruby
       before_script:
         - cp evaluationserver/config/database.travis.yml evaluationserver/config/database.yml
