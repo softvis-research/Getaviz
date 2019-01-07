@@ -17,8 +17,8 @@ An academic publication about Getaviz you can find [here](https://www.researchga
 
 ## Build Status
 
-* master branch: [![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=master)](https://travis-ci.com/softvis-research/Getaviz)
-* development branch: [![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=development)](https://travis-ci.com/softvis-research/Getaviz)
+* [![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=master)](https://travis-ci.com/softvis-research/Getaviz) master
+* [![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=development)](https://travis-ci.com/softvis-research/Getaviz) development
 
 ## Development Team
 
