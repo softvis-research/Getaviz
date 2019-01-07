@@ -19,6 +19,7 @@ matrix:
         - cat ./config/database.yml
         - echo $RAILS_ENV
         - bundle exec rake --version
+
     - language: java
       before_script:
         - cd generator/org.svis.generator.releng/
