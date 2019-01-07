@@ -2,12 +2,8 @@ matrix:
   include:
     - name: Generator
       language: java
-      jdk:
-        - oraclejdk8
       before_install:
-        - cd generator
-        - cd org.svis.generator.releng/
-        - echo "MAVEN_OPTS='-Xmx4g -XX:MaxPermSize=1g'" > ~/.mavenrc
+        - echo test
     - name: evaluationserver
       language: ruby
       before_script:
