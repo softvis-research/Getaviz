@@ -81,13 +81,14 @@
     <script type="text/javascript" src="scripts/AframeCanvasManipulator.js"></script>
     <script type="text/javascript" src="scripts/Application.js"></script>
     <script type="text/javascript" src="scripts/AframeActionController.js"></script>
-    <script type="text/javascript" src="scripts/aframe-orbit-camera-component.js"></script>
+    <!--<script type="text/javascript" src="scripts/aframe-orbit-camera-component.js"></script>-->
+    <script type="text/javascript" src="scripts/camera-beta.js"></script>
 
 
     <link rel="stylesheet" href="Style.css" type="text/css" />
 
     <!--setup-->
-    <script type="text/javascript" src="setups/test/aframe.js"></script>
+    <script type="text/javascript" src="setups/test/flyTo.js"></script>
 
 </head>
 <body>
@@ -96,6 +97,8 @@
         $(function(){
             $("#canvas").load(encodeURI(modelUrl + "/model.html"));
         });
+
+        var globalCamera;
     </script>
 </div>
 
