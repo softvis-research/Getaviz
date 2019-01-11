@@ -17,6 +17,21 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
   
 An academic publication about Getaviz you can find [here](https://www.researchgate.net/publication/320083290_GETAVIZ_Generating_Structural_Behavioral_and_Evolutionary_Views_of_Software_Systems_for_Empirical_Evaluation).
 
+## How do I get set up? ###
+
+Clone this repository and follow the instructions under [Installation & Setup](../../wiki/Installation-&-Setup).
+Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.md with further instructions and documentation.
+
+## Docker ##
+
+Getaviz can also be run via Docker. We provide containers via Docker Hub.
+* Evaluation server: https://hub.docker.com/r/getaviz/evaluationserver/
+* User Interface: https://hub.docker.com/r/getaviz/ui/
+
+## Wiki
+
+Please have a look at our [Wiki](../../wiki/Home) which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
+
 ## Development Team
 
 ### Main Contributors
@@ -40,18 +55,3 @@ Many thanks to all the contributors who have improved Getaviz by implementing ne
 * [Stefan Faulhaber](https://github.com/StefanFaulhaber)
 * [Dan Häberlein](https://github.com/dhaeb)
 * Lisa Vogelsberg
-
-## How do I get set up? ###
-
-The recommended way is **not** to clone this repository, but to follow the instructions under [Installation & Setup](../../wiki/Installation-&-Setup).
-Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.md with further instructions and documentation.
-
-## Docker ##
-
-Getaviz can also be run via Docker. We provide containers via Docker Hub.
-* Evaluation server: https://hub.docker.com/r/getaviz/evaluationserver/
-* User Interface: https://hub.docker.com/r/getaviz/ui/
-
-## Wiki
-
-Please have a look at our [Wiki](../../wiki/Home) which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
