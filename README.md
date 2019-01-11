@@ -6,14 +6,14 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
 
 ## Features
 * Supported software artifacts for analysis  
-![Java](https://img.shields.io/badge/language-Java-green.svg) ![Ruby](https://img.shields.io/badge/language-Ruby-green.svg) ![C#](https://img.shields.io/badge/language-C%23-green.svg)
-![git](https://img.shields.io/badge/SCM-git-green.svg)
-![svn](https://img.shields.io/badge/SCM-svn-green.svg)
+![Java](https://img.shields.io/badge/language-Java-blue.svg) ![Ruby](https://img.shields.io/badge/language-Ruby-blue.svg) ![C#](https://img.shields.io/badge/language-C%23-blue.svg)
+![git](https://img.shields.io/badge/SCM-git-blue.svg)
+![svn](https://img.shields.io/badge/SCM-svn-blue.svg)
 * Supported output formats  
-![x3d](https://img.shields.io/badge/3D-X3D-green.svg)
-![x3dom](https://img.shields.io/badge/3D-X3Dom-green.svg)
-![aframe](https://img.shields.io/badge/3D-A--Frame-green.svg)
-![aframe](https://img.shields.io/badge/VR-HTC_Vive-green.svg)
+![x3d](https://img.shields.io/badge/3D-X3D-blue.svg)
+![x3dom](https://img.shields.io/badge/3D-X3Dom-blue.svg)
+![aframe](https://img.shields.io/badge/3D-A--Frame-blue.svg)
+![aframe](https://img.shields.io/badge/VR-HTC_Vive-blue.svg)
 * Supported visualization metaphors: 
   * Recursive Disk
   * City, City Bricks, City Floors, City Panels
