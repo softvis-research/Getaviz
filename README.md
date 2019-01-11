@@ -5,7 +5,7 @@
 Getaviz is a toolset for designing, generating, and exploring software visualizations in 2D, 3D, and virtual reality (VR), supporting structural, behavioral and evolutional visualizations. An **online demo** of Getaviz you can find [here](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind).
 
 ## Features
-* Analyze software artifacts  
+* Supported software artifacts for analysis  
 ![Java](https://img.shields.io/badge/language-Java-green.svg) ![Ruby](https://img.shields.io/badge/language-Ruby-green.svg) ![C#](https://img.shields.io/badge/language-C%23-green.svg)
 ![git](https://img.shields.io/badge/SCM-git-green.svg)
 ![svn](https://img.shields.io/badge/SCM-svn-green.svg)
