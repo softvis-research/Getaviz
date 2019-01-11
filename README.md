@@ -5,9 +5,15 @@
 Getaviz is a toolset for designing, generating, and exploring software visualizations in 2D, 3D, and virtual reality (VR), supporting structural, behavioral and evolutional visualizations. An **online demo** of Getaviz you can find [here](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind).
 
 ## Features
-* Supported languages: Java, Ruby, and C#  
-* Supported version control systems: git and svn  
-* Supported output formats: X3D, X3DOM, A-Frame  
+* Analyze software artifacts  
+![Java](https://img.shields.io/badge/language-Java-green.svg) ![Ruby](https://img.shields.io/badge/language-Ruby-green.svg) ![C#](https://img.shields.io/badge/language-C%23-green.svg)
+![git](https://img.shields.io/badge/SCM-git-green.svg)
+![svn](https://img.shields.io/badge/SCM-svn-green.svg)
+* Supported output formats  
+![x3d](https://img.shields.io/badge/3D-X3D-green.svg)
+![x3dom](https://img.shields.io/badge/3D-X3Dom-green.svg)
+![aframe](https://img.shields.io/badge/3D-A--Frame-green.svg)
+![aframe](https://img.shields.io/badge/VR-A--Frame-green.svg)
 * Supported visualization metaphors: 
   * Recursive Disk
   * City, City Bricks, City Floors, City Panels
@@ -24,9 +30,9 @@ Each subdirectory of this repository represents a standalone component of Getavi
 
 ## Docker ##
 
-Getaviz can also be run via Docker. We provide containers via Docker Hub.
-* Evaluation server: https://hub.docker.com/r/getaviz/evaluationserver/
-* User Interface: https://hub.docker.com/r/getaviz/ui/
+Some Getaviz components are available as docker containers.  
+[![UI](https://img.shields.io/badge/docker-ui-blue.svg)](https://hub.docker.com/r/getaviz/evaluationserver)  
+[![Evaluation Server](https://img.shields.io/badge/docker-evaluationserver-blue.svg)](https://hub.docker.com/r/getaviz/ui)
 
 ## Wiki
 
