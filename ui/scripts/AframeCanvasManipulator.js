@@ -9,26 +9,29 @@ var canvasManipulator = (function () {
     };
 
     var scene = {};
-    var threeJSScene = {};
 
-    var camera;
-    var initialCameraView;
-
-    var testEntity;
+    var initialCameraView = {};
 
     function initialize() {
 
         scene = document.querySelector("a-scene");
-        threeJSScene = scene.object3D;
-        camera = document.getElementById("camera");
 
+        initialCameraView.target = globalCamera.target;
+        initialCameraView.position = globalCamera.object.position;
+        initialCameraView.spherical = globalCamera.spherical;
     }
 
     function reset() {
+        let offset = new THREE.Vector3();
+        offset.subVectors(initialCameraView.target, globalCamera.target).multiplyScalar(globalCamera.data.panSpeed);
+        globalCamera.panOffset.add(offset);
 
+        globalCamera.sphericalDelta.phi = 0.25 * (initialCameraView.spherical.phi - globalCamera.spherical.phi);
+        globalCamera.sphericalDelta.theta = 0.25 * (initialCameraView.spherical.theta - globalCamera.spherical.theta);
+
+        globalCamera.scale = initialCameraView.spherical.radius/globalCamera.spherical.radius;
     }
 
-    //  working - save old transparency in case it is not 0?
     function changeTransparencyOfEntities(entities, value) {
         entities.forEach(function (entity2) {
             //  getting the entity again here, because without it the check if originalTransparency is defined fails sometimes
@@ -50,7 +53,6 @@ var canvasManipulator = (function () {
         });
     }
 
-    //  working
     function resetTransparencyOfEntities(entities) {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
@@ -65,13 +67,8 @@ var canvasManipulator = (function () {
         });
     }
 
-
-    //	working
     function changeColorOfEntities(entities, color) {
         entities.forEach(function (entity) {
-                //	in x3dom this function would get entities of the model to change the color of the related object
-                //	for reference in canvasHoverController.js: var entity = model.getEntityById(multipartEvent.partID);
-                //	this entity gets handed over to the ActionController.js as part of an ApplicationEvent
                 if (!(entity == undefined)) {
                     var component = document.getElementById(entity.id);
                 }
@@ -88,7 +85,6 @@ var canvasManipulator = (function () {
         );
     }
 
-//	working
     function resetColorOfEntities(entities) {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
@@ -112,7 +108,6 @@ var canvasManipulator = (function () {
         object.setAttribute("color", color);
     }
 
-//  working
     function hideEntities(entities) {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
@@ -124,7 +119,6 @@ var canvasManipulator = (function () {
         });
     }
 
-//  working
     function showEntities(entities) {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
@@ -175,11 +169,11 @@ var canvasManipulator = (function () {
         });
     }
 
-//  after clicking an entity fit the camera to show this entity (angle stays the same)
-//  not working
     function flyToEntity(entity) {
-        /*document.querySelector("#camera").object3D.position = {x: 1, y: 2, z: 3};
-        console.debug(document.querySelector("#camera").object3D.position);*/
+        setCenterOfRotation(entity);
+        let object = document.getElementById(entity.id);
+        let boundingSphereRadius = object.object3DMap.mesh.geometry.boundingSphere.radius;
+        globalCamera.scale = boundingSphereRadius/globalCamera.spherical.radius;
     }
 
     function addElement(element) {
@@ -192,29 +186,10 @@ var canvasManipulator = (function () {
     }
 
 
-//  not working yet
-//  gets called from Mark- and SelectController if specified in the config
-    function setCenterOfRotation(entity, setFocus) {
-        var centerOfPart = getCenterOfEntity(entity);
-
-        viewpoint.setCenterOfRotation(centerOfPart);
-
-        if (setFocus) {
-            var mat = viewarea.getViewMatrix().inverse();
-
-            var from = mat.e3();
-            var at = viewarea._pick;
-            var up = mat.e1();
-
-            var norm = mat.e0().cross(up).normalize();
-            // get distance between look-at point and viewing plane
-            var dist = norm.dot(viewarea._pick.subtract(from));
-
-            from = at.addScaled(norm, -dist);
-            mat = x3dom.fields.SFMatrix4f.lookAt(from, at, up);
-
-            viewarea.animateTo(mat.inverse(), viewpoint);
-        }
+    function setCenterOfRotation(entity) {
+        let offset = new THREE.Vector3();
+        offset.subVectors(getCenterOfEntity(entity), globalCamera.target).multiplyScalar(globalCamera.data.panSpeed);
+        globalCamera.panOffset.add(offset);
     }
 
     function getCenterOfEntity(entity) {
@@ -269,7 +244,6 @@ var canvasManipulator = (function () {
 
         addElement: addElement,
         removeElement: removeElement,
-
 
         setCenterOfRotation: setCenterOfRotation,
         getCenterOfEntity: getCenterOfEntity,
