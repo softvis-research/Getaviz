@@ -60,4 +60,5 @@ Many thanks to all the contributors who have improved Getaviz by implementing ne
 * André Naumann
 * [Stefan Faulhaber](https://github.com/StefanFaulhaber)
 * [Dan Häberlein](https://github.com/dhaeb)
-* Lisa Vogelsberg
+* [Lisa Vogelsberg](https://github.com/Valekta/)
+* [Aaron Sillus](https://github.com/AaronSil)
