@@ -1,4 +1,6 @@
-﻿# Getaviz
+[![GitHub license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/softvis-research/Getaviz/blob/master/LICENSE)
+[![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=master)](https://travis-ci.com/softvis-research/Getaviz)  
+# Getaviz
 
 Getaviz is a toolset for designing, generating, and exploring software visualizations in 2D, 3D, and virtual reality (VR), supporting structural, behavioral and evolutional visualizations. An **online demo** of Getaviz you can find [here](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind).
 
@@ -14,11 +16,6 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
   * …
   
 An academic publication about Getaviz you can find [here](https://www.researchgate.net/publication/320083290_GETAVIZ_Generating_Structural_Behavioral_and_Evolutionary_Views_of_Software_Systems_for_Empirical_Evaluation).
-
-## Build Status
-
-[![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=master)](https://travis-ci.com/softvis-research/Getaviz) master  
-[![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=development)](https://travis-ci.com/softvis-research/Getaviz) development
 
 ## Development Team
 
