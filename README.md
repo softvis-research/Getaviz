@@ -13,7 +13,7 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
 ![x3d](https://img.shields.io/badge/3D-X3D-green.svg)
 ![x3dom](https://img.shields.io/badge/3D-X3Dom-green.svg)
 ![aframe](https://img.shields.io/badge/3D-A--Frame-green.svg)
-![aframe](https://img.shields.io/badge/VR-A--Frame-green.svg)
+![aframe](https://img.shields.io/badge/VR-HTC_Vive-green.svg)
 * Supported visualization metaphors: 
   * Recursive Disk
   * City, City Bricks, City Floors, City Panels
