@@ -56,5 +56,5 @@ Many thanks to all the contributors who have improved Getaviz by implementing ne
 * [Aaron Sillus](https://github.com/AaronSil)
 
 ## Publications
-* Baum, David; Schilbach, Jan; Kovacs, Pascal; Eisenecker, Ulrich; Müller, Richard: [GETAVIZ: Generating Structural, Behavioral, and Evolutionary Views of Software Systems for Empirical Evaluation](https://www.researchgate.net/publication/320083290_GETAVIZ_Generating_Structural_Behavioral_and_Evolutionary_Views_of_Software_Systems_for_Empirical_Evaluation), IEEE VISSOFT, 2017
+* Baum, David; Schilbach, Jan; Kovacs, Pascal; Eisenecker, Ulrich; Müller, Richard: [GETAVIZ: Generating Structural, Behavioral, and Evolutionary Views of Software Systems for Empirical Evaluation](https://www.researchgate.net/publication/320083290_GETAVIZ_Generating_Structural_Behavioral_and_Evolutionary_Views_of_Software_Systems_for_Empirical_Evaluation), IEEE VISSOFT, 2017.
 * Baum, David; Dietrich, Jens; Anslow, Craig; Müller, Richard: [Visualizing Design Erosion: How Big Balls of Mud are Made](https://arxiv.org/abs/1807.06136), IEEE VISSOFT, 2018.
