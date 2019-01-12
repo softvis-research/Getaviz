@@ -28,15 +28,13 @@ An academic publication about Getaviz you can find [here](https://www.researchga
 Clone this repository and follow the instructions under [Installation & Setup](../../wiki/Installation-&-Setup).
 Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.md with further instructions and documentation.
 
+Please have a look at our Wiki which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
+
 ## Docker ##
 
 Some Getaviz components are available as docker containers.  
 [![UI](https://img.shields.io/badge/docker-ui-blue.svg)](https://hub.docker.com/r/getaviz/evaluationserver)  
 [![Evaluation Server](https://img.shields.io/badge/docker-evaluationserver-blue.svg)](https://hub.docker.com/r/getaviz/ui)
-
-## Wiki
-
-Please have a look at our [Wiki](../../wiki/Home) which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
 
 ## Development Team
 
