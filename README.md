@@ -6,14 +6,16 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
 
 ## Features
 * Supported software artifacts for analysis  
-![Java](https://img.shields.io/badge/language-Java-blue.svg) ![Ruby](https://img.shields.io/badge/language-Ruby-blue.svg) ![C#](https://img.shields.io/badge/language-C%23-blue.svg)
-![git](https://img.shields.io/badge/SCM-git-blue.svg)
-![svn](https://img.shields.io/badge/SCM-svn-blue.svg)
+[![Java](https://img.shields.io/badge/language-Java-blue.svg)](https://java.com/)
+[![Ruby](https://img.shields.io/badge/language-Ruby-blue.svg)](https://www.ruby-lang.org/)
+[![C#](https://img.shields.io/badge/language-C%23-blue.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/index)
+[![git](https://img.shields.io/badge/SCM-git-blue.svg)](https://git-scm.com/)
+[![svn](https://img.shields.io/badge/SCM-svn-blue.svg)](https://subversion.apache.org/)
 * Supported output formats  
-![x3d](https://img.shields.io/badge/3D-X3D-blue.svg)
-![x3dom](https://img.shields.io/badge/3D-X3Dom-blue.svg)
-![aframe](https://img.shields.io/badge/3D-A--Frame-blue.svg)
-![aframe](https://img.shields.io/badge/VR-HTC_Vive-blue.svg)
+[![x3d](https://img.shields.io/badge/3D-X3D-blue.svg)](http://www.web3d.org/x3d/what-x3d)
+[![x3dom](https://img.shields.io/badge/3D-x3dom-blue.svg)](https://www.x3dom.org/)
+[![aframe](https://img.shields.io/badge/3D-A--Frame-blue.svg)](https://aframe.io/)
+[![aframe](https://img.shields.io/badge/VR-HTC_Vive-blue.svg)](https://www.vive.com/)
 * Supported visualization metaphors: 
   * Recursive Disk
   * City, City Bricks, City Floors, City Panels
@@ -29,8 +31,6 @@ Clone this repository and follow the instructions under [Installation & Setup](.
 Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.md with further instructions and documentation.
 
 Please have a look at our Wiki which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
-
-## Docker ##
 
 Some Getaviz components are available as docker containers.  
 [![UI](https://img.shields.io/badge/docker-ui-blue.svg)](https://hub.docker.com/r/getaviz/evaluationserver)  
