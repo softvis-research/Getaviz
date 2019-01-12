@@ -33,7 +33,7 @@ Each subdirectory of this repository represents a standalone component of Getavi
 Please have a look at our Wiki which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
 
 Some Getaviz components are available as docker containers.  
-[![UI](https://img.shields.io/badge/docker-ui-blue.svg)](https://hub.docker.com/r/getaviz/evaluationserver)  
+[![UI](https://img.shields.io/badge/docker-ui-blue.svg)](https://hub.docker.com/r/getaviz/evaluationserver)
 [![Evaluation Server](https://img.shields.io/badge/docker-evaluationserver-blue.svg)](https://hub.docker.com/r/getaviz/ui)
 
 ## Development Team
