@@ -11,7 +11,7 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
 [![C#](https://img.shields.io/badge/language-C%23-blue.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/index)
 [![git](https://img.shields.io/badge/SCM-git-blue.svg)](https://git-scm.com/)
 [![svn](https://img.shields.io/badge/SCM-svn-blue.svg)](https://subversion.apache.org/)
-* Supported output formats  
+* Supported output formats/platforms  
 [![x3d](https://img.shields.io/badge/3D-X3D-blue.svg)](http://www.web3d.org/x3d/what-x3d)
 [![x3dom](https://img.shields.io/badge/3D-x3dom-blue.svg)](https://www.x3dom.org/)
 [![aframe](https://img.shields.io/badge/3D-A--Frame-blue.svg)](https://aframe.io/)
