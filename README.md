@@ -8,7 +8,7 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
 * Supported software artifacts for analysis  
 [![Java](https://img.shields.io/badge/language-Java-blue.svg)](https://java.com/)
 [![Ruby](https://img.shields.io/badge/language-Ruby-blue.svg)](https://www.ruby-lang.org/)
-[![C#](https://img.shields.io/badge/language-C%23-blue.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/index)
+[![C#](https://img.shields.io/badge/language-C%23-blue.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/index)  
 [![git](https://img.shields.io/badge/SCM-git-blue.svg)](https://git-scm.com/)
 [![svn](https://img.shields.io/badge/SCM-svn-blue.svg)](https://subversion.apache.org/)
 * Supported output formats/platforms  
