@@ -11,7 +11,7 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
 [![C#](https://img.shields.io/badge/language-C%23-blue.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/index)  
 [![git](https://img.shields.io/badge/SCM-git-blue.svg)](https://git-scm.com/)
 [![svn](https://img.shields.io/badge/SCM-svn-blue.svg)](https://subversion.apache.org/)
-* Visualize the required information appropriate for your usecase
+* Visualize the required information appropriate for your usecase  
 [![Recursive Disk](https://img.shields.io/badge/2D-Recursive%20Disk-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind)  
 [![RD 3D](https://img.shields.io/badge/3D-RD-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20reek&model=RD%203D%20reek)
 [![City](https://img.shields.io/badge/3D-City-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20original%20freemind)
