@@ -44,14 +44,7 @@ Getaviz is mainly developed by the research group [Visual Software Analytics](ht
 * [Pascal Kovacs](https://github.com/PascalKovacs)
 * [David Baum](http://home.uni-leipzig.de/svis/Research%20Group/#DavidBaum)
 
-Many thanks to all the contributors who have improved Getaviz by implementing new features or fixing bugs, especially:
-
-* Denise Zilch
-* André Naumann
-* [Stefan Faulhaber](https://github.com/StefanFaulhaber)
-* [Dan Häberlein](https://github.com/dhaeb)
-* [Lisa Vogelsberg](https://github.com/Valekta/)
-* [Aaron Sillus](https://github.com/AaronSil)
+Many thanks to all the contributors who have improved Getaviz by implementing new features or fixing bugs, especially: Denise Zilch, André Naumann, [Stefan Faulhaber](https://github.com/StefanFaulhaber), [Dan Häberlein](https://github.com/dhaeb),  [Lisa Vogelsberg](https://github.com/Valekta/), [Aaron Sillus](https://github.com/AaronSil)
 
 ## Publications
 * David Baum, Jens Dietrich, Craig Anslow, Richard Müller: [Visualizing Design Erosion: How Big Balls of Mud are Made](https://arxiv.org/abs/1807.06136), IEEE VISSOFT, 2018.
