@@ -2,9 +2,9 @@
 [![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=master)](https://travis-ci.com/softvis-research/Getaviz)  
 # Getaviz
 
-Getaviz is a toolset for designing, generating, and exploring software visualizations in 2D, 3D, and virtual reality (VR), supporting structural, behavioral and evolutional visualizations. An **online demo** of Getaviz you can find [here](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind).
+Getaviz makes it possible to solve software engineering problems visually by exploring them in 2D, 3D, and virtual reality. 
+To get a first impression, have a look at [our showcases](http://home.uni-leipzig.de/svis/Showcases/) that are available online.
 
-## Features
 * Analyse a variety of software artifacts  
 [![Java](https://img.shields.io/badge/language-Java-blue.svg)](https://java.com/)
 [![Ruby](https://img.shields.io/badge/language-Ruby-blue.svg)](https://www.ruby-lang.org/)
