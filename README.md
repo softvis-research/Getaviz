@@ -3,26 +3,7 @@
 # Getaviz
 
 Getaviz makes it possible to solve software engineering problems visually by exploring them in 2D, 3D, and virtual reality. 
-To get a first impression, have a look at [our showcases](http://home.uni-leipzig.de/svis/Showcases/) that are available online.
-
-* Analyse a variety of software artifacts  
-[![Java](https://img.shields.io/badge/language-Java-blue.svg)](https://java.com/)
-[![Ruby](https://img.shields.io/badge/language-Ruby-blue.svg)](https://www.ruby-lang.org/)
-[![C#](https://img.shields.io/badge/language-C%23-blue.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/index)  
-[![git](https://img.shields.io/badge/SCM-git-blue.svg)](https://git-scm.com/)
-[![svn](https://img.shields.io/badge/SCM-svn-blue.svg)](https://subversion.apache.org/)
-* Visualize the required information appropriate for your usecase  
-[![Recursive Disk](https://img.shields.io/badge/2D-Recursive%20Disk-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind)  
-[![RD 3D](https://img.shields.io/badge/3D-Recursive%20Disk-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20reek&model=RD%203D%20reek)
-[![City](https://img.shields.io/badge/3D-City-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20original%20freemind)
-[![City Bricks](https://img.shields.io/badge/3D-City%20Bricks-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20bricks%20freemind)
-[![City Floors](https://img.shields.io/badge/3D-City%20Floors-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20floor%20freemind)
- * Supported multiple output formats and platforms  
-[![x3d](https://img.shields.io/badge/3D-X3D-blue.svg)](http://www.web3d.org/x3d/what-x3d)
-[![x3dom](https://img.shields.io/badge/3D-x3dom-blue.svg)](https://www.x3dom.org/)
-[![aframe](https://img.shields.io/badge/3D-A--Frame-blue.svg)](https://aframe.io/)  
-[![vive](https://img.shields.io/badge/VR-HTC_Vive-blue.svg)](https://www.vive.com/)
-[![oculus](https://img.shields.io/badge/VR-Oculus_Rift-blue.svg)](https://www.oculus.com/rift/)
+To get a first impression, have a look at [our showcases](http://home.uni-leipzig.de/svis/Showcases/) that are available online. You can adopt the visualizations as well as the user interface according to your needs. Getaviz visualizes the structure and behavior of several programming languages (*Java*, *Ruby*, *PHP*, and *C#*) and can enrich these visualizations with evolutional information from *git* and *svn* repositories. They can be explored via browser, HTC Vive, or Oculus Rift. We support many different visualizations, e.g., Recursive Disk ([2D](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind)) and [3D](https://img.shields.io/badge/3D-Recursive%20Disk-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20reek&model=RD%203D%20reek)), [City](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20original%20freemind), [City Floors](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20floor%20freemind), [City Bricks](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20bricks%20freemind), and many more.
 
 ## How do I get set up? ###
 
