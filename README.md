@@ -13,17 +13,16 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
 [![svn](https://img.shields.io/badge/SCM-svn-blue.svg)](https://subversion.apache.org/)
 * Visualize the required information appropriate for your usecase
 [![Recursive Disk](https://img.shields.io/badge/2D-Recursive%20Disk-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind)  
+[![RD 3D](https://img.shields.io/badge/3D-RD-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20reek&model=RD%203D%20reek)
 [![City](https://img.shields.io/badge/3D-City-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20original%20freemind)
 [![City Bricks](https://img.shields.io/badge/3D-City%20Bricks-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20bricks%20freemind)
 [![City Floors](https://img.shields.io/badge/3D-City%20Floors-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20floor%20freemind)
-[![RD 3D](https://img.shields.io/badge/3D-RD-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20reek&model=RD%203D%20reek)  
-* Supported multiple output formats and platforms  
+ * Supported multiple output formats and platforms  
 [![x3d](https://img.shields.io/badge/3D-X3D-blue.svg)](http://www.web3d.org/x3d/what-x3d)
 [![x3dom](https://img.shields.io/badge/3D-x3dom-blue.svg)](https://www.x3dom.org/)
-[![aframe](https://img.shields.io/badge/3D-A--Frame-blue.svg)](https://aframe.io/)
-[![aframe](https://img.shields.io/badge/VR-HTC_Vive-blue.svg)](https://www.vive.com/)
-
-  * and many others
+[![aframe](https://img.shields.io/badge/3D-A--Frame-blue.svg)](https://aframe.io/)  
+[![vive](https://img.shields.io/badge/VR-HTC_Vive-blue.svg)](https://www.vive.com/)
+[![oculus](https://img.shields.io/badge/VR-Oculus_Rift-blue.svg)](https://www.oculus.com/rift/)
 
 ## How do I get set up? ###
 
