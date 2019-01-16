@@ -5,7 +5,7 @@
 Getaviz is a toolset for designing, generating, and exploring software visualizations in 2D, 3D, and virtual reality (VR), supporting structural, behavioral and evolutional visualizations. An **online demo** of Getaviz you can find [here](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind).
 
 ## Features
-* Supported software artifacts for analysis  
+* Analyse a variety of software artifacts
 [![Java](https://img.shields.io/badge/language-Java-blue.svg)](https://java.com/)
 [![Ruby](https://img.shields.io/badge/language-Ruby-blue.svg)](https://www.ruby-lang.org/)
 [![C#](https://img.shields.io/badge/language-C%23-blue.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/index)  
@@ -21,7 +21,7 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
 [![City](https://img.shields.io/badge/3D-City-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20original%20freemind)
 [![City Bricks](https://img.shields.io/badge/3D-City%20Bricks-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20bricks%20freemind)
 [![City Floors](https://img.shields.io/badge/3D-City%20Floors-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20floor%20freemind)
-[![City](https://img.shields.io/badge/3D-City-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20original%20freemind)  
+[![RD 3D](https://img.shields.io/badge/3D-RD-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20reek&model=RD%203D%20reek)  
   * and many others
 
 ## How do I get set up? ###
