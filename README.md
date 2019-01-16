@@ -5,23 +5,24 @@
 Getaviz is a toolset for designing, generating, and exploring software visualizations in 2D, 3D, and virtual reality (VR), supporting structural, behavioral and evolutional visualizations. An **online demo** of Getaviz you can find [here](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind).
 
 ## Features
-* Analyse a variety of software artifacts
+* Analyse a variety of software artifacts  
 [![Java](https://img.shields.io/badge/language-Java-blue.svg)](https://java.com/)
 [![Ruby](https://img.shields.io/badge/language-Ruby-blue.svg)](https://www.ruby-lang.org/)
 [![C#](https://img.shields.io/badge/language-C%23-blue.svg)](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/index)  
 [![git](https://img.shields.io/badge/SCM-git-blue.svg)](https://git-scm.com/)
 [![svn](https://img.shields.io/badge/SCM-svn-blue.svg)](https://subversion.apache.org/)
-* Supported output formats/platforms  
-[![x3d](https://img.shields.io/badge/3D-X3D-blue.svg)](http://www.web3d.org/x3d/what-x3d)
-[![x3dom](https://img.shields.io/badge/3D-x3dom-blue.svg)](https://www.x3dom.org/)
-[![aframe](https://img.shields.io/badge/3D-A--Frame-blue.svg)](https://aframe.io/)
-[![aframe](https://img.shields.io/badge/VR-HTC_Vive-blue.svg)](https://www.vive.com/)
-* Supported visualization metaphors:  
+* Visualize the required information appropriate for your usecase
 [![Recursive Disk](https://img.shields.io/badge/2D-Recursive%20Disk-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind)  
 [![City](https://img.shields.io/badge/3D-City-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20original%20freemind)
 [![City Bricks](https://img.shields.io/badge/3D-City%20Bricks-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20bricks%20freemind)
 [![City Floors](https://img.shields.io/badge/3D-City%20Floors-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20floor%20freemind)
 [![RD 3D](https://img.shields.io/badge/3D-RD-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20reek&model=RD%203D%20reek)  
+* Supported multiple output formats and platforms  
+[![x3d](https://img.shields.io/badge/3D-X3D-blue.svg)](http://www.web3d.org/x3d/what-x3d)
+[![x3dom](https://img.shields.io/badge/3D-x3dom-blue.svg)](https://www.x3dom.org/)
+[![aframe](https://img.shields.io/badge/3D-A--Frame-blue.svg)](https://aframe.io/)
+[![aframe](https://img.shields.io/badge/VR-HTC_Vive-blue.svg)](https://www.vive.com/)
+
   * and many others
 
 ## How do I get set up? ###
