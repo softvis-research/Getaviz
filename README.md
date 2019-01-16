@@ -38,7 +38,7 @@ Some Getaviz components are available as docker containers.
 
 ## Development Team
 
-Getaviz is mainly developed by the research group [Visual Software Analytics](http://softvis.wifa.uni-leipzig.de) at Leipzig University. It has been developed over several years and is the basic for many scientific publications. Currently, four main developers are contributung actively to Getaviz:
+Getaviz is mainly developed by the research group [Visual Software Analytics](http://softvis.wifa.uni-leipzig.de) at Leipzig University. Currently, four main developers are contributung actively to Getaviz:
 * [Richard Müller](https://github.com/rmllr)
 * [Jan Schilbach](https://github.com/schilbach)
 * [Pascal Kovacs](https://github.com/PascalKovacs)
