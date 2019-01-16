@@ -17,11 +17,9 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
 [![aframe](https://img.shields.io/badge/3D-A--Frame-blue.svg)](https://aframe.io/)
 [![aframe](https://img.shields.io/badge/VR-HTC_Vive-blue.svg)](https://www.vive.com/)
 * Supported visualization metaphors: 
-  * Recursive Disk
+  * [![Recursive Disk](https://img.shields.io/badge/2D-Recursive%20Disk-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind)
   * City, City Bricks, City Floors, City Panels
-  * Plant
-  * MultiSphere
-  * …
+  * and many others
 
 ## How do I get set up? ###
 
