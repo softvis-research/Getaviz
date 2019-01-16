@@ -13,7 +13,7 @@ Getaviz is a toolset for designing, generating, and exploring software visualiza
 [![svn](https://img.shields.io/badge/SCM-svn-blue.svg)](https://subversion.apache.org/)
 * Visualize the required information appropriate for your usecase  
 [![Recursive Disk](https://img.shields.io/badge/2D-Recursive%20Disk-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind)  
-[![RD 3D](https://img.shields.io/badge/3D-RD-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20reek&model=RD%203D%20reek)
+[![RD 3D](https://img.shields.io/badge/3D-Recursive%20Disk-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20reek&model=RD%203D%20reek)
 [![City](https://img.shields.io/badge/3D-City-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20original%20freemind)
 [![City Bricks](https://img.shields.io/badge/3D-City%20Bricks-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20bricks%20freemind)
 [![City Floors](https://img.shields.io/badge/3D-City%20Floors-blue.svg)](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20floor%20freemind)
