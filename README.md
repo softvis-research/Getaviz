@@ -1,5 +1,6 @@
-[![GitHub license](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/softvis-research/Getaviz/blob/master/LICENSE)
-[![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=master)](https://travis-ci.com/softvis-research/Getaviz)  
+[![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=master)](https://travis-ci.com/softvis-research/Getaviz)
+[![UI](https://img.shields.io/badge/docker-ui-blue.svg)](https://hub.docker.com/r/getaviz/evaluationserver)
+[![Evaluation Server](https://img.shields.io/badge/docker-evaluationserver-blue.svg)](https://hub.docker.com/r/getaviz/ui)
 # Getaviz
 
 With Getaviz you can solve software engineering problems visually by exploring software artifacts in 2D, 3D, and virtual reality. To get a first impression, have a look at [our showcases](http://home.uni-leipzig.de/svis/Showcases/) that are available online. You can adopt the visualizations as well as the user interface according to your needs. Getaviz visualizes the structure and behavior of several programming languages (*Java*, *Ruby*, *PHP*, and *C#*) and can enrich these visualizations with evolutional information from *git* and *svn* repositories. They can be explored via *browser*, *HTC Vive*, or *Oculus Rift*. We support many different visualizations, e.g., Recursive Disk ([2D](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind) and [3D](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20reek&model=RD%203D%20reek)), [City](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20original%20freemind), [City Floors](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20floor%20freemind), [City Bricks](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20bricks%20freemind), and many more.
@@ -10,10 +11,6 @@ Clone this repository and follow the instructions under [Installation & Setup](.
 Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.md with further instructions and documentation.
 
 Please have a look at our Wiki which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
-
-Some Getaviz components are available as docker containers.  
-[![UI](https://img.shields.io/badge/docker-ui-blue.svg)](https://hub.docker.com/r/getaviz/evaluationserver)
-[![Evaluation Server](https://img.shields.io/badge/docker-evaluationserver-blue.svg)](https://hub.docker.com/r/getaviz/ui)
 
 ## Development Team
 
