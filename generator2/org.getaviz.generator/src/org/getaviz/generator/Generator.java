@@ -10,12 +10,19 @@ import org.getaviz.generator.rd.m2t.RD2AFrame;
 import org.getaviz.generator.rd.m2t.RD2X3D;
 import org.getaviz.generator.city.s2m.JQA2City;
 import org.getaviz.generator.rd.s2m.JQA2RD;
+import org.getaviz.lib.database.Database;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Result;
+import org.neo4j.graphdb.Transaction;
 
 public class Generator {
 
 	public static void main(String[] args) {
 		SettingsConfiguration config = SettingsConfiguration.getInstance();
-		new JQAEnhancement();
+		GraphDatabaseService graph = Database.getInstance(config.getDatabaseName());
+		boolean isCSourceCode = isCSourceCode(graph);
+		
+		new JQAEnhancement(isCSourceCode);
 		switch (config.getMetaphor()) {
 		case CITY: {
 			new JQA2City();
@@ -43,6 +50,22 @@ public class Generator {
 			}
 			break;
 		}
+		}
+	}
+
+	private static boolean isCSourceCode(GraphDatabaseService graph) {
+		Transaction tx = graph.beginTx();
+		Result queryResult = null;
+		try {
+			queryResult = graph.execute("MATCH (n:C) RETURN n LIMIT 10");
+		} finally {
+			tx.close();
+		}
+		
+		if(queryResult.hasNext()) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }
