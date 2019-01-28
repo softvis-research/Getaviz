@@ -40,10 +40,13 @@
             url:    "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
 		},
         { 	name: 	"relationConnectorController",
-
-            showInnerRelations: false,
+            fixPositionY : false,
+            showInnerRelations : true,
+            sourceStartAtParentBorder : false,
+            targetEndAtParentBorder : false,
             sourceStartAtBorder: true,
             targetEndAtBorder: true,
+            createEndpoints : true
         },
 		{ 	name: 	"relationTransparencyController",
 		},
