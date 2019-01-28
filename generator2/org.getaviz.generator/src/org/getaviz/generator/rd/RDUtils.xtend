@@ -14,6 +14,7 @@ class RDUtils {
 			endNode.hasLabel(Labels.DiskSegment)
 		].map[return endNode].filter [
 			getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.Method)
+			|| getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.Function)
 		]
 		return methods
 	}
@@ -30,6 +31,7 @@ class RDUtils {
 			endNode.hasLabel(Labels.DiskSegment)
 		].map[return endNode].filter [
 			getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.Field)
+			|| getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.Variable)
 		]
 		return data
 	}

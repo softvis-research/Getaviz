@@ -1,22 +1,22 @@
 package org.getaviz.generator.rd.m2m
 
+import com.vividsolutions.jts.algorithm.MinimumBoundingCircle
+import com.vividsolutions.jts.geom.Coordinate
+import com.vividsolutions.jts.geom.CoordinateList
+import com.vividsolutions.jts.geom.Geometry
+import com.vividsolutions.jts.geom.GeometryFactory
+import com.vividsolutions.jts.util.GeometricShapeFactory
+import java.util.ArrayList
+import org.apache.commons.logging.LogFactory
+import org.getaviz.generator.Helper
 import org.getaviz.generator.SettingsConfiguration
-import org.getaviz.lib.database.Database
-import org.neo4j.graphdb.Node
-import org.neo4j.graphdb.Direction
-import org.getaviz.lib.database.Rels
-import org.getaviz.lib.database.Labels
 import org.getaviz.generator.SettingsConfiguration.OutputFormat
 import org.getaviz.generator.rd.RDUtils
-import java.util.ArrayList
-import com.vividsolutions.jts.geom.Geometry
-import com.vividsolutions.jts.util.GeometricShapeFactory
-import com.vividsolutions.jts.geom.GeometryFactory
-import com.vividsolutions.jts.algorithm.MinimumBoundingCircle
-import com.vividsolutions.jts.geom.CoordinateList
-import com.vividsolutions.jts.geom.Coordinate
-import org.getaviz.generator.Helper
-import org.apache.commons.logging.LogFactory
+import org.getaviz.lib.database.Database
+import org.getaviz.lib.database.Labels
+import org.getaviz.lib.database.Rels
+import org.neo4j.graphdb.Direction
+import org.neo4j.graphdb.Node
 
 class RD2RD {
 	val config = SettingsConfiguration.instance
@@ -36,14 +36,18 @@ class RD2RD {
 		try {
 			var result = graph.execute(
 				"MATCH p=(n:Package)-[:CONTAINS*]->(m:Package) WHERE NOT (m)-[:CONTAINS]->(:Package) RETURN max(length(p)) AS length")
-			val namespaceMaxLevel = (result.head.get("length") as Long).intValue + 1
+			var namespaceMaxLevel = 2
+			if(!(result.head.get("length") === null)){
+				namespaceMaxLevel = (result.head.get("length") as Long).intValue + 1
+			}
 			// Returns the longest Path from root to deepest sub package
 			result = graph.execute(
 				"MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE NOT (m)-[:CONTAINS]->(:RD:Disk) RETURN max(length(p)) AS length")
 			val diskMaxLevel = (result.head.get("length") as Long).intValue
 			NS_colors = createColorGradiant(NS_colorStart, NS_colorEnd, namespaceMaxLevel)
 			getDisks.forEach [
-				if (getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.Package)) {
+				if (getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.Package)
+					|| getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.TranslationUnit)){
 					setNamespaceColor
 				}
 				setProperty("maxLevel", diskMaxLevel)

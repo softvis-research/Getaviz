@@ -1,18 +1,19 @@
 package org.getaviz.generator.jqa
 
-import java.io.Writer
 import java.io.FileWriter
-import org.getaviz.lib.database.Database
-import org.neo4j.graphdb.Node
 import java.io.IOException
+import java.io.Writer
 import java.util.List
+import org.apache.commons.lang3.StringUtils
+import org.apache.commons.logging.LogFactory
+import org.getaviz.generator.SettingsConfiguration
+import org.getaviz.lib.database.Database
+import org.getaviz.lib.database.Labels
 import org.getaviz.lib.database.Rels
 import org.neo4j.graphdb.Direction
-import org.apache.commons.lang3.StringUtils
+import org.neo4j.graphdb.Node
+
 import static org.apache.commons.text.StringEscapeUtils.escapeHtml4
-import org.getaviz.lib.database.Labels
-import org.getaviz.generator.SettingsConfiguration
-import org.apache.commons.logging.LogFactory
 
 class JQA2JSON {
 	val graph = Database::instance
@@ -28,6 +29,7 @@ class JQA2JSON {
 		try {
 			val path = config.outputPath + "metaData.json"
 			fw = new FileWriter(path)
+			println("Elements: " + elements.size.toString)
 			fw.write(elements.toJSON)
 			tx.success
 		} catch (IOException e) {
@@ -66,9 +68,18 @@ class JQA2JSON {
 			«ENDIF»		
 			«IF el.hasLabel(Labels.Field) && el.hasLabel(Labels.Enum)»
 			«toMetaDataEnumValue(el)»
-			«ENDIF»								
+			«ENDIF»	
+			«IF el.hasLabel(Labels.TranslationUnit)»
+			«toMetaDataTranslationUnit(el)»
+			«ENDIF»
+			«IF el.hasLabel(Labels.Function)»
+			«toMetaDataFunction(el)»
+			«ENDIF»
+			«IF el.hasLabel(Labels.Variable)»
+			«toMetaDataVariable(el)»
+			«ENDIF»
 		«ENDFOR»
-	'''	
+	'''
 	
 	private def toMetaDataNamespace(Node namespace) {
 		val parent = namespace.getRelationships(Rels.CONTAINS, Direction.INCOMING).filter[startNode.hasLabel(Labels.Package)].head
@@ -205,6 +216,57 @@ class JQA2JSON {
 		"modifiers":     "«annotation.modifiers»",
 		"subClassOf":    "",
 		"superClassOf":  "",
+		"belongsTo":     "«belongsTo»"
+	'''
+		return result
+	}
+	
+	private def toMetaDataTranslationUnit(Node translationUnit) {
+		var belongsTo = ""
+		val result = '''
+		"id":            "«translationUnit.getProperty("hash")»",
+		"qualifiedName": "«translationUnit.getProperty("fqn")»",
+		"name":          "«translationUnit.getProperty("name")»",
+		"type":          "FAMIX.Namespace"
+		"belongsTo":     "«belongsTo»"
+	'''	
+		return result
+	}
+	
+	private def toMetaDataFunction(Node function) {
+		var belongsTo = ""
+		val parent = function.getSingleRelationship(Rels.DECLARES, Direction.INCOMING)
+		if(parent !== null) {
+			belongsTo = parent.startNode.getProperty("hash") as String
+		}		
+		
+		val result = '''
+		"id":            "«function.getProperty("hash")»",
+		"qualifiedName": "«escapeHtml4(function.getProperty("fqn") as String)»",
+		"name":          "«function.getProperty("name")»",
+		"type":          "FAMIX.Method",
+		"belongsTo":     "«belongsTo»"
+	'''
+		return result
+	}
+	
+	def toMetaDataVariable(Node variable) {
+		var belongsTo = ""
+		var declaredType = ""
+		val parent = variable.getRelationships(Direction.INCOMING, Rels.DECLARES).head
+		if(parent !== null) {
+			belongsTo = parent.startNode.getProperty("hash") as String
+		}		
+		val type = variable.getSingleRelationship(Rels.OF_TYPE, Direction.OUTGOING)
+		if(type !== null) {
+			declaredType = type.startNode.getProperty("name") as String
+		}				
+		val result = '''
+		"id":            "«variable.getProperty("hash")»",
+		"qualifiedName": "«variable.getProperty("fqn")»",
+		"name":          "«variable.getProperty("name")»",
+		"type":          "FAMIX.Attribute",
+		"declaredType":  "«declaredType»",
 		"belongsTo":     "«belongsTo»"
 	'''
 		return result

@@ -10,13 +10,13 @@ import org.neo4j.graphdb.Direction
 import org.getaviz.generator.SettingsConfiguration.OutputFormat
 import org.apache.commons.logging.LogFactory
 
-class JQA2RD {
+class Java2RD {
 	val config = SettingsConfiguration.getInstance
 	var graph = Database::getInstance(config.databaseName)
 	val log = LogFactory::getLog(class)
 	
 	new () {
-		log.info("JQA2RD started")
+		log.info("Java2RD started")
 		var tx = graph.beginTx
 		try {
 			val result = graph.execute("MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN n")
@@ -35,7 +35,7 @@ class JQA2RD {
 		} finally {
 			tx.close
 		}
-		log.info("JQA2RD finished")
+		log.info("Java2RD finished")
 	}
 
 	def private Node namespaceToDisk(Node namespace) {

@@ -9,7 +9,8 @@ import org.getaviz.generator.rd.m2m.RD2RD;
 import org.getaviz.generator.rd.m2t.RD2AFrame;
 import org.getaviz.generator.rd.m2t.RD2X3D;
 import org.getaviz.generator.city.s2m.JQA2City;
-import org.getaviz.generator.rd.s2m.JQA2RD;
+import org.getaviz.generator.rd.s2m.C2RD;
+import org.getaviz.generator.rd.s2m.Java2RD;
 import org.getaviz.lib.database.Database;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Result;
@@ -35,7 +36,11 @@ public class Generator {
 			break;
 		}
 		case RD: {
-			new JQA2RD();
+			if(isCSourceCode) {
+				new C2RD();
+			} else {
+				new Java2RD();
+			}
 			new JQA2JSON();
 			new RD2RD();
 			switch(config.getOutputFormat()) {
