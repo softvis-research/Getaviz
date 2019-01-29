@@ -222,7 +222,7 @@ class JQA2JSON {
 	}
 	
 	private def toMetaDataTranslationUnit(Node translationUnit) {
-		var belongsTo = ""
+		var belongsTo = "root"
 		val result = '''
 		"id":            "«translationUnit.getProperty("hash")»",
 		"qualifiedName": "«translationUnit.getProperty("fqn")»",
@@ -250,7 +250,7 @@ class JQA2JSON {
 		"calls":		 "",
 		"calledBy":		 "",
 		"accesses":	 	 "",
-		"belongsTo":     ""
+		"belongsTo":     "«belongsTo»"
 	'''
 		return result
 	}
