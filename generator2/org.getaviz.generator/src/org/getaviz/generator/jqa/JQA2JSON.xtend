@@ -246,7 +246,7 @@ class JQA2JSON {
 		"name":          "«function.getProperty("name")»",
 		"type":          "FAMIX.Method",
 		"modifiers":     "",
-		"signature":  	 "",
+		"signature":  	 "«function.getFunctionSignature»",
 		"calls":		 "",
 		"calledBy":		 "",
 		"accesses":	 	 "",
@@ -383,5 +383,53 @@ class JQA2JSON {
 	
 	def removeBrackets(String string) {
 		return StringUtils::remove(StringUtils::remove(string, "["), "]")
+	}
+	
+	def private getFunctionSignature(Node function){
+		var signature = ""
+		var returnType = ""
+		var typeList = function.getRelationships(Direction.OUTGOING, Rels.RETURNS).map[endNode]
+		for(type : typeList){
+			returnType += type.getProperty("name")
+		}
+		if(!returnType.endsWith("*")){
+			returnType += " "
+		}
+		val functionName = function.getProperty("name")
+		var parameterList = function.getRelationships(Direction.OUTGOING, Rels.HAS).map[endNode]
+		//sort parameters according to their index
+		parameterList = parameterList.sortBy[p|p.getProperty("index", 0) as Integer]
+		var parameters = getFunctionParameters(parameterList)
+		//build signature
+		signature = returnType + functionName + "(" + parameters + ")"
+		
+		return signature
 	}	
+	
+	def private getFunctionParameters(Iterable<Node> parameterList){
+		var parameters = ""
+		var counter = 0
+		for(parameter: parameterList){
+			//add comma after parameter
+			if(counter != 0){
+				parameters += ", "
+			}
+			var parameterTypeList = parameter.getRelationships(Direction.OUTGOING, Rels.OF_TYPE).map[endNode]
+			var parameterTypeString = ""
+			for(parameterType : parameterTypeList){
+				parameterTypeString += parameterType.getProperty("name")
+			}
+			
+			//put [] after the parameter name
+			if(parameterTypeString.endsWith("]")){
+				var String[] parts = parameterTypeString.split("\\[", 2)
+				parameters += parts.get(0) + parameter.getProperty("name") + "[" + parts.get(1) 
+			} else {
+				parameters += parameterTypeString + " " + parameter.getProperty("name")
+			}
+			counter++
+		}
+		
+		return parameters
+	}
 }
