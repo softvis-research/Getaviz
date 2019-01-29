@@ -227,7 +227,7 @@ class JQA2JSON {
 		"id":            "«translationUnit.getProperty("hash")»",
 		"qualifiedName": "«translationUnit.getProperty("fqn")»",
 		"name":          "«translationUnit.getProperty("name")»",
-		"type":          "FAMIX.Namespace"
+		"type":          "FAMIX.Namespace",
 		"belongsTo":     "«belongsTo»"
 	'''	
 		return result
@@ -245,7 +245,12 @@ class JQA2JSON {
 		"qualifiedName": "«escapeHtml4(function.getProperty("fqn") as String)»",
 		"name":          "«function.getProperty("name")»",
 		"type":          "FAMIX.Method",
-		"belongsTo":     "«belongsTo»"
+		"modifiers":     "",
+		"signature":  	 "",
+		"calls":		 "",
+		"calledBy":		 "",
+		"accesses":	 	 "",
+		"belongsTo":     ""
 	'''
 		return result
 	}
