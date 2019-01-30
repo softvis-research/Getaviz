@@ -2,15 +2,15 @@ package org.getaviz.generator.jqa
 
 import java.io.Writer
 import java.io.FileWriter
-import org.getaviz.lib.database.Database
+import org.getaviz.generator.database.Database
 import org.neo4j.graphdb.Node
 import java.io.IOException
 import java.util.List
-import org.getaviz.lib.database.Rels
+import org.getaviz.generator.database.Rels
 import org.neo4j.graphdb.Direction
 import org.apache.commons.lang3.StringUtils
 import static org.apache.commons.text.StringEscapeUtils.escapeHtml4
-import org.getaviz.lib.database.Labels
+import org.getaviz.generator.database.Labels
 import org.getaviz.generator.SettingsConfiguration
 import org.apache.commons.logging.LogFactory
 

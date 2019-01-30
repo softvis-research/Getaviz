@@ -11,8 +11,8 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.SettingsConfiguration.OutputFormat;
 import org.getaviz.generator.city.m2m.BuildingSegmentComparator;
 import org.getaviz.generator.city.m2m.RGBColor;
-import org.getaviz.lib.database.Labels;
-import org.getaviz.lib.database.Rels;
+import org.getaviz.generator.database.Labels;
+import org.getaviz.generator.database.Rels;
 
 public class CityUtils {
 

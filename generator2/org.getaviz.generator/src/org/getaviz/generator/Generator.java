@@ -12,9 +12,18 @@ import org.getaviz.generator.city.s2m.JQA2City;
 import org.getaviz.generator.rd.s2m.JQA2RD;
 
 public class Generator {
+	static SettingsConfiguration config = SettingsConfiguration.getInstance();
 
 	public static void main(String[] args) {
-		SettingsConfiguration config = SettingsConfiguration.getInstance();
+		run();
+	}
+
+	public static void run() {
+		// initialize directories
+		//File dir = new File(config.getOutputPath());
+		//dir.mkdir();
+		
+		// start generation process
 		new JQAEnhancement();
 		switch (config.getMetaphor()) {
 		case CITY: {
@@ -43,6 +52,6 @@ public class Generator {
 			}
 			break;
 		}
-		}
+	}
 	}
 }

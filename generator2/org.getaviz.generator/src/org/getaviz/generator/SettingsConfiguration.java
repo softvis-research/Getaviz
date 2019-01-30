@@ -14,13 +14,10 @@ public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
 	private static SettingsConfiguration instance = null;
 
-	private SettingsConfiguration() {
-	}
-
 	public static SettingsConfiguration getInstance() {
 		if (instance == null) {
 			instance = new SettingsConfiguration();
-			loadConfig("./settings.properties");
+			loadConfig("settings.properties");
 		}
 		return instance;
 	}
@@ -44,7 +41,7 @@ public class SettingsConfiguration {
 	}
 
 	public void loadDefault() {
-		loadConfig("./settings.properties");
+		loadConfig("settings.properties");
 	}
 	
 	public Metaphor getMetaphor() {

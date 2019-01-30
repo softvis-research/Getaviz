@@ -2,12 +2,12 @@ package org.getaviz.generator.city.m2m
 
 import org.neo4j.graphdb.GraphDatabaseService
 import org.getaviz.generator.SettingsConfiguration
-import org.getaviz.lib.database.Database
-import org.getaviz.lib.database.Labels
+import org.getaviz.generator.database.Database
+import org.getaviz.generator.database.Labels
 import org.getaviz.generator.SettingsConfiguration.BuildingType
 import org.neo4j.graphdb.Node
 import org.getaviz.generator.city.CityUtils
-import org.getaviz.lib.database.Rels
+import org.getaviz.generator.database.Rels
 import org.neo4j.graphdb.Direction
 import org.getaviz.generator.SettingsConfiguration.ClassElementsModes
 import org.neo4j.graphdb.Path

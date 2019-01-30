@@ -2,11 +2,9 @@ package org.getaviz.generator.jqa
 
 import org.neo4j.graphdb.traversal.Evaluator
 import org.neo4j.graphdb.Path
-import org.getaviz.lib.database.Labels
+import org.getaviz.generator.database.Labels
 import org.neo4j.graphdb.traversal.Evaluation
-//import org.getaviz.lib.database.Database
-//import org.getaviz.generator.SettingsConfiguration
-import org.getaviz.lib.database.Rels
+import org.getaviz.generator.database.Rels
 import org.neo4j.graphdb.Direction
 
 class JQAEvaluator implements Evaluator {

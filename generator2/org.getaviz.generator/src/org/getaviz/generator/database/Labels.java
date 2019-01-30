@@ -1,4 +1,4 @@
-package org.getaviz.lib.database;
+package org.getaviz.generator.database;
 
 import org.neo4j.graphdb.Label;
 

@@ -3,11 +3,11 @@ package org.getaviz.generator.rd.m2m;
 import java.util.ArrayList
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.neo4j.graphdb.Node
-import org.getaviz.lib.database.Rels
+import org.getaviz.generator.database.Rels
 import org.neo4j.graphdb.Direction
-import org.getaviz.lib.database.Labels
+import org.getaviz.generator.database.Labels
 import org.getaviz.generator.rd.RDUtils
-import org.getaviz.lib.database.Database
+import org.getaviz.generator.database.Database
 import org.apache.commons.logging.LogFactory
 
 class CircleWithInnerCircles extends Circle {
