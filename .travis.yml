@@ -11,9 +11,9 @@ matrix:
       language: java
       before_install:
         - cd generator2
-        - cd org.getaviz.parent/
+        - cd org.getaviz.generator/
       script:
-        - mvn clean install -fae
+        - mvn clean install
     - name: Evaluation Server
       language: ruby
       before_script:
