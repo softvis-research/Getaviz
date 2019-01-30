@@ -6,8 +6,8 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.SettingsConfiguration.Attributes;
 import org.getaviz.generator.SettingsConfiguration.Methods;
 import org.getaviz.generator.SettingsConfiguration.SortPriorities_Visibility;
-import org.getaviz.lib.database.Labels;
-import org.getaviz.lib.database.Rels;
+import org.getaviz.generator.database.Labels;
+import org.getaviz.generator.database.Rels;
 
 public class BuildingSegmentComparator implements Comparable<BuildingSegmentComparator> {
 	private Node segment;

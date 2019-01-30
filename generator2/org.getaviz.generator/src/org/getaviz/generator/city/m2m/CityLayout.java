@@ -15,9 +15,9 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.city.m2m.Rectangle;
-import org.getaviz.lib.database.Database;
-import org.getaviz.lib.database.Labels;
-import org.getaviz.lib.database.Rels;
+import org.getaviz.generator.database.Labels;
+import org.getaviz.generator.database.Rels;
+import org.getaviz.generator.database.Database;
 
 public class CityLayout {
 	private static boolean DEBUG = false;

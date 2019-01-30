@@ -3,7 +3,7 @@ package org.getaviz.generator.jqa
 import org.neo4j.graphdb.Path
 import org.neo4j.graphdb.traversal.Evaluation
 import org.neo4j.graphdb.traversal.Evaluator
-import org.getaviz.lib.database.Labels
+import org.getaviz.generator.database.Labels
 
 class EndNodeEvaluator implements Evaluator {
 	var Labels label

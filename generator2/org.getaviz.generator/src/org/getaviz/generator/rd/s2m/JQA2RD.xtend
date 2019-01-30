@@ -1,11 +1,11 @@
 package org.getaviz.generator.rd.s2m
 
-import org.getaviz.lib.database.Database
+import org.getaviz.generator.database.Database
 import org.getaviz.generator.SettingsConfiguration
-import org.getaviz.lib.database.Labels
+import org.getaviz.generator.database.Labels
 import java.util.GregorianCalendar
 import org.neo4j.graphdb.Node
-import org.getaviz.lib.database.Rels
+import org.getaviz.generator.database.Rels
 import org.neo4j.graphdb.Direction
 import org.getaviz.generator.SettingsConfiguration.OutputFormat
 import org.apache.commons.logging.LogFactory

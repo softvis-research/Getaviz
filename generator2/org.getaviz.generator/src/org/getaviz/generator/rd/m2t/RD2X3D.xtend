@@ -1,9 +1,9 @@
 package org.getaviz.generator.rd.m2t
 
 import org.getaviz.generator.SettingsConfiguration
-import org.getaviz.lib.database.Database
+import org.getaviz.generator.database.Database
 import org.neo4j.graphdb.Node
-import org.getaviz.lib.database.Rels
+import org.getaviz.generator.database.Rels
 import org.neo4j.graphdb.Direction
 import org.getaviz.generator.OutputFormatHelper
 import java.io.FileWriter

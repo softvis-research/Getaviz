@@ -8,9 +8,9 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Result;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.city.CityUtils;
-import org.getaviz.lib.database.Database;
-import org.getaviz.lib.database.Labels;
-import org.getaviz.lib.database.Rels;
+import org.getaviz.generator.database.Labels;
+import org.getaviz.generator.database.Rels;
+import org.getaviz.generator.database.Database;
 
 public class BrickLayout {
 	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
