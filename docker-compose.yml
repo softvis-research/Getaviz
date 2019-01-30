@@ -1,6 +1,6 @@
 version: "3"
 services:
-    #db:
+    db:
         #image: mysql:5.7
         #environment:
             #MYSQL_ROOT_PASSWORD: dbpassword_for_user
@@ -8,7 +8,7 @@ services:
             #MYSQL_USER: db_username
             #MYSQL_PASSWORD: dbpassword_for_user
         #restart: always
-    #eval:
+    eval:
         #build: evaluationserver
         #env_file: evaluationserver/env
         #command: "./bin/wait-for-it.sh db:3306 -s -t 30 -- ./bin/docker_start"
@@ -35,6 +35,6 @@ services:
             - ./generator2/databases:/opt/databases/
         ports:
             - "8083:8080"
-#volumes:
-  #bundle:
-    #driver: local
+volumes:
+  bundle:
+    driver: local
