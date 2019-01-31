@@ -31,8 +31,8 @@ services:
         volumes:
             - ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war
             - ./settings.properties:/opt/config/settings.properties
-            - ./generator2/output:/opt/output/
-            - ./generator2/databases:/opt/databases/
+            - ./generator2/output:/var/lib/jetty/output/
+            - ./generator2/databases:/var/lib/jetty/databases/
         ports:
             - "8083:8080"
 volumes:
