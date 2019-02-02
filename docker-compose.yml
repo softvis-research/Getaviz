@@ -19,12 +19,11 @@ services:
         depends_on:
             - db
     frontend:
-        restart: always
-        image: php:7.1.11-apache
+        build: ui/
         volumes:
-            - ./ui:/var/www/html
+            - ./ui:/var/www/html/ui
         ports:
-            - "8082:8082"
+            - "8082:80"
     backend:
         build: generator2/org.getaviz.generator/
         restart: always
