@@ -110,38 +110,6 @@
 				},
 
 				{	
-					title:		"Visualizations",
-					subMenu:	true,
-					items:		[
-						{
-							title: 	"City Original",
-							link: 	true,
-							url:	"index.php?setup=web/City freemind&model=City%20original%20freemind"
-						},
-						{
-							title: 	"City Bricks",
-							link: 	true,
-							url:	"index.php?setup=web/City freemind&model=City%20bricks%20freemind"
-						},						
-						{
-							title: 	"City Floors",
-							link: 	true,
-							url:	"index.php?setup=web/City freemind&model=City%20floor%20freemind"
-						},
-						{
-							title: 	"Recursive Disk",
-							link: 	true,
-							url:	"index.php?setup=web/RD freemind&model=RD%20freemind"
-						},
-                        {
-                            title: 	"Recursive Disk 3D",
-                            link: 	true,
-                            url:	"index.php?setup=web/RD reek&model=RD%203D%20reek"
-                        },
-					]
-				},
-
-				{	
 					title:		"About",
 					subMenu:	true,
 					items:		[
