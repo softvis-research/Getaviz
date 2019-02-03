@@ -10,6 +10,7 @@ services:
         restart: always
     eval:
         build: evaluationserver
+        restart: always
         env_file: evaluationserver/env
         command: "./bin/wait-for-it.sh db:3306 -s -t 30 -- ./bin/docker_start"
         volumes:
@@ -20,6 +21,7 @@ services:
             - db
     frontend:
         build: ui/
+        restart: always
         volumes:
             - ./ui:/var/www/html/ui
         ports:
