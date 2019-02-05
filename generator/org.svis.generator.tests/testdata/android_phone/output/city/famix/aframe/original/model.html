@@ -3,15 +3,35 @@
   <head>
     <meta charset="utf-8">
     <title>Ring</title>
-    <meta name="description" content="Ring - A-Frame">
-    <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+    <meta name="description" content="Getaviz">
   </head>
   <body>
-    <a-scene altspace scale="0.001 0.001 0.001" light="defaultLightsEnabled: false" stats>
-    <a-entity position="0 0 200">
-      <a-camera></a-camera>
-    </a-entity>
-<a-box position="141.5 1.5 157.0"
+    <a-scene id="aframe-canvas"
+    	light="defaultLightsEnabled: false"
+    	cursor="rayOrigin: mouse"
+    	embedded="true"
+    >
+    <a-entity
+    	id="camera"
+    	camera="fov: 80; zoom: 1;"
+    	position="44.0 20.0 44.0"
+    	rotation="0 -90 0"
+    	orbit-camera="
+        	target: 15.0 1.5 15.0;
+            enableDamping: true;
+            dampingFactor: 0.25;
+            rotateSpeed: 0.25;
+            panSpeed: 0.25;
+            invertZoom: true;
+            logPosition: false;
+            minDistance:0;
+            maxDistance:1000;
+            "
+    	mouse-cursor=""
+    	>
+    	</a-entity>
+<a-box id="ID_5fb552a76ef3c7ee67681d80e9797e088a6c9859" 
+	position="141.5 1.5 157.0"
 	width="277.0"
 	height="1.0"
 	depth="308.0"
@@ -19,7 +39,8 @@
 	shader="flat"
 	flat-shading="true">
 </a-box>
-<a-box position="141.5 2.5 157.0"
+<a-box id="ID_501b14856c0c2da26a2072a19a7020303aeb654a" 
+	position="141.5 2.5 157.0"
 	width="271.0"
 	height="1.0"
 	depth="302.0"
@@ -27,7 +48,8 @@
 	shader="flat"
 	flat-shading="true">
 </a-box>
-<a-box position="141.5 3.5 157.0"
+<a-box id="ID_fa5a869f00e096e9671eaf38761b29e7e6fba832" 
+	position="141.5 3.5 157.0"
 	width="265.0"
 	height="1.0"
 	depth="296.0"
@@ -35,7 +57,8 @@
 	shader="flat"
 	flat-shading="true">
 </a-box>
-<a-box position="252.0 9.0 80.0"
+<a-box id="ID_d4107e8a97712c5a9bf2352dd61e11ff484b3dc3"
+		position="252.0 9.0 80.0"
 		width="16.0"
 		height="10.0"
 		depth="16.0"
@@ -43,7 +66,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="200.5 8.5 135.5"
+<a-box id="ID_478d37d978e3dcf6507d87a6ac6c0dce086e177c"
+		position="200.5 8.5 135.5"
 		width="13.0"
 		height="9.0"
 		depth="13.0"
@@ -51,7 +75,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="143.0 4.5 254.0"
+<a-box id="ID_4ad9afc7abd20532477a315ecf737165ad37d3ea"
+		position="143.0 4.5 254.0"
 		width="22.0"
 		height="1.0"
 		depth="22.0"
@@ -59,7 +84,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="147.0 25.0 184.0"
+<a-box id="ID_da3856ad38bd47499a8ec588c55c5334c577ba12"
+		position="147.0 25.0 184.0"
 		width="76.0"
 		height="42.0"
 		depth="76.0"
@@ -67,7 +93,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="163.5 10.5 108.5"
+<a-box id="ID_af9311014985431be87f7f46712037fc38a62920"
+		position="163.5 10.5 108.5"
 		width="35.0"
 		height="13.0"
 		depth="35.0"
@@ -75,7 +102,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="255.5 7.0 216.5"
+<a-box id="ID_db717d54361c6ee8f329f50c16042d2cfab9a158"
+		position="255.5 7.0 216.5"
 		width="7.0"
 		height="6.0"
 		depth="7.0"
@@ -83,7 +111,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="160.0 6.5 228.0"
+<a-box id="ID_dfed8481b6d00b1fd31eff586c59ed44721d952f"
+		position="160.0 6.5 228.0"
 		width="6.0"
 		height="5.0"
 		depth="6.0"
@@ -91,7 +120,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="233.5 22.0 106.5"
+<a-box id="ID_4c141df147f212f9d24fca5c9e3b9126fd6192ac"
+		position="233.5 22.0 106.5"
 		width="31.0"
 		height="36.0"
 		depth="31.0"
@@ -99,7 +129,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="77.5 29.5 77.5"
+<a-box id="ID_657604c8d4b7671a8c237667c6f9c54b0bbb0f06"
+		position="77.5 29.5 77.5"
 		width="131.0"
 		height="51.0"
 		depth="131.0"
@@ -107,7 +138,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="243.5 7.5 134.5"
+<a-box id="ID_619658f0d43cebec6066e97d7b1db38a04204d41"
+		position="243.5 7.5 134.5"
 		width="11.0"
 		height="7.0"
 		depth="11.0"
@@ -115,7 +147,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="41.5 21.5 272.5"
+<a-box id="ID_a07ab82d150fc9043d45e22cba032b718548b2dd"
+		position="41.5 21.5 272.5"
 		width="59.0"
 		height="35.0"
 		depth="59.0"
@@ -123,7 +156,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="184.5 10.5 135.5"
+<a-box id="ID_7a586f5e0972ab4f7b73087665edc8fc6184bc52"
+		position="184.5 10.5 135.5"
 		width="13.0"
 		height="13.0"
 		depth="13.0"
@@ -131,7 +165,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="125.5 6.5 270.5"
+<a-box id="ID_044d0bc64dd78487623b709b92efad549d841a3f"
+		position="125.5 6.5 270.5"
 		width="5.0"
 		height="5.0"
 		depth="5.0"
@@ -139,7 +174,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="240.5 5.5 298.5"
+<a-box id="ID_31547cb3f4b6be63442b560f074994f21f686d02"
+		position="240.5 5.5 298.5"
 		width="1.0"
 		height="3.0"
 		depth="1.0"
@@ -147,7 +183,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="175.0 5.0 270.0"
+<a-box id="ID_7aa108ac57d521eaabb1e7bdd2e85c8505d6de30"
+		position="175.0 5.0 270.0"
 		width="4.0"
 		height="2.0"
 		depth="4.0"
@@ -155,7 +192,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="199.5 5.5 269.5"
+<a-box id="ID_81aeba89898b792643572e42809937a7ab9e5214"
+		position="199.5 5.5 269.5"
 		width="3.0"
 		height="3.0"
 		depth="3.0"
@@ -163,7 +201,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="120.0 5.0 239.0"
+<a-box id="ID_403be91f730905f4c30280caafa16bf992f007d0"
+		position="120.0 5.0 239.0"
 		width="2.0"
 		height="2.0"
 		depth="2.0"
@@ -171,7 +210,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="168.0 8.5 270.0"
+<a-box id="ID_4e038567f7e15dda4e0603fd55a4ab22f051e09f"
+		position="168.0 8.5 270.0"
 		width="4.0"
 		height="9.0"
 		depth="4.0"
@@ -179,7 +219,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="161.0 6.0 270.0"
+<a-box id="ID_01ac0e3c70146b6ef43aeee83529e15a5b1f6e22"
+		position="161.0 6.0 270.0"
 		width="4.0"
 		height="4.0"
 		depth="4.0"
@@ -187,7 +228,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="154.0 6.0 270.0"
+<a-box id="ID_a59a8f50ae6e65dd91156a386f1c3c5fc8e35c46"
+		position="154.0 6.0 270.0"
 		width="4.0"
 		height="4.0"
 		depth="4.0"
@@ -195,7 +237,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="184.0 7.5 50.0"
+<a-box id="ID_4cc8994cd1a49ff0bd8eba602ba4caea2f16bfe5"
+		position="184.0 7.5 50.0"
 		width="76.0"
 		height="7.0"
 		depth="76.0"
@@ -203,7 +246,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="113.0 8.0 288.0"
+<a-box id="ID_ec747ead44fca3e6ee6b9481b9479db377a7d862"
+		position="113.0 8.0 288.0"
 		width="24.0"
 		height="8.0"
 		depth="24.0"
@@ -211,7 +255,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="237.0 21.5 253.0"
+<a-box id="ID_fca2619cd34b91182873244167703742bbcbb920"
+		position="237.0 21.5 253.0"
 		width="20.0"
 		height="35.0"
 		depth="20.0"
@@ -219,7 +264,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="147.0 7.5 270.0"
+<a-box id="ID_d32147464c1744d3a296120197ccbb47a2bb7f13"
+		position="147.0 7.5 270.0"
 		width="4.0"
 		height="7.0"
 		depth="4.0"
@@ -227,7 +273,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="140.0 8.5 230.0"
+<a-box id="ID_c828dda441a832483654f76d914838e28de62fa0"
+		position="140.0 8.5 230.0"
 		width="10.0"
 		height="9.0"
 		depth="10.0"
@@ -235,7 +282,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="217.5 14.0 287.5"
+<a-box id="ID_62a11e7c15c2a2ea9f32476af081983510907d08"
+		position="217.5 14.0 287.5"
 		width="23.0"
 		height="20.0"
 		depth="23.0"
@@ -243,7 +291,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="118.0 19.0 254.0"
+<a-box id="ID_17996fdb364628d400f93fe910128f2ec88b457f"
+		position="118.0 19.0 254.0"
 		width="22.0"
 		height="30.0"
 		depth="22.0"
@@ -251,7 +300,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="115.0 8.0 239.0"
+<a-box id="ID_b94aef1398244f37f04605a7cb44ec8daf816a62"
+		position="115.0 8.0 239.0"
 		width="2.0"
 		height="8.0"
 		depth="2.0"
@@ -259,7 +309,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="245.5 5.0 216.5"
+<a-box id="ID_b610e9cb6d875050ddce354c6006c11e011ab2be"
+		position="245.5 5.0 216.5"
 		width="7.0"
 		height="2.0"
 		depth="7.0"
@@ -267,7 +318,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="214.0 8.0 253.0"
+<a-box id="ID_605cec2938cf5cc931c656f1722464f1b6bc2810"
+		position="214.0 8.0 253.0"
 		width="20.0"
 		height="8.0"
 		depth="20.0"
@@ -275,7 +327,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="229.5 8.0 134.5"
+<a-box id="ID_4c5d23404c95ea7ba91cea3863a0d1a9337a8bf0"
+		position="229.5 8.0 134.5"
 		width="11.0"
 		height="8.0"
 		depth="11.0"
@@ -283,7 +336,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="191.5 16.5 287.5"
+<a-box id="ID_3eaf1b3087266e0bf42429830621832ef273f084"
+		position="191.5 16.5 287.5"
 		width="23.0"
 		height="25.0"
 		depth="23.0"
@@ -291,7 +345,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="127.0 8.0 230.0"
+<a-box id="ID_cfa3400819b24033b656e7e88d535a61aa90cd56"
+		position="127.0 8.0 230.0"
 		width="10.0"
 		height="8.0"
 		depth="10.0"
@@ -299,7 +354,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="114.0 7.5 230.0"
+<a-box id="ID_c18310b235fe576f376629949c867fcd0d16637c"
+		position="114.0 7.5 230.0"
 		width="10.0"
 		height="7.0"
 		depth="10.0"
@@ -307,7 +363,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="140.0 4.5 270.0"
+<a-box id="ID_c6cc03c6ab43da368c219548b97415713041491e"
+		position="140.0 4.5 270.0"
 		width="4.0"
 		height="1.0"
 		depth="4.0"
@@ -315,7 +372,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="117.5 8.5 270.5"
+<a-box id="ID_47400cfec078b202f1479e33623230898d7e8c20"
+		position="117.5 8.5 270.5"
 		width="5.0"
 		height="9.0"
 		depth="5.0"
@@ -323,7 +381,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="86.0 11.0 288.0"
+<a-box id="ID_20a88e2f36b6b5bef0c107cf365df135835ff4b0"
+		position="86.0 11.0 288.0"
 		width="24.0"
 		height="14.0"
 		depth="24.0"
@@ -331,7 +390,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="193.5 6.5 269.5"
+<a-box id="ID_81be2777b7d185a558ed66cf9dcf15cdaa726e06"
+		position="193.5 6.5 269.5"
 		width="3.0"
 		height="5.0"
 		depth="3.0"
@@ -339,7 +399,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="225.0 5.5 217.0"
+<a-box id="ID_61aab191883443a4b68294edf496380d21a16cec"
+		position="225.0 5.5 217.0"
 		width="8.0"
 		height="3.0"
 		depth="8.0"
@@ -347,7 +408,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="263.0 6.0 154.0"
+<a-box id="ID_3125a48f3d82547240c8c873c65899b58d3c3bab"
+		position="263.0 6.0 154.0"
 		width="16.0"
 		height="4.0"
 		depth="16.0"
@@ -355,7 +417,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="110.0 4.5 239.0"
+<a-box id="ID_60bea9e4a9b7ccd277150848c000c8c8bdc8a0e3"
+		position="110.0 4.5 239.0"
 		width="2.0"
 		height="1.0"
 		depth="2.0"
@@ -363,7 +426,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="151.0 5.0 228.0"
+<a-box id="ID_39219f4e45b08824ed1608d1f9ebbab7a6041292"
+		position="151.0 5.0 228.0"
 		width="6.0"
 		height="2.0"
 		depth="6.0"
@@ -371,7 +435,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="236.5 5.0 298.5"
+<a-box id="ID_86774ef3c608babfde9bc1568f0923cc2c8be32d"
+		position="236.5 5.0 298.5"
 		width="1.0"
 		height="2.0"
 		depth="1.0"
@@ -379,7 +444,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="168.5 8.5 135.5"
+<a-box id="ID_06726156c965299a33d4702d614e2109dc266fd5"
+		position="168.5 8.5 135.5"
 		width="13.0"
 		height="9.0"
 		depth="13.0"
@@ -387,7 +453,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="187.5 7.0 269.5"
+<a-box id="ID_36871de283883bc9f6794a37a8d0f95c7f7a3b27"
+		position="187.5 7.0 269.5"
 		width="3.0"
 		height="6.0"
 		depth="3.0"
@@ -395,7 +462,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="233.0 13.5 80.0"
+<a-box id="ID_780d8d04c274a8fbe92be9faafa9b9a64d9ae0e5"
+		position="233.0 13.5 80.0"
 		width="16.0"
 		height="19.0"
 		depth="16.0"
@@ -403,7 +471,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="232.5 4.5 298.5"
+<a-box id="ID_871b93ccca3eb182c6c3163c6f15aed8529d413a"
+		position="232.5 4.5 298.5"
 		width="1.0"
 		height="1.0"
 		depth="1.0"
@@ -411,7 +480,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="191.0 6.0 253.0"
+<a-box id="ID_d872a5bd3c91f4dbc6fbe4751d09fa4f61801f1d"
+		position="191.0 6.0 253.0"
 		width="20.0"
 		height="4.0"
 		depth="20.0"
@@ -419,7 +489,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="241.5 7.0 285.5"
+<a-box id="ID_4df4f81a4f1d9331ec5a364cc8478f373aa10da9"
+		position="241.5 7.0 285.5"
 		width="19.0"
 		height="6.0"
 		depth="19.0"
@@ -427,7 +498,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="268.0 10.0 132.0"
+<a-box id="ID_e4ffb4d34719515dbe799b0ead4a62e5af9028a9"
+		position="268.0 10.0 132.0"
 		width="6.0"
 		height="12.0"
 		depth="6.0"
@@ -435,7 +507,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="233.5 10.5 60.5"
+<a-box id="ID_fdfe858c8349a807145802849954832cfb34a75b"
+		position="233.5 10.5 60.5"
 		width="17.0"
 		height="13.0"
 		depth="17.0"
@@ -443,7 +516,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="59.0 61.5 193.0"
+<a-box id="ID_8219617cb62b6cd3e181f02c21af9f3ed4df68d3"
+		position="59.0 61.5 193.0"
 		width="94.0"
 		height="115.0"
 		depth="94.0"
@@ -451,7 +525,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="269.5 4.5 138.5"
+<a-box id="ID_a9e105ae6931d98dfe422d94a466a6e1bbeff711"
+		position="269.5 4.5 138.5"
 		width="1.0"
 		height="1.0"
 		depth="1.0"
@@ -459,7 +534,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="89.0 10.0 258.0"
+<a-box id="ID_f9ac38488bb293e38a096712883eaf6838c2ae46"
+		position="89.0 10.0 258.0"
 		width="30.0"
 		height="12.0"
 		depth="30.0"
@@ -467,7 +543,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="257.0 10.5 134.0"
+<a-box id="ID_ec312eb29f279bf71a419cd2fabb648cb712c0b3"
+		position="257.0 10.5 134.0"
 		width="10.0"
 		height="13.0"
 		depth="10.0"
@@ -475,7 +552,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="152.5 6.5 135.5"
+<a-box id="ID_9f0a6c90148907ced253ae39e87d3b838f28c992"
+		position="152.5 6.5 135.5"
 		width="13.0"
 		height="5.0"
 		depth="13.0"
@@ -483,7 +561,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="167.5 12.5 253.5"
+<a-box id="ID_e3b7bb49fd8ec031e2d7551e46141821f79594b4"
+		position="167.5 12.5 253.5"
 		width="21.0"
 		height="17.0"
 		depth="21.0"
@@ -491,7 +570,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="199.5 17.0 106.5"
+<a-box id="ID_00c85f129b0c11173df30f2d264c45e5e3a3c79a"
+		position="199.5 17.0 106.5"
 		width="31.0"
 		height="26.0"
 		depth="31.0"
@@ -499,7 +579,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="109.5 5.0 270.5"
+<a-box id="ID_a6026f2b51bc7781bc9065a53dbe6f892fc4da4e"
+		position="109.5 5.0 270.5"
 		width="5.0"
 		height="2.0"
 		depth="5.0"
@@ -507,7 +588,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="165.5 22.5 287.5"
+<a-box id="ID_6315e1b9c3cf1c0eead1b8a1b253a6db68e803f8"
+		position="165.5 22.5 287.5"
 		width="23.0"
 		height="37.0"
 		depth="23.0"
@@ -515,7 +597,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="265.0 5.0 216.0"
+<a-box id="ID_0bc354d0c2d59b6d46cf6dce54d90037f5c1e8be"
+		position="265.0 5.0 216.0"
 		width="6.0"
 		height="2.0"
 		depth="6.0"
@@ -523,7 +606,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="220.0 34.0 178.0"
+<a-box id="ID_b7091b41bc7aff3858d55289b293bbd1aa24307a"
+		position="220.0 34.0 178.0"
 		width="64.0"
 		height="60.0"
 		depth="64.0"
@@ -531,7 +615,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="215.5 29.0 134.5"
+<a-box id="ID_b5946ae8550b36173548318d03aa2be442ba35e8"
+		position="215.5 29.0 134.5"
 		width="11.0"
 		height="50.0"
 		depth="11.0"
@@ -539,7 +624,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="139.5 36.0 287.5"
+<a-box id="ID_b493b25346511112f3f467d21bb7a3a442f8864e"
+		position="139.5 36.0 287.5"
 		width="23.0"
 		height="64.0"
 		depth="23.0"
@@ -547,7 +633,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="235.5 4.5 216.5"
+<a-box id="ID_6031e0947c2cf768edc0e09db9da3fcaa5ef75d3"
+		position="235.5 4.5 216.5"
 		width="7.0"
 		height="1.0"
 		depth="7.0"
@@ -555,7 +642,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="214.0 9.5 217.0"
+<a-box id="ID_b1441e6446699bbf40be3ddfcb16b69ec795c301"
+		position="214.0 9.5 217.0"
 		width="8.0"
 		height="11.0"
 		depth="8.0"
@@ -563,7 +651,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="233.5 9.5 40.5"
+<a-box id="ID_fdc32b41955a04f39ab604c87266380ce3627f3d"
+		position="233.5 9.5 40.5"
 		width="17.0"
 		height="11.0"
 		depth="17.0"
@@ -571,7 +660,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="233.5 8.5 20.5"
+<a-box id="ID_bdbdfe1cc1eb60ff093162c09b4cc576d49b9b0f"
+		position="233.5 8.5 20.5"
 		width="17.0"
 		height="9.0"
 		depth="17.0"
@@ -579,7 +669,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="203.0 9.5 217.0"
+<a-box id="ID_86820d9689560b50a6b54ce40b91101a33c771e0"
+		position="203.0 9.5 217.0"
 		width="8.0"
 		height="11.0"
 		depth="8.0"
@@ -587,7 +678,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="181.5 10.0 269.5"
+<a-box id="ID_c0d5b8c4764b3562dd3b9024b0061b46b9c5e484"
+		position="181.5 10.0 269.5"
 		width="3.0"
 		height="12.0"
 		depth="3.0"
@@ -595,7 +687,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="192.0 7.5 217.0"
+<a-box id="ID_3fbce74794819dc47b2dde8afbccd565a07ce545"
+		position="192.0 7.5 217.0"
 		width="8.0"
 		height="7.0"
 		depth="8.0"
@@ -603,7 +696,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="265.5 5.5 138.5"
+<a-box id="ID_6eb10a78cff7e308bfa122bf528ab7538c48a2ae"
+		position="265.5 5.5 138.5"
 		width="1.0"
 		height="3.0"
 		depth="1.0"
@@ -611,7 +705,8 @@
 		shader="flat"
 		flat-shading="true">
 </a-box>
-<a-box position="133.0 6.0 270.0"
+<a-box id="ID_1b39b3071c491e283fb97fd895d31abdae344c89"
+		position="133.0 6.0 270.0"
 		width="4.0"
 		height="4.0"
 		depth="4.0"

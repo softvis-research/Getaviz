@@ -110,10 +110,7 @@ var searchController = (function() {
         });	
 		$(jQsearchInputID).on("typeahead:closed", function() {
 			rootDivElement.parentElement.style.overflow = "hidden";
-        });	
-		
-		
-        
+        });
     }
     
     function selectEntity(id) {     

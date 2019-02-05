@@ -31,29 +31,23 @@
 
 		{ 	name: 	"canvasFlyToController" 
 		},
-        {
-            name: 'filterController',
-            devMode: false,
-            configuration: 'default.json'
-        },
 		{	name: 	"searchController" 
 		},
 
 		{	name: 	"packageExplorerController",
 		},
 		{	name: 	"sourceCodeController",
-            url:    "https://raw.githubusercontent.com/softvis-research/freemind-mmx/master/freemind/"
+            url:    "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
 		},
-		{ 	name: 	"relationConnectorController",		
-						
-			fixPositionZ : 1,
-			showInnerRelations : true,
-			elementShape : "circle",					
-			sourceStartAtParentBorder : true,
-			targetEndAtParentBorder : false,
-			createEndpoints: true,
-		},
-
+        { 	name: 	"relationConnectorController",
+            fixPositionY : false,
+            showInnerRelations : true,
+            sourceStartAtParentBorder : false,
+            targetEndAtParentBorder : false,
+            sourceStartAtBorder: true,
+            targetEndAtBorder: true,
+            createEndpoints : true
+        },
 		{ 	name: 	"relationTransparencyController",
 		},
 			
@@ -61,10 +55,10 @@
 		},
         {
             name:   "systeminfoController",
-            system: "Freemind",
-            link: "https://freemind.sf.net",
+            system: "Bank",
+            link: "https://github.com/softvis-research/Bank",
             noc: true,
-            loc: 72329
+            loc: 192
         },
 		{	name: 	"menuController",
 			menuMapping: [
@@ -129,7 +123,7 @@
 						{
 							title: 	"City Floors",
 							link: 	true,
-							url:	"index.php?setup=web/City freemind&model=City%20floor%20freeminds"
+							url:	"index.php?setup=web/City freemind&model=City%20floor%20freemind"
 						},
 						{
 							title: 	"Recursive Disk",
@@ -189,21 +183,12 @@
                 name: "Type",
                 icon: "purpleCircle",
             }, {
-                name: "Method",
-                icon: "lightBlueCircle",
-            }, {
-                name: "Field",
-                icon: "yellowCircle",
-            }, {
                 name: "Navigation",
                 icon: "navigation",
                 entries: [
                     {
                         name: "Rotate",
                         icon: "leftMouseButton"
-                    }, {
-                        name: "Center",
-                        icon: "doubleClick"
                     }, {
                         name: "Move",
                         icon: "midMouseButton"
@@ -215,11 +200,11 @@
             ],
         }
 	],
+	
+	
+	
 
-
-
-
-    uis: [
+	uis: [
 
 
         {
@@ -269,10 +254,10 @@
                                     size: "33%",
                                     expanders: [
                                         {
-                                            name: "filterExplorer",
+                                           name: "filterExplorer",
                                             title: "Filter",
                                             controllers: [
-                                                {name: "filterController"}
+                                               // {name: "filterController"}
                                             ],
                                         }
                                     ]

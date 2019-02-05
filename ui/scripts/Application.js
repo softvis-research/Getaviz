@@ -23,20 +23,17 @@ $(document).ready(function () {
 });
 
 function initializeApplication(metaDataJson){
-
     //wait for canvas to be loaded full here...
-	var canvas = document.getElementById("x3dom-x3dElement-canvas");	
+	var canvas = document.getElementById(canvasId);
 	if(!canvas){
 		setTimeout(function(){initializeApplication(metaDataJson);}, 100);
 		return;
 	}
+
 	//create entity model
 	model.initialize(metaDataJson);
 
-	//start action controller
 	actionController.initialize();
-
-	//initialize canvas manipulator
 	canvasManipulator.initialize();
 
 	//initialize application
@@ -73,8 +70,8 @@ var application = (function() {
 	//initilize application
 	//*******************	
 	
-	function initialize(){						
-		
+	function initialize(){
+
 		//parse setup if defined
 		if(!window["setup"]){
 			events.log.error.publish({ text: "No setup configured"});
@@ -95,12 +92,11 @@ var application = (function() {
 		if( currentUIConfig === null){
 			events.log.error.publish({ text: "No UI config in setup found"});
 			return;
-		}		
-				
-		
+		}
+
 		//initialize controllers
-		setup.controllers.forEach(function(controller){				
-			loadAndInitializeController(controller);			
+		setup.controllers.forEach(function(controller){
+			loadAndInitializeController(controller);
 		});		
 		
 		//for ajax loading 
@@ -109,22 +105,27 @@ var application = (function() {
 	
 	
 	function startConfigParsingAfterControllerLoading(){
-		
 		//check that all controllers loaded
 		if(setup.controllers.length !== controllers.size){
+			console.debug("controllers not loaded yet...");
 			setTimeout(startConfigParsingAfterControllerLoading, 1);
 			return;
 		}
-		
+
 		//get body and canvas elements
 		bodyElement = document.body; 	
 		canvasElement = document.getElementById("canvas");
 		
 		//create ui div element
-		var uiDIV = document.createElement("DIV");
-		uiDIV.id = "ui";
-		bodyElement.appendChild(uiDIV);
-		currentUIConfig.uiDIV = uiDIV;
+		/*	AFRAME-WORKAROUND
+		FÜR AFRAME - existierendes DIV statt neuem UI aus aframe.html
+		id von "ui" zu "canvas" geändert
+		var uiDIV = document.getElementById("canvas");*/
+
+        var uiDIV = document.createElement("DIV");
+        uiDIV.id = "ui";
+        bodyElement.appendChild(uiDIV);
+        currentUIConfig.uiDIV = uiDIV;
 		
 		//activate controller
 		newActiveControllers = [];
@@ -134,8 +135,7 @@ var application = (function() {
 			parseUIConfig(currentUIConfig.name, currentUIConfig, uiDIV);
 
 			//activate controller
-			activateController();	
-
+			activateController();
 			events.log.info.publish({ text: "new config loaded: " + currentUIConfig.name });			
 		} catch(err) {
 			events.log.error.publish({ text: err.message });
@@ -191,7 +191,7 @@ var application = (function() {
 		currentUIConfig = nextUIConfig;
 		currentUIConfig.uiDIV = uiDIV;
 		
-		//collect old active controllers for deactivation		
+		//collect old active controllers for deactivation
 		oldActiveControllers = Array.from(activeControllers.keys());
 		newActiveControllers = [];
 
@@ -200,16 +200,15 @@ var application = (function() {
 			parseUIConfig(currentUIConfig.name, currentUIConfig, uiDIV);
 
 			//deactive controller
-			deactivateController(oldActiveControllers);	
+			deactivateController(oldActiveControllers);
 
 			//activate controller
-			activateController();	
+			activateController();
 
 			events.log.info.publish({ text: "new config loaded: " + currentUIConfig.name });	
 		} catch(err) {
 			events.log.error.publish({ text: err.message });
 		}
-
 	}
 	
 	
@@ -217,7 +216,7 @@ var application = (function() {
 	//*******************
 	
 	function parseUIConfig(configName, configPart, parent){
-		
+
 		//areas
 		if(configPart.area !== undefined){
 			var area = configPart.area;
@@ -292,11 +291,18 @@ var application = (function() {
 				
 		//canvas
 		if(configPart.canvas !== undefined){
-			
-			var canvasParentElement = canvasElement.parentElement;			
-			canvasParentElement.removeChild(canvasElement);		
-		
-			parent.appendChild(canvasElement);
+			if(visMode != "aframe") {
+                var canvasParentElement = canvasElement.parentElement;
+                canvasParentElement.removeChild(canvasElement);
+
+                parent.appendChild(canvasElement);
+            } else {
+                var canvasParentElement = canvasElement.parentElement;
+                canvasParentElement.removeChild(canvasElement);
+
+                parent.appendChild(canvasElement.cloneNode(true));
+                //	evtl canvas löschen ??
+			}
 		}
 		
 		//controller
@@ -321,7 +327,7 @@ var application = (function() {
 	
 	function loadAndInitializeController(controller){
 		var controllerName = controller.name;
-				
+
 		//controller allready loaded by html-file?
 		if(window[controllerName]){
 			var controllerObject = window[controllerName];
@@ -340,7 +346,7 @@ var application = (function() {
 	
 	function setActivateController(controller, parent){
 		
-		var controllerName = controller.name;		
+		var controllerName = controller.name;
 		var controllerObject = controllers.get(controllerName);
 		
 		if(controllerObject === undefined){
@@ -377,15 +383,13 @@ var application = (function() {
 	}
 
 	function activateController(){
-		
 		newActiveControllers.forEach(function(controllerObject){
 			if(controllerObject.activate){
 				var controllerDiv = activeControllers.get(controllerObject);
 
 				controllerObject.activate(controllerDiv);
 			}	
-		});	
-		
+		});
 	}
 	
 
@@ -410,29 +414,31 @@ var application = (function() {
 	//*******************
 	
 	function createNavigationMode(navigationObject){			
-		
-		var navigationInfoElement = document.getElementById("navigationInfo");
-		
-		if(!navigationInfoElement){
-			var scene = document.getElementById("scene");
-		
-			navigationInfoElement = document.createElement("NAVIGATIONINFO");
-			navigationInfoElement.id = "navigationInfo";
-			
-			scene.appendChild(navigationInfoElement);		
-		}
-						
-		if(navigationObject.type){
-			navigationInfoElement.setAttribute("type", navigationObject.type);
-		}
-		if(navigationObject.speed){
-			navigationInfoElement.setAttribute("speed", navigationObject.speed);
-		}
-		
-		//Turntable seems not to work with 1.7 and dynamic adding
-		if(navigationObject.typeParams){
-			navigationInfoElement.setAttribute("typeParams", navigationObject.typeParams);
-		}
+		if(visMode == "x3dom") {
+            var navigationInfoElement = document.getElementById("navigationInfo");
+
+            if (!navigationInfoElement) {
+                var scene = document.getElementById("scene");
+
+                navigationInfoElement = document.createElement("NAVIGATIONINFO");
+                navigationInfoElement.id = "navigationInfo";
+
+                scene.appendChild(navigationInfoElement);
+            }
+
+            if (navigationObject.type) {
+                navigationInfoElement.setAttribute("type", navigationObject.type);
+            }
+            if (navigationObject.speed) {
+                navigationInfoElement.setAttribute("speed", navigationObject.speed);
+            }
+
+            //Turntable seems not to work with 1.7 and dynamic adding
+            if (navigationObject.typeParams) {
+                navigationInfoElement.setAttribute("typeParams", navigationObject.typeParams);
+            }
+        }
+        else console.debug("No x3dom - no navigationInfoElement");
 	}
 	
 	function createPanel(areaPart){

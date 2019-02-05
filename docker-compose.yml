@@ -1,0 +1,41 @@
+version: "3"
+services:
+    db:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: dbpassword_for_user
+            MYSQL_DATABASE: eval_server_development
+            MYSQL_USER: db_username
+            MYSQL_PASSWORD: dbpassword_for_user
+        restart: always
+    eval:
+        build: evaluationserver
+        restart: always
+        env_file: evaluationserver/env
+        command: "./bin/wait-for-it.sh db:3306 -s -t 30 -- ./bin/docker_start"
+        volumes:
+        - ./evaluationserver:/usr/src/app
+        ports:
+            - "8081:8081" 
+        depends_on:
+            - db
+    frontend:
+        build: ui/
+        restart: always
+        volumes:
+            - ./ui:/var/www/html/ui
+        ports:
+            - "8082:80"
+    backend:
+        build: generator2/org.getaviz.generator/
+        restart: always
+        volumes:
+            - ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war
+            - ./settings.properties:/opt/config/settings.properties
+            - ./generator2/output:/var/lib/jetty/output/
+            - ./generator2/databases:/var/lib/jetty/databases/
+        ports:
+            - "8083:8080"
+volumes:
+  bundle:
+    driver: local

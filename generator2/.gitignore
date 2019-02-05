@@ -1,0 +1,25 @@
+.metadata/
+*/bin
+*/model/*
+*/xtend-gen/*
+*/test-xtend-gen/*
+*/src-gen/*
+*.xml_gen
+*/target/*
+**/generated-sources/*
+*/.settings/*
+*/output/*
+.directory
+/databases
+/databases.old
+dbms
+/bin/
+store_lock
+**.log
+neostore.transaction.db.**
+*.xtextbin
+*.xtendbin
+test-xtend-gen/
+
+# Ignore default models
+/.recommenders/

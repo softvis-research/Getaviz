@@ -229,7 +229,6 @@ var canvasManipulator = (function() {
 		const centerOfPart = getCenterOfEntity(entity);
 
 		viewpoint.setCenterOfRotation(centerOfPart);
-
 		if(setFocus){
 			let mat = viewarea.getViewMatrix().inverse();
 
@@ -250,6 +249,7 @@ var canvasManipulator = (function() {
 
 	
 	function getCenterOfEntity(entity){
+
 		const entityPart = getPart(entity);
 		const volumeOfPart = entityPart.getVolume();
 		const centerOfPart = volumeOfPart.center;
@@ -264,7 +264,6 @@ var canvasManipulator = (function() {
 			const part = multiPart.getParts([entity.id]);
 			entity.part = part;
 		}
-		
 		return entity.part;
 	}
 	
@@ -274,8 +273,7 @@ var canvasManipulator = (function() {
 		//->Heilung durch Dopplung	
 		if(parts.ids.length === 1){
 			parts.ids.push(parts.ids[0]);	
-		}	
-		
+		}
 		parts.setDiffuseColor(color);
 	}
 	
@@ -285,8 +283,7 @@ var canvasManipulator = (function() {
 		//->Heilung durch Dopplung
 		if(parts.ids.length === 1){
 			parts.ids.push(parts.ids[0]);	
-		}							
-				
+		}
 		parts.setTransparency(value);
     }
 
@@ -296,8 +293,7 @@ var canvasManipulator = (function() {
 		//->Heilung durch Dopplung
 		if(parts.ids.length === 1){
 			parts.ids.push(parts.ids[0]);	
-		}							
-				
+		}
 		parts.setVisibility(visibility);
 	}
 
