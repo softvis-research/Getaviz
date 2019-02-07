@@ -208,7 +208,48 @@ var model = (function() {
 					} else {
 						entity.accesses = [];
 					}
-					break;				
+					break;
+				case "Function":
+					entity.signature = element.signature;
+					entity.qualifiedName = element.qualifiedName;
+					
+					if(element.calls){
+						entity.calls = element.calls.split(",");
+					} else {
+						entity.calls = [];
+					}
+					if(element.calledBy){
+						entity.calledBy = element.calledBy.split(",");
+					} else {
+						entity.calledBy = [];
+					}
+					if(element.accesses){						
+						entity.accesses = element.accesses.split(",");
+					} else {
+						entity.accesses = [];
+					}
+					break;
+				case "Variable":
+					if(element.accessedBy){
+						entity.accessedBy = element.accessedBy.split(",");
+					} else {
+						entity.accessedBy = [];
+					}
+					
+					if(element.declaredType){
+						//if variable is of type array, [] is put after the variable name
+						if(element.declaredType.includes("[")){
+							let parts = element.declaredType.split("[");
+							entity.displayText = parts[0] + entity.name + "[" + parts[1];
+						} else {
+							entity.displayText = element.declaredType + " " + element.name;
+						}
+					} else {
+						entity.displayText = element.name;
+					}
+					break;
+				case "TranslationUnit":
+					break;
 				default: 
 					return;
 			}
@@ -403,9 +444,6 @@ var model = (function() {
 			});		
 		});
     }
-	
-	
-	
 	
 	function reset(){
 		eventEntityMap.forEach(function(entityMap, eventKey, map){

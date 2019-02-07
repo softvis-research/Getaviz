@@ -61,7 +61,7 @@ public class JQACEnhancement {
 					child.setProperty("name", Long.toString(((Node)child).getId()));
 				}
 				if(!child.hasProperty("fqn")){
-					child.setProperty("fqn", (fileName + child.getProperty("name")));
+					child.setProperty("fqn", (fileName + "_" + child.getProperty("name")));
 				}
 				if(!child.hasProperty("hash")){
 					child.setProperty("hash", createHash(child.getProperty("fqn").toString()));

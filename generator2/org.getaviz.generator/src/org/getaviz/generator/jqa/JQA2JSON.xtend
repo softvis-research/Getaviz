@@ -227,7 +227,7 @@ class JQA2JSON {
 		"id":            "«translationUnit.getProperty("hash")»",
 		"qualifiedName": "«translationUnit.getProperty("fqn")»",
 		"name":          "«translationUnit.getProperty("name")»",
-		"type":          "FAMIX.Namespace",
+		"type":          "FAMIX.TranslationUnit",
 		"belongsTo":     "«belongsTo»"
 	'''	
 		return result
@@ -244,7 +244,7 @@ class JQA2JSON {
 		"id":            "«function.getProperty("hash")»",
 		"qualifiedName": "«escapeHtml4(function.getProperty("fqn") as String)»",
 		"name":          "«function.getProperty("name")»",
-		"type":          "FAMIX.Method",
+		"type":          "FAMIX.Function",
 		"modifiers":     "",
 		"signature":  	 "«function.getFunctionSignature»",
 		"calls":		 "",
@@ -264,13 +264,13 @@ class JQA2JSON {
 		}		
 		val type = variable.getSingleRelationship(Rels.OF_TYPE, Direction.OUTGOING)
 		if(type !== null) {
-			declaredType = type.startNode.getProperty("name") as String
+			declaredType = type.endNode.getProperty("name") as String
 		}				
 		val result = '''
 		"id":            "«variable.getProperty("hash")»",
 		"qualifiedName": "«variable.getProperty("fqn")»",
 		"name":          "«variable.getProperty("name")»",
-		"type":          "FAMIX.Attribute",
+		"type":          "FAMIX.Variable",
 		"declaredType":  "«declaredType»",
 		"belongsTo":     "«belongsTo»"
 	'''
