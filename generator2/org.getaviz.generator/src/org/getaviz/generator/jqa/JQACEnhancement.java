@@ -13,6 +13,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.QueryExecutionException;
+import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
 
@@ -45,6 +46,12 @@ public class JQACEnhancement {
 		for(Node translationUnit : translationUnits) {
 			//build translationUnit name, fqn and hash from the filename of the containing file
 			String fileName = translationUnit.getSingleRelationship(Rels.CONTAINS, Direction.INCOMING).getStartNode().getProperty("fileName").toString();
+			if(fileName.endsWith(".ast")) {
+				fileName = fileName.replaceAll(".ast", "");
+				if(!fileName.endsWith(".h")) {
+					fileName = fileName + ".c";
+				}
+			}
 			if(!translationUnit.hasProperty("name")){
 				translationUnit.setProperty("name", fileName);
 			}
@@ -56,7 +63,8 @@ public class JQACEnhancement {
 			}
 			
 			//build fqn and hash for functions etc. from the name of the translation unit plus their own name
-			this.graph.traversalDescription().depthFirst().relationships(Rels.DECLARES, Direction.OUTGOING).traverse(translationUnit).nodes().forEach(child -> {
+			ResourceIterable<Node> nodes = this.graph.traversalDescription().depthFirst().relationships(Rels.DECLARES, Direction.OUTGOING).traverse(translationUnit).nodes();
+			for(Node child : nodes) {
 				if(!child.hasProperty("name")){
 					child.setProperty("name", Long.toString(((Node)child).getId()));
 				}
@@ -66,8 +74,7 @@ public class JQACEnhancement {
 				if(!child.hasProperty("hash")){
 					child.setProperty("hash", createHash(child.getProperty("fqn").toString()));
 				}
-					
-			});
+			}
 		}
 	}
 	
