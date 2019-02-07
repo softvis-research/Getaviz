@@ -37,8 +37,9 @@ class RD2RD {
 			var result = graph.execute(
 				"MATCH p=(n:Package)-[:CONTAINS*]->(m:Package) WHERE NOT (m)-[:CONTAINS]->(:Package) RETURN max(length(p)) AS length")
 			var namespaceMaxLevel = 2
-			if(!(result.head.get("length") === null)){
-				namespaceMaxLevel = (result.head.get("length") as Long).intValue + 1
+			val head = result.head
+			if(head.containsKey("length") && head.get("length") !== null){
+				namespaceMaxLevel = (head.get("length") as Long).intValue + 1
 			}
 			// Returns the longest Path from root to deepest sub package
 			result = graph.execute(
