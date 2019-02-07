@@ -4,7 +4,8 @@ import org.getaviz.generator.city.m2m.City2City;
 import org.getaviz.generator.city.m2t.City2AFrame;
 import org.getaviz.generator.city.m2t.City2X3D;
 import org.getaviz.generator.jqa.JQA2JSON;
-import org.getaviz.generator.jqa.JQAEnhancement;
+import org.getaviz.generator.jqa.JQACEnhancement;
+import org.getaviz.generator.jqa.JQAJavaEnhancement;
 import org.getaviz.generator.rd.m2m.RD2RD;
 import org.getaviz.generator.rd.m2t.RD2AFrame;
 import org.getaviz.generator.rd.m2t.RD2X3D;
@@ -23,7 +24,12 @@ public class Generator {
 		GraphDatabaseService graph = Database.getInstance(config.getDatabaseName());
 		ProgrammingLanguage sourceCodeLanguage = getLanguage(graph);
 		
-		new JQAEnhancement(sourceCodeLanguage);
+		if(sourceCodeLanguage == ProgrammingLanguage.C) {
+			new JQACEnhancement();
+		} else if(sourceCodeLanguage == ProgrammingLanguage.JAVA) {
+			new JQAJavaEnhancement();
+		}
+		
 		switch (config.getMetaphor()) {
 		case CITY: {
 			new JQA2City();
