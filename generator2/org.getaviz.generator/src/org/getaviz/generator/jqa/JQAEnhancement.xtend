@@ -9,6 +9,7 @@ import org.getaviz.lib.database.Rels
 import org.neo4j.graphdb.Direction
 import org.neo4j.graphdb.traversal.Uniqueness
 import org.neo4j.graphdb.Node
+import org.getaviz.generator.Generator.ProgrammingLanguage
 
 class JQAEnhancement {
 	val log = LogFactory::getLog(class)
@@ -16,7 +17,7 @@ class JQAEnhancement {
 	val graph = Database::getInstance(config.databaseName)
 	val evaluator = new JQAEvaluator
 
-	new(boolean isCSourceCode) {
+	new(ProgrammingLanguage sourceCodeLanguage) {
 		log.info("JQAEnhancement has started.")
 		var tx = graph.beginTx
 		try {
@@ -39,7 +40,7 @@ class JQAEnhancement {
 
 		tx = graph.beginTx
 		try {
-			addHashes(isCSourceCode)
+			addHashes(sourceCodeLanguage)
 			tx.success
 		} finally {
 			tx.close
@@ -47,8 +48,8 @@ class JQAEnhancement {
 		log.info("JQAEnhancement finished")
 	}
 
-	private def addHashes(boolean isCSourceCode) {
-		if(!isCSourceCode){
+	private def addHashes(ProgrammingLanguage sourceCodeLanguage) {
+		if(sourceCodeLanguage == ProgrammingLanguage.JAVA){
 			var roots = graph.execute("MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN n").map [
 			return get("n") as Node
 			]

@@ -21,9 +21,9 @@ public class Generator {
 	public static void main(String[] args) {
 		SettingsConfiguration config = SettingsConfiguration.getInstance();
 		GraphDatabaseService graph = Database.getInstance(config.getDatabaseName());
-		boolean isCSourceCode = isCSourceCode(graph);
+		ProgrammingLanguage sourceCodeLanguage = getLanguage(graph);
 		
-		new JQAEnhancement(isCSourceCode);
+		new JQAEnhancement(sourceCodeLanguage);
 		switch (config.getMetaphor()) {
 		case CITY: {
 			new JQA2City();
@@ -36,9 +36,9 @@ public class Generator {
 			break;
 		}
 		case RD: {
-			if(isCSourceCode) {
+			if(sourceCodeLanguage == ProgrammingLanguage.C) {
 				new C2RD();
-			} else {
+			} else if(sourceCodeLanguage == ProgrammingLanguage.JAVA){
 				new Java2RD();
 			}
 			new JQA2JSON();
@@ -58,7 +58,12 @@ public class Generator {
 		}
 	}
 
-	private static boolean isCSourceCode(GraphDatabaseService graph) {
+	/**
+	 * Checks source code language in graph database and returns language of type ProgrammingLanguage.
+	 * @param graph of type GraphDatabaseService
+	 * @return element of enum ProgrammingLanguage
+	 */
+	private static ProgrammingLanguage getLanguage(GraphDatabaseService graph) {
 		Transaction tx = graph.beginTx();
 		Result queryResult = null;
 		try {
@@ -68,9 +73,14 @@ public class Generator {
 		}
 		
 		if(queryResult.hasNext()) {
-			return true;
+			return ProgrammingLanguage.C;
 		} else {
-			return false;
+			return ProgrammingLanguage.JAVA;
 		}
+	}
+	
+	public enum ProgrammingLanguage{
+		JAVA,
+		C
 	}
 }
