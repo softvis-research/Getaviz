@@ -24,6 +24,7 @@ class JQA2JSON {
 		log.info("JQA2JSON has started.")
 		val elements = newArrayList
 		graph.execute("MATCH (n)<-[:VISUALIZES]-() RETURN n").forEach[elements.add(get("n") as Node)]
+		graph.execute("MATCH (n:SingleCondition) RETURN n").forEach[elements.add(get("n") as Node)]
 		val tx = graph.beginTx
 		var Writer fw = null
 		try {
@@ -77,6 +78,9 @@ class JQA2JSON {
 			«ENDIF»
 			«IF el.hasLabel(Labels.Variable)»
 			«toMetaDataVariable(el)»
+			«ENDIF»
+			«IF el.hasLabel(Labels.SingleCondition)»
+			«toMetaDataCondition(el)»
 			«ENDIF»
 		«ENDFOR»
 	'''
@@ -227,7 +231,7 @@ class JQA2JSON {
 		"id":            "«translationUnit.getProperty("hash")»",
 		"qualifiedName": "«translationUnit.getProperty("fqn")»",
 		"name":          "«translationUnit.getProperty("name")»",
-		"type":          "FAMIX.TranslationUnit",
+		"type":          "TranslationUnit",
 		"belongsTo":     "«belongsTo»"
 	'''	
 		return result
@@ -273,6 +277,18 @@ class JQA2JSON {
 		"type":          "FAMIX.Variable",
 		"declaredType":  "«declaredType»",
 		"belongsTo":     "«belongsTo»"
+	'''
+		return result
+	}
+	
+	def toMetaDataCondition(Node condition) {
+		val belongsTo = "";
+		val result = '''
+		"id":            "«condition.getProperty("hash")»",
+		"qualifiedName": "«condition.getProperty("fqn")»",
+		"name":     	 "«condition.getProperty("MacroName")»",
+		"type":          "Macro",
+		"belongsTo":	 "«belongsTo»"
 	'''
 		return result
 	}

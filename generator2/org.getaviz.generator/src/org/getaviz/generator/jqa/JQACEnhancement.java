@@ -76,6 +76,18 @@ public class JQACEnhancement {
 				}
 			}
 		}
+		
+		List<Node> macros = new ArrayList<>();
+		Result macroQueryResult = graph.execute("MATCH (n:SingleCondition) RETURN n");
+		while(macroQueryResult.hasNext()) {
+			macros.add((Node)macroQueryResult.next().get("n"));
+		}
+		
+		for(Node macro : macros) {
+			if(!macro.hasProperty("hash")){
+				macro.setProperty("hash", createHash(macro.getProperty("fqn").toString() + macro.getId()));
+			}
+		}
 	}
 	
 	private String createHash(String fqn) {
