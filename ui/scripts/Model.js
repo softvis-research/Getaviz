@@ -23,6 +23,7 @@ var model = (function() {
 	let issuesById = new Map();
 	let paths = [];
 	let labels = [];
+	let macrosById = new Map();
 
 	function initialize(famixModel) {            
 		//create initial entites from famix elements 
@@ -249,6 +250,9 @@ var model = (function() {
 					}
 					break;
 				case "TranslationUnit":
+					break;
+				case "Macro":
+					macrosById.set(element.id, entity);
 					break;
 				default: 
 					return;
@@ -516,6 +520,10 @@ var model = (function() {
     function getAllIssues() {
         return issues;
     }
+	
+	function getAllMacrosById(){
+		return macrosById;
+	}
 
 	function getAllSecureEntities(){
 	    let entities = [];
@@ -665,6 +673,7 @@ var model = (function() {
         getAllVersions              : getAllVersions,
 		getAllIssues				: getAllIssues,
         getIssuesById               : getIssuesById,
+		getAllMacrosById			: getAllMacrosById,
 		createEntity				: createEntity,
 		removeEntity				: removeEntity,
 		
