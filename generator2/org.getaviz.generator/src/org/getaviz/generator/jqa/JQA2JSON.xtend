@@ -282,13 +282,11 @@ class JQA2JSON {
 	}
 	
 	def toMetaDataCondition(Node condition) {
-		val belongsTo = "";
 		val result = '''
 		"id":            "«condition.getProperty("hash")»",
 		"qualifiedName": "«condition.getProperty("fqn")»",
 		"name":     	 "«condition.getProperty("MacroName")»",
-		"type":          "Macro",
-		"belongsTo":	 "«belongsTo»"
+		"type":          "Macro"
 	'''
 		return result
 	}
