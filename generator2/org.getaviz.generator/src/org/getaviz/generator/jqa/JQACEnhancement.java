@@ -77,15 +77,15 @@ public class JQACEnhancement {
 			}
 		}
 		
-		List<Node> macros = new ArrayList<>();
-		Result macroQueryResult = graph.execute("MATCH (n:SingleCondition) RETURN n");
-		while(macroQueryResult.hasNext()) {
-			macros.add((Node)macroQueryResult.next().get("n"));
+		List<Node> conditionNodes = new ArrayList<>();
+		Result conditionQueryResult = graph.execute("MATCH (n:Condition) RETURN n");
+		while(conditionQueryResult.hasNext()) {
+			conditionNodes.add((Node)conditionQueryResult.next().get("n"));
 		}
 		
-		for(Node macro : macros) {
-			if(!macro.hasProperty("hash")){
-				macro.setProperty("hash", createHash(macro.getProperty("fqn").toString() + macro.getId()));
+		for(Node condition : conditionNodes) {
+			if(!condition.hasProperty("hash")){
+				condition.setProperty("hash", createHash(Long.toString(condition.getId())));
 			}
 		}
 	}

@@ -23,8 +23,8 @@ class JQA2JSON {
 	new () {
 		log.info("JQA2JSON has started.")
 		val elements = newArrayList
+		graph.execute("MATCH (n:Condition) RETURN n").forEach[elements.add(get("n") as Node)]
 		graph.execute("MATCH (n)<-[:VISUALIZES]-() RETURN n").forEach[elements.add(get("n") as Node)]
-		graph.execute("MATCH (n:SingleCondition) RETURN n").forEach[elements.add(get("n") as Node)]
 		val tx = graph.beginTx
 		var Writer fw = null
 		try {
@@ -80,7 +80,16 @@ class JQA2JSON {
 			«toMetaDataVariable(el)»
 			«ENDIF»
 			«IF el.hasLabel(Labels.SingleCondition)»
-			«toMetaDataCondition(el)»
+			«toMetaDataSingleCondition(el)»
+			«ENDIF»
+			«IF el.hasLabel(Labels.Not)»
+			«toMetaDataNegation(el)»
+			«ENDIF»
+			«IF el.hasLabel(Labels.And)»
+			«toMetaDataAnd(el)»
+			«ENDIF»
+			«IF el.hasLabel(Labels.Or)»
+			«toMetaDataOr(el)»
 			«ENDIF»
 		«ENDFOR»
 	'''
@@ -233,16 +242,21 @@ class JQA2JSON {
 		"name":          "«translationUnit.getProperty("name")»",
 		"type":          "TranslationUnit",
 		"belongsTo":     "«belongsTo»"
-	'''	
+		'''	
 		return result
 	}
 	
 	private def toMetaDataFunction(Node function) {
 		var belongsTo = ""
+		var dependsOn = ""
 		val parent = function.getSingleRelationship(Rels.DECLARES, Direction.INCOMING)
 		if(parent !== null) {
 			belongsTo = parent.startNode.getProperty("hash") as String
-		}		
+		}	
+		var dependent = function.getRelationships(Direction.OUTGOING, Rels.DEPENDS_ON).head
+		if(dependent !== null){
+			dependsOn = dependent.endNode.getProperty("hash") as String
+		}	
 		
 		val result = '''
 		"id":            "«function.getProperty("hash")»",
@@ -254,14 +268,16 @@ class JQA2JSON {
 		"calls":		 "",
 		"calledBy":		 "",
 		"accesses":	 	 "",
-		"belongsTo":     "«belongsTo»"
-	'''
+		"belongsTo":     "«belongsTo»",
+		"dependsOn":     "«dependsOn»"
+		'''
 		return result
 	}
 	
 	def toMetaDataVariable(Node variable) {
 		var belongsTo = ""
 		var declaredType = ""
+		var dependsOn = ""
 		val parent = variable.getRelationships(Direction.INCOMING, Rels.DECLARES).head
 		if(parent !== null) {
 			belongsTo = parent.startNode.getProperty("hash") as String
@@ -269,25 +285,80 @@ class JQA2JSON {
 		val type = variable.getSingleRelationship(Rels.OF_TYPE, Direction.OUTGOING)
 		if(type !== null) {
 			declaredType = type.endNode.getProperty("name") as String
-		}				
+		}	
+		var dependent = variable.getRelationships(Direction.OUTGOING, Rels.DEPENDS_ON).head
+		if(dependent !== null){
+			dependsOn = dependent.endNode.getProperty("hash") as String
+		}
+					
 		val result = '''
 		"id":            "«variable.getProperty("hash")»",
 		"qualifiedName": "«variable.getProperty("fqn")»",
 		"name":          "«variable.getProperty("name")»",
 		"type":          "FAMIX.Variable",
 		"declaredType":  "«declaredType»",
-		"belongsTo":     "«belongsTo»"
-	'''
+		"belongsTo":     "«belongsTo»",
+		"dependsOn":     "«dependsOn»"
+		'''
 		return result
 	}
 	
-	def toMetaDataCondition(Node condition) {
+	def toMetaDataSingleCondition(Node singleCondition) {
 		val result = '''
-		"id":            "«condition.getProperty("hash")»",
-		"qualifiedName": "«condition.getProperty("fqn")»",
-		"name":     	 "«condition.getProperty("MacroName")»",
+		"id":            "«singleCondition.getProperty("hash")»",
+		"qualifiedName": "«singleCondition.getProperty("fqn")»",
+		"name":     	 "«singleCondition.getProperty("MacroName")»",
 		"type":          "Macro"
-	'''
+		'''
+		return result
+	}
+	
+	def toMetaDataNegation(Node negation) {
+		var negated = ""
+		val negatedNode = negation.getRelationships(Direction.OUTGOING, Rels.NEGATES).head.endNode
+		if(negatedNode !== null) {
+			negated = negatedNode.getProperty("hash") as String
+		}
+		
+		val result = '''
+		"id":            "«negation.getProperty("hash")»",
+		"type":          "Negation",
+		"negated":		 "«negated»"
+		'''
+		return result
+	}
+	
+	def toMetaDataAnd(Node andNode) {
+		val connectedConditions = newArrayList
+		val connections = andNode.getRelationships(Direction.OUTGOING, Rels.CONNECTS)
+		connections.forEach[
+			if(endNode.hasProperty("hash")){
+				connectedConditions += endNode.getProperty("hash") as String
+			}
+		]
+		
+		val result = '''
+		"id":            "«andNode.getProperty("hash")»",
+		"type":          "And",
+		"connected":	 "«connectedConditions.removeBrackets»"
+		'''
+		return result
+	}
+	
+	def toMetaDataOr(Node orNode) {
+		val connectedConditions = newArrayList
+		val connections = orNode.getRelationships(Direction.OUTGOING, Rels.CONNECTS)
+		connections.forEach[
+			if(endNode.hasProperty("hash")){
+				connectedConditions += endNode.getProperty("hash") as String
+			}
+		]
+		
+		val result = '''
+		"id":            "«orNode.getProperty("hash")»",
+		"type":          "Or",
+		"connected":	 "«connectedConditions.removeBrackets»"
+		'''
 		return result
 	}
 					
