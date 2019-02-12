@@ -14,7 +14,9 @@ var canvasFilterController = (function() {
         events.tmpFiltered.off.subscribe(onEntityTmpUnfilter);
         events.versionSelected.on.subscribe(onVersionSelected);
 		events.versionSelected.off.subscribe(offVersionSelected);
-		events.config.filterSettings.subscribe(filterSettings);
+        events.config.filterSettings.subscribe(filterSettings);
+        events.macroDefined.on.subscribe(onMacroDefined);
+        events.macroDefined.off.subscribe(onMacroUndefined);
     }
 
     function applyIssueFilter(entities) {
@@ -150,6 +152,16 @@ var canvasFilterController = (function() {
         
     function offVersionSelected(applicationEvent) {
         const entities = model.getEntitiesByVersion(applicationEvent.entities[0]);
+        canvasManipulator.hideEntities(entities);
+    }
+
+    function onMacroDefined(applicationEvent){
+        const entities = model.getModelElementsByMacro(String(applicationEvent.entities[0]));
+        canvasManipulator.showEntities(entities);
+    }
+
+    function onMacroUndefined(applicationEvent){
+        const entities = model.getModelElementsByMacro(String(applicationEvent.entities[0]));
         canvasManipulator.hideEntities(entities);
     }
 

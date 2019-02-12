@@ -70,8 +70,7 @@ var macroExplorerController = (function() {
                 }
             },
             callback: {
-                onCheck: macroOnCheck,
-                onClick: macroOnClick
+                onCheck: macroOnCheck
             },
             view:{
                 showLine: false,
@@ -85,11 +84,24 @@ var macroExplorerController = (function() {
 	}
 	
 	function macroOnCheck(event, treeId, treeNode) {
-		//TODO: implement
-    }
-	
-	function macroOnClick(treeEvent, treeId, treeNode) {
-		//TODO: implement
+		var nodes = tree.getChangeCheckedNodes();
+        
+		var entities = [];
+		nodes.forEach(function(node){
+			node.checkedOld = node.checked;	
+			entities.push(node.id);
+		});
+								
+		var applicationEvent = {			
+			sender: 	macroExplorerController,
+			entities:	entities
+		};
+		
+		if (!treeNode.checked){
+			events.macroDefined.off.publish(applicationEvent);
+		} else {
+			events.macroDefined.on.publish(applicationEvent);
+		}
     }
     
     return {

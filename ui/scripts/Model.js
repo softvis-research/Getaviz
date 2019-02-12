@@ -10,7 +10,8 @@ var model = (function() {
 		added			: { name: "added" },
 		componentSelected : { name: "componentSelected" },
 		antipattern     : { name: "antipattern" },
-		versionSelected : { name: "versionSelected" }
+		versionSelected : { name: "versionSelected" },
+		macroDefined	: { name: "macroDefined"}
     };
 
 	let entitiesById = new Map();
@@ -24,6 +25,8 @@ var model = (function() {
 	let paths = [];
 	let labels = [];
 	let macrosById = new Map();
+	let modelElementsByMacro = new Map();
+	let conditionElementById = new Map();
 
 	function initialize(famixModel) {            
 		//create initial entites from famix elements 
@@ -229,6 +232,9 @@ var model = (function() {
 					} else {
 						entity.accesses = [];
 					}
+
+					entity.dependsOn = element.dependsOn;
+
 					break;
 				case "Variable":
 					if(element.accessedBy){
@@ -248,11 +254,31 @@ var model = (function() {
 					} else {
 						entity.displayText = element.name;
 					}
+
+					entity.dependsOn = element.dependsOn;
+
 					break;
 				case "TranslationUnit":
 					break;
 				case "Macro":
 					macrosById.set(element.id, entity);
+					conditionElementById.set(element.id, entity);
+					break;
+				case "And":
+				case "Or":
+					if(element.connected){
+						entity.connected = element.connected.split(",");
+						for(let i = 0; i < entity.connected.length; ++i) {
+							entity.connected[i] = entity.connected[i].trim();
+						}
+					} else {
+						entity.connected = [];
+					}
+					conditionElementById.set(element.id, entity);
+					break;
+				case "Negation":
+					entity.negated = element.negated;
+					conditionElementById.set(element.id, entity);
 					break;
 				default: 
 					return;
@@ -411,7 +437,13 @@ var model = (function() {
 					entity.accesses = accesses;
 					
 					break;				
-				
+				case "Function":
+				case "Variable":
+					if(entity.dependsOn !== undefined && entity.dependsOn !== ""){
+						retrieveAllUsedMacros(entity.dependsOn, entity.id);
+					}
+					
+					break;
 				default: 				
 					return;
 			}
@@ -500,7 +532,38 @@ var model = (function() {
 		return parents;
 	}
 
-	
+	function retrieveAllUsedMacros(conditionId, modelElementId){
+		var conditionEntity = conditionElementById.get(conditionId);
+
+		switch (conditionEntity.type) {
+			case "Macro":
+				var modelEntity = getEntityById(modelElementId);
+				if(modelElementsByMacro.get(conditionEntity.id) === undefined){
+					var modelElements = [];
+					modelElements.push(modelEntity);
+					modelElementsByMacro.set(conditionEntity.id, modelElements);
+				} else {
+					var modelElements = modelElementsByMacro.get(conditionEntity.id);
+					modelElements.push(modelEntity);
+					modelElementsByMacro.set(conditionEntity.id, modelElements);
+				}
+				break;
+			case "And":
+			case "Or":
+				var connectedElementIds = conditionEntity.connected;
+				connectedElementIds.forEach(function(connectedEntityId){
+					retrieveAllUsedMacros(String(connectedEntityId), modelElementId);
+				});
+				break;
+			case "Negation":
+				let negatedElementId = conditionEntity.negated;
+				retrieveAllUsedMacros(negatedElementId, modelElementId);
+				break;			
+			default:
+				break;
+		}
+	}
+
 	function getAllEntities(){
 		return entitiesById;
 	}
@@ -523,6 +586,10 @@ var model = (function() {
 	
 	function getAllMacrosById(){
 		return macrosById;
+	}
+
+	function getModelElementsByMacro(id){
+		return modelElementsByMacro.get(id);
 	}
 
 	function getAllSecureEntities(){
@@ -674,6 +741,7 @@ var model = (function() {
 		getAllIssues				: getAllIssues,
         getIssuesById               : getIssuesById,
 		getAllMacrosById			: getAllMacrosById,
+		getModelElementsByMacro     : getModelElementsByMacro,
 		createEntity				: createEntity,
 		removeEntity				: removeEntity,
 		
