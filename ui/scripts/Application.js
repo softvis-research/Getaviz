@@ -44,13 +44,7 @@ function initializeApplication(metaDataJson){
 	}
 }
 
-
-
-
-
-
 var application = (function() {
-	
 
 	var controllerFileFolder = "scripts/";
 	

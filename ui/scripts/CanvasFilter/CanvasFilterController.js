@@ -15,8 +15,7 @@ var canvasFilterController = (function() {
         events.versionSelected.on.subscribe(onVersionSelected);
 		events.versionSelected.off.subscribe(offVersionSelected);
         events.config.filterSettings.subscribe(filterSettings);
-        events.macroDefined.on.subscribe(onMacroDefined);
-        events.macroDefined.off.subscribe(onMacroUndefined);
+        events.macroChanged.on.subscribe(onMacroChanged);
     }
 
     function applyIssueFilter(entities) {
@@ -155,14 +154,89 @@ var canvasFilterController = (function() {
         canvasManipulator.hideEntities(entities);
     }
 
-    function onMacroDefined(applicationEvent){
+    function onMacroChanged(applicationEvent){
         const entities = model.getModelElementsByMacro(String(applicationEvent.entities[0]));
-        canvasManipulator.showEntities(entities);
+        var shownEntities = [];
+        var hiddenEntities = [];
+        for(var i = 0; i < entities.length; i++){
+            if(showEntity(entities[i], applicationEvent)){
+                shownEntities.push(entities[i]);
+            } else {
+                hiddenEntities.push(entities[i]);
+            }
+        }
+        if(shownEntities.length > 0){
+            canvasManipulator.showEntities(shownEntities);  
+        }
+        if(hiddenEntities.length > 0){
+            canvasManipulator.hideEntities(hiddenEntities);
+        }
     }
 
-    function onMacroUndefined(applicationEvent){
-        const entities = model.getModelElementsByMacro(String(applicationEvent.entities[0]));
-        canvasManipulator.hideEntities(entities);
+    function showEntity(modelEntity, applicationEvent){
+        var showEntity = true;
+        var condition = model.getEntityById(modelEntity.dependsOn);
+
+        if(condition !== undefined){
+            showEntity = evaluateCondition(condition, applicationEvent.allTreeNodesById);
+        }
+        
+        return showEntity;
+    }
+
+    function evaluateCondition(condition, allTreeNodesById){
+        switch (condition.type) {
+            case "Macro":
+                var macroNode = allTreeNodesById.get(condition.id);
+                if(macroNode !== undefined && macroNode.checked){
+                    return true;
+                } else {
+                    return false;
+                }
+            case "Negation":
+                var negatedCondition = model.getEntityById(condition.negated);
+                var macroResult = evaluateCondition(negatedCondition, allTreeNodesById);
+                if(macroResult){
+                    return false;
+                //negation is true if macro is not defined
+                } else {
+                    return true;
+                }
+            case "And":
+                var connectedEntityIds = condition.connected;
+                var result = true;
+                for(var i = 0; i < connectedEntityIds.length; i++){
+                    var connectedEntity = model.getEntityById(connectedEntityIds[i]);
+                    var singleResult = evaluateCondition(connectedEntity, allTreeNodesById);
+                    //if one part of the and expression is false, the whole expression is false
+                    if(singleResult === false){
+                        result = false;
+                        break;
+                    }
+                }
+                return result;
+            case "Or":
+                var connectedEntityIds = condition.connected;
+                var trueCounter = 0;
+                for(var i = 0; i < connectedEntityIds.length; i++){
+                    var connectedEntity = model.getEntityById(connectedEntityIds[i]);
+                    var singleResult = evaluateCondition(connectedEntity, allTreeNodesById);
+                    //an exclusive or is only true if exactly one of the parts is true
+                    if(singleResult){
+                        trueCounter += 1;
+                        if(trueCounter > 1){
+                            result = false;
+                            break;
+                        }
+                    }
+                }
+                if(trueCounter === 0){
+                    result = false;
+                }
+                return result;
+            default:
+                break;
+        }
     }
 
     return {

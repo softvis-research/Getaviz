@@ -11,7 +11,7 @@ var model = (function() {
 		componentSelected : { name: "componentSelected" },
 		antipattern     : { name: "antipattern" },
 		versionSelected : { name: "versionSelected" },
-		macroDefined	: { name: "macroDefined"}
+		macroChanged	: { name: "macroChanged"}
     };
 
 	let entitiesById = new Map();
@@ -26,7 +26,6 @@ var model = (function() {
 	let labels = [];
 	let macrosById = new Map();
 	let modelElementsByMacro = new Map();
-	let conditionElementById = new Map();
 
 	function initialize(famixModel) {            
 		//create initial entites from famix elements 
@@ -262,7 +261,6 @@ var model = (function() {
 					break;
 				case "Macro":
 					macrosById.set(element.id, entity);
-					conditionElementById.set(element.id, entity);
 					break;
 				case "And":
 				case "Or":
@@ -274,11 +272,9 @@ var model = (function() {
 					} else {
 						entity.connected = [];
 					}
-					conditionElementById.set(element.id, entity);
 					break;
 				case "Negation":
 					entity.negated = element.negated;
-					conditionElementById.set(element.id, entity);
 					break;
 				default: 
 					return;
@@ -533,7 +529,7 @@ var model = (function() {
 	}
 
 	function retrieveAllUsedMacros(conditionId, modelElementId){
-		var conditionEntity = conditionElementById.get(conditionId);
+		var conditionEntity = getEntityById(conditionId);
 
 		switch (conditionEntity.type) {
 			case "Macro":

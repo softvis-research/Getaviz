@@ -2,7 +2,8 @@ var macroExplorerController = (function() {
 	
 	let tree;
 	let jMacroExplorer = "#macroExplorerUL";
-	let macroExplorerULID = "macroExplorerUL";
+	let macroExplorerTreeId = "macroExplorerUL";
+	let allTreeNodesById = new Map();
 
 	let controllerConfig = {
         elementsSelectable: true
@@ -17,11 +18,11 @@ var macroExplorerController = (function() {
 		let macroDiv = document.createElement("DIV");
 		macroDiv.id = "macroDiv";
 				
-		let macroExplorerUL = document.createElement("UL");
-		macroExplorerUL.id = macroExplorerULID;
-		macroExplorerUL.setAttribute("class", "ztree");
+		let macroExplorerTree = document.createElement("UL");
+		macroExplorerTree.id = macroExplorerTreeId;
+		macroExplorerTree.setAttribute("class", "ztree");
 				
-		macroDiv.appendChild(macroExplorerUL);
+		macroDiv.appendChild(macroExplorerTree);
 		rootDiv.appendChild(macroDiv);
 				
 		//create zTree
@@ -55,9 +56,9 @@ var macroExplorerController = (function() {
             }
 		});
 		
-		//Sortierung Alphanumerisch
+		//sort alphanumerically
+		items.sort();
 		
-
 		//settings
 		var settings = {
             check: {
@@ -84,25 +85,29 @@ var macroExplorerController = (function() {
 	}
 	
 	function macroOnCheck(event, treeId, treeNode) {
-		var nodes = tree.getChangeCheckedNodes();
-        
+		var allNodes = tree.getNodes();
+		for (var i = 0; i < allNodes.length; i++) {
+			var currentNode = allNodes[i];
+			allTreeNodesById.set(currentNode.id, currentNode)
+		}
+
+		var changedNodes = tree.getChangeCheckedNodes();
 		var entities = [];
-		nodes.forEach(function(node){
+		changedNodes.forEach(function(node){
 			node.checkedOld = node.checked;	
 			entities.push(node.id);
 		});
 								
 		var applicationEvent = {			
 			sender: 	macroExplorerController,
-			entities:	entities
+			entities:	entities,
+			allTreeNodesById: allTreeNodesById
 		};
 		
-		if (!treeNode.checked){
-			events.macroDefined.off.publish(applicationEvent);
-		} else {
-			events.macroDefined.on.publish(applicationEvent);
-		}
-    }
+		if (treeNode !== undefined){
+			events.macroChanged.on.publish(applicationEvent);
+		} 
+	}
     
     return {
         initialize: initialize,
