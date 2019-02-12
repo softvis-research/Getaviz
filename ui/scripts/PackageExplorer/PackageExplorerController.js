@@ -51,7 +51,9 @@ var packageExplorerController = (function() {
 			
 			if(entity.belongsTo === undefined){
 				//rootpackages
-				if(entity.type !== "issue" && entity.type !== "Macro") {
+				if(entity.type !== "issue" && entity.type !== "Macro"
+				&& entity.type !== "And" && entity.type !== "Or"
+				&& entity.type !== "Negation") {
 					if(entity.type === "Namespace") {
                         item = {
                             id: entity.id,
