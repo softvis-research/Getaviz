@@ -19,6 +19,7 @@ class JQA2RD {
 		log.info("JQA2RD started")
 		var tx = graph.beginTx
 		try {
+			graph.execute("MATCH (n:RD) DETACH DELETE n")
 			val result = graph.execute("MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN n")
 			val root = graph.createNode(Labels.Model, Labels.RD)
 			root.setProperty("date", new GregorianCalendar().time.toString)
