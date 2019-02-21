@@ -23,6 +23,7 @@ class JQA2City {
 	new () {
 		log.info("JQA2City started")
 		graph = Database::getInstance(config.databaseName)
+		graph.execute("MATCH (n:City) DETACH DELETE n")
 		var tx = graph.beginTx
 		try {
 			val result = graph.execute("MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package)RETURN n")
