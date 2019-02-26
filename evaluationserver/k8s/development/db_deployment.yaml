@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: evalserver-mysql
+  labels:
+    app: evalserver
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: evalserver
+    tier: mysql
+  clusterIP: None
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: evalserver
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: evalserver-mysql
+  labels:
+    app: evalserver
+spec:
+  selector:
+    matchLabels:
+      app: evalserver
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: evalserver
+        tier: mysql
+    spec:
+      containers:
+      - image: mysql:5.7
+        name: mysql
+        env:
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysql-user
+              key: user
+        - name: MYSQL_DATABASE
+          value: "database"
+        - name: MYSQL_RANDOM_ROOT_PASSWORD
+          value: "yes"
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim

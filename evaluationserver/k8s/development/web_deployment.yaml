@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: evalserver-web
+  labels:
+    app: evalserver
+spec:
+  ports:
+  - protocol: TCP
+    port: 3000
+  selector:
+    app: evalserver
+    tier: web
+  type: NodePort
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: evalserver-web
+  labels:
+    app: evalserver
+spec:
+  selector:
+    matchLabels:
+      app: evalserver
+      tier: web
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: evalserver
+        tier: web
+    spec:
+      containers:
+      - image: evaluationserver_web:latest
+        name: evaluationserver-web
+        args: ["rails", "s"]
+        env:
+        - name: RAILS_ENV
+          value: development
+        - name: DEVELOPMENT_MYSQL_DB_HOST
+          value: evalserver-mysql
+        - name: DEVELOPMENT_MYSQL_DB_NAME
+          value: "database"
+        - name: DEVELOPMENT_MYSQL_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        - name: DEVELOPMENT_MYSQL_DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysql-user
+              key: user
+        ports:
+        - containerPort: 3000
+          name: evalserver
+        imagePullPolicy: Never
+        volumeMounts:
+        - mountPath: "/app"
+          name: host-mount
+      volumes:
+      - name: host-mount
+        hostPath:
+          path: "/evalserver"
