@@ -9,14 +9,36 @@ import org.neo4j.graphdb.Direction
 import org.neo4j.graphdb.traversal.Uniqueness
 import org.getaviz.generator.database.Database
 import org.apache.commons.logging.LogFactory
+import java.io.IOException
 
-class JQAEnhancement {
+class DatabaseBuilder {
 	val log = LogFactory::getLog(class)
 	val config = SettingsConfiguration.instance
 	val graph = Database::getInstance(config.databaseName)
 	val evaluator = new JQAEvaluator
 
 	new() {
+		scan();
+		enhance();
+	}
+
+	def scan() {
+		val runtime = Runtime.getRuntime();
+		log.info(config.getDatabaseName());
+		log.info(config.getInputJars());
+		try {
+			runtime.exec("/opt/jqassistant/bin/jqassistant.sh scan -u " + config.getInputJars() + " -storeUri file:" +
+				config.getDatabaseName()).waitFor();
+			runtime.exec("chmod -v 777 -R " + config.getDatabaseName()).waitFor();
+			runtime.exec("chmod -v 777 -R " + config.getDatabaseName() + "/../store_lock").waitFor();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	def enhance() {
 		log.info("JQAEnhancement has started.")
 		var tx = graph.beginTx
 		try {
@@ -51,7 +73,7 @@ class JQAEnhancement {
 		val roots = graph.execute("MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN n").map [
 			return get("n") as Node
 		]
-		
+
 		roots.forEach [ package |
 			graph.traversalDescription.depthFirst.relationships(Rels.CONTAINS, Direction.OUTGOING).relationships(
 				Rels.DECLARES, Direction.OUTGOING).uniqueness(Uniqueness.NONE).evaluator(evaluator).traverse(package).
