@@ -58,8 +58,8 @@ public class Generator {
 			}
 
 		} catch (Exception e) {
-			log.info(e);
-		}
-		Database.getInstance().shutdown();
+			log.error(e);
+		} 
+//		Database.getInstance().shutdown();
 	}
 }

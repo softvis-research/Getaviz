@@ -45,19 +45,19 @@ public class SettingsConfiguration {
 		loadConfig("settings.properties");
 	}
 	
-	public String getInputJars() {
-		String[] jarArray = config.getStringArray("input.jars");
-		if(jarArray.length == 0) {
-			throw new RuntimeException("There is no specified uri to a jar file. Check if in the settings.properties file the field input.jars is set to an existing uri.");
+	public String getInputFiles() {
+		String[] fileArray = config.getStringArray("input.files");
+		if(fileArray.length == 0) {
+			throw new RuntimeException("There is no specified uri to a jar or war file. Check if in the settings.properties file the field input.files is set to one or more existing uris.");
 		}
-		String jars = "";
-		for(int i = 0; i < jarArray.length; i++) {
-			jars += jarArray[i];
-			if(i < jarArray.length - 1) {
-				jars += ",";
+		String files = "";
+		for(int i = 0; i < fileArray.length; i++) {
+			files += fileArray[i];
+			if(i < fileArray.length - 1) {
+				files += ",";
 			}
 		}
-		return jars;
+		return files;
 	}
 	
 	public Metaphor getMetaphor() {

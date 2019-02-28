@@ -10,12 +10,14 @@ import org.neo4j.graphdb.traversal.Uniqueness
 import org.getaviz.generator.database.Database
 import org.apache.commons.logging.LogFactory
 import java.io.IOException
+import org.neo4j.graphdb.GraphDatabaseService
 
 class DatabaseBuilder {
 	val log = LogFactory::getLog(class)
 	val config = SettingsConfiguration.instance
-	val graph = Database::getInstance(config.databaseName)
+	var GraphDatabaseService graph
 	val evaluator = new JQAEvaluator
+	val runtime = Runtime.getRuntime();
 
 	new() {
 		scan();
@@ -23,23 +25,30 @@ class DatabaseBuilder {
 	}
 
 	def scan() {
-		val runtime = Runtime.getRuntime();
-		log.info(config.getDatabaseName());
-		log.info(config.getInputJars());
+		log.info("jQA scan started.")
+		log.info("Scanning from URI(s) " + config.inputFiles);
+		log.info("Scanning to database " + config.databaseName);
 		try {
-			runtime.exec("/opt/jqassistant/bin/jqassistant.sh scan -u " + config.getInputJars() + " -storeUri file:" +
-				config.getDatabaseName()).waitFor();
-			runtime.exec("chmod -v 777 -R " + config.getDatabaseName()).waitFor();
-			runtime.exec("chmod -v 777 -R " + config.getDatabaseName() + "/../store_lock").waitFor();
+			val pScan = runtime.exec("/opt/jqassistant/bin/jqassistant.sh scan -u " + config.inputFiles + " -storeUri file:" +
+				config.getDatabaseName());
+			pScan.waitFor()
+			val pRightsDatabase = runtime.exec("chmod -v 777 -R " + config.databaseName)
+			pRightsDatabase.waitFor()
+			val pRightsStoreLock = runtime.exec("chmod -v 777 -R " + config.databaseName + "/../store_lock")
+			pRightsStoreLock.waitFor()
 		} catch (InterruptedException e) {
+			log.error(e);
 			e.printStackTrace();
 		} catch (IOException e) {
+			log.error(e);
 			e.printStackTrace();
 		}
+		log.info("jQA scan ended.")
 	}
 
 	def enhance() {
-		log.info("JQAEnhancement has started.")
+		graph = Database::getInstance(config.databaseName)
+		log.info("jQA enhancement started.")
 		var tx = graph.beginTx
 		try {
 			labelGetter()
@@ -66,7 +75,7 @@ class DatabaseBuilder {
 		} finally {
 			tx.close
 		}
-		log.info("JQAEnhancement finished")
+		log.info("jQA enhancement finished")
 	}
 
 	private def addHashes() {
