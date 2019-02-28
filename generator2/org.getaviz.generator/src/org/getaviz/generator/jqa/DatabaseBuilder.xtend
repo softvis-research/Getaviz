@@ -9,15 +9,46 @@ import org.neo4j.graphdb.Direction
 import org.neo4j.graphdb.traversal.Uniqueness
 import org.getaviz.generator.database.Database
 import org.apache.commons.logging.LogFactory
+import java.io.IOException
+import org.neo4j.graphdb.GraphDatabaseService
 
-class JQAEnhancement {
+class DatabaseBuilder {
 	val log = LogFactory::getLog(class)
 	val config = SettingsConfiguration.instance
-	val graph = Database::getInstance(config.databaseName)
+	var GraphDatabaseService graph
 	val evaluator = new JQAEvaluator
+	val runtime = Runtime.getRuntime();
 
 	new() {
-		log.info("JQAEnhancement has started.")
+		scan();
+		enhance();
+	}
+
+	def scan() {
+		log.info("jQA scan started.")
+		log.info("Scanning from URI(s) " + config.inputFiles);
+		log.info("Scanning to database " + config.databaseName);
+		try {
+			val pScan = runtime.exec("/opt/jqassistant/bin/jqassistant.sh scan -u " + config.inputFiles + " -storeUri file:" +
+				config.getDatabaseName());
+			pScan.waitFor()
+			val pRightsDatabase = runtime.exec("chmod -v 777 -R " + config.databaseName)
+			pRightsDatabase.waitFor()
+			val pRightsStoreLock = runtime.exec("chmod -v 777 -R " + config.databaseName + "/../store_lock")
+			pRightsStoreLock.waitFor()
+		} catch (InterruptedException e) {
+			log.error(e);
+			e.printStackTrace();
+		} catch (IOException e) {
+			log.error(e);
+			e.printStackTrace();
+		}
+		log.info("jQA scan ended.")
+	}
+
+	def enhance() {
+		graph = Database::getInstance(config.databaseName)
+		log.info("jQA enhancement started.")
 		var tx = graph.beginTx
 		try {
 			labelGetter()
@@ -44,14 +75,14 @@ class JQAEnhancement {
 		} finally {
 			tx.close
 		}
-		log.info("JQAEnhancement finished")
+		log.info("jQA enhancement finished")
 	}
 
 	private def addHashes() {
 		val roots = graph.execute("MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN n").map [
 			return get("n") as Node
 		]
-		
+
 		roots.forEach [ package |
 			graph.traversalDescription.depthFirst.relationships(Rels.CONTAINS, Direction.OUTGOING).relationships(
 				Rels.DECLARES, Direction.OUTGOING).uniqueness(Uniqueness.NONE).evaluator(evaluator).traverse(package).

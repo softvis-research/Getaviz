@@ -6,6 +6,7 @@ import java.awt.Color;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.lang3.StringUtils;
 import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
@@ -42,6 +43,21 @@ public class SettingsConfiguration {
 
 	public void loadDefault() {
 		loadConfig("settings.properties");
+	}
+	
+	public String getInputFiles() {
+		String[] fileArray = config.getStringArray("input.files");
+		if(fileArray.length == 0) {
+			throw new RuntimeException("There is no specified uri to a jar or war file. Check if in the settings.properties file the field input.files is set to one or more existing uris.");
+		}
+		String files = "";
+		for(int i = 0; i < fileArray.length; i++) {
+			files += fileArray[i];
+			if(i < fileArray.length - 1) {
+				files += ",";
+			}
+		}
+		return files;
 	}
 	
 	public Metaphor getMetaphor() {
