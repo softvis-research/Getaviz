@@ -1,7 +1,10 @@
+![gsoc](https://developers.google.com/open-source/gsoc/resources/downloads/GSoC-logo-horizontal-800.png)
+
 [![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=master)](https://travis-ci.com/softvis-research/Getaviz)
 [![Generator2](https://img.shields.io/badge/docker-generator2-blue.svg)](https://hub.docker.com/r/getaviz/generator2)
 [![UI](https://img.shields.io/badge/docker-ui-blue.svg)](https://hub.docker.com/r/getaviz/evaluationserver)
 [![Evaluation Server](https://img.shields.io/badge/docker-evaluationserver-blue.svg)](https://hub.docker.com/r/getaviz/ui)
+
 # Getaviz
 
 With Getaviz you can solve software engineering problems visually by exploring software artifacts in 2D, 3D, and virtual reality. Among other things it provides proper visualizations for identifying and refactoring antipatterns, locating runtime bottlenecks, assessing software quality, and tracking changes across multiple versions. To get a first impression, have a look at [our showcases](http://home.uni-leipzig.de/svis/Showcases/) that are available online. You can adopt the visualizations as well as the user interface according to your needs. Getaviz visualizes the structure and behavior of several programming languages (*Java*, *Ruby*, *PHP*, and *C#*) and can enrich these visualizations with evolutional information from *git* and *svn* repositories. They can be explored via *browser*, *HTC Vive*, or *Oculus Rift*. We support many different visualizations, e.g., Recursive Disk ([2D](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20freemind&model=RD%20freemind) and [3D](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/RD%20reek&model=RD%203D%20reek)), [City](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20original%20freemind), [City Floors](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20floor%20freemind), [City Bricks](https://home.uni-leipzig.de/svis/getaviz/index.php?setup=web/City%20freemind&model=City%20bricks%20freemind), and many more.
