@@ -276,6 +276,9 @@ var model = (function() {
 				case "Negation":
 					entity.negated = element.negated;
 					break;
+				case "Struct":
+					entity.dependsOn = element.dependsOn;
+					break;
 				default: 
 					return;
 			}
@@ -435,10 +438,10 @@ var model = (function() {
 					break;				
 				case "Function":
 				case "Variable":
+				case "Struct":
 					if(entity.dependsOn !== undefined && entity.dependsOn !== ""){
 						retrieveAllUsedMacros(entity.dependsOn, entity.id);
 					}
-					
 					break;
 				default: 				
 					return;

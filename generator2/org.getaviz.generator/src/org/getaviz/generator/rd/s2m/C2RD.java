@@ -58,9 +58,9 @@ public class C2RD {
 		disk.setProperty("transparency", config.getRDNamespaceTransparency());
 		
 		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			disk.setProperty("color", config.getRDClassColorHex());
+			disk.setProperty("color", config.getRDNamespaceColorHex());
 		} else {
-			disk.setProperty("color", config.getRDClassColorAsPercentage());
+			disk.setProperty("color", config.getRDNamespaceColorAsPercentage());
 		}
 		List<Node> subElements = new ArrayList<>();
 		for(Relationship relationship : translationUnit.getRelationships(Rels.DECLARES, Direction.OUTGOING)) {
@@ -68,6 +68,7 @@ public class C2RD {
 		}
 		List<Node> functions = new ArrayList<>();
 		List<Node> variables = new ArrayList<>();
+		List<Node> structs = new ArrayList<>();
 		
 		for(Node element : subElements) {
 			if(element.hasLabel(Labels.Function)) {
@@ -75,6 +76,9 @@ public class C2RD {
 			}
 			if(element.hasLabel(Labels.Variable)) {
 				variables.add(element);
+			}
+			if(element.hasLabel(Labels.Struct)) {
+				structs.add(element);
 			}
 		}
 
@@ -88,14 +92,15 @@ public class C2RD {
 		} else {
 			functions.forEach(function -> disk.createRelationshipTo(functionToDiskSegment(function), Rels.CONTAINS));
 		}
-
+		structs.forEach(struct -> disk.createRelationshipTo(structToDisk(struct), Rels.CONTAINS));
+		
 		return disk;
 	}
 
 	private Node functionToDisk(Node function) {
 		final Node disk = graph.createNode(Labels.RD, Labels.Disk);
 		disk.createRelationshipTo(function, Rels.VISUALIZES);
-		disk.setProperty("ringWidth", config.getRDRingWidth());
+		disk.setProperty("ringWidth", config.getRDRingWidthMD());
 		disk.setProperty("height", config.getRDHeight());
 		disk.setProperty("transparency", config.getRDMethodTransparency());
 		String color = 153 / 255.0 + " " + 0 / 255.0 + " " + 0 / 255.0;
@@ -159,5 +164,31 @@ public class C2RD {
 		diskSegment.setProperty("color", color);
 		diskSegment.setProperty("transparency", config.getRDDataTransparency());
 		return diskSegment;
+	}
+	
+	private Node structToDisk(Node struct) {
+		final Node disk = graph.createNode(Labels.RD, Labels.Disk);
+		disk.createRelationshipTo(struct, Rels.VISUALIZES);
+		disk.setProperty("ringWidth", config.getRDRingWidth());
+		disk.setProperty("height", config.getRDHeight());
+		disk.setProperty("transparency", config.getRDClassTransparency());
+		String color = config.getRDClassColorAsPercentage();
+		if (config.getOutputFormat() == OutputFormat.AFrame) {
+			color = config.getRDClassColorHex();
+		}
+		disk.setProperty("color", color);
+		
+		List<Node> variables = new ArrayList<>();
+		for(Relationship relationship : struct.getRelationships(Rels.DECLARES, Direction.OUTGOING)) {
+			variables.add(relationship.getEndNode());
+		}
+		
+		if (config.isDataDisks()) {
+			variables.forEach(variable -> disk.createRelationshipTo(variableToDisk(variable), Rels.CONTAINS));
+		} else {
+			variables.forEach(variable -> disk.createRelationshipTo(variableToDiskSegment(variable), Rels.CONTAINS));
+		}
+		
+		return disk;
 	}
 }
