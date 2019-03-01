@@ -107,7 +107,9 @@ var packageExplorerController = (function() {
 					case "Function":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt"};
 						break;
-					
+					case "Struct":
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
+						break;
 					default: 
 						events.log.warning.publish({ text: "FamixElement not in tree: " + entity.type});
 
