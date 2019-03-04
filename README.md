@@ -11,7 +11,7 @@ With Getaviz you can solve software engineering problems visually by exploring s
 
 ## Installation
 
-Clone this repository and follow the instructions under [Installation](../../wiki/Installation). 
+Clone this repository and follow the instructions under [Installation](../../wiki/Installation) and [Usage](../../wiki/Usage). 
 
 Please have a look at our wiki which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
 
