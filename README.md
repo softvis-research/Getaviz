@@ -11,7 +11,7 @@ With Getaviz you can solve software engineering problems visually by exploring s
 
 ## How do I get set up? ###
 
-Clone this repository and follow the instructions under [Installation & Setup](../../wiki/Installation-&-Setup).
+Clone this repository and follow the instructions under [Installation](../../wiki/Installation).
 Each subdirectory of this repository represents a standalone component of Getaviz. It contains a separate README.md with further instructions and documentation.
 
 Please have a look at our Wiki which contains many additional information. However, documentation is still incomplete. Feel free to open an issue if you have any question!
