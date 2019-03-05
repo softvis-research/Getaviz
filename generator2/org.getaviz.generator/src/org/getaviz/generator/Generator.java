@@ -11,7 +11,6 @@ import org.getaviz.generator.rd.m2m.RD2RD;
 import org.getaviz.generator.rd.m2t.RD2AFrame;
 import org.getaviz.generator.rd.m2t.RD2X3D;
 import org.getaviz.generator.city.s2m.JQA2City;
-import org.getaviz.generator.database.Database;
 import org.getaviz.generator.rd.s2m.JQA2RD;
 
 public class Generator {
