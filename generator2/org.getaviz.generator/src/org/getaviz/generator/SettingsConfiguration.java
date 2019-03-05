@@ -6,7 +6,6 @@ import java.awt.Color;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.lang3.StringUtils;
 import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
@@ -61,7 +60,7 @@ public class SettingsConfiguration {
 	}
 	
 	public Metaphor getMetaphor() {
-		String metaphor = config.getString("metaphor", "rdr");
+		String metaphor = config.getString("metaphor", "rd");
 		switch (metaphor) {
 			case "city":
 				return Metaphor.CITY;
@@ -71,7 +70,7 @@ public class SettingsConfiguration {
 	}
 	
 	public String getOutputPath() {
-		return config.getString("output.path", "./output/");
+		return config.getString("output.path", "/var/lib/jetty/output/");
 	}
 	
 	public String getRepositoryName() {
@@ -83,15 +82,15 @@ public class SettingsConfiguration {
 	}
 
 	public String getDatabaseName() {
-		return config.getString("database_name", "../databases/graph.db");
+		return config.getString("database_name", "/var/lib/jetty/databases/graph.db");
 	}
 
 	public OutputFormat getOutputFormat() {
-		switch (config.getString("output.format", "x3d")) {
-		case "aframe":
-			return OutputFormat.AFrame;
-		default:
+		switch (config.getString("output.format", "aframe")) {
+		case "x3d":
 			return OutputFormat.X3D;
+		default:
+			return OutputFormat.AFrame;
 		}
 	}
 	
