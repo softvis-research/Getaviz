@@ -17,7 +17,7 @@ Please have a look at our wiki which contains many additional information. Howev
 
 ## Development Team
 
-Getaviz is mainly developed by the research group [Visual Software Analytics](http://softvis.wifa.uni-leipzig.de) at Leipzig University. Currently, four main developers are contributung actively to Getaviz:
+Getaviz is mainly developed by the research group [Visual Software Analytics](http://softvis.wifa.uni-leipzig.de) at Leipzig University. Currently, four main developers are contributing actively to Getaviz:
 * [Richard Müller](https://github.com/rmllr)
 * [Jan Schilbach](https://github.com/schilbach)
 * [Pascal Kovacs](https://github.com/PascalKovacs)
