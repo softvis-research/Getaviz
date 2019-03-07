@@ -16,7 +16,7 @@ public class GeneratorServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.info("Generator Servlet startet");
-		
+
 		SettingsConfiguration.getInstance("/opt/config/settings.properties");
 
 		// Set response content type
@@ -24,9 +24,9 @@ public class GeneratorServlet extends HttpServlet {
 
 		// Actual logic goes here.
 		PrintWriter out = response.getWriter();
-		
+
 		out.println("<h1>Hello, World!</h1>");
-		
+
 		// Prevents double execution of running process
 		String requestURI = request.getRequestURI();
 		if (requestURI.equals("/favicon.ico")) {

@@ -85,6 +85,10 @@ public class SettingsConfiguration {
 	public String getDatabaseName() {
 		return config.getString("database_name", "../databases/graph.db");
 	}
+	
+	public String getDatabase() {
+		return config.getString("database", "bolt://neo4j:7687");
+	}
 
 	public OutputFormat getOutputFormat() {
 		switch (config.getString("output.format", "x3d")) {

@@ -11,11 +11,12 @@ import org.getaviz.generator.database.Database
 import org.apache.commons.logging.LogFactory
 import java.io.IOException
 import org.neo4j.graphdb.GraphDatabaseService
+import org.getaviz.generator.database.DatabaseConnector
 
 class DatabaseBuilder {
 	val log = LogFactory::getLog(class)
 	val config = SettingsConfiguration.instance
-	var GraphDatabaseService graph
+	val connector = DatabaseConnector::instance
 	val evaluator = new JQAEvaluator
 	val runtime = Runtime.getRuntime();
 
@@ -29,8 +30,9 @@ class DatabaseBuilder {
 		log.info("Scanning from URI(s) " + config.inputFiles);
 		log.info("Scanning to database " + config.databaseName);
 		try {
-			val pScan = runtime.exec("/opt/jqassistant/bin/jqassistant.sh scan -u " + config.inputFiles + " -storeUri file:" +
-				config.getDatabaseName());
+			val pScan = runtime.exec(
+				"/opt/jqassistant/bin/jqassistant.sh scan -reset -u " + config.inputFiles + " -storeUri " +
+					config.database)
 			pScan.waitFor()
 			val pRightsDatabase = runtime.exec("chmod -v 777 -R " + config.databaseName)
 			pRightsDatabase.waitFor()
@@ -47,74 +49,44 @@ class DatabaseBuilder {
 	}
 
 	def enhance() {
-		graph = Database::getInstance(config.databaseName)
 		log.info("jQA enhancement started.")
-		var tx = graph.beginTx
-		try {
-			labelGetter()
-			labelSetter()
-			labelPrimitives()
-			labelInnerTypes()
-			tx.success
-		} finally {
-			tx.close
-		}
-
-		tx = graph.beginTx
-		try {
-			labelAnonymousInnerTypes()
-			tx.success
-		} finally {
-			tx.close
-		}
-
-		tx = graph.beginTx
-		try {
-			addHashes()
-			tx.success
-		} finally {
-			tx.close
-		}
+		connector.executeWrite(labelGetter, labelSetter, labelPrimitives, labelInnerTypes)
+		connector.executeWrite(labelAnonymousInnerTypes)
+		addHashes()
 		log.info("jQA enhancement finished")
 	}
 
 	private def addHashes() {
-		val roots = graph.execute("MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN n").map [
-			return get("n") as Node
-		]
-
-		roots.forEach [ package |
-			graph.traversalDescription.depthFirst.relationships(Rels.CONTAINS, Direction.OUTGOING).relationships(
-				Rels.DECLARES, Direction.OUTGOING).uniqueness(Uniqueness.NONE).evaluator(evaluator).traverse(package).
-				nodes.forEach [
-					var fqn = getProperty("fqn", "") as String
-					if (fqn.empty) {
-						val container = getSingleRelationship(Rels.DECLARES, Direction.INCOMING).startNode
-						val containerFqn = container.getProperty("fqn") as String
-						var name = getProperty("name", "") as String
-						var signature = getProperty("signature") as String
-						val index = signature.indexOf(" ") + 1
-						if (hasLabel(Labels.Method)) {
-							val indexOfBracket = signature.indexOf("(")
-							if (name.empty) {
-								name = signature.substring(index, indexOfBracket)
-								setProperty("name", name)
-							}
-							fqn = containerFqn + "." + signature.substring(index)
-						} else {
-							if (name.empty) {
-								name = signature.substring(index)
-								setProperty("name", name)
-							}
-							fqn = containerFqn + "." + name
-						}
-						setProperty("fqn", fqn)
+		connector.executeWrite(labelInheritedMethods)
+		connector.executeRead(collectRelevantNodes).forEach [
+			val node = get("m").asNode
+			var fqn = node.get("fqn").asString
+			if (fqn.nullOrEmpty) {
+				val container = connector.executeRead("MATCH (n)<-[:DECLARES]-(m) WHERE ID(n) = " + node.id +
+					" RETURN m").next.get("m").asNode
+				val containerFqn = container.get("fqn").asString
+				var name = node.get("name").asString
+				var signature = node.get("signature").asString
+				val index = signature.indexOf(" ") + 1
+				if (node.hasLabel("Method")) {
+					val indexOfBracket = signature.indexOf("(")
+					if (name.empty) {
+						name = signature.substring(index, indexOfBracket)
 					}
-					if (!hasProperty("hash")) {
-						setProperty("hash", createHash(fqn))
+					fqn = containerFqn + "." + signature.substring(index)
+				} else {
+					if (name.empty) {
+						name = signature.substring(index)
 					}
-				]
+					fqn = containerFqn + "." + name
+				}
+				connector.executeWrite("MATCH (n) WHERE ID(n) = " + node.id + " SET n.name = \'" + name + "\', n.fqn = \'" + fqn + "\'")
+			} 
+			if (node.get("hash").isNull) {
+				connector.executeWrite("MATCH (n) WHERE ID(n) = " + node.id + " SET n.hash = \'" + createHash(fqn) + "\'")
+			}
 		]
+//		connector.executeWrite(unlabelInheritedMethods)
 	}
 
 	private def createHash(String fqn) {
@@ -122,37 +94,51 @@ class DatabaseBuilder {
 	}
 
 	private def labelPrimitives() {
-		graph.execute("MATCH (p:Type) WHERE p.name =~ \"[a-z]+\" RETURN p").forEach [
-			val primitive = get("p") as Node
-			primitive.addLabel(Labels.Primitive)
-		]
+		return "MATCH (n:Type) WHERE n.name =~ \"[a-z]+\" SET n:Primitive"
 	}
 
 	private def labelGetter() {
-		graph.execute("MATCH (o:Type)-[:DECLARES]->(method:Method)-[getter:READS]->(attribute:Field)<-[:DECLARES]-(q:Type) 
-					   WHERE method.name =~ \"get[A-Z]+[A-Za-z]*\" 
-					   AND toLower(method.name) contains(attribute.name) AND ID(o) = ID(q) 
-					   RETURN method").forEach [
-			val getter = get("method") as Node
-			getter.addLabel(Labels.Getter)
-		]
+		return "MATCH (o:Type)-[:DECLARES]->(method:Method)-[getter:READS]->(attribute:Field)<-[:DECLARES]-(q:Type) 
+				WHERE method.name =~ \"get[A-Z]+[A-Za-z]*\" 
+				AND toLower(method.name) contains(attribute.name) AND ID(o) = ID(q) 
+				SET method:Getter"
 	}
 
 	private def labelSetter() {
-		graph.execute("MATCH (o:Type)-[:DECLARES]->(method:Method)-[setter:WRITES]->(attribute:Field)<-[:DECLARES]-(q:Type) 
-					   WHERE method.name =~ \"set[A-Z]+[A-Za-z]*\" 
-					   AND toLower(method.name) contains(attribute.name) AND ID(o) = ID(q) 
-					   RETURN method").forEach [
-			val setter = get("method") as Node
-			setter.addLabel(Labels.Getter)
-		]
+		return "MATCH (o:Type)-[:DECLARES]->(method:Method)-[setter:WRITES]->(attribute:Field)<-[:DECLARES]-(q:Type) 
+				WHERE method.name =~ \"set[A-Z]+[A-Za-z]*\" 
+				AND toLower(method.name) contains(attribute.name) AND ID(o) = ID(q) 
+				SET method:Setter"
 	}
 
 	private def labelInnerTypes() {
-		graph.execute("MATCH (:Type)-[:DECLARES]->(innerType:Type) SET innerType:Inner")
+		return "MATCH (:Type)-[:DECLARES]->(innerType:Type) SET innerType:Inner"
 	}
 
 	private def labelAnonymousInnerTypes() {
-		graph.execute("MATCH (innerType:Inner:Type) WHERE innerType.name =~ \".*\\\\$[0-9]*\" SET innerType:Anonymous")
+		return "MATCH (innerType:Inner:Type) WHERE innerType.name =~ \".*\\\\$[0-9]*\" SET innerType:Anonymous"
+	}
+
+	private def labelInheritedMethods() {
+		return "MATCH p=(m:Method)<-[:DECLARES]-()-[:EXTENDS]->(:Type)-[:DECLARES]->(o:Method)
+				WHERE m.signature = o.signature AND NOT m:Constructor
+				SET m:Inherited"
+	}
+
+	private def unlabelInheritedMethods() {
+		return "MATCH (m:Method:Inherited) REMOVE m:Inherited"
+	}
+
+	private def collectRelevantNodes() {
+		return "MATCH (n:Package)-[:DECLARES|CONTAINS*]->(m) WHERE (
+					m:Package OR 
+    				m:Type 
+        				AND (m:Interface OR m:Class OR m:Enum OR m:Annotation) 
+        				AND NOT m:Anonymous AND NOT (m)<--(:Method) AND NOT (m:Inner)<--(:Package) OR
+    				m:Field OR
+    				m:Constructor OR
+    				m:Method AND NOT m:Method:Inherited
+				) AND NOT ((n)<-[:CONTAINS]-(:Package) OR m.name CONTAINS '$')
+				RETURN DISTINCT m"
 	}
 }
