@@ -166,10 +166,12 @@ var canvasFilterController = (function() {
             }
         }
         if(shownEntities.length > 0){
-            canvasManipulator.showEntities(shownEntities);  
+            //canvasManipulator.showEntities(shownEntities); 
+            canvasManipulator.changeTransparencyOfEntities(shownEntities, 0.0); 
         }
         if(hiddenEntities.length > 0){
-            canvasManipulator.hideEntities(hiddenEntities);
+            //canvasManipulator.hideEntities(hiddenEntities);
+            canvasManipulator.changeTransparencyOfEntities(hiddenEntities, 0.85);
         }
     }
 
