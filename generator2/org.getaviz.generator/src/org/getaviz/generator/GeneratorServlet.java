@@ -27,10 +27,6 @@ public class GeneratorServlet extends HttpServlet {
 
 		out.println("<h1>Hello, World!</h1>");
 
-		// Prevents double execution of running process
-		String requestURI = request.getRequestURI();
-		if (requestURI.equals("/favicon.ico")) {
-			Generator.run();
-		}
+		Generator.run();
 	}
 }
