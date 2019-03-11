@@ -1,23 +1,16 @@
 package org.getaviz.generator.jqa
 
 import org.getaviz.generator.SettingsConfiguration
-import org.neo4j.graphdb.Node
-import org.getaviz.generator.database.Labels
 import org.apache.commons.codec.digest.DigestUtils
-import org.getaviz.generator.database.Rels
-import org.neo4j.graphdb.Direction
-import org.neo4j.graphdb.traversal.Uniqueness
-import org.getaviz.generator.database.Database
 import org.apache.commons.logging.LogFactory
 import java.io.IOException
-import org.neo4j.graphdb.GraphDatabaseService
 import org.getaviz.generator.database.DatabaseConnector
+import org.neo4j.driver.v1.Record
 
 class DatabaseBuilder {
 	val log = LogFactory::getLog(class)
 	val config = SettingsConfiguration.instance
 	val connector = DatabaseConnector::instance
-	val evaluator = new JQAEvaluator
 	val runtime = Runtime.getRuntime();
 
 	new() {
@@ -57,36 +50,10 @@ class DatabaseBuilder {
 	}
 
 	private def addHashes() {
-		connector.executeWrite(labelInheritedMethods)
-		connector.executeRead(collectRelevantNodes).forEach [
-			val node = get("m").asNode
-			var fqn = node.get("fqn").asString
-			if (fqn.nullOrEmpty) {
-				val container = connector.executeRead("MATCH (n)<-[:DECLARES]-(m) WHERE ID(n) = " + node.id +
-					" RETURN m").next.get("m").asNode
-				val containerFqn = container.get("fqn").asString
-				var name = node.get("name").asString
-				var signature = node.get("signature").asString
-				val index = signature.indexOf(" ") + 1
-				if (node.hasLabel("Method")) {
-					val indexOfBracket = signature.indexOf("(")
-					if (name.empty) {
-						name = signature.substring(index, indexOfBracket)
-					}
-					fqn = containerFqn + "." + signature.substring(index)
-				} else {
-					if (name.empty) {
-						name = signature.substring(index)
-					}
-					fqn = containerFqn + "." + name
-				}
-				connector.executeWrite("MATCH (n) WHERE ID(n) = " + node.id + " SET n.name = \'" + name + "\', n.fqn = \'" + fqn + "\'")
-			} 
-			if (node.get("hash").isNull) {
-				connector.executeWrite("MATCH (n) WHERE ID(n) = " + node.id + " SET n.hash = \'" + createHash(fqn) + "\'")
-			}
-		]
-//		connector.executeWrite(unlabelInheritedMethods)
+		connector.executeRead(collectAllPackages).forEach[enhanceNode]
+		connector.executeRead(collectAllTypes).forEach[enhanceNode]
+		connector.executeRead(collectAllFields).forEach[enhanceNode]
+		connector.executeRead(collectAllMethods).forEach[enhanceNode]
 	}
 
 	private def createHash(String fqn) {
@@ -119,26 +86,53 @@ class DatabaseBuilder {
 		return "MATCH (innerType:Inner:Type) WHERE innerType.name =~ \".*\\\\$[0-9]*\" SET innerType:Anonymous"
 	}
 
-	private def labelInheritedMethods() {
-		return "MATCH p=(m:Method)<-[:DECLARES]-()-[:EXTENDS]->(:Type)-[:DECLARES]->(o:Method)
-				WHERE m.signature = o.signature AND NOT m:Constructor
-				SET m:Inherited"
+	private def collectAllPackages() {
+		return "MATCH (n:Package) RETURN n"
 	}
 
-	private def unlabelInheritedMethods() {
-		return "MATCH (m:Method:Inherited) REMOVE m:Inherited"
+	private def collectAllTypes() {
+		return "MATCH (n:Type)
+				WHERE (n:Interface OR n:Class OR n:Enum OR n:Annotation) 
+				AND NOT n:Anonymous AND NOT (n)<-[:CONTAINS]-(:Method)
+				RETURN n"
 	}
 
-	private def collectRelevantNodes() {
-		return "MATCH (n:Package)-[:DECLARES|CONTAINS*]->(m) WHERE (
-					m:Package OR 
-    				m:Type 
-        				AND (m:Interface OR m:Class OR m:Enum OR m:Annotation) 
-        				AND NOT m:Anonymous AND NOT (m)<--(:Method) AND NOT (m:Inner)<--(:Package) OR
-    				m:Field OR
-    				m:Constructor OR
-    				m:Method AND NOT m:Method:Inherited
-				) AND NOT ((n)<-[:CONTAINS]-(:Package) OR m.name CONTAINS '$')
-				RETURN DISTINCT m"
+	private def collectAllFields() {
+		return "MATCH (n:Field)<-[:DECLARES]-(f:Type)
+				WHERE (NOT n.name CONTAINS '$') AND (NOT f:Anonymous) RETURN DISTINCT n"
 	}
+
+	private def collectAllMethods() {
+		return "MATCH (n:Method)<-[:DECLARES]-(f:Type)
+				WHERE (NOT n.name CONTAINS '$') AND (NOT f:Anonymous) RETURN DISTINCT n"
+	}
+
+	private def enhanceNode(Record record) {
+		val node = record.get("n").asNode
+		var fqn = record.get("fqn").asString
+		if (fqn.nullOrEmpty) {
+			val container = connector.executeRead("MATCH (n)<-[:DECLARES]-(m) WHERE ID(n) = " + node.id +
+				" RETURN m").next.get("n").asNode
+			val containerFqn = container.get("fqn").asString
+			var name = node.get("name").asString
+			var signature = node.get("signature").asString
+			val index = signature.indexOf(" ") + 1
+			if (node.hasLabel("Method")) {
+				val indexOfBracket = signature.indexOf("(")
+				if (name.empty) {
+					name = signature.substring(index, indexOfBracket)
+				}
+				fqn = containerFqn + "." + signature.substring(index)
+			} else {
+				if (name.empty) {
+					name = signature.substring(index)
+				}
+				fqn = containerFqn + "." + name
+			}
+			connector.executeWrite(
+				"MATCH (n) WHERE ID(n) = " + node.id + " SET n.name = \'" + name + "\', n.fqn = \'" + fqn + "\'")
+		}
+		connector.executeWrite("MATCH (n) WHERE ID(n) = " + node.id + " SET n.hash = \'" + createHash(fqn) + "\'")
+	}
+
 }
