@@ -8,11 +8,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.lib.database.Database;
+import org.getaviz.lib.database.Labels;
 import org.getaviz.lib.database.Rels;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.QueryExecutionException;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.ResourceIterable;
 import org.neo4j.graphdb.Result;
 import org.neo4j.graphdb.Transaction;
@@ -68,7 +70,15 @@ public class JQACEnhancement {
 				if(!child.hasProperty("name")){
 					child.setProperty("name", Long.toString(((Node)child).getId()));
 				}
-				if(!child.hasProperty("fqn")){
+				Relationship declaration = child.getSingleRelationship(Rels.DECLARES, Direction.INCOMING);
+				Node declaringParent = null;
+				if(declaration != null) {
+					declaringParent = declaration.getStartNode();
+				}
+				//If variable is part of a struct or union it could have the same name as another struct or union variable.
+				if(child.hasLabel(Labels.Variable) && declaringParent != null && (declaringParent.hasLabel(Labels.Struct) || declaringParent.hasLabel(Labels.Union))) {
+					child.setProperty("fqn", fileName + "_" + declaringParent.getProperty("name") + "_" + child.getProperty("name"));
+				} else if(!child.hasProperty("fqn")){
 					child.setProperty("fqn", (fileName + "_" + child.getProperty("name")));
 				}
 				if(!child.hasProperty("hash")){
