@@ -68,7 +68,7 @@ public class C2RD {
 		}
 		List<Node> functions = new ArrayList<>();
 		List<Node> variables = new ArrayList<>();
-		List<Node> structs = new ArrayList<>();
+		List<Node> unionsAndStructs = new ArrayList<>();
 		
 		for(Node element : subElements) {
 			if(element.hasLabel(Labels.Function)) {
@@ -77,8 +77,8 @@ public class C2RD {
 			if(element.hasLabel(Labels.Variable)) {
 				variables.add(element);
 			}
-			if(element.hasLabel(Labels.Struct)) {
-				structs.add(element);
+			if(element.hasLabel(Labels.Struct) || element.hasLabel(Labels.Union)) {
+				unionsAndStructs.add(element);
 			}
 		}
 
@@ -92,7 +92,7 @@ public class C2RD {
 		} else {
 			functions.forEach(function -> disk.createRelationshipTo(functionToDiskSegment(function), Rels.CONTAINS));
 		}
-		structs.forEach(struct -> disk.createRelationshipTo(structToDisk(struct), Rels.CONTAINS));
+		unionsAndStructs.forEach(element -> disk.createRelationshipTo(unionOrStructToDisk(element), Rels.CONTAINS));
 		
 		return disk;
 	}
@@ -166,9 +166,9 @@ public class C2RD {
 		return diskSegment;
 	}
 	
-	private Node structToDisk(Node struct) {
+	private Node unionOrStructToDisk(Node element) {
 		final Node disk = graph.createNode(Labels.RD, Labels.Disk);
-		disk.createRelationshipTo(struct, Rels.VISUALIZES);
+		disk.createRelationshipTo(element, Rels.VISUALIZES);
 		disk.setProperty("ringWidth", config.getRDRingWidth());
 		disk.setProperty("height", config.getRDHeight());
 		disk.setProperty("transparency", config.getRDClassTransparency());
@@ -179,7 +179,7 @@ public class C2RD {
 		disk.setProperty("color", color);
 		
 		List<Node> variables = new ArrayList<>();
-		for(Relationship relationship : struct.getRelationships(Rels.DECLARES, Direction.OUTGOING)) {
+		for(Relationship relationship : element.getRelationships(Rels.DECLARES, Direction.OUTGOING)) {
 			variables.add(relationship.getEndNode());
 		}
 		

@@ -94,6 +94,9 @@ class JQA2JSON {
 			«IF el.hasLabel(Labels.Struct)»
 			«toMetaDataStruct(el)»
 			«ENDIF»
+			«IF el.hasLabel(Labels.Union)»
+			«toMetaDataUnion(el)»
+			«ENDIF»
 		«ENDFOR»
 	'''
 	
@@ -383,6 +386,29 @@ class JQA2JSON {
 		"qualifiedName": "«struct.getProperty("fqn")»",
 		"name":          "«struct.getProperty("name")»",
 		"type":          "Struct",
+		"belongsTo":     "«belongsTo»",
+		"dependsOn":     "«dependsOn»"
+		'''
+		return result
+	}
+	
+	def toMetaDataUnion(Node union) {
+		var belongsTo = ""
+		var dependsOn = ""
+		val parent = union.getRelationships(Direction.INCOMING, Rels.DECLARES).head
+		if(parent !== null) {
+			belongsTo = parent.startNode.getProperty("hash") as String
+		}			
+		var dependent = union.getRelationships(Direction.OUTGOING, Rels.DEPENDS_ON).head
+		if(dependent !== null){
+			dependsOn = dependent.endNode.getProperty("hash") as String
+		}
+					
+		val result = '''
+		"id":            "«union.getProperty("hash")»",
+		"qualifiedName": "«union.getProperty("fqn")»",
+		"name":          "«union.getProperty("name")»",
+		"type":          "Union",
 		"belongsTo":     "«belongsTo»",
 		"dependsOn":     "«dependsOn»"
 		'''

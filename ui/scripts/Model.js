@@ -277,6 +277,7 @@ var model = (function() {
 					entity.negated = element.negated;
 					break;
 				case "Struct":
+				case "Union":
 					entity.dependsOn = element.dependsOn;
 					break;
 				default: 
@@ -439,6 +440,7 @@ var model = (function() {
 				case "Function":
 				case "Variable":
 				case "Struct":
+				case "Union":
 					if(entity.dependsOn !== undefined && entity.dependsOn !== ""){
 						retrieveAllUsedMacros(entity.dependsOn, entity.id);
 					}
