@@ -314,26 +314,6 @@ public class SettingsConfiguration {
 		return getColor(config.getString("city.class.color", "#353559"));
 	}
 
-	public Color getDynamicClassColorStart() {
-		return getColor(config.getString("city.dynamic.class.color_start", "#fa965c"));
-	}
-
-	public Color getDynamicClassColorEnd() {
-		return getColor(config.getString("city.dynamic.class.color_end", "#feb280"));
-	}
-
-	public Color getDynamicMethodColor() {
-		return getColor(config.getString("city.dynamic.method.color", "#735eb9"));
-	}
-
-	public Color getDynamicPackageColorStart() {
-		return getColor(config.getString("city.dynamic.package.color_start", "#23862c"));
-	}
-
-	public Color getDynamicPackageColorEnd() {
-		return getColor(config.getString("city.dynamic.package.color_end", "#7bcd8d"));
-	}
-
 	public Color getCityColor(String name) {
 		return getColor(getCityColorHex(name));
 	}
