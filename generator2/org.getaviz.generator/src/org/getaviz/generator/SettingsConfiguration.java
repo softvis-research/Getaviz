@@ -6,6 +6,8 @@ import java.awt.Color;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
@@ -13,6 +15,7 @@ import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
 	private static SettingsConfiguration instance = null;
+	private static Log log = LogFactory.getLog(SettingsConfiguration.class);
 
 	public static SettingsConfiguration getInstance() {
 		if (instance == null) {
@@ -35,8 +38,9 @@ public class SettingsConfiguration {
 		try {
 			Configurations configs = new Configurations();
 			config = configs.properties(file);
+			new File(instance.getOutputPath()).mkdirs();
 		} catch (ConfigurationException cex) {
-			System.out.println(cex);
+			log.error(cex);
 		}
 	}
 
@@ -69,8 +73,12 @@ public class SettingsConfiguration {
 		}
 	}
 	
+	public String getName() {
+		return config.getString("input.name", "default");
+	}
+	
 	public String getOutputPath() {
-		return config.getString("output.path", "/var/lib/jetty/output/");
+		return config.getString("output.path", "/var/lib/jetty/data-gen/") + getName() + "/model/";
 	}
 	
 	public String getRepositoryName() {

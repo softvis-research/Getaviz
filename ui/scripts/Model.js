@@ -118,7 +118,7 @@ var model = (function() {
 						entity.reaches = [];
 					}
 					entity.reachedBy = [];
-                                        if(entity.antipattern !== undefined) {
+                                        if(entity.antipattern !== false) {
                                             entity.antipattern = element.antipattern.split(",");
                                         } else {
                                             entity.antipattern = [];
