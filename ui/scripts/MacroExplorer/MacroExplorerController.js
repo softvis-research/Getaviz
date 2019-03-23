@@ -6,7 +6,8 @@ var macroExplorerController = (function() {
 	let allTreeNodesById = new Map();
 
 	let controllerConfig = {
-        elementsSelectable: true
+		elementsSelectable: true,
+		filterMode: "transparent" //can be "transparent" or "removed"
 	};
 	
 	function initialize(setupConfig){
@@ -101,7 +102,8 @@ var macroExplorerController = (function() {
 		var applicationEvent = {			
 			sender: 	macroExplorerController,
 			entities:	entities,
-			allTreeNodesById: allTreeNodesById
+			allTreeNodesById: allTreeNodesById,
+			filterMode: controllerConfig.filterMode
 		};
 		
 		if (treeNode !== undefined){

@@ -166,12 +166,20 @@ var canvasFilterController = (function() {
             }
         }
         if(shownEntities.length > 0){
-            //canvasManipulator.showEntities(shownEntities); 
-            canvasManipulator.changeTransparencyOfEntities(shownEntities, 0.0); 
+            //there are two modes: "transparent" and "removed"
+            if(applicationEvent.filterMode === "transparent"){
+                canvasManipulator.changeTransparencyOfEntities(shownEntities, 0.0);
+            } else{
+                canvasManipulator.showEntities(shownEntities);
+            }
         }
+
         if(hiddenEntities.length > 0){
-            //canvasManipulator.hideEntities(hiddenEntities);
-            canvasManipulator.changeTransparencyOfEntities(hiddenEntities, 0.85);
+            if(applicationEvent.filterMode === "transparent"){
+                canvasManipulator.changeTransparencyOfEntities(hiddenEntities, 0.85);
+            } else {
+                canvasManipulator.hideEntities(hiddenEntities);
+            }
         }
     }
 

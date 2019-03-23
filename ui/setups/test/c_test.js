@@ -45,7 +45,9 @@
 		{	name: 	"sourceCodeController",
             url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
 		},
-		{	name:	"macroExplorerController"
+        {	name:	"macroExplorerController",
+            //should the filtered elements be "removed" or just "transparent"?
+            filterMode: "removed"
 		},
 		{ 	name: 	"relationConnectorController",		
 						
