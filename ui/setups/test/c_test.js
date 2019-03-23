@@ -40,7 +40,9 @@
 		{	name: 	"searchController" 
 		},
 
-		{	name: 	"packageExplorerController",
+        {	name: 	"packageExplorerController",
+        
+            elementsSelectable: false
 		},
 		{	name: 	"sourceCodeController",
             url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
