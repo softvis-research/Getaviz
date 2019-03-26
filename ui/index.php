@@ -85,6 +85,7 @@ EOT;
 
     var canvasId = "<?php echo $canvasId; ?>";
     var visMode = "<?php echo $visMode; ?>";
+    const BACKEND = "<?php $backend = gethostbyname(backend ); echo $backend; ?>";
 </script>
 <html>
 	<title>Getaviz</title>

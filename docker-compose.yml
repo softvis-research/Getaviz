@@ -27,18 +27,29 @@ services:
             - data-gen:/var/www/html/ui/data-gen
         ports:
             - "8082:80"
+        networks:
+            - default
+        depends_on:
+            - backend
     backend:
         build: generator2/org.getaviz.generator/
         restart: always
         volumes:
-            #- ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war
+            - ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war
             - ./settings.properties:/opt/config/settings.properties
             - ./generator2/output:/var/lib/jetty/output/
             - ./generator2/databases:/var/lib/jetty/databases/
             - data-gen:/var/lib/jetty/data-gen
         ports:
+        
             - "8083:8080"
+        networks:
+            - default
 volumes:
   data-gen:
   bundle:
     driver: local
+    
+networks:
+    default:
+        driver: bridge

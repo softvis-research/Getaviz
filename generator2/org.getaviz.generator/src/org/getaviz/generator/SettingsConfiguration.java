@@ -1,6 +1,9 @@
 package org.getaviz.generator;
 
 import java.io.File;
+
+import javax.servlet.http.HttpServletRequest;
+
 import java.awt.Color;
 
 import org.apache.commons.configuration2.PropertiesConfiguration;
@@ -31,6 +34,22 @@ public class SettingsConfiguration {
 		}
 		loadConfig(path);
 		return instance;
+	}
+	
+	public static SettingsConfiguration getInstance(HttpServletRequest request) {
+		if (instance == null) {
+			instance = new SettingsConfiguration();
+		}
+		loadConfig(request);
+		return instance;
+	}
+	
+	private static void loadConfig(HttpServletRequest request) {
+		config = new PropertiesConfiguration();
+		// TODO make failsafe if property is not set by using default values
+		config.setProperty("input.files", request.getParameter("input_files"));
+		config.setProperty("metaphor", request.getParameter("metaphor"));
+		new File(instance.getOutputPath()).mkdirs();
 	}
 
 	private static void loadConfig(String path) {

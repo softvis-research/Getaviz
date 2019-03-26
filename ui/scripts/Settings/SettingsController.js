@@ -1126,8 +1126,7 @@ var settingsController = (function() {
 				// Submit Form Data 
 				var btn = settingsForm.jqxForm('getComponentByName', 'submitButton');
 				btn.on('click', function () {
-					// arg1: url | arg2, optional: target, default is _blank | arg3, optional: submit method - GET or POST, default is POST
-					settingsForm.jqxForm('submit', "http://backend:8083", "_blank", 'POST');
+					settingsForm.jqxForm('submit', "http://" + BACKEND +":8080", "_self", 'POST');
 				});
             }
         });
