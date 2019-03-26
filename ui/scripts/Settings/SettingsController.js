@@ -1066,6 +1066,20 @@ var settingsController = (function() {
 						$('#settingsForm').jqxForm('hideComponent', 'city_class_elements_sort_mode_fine');
 						$('#settingsForm').jqxForm('hideComponent', 'city_class_elements_sort_mode_fine_direction_reversed');
 						$('#settingsForm').jqxForm('hideComponent', 'city_show_building_base');
+							$('#settingsForm').jqxForm('hideComponent', 'city_show_attributes_as_cylinders');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_separator_mode');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_height_treshold_nos');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_height_unit');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_horizontal_margin');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_vertical_margin');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_vertical_gap');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_separator_height');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_layout');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_size');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_horizontal_margin');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_horizontal_gap');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_vertical_margin');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_vertical_gap');
 						$('#settingsForm').jqxForm('hideComponent', 'city_original_building_metric');
 						$('#settingsForm').jqxForm('hideComponent', 'city_width_min');
 						$('#settingsForm').jqxForm('hideComponent', 'city_height_min');
@@ -1109,16 +1123,16 @@ var settingsController = (function() {
 						$('#settingsForm').jqxForm('showComponent', 'rd_color_namespace');
 						$('#settingsForm').jqxForm('showComponent', 'rd_method_disks');
 						$('#settingsForm').jqxForm('showComponent', 'rd_data_disks');
-						$('#settingsForm').jqxForm('showComponent', 'rd_method_type_mode');	
+						$('#settingsForm').jqxForm('showComponent', 'rd_method_type_mode');
 					}	
 					
 					if (newValue.output_format == 'x3d') {
 					
-						$('#settingsForm').jqxForm('showComponent', 'convert_to_multipart');	
+						$('#settingsForm').jqxForm('showComponent', 'convert_to_multipart');
 						
 					} else if (newValue.output_format == 'aframe') {
 					
-						$('#settingsForm').jqxForm('hideComponent', 'convert_to_multipart');						
+						$('#settingsForm').jqxForm('hideComponent', 'convert_to_multipart');	
 					}
 				
 				});
