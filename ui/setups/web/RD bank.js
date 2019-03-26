@@ -16,6 +16,9 @@ var setup = {
 			
 			createHeadSection: false
 		},
+		
+		{	name:	"settingsController",
+		},
         
         {
             name: 'canvasFilterController'
@@ -180,7 +183,18 @@ var setup = {
                             url:	"http://home.uni-leipzig.de/svis/privacy-policy/"
                         }
 					]
-				},				
+				},	
+
+				{	
+					title:		"Settings",
+					subMenu:	true,
+					items:		[
+                        {
+                            title: 	"Change Settings",
+                            event:	"settingsController.openSettingsPopUp"
+                        }
+					]
+				},			
 			]
 		},
         {
@@ -251,6 +265,7 @@ var setup = {
                         {name: "menuController"},
                         //{name: "searchController"},
                         {name: "emailController"},
+						{name: "settingsController"}	
                     ],
                 },
                 second: {
