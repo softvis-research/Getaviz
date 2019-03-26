@@ -40,7 +40,7 @@ var settingsController = (function() {
 						name: 'input_files',
 						type: 'text',
 						label: 'input.files:',
-						required: true,
+						//required: true,
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
@@ -1217,10 +1217,17 @@ var settingsController = (function() {
 				
 				});
 				
+				// // Submit Button Validator
+				// settingsForm.jqxValidator({ rules: [
+					// { input: '#input_files', message: 'Please assign a Name', focus: 'true', rule: 'required', hintType: 'label' },
+					// // { input: '#input_files', message: 'Please assign a Name', focus: 'true', rule: 'minLength=3' }
+				// ]});
+				
 				// Submit Form Data 
 				var btn = settingsForm.jqxForm('getComponentByName', 'submitButton');
 				btn.on('click', function () {
 					// arg1: url | arg2, optional: target, default is _blank | arg3, optional: submit method - GET or POST, default is POST
+					//settingsForm.jqxValidator('validate');
 					settingsForm.jqxForm('submit', "http://backend:8083", "_blank", 'POST');
 				});
             }
