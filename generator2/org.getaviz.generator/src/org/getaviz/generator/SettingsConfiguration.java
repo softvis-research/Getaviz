@@ -1,11 +1,16 @@
 package org.getaviz.generator;
 
 import java.io.File;
+
+import javax.servlet.http.HttpServletRequest;
+
 import java.awt.Color;
 
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
@@ -13,6 +18,7 @@ import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
 	private static SettingsConfiguration instance = null;
+	private static Log log = LogFactory.getLog(SettingsConfiguration.class);
 
 	public static SettingsConfiguration getInstance() {
 		if (instance == null) {
@@ -29,14 +35,31 @@ public class SettingsConfiguration {
 		loadConfig(path);
 		return instance;
 	}
+	
+	public static SettingsConfiguration getInstance(HttpServletRequest request) {
+		if (instance == null) {
+			instance = new SettingsConfiguration();
+		}
+		loadConfig(request);
+		return instance;
+	}
+	
+	private static void loadConfig(HttpServletRequest request) {
+		config = new PropertiesConfiguration();
+		// TODO make failsafe if property is not set by using default values
+		config.setProperty("input.files", request.getParameter("input_files"));
+		config.setProperty("metaphor", request.getParameter("metaphor"));
+		new File(instance.getOutputPath()).mkdirs();
+	}
 
 	private static void loadConfig(String path) {
 		File file = new File(path);
 		try {
 			Configurations configs = new Configurations();
 			config = configs.properties(file);
+			new File(instance.getOutputPath()).mkdirs();
 		} catch (ConfigurationException cex) {
-			System.out.println(cex);
+			log.error(cex);
 		}
 	}
 
@@ -69,8 +92,12 @@ public class SettingsConfiguration {
 		}
 	}
 	
+	public String getName() {
+		return config.getString("input.name", "default");
+	}
+	
 	public String getOutputPath() {
-		return config.getString("output.path", "/var/lib/jetty/output/");
+		return config.getString("output.path", "/var/lib/jetty/data-gen/") + getName() + "/model/";
 	}
 	
 	public String getRepositoryName() {
@@ -312,26 +339,6 @@ public class SettingsConfiguration {
 
 	public Color getClassColor() {
 		return getColor(config.getString("city.class.color", "#353559"));
-	}
-
-	public Color getDynamicClassColorStart() {
-		return getColor(config.getString("city.dynamic.class.color_start", "#fa965c"));
-	}
-
-	public Color getDynamicClassColorEnd() {
-		return getColor(config.getString("city.dynamic.class.color_end", "#feb280"));
-	}
-
-	public Color getDynamicMethodColor() {
-		return getColor(config.getString("city.dynamic.method.color", "#735eb9"));
-	}
-
-	public Color getDynamicPackageColorStart() {
-		return getColor(config.getString("city.dynamic.package.color_start", "#23862c"));
-	}
-
-	public Color getDynamicPackageColorEnd() {
-		return getColor(config.getString("city.dynamic.package.color_end", "#7bcd8d"));
 	}
 
 	public Color getCityColor(String name) {
