@@ -32,18 +32,20 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px'
+						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'input_files',
 						name: 'input_files',
 						type: 'text',
 						label: 'input.files:',
-						required: true,
+						//required: true,
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px'
+						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'output_format',
@@ -56,7 +58,8 @@ var settingsController = (function() {
 						options: [
 							{ value: 'aframe' },
 							{ value: 'x3d'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'metaphor',
@@ -69,7 +72,8 @@ var settingsController = (function() {
 						options: [
 							{ value: 'rd' },
 							{ value: 'city'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'output_path',
@@ -79,9 +83,20 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px'
-					},
-					
+						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
+					},					
+					{
+						bind: 'database_name',
+						name: 'database_name',
+						type: 'text',
+						label: 'database_name:',
+						labelPosition: 'left',
+						labelWidth: '325px',
+						align: 'left',
+						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
+					},						
 					// only available if output.format == 'x3d' 
 					{
 						bind: 'convert_to_multipart',
@@ -94,19 +109,9 @@ var settingsController = (function() {
 						options: [
 							{ value: 'false' },
 							{ value: 'true'}
-						]
-					},
-					
-					{
-						bind: 'database_name',
-						name: 'database_name',
-						type: 'text',
-						label: 'database_name:',
-						labelPosition: 'left',
-						labelWidth: '325px',
-						align: 'left',
-						width: '250px'
-					},					
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
+					},				
 					{
 						type: 'blank',
 						rowHeight: '25px'
@@ -126,7 +131,8 @@ var settingsController = (function() {
 							{ value: 'panels'},
 							{ value: 'bricks'},
 							{ value: 'floor'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_scheme',
@@ -139,7 +145,8 @@ var settingsController = (function() {
 						options: [
 							{ value: 'types' },
 							{ value: 'visibility'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_class_elements_mode',
@@ -153,7 +160,8 @@ var settingsController = (function() {
 							{ value: 'methods_and_attributes' },
 							{ value: 'methods_only'},
 							{ value: 'attributes_only'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_class_elements_sort_mode_coarse',
@@ -167,7 +175,8 @@ var settingsController = (function() {
 							{ value: 'methods_first' },
 							{ value: 'unsorted'},
 							{ value: 'attributes_first'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_class_elements_sort_mode_fine',
@@ -182,7 +191,8 @@ var settingsController = (function() {
 							{ value: 'unsorted'},
 							{ value: 'alphabetically'},
 							{ value: 'nos'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_class_elements_sort_mode_fine_direction_reversed',
@@ -195,7 +205,8 @@ var settingsController = (function() {
 						options: [
 							{ value: 'false' },
 							{ value: 'true'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_show_building_base',
@@ -208,7 +219,14 @@ var settingsController = (function() {
 						options: [
 							{ value: 'true' },
 							{ value: 'false'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
+					},						
+					{
+						bind: 'city_blank_node',
+						name: 'city_blank_node',
+						type: 'blank',
+						rowHeight: '25px'
 					},					
 					{
 						bind: 'city_show_attributes_as_cylinders',
@@ -221,7 +239,8 @@ var settingsController = (function() {
 						options: [
 							{ value: 'true' },
 							{ value: 'false'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_brick_layout',
@@ -235,7 +254,8 @@ var settingsController = (function() {
 							{ value: 'progressive' },
 							{ value: 'straight'},
 							{ value: 'balanced'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_brick_size',
@@ -246,6 +266,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_brick_horizontal_margin',
@@ -256,6 +277,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_brick_horizontal_gap',
@@ -266,6 +288,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_brick_vertical_margin',
@@ -276,6 +299,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_brick_vertical_gap',
@@ -286,6 +310,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_panel_separator_mode',
@@ -299,7 +324,8 @@ var settingsController = (function() {
 							{ value: 'separator' },
 							{ value: 'none'},
 							{ value: 'gap'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_panel_height_treshold_nos',
@@ -319,7 +345,8 @@ var settingsController = (function() {
 							{ value: '144'},
 							{ value: '192'},
 							{ value: '240'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_panel_height_unit',
@@ -330,6 +357,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_panel_horizontal_margin',
@@ -340,6 +368,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_panel_vertical_margin',
@@ -350,6 +379,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_panel_vertical_gap',
@@ -360,6 +390,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_panel_separator_height',
@@ -370,6 +401,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_original_building_metric',
@@ -382,7 +414,8 @@ var settingsController = (function() {
 						options: [
 							{ value: 'none' },
 							{ value: 'nos'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_width_min',
@@ -393,6 +426,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_height_min',
@@ -403,6 +437,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_building_horizontal_margin',
@@ -413,6 +448,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_building_horizontal_gap',
@@ -423,6 +459,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_building_vertical_margin',
@@ -433,6 +470,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_package_color_start',
@@ -442,7 +480,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_package_color_end',
@@ -452,7 +491,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_class_color_start',
@@ -462,7 +502,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_class_color_end',
@@ -472,7 +513,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_class_color',
@@ -482,7 +524,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_blue',
@@ -492,7 +535,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_aqua',
@@ -502,7 +546,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_light_green',
@@ -512,7 +557,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_dark_green',
@@ -522,7 +568,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_yellow',
@@ -532,7 +579,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_orange',
@@ -542,7 +590,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_red',
@@ -552,7 +601,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_pink',
@@ -562,7 +612,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_violet',
@@ -572,7 +623,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_light_grey',
@@ -582,7 +634,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_dark_grey',
@@ -592,7 +645,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_white',
@@ -602,7 +656,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'city_color_black',
@@ -612,7 +667,8 @@ var settingsController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px'
+						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},
 					
 					// Recursive Disk Options 					
@@ -625,6 +681,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_method_factor',
@@ -635,6 +692,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_height',
@@ -645,6 +703,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_height_boost',
@@ -655,6 +714,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_height_multiplicator',
@@ -665,6 +725,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_ring_width',
@@ -675,6 +736,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_ring_width_md',
@@ -685,6 +747,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_ring_width_ad',
@@ -695,6 +758,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_min_area',
@@ -705,6 +769,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_namespace_transparency',
@@ -715,6 +780,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_class_transparency',
@@ -725,6 +791,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_method_transparency',
@@ -735,6 +802,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_data_transparency',
@@ -745,6 +813,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '250px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_color_class',
@@ -755,6 +824,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_color_data',
@@ -765,6 +835,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_color_method',
@@ -775,6 +846,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_color_namespace',
@@ -785,6 +857,7 @@ var settingsController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '244px',
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_method_disks',
@@ -797,7 +870,8 @@ var settingsController = (function() {
 						options: [
 							{ value: 'false' },
 							{ value: 'true'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_data_disks',
@@ -810,7 +884,8 @@ var settingsController = (function() {
 						options: [
 							{ value: 'false' },
 							{ value: 'true'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
 						bind: 'rd_method_type_mode',
@@ -823,7 +898,8 @@ var settingsController = (function() {
 						options: [
 							{ value: 'false' },
 							{ value: 'true'}
-						]
+						],
+						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},
 					{
 						type: 'blank',
@@ -834,7 +910,7 @@ var settingsController = (function() {
 						type: 'button',
 						text: 'Submit',
 						align: 'right',
-						padding: {left: 0, top: 5, bottom: 5, right: 40}
+						padding: {left: 20, top: 5, bottom: 5, right: 20}
 					}
 					
 				];
@@ -921,7 +997,10 @@ var settingsController = (function() {
 					value: defaultValue,
 					padding: { left: 10, top: 10, right: 10, bottom: 10 }
 					
-				});				
+				});	
+
+				// On first load show only the input fields for initially selected options (aframe, city, optional)
+				initial_load_aframe_city_optional();
 				
 				// formDataChange Event 
 				settingsForm.on('formDataChange', function (event) {
@@ -1066,6 +1145,21 @@ var settingsController = (function() {
 						$('#settingsForm').jqxForm('hideComponent', 'city_class_elements_sort_mode_fine');
 						$('#settingsForm').jqxForm('hideComponent', 'city_class_elements_sort_mode_fine_direction_reversed');
 						$('#settingsForm').jqxForm('hideComponent', 'city_show_building_base');
+						$('#settingsForm').jqxForm('hideComponent', 'city_blank_node');
+							$('#settingsForm').jqxForm('hideComponent', 'city_show_attributes_as_cylinders');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_separator_mode');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_height_treshold_nos');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_height_unit');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_horizontal_margin');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_vertical_margin');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_vertical_gap');
+							$('#settingsForm').jqxForm('hideComponent', 'city_panel_separator_height');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_layout');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_size');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_horizontal_margin');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_horizontal_gap');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_vertical_margin');
+							$('#settingsForm').jqxForm('hideComponent', 'city_brick_vertical_gap');
 						$('#settingsForm').jqxForm('hideComponent', 'city_original_building_metric');
 						$('#settingsForm').jqxForm('hideComponent', 'city_width_min');
 						$('#settingsForm').jqxForm('hideComponent', 'city_height_min');
@@ -1109,19 +1203,25 @@ var settingsController = (function() {
 						$('#settingsForm').jqxForm('showComponent', 'rd_color_namespace');
 						$('#settingsForm').jqxForm('showComponent', 'rd_method_disks');
 						$('#settingsForm').jqxForm('showComponent', 'rd_data_disks');
-						$('#settingsForm').jqxForm('showComponent', 'rd_method_type_mode');	
+						$('#settingsForm').jqxForm('showComponent', 'rd_method_type_mode');
 					}	
 					
 					if (newValue.output_format == 'x3d') {
 					
-						$('#settingsForm').jqxForm('showComponent', 'convert_to_multipart');	
+						$('#settingsForm').jqxForm('showComponent', 'convert_to_multipart');
 						
 					} else if (newValue.output_format == 'aframe') {
 					
-						$('#settingsForm').jqxForm('hideComponent', 'convert_to_multipart');						
+						$('#settingsForm').jqxForm('hideComponent', 'convert_to_multipart');	
 					}
 				
 				});
+				
+				// // Submit Button Validator
+				// settingsForm.jqxValidator({ rules: [
+					// { input: '#input_files', message: 'Please assign a Name', focus: 'true', rule: 'required', hintType: 'label' },
+					// // { input: '#input_files', message: 'Please assign a Name', focus: 'true', rule: 'minLength=3' }
+				// ]});
 				
 				// Submit Form Data 
 				var btn = settingsForm.jqxForm('getComponentByName', 'submitButton');
@@ -1138,6 +1238,86 @@ var settingsController = (function() {
 		events.log.event.subscribe(addLogObject);
 		events.log.manipulation.subscribe(addLogObject);
 	}
+	
+	// On first load show only the input fields for initially selected options (aframe, city, optional)
+	function initial_load_aframe_city_optional() {
+
+		$('#settingsForm').jqxForm('showComponent', 'city_building_type');											// Visibility based on 'city'
+		$('#settingsForm').jqxForm('showComponent', 'city_scheme');
+		$('#settingsForm').jqxForm('showComponent', 'city_class_elements_mode');
+		$('#settingsForm').jqxForm('showComponent', 'city_class_elements_sort_mode_coarse');
+		$('#settingsForm').jqxForm('showComponent', 'city_class_elements_sort_mode_fine');
+		$('#settingsForm').jqxForm('showComponent', 'city_class_elements_sort_mode_fine_direction_reversed');
+		$('#settingsForm').jqxForm('showComponent', 'city_show_building_base');	
+		$('#settingsForm').jqxForm('showComponent', 'city_width_min');
+		$('#settingsForm').jqxForm('showComponent', 'city_height_min');
+		$('#settingsForm').jqxForm('showComponent', 'city_building_horizontal_margin');
+		$('#settingsForm').jqxForm('showComponent', 'city_building_horizontal_gap');
+		$('#settingsForm').jqxForm('showComponent', 'city_building_vertical_margin');
+		$('#settingsForm').jqxForm('showComponent', 'city_package_color_start');
+		$('#settingsForm').jqxForm('showComponent', 'city_package_color_end');
+		$('#settingsForm').jqxForm('showComponent', 'city_class_color_start');
+		$('#settingsForm').jqxForm('showComponent', 'city_class_color_end');
+		$('#settingsForm').jqxForm('showComponent', 'city_class_color');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_blue');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_aqua');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_light_green');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_dark_green');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_yellow');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_orange');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_red');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_pink');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_violet');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_light_grey');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_dark_grey');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_white');
+		$('#settingsForm').jqxForm('showComponent', 'city_color_black');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_data_factor');	
+		$('#settingsForm').jqxForm('hideComponent', 'rd_method_factor');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_height');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_height_boost');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_height_multiplicator');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_ring_width');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_ring_width_md');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_ring_width_ad');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_min_area');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_namespace_transparency');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_class_transparency');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_method_transparency');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_data_transparency');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_color_class');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_color_data');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_color_method');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_color_namespace');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_method_disks');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_data_disks');
+		$('#settingsForm').jqxForm('hideComponent', 'rd_method_type_mode');	
+		$('#settingsForm').jqxForm('hideComponent', 'city_show_attributes_as_cylinders');							// Visibility based on 'optional'
+		$('#settingsForm').jqxForm('hideComponent', 'city_panel_separator_mode');
+		$('#settingsForm').jqxForm('hideComponent', 'city_panel_height_treshold_nos');
+		$('#settingsForm').jqxForm('hideComponent', 'city_panel_height_unit');
+		$('#settingsForm').jqxForm('hideComponent', 'city_panel_horizontal_margin');
+		$('#settingsForm').jqxForm('hideComponent', 'city_panel_vertical_margin');
+		$('#settingsForm').jqxForm('hideComponent', 'city_panel_vertical_gap');
+		$('#settingsForm').jqxForm('hideComponent', 'city_panel_separator_height');							
+		$('#settingsForm').jqxForm('hideComponent', 'city_brick_layout');
+		$('#settingsForm').jqxForm('hideComponent', 'city_brick_size');
+		$('#settingsForm').jqxForm('hideComponent', 'city_brick_horizontal_margin');
+		$('#settingsForm').jqxForm('hideComponent', 'city_brick_horizontal_gap');
+		$('#settingsForm').jqxForm('hideComponent', 'city_brick_vertical_margin');
+		$('#settingsForm').jqxForm('hideComponent', 'city_brick_vertical_gap');							
+		$('#settingsForm').jqxForm('showComponent', 'city_original_building_metric');		
+		$('#settingsForm').jqxForm('hideComponent', 'convert_to_multipart');										// Visibility based on 'aframe'
+	}
+	
+	// function hide_city() {
+	// }
+	
+	// function hide_city_original() {
+	// }
+	
+	// function hide_rd() {		
+	// }
 	
 	function reset(){
 	}
@@ -1171,11 +1351,11 @@ var settingsController = (function() {
 		settingsPopupContentDiv.appendChild(settingsForm);		
 		
 		// Button to restore default																// WiP
-		var settingsPopupCancelInput = document.createElement("INPUT");
-		settingsPopupContentDiv.appendChild(settingsPopupCancelInput);
-		settingsPopupCancelInput.type = "button";
-		settingsPopupCancelInput.id = "settingsRestoreDef";
-		settingsPopupCancelInput.value = "Restore Default";
+		// var settingsPopupCancelInput = document.createElement("INPUT");
+		// settingsPopupContentDiv.appendChild(settingsPopupCancelInput);
+		// settingsPopupCancelInput.type = "button";
+		// settingsPopupCancelInput.id = "settingsRestoreDef";
+		// settingsPopupCancelInput.value = "Restore Default";
 	}
 	
 	return {
