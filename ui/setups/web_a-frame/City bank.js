@@ -10,12 +10,15 @@
 			logInfoConsole		: false,
 			logActionConsole	: false,
 			logEventConsole		: false
-		},		
+		},	
 		
-		{	name: 	"emailController",
-			
+		{	name:	"emailController",
+		
 			createHeadSection: false
 		},	
+		
+		{	name:	"settingsController",
+		},
 
 		{	name: 	"canvasHoverController",			
 		},	
@@ -171,7 +174,18 @@
                             url:	"http://home.uni-leipzig.de/svis/privacy-policy/"
                         }
 					]
-				},				
+				},
+
+				{	
+					title:		"Settings",
+					subMenu:	true,
+					items:		[
+                        {
+                            title: 	"Change Settings",
+                            event:	"settingsController.openSettingsPopUp"
+                        }
+					]
+				},			
 			]
 		},
         {
@@ -233,6 +247,7 @@
                         {name: "menuController"},
                         //{name: "searchController"},
                         {name: "emailController"},
+						{name: "settingsController"}	
                     ],
                 },
                 second: {

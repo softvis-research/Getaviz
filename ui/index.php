@@ -117,6 +117,8 @@ EOT;
     <script type="text/javascript" src="libs/jqwidgets/jqxlistbox.js"></script>
     <script type="text/javascript" src="libs/jqwidgets/jqxdropdownlist.js"></script>
     <script type="text/javascript" src="libs/jqwidgets/jqxslider.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxnumberinput.js"></script>
+    <script type="text/javascript" src="libs/jqwidgets/jqxform.js"></script>	
 	
     <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.base.css" type="text/css" />
     <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.metro.css" type="text/css" />
@@ -141,6 +143,7 @@ EOT;
 	<script type="text/javascript" src="scripts/SourceCode/SourceCodeController.js"></script>
 	<script type="text/javascript" src="scripts/InteractionLogger/InteractionLogger.js"></script>
 	<script type="text/javascript" src="scripts/Email/EmailController.js"></script>
+    <script type="text/javascript" src="scripts/Settings/SettingsController.js"></script>
 	<script type="text/javascript" src="scripts/Menu/MenuController.js"></script>
 	<script type="text/javascript" src="scripts/Legend/LegendController.js"></script>
     <script type="text/javascript" src="scripts/Systeminfo/SysteminfoController.js"></script>
