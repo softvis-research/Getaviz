@@ -35,7 +35,7 @@ services:
         build: generator2/org.getaviz.generator/
         restart: always
         volumes:
-            - ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war
+           # - ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # Only use for development purpose
             - ./settings.properties:/opt/config/settings.properties
             - ./generator2/output:/var/lib/jetty/output/
             - ./generator2/databases:/var/lib/jetty/databases/
