@@ -1,4 +1,4 @@
-var settingsController = (function() {
+var generationFormController = (function() {
 	
 	// Conversion of Setting_Name to ID:
 	// city.building_type --> city_building_type
