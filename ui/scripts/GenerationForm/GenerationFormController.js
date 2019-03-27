@@ -74,29 +74,7 @@ var generationFormController = (function() {
 							{ value: 'city'}
 						],
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
-					},					
-					{
-						bind: 'output_path',
-						name: 'output_path',
-						type: 'text',
-						label: 'output.path:',
-						labelPosition: 'left',
-						labelWidth: '325px',
-						align: 'left',
-						width: '250px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
-					},					
-					{
-						bind: 'database_name',
-						name: 'database_name',
-						type: 'text',
-						label: 'database_name:',
-						labelPosition: 'left',
-						labelWidth: '325px',
-						align: 'left',
-						width: '250px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
-					},						
+					},							
 					// only available if output.format == 'x3d' 
 					{
 						bind: 'convert_to_multipart',
@@ -920,9 +898,7 @@ var generationFormController = (function() {
 					input_name: 'default',
 					output_format: 'aframe',
 					metaphor: 'city',
-					output_path: '/var/lib/jetty/output/',
 					convert_to_multipart: false,
-					database_name: '/var/lib/jetty/databases/graph.db',
 					city_building_type: 'original',
 					city_scheme: 'types',
 					city_class_elements_mode: 'methods_and_attributes',
