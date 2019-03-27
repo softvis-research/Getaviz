@@ -1316,7 +1316,7 @@ var generationFormController = (function() {
 		// The Windows Title
 		var settingsPopupTitleDiv = document.createElement("DIV");
 		settingsPopupWindowDiv.appendChild(settingsPopupTitleDiv);
-		settingsPopupTitleDiv.innerHTML = "Change Settings";
+		settingsPopupTitleDiv.innerHTML = "New Visualization";
 		
 		// The Windows DIV
 		var settingsPopupContentDiv = document.createElement("DIV");
