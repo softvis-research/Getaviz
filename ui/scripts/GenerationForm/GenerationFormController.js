@@ -1,8 +1,9 @@
 var generationFormController = (function() {
 	
-	// Conversion of Setting_Name to ID:
-	// city.building_type --> city_building_type
-	// replace . with _ ("." in ID makes the ID not work)
+	// Name Conversion Rules from "label" to "bind"
+	// Example: city.building_type --> city_building_type	
+	// Most options in the file settings.properties contain a "."
+	// If "." is used in "bind" the ui does not load ("." is interpreted as a function call)
 	
 	var logObjectMap = new Map();
 	
