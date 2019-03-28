@@ -2,11 +2,9 @@ package org.getaviz.generator;
 
 import java.io.File;
 import java.awt.Color;
-
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.lang3.StringUtils;
 import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
@@ -14,7 +12,7 @@ import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
 	private static SettingsConfiguration instance = null;
-
+	
 	public static SettingsConfiguration getInstance() {
 		if (instance == null) {
 			instance = new SettingsConfiguration();
@@ -43,6 +41,10 @@ public class SettingsConfiguration {
 
 	public void loadDefault() {
 		loadConfig("settings.properties");
+	}
+	
+	public boolean isSkipScan() {
+		return config.getBoolean("input.skip_scan", false);
 	}
 	
 	public String getInputFiles() {
