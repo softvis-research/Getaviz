@@ -41,7 +41,7 @@ public class GeneratorServlet extends HttpServlet {
 		String name = config.getName();
 		boolean aframe = config.getOutputFormat() == OutputFormat.AFrame;
 		response.setHeader("Location", url + "?aframe=" + Boolean.toString(aframe) + "&model=" + name
-				+ "&setup=web_a-frame/City%20bank&srcDir=data-gen");
+				+ "&setup=web_a-frame/default" + "&srcDir=data-gen");
 
 	}
 }
