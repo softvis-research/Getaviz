@@ -1,9 +1,8 @@
-FROM ruby:2.4.1
+FROM ruby:2.4.5
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        rails rake build-essential nodejs libmysqlclient-dev mysql-client\
-    && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /usr/src/app
+        rails rake build-essential nodejs default-libmysqlclient-dev mysql-client\
+    && rm -rf /var/lib/apt/lists/* && mkdir -p /usr/src/app
 WORkDIR /usr/src/app/
 COPY . .
 RUN gem update --system
