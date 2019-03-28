@@ -1,6 +1,7 @@
 package org.getaviz.generator;
 
 import java.io.File;
+import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,9 +47,12 @@ public class SettingsConfiguration {
 	
 	private static void loadConfig(HttpServletRequest request) {
 		config = new PropertiesConfiguration();
-		// TODO make failsafe if property is not set by using default values
-		config.setProperty("input.files", request.getParameter("input_files"));
-		config.setProperty("metaphor", request.getParameter("metaphor"));
+		Enumeration<String> parameters = request.getParameterNames();
+		while(parameters.hasMoreElements()) {
+			String parameter = parameters.nextElement();
+			config.setProperty(parameter, request.getParameter(parameter));
+			log.debug("Config " + parameter + ": " + request.getParameter(parameter) + " is set");
+		}
 		new File(instance.getOutputPath()).mkdirs();
 	}
 
