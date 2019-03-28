@@ -137,6 +137,10 @@
                             link: 	true,
                             url:	"index.php?setup=web/RD reek&model=RD%203D%20reek"
                         },
+                        {
+                            title: 	"New Visualization",
+                            event:	"generationFormController.openSettingsPopUp"
+                        },
 					]
 				},
 
@@ -172,17 +176,6 @@
                             title: 	"Privacy Policy",
                             link: 	true,
                             url:	"http://home.uni-leipzig.de/svis/privacy-policy/"
-                        }
-					]
-				},
-
-				{	
-					title:		"Visualizations",
-					subMenu:	true,
-					items:		[
-                        {
-                            title: 	"New Visualization",
-                            event:	"generationFormController.openSettingsPopUp"
                         }
 					]
 				},			
