@@ -144,7 +144,7 @@ EOT;
 	<script type="text/javascript" src="scripts/SourceCode/SourceCodeController.js"></script>
 	<script type="text/javascript" src="scripts/InteractionLogger/InteractionLogger.js"></script>
 	<script type="text/javascript" src="scripts/Email/EmailController.js"></script>
-    <script type="text/javascript" src="scripts/Settings/SettingsController.js"></script>
+    <script type="text/javascript" src="scripts/GenerationForm/GenerationFormController.js"></script>
 	<script type="text/javascript" src="scripts/Menu/MenuController.js"></script>
 	<script type="text/javascript" src="scripts/Legend/LegendController.js"></script>
     <script type="text/javascript" src="scripts/Systeminfo/SysteminfoController.js"></script>

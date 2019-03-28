@@ -17,7 +17,7 @@ var setup = {
 			createHeadSection: false
 		},
 		
-		{	name:	"settingsController",
+		{	name:	"generationFormController",
 		},
         
         {
@@ -186,12 +186,12 @@ var setup = {
 				},	
 
 				{	
-					title:		"Settings",
+					title:		"Visualizations",
 					subMenu:	true,
 					items:		[
                         {
-                            title: 	"Change Settings",
-                            event:	"settingsController.openSettingsPopUp"
+                            title: 	"New Visualization",
+                            event:	"generationFormController.openSettingsPopUp"
                         }
 					]
 				},			
@@ -265,7 +265,7 @@ var setup = {
                         {name: "menuController"},
                         //{name: "searchController"},
                         {name: "emailController"},
-						{name: "settingsController"}	
+						{name: "generationFormController"}	
                     ],
                 },
                 second: {

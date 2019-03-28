@@ -1,8 +1,9 @@
-var settingsController = (function() {
+var generationFormController = (function() {
 	
-	// Conversion of Setting_Name to ID:
-	// city.building_type --> city_building_type
-	// replace . with _ ("." in ID makes the ID not work)
+	// Name Conversion Rules from "label" to "bind"
+	// Example: city.building_type --> city_building_type	
+	// Most options in the file settings.properties contain a "."
+	// If "." is used in "bind" the ui does not load ("." is interpreted as a function call)
 	
 	var logObjectMap = new Map();
 	
@@ -28,7 +29,7 @@ var settingsController = (function() {
 						bind: 'input_name',
 						name: 'input_name',
 						type: 'text',
-						label: 'input.name:',
+						label: 'input.name',
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
@@ -39,7 +40,7 @@ var settingsController = (function() {
 						bind: 'input_files',
 						name: 'input_files',
 						type: 'text',
-						label: 'input.files:',
+						label: 'input.files',
 						//required: true,
 						labelPosition: 'left',
 						labelWidth: '325px',
@@ -51,7 +52,7 @@ var settingsController = (function() {
 						bind: 'output_format',
 						name: 'output_format',
 						type: 'option',
-						label: 'output.format:',
+						label: 'output.format',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -65,7 +66,7 @@ var settingsController = (function() {
 						bind: 'metaphor',
 						name: 'metaphor',
 						type: 'option',
-						label: 'metaphor:',
+						label: 'metaphor',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -74,35 +75,13 @@ var settingsController = (function() {
 							{ value: 'city'}
 						],
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
-					},					
-					{
-						bind: 'output_path',
-						name: 'output_path',
-						type: 'text',
-						label: 'output.path:',
-						labelPosition: 'left',
-						labelWidth: '325px',
-						align: 'left',
-						width: '250px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
-					},					
-					{
-						bind: 'database_name',
-						name: 'database_name',
-						type: 'text',
-						label: 'database_name:',
-						labelPosition: 'left',
-						labelWidth: '325px',
-						align: 'left',
-						width: '250px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
-					},						
+					},							
 					// only available if output.format == 'x3d' 
 					{
 						bind: 'convert_to_multipart',
 						name: 'convert_to_multipart',
 						type: 'option',
-						label: 'convert_to_multipart:',
+						label: 'convert_to_multipart',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -122,7 +101,7 @@ var settingsController = (function() {
 						bind: 'city_building_type',
 						name: 'city_building_type',
 						type: 'option',
-						label: 'city.building_type:',
+						label: 'city.building_type',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -138,7 +117,7 @@ var settingsController = (function() {
 						bind: 'city_scheme',
 						name: 'city_scheme',
 						type: 'option',
-						label: 'city.scheme:',
+						label: 'city.scheme',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -152,7 +131,7 @@ var settingsController = (function() {
 						bind: 'city_class_elements_mode',
 						name: 'city_class_elements_mode',
 						type: 'option',
-						label: 'city.class_elements_mode:',
+						label: 'city.class_elements_mode',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -167,7 +146,7 @@ var settingsController = (function() {
 						bind: 'city_class_elements_sort_mode_coarse',
 						name: 'city_class_elements_sort_mode_coarse',
 						type: 'option',
-						label: 'city.class_elements_sort_mode_coarse:',
+						label: 'city.class_elements_sort_mode_coarse',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -182,7 +161,7 @@ var settingsController = (function() {
 						bind: 'city_class_elements_sort_mode_fine',
 						name: 'city_class_elements_sort_mode_fine',
 						type: 'option',
-						label: 'city.class_elements_sort_mode_fine:',
+						label: 'city.class_elements_sort_mode_fine',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -246,7 +225,7 @@ var settingsController = (function() {
 						bind: 'city_brick_layout',
 						name: 'city_brick_layout',
 						type: 'option',
-						label: 'city.brick.layout:',
+						label: 'city.brick.layout',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -316,7 +295,7 @@ var settingsController = (function() {
 						bind: 'city_panel_separator_mode',
 						name: 'city_panel_separator_mode',
 						type: 'option',
-						label: 'city.panel.separator_mode :',
+						label: 'city.panel.separator_mode',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -331,7 +310,7 @@ var settingsController = (function() {
 						bind: 'city_panel_height_treshold_nos',
 						name: 'city_panel_height_treshold_nos',
 						type: 'option',
-						label: 'city.panel.height_treshold_nos :',
+						label: 'city.panel.height_treshold_nos',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -407,7 +386,7 @@ var settingsController = (function() {
 						bind: 'city_original_building_metric',
 						name: 'city_original_building_metric',
 						type: 'option',
-						label: 'city.original_building_metric:',
+						label: 'city.original_building_metric',
 						labelWidth: '325px',
 						width: '250px',
 						component: 'jqxDropDownList',
@@ -920,9 +899,7 @@ var settingsController = (function() {
 					input_name: 'default',
 					output_format: 'aframe',
 					metaphor: 'city',
-					output_path: '/var/lib/jetty/output/',
 					convert_to_multipart: false,
-					database_name: '/var/lib/jetty/databases/graph.db',
 					city_building_type: 'original',
 					city_scheme: 'types',
 					city_class_elements_mode: 'methods_and_attributes',
@@ -1339,7 +1316,7 @@ var settingsController = (function() {
 		// The Windows Title
 		var settingsPopupTitleDiv = document.createElement("DIV");
 		settingsPopupWindowDiv.appendChild(settingsPopupTitleDiv);
-		settingsPopupTitleDiv.innerHTML = "Change Settings";
+		settingsPopupTitleDiv.innerHTML = "New Visualization";
 		
 		// The Windows DIV
 		var settingsPopupContentDiv = document.createElement("DIV");

@@ -16,6 +16,9 @@
 			
 			createHeadSection: false
 		},	
+		
+		{	name:	"generationFormController",
+		},
 
 		{	name: 	"canvasHoverController",			
 		},	
@@ -143,7 +146,18 @@
                             url:	"http://home.uni-leipzig.de/svis/privacy-policy/"
                         }
 					]
-				},				
+				},
+
+				{	
+					title:		"Visualizations",
+					subMenu:	true,
+					items:		[
+                        {
+                            title: 	"New Visualization",
+                            event:	"generationFormController.openSettingsPopUp"
+                        }
+					]
+				},					
 			]
 		},
         {
@@ -214,6 +228,7 @@
                         {name: "menuController"},
                         {name: "searchController"},
                         {name: "emailController"},
+                        {name: "generationFormController"},
                     ],
                 },
                 second: {
