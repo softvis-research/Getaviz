@@ -1,10 +1,6 @@
 package org.getaviz.generator.rd.m2m
 
 import org.getaviz.generator.SettingsConfiguration
-import org.getaviz.generator.database.Database
-import org.neo4j.graphdb.Node
-import org.neo4j.graphdb.Direction
-import org.getaviz.generator.database.Rels
 import org.getaviz.generator.database.Labels
 import org.getaviz.generator.SettingsConfiguration.OutputFormat
 import org.getaviz.generator.rd.RDUtils
@@ -17,130 +13,98 @@ import com.vividsolutions.jts.geom.CoordinateList
 import com.vividsolutions.jts.geom.Coordinate
 import org.getaviz.generator.Helper
 import org.apache.commons.logging.LogFactory
+import org.getaviz.generator.database.DatabaseConnector
+import org.neo4j.driver.v1.types.Node
+import java.util.Iterator
 
 class RD2RD {
 	val config = SettingsConfiguration.instance
-	val graph = Database::getInstance(config.databaseName)
+	val connector = DatabaseConnector.instance
 	val log = LogFactory::getLog(class)
 	extension Helper util = new Helper
 
-	// TODO set colors via RGBColor class for all entities
-	// color scheme
+// TODO set colors via RGBColor class for all entities
+// color scheme
 	RGBColor NS_colorStart = new RGBColor(150, 150, 150);
 	RGBColor NS_colorEnd = new RGBColor(240, 240, 240); // from CodeCity
 	RGBColor[] NS_colors
 
 	new() {
 		log.info("RD2RD started")
-		var tx = graph.beginTx
-		try {
-			var result = graph.execute(
-				"MATCH p=(n:Package)-[:CONTAINS*]->(m:Package) WHERE NOT (m)-[:CONTAINS]->(:Package) RETURN max(length(p)) AS length")
-			val namespaceMaxLevel = (result.head.get("length") as Long).intValue + 1
-			// Returns the longest Path from root to deepest sub package
-			result = graph.execute(
-				"MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE NOT (m)-[:CONTAINS]->(:RD:Disk) RETURN max(length(p)) AS length")
-			val diskMaxLevel = (result.head.get("length") as Long).intValue
-			NS_colors = createColorGradiant(NS_colorStart, NS_colorEnd, namespaceMaxLevel)
-			getDisks.forEach [
-				if (getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.Package)) {
-					setNamespaceColor
-				}
-				setProperty("maxLevel", diskMaxLevel)
-			]
-			tx.success
-		} finally {
-			tx.close
-		}
+		var length = connector.executeRead(
+			"MATCH p=(n:Package)-[:CONTAINS*]->(m:Package) WHERE NOT (m)-[:CONTAINS]->(:Package) RETURN max(length(p)) AS length")
+		val namespaceMaxLevel = length.single.get("length").asLong.intValue + 1
+		length = connector.executeRead(
+			"MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE NOT (m)-[:CONTAINS]->(:RD:Disk) RETURN max(length(p)) AS length")
+		val diskMaxLevel = length.single.get("length").asLong.intValue + 1
+		NS_colors = createColorGradiant(NS_colorStart, NS_colorEnd, namespaceMaxLevel)
 
-		tx = graph.beginTx
-		try {
-			getRootDisks.calculateNetArea
-			tx.success
-		} finally {
-			tx.close
-		}
+		connector.executeRead(
+			"MATCH p = (n:Model:RD)-[:CONTAINS*]->(d:Disk)-[:VISUALIZES]->(e) RETURN d,e,length(p)-1 AS length").forEach [
+			var setString = " SET n.maxLevel = " + diskMaxLevel
+			val disk = get("d").asNode
+			if (get("e").asNode.hasLabel(Labels.Package.name)) {
+				setString += ", n.color = \'" + setNamespaceColor(get("length").asLong.intValue) + "\'"
+			}
+			connector.executeWrite("MATCH (n) WHERE ID(n) = " + disk.id + setString)
+		]
+		log.debug("vor calulate net area")
+		getRootDisks.calculateNetArea
+		log.debug("nach calulate net area")
 
-		tx = graph.beginTx
-		try {
-			getDisks.forEach[calculateRadius]
-			tx.success
-		} finally {
-			tx.close
-		}
+		getDisks.forEach[get("d").asNode.calculateRadius]
+		log.debug("nach calulate net radius")
 
-		tx = graph.beginTx
-		try {
-			getRootDisks.calculateLayout
-			tx.success
-		} finally {
-			tx.close
-		}
+		getRootDisks.calculateLayout
+		log.debug("Nach calculate Layout")
 
-		tx = graph.beginTx
-		try {
-			getDisks.forEach[postLayout]
-			tx.success
-		} finally {
-			tx.close
-		}
-		tx = graph.beginTx
-		try {
-			getDisks.forEach[postLayout2]
-			tx.success
-		} finally {
-			tx.close
-		}
+		getDisks.forEach[get("d").asNode.postLayout]
+		log.debug("Nach postLayout")
+
+		getDisks.forEach[get("d").asNode.postLayout2]
+		log.debug("Nach postLayout2")
+
 		log.info("RD2RD finished")
 	}
 
-	def private setNamespaceColor(Node namespaceDisk) {
-		var String color
-		val result = graph.execute("MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) where ID(m) = " + namespaceDisk.id +
-			" RETURN max(length(p)) AS length")
-		val level = (result.head.get("length") as Long).intValue
+	def private String setNamespaceColor(int level) {
 		if (config.outputFormat == OutputFormat::AFrame) {
-			color = config.RDNamespaceColorHex
+			return config.RDNamespaceColorHex
 		} else {
 			// namespace.color = NS_colors.get(namespace.getLevel() - 1).asPercentage
-			color = NS_colors.get(level - 1).asPercentage
+			return NS_colors.get(level - 1).asPercentage
 		}
-		namespaceDisk.setProperty("color", color)
 	}
 
-	def private void calculateNetArea(Iterable <Node> disks) {
-		disks.forEach[disk|
-			RDUtils::getSubDisks(disk).calculateNetArea
-			disk.calculateNetArea
+	def private void calculateNetArea(Iterator<Node> disks) {
+		disks.forEach [ disk |
+			getSubDisks(disk.id).calculateNetArea
+			calculateNetArea(disk.id)
 		]
 	}
 
-	def private calculateNetArea(Node disk) {
+	def private void calculateNetArea(Long disk) {
 		var netArea = 0.0
-		var methodSum = 0.0
-		var dataSum = 0.0
-		for(field : RDUtils::getData(disk)) {
-			val size = field.getProperty("size") as Double * config.RDDataFactor
-			field.setProperty("size", size)
-			dataSum += size
-		}
-		for(method : RDUtils::getMethods(disk)){
-			val size = method.getProperty("size") as Double * config.RDMethodFactor
-			method.setProperty("size", size)
-			methodSum += size
-		}
+		val dataSum = connector.executeRead(
+			"MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Field) WHERE ID(n) = " + disk +
+				" SET d.size = d.size * " + config.RDDataFactor + " RETURN SUM(d.size) AS sum").single.get("sum").
+			asDouble
+		val methodSum = connector.executeRead(
+			"MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Method) WHERE ID(n) = " + disk +
+				" SET d.size = d.size * " + config.RDDataFactor + " RETURN SUM(d.size) AS sum").single.get("sum").
+			asDouble
 		netArea = dataSum + methodSum
-		disk.setProperty("netArea", netArea)
+		connector.executeWrite("MATCH (n) WHERE ID(n) = " + disk + " SET n.netArea = " + netArea)
 	}
 
 	def private calculateRadius(Node disk) {
-		val netArea = disk.getProperty("netArea") as Double
-		val ringWidth = disk.getProperty("ringWidth") as Double
-		var radius = Math::sqrt(netArea / Math::PI) + ringWidth
-		disk.setProperty("radius", radius)
+		val netArea = disk.get("netArea").asDouble
+		val ringWidth = disk.get("ringWidth").asDouble
+		val radius = Math::sqrt(netArea / Math::PI) + ringWidth
+		connector.executeWrite("MATCH(n) WHERE ID(n) = " + disk.id + " SET n.radius = " + radius)
 	}
 
-	def private calculateLayout(Iterable<Node> disks) {
+	def private calculateLayout(Iterator<Node> disks) {
 		val nestedCircles = new ArrayList<CircleWithInnerCircles>
 		disks.forEach[disk|nestedCircles += new CircleWithInnerCircles(disk, false)]
 		RDLayout::nestedLayout(nestedCircles)
@@ -148,114 +112,136 @@ class RD2RD {
 	}
 
 	def private postLayout(Node disk) {
-		val data = RDUtils.getData(disk)
-		val methods = RDUtils.getMethods(disk)
+		val data = RDUtils.getData(disk.id)
+		val methods = RDUtils.getMethods(disk.id)
 		disk.fractions(data, methods)
 		data.fractions
 		methods.fractions
 	}
 
 	def private postLayout2(Node disk) {
-		RDUtils::getSubDisks(disk).forEach[calculateRings]
+		RDUtils::getSubDisks(disk.id).forEach [
+			get("d").asNode.calculateRings
+		]
 		disk.calculateRings
 	}
 
-	def private fractions(Node disk, Iterable<Node> data, Iterable<Node> methods) {
-		val netArea = disk.getProperty("netArea") as Double
+	def private fractions(Node disk, Iterator<Node> data, Iterator<Node> methods) {
+		val netArea = disk.get("netArea").asDouble
 		var currentMethodArea = RDUtils.sum(methods) / netArea
 		var currentDataArea = RDUtils.sum(data) / netArea
-		disk.setProperty("methodArea", currentMethodArea)
-		disk.setProperty("dataArea", currentDataArea)
+		connector.executeWrite(
+			"MATCH (n) WHERE ID(n) = " + disk.id + " SET n.methodArea = " + currentMethodArea + ", n.dataArea = " +
+				currentDataArea)
 	}
 
-	def private fractions(Iterable<Node> segments) {
+	def private fractions(Iterator<Node> segments) {
 		val sum = RDUtils.sum(segments)
 		segments.forEach [
-			setProperty("size", getProperty("size") as Double / sum)
+			connector.executeWrite("MATCH (n) WHERE ID(n) = " + id + " SET n.size = n.size/" + sum)
 		]
 	}
 
 	def private calculateRings(Node disk) {
-		val ringWidth = disk.getProperty("ringWidth") as Double
-		val height = disk.getProperty("height") as Double
-		val radius = disk.getProperty("radius") as Double
-		var methodArea = disk.getProperty("methodArea") as Double
-		var dataArea = disk.getProperty("dataArea") as Double
-		val netArea = disk.getProperty("netArea") as Double
+		val ringWidth = disk.get("ringWidth").asDouble
+		val height = disk.get("height").asDouble
+		val radius = disk.get("radius").asDouble
+		var methodArea = disk.get("methodArea").asDouble
+		var dataArea = disk.get("dataArea").asDouble
+		val netArea = disk.get("netArea").asDouble
 		if (ringWidth == 0) {
-			calculateCrossSection(disk, ringWidth, 0)
+			calculateCrossSection(disk.id, ringWidth, 0)
 		} else {
-			calculateCrossSection(disk, ringWidth, height)
+			calculateCrossSection(disk.id, ringWidth, height)
 		}
-		calculateSpines(disk, radius - (0.5 * ringWidth))
-		if (RDUtils::getSubDisks(disk).nullOrEmpty) {
+		calculateSpines(disk.id, radius - (0.5 * ringWidth))
+		log.debug("in calculate rings")
+		if (RDUtils::getSubDisks(disk.id).nullOrEmpty) {
 			val r_data = Math::sqrt(dataArea * netArea / Math::PI)
 			val r_methods = radius - ringWidth
 			val b_methods = r_methods - r_data
-			val diskMethods = RDUtils.getMethods(disk)
-			val diskData = RDUtils.getData(disk)
+			val diskMethods = RDUtils.getMethods(disk.id)
+			val diskData = RDUtils.getData(disk.id)
+			if (!diskMethods.nullOrEmpty) {
+				log.debug("Wenn in calc rings methods nicht leer")
+				diskMethods.calculateCrossSection(b_methods, height)
+//				val crossSection = calculateCrossSection(b_methods, height)
+//				connector.executeWrite(
+//					"MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Method) WHERE ID(n) = " + disk.id +
+//						" SET d.crossSection = \'" + crossSection + "\'")
+				log.debug("Ist das durch?")
+				calculateSpines(diskMethods, r_methods - 0.5 * b_methods)
+				if (config.outputFormat == OutputFormat::AFrame) {
+					diskMethods.forEach [
+						connector.executeWrite(
+							"MATCH (n) WHERE ID(n) = " + id + " SET n.outerRadius = " + r_methods +
+								", n.innerRadius = " + r_data)
+					]
+				}
+			}
+			if (!diskData.nullOrEmpty) {
+				log.debug("Wenn in calc rings data nicht leer")
+				diskData.calculateCrossSection(r_data, height)
+				calculateSpines(diskData, 0.5 * r_data)
+				if (config.outputFormat == OutputFormat::AFrame) {
+					diskData.forEach [
+						connector.executeWrite(
+							"MATCH (n) WHERE ID(n) = " + id + " SET n.outerRadius = " + r_data + ", n.innerRadius = " +
+								0.0)
+					]
+				}
+			}
+		} else {
+			val outerRadius = disk.id.calculateOuterRadius
+			val r_data = Math::sqrt((dataArea * netArea / Math::PI) + (outerRadius * outerRadius))
+			val b_data = r_data - outerRadius
+			val r_methods = Math::sqrt((methodArea * netArea / Math::PI) + (r_data * r_data))
+			val b_methods = r_methods - r_data
+			val diskMethods = RDUtils.getMethods(disk.id)
 			if (!diskMethods.nullOrEmpty) {
 				diskMethods.calculateCrossSection(b_methods, height)
 				calculateSpines(diskMethods, r_methods - 0.5 * b_methods)
 				if (config.outputFormat == OutputFormat::AFrame) {
 					diskMethods.forEach [
-						setProperty("outerRadius", r_methods)
-						setProperty("innerRadius", r_data)
+						connector.executeWrite("MATCH (n) WHERE ID(n) = " + id + " SET n.outerRadius = " + r_methods + ",
+
+n.innerRadius = " + r_data)
 					]
 				}
 			}
-			if (!diskData.nullOrEmpty) {
-				diskData.calculateCrossSection(r_data, height)
-				calculateSpines(diskData, 0.5 * r_data)
-				if (config.outputFormat == OutputFormat::AFrame) {
-					diskData.forEach [
-						setProperty("outerRadius", r_data)
-						setProperty("innerRadius", 0.0)
-					]
-				}
-			}
-		} else {
-			val outerRadius = disk.calculateOuterRadius
-			val r_data = Math::sqrt((dataArea * netArea / Math::PI) + (outerRadius * outerRadius))
-			val b_data = r_data - outerRadius
-			val r_methods = Math::sqrt((methodArea * netArea / Math::PI) + (r_data * r_data))
-			val b_methods = r_methods - r_data
-			val diskMethods = RDUtils.getMethods(disk)
-			if (!diskMethods.nullOrEmpty) {
-				diskMethods.calculateCrossSection(b_methods, height)
-				calculateSpines(diskMethods, r_methods - 0.5 * b_methods)				
-				if (config.outputFormat == OutputFormat::AFrame) {
-					diskMethods.forEach [
-						setProperty("outerRadius", r_methods)
-						setProperty("innerRadius", r_data)
-					]
-				}
-			}
-			val diskData = RDUtils.getData(disk)
+			val diskData = RDUtils.getData(disk.id)
 			if (!diskData.nullOrEmpty) {
 				diskData.calculateCrossSection(b_data, height)
 				calculateSpines(diskData, r_data - 0.5 * b_data)
 				if (config.outputFormat == OutputFormat::AFrame) {
 					diskData.forEach [
-						setProperty("outerRadius", r_data)
-						setProperty("innerRadius", r_data - b_data)
+						connector.executeWrite("
+MATCH
+(n)WHERE ID
+(n)= " + id + " SET
+n.outerRadius = " + r_data + "
+, n.innerRadius = " + (r_data - b_data))
 					]
 				}
 			}
 		}
 	}
 
-	def private calculateOuterRadius(Node disk) {
+	def private calculateOuterRadius(Long disk) {
+		log.debug("In calculate outer radius: " + disk)
 		val coordinates = new CoordinateList()
 		RDUtils::getSubDisks(disk).forEach [
-			val position = getSingleRelationship(Rels.HAS, Direction.OUTGOING)
+			val node = get("d").asNode
+			val position = connector.executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + node.id +
+				" RETURN p")
 			var x = 0.0
 			var y = 0.0
-			if (position !== null) {
-				x = position.endNode.getProperty("x") as Double
-				y = position.endNode.getProperty("y") as Double
+			if (!position.nullOrEmpty) {
+				val posNode = position.single.get("p").asNode
+				x = posNode.get("x").asDouble
+				y = posNode.get("y").asDouble
 			}
-			coordinates.add(createCircle(x, y, getProperty("radius") as Double).coordinates, false)
+			coordinates.add(createCircle(x, y, node.get("radius").asDouble).coordinates, false)
 		]
 		val geoFactory = new GeometryFactory()
 		val innerCircleMultiPoint = geoFactory.createMultiPoint(coordinates.toCoordinateArray)
@@ -272,30 +258,40 @@ class RD2RD {
 		return shapeFactory.createCircle
 	}
 
-	def private calculateCrossSection(Iterable<Node> segments, double width, double height) {
-		val crossSection = (-(width / 2 ) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", " +
-				((width / 2 ) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height))
-			segments.forEach[setProperty("crossSection", crossSection)]
-	}
-
-	def private calculateCrossSection(Node disk, double width, double height) {
+	def private calculateCrossSection(Iterator<Node> segments, double width, double height) {
 		val crossSection = (-(width / 2 ) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", " +
 			((width / 2 ) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height))
-
-		disk.setProperty("crossSection", crossSection)
+		val statementList = newArrayList
+		segments.forEach [
+			statementList += "MATCH (n) WHERE ID(n) = " + id + " SET n.crossSection = \'" + crossSection + "\'"
+		]
+		connector.executeWrite(statementList)
 	}
 
-	def private calculateSpines(Iterable<Node> segments, double factor) {
+	def private calculateCrossSection(double width, double height) {
+		val crossSection = (-(width / 2 ) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", " +
+			((width / 2 ) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height))
+		return crossSection
+	}
+
+	def private calculateCrossSection(Long disk, double width, double height) {
+		val crossSection = (-(width / 2 ) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", " +
+			((width / 2 ) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height))
+		connector.executeWrite("MATCH (n)  WHERE ID(n) = " + disk + " SET n.crossSection = \'" + crossSection + "\'")
+	}
+
+	def private calculateSpines(Iterator<Node> segments, double factor) {
+		log.debug("in calculate spines")
 		if (config.outputFormat == OutputFormat::X3D) {
 			var spinePointCount = 0
-			if (segments.length < 50) {
+			if (segments.size < 50) {
 				spinePointCount = 400
 			} else {
 				spinePointCount = 1000
 			}
 			val completeSpine = newArrayOfSize(spinePointCount)
 			val stepX = 2 * Math::PI / spinePointCount;
-	
+
 			for (i : 0 ..< spinePointCount) {
 				completeSpine.set(i, factor * Math::cos(i * stepX) + " " + factor * Math::sin(i * stepX) + " " + 0.0)
 			}
@@ -303,9 +299,10 @@ class RD2RD {
 			// calculate spines according  to fractions
 			var start = 0
 			var end = 0
-	
-			for (segment : segments) {
-				val size = segment.getProperty("size") as Double
+			val statementList = newArrayList
+			while (segments.hasNext) {
+				val segment = segments.next
+				val size = segment.get("size").asDouble
 				// val entity = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
 				start = end;
 				end = start + Math::floor(spinePointCount * size).intValue
@@ -319,30 +316,36 @@ class RD2RD {
 				for (j : 0 ..< end - start) {
 					partSpine.set(j, completeSpine.get(start + j))
 				}
-				segment.setProperty("spine", partSpine.removeBrackets)
+				statementList +=
+					"MATCH (n) WHERE ID(n) = " + segment.id + " SET n.spine = \'" + partSpine.removeBrackets + "\'"
 			}
+			connector.executeWrite(statementList)
 		}
 		if (config.outputFormat == OutputFormat::AFrame) {
 			if (!segments.empty) {
-				var length = segments.length
+				var length = segments.size
 				var sizeSum = 0.0
 				var position = 0.0
-				for (segment : segments) {
-					val size = segment.getProperty("size") as Double
+				while (segments.hasNext) {
+					val segment = segments.next
+					val size = segment.get("size").asDouble
 					sizeSum += size
 				}
 				sizeSum += sizeSum / 360 * length
-				for (segment : segments) {
-					val angle = (segment.getProperty("size") as Double / sizeSum) * 360
-					segment.setProperty("angle", angle)
-					segment.setProperty("anglePosition", position)
+				while (segments.hasNext) {
+					log.info("Nach erstem Iterator-Durchlauf sind wir wieder am Anfang")
+					val segment = segments.next
+					val angle = (segment.get("size").asDouble / sizeSum) * 360
+					connector.executeWrite(
+						"MATCH (n) WHERE ID(n) = " + segment.id + " SET n.angle = " + angle + ", n.anglePosition = " +
+							position)
 					position += angle + 1
 				}
 			}
 		}
 	}
 
-	def private calculateSpines(Node disk, double factor) {
+	def private calculateSpines(Long disk, double factor) {
 		val spinePointCount = 50
 		val completeSpine = newArrayOfSize(spinePointCount)
 		val stepX = 2 * Math::PI / spinePointCount;
@@ -350,7 +353,8 @@ class RD2RD {
 			completeSpine.set(i, factor * Math::cos(i * stepX) + " " + factor * Math::sin(i * stepX) + " " + 0.0)
 		}
 		completeSpine.set(spinePointCount - 1, completeSpine.get(0))
-		disk.setProperty("spine", completeSpine.removeBrackets)
+		connector.executeWrite("MATCH (n) WHERE ID(n) = " + disk + " SET n.spine = \'" + completeSpine.removeBrackets +
+			"\'")
 	}
 
 	def private RGBColor[] createColorGradiant(RGBColor start, RGBColor end, int maxLevel) {
@@ -371,11 +375,18 @@ class RD2RD {
 	}
 
 	def private getDisks() {
-		return graph.execute("MATCH (n:Model:RD)-[:CONTAINS*]->(m:Disk) RETURN m").map[return get("m") as Node]
+		return connector.executeRead("MATCH (n:Model:RD)-[:CONTAINS*]->(d:Disk) RETURN d")
+	}
+
+	def private getSubDisks(Long entity) {
+		return connector.executeRead("MATCH (n)-[:CONTAINS]->(d:Disk) WHERE ID(n) = " + entity + " RETURN d").map [
+			return get("d").asNode
+		]
 	}
 
 	def private getRootDisks() {
-		val rootDisks = graph.execute("MATCH (n:Model:RD)-[:CONTAINS]->(m:Disk) RETURN m").map[return get("m") as Node].toList
-		return rootDisks
+		return connector.executeRead("MATCH (n:RD:Model)-[:CONTAINS]->(d:Disk) RETURN d").map [
+			return get("d").asNode
+		]
 	}
 }

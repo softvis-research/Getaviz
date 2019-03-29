@@ -1,18 +1,16 @@
 package org.getaviz.generator.rd.m2t
 
 import org.getaviz.generator.SettingsConfiguration
-import org.getaviz.generator.database.Database
-import org.neo4j.graphdb.Node
-import org.getaviz.generator.database.Rels
-import org.neo4j.graphdb.Direction
 import org.getaviz.generator.OutputFormatHelper
 import java.io.FileWriter
 import java.io.IOException
 import org.apache.commons.logging.LogFactory
+import org.getaviz.generator.database.DatabaseConnector
+import org.neo4j.driver.v1.types.Node
 
 class RD2X3D {
 	val config = SettingsConfiguration.instance
-	val graph = Database::getInstance(config.databaseName)
+	val connector = DatabaseConnector::instance
 	val log = LogFactory::getLog(class)
 	extension OutputFormatHelper helper = new OutputFormatHelper
 	
@@ -39,46 +37,36 @@ class RD2X3D {
 	def private String toRD() {
 		val disks = new StringBuilder
 		val segments = new StringBuilder
-		var tx = graph.beginTx
-		try {
-			var result = graph.execute("MATCH (n:Disk) RETURN n").map[return get("n") as Node]
-			result.forEach[disks.append(toDisk)]
-			tx.success
-		} finally {
-			tx.close
-		}	
-		tx = graph.beginTx
-		try {
-			var result = graph.execute("MATCH (n:DiskSegment) RETURN n").map[return get("n") as Node]
-			result.forEach[segments.append(toSegment)]
-			tx.success
-		} finally {
-			tx.close
-		}		
+		connector.executeRead("MATCH (n:Model:RD)-[:CONTAINS*]->(d:Disk)-[:HAS]->(p:Position) RETURN d,p").forEach[
+			disks.append(toDisk(get("d").asNode,get("p").asNode))
+		]
+		
+		connector.executeRead("MATCH (n:Model:RD)-[:CONTAINS*]->(ds:DiskSegment) RETURN ds").forEach[
+			segments.append(toSegment(get("ds").asNode))
+		]			
 		return disks.toString + segments.toString
 	}
 	
-	def private String toDisk(Node disk) {
-		val position = disk.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode as Node
-		val entity = disk.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
+	def private String toDisk(Node disk, Node position) {
+		val entity = connector.getVisualizedEntity(disk.id)
 		val result = '''
-		<Transform translation='«position.getProperty("x") + " " + position.getProperty("y") + " " + position.getProperty("z")»' 
+		<Transform translation='«position.get("x") + " " + position.get("y") + " " + position.get("z")»' 
 			rotation='0 0 1 1.57'
-			scale='1 1 «disk.getProperty("height") as Double»'>
-			<Transform DEF='«entity.getProperty("hash") as String»'>
+			scale='1 1 «disk.get("height")»'>
+			<Transform DEF='«entity.get("hash").asString»'>
 				<Shape>
 					<Extrusion
 						convex='true'
 						solid='true'
-						crossSection='«disk.getProperty("crossSection") as String»'
-						spine='«disk.getProperty("spine") as String»'
+						crossSection='«disk.get("crossSection").asString»'
+						spine='«disk.get("spine").asString»'
 						creaseAngle='1'
 						beginCap='true'
 						endCap='true'></Extrusion>
 					<Appearance>
 							<Material
-								diffuseColor='«disk.getProperty("color") as String»'
-								transparency='«disk.getProperty("transparency") as Double»'
+								diffuseColor='«disk.get("color").asString»'
+								transparency='«disk.get("transparency")»'
 							></Material>
 					</Appearance>
 				</Shape>
@@ -89,26 +77,25 @@ class RD2X3D {
 	}
 	
 	def private String toSegment(Node segment) {
-		val parent = segment.getSingleRelationship(Rels.CONTAINS, Direction.INCOMING).startNode
-		val position = parent.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode
-		val entity = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
+		val position = connector.executeRead("MATCH (n)<-[:CONTAINS]-(parent)-[:HAS]->(p:Position) WHERE ID(n) = " + segment.id + " RETURN p").single.get("p").asNode
+		val entity = connector.getVisualizedEntity(segment.id)
 		val result = '''
-			<Transform  translation='«position.getProperty("x") + " " + position.getProperty("y") + " " +
-			position.getProperty("z")»' rotation='0 0 1 1.57'>
-				<Transform DEF='«entity.getProperty("hash") as String»'>
+			<Transform  translation='«position.get("x") + " " + position.get("y") + " " +
+			position.get("z")»' rotation='0 0 1 1.57'>
+				<Transform DEF='«entity.get("hash").asString»'>
 					<Shape>
 						<Extrusion
 							convex='true'
 							solid='true'
-							crossSection='«segment.getProperty("crossSection") as String»'
-							spine='«segment.getProperty("spine") as String»'
+							crossSection='«segment.get("crossSection").asString»'
+							spine='«segment.get("spine").asString»'
 							creaseAngle='1'
 							beginCap='true'
 							endCap='true'></Extrusion>
 						<Appearance>
 								<Material
-									diffuseColor='«segment.getProperty("color") as String»'
-									transparency='«segment.getProperty("transparency") as Double»'
+									diffuseColor='«segment.get("color").asString»'
+									transparency='«segment.get("transparency")»'
 								></Material>
 						</Appearance>
 					</Shape>
