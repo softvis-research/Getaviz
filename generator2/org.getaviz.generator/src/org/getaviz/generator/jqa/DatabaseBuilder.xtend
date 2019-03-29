@@ -109,10 +109,10 @@ class DatabaseBuilder {
 
 	private def enhanceNode(Record record) {
 		val node = record.get("n").asNode
-		var fqn = record.get("fqn").asString
+		var fqn = node.get("fqn").asString
 		if (fqn.nullOrEmpty) {
-			val container = connector.executeRead("MATCH (n)<-[:DECLARES]-(m) WHERE ID(n) = " + node.id +
-				" RETURN m").next.get("n").asNode
+			val container = connector.executeRead("MATCH (n)<-[:DECLARES]-(container) WHERE ID(n) = " + node.id +
+				" RETURN container").single.get("container").asNode
 			val containerFqn = container.get("fqn").asString
 			var name = node.get("name").asString
 			var signature = node.get("signature").asString
