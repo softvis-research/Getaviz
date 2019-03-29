@@ -212,7 +212,7 @@ public class SettingsConfiguration {
 	}
 
 	public SeparatorModes getPanelSeparatorMode() {
-		String value = config.getString("city.panel_separator_mode", "separator");
+		String value = config.getString("city.panel.separator_mode", "separator");
 		switch (value) {
 		case "none":
 			return SeparatorModes.NONE;
