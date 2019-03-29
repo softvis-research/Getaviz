@@ -1,13 +1,13 @@
 package org.getaviz.generator.city.m2m;
 
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
+import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.types.Node;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.SettingsConfiguration.Attributes;
 import org.getaviz.generator.SettingsConfiguration.Methods;
 import org.getaviz.generator.SettingsConfiguration.SortPriorities_Visibility;
+import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
-import org.getaviz.generator.database.Rels;
 
 public class BuildingSegmentComparator implements Comparable<BuildingSegmentComparator> {
 	private Node segment;
@@ -17,10 +17,11 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 	private int fineValue; // compared after coarseValue
 	private int finerValue; // compared after finevalue, if it was equal
 	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private static DatabaseConnector connector = DatabaseConnector.getInstance();
 
 	public BuildingSegmentComparator(final Node segment) {
 		this.segment = segment;
-		this.relatedEntity = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).getEndNode();
+		this.relatedEntity = connector.getVisualizedEntity(segment.id());
 		setCoarseValue();
 		switch (config.getClassElementsSortModeFine()) {
 		case ALPHABETICALLY: // names compared directly in compareTo-method
@@ -59,7 +60,7 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 	}
 
 	static int getCompValue_Visibility(final Node relatedEntity) {
-		String visbility = (String) relatedEntity.getProperty("visibility");
+		String visbility = relatedEntity.get("visibility").asString();
 		if (visbility.equals("private")) {
 			return SortPriorities_Visibility.PRIVATE;
 		} else if (visbility.equals("protected")) {
@@ -72,13 +73,11 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 	}
 
 	static int getCompValue_Type(final Node relatedEntity) {
-		if (relatedEntity.hasLabel(Labels.Field)) {
+		if (relatedEntity.hasLabel(Labels.Field.name())) {
 			boolean isPrimitive = false;
-			if (relatedEntity.hasRelationship(Rels.OF_TYPE)) {
-				Node declaredType = relatedEntity.getSingleRelationship(Rels.OF_TYPE, Direction.OUTGOING).getEndNode();
-				if (declaredType.hasLabel(Labels.Primitive)) {
-					isPrimitive = true;
-				}
+			StatementResult result = connector.executeRead("MATCH (n)-[OF_TYPE]->(t:Primitive) WHERE ID(n) = " + relatedEntity.id() + " RETURN t");
+			if(result.hasNext()) {
+				isPrimitive = true;
 			}
 			if (isPrimitive) {
 				return Attributes.SortPriorities_Types.PRIMITVE;
@@ -86,19 +85,13 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 				return Attributes.SortPriorities_Types.COMPLEX;
 			}
 		} else {
-			boolean isStatic = false;
-			if (relatedEntity.hasProperty("static")) {
-				isStatic = (Boolean) relatedEntity.getProperty("static");
-			}
-			boolean isAbstract = false;
-			if (relatedEntity.hasProperty("abstract")) {
-				isAbstract = (Boolean) relatedEntity.getProperty("abstract");
-			}
-			if (relatedEntity.hasLabel(Labels.Constructor)) {
+			boolean isStatic = relatedEntity.get("static").asBoolean(false);
+			boolean isAbstract = relatedEntity.get("abstract").asBoolean(false);
+			if (relatedEntity.hasLabel(Labels.Constructor.name())) {
 				return Methods.SortPriorities_Types.CONSTRUCTOR;
-			} else if (relatedEntity.hasLabel(Labels.Getter)) {
+			} else if (relatedEntity.hasLabel(Labels.Getter.name())) {
 				return Methods.SortPriorities_Types.GETTER;
-			} else if (relatedEntity.hasLabel(Labels.Setter)) {
+			} else if (relatedEntity.hasLabel(Labels.Setter.name())) {
 				return Methods.SortPriorities_Types.SETTER;
 			} else if (isStatic) {
 				return Methods.SortPriorities_Types.STATIC;
@@ -131,8 +124,8 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 		case UNSORTED:
 			return 0;
 		case ALPHABETICALLY:
-			String name = (String) relatedEntity.getProperty("name");
-			result = name.compareTo((String) comp.relatedEntity.getProperty("name"));
+			String name = relatedEntity.get("name").asString();
+			result = name.compareTo(comp.relatedEntity.get("name").asString());
 			break;
 		case SCHEME:
 			if (fineValue < comp.fineValue)
@@ -165,14 +158,8 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 
 	/** Compares the number of statements inside the given methods. */
 	private int compareNOS(final BuildingSegmentComparator comp) {
-		long numberOfStatements = 0;
-		long numberOfStatementsComp = 0;
-		if (relatedEntity.hasProperty("effectiveLineCount")) {
-			numberOfStatements = (int) relatedEntity.getProperty("effectiveLineCount");
-		}
-		if (comp.relatedEntity.hasProperty("effectiveLineCount")) {
-			numberOfStatementsComp = (int) comp.relatedEntity.getProperty("effectiveLineCount");
-		}
+		long numberOfStatements = relatedEntity.get("effectiveLineCount").asLong(0);
+		long numberOfStatementsComp = comp.relatedEntity.get("effectiveLineCount").asLong(0);
 		if (numberOfStatements < numberOfStatementsComp)
 			return 1;
 		else if (numberOfStatements > numberOfStatementsComp)
@@ -192,18 +179,18 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 	private void setCoarseValue() {
 		switch (config.getClassElementsSortModeCoarse()) {
 		case ATTRIBUTES_FIRST:
-			if (relatedEntity.hasLabel(Labels.Field)) {
+			if (relatedEntity.hasLabel(Labels.Field.name())) {
 				coarseValue = -1;
-			} else if (relatedEntity.hasLabel(Labels.Method)) {
+			} else if (relatedEntity.hasLabel(Labels.Method.name())) {
 				coarseValue = 1;
 			} else {
 				coarseValue = 0;
 			}
 
 		case METHODS_FIRST:
-			if (relatedEntity.hasLabel(Labels.Field)) {
+			if (relatedEntity.hasLabel(Labels.Field.name())) {
 				coarseValue = 1;
-			} else if (relatedEntity.hasLabel(Labels.Method)) {
+			} else if (relatedEntity.hasLabel(Labels.Method.name())) {
 				coarseValue = -1;
 			} else {
 				coarseValue = 0;
@@ -214,9 +201,9 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 			coarseValue = 0;
 			break;
 		default:
-			if (relatedEntity.hasLabel(Labels.Field)) {
+			if (relatedEntity.hasLabel(Labels.Field.name())) {
 				coarseValue = 1;
-			} else if (relatedEntity.hasLabel(Labels.Method)) {
+			} else if (relatedEntity.hasLabel(Labels.Method.name())) {
 				coarseValue = -1;
 			} else {
 				coarseValue = 0;

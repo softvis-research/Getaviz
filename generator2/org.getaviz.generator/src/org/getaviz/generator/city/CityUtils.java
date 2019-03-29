@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
+import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.types.Node;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.SettingsConfiguration.OutputFormat;
 import org.getaviz.generator.city.m2m.BuildingSegmentComparator;
 import org.getaviz.generator.city.m2m.RGBColor;
+import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
-import org.getaviz.generator.database.Rels;
 
 public class CityUtils {
 
 	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private static DatabaseConnector connector = DatabaseConnector.getInstance();
 	public static String getFamixClassString(final String className) {
 		String s = className.substring(0, 5) + "." + className.substring(5, className.length());
 		if (className.endsWith("Impl"))
@@ -58,13 +58,9 @@ public class CityUtils {
 		return colorRange;
 	}
 
-	public static void setBuildingSegmentColor(final Node segment) {
+	public static String setBuildingSegmentColor(Node relatedEntity) {
 		String color = "";
-		Node entity = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).getEndNode();
-		String visibility = "";
-		if(entity.hasProperty("visibility")) {
-			visibility = (String)(entity.getProperty("visibility"));
-		}
+		String visibility = relatedEntity.get("visibility").asString("");
 		if (config.getOutputFormat() == OutputFormat.AFrame) {
 			switch (config.getScheme()) {
 			case VISIBILITY:
@@ -78,18 +74,17 @@ public class CityUtils {
 					// Package visibility or default
 					color = config.getCityColorHex("blue");
 				}
-				segment.setProperty("color", color);
 				break;
 			case TYPES:
-				if(entity.hasLabel(Labels.Field)) {
-					setAttributeColor(segment);
-				} else if(entity.hasLabel(Labels.Method)) {
-					setMethodColor(segment);
+				if(relatedEntity.hasLabel(Labels.Field.name())) {
+					color = setAttributeColor(relatedEntity.id());
+				} else if(relatedEntity.hasLabel(Labels.Method.name())) {
+					color = setMethodColor(relatedEntity);
 				} else {
-					segment.setProperty("color", config.getCityColorHex("blue"));
+					color =  config.getCityColorHex("blue");
 				}
 			default:
-				segment.setProperty("color", config.getCityColorHex("blue"));
+				color = config.getCityColorHex("blue");
 			}
 		} else {
 			switch (config.getScheme()) {
@@ -104,32 +99,29 @@ public class CityUtils {
 					// Package visibility or default
 					color = config.getCityColorAsPercentage("blue");
 				}
-				segment.setProperty("color", color);
 				break;
 			case TYPES:
-				if(entity.hasLabel(Labels.Field)) {
-					setAttributeColor(segment);
-				} else if(entity.hasLabel(Labels.Method)) {
-					setMethodColor(segment);
+				if(relatedEntity.hasLabel(Labels.Field.name())) {
+					color = setAttributeColor(relatedEntity.id());
+				} else if(relatedEntity.hasLabel(Labels.Method.name())) {
+					color = setMethodColor(relatedEntity);
 				} else {
-					segment.setProperty("color", config.getCityColorAsPercentage("blue"));
+					color = config.getCityColorAsPercentage("blue");
 				}
 				break;
 			default:
-				segment.setProperty("color", config.getCityColorAsPercentage("blue"));
+				color = config.getCityColorAsPercentage("blue");
 			}
 		}
+		return color;
 	}	
 
-	private static void setAttributeColor(final Node segment) {
+	private static String setAttributeColor(Long relatedEntity) {
 		String color = "";
-		Node entity = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).getEndNode();
 		boolean isPrimitive = false;
-		if(entity.hasRelationship(Rels.OF_TYPE)) {
-			Node declaredType = entity.getSingleRelationship(Rels.OF_TYPE, Direction.OUTGOING).getEndNode();
-			if (declaredType.hasLabel(Labels.Primitive)) {
-				isPrimitive = true;
-			}
+		StatementResult result = connector.executeRead("MATCH (n)-[OF_TYPE]->(t:Primitive) WHERE ID(n) = " + relatedEntity + " RETURN t");
+		if(result.hasNext()) {
+			isPrimitive = true;
 		}
 		if (config.getOutputFormat() == OutputFormat.AFrame) {
 			if (isPrimitive) {
@@ -144,27 +136,21 @@ public class CityUtils {
 				color = config.getCityColorAsPercentage("aqua");
 			}
 		}
-		segment.setProperty("color", color);
+		return color;
 	}
 	
-	private static void setMethodColor(final Node segment) {
-		Node entity = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).getEndNode();
+	private static String setMethodColor(Node relatedEntity) {
 		String color = "";
-		boolean isStatic = false;
-		if(entity.hasProperty("static")) {
-			isStatic = (Boolean)entity.getProperty("static");
-		}
-		boolean isAbstract = false;
-		if(entity.hasProperty("abstract")) {
-			isAbstract = (Boolean)entity.getProperty("abstract");
-		}		
+		boolean isStatic = relatedEntity.get("static").asBoolean(false);
+		boolean isAbstract = relatedEntity.get("abstract").asBoolean(false);
+	
 		if (config.getOutputFormat() == OutputFormat.AFrame) {
 			// if (bs.getMethodKind().equals("constructor")) {
-			if (entity.hasLabel(Labels.Constructor)) {
+			if (relatedEntity.hasLabel(Labels.Constructor.name())) {
 				color = config.getCityColorHex("red");
-			} else if (entity.hasLabel(Labels.Getter)) {
+			} else if (relatedEntity.hasLabel(Labels.Getter.name())) {
 				color = config.getCityColorHex("light_green");
-			} else if (entity.hasLabel(Labels.Setter)) {
+			} else if (relatedEntity.hasLabel(Labels.Setter.name())) {
 				color = config.getCityColorHex("dark_green");
 			} else if (isStatic) {
 				color = config.getCityColorHex("yellow");
@@ -176,11 +162,11 @@ public class CityUtils {
 			}
 		} else {
 			// if (bs.getMethodKind().equals("constructor")) {
-			if (entity.hasLabel(Labels.Constructor)) {
+			if (relatedEntity.hasLabel(Labels.Constructor.name())) {
 				color = config.getCityColorAsPercentage("red");
-			} else if (entity.hasLabel(Labels.Getter)) {
+			} else if (relatedEntity.hasLabel(Labels.Getter.name())) {
 				color = config.getCityColorAsPercentage("light_green");
-			} else if (entity.hasLabel(Labels.Setter)) {
+			} else if (relatedEntity.hasLabel(Labels.Setter.name())) {
 				color = config.getCityColorAsPercentage("dark_green");
 			} else if (isStatic) {
 				color = config.getCityColorAsPercentage("yellow");
@@ -191,7 +177,7 @@ public class CityUtils {
 				color = config.getCityColorAsPercentage("violet");
 			}
 		}
-		segment.setProperty("color", color);
+		return color;
 	}
 
 	/**
@@ -204,43 +190,39 @@ public class CityUtils {
 	 *
 	 */
 	
-	public static void sortBuildingSegments(final List<Node> buildingSegments) {
-		final List<BuildingSegmentComparator> sortedList = new ArrayList<BuildingSegmentComparator>(buildingSegments.size());
-		for (Node segment : buildingSegments)
+	public static void sortBuildingSegments(final List<Node> segments) {
+		final List<BuildingSegmentComparator> sortedList = new ArrayList<BuildingSegmentComparator>(segments.size());
+		for (Node segment : segments)
 			sortedList.add(new BuildingSegmentComparator(segment));
 		Collections.sort(sortedList);
-		buildingSegments.clear();
+		segments.clear();
 		for (BuildingSegmentComparator bsc : sortedList)
-			buildingSegments.add(bsc.getSegment());
+			segments.add(bsc.getSegment());
 	}
 		
-	public static List<Node> getChildren(Node parent) {
+	public static List<Node> getChildren(Long parent) {
 		ArrayList<Node> children = new ArrayList<Node>();
-		Iterable<Relationship> childrenRels = parent.getRelationships(Rels.CONTAINS, Direction.OUTGOING);
-		for (Relationship relationship : childrenRels) {
-			children.add(relationship.getEndNode());
+		StatementResult childs = connector.executeRead("MATCH (n)-[:CONTAINS]->(child) WHERE ID(n) = " + parent + " RETURN child");
+		while(childs.hasNext()) {
+			children.add(childs.next().get("child").asNode());
 		}
 		return children;
 	}
 
-	public static List<Node> getMethods(Node building) {
+	public static List<Node> getMethods(Long building) {
+		StatementResult result = connector.executeRead("MATCH (n)-[:CONTAINS]->(bs:BuildingSegment)-[:VISUALIZES]->(m:Method) WHERE ID(n) = " + building + " RETURN bs");
 		ArrayList<Node> methods = new ArrayList<Node>();
-		for (Node child : getChildren(building)) {
-			Node entity = child.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).getEndNode();
-			if (entity.hasLabel(Labels.Method)) {
-				methods.add(child);
-			}
+		while(result.hasNext()) {
+			methods.add(result.next().get("bs").asNode());
 		}
 		return methods;
 	}
 
-	public static List<Node> getData(Node building) {
+	public static List<Node> getData(Long building) {
+		StatementResult result = connector.executeRead("MATCH (n)-[:CONTAINS]->(bs:BuildingSegment)-[:VISUALIZES]->(f:Field) WHERE ID(n) = " + building + " RETURN bs");
 		ArrayList<Node> data = new ArrayList<Node>();
-		for (Node child : getChildren(building)) {
-			Node entity = child.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).getEndNode();
-			if (entity.hasLabel(Labels.Field)) {
-				data.add(child);
-			}
+		while(result.hasNext()) {
+			data.add(result.next().get("bs").asNode());
 		}
 		return data;
 	}
