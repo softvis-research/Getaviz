@@ -1200,6 +1200,7 @@ var generationFormController = (function() {
 				
 				// Validation rules
 				$('#settingsForm').jqxValidator({
+					hintType: "label",
 					rules: [
 						{ input: manual_input_name, message: 'Please enter an input.name!', action: 'keyup', position: 'top:0,15', rule: 'required' },
 						{ input: manual_input_files, message: 'Please enter the path to your input.files!', action: 'keyup, focus, blur, valuechanged', position: 'top:0,15', rule: 'required' },
@@ -1226,7 +1227,7 @@ var generationFormController = (function() {
 						{ input: manual_rd_color_method, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
 						{ input: manual_rd_color_namespace, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
 					]
-				});				
+				});			
 				
 				// Submit Form Data 
 				var btn = settingsForm.jqxForm('getComponentByName', 'submitButton');
