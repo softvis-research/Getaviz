@@ -1175,21 +1175,70 @@ var generationFormController = (function() {
 				// Manually created vars to access the data in the form
 				var manual_input_name = settingsForm.jqxForm('getComponentByName', 'input.name');
 				var manual_input_files = settingsForm.jqxForm('getComponentByName', 'input.files');
-				// var manual_city_package_color_start = settingsForm.jqxForm('getComponentByName', 'city.package.color_start');
+				var manual_city_package_color_start = settingsForm.jqxForm('getComponentByName', 'city.package.color_start');
+				var manual_city_package_color_end = settingsForm.jqxForm('getComponentByName', 'city.package.color_end');
+				var manual_city_class_color_start = settingsForm.jqxForm('getComponentByName', 'city.class.color_start');
+				var manual_city_class_color_end = settingsForm.jqxForm('getComponentByName', 'city.class.color_end');
+				var manual_city_class_color = settingsForm.jqxForm('getComponentByName', 'city.class.color');
+				var manual_city_color_blue = settingsForm.jqxForm('getComponentByName', 'city.color.blue');
+				var manual_city_color_aqua = settingsForm.jqxForm('getComponentByName', 'city.color.aqua');
+				var manual_city_color_light_green = settingsForm.jqxForm('getComponentByName', 'city.color.light_green');
+				var manual_city_color_dark_green = settingsForm.jqxForm('getComponentByName', 'city.color.dark_green');
+				var manual_city_color_yellow = settingsForm.jqxForm('getComponentByName', 'city.color.yellow');
+				var manual_city_color_orange = settingsForm.jqxForm('getComponentByName', 'city.color.orange');
+				var manual_city_color_red = settingsForm.jqxForm('getComponentByName', 'city.color.red');
+				var manual_city_color_pink = settingsForm.jqxForm('getComponentByName', 'city.color.pink');
+				var manual_city_color_violet = settingsForm.jqxForm('getComponentByName', 'city.color.violet');
+				var manual_city_color_light_grey = settingsForm.jqxForm('getComponentByName', 'city.color.light_grey');
+				var manual_city_color_dark_grey = settingsForm.jqxForm('getComponentByName', 'city.color.dark_grey');
+				var manual_city_color_white = settingsForm.jqxForm('getComponentByName', 'city.color.white');
+				var manual_city_color_black = settingsForm.jqxForm('getComponentByName', 'city.color.black');
+				var manual_rd_color_class = settingsForm.jqxForm('getComponentByName', 'rd.color.class');
+				var manual_rd_color_data = settingsForm.jqxForm('getComponentByName', 'rd.color.data');
+				var manual_rd_color_method = settingsForm.jqxForm('getComponentByName', 'rd.color.method');
+				var manual_rd_color_namespace = settingsForm.jqxForm('getComponentByName', 'rd.color.namespace');
 				
+				// Validation rules
 				$('#settingsForm').jqxValidator({
 					rules: [
 						{ input: manual_input_name, message: 'Please enter an input.name!', action: 'keyup', position: 'top:0,15', rule: 'required' },
-						{ input: manual_input_files, message: 'Please enter the path to your input.files!', action: 'keyup, focus, blur', position: 'top:0,15', rule: 'required' },
-						// { input: manual_city_package_color_start, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', /*rule: '7,7',*/ rule: function() {
+						{ input: manual_input_files, message: 'Please enter the path to your input.files!', action: 'keyup, focus, blur, valuechanged', position: 'top:0,15', rule: 'required' },
+						{ input: manual_city_package_color_start, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_package_color_end, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_class_color_start, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_class_color_end, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_class_color, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_blue, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_aqua, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_light_green, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_dark_green, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_yellow, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_orange, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_red, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_pink, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_violet, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_light_grey, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_dark_grey, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_white, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_color_black, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_rd_color_class, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_rd_color_data, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_rd_color_method, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_rd_color_namespace, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: 'length=7,7',},
 
+
+						// { input: manual_city_package_color_start, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', rule: function() {
+
+							// var hex_format = "/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/";
 							// console.log('custom function');
+							// console.log(manual_city_package_color_start);
 							
 							// if(manual_city_package_color_start.contains('#') == true)
 								// return true;
 							// else
-								// return false;
+								// return false;							
 							
+							// return true;
 							
 							// }
 						// },
