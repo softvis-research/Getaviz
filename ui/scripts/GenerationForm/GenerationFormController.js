@@ -47,21 +47,7 @@ var generationFormController = (function() {
 						align: 'left',
 						width: '250px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
-					},					
-					{
-						bind: 'output_format',
-						name: 'output.format',
-						type: 'option',
-						label: 'output.format',
-						labelWidth: '325px',
-						width: '250px',
-						component: 'jqxDropDownList',
-						options: [
-							{ value: 'aframe' },
-							{ value: 'x3d'}
-						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
-					},					
+					},							
 					{
 						bind: 'metaphor',
 						name: 'metaphor',
@@ -75,22 +61,7 @@ var generationFormController = (function() {
 							{ value: 'city'}
 						],
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
-					},							
-					// only available if output.format == 'x3d' 
-					{
-						bind: 'convert_to_multipart',
-						name: 'convert_to_multipart',
-						type: 'option',
-						label: 'convert_to_multipart',
-						labelWidth: '325px',
-						width: '250px',
-						component: 'jqxDropDownList',
-						options: [
-							{ value: 'false' },
-							{ value: 'true'}
-						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
-					},				
+					},			
 					{
 						type: 'blank',
 						rowHeight: '25px'
@@ -897,9 +868,7 @@ var generationFormController = (function() {
 				// Default Values 				
 				var defaultValue = {
 					input_name: 'default',
-					output_format: 'aframe',
 					metaphor: 'city',
-					convert_to_multipart: false,
 					city_building_type: 'original',
 					city_scheme: 'types',
 					city_class_elements_mode: 'methods_and_attributes',
@@ -976,8 +945,8 @@ var generationFormController = (function() {
 					
 				});	
 
-				// On first load show only the input fields for initially selected options (aframe, city, optional)
-				initial_load_aframe_city_optional();
+				// On first load show only the input fields for initially selected options (city, optional)
+				initial_load_city_optional();
 				
 				// formDataChange Event 
 				settingsForm.on('formDataChange', function (event) {
@@ -1182,15 +1151,6 @@ var generationFormController = (function() {
 						$('#settingsForm').jqxForm('showComponent', 'rd.data_disks');
 						$('#settingsForm').jqxForm('showComponent', 'rd.method_type_mode');
 					}	
-					
-					if (newValue.output_format == 'x3d') {
-					
-						$('#settingsForm').jqxForm('showComponent', 'convert_to_multipart');
-						
-					} else if (newValue.output_format == 'aframe') {
-					
-						$('#settingsForm').jqxForm('hideComponent', 'convert_to_multipart');	
-					}
 				
 				});
 				
@@ -1216,8 +1176,8 @@ var generationFormController = (function() {
 		events.log.manipulation.subscribe(addLogObject);
 	}
 	
-	// On first load show only the input fields for initially selected options (aframe, city, optional)
-	function initial_load_aframe_city_optional() {
+	// On first load show only the input fields for initially selected options (city, optional)
+	function initial_load_city_optional() {
 
 		$('#settingsForm').jqxForm('showComponent', 'city.building_type');											// Visibility based on 'city'
 		$('#settingsForm').jqxForm('showComponent', 'city.scheme');
@@ -1283,8 +1243,7 @@ var generationFormController = (function() {
 		$('#settingsForm').jqxForm('hideComponent', 'city.brick_horizontal_gap');
 		$('#settingsForm').jqxForm('hideComponent', 'city.brick_vertical_margin');
 		$('#settingsForm').jqxForm('hideComponent', 'city.brick_vertical_gap');							
-		$('#settingsForm').jqxForm('showComponent', 'city.original_building_metric');		
-		$('#settingsForm').jqxForm('hideComponent', 'convert_to_multipart');										// Visibility based on 'aframe'
+		$('#settingsForm').jqxForm('showComponent', 'city.original_building_metric');
 	}
 	
 	// function hide_city() {
