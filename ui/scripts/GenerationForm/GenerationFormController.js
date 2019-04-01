@@ -861,7 +861,7 @@ var generationFormController = (function() {
 						text: 'Submit',
 						align: 'right',
 						padding: {left: 20, top: 5, bottom: 5, right: 20}
-					}
+					},
 					
 				];
 				
@@ -1170,18 +1170,42 @@ var generationFormController = (function() {
 						$('#settingsForm').jqxForm('showComponent', 'rd.method_type_mode');
 					}	
 				
+				});			
+				
+				// Manually created vars to access the data in the form
+				var manual_input_name = settingsForm.jqxForm('getComponentByName', 'input.name');
+				var manual_input_files = settingsForm.jqxForm('getComponentByName', 'input.files');
+				// var manual_city_package_color_start = settingsForm.jqxForm('getComponentByName', 'city.package.color_start');
+				
+				$('#settingsForm').jqxValidator({
+					rules: [
+						{ input: manual_input_name, message: 'Please enter an input.name!', action: 'keyup', position: 'top:0,15', rule: 'required' },
+						{ input: manual_input_files, message: 'Please enter the path to your input.files!', action: 'keyup, focus, blur', position: 'top:0,15', rule: 'required' },
+						// { input: manual_city_package_color_start, message: 'Please enter a HEX Color!', action: 'valuechanged', position: 'top:0,15', /*rule: '7,7',*/ rule: function() {
+
+							// console.log('custom function');
+							
+							// if(manual_city_package_color_start.contains('#') == true)
+								// return true;
+							// else
+								// return false;
+							
+							
+							// }
+						// },
+					]
 				});
 				
-				// // Submit Button Validator
-				// settingsForm.jqxValidator({ rules: [
-					// { input: '#input_files', message: 'Please assign a Name', focus: 'true', rule: 'required', hintType: 'label' },
-					// // { input: '#input_files', message: 'Please assign a Name', focus: 'true', rule: 'minLength=3' }
-				// ]});
 				
 				// Submit Form Data 
 				var btn = settingsForm.jqxForm('getComponentByName', 'submitButton');
 				btn.on('click', function () {
+					
+					$('#settingsForm').jqxValidator('validate');
+					//console.log('.bind click validate done');
+					
 					settingsForm.jqxForm('submit', "http://" + BACKEND +":8080", "_self", 'POST');
+					//console.log('bind click submit done');
 				});
             }
         });
@@ -1284,6 +1308,12 @@ var generationFormController = (function() {
 	}
 	
 	function createSettingPopup(rootDiv){
+
+		// var cssLink = document.createElement("link");
+		// cssLink.type = "text/css";
+		// cssLink.rel = "stylesheet";
+		// cssLink.href = "scripts/GenerationForm/GenerationFormController.css";
+		// document.getElementsByTagName("head")[0].appendChild(cssLink);
 		
 		// The Window
 		var settingsPopupWindowDiv = document.createElement("DIV");

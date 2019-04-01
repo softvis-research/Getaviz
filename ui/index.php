@@ -120,6 +120,7 @@ EOT;
     <script type="text/javascript" src="libs/jqwidgets/jqxslider.js"></script>
     <script type="text/javascript" src="libs/jqwidgets/jqxnumberinput.js"></script>
     <script type="text/javascript" src="libs/jqwidgets/jqxform.js"></script>	
+    <script type="text/javascript" src="libs/jqwidgets/jqxvalidator.js"></script>
 	
     <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.base.css" type="text/css" />
     <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.metro.css" type="text/css" />
