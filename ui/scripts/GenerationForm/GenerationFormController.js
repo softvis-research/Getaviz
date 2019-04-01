@@ -1337,11 +1337,11 @@ var generationFormController = (function() {
 	
 	function createSettingPopup(rootDiv){
 
-		// var cssLink = document.createElement("link");
-		// cssLink.type = "text/css";
-		// cssLink.rel = "stylesheet";
-		// cssLink.href = "scripts/GenerationForm/GenerationFormController.css";
-		// document.getElementsByTagName("head")[0].appendChild(cssLink);
+		var cssLink = document.createElement("link");
+		cssLink.type = "text/css";
+		cssLink.rel = "stylesheet";
+		cssLink.href = "scripts/GenerationForm/GenerationFormController.css";
+		document.getElementsByTagName("head")[0].appendChild(cssLink);
 		
 		// The Window
 		var settingsPopupWindowDiv = document.createElement("DIV");
