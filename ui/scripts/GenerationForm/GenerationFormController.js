@@ -1062,6 +1062,24 @@ var generationFormController = (function() {
 							$('#settingsForm').jqxForm('hideComponent', 'city.brick.vertical_margin');
 							$('#settingsForm').jqxForm('hideComponent', 'city.brick.vertical_gap');							
 							$('#settingsForm').jqxForm('showComponent', 'city.original_building_metric');
+							$('#settingsForm').jqxForm('hideComponent', 'city.scheme');
+							$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_mode');
+							$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_coarse');
+							$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine');
+							$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine_direction_reversed');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.blue');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.aqua');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.light_green');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_green');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.yellow');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.orange');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.red');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.pink');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.violet');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.light_grey');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_grey');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.white');
+							$('#settingsForm').jqxForm('hideComponent', 'city.color.black');
 							
 						} else if (newValue.city_building_type == 'bricks') {
 						
@@ -1092,20 +1110,20 @@ var generationFormController = (function() {
 						$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine_direction_reversed');
 						$('#settingsForm').jqxForm('hideComponent', 'city.show_building_base');
 						$('#settingsForm').jqxForm('hideComponent', 'city_blank_node');
-							$('#settingsForm').jqxForm('hideComponent', 'city.show_attributes_as_cylinders');
-							$('#settingsForm').jqxForm('hideComponent', 'city.panel.separator_mode');
-							$('#settingsForm').jqxForm('hideComponent', 'city.panel.height_treshold_nos');
-							$('#settingsForm').jqxForm('hideComponent', 'city.panel.height_unit');
-							$('#settingsForm').jqxForm('hideComponent', 'city.panel.horizontal_margin');
-							$('#settingsForm').jqxForm('hideComponent', 'city.panel.vertical_margin');
-							$('#settingsForm').jqxForm('hideComponent', 'city.panel.vertical_gap');
-							$('#settingsForm').jqxForm('hideComponent', 'city.panel.separator_height');
-							$('#settingsForm').jqxForm('hideComponent', 'city.brick.layout');
-							$('#settingsForm').jqxForm('hideComponent', 'city.brick.size');
-							$('#settingsForm').jqxForm('hideComponent', 'city.brick.horizontal_margin');
-							$('#settingsForm').jqxForm('hideComponent', 'city.brick.horizontal_gap');
-							$('#settingsForm').jqxForm('hideComponent', 'city.brick.vertical_margin');
-							$('#settingsForm').jqxForm('hideComponent', 'city.brick.vertical_gap');
+						$('#settingsForm').jqxForm('hideComponent', 'city.show_attributes_as_cylinders');
+						$('#settingsForm').jqxForm('hideComponent', 'city.panel.separator_mode');
+						$('#settingsForm').jqxForm('hideComponent', 'city.panel.height_treshold_nos');
+						$('#settingsForm').jqxForm('hideComponent', 'city.panel.height_unit');
+						$('#settingsForm').jqxForm('hideComponent', 'city.panel.horizontal_margin');
+						$('#settingsForm').jqxForm('hideComponent', 'city.panel.vertical_margin');
+						$('#settingsForm').jqxForm('hideComponent', 'city.panel.vertical_gap');
+						$('#settingsForm').jqxForm('hideComponent', 'city.panel.separator_height');
+						$('#settingsForm').jqxForm('hideComponent', 'city.brick.layout');
+						$('#settingsForm').jqxForm('hideComponent', 'city.brick.size');
+						$('#settingsForm').jqxForm('hideComponent', 'city.brick.horizontal_margin');
+						$('#settingsForm').jqxForm('hideComponent', 'city.brick.horizontal_gap');
+						$('#settingsForm').jqxForm('hideComponent', 'city.brick.vertical_margin');
+						$('#settingsForm').jqxForm('hideComponent', 'city.brick.vertical_gap');
 						$('#settingsForm').jqxForm('hideComponent', 'city.original_building_metric');
 						$('#settingsForm').jqxForm('hideComponent', 'city.width_min');
 						$('#settingsForm').jqxForm('hideComponent', 'city.height_min');
@@ -1180,12 +1198,13 @@ var generationFormController = (function() {
 	function initial_load_city_optional() {
 
 		$('#settingsForm').jqxForm('showComponent', 'city.building_type');											// Visibility based on 'city'
-		$('#settingsForm').jqxForm('showComponent', 'city.scheme');
-		$('#settingsForm').jqxForm('showComponent', 'city.class_elements_mode');
-		$('#settingsForm').jqxForm('showComponent', 'city.class_elements_sort_mode_coarse');
-		$('#settingsForm').jqxForm('showComponent', 'city.class_elements_sort_mode_fine');
-		$('#settingsForm').jqxForm('showComponent', 'city.class_elements_sort_mode_fine_direction_reversed');
-		$('#settingsForm').jqxForm('showComponent', 'city.show_building_base');	
+		$('#settingsForm').jqxForm('hideComponent', 'city.scheme');
+		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_mode');
+		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_coarse');
+		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine');
+		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine_direction_reversed');
+		$('#settingsForm').jqxForm('showComponent', 'city.show_building_base');						
+		$('#settingsForm').jqxForm('showComponent', 'city.original_building_metric');
 		$('#settingsForm').jqxForm('showComponent', 'city.width_min');
 		$('#settingsForm').jqxForm('showComponent', 'city.height_min');
 		$('#settingsForm').jqxForm('showComponent', 'city.building.horizontal_margin');
@@ -1196,19 +1215,19 @@ var generationFormController = (function() {
 		$('#settingsForm').jqxForm('showComponent', 'city.class.color_start');
 		$('#settingsForm').jqxForm('showComponent', 'city.class.color_end');
 		$('#settingsForm').jqxForm('showComponent', 'city.class.color');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.blue');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.aqua');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.light_green');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.dark_green');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.yellow');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.orange');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.red');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.pink');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.violet');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.light_grey');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.dark_grey');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.white');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.black');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.blue');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.aqua');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.light_green');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_green');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.yellow');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.orange');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.red');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.pink');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.violet');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.light_grey');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_grey');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.white');
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.black');
 		$('#settingsForm').jqxForm('hideComponent', 'rd.data_factor');	
 		$('#settingsForm').jqxForm('hideComponent', 'rd.method_factor');
 		$('#settingsForm').jqxForm('hideComponent', 'rd.height');
@@ -1229,21 +1248,20 @@ var generationFormController = (function() {
 		$('#settingsForm').jqxForm('hideComponent', 'rd.method_disks');
 		$('#settingsForm').jqxForm('hideComponent', 'rd.data_disks');
 		$('#settingsForm').jqxForm('hideComponent', 'rd.method_type_mode');	
-		$('#settingsForm').jqxForm('hideComponent', 'city.show_attributes_as_cylinders');							// Visibility based on 'optional'
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel_separator_mode');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel_height_treshold_nos');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel_height_unit');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel_horizontal_margin');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel_vertical_margin');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel_vertical_gap');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel_separator_height');							
+		$('#settingsForm').jqxForm('hideComponent', 'city.show_attributes_as_cylinders');
+		$('#settingsForm').jqxForm('hideComponent', 'city.panel.separator_mode');
+		$('#settingsForm').jqxForm('hideComponent', 'city.panel.height_treshold_nos');
+		$('#settingsForm').jqxForm('hideComponent', 'city.panel.height_unit');
+		$('#settingsForm').jqxForm('hideComponent', 'city.panel.horizontal_margin');
+		$('#settingsForm').jqxForm('hideComponent', 'city.panel.vertical_margin');
+		$('#settingsForm').jqxForm('hideComponent', 'city.panel.vertical_gap');
+		$('#settingsForm').jqxForm('hideComponent', 'city.panel.separator_height');
 		$('#settingsForm').jqxForm('hideComponent', 'city.brick.layout');
-		$('#settingsForm').jqxForm('hideComponent', 'city.brick_size');
-		$('#settingsForm').jqxForm('hideComponent', 'city.brick_horizontal_margin');
-		$('#settingsForm').jqxForm('hideComponent', 'city.brick_horizontal_gap');
-		$('#settingsForm').jqxForm('hideComponent', 'city.brick_vertical_margin');
-		$('#settingsForm').jqxForm('hideComponent', 'city.brick_vertical_gap');							
-		$('#settingsForm').jqxForm('showComponent', 'city.original_building_metric');
+		$('#settingsForm').jqxForm('hideComponent', 'city.brick.size');
+		$('#settingsForm').jqxForm('hideComponent', 'city.brick.horizontal_margin');
+		$('#settingsForm').jqxForm('hideComponent', 'city.brick.horizontal_gap');
+		$('#settingsForm').jqxForm('hideComponent', 'city.brick.vertical_margin');
+		$('#settingsForm').jqxForm('hideComponent', 'city.brick.vertical_gap');	
 	}
 	
 	// function hide_city() {
