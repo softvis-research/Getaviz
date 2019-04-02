@@ -3,7 +3,81 @@ var generationFormController = (function() {
 	// Name Conversion Rules from "label" to "bind"
 	// Example: city.building_type --> city_building_type	
 	// Most options in the file settings.properties contain a "."
-	// If "." is used in "bind" the ui does not load ("." is interpreted as a function call)
+	// If "." is used in "bind" the ui does not load ("." is interpreted as a function call)	
+	
+	// width for DropDownLists = 200px
+	// to align simple InputFields with the DDLs, choose 200px-6px = 194px
+	
+	// Order of Options:
+	// input.name
+	// input.files
+	// metaphor
+	// city.building_type
+	// city.scheme
+	// city.class_elements_mode
+	// city.class_elements_sort_mode_coarse
+	// city.class_elements_sort_mode_fine
+	// city.class_elements_sort_mode_fine_direction_reversed
+	// city.show_building_base
+	// 		city_blank_node
+	// city.show_attributes_as_cylinders
+	// city.brick.layout
+	// city.brick.size
+	// city.brick.horizontal_margin
+	// city.brick.horizontal_gap
+	// city.brick.vertical_margin
+	// city.brick.vertical_gap
+	// city.panel.separator_mode
+	// city.panel.height_treshold_nos
+	// city.panel.height_unit
+	// city.panel.horizontal_margin
+	// city.panel.vertical_margin
+	// city.panel.vertical_gap
+	// city.panel.separator_height
+	// city.original_building_metric
+	// city.width_min
+	// city.height_min
+	// city.building.horizontal_margin
+	// city.building.horizontal_gap
+	// city.building.vertical_margin
+	// city.package.color_start
+	// city.package.color_end
+	// city.class.color_start
+	// city.class.color_end
+	// city.class.color
+	// city.color.blue
+	// city.color.aqua
+	// city.color.light_green
+	// city.color.dark_green
+	// city.color.yellow
+	// city.color.orange
+	// city.color.red
+	// city.color.pink
+	// city.color.violet
+	// city.color.light_grey
+	// city.color.dark_grey
+	// city.color.white
+	// city.color.black
+	// rd.data_factor
+	// rd.method_factor
+	// rd.height
+	// rd.height_boost
+	// rd.height_multiplicator
+	// rd.ring_width
+	// rd.ring_width_md
+	// rd.ring_width_ad
+	// rd.min_area
+	// rd.namespace_transparency
+	// rd.class_transparency
+	// rd.method_transparency
+	// rd.data_transparency
+	// rd.color.class
+	// rd.color.data
+	// rd.color.method
+	// rd.color.namespace
+	// rd.method_disks
+	// rd.data_disks
+	// rd.method_type_mode
 	
 	var logObjectMap = new Map();
 	
