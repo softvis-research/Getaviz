@@ -145,11 +145,10 @@
     overflow: hidden !important;
 }
 /*jqxButton, jqxToggleButton, jqxRepeatButton Style*/
-.jqx-button{outline: none; border: 1px solid transparent; padding: 3px; text-align: center; vertical-align: central; margin: 0 0 0 0; cursor: default; }
+.jqx-button{outline: none; border: 1px solid transparent; padding: 5px; text-align: center; vertical-align: central; margin: 0 0 0 0; cursor: default; }
 button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button {
     box-sizing: border-box !important; -moz-box-sizing: border-box !important; 
 }
-
 .jqx-buttongroup{}
 .jqx-group-button-normal {
     vertical-align: middle;
@@ -229,6 +228,34 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     border-style: solid;
     border-width: 1px;
 }
+.jqx-grid .jqx-adaptive-table{
+  border-collapse: collapse;
+  border:none;
+  width: 100%;
+}
+
+.jqx-grid .jqx-adaptive-table td, .jqx-grid .jqx-adaptive-table th {
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+	overflow: auto;
+}
+
+.jqx-grid .jqx-adaptive-table tr:nth-child(even){background-color: #f2f2f2;}
+
+.jqx-grid .jqx-adaptive-table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.jqx-grid .jqx-adaptive-view a {
+    padding:10px;
+    text-decoration:none;
+    color: orangered;
+}
+
 /*applied to the Pager.*/
 .jqx-grid-pager
 {
@@ -247,9 +274,9 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     margin: 1px;
     border: 1px solid transparent;
     color: inherit !important;
-    *color: expression(this.parentNode.currentStyle['color']) !important;     
     outline: none;
     font-weight: normal !important;
+    line-height:14px;
 }
 .jqx-grid-menu-item-touch {
     padding-top: 6px !important;
@@ -295,9 +322,9 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     border-style: solid;
     border-width: 0px 0px 0px 1px;
     border-color: transparent;
-    background-image: url('images/menubutton.png');
+    background-image: url('images/icon-menu-small.png') !important;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: center !important;
     cursor: pointer;
  }
 .jqx-grid-column-menubutton-rtl {
@@ -326,6 +353,7 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     background-image: url('images/filter.png');
     background-repeat: no-repeat;
     background-position: center;
+    margin-top:1px;
  }
   /*applied to the column's resize line.*/
  .jqx-grid-column-resizeline {
@@ -362,7 +390,7 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
   /*applied to the sort ascending menu item in the Grid's Context Menu*/
  .jqx-grid-sortasc-icon
  {
-    background-image: url('images/sortasc.png');
+    background-image: url('images/icon-sort-asc.png');
     background-repeat: no-repeat;
     background-position: left center;
     width: 16px;
@@ -374,7 +402,7 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
   /*applied to the sort ascending menu item in the Grid's Context Menu*/
  .jqx-grid-sortdesc-icon
  {
-    background-image: url('images/sortdesc.png');
+    background-image: url('images/icon-sort-desc.png');
     background-repeat: no-repeat;
     background-position: left center;
     width: 16px;
@@ -386,7 +414,7 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
   /*applied to the grid menu's sort remove item/*/
  .jqx-grid-sortremove-icon
  {
-    background-image: url('images/sortremove.png');
+    background-image: url('images/icon-sort-remove.png');
     background-repeat: no-repeat;
     background-position: left center;
     width: 16px;
@@ -501,7 +529,6 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     text-decoration: none;
     cursor: pointer;
     color: inherit;
-    *color: expression(this.parentNode.currentStyle['color']);     
 }
  .jqx-grid-group-column  a:visited{
     color: inherit;
@@ -512,7 +539,6 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     outline: 0 none;
     text-decoration: none;
     cursor: pointer;
-     *color: expression(this.parentNode.currentStyle['color']);    
 }
 /*applied to a grid cell*/
 .jqx-grid-cell {
@@ -528,6 +554,7 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     overflow: hidden; 
     position: absolute !important; 
     height: 100%; 
+    outline:none;
  }
 .jqx-grid-cell-locked {
     color: #aaa !important;
@@ -597,7 +624,7 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
 .jqx-grid-cell-wrap {white-space: normal !important;}
 
 .jqx-tree-grid-indent {
-    width: 15px;
+    width: 18px;
     display: inline-block;
     height: 8px;
     overflow: hidden;
@@ -605,7 +632,8 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
 }
 .jqx-tree-grid-title {
     text-decoration: none;
-    vertical-align: top;
+    vertical-align: bottom;
+    line-height:20px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -615,16 +643,16 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     margin-top: 0px;
     margin-right: 0px;
     position: relative;
-    width: 15px;
-    height: 16px;   
+    width: 18px;
+    height: 18px;   
     vertical-align: top;
 }
 .jqx-tree-grid-checkbox {
    float: none !important; 
-   width: 14px;
-   height: 14px;
+   width: 16px;
+   height: 16px;
    cursor: pointer;
-   margin-right: 2px !important;
+   margin-right: 6px !important;
    margin-left: 2px !important;
 }
 .jqx-tree-grid-icon {
@@ -648,8 +676,8 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     height: 100%;
 }
 .jqx-tree-grid-expand-button {
-    height: 16px;
-    width: 15px;
+    height: 18px;
+    width: 18px;
     vertical-align: top;
 }
 
@@ -754,6 +782,20 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
  .jqx-grid-cell-selected {
     border-left: 0px solid transparent;
  }
+ .jqx-grid-cell-selected.jqx-grid-cell-edit{
+     border-color: #DDDDDD !important;
+     background-color: #fff !important;
+     color: #333 !important;
+ }
+ .jqx-fill-state-focus.jqx-grid-cell-edit,  
+  .jqx-grid-cell-edit .jqx-fill-state-focus,
+  .jqx-grid-cell-edit.jqx-fill-state-focus .jqx-action-button,
+  .jqx-grid-cell-edit .jqx-numberinput-focus,
+  .jqx-grid-cell-edit .jqx-combobox-content-focus
+  {
+     border-color: #DDDDDD !important;
+ }
+
  .jqx-cell-rtl {
    border-left-width: 1px;
    border-right-width: 0px;
@@ -943,7 +985,7 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     overflow: hidden;
     color: inherit;
     right: 0;
-    margin: 0px 1px 0px 1px;
+    margin: 0px 3px 0px 3px;
     cursor: pointer;
 }
 /*applied to the sub menu items.*/
@@ -954,6 +996,8 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     list-style: none;
     padding: 4px 8px 4px 8px;
     margin: 1px;
+    margin-left:3px;
+    margin-right:3px;
     float: none;
     overflow: hidden;
     left: 100%;
@@ -961,7 +1005,6 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     right: 0;
     text-align: left;
     cursor: pointer;
-    *color: expression(this.parentNode.currentStyle['color']);     
 }
 /*applied to a sub menu item when the mouse is over the item.*/
 .jqx-menu-item-hover
@@ -970,11 +1013,12 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     right: 0;
     list-style: none;
     margin: 1px;
+    margin-left: 3px;
+    margin-right: 3px;
     left: 100%;
     padding: 4px 8px 4px 8px;
     text-align: left;
     cursor: pointer;
-    *color: expression(this.parentNode.currentStyle['color']);     
 }
 /*applied to a top-level menu item when the mouse is over it.*/
 .jqx-menu-item-top-hover
@@ -982,12 +1026,11 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     color: inherit;
     right: 0;
     list-style: none;
-    margin: 0px 1px 0px 1px;
+    margin: 0px 3px 0px 3px;
     left: 100%;
     padding: 4px 8px 4px 8px;
     top: 50%;
     cursor: pointer;
-    *color: expression(this.parentNode.currentStyle['color']);     
 }
 /*applied to a sub menu item when its sub menu is opened.*/
 .jqx-menu-item-selected
@@ -995,11 +1038,12 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     right: 0;
     list-style: none;
     margin: 1px;
+    margin-left:3px;
+    margin-right:3px;
     left: 100%;
     padding: 4px 8px 4px 8px;
     text-align: left;
     cursor: pointer;
-    *color: expression(this.parentNode.currentStyle['color']);     
 }
 /*applied to a disabled sub menu item.*/
 .jqx-menu-item-disabled
@@ -1012,6 +1056,8 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     right: 0;
     list-style: none;
     margin: 0px 1px 0px 1px;
+    margin-left:3px;
+    margin-right:3px;
     left: 100%;
     padding: 4px 8px 4px 8px;
     cursor: pointer;
@@ -1157,11 +1203,11 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
 /*applied to the anchor elements*/
 .jqx-menu-item a:link, .jqx-menu-item a:visited, .jqx-menu-item a:hover, .jqx-menu-item-top a:link, .jqx-menu-item-top a:visited, .jqx-menu-item-top a:hover
 {
+    font:inherit;
     text-decoration: none;
     color: inherit;
     outline: none;
     background-color: transparent;
-    *color: expression(this.parentNode.currentStyle['color']);     
 }
 
 /*applied to the menu widget when it is disabled.*/
@@ -1498,25 +1544,22 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
 .jqx-tabs-title a:link
 {
     color: inherit;
-    *color: expression(this.parentNode.currentStyle['color']);    
+       
     text-decoration: none;
 }
 .jqx-tabs-title a:hover
 {
     color: inherit;
-    *color: expression(this.parentNode.currentStyle['color']);
     text-decoration: none;
 }
 .jqx-tabs-title a:active
 {
     color: inherit;
-    *color: expression(this.parentNode.currentStyle['color']);
     text-decoration: none;
 }
 .jqx-tabs-title a:visited
 {
     color: inherit;
-    *color: expression(this.parentNode.currentStyle['color']);
     text-decoration: none;
 }
 /*applied to the tab's title when the tab is selected and the jqxTab's position property is set to 'top' .*/
@@ -1902,6 +1945,17 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     cursor: default;
     border-collapse: separate;
 }
+.jqx-calendar .jqx-widget-header{
+  
+}
+.jqx-calendar > div {
+    padding: 0px;
+    box-sizing: border-box;
+}
+.jqx-calendar-light > div {
+    padding: 10px;
+}
+
 .jqx-calendar td {
     padding-top: 0px;
     padding-bottom: 0px;
@@ -1909,6 +1963,7 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     border-spacing: 1px;
     font-size: 13px;
     line-height: 1.231;
+    height:auto;
 }
 .jqx-calendar table {
     margin: 0px;
@@ -2161,6 +2216,8 @@ button.jqx-button, input[type=button].jqx-button,  input[type=submit].jqx-button
     border-right-style: solid;
     padding-top: 5px;
     padding-bottom: 5px;
+    padding-left:5px;
+    padding-right:5px;
     outline: 0;
 }
 /*applid to the content of the expander header.*/
@@ -2263,7 +2320,7 @@ of the horizontal scrollbar.*/
 .jqx-listitem-state-group
 {
     white-space: nowrap;
-    padding: 4px 2px 4px 2px;
+    padding: 5px 2px 5px 2px;
     background: transparent;
     font-weight: bold;
     text-align: left;
@@ -2277,7 +2334,8 @@ of the horizontal scrollbar.*/
 {
     white-space: nowrap;
     padding: 3px;
-    margin: 1px;
+    padding-top:5px;
+    padding-bottom:5px;
     border: 1px solid transparent;
     outline: none;
     visibility: inherit;
@@ -2295,7 +2353,8 @@ of the horizontal scrollbar.*/
     white-space: nowrap;
     background: transparent;
     padding: 3px 3px 3px 3px;
-    margin: 1px;
+    padding-top:5px;
+    padding-bottom:5px;
     border: 1px solid transparent;
 }
 /*applied to a list item when the item is selected.*/
@@ -2303,7 +2362,8 @@ of the horizontal scrollbar.*/
 {
     white-space: nowrap;
     padding: 3px 3px 3px 3px;
-    margin: 1px;
+    padding-top:5px;
+    padding-bottom:5px;
     border: 1px solid transparent;
 }
 .jqx-listbox-feedback
@@ -2445,7 +2505,7 @@ of the horizontal scrollbar.*/
     outline: 0 none;
     text-decoration: none;
     cursor: pointer;
-    *color: expression(this.parentNode.currentStyle['color']);    
+       
 }
 /*applied to the ComboBox when the widget is disabled.*/
 .jqx-combobox-state-disabled
@@ -2484,7 +2544,7 @@ of the horizontal scrollbar.*/
 {
     padding: 0px;
     overflow: hidden;
-    padding-left: 3px;
+    padding-left: 4px;
     padding-top: 0px;
     padding-bottom: 0px;
     margin: 0px;
@@ -2499,7 +2559,18 @@ of the horizontal scrollbar.*/
     padding-left: 0px;
     padding-right: 3px;
 }
-
+.jqx-dropdownlist .jqx-icon-arrow-down {
+    width:13px;
+}
+.jqx-dropdownlist .jqx-icon-arrow-up {
+    width:13px;
+}
+.jqx-combobox .jqx-icon-arrow-down {
+    width:13px;
+}
+.jqx-combobox .jqx-icon-arrow-up {
+    width:13px;
+}
 /*applied to the dropdownlist's content element which displays the selected item's text or html and the widget is disabled. */
 .jqx-dropdownlist-content-disabled
 {
@@ -2644,7 +2715,7 @@ of the horizontal scrollbar.*/
     border-width: 0px;
     border-bottom: 1px solid transparent; 
     overflow: hidden;
-    padding: 5px;
+    padding: 7px;
     height: auto;
     white-space: nowrap;
     overflow: hidden;  
@@ -2678,18 +2749,19 @@ of the horizontal scrollbar.*/
     cursor: pointer;
     background-image: url(images/close.png);
     background-repeat: no-repeat;    
+    margin-top:2px;
 }
 /*applied to the window's collapse button*/
 .jqx-window-collapse-button
 {
     background-image: url(images/icon-up.png);
     cursor: pointer;
-    margin-top: 1px;
+    margin-top: 3px;
 }
 /*applied to the window's collapse button when the window is collapsed*/
 .jqx-window-collapse-button-collapsed
 {
-    margin-top: 0px;
+    margin-top: 3px;
     cursor: pointer;
     background-image: url(images/icon-down.png);
 }
@@ -2763,8 +2835,8 @@ of the horizontal scrollbar.*/
 .jqx-slider-slider
 {
     cursor: pointer;
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
     z-index: 15;
     position: absolute;
     left: 0px;
@@ -2780,11 +2852,12 @@ of the horizontal scrollbar.*/
     -webkit-border-radius: 100%;
     border-radius: 100%;  
     box-sizing: content-box !important;
+    padding: 3px !important;
 }
 /*applied to the slider's thumb when the slider is in horizontal mode*/
 .jqx-slider-slider-horizontal
 {   
-    margin-top: -5px;
+    margin-top: -9px;
     -moz-border-radius: 100%;
     -webkit-border-radius: 100%;
     border-radius: 100%;  
@@ -2793,7 +2866,7 @@ of the horizontal scrollbar.*/
 /*applied to the slider's thumb when the slider is in vertical mode*/
 .jqx-slider-slider-vertical
 {
-    margin-left: -5px;
+    margin-left: -9px;
     -moz-border-radius: 100%;
     -webkit-border-radius: 100%;
     border-radius: 100%;
@@ -2802,7 +2875,7 @@ of the horizontal scrollbar.*/
 /*applied to the track where is located the thumb*/
 .jqx-slider-track
 {
-    height: 8px;
+    height: 4px;
     float:left;
     position: relative;
     z-index: 20;
@@ -2810,13 +2883,13 @@ of the horizontal scrollbar.*/
 /*used in horizontal slider*/
 .jqx-slider-track-horizontal
 {
-    height: 8px;
+    height: 4px;
     margin-top: 2px;
 }
 /*used in vertical slider*/
 .jqx-slider-track-vertical
 {
-    width: 8px;
+    width: 4px;
 }
 /*applied to the div which is between the thumbs in a range slider or from beginning of the track to the current thumb position in the default slider*/
 .jqx-slider-rangebar
@@ -3180,7 +3253,10 @@ of the horizontal scrollbar.*/
     margin-top: -7.5px !important;
 }
 /*applied to Inputs*/
-.jqx-input{overflow: hidden; background-color: inherit; border-color: #c7c7c7;}
+.jqx-input-widget{
+    box-sizing: border-box !important;
+}
+.jqx-input{ overflow: hidden; background-color: inherit; border-color: #c7c7c7;}
 .jqx-input-invalid {
     color: red !important;
 }
@@ -3446,6 +3522,15 @@ of the horizontal scrollbar.*/
 {
     border-bottom: 1px solid #c5c5c5;
 }
+.jqx-grid-column-header[sort] > div > div {
+    width: calc(100% - 20px);
+}
+.jqx-grid-column-header[filter] > div > div {
+    width: calc(100% - 20px);
+}
+.jqx-grid-column-header[filter][sort] > div > div {
+    width: calc(100% - 40px);
+}
 
 .jqx-scheduler-all-day-cell
 {
@@ -3696,7 +3781,7 @@ of the horizontal scrollbar.*/
     float: right;
     margin-right: 2%;
     padding: 4px;
-    width: 72%;
+    width: 380px;
 }
 .jqx-scheduler-edit-dialog-label-rtl {
     clear: both;
@@ -3821,7 +3906,7 @@ of the horizontal scrollbar.*/
 }
 .jqx-grid-column-header a:link, .jqx-grid-column-header a:visited
 {
-   *color: expression(this.parentNode.currentStyle['color']);    
+      
 }
 .jqx-grid-bottomright, .jqx-panel-bottomright, .jqx-listbox-bottomright
 {
@@ -3870,7 +3955,7 @@ input[type=text].jqx-input, input[type=password].jqx-input {
     border-width: 1px;
     border-style: solid;
     font-size: 13px;
-    padding: 0px;
+    padding: 3px;
     padding-left:3px;
     padding-right: 3px;
 }
@@ -5691,7 +5776,10 @@ ol li .jqx-listmenu-item-label:before
 {
     overflow: auto;
 }
-.jqx-responsive-panel, .jqx-responsive-panel-button
+.jqx-responsive-panel{
+    border-width:0px;
+}
+.jqx-responsive-panel-button
 {
     border-width: 1px;
     border-style: solid;
@@ -5910,7 +5998,6 @@ ol li .jqx-listmenu-item-label:before
     box-sizing: border-box;
     opacity: 0.6;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
-    *filter: alpha(opacity=60);
     display: none;
 }
 .jqx-layout-resize-feedback-horizontal
@@ -5937,6 +6024,7 @@ ol li .jqx-listmenu-item-label:before
     display: none;
     background-color: transparent;
     z-index: 8999;
+    pointer-events: none;
 }
 .jqx-layout-ribbon-header-ltr
 {
@@ -5965,7 +6053,6 @@ ol li .jqx-listmenu-item-label:before
     z-index: 99999;
     opacity: 0.9;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
-    *filter: alpha(opacity=90);
 }
 .jqx-docking-layout-overlay-square-edge {
     display: none;
@@ -6068,7 +6155,6 @@ ol li .jqx-listmenu-item-label:before
     background-color: #6495ED;
     opacity: 0.5;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-    *filter: alpha(opacity=50);
     z-index: 10000;
     top: 0px;
     left: 0px;
@@ -6111,7 +6197,6 @@ ol li .jqx-listmenu-item-label:before
     height: 0px;
     display: block;
     background: transparent !important;
-    *filter: inherit;
 }
 .jqx-docking-layout-overlay-square-edge-arrow-left, .jqx-docking-layout-overlay-square-edge-arrow-right, .jqx-docking-layout-overlay-square-edge-arrow-top
 {
@@ -6766,14 +6851,14 @@ ol li .jqx-listmenu-item-label:before
 .jqx-element {
     overflow: hidden;
     border-style: solid;
-    border-width: 1px;
-    border-color: #c7c7c7;
+    border-width: 0px;
+    border-color: transparent;
+    box-sizing:border-box;
 }
 .jqx-element-no-border {
     border-width:0px;
 }
 .jqx-element-container {
-    border-width: 0px !important;
 }
 .jqx-resize-trigger, .jqx-resize-trigger-shrink {
     position: absolute; 
@@ -6798,4 +6883,223 @@ ol li .jqx-listmenu-item-label:before
     pointer-events: none; 
     z-index: -1;
     visibility:hidden;
+}
+
+/* jqxPivotGrid */
+.jqx-pivotgrid
+{
+    background-color: #DEDEDE;
+}
+
+.jqx-pivotgrid-item
+{
+    white-space: nowrap;
+    overflow: hidden;
+    position: absolute;
+    padding: 0px;
+    text-overflow: ellipsis;
+}
+
+.jqx-pivotgrid-content-wrapper
+{
+    align: left;
+    valign: top;
+    overflow: hidden;
+    border: solid 1px grey;
+}
+
+.jqx-pivotgrid-menu-button
+{
+    border: none;
+    background-image: url('images/icon-menu-small.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+.jqx-pivotgrid-expand-button
+{
+    outline: none;
+    background-image: url('images/icon_expand.png');
+    background-repeat: no-repeat;
+    cursor: pointer;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    position: relative;
+    left: 5px;
+    float: left;
+    vertical-align: middle;
+}
+
+.jqx-pivotgrid-collapse-button
+{
+    outline: none;
+    background-image: url('images/icon_collapse.png');
+    background-repeat: no-repeat;
+    cursor: pointer;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    position: relative;
+    left: 5px;
+    float: left;
+    vertical-align: middle;    
+}
+
+
+.jqx-pivotgrid-sortasc-icon
+ {
+    background-image: url('images/icon-sort-asc.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin-left: -4px;
+    margin-right: 4px;
+ }
+
+.jqx-pivotgrid-sortdesc-icon
+ {
+    background-image: url('images/icon-sort-desc.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin-left: -4px;
+    margin-right: 4px;
+ }
+
+.jqx-pivotgrid-sortremove-icon
+ {
+    background-image: url('images/icon-sort-remove.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin-left: -4px;
+    margin-right: 4px;
+ }
+
+.jqx-pivotgrid-settings-icon
+ {
+    background-image: url('images/icon-menu-small.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    width: 16px;
+    height: 16px;
+    float: left;
+    margin-left: -4px;
+    margin-right: 4px;
+ }
+
+jqx-bullet-chart{
+    width:800px;
+    height:80px;
+}
+jqx-scroll-view{
+    width:600px;
+}
+jqx-bar-gauge, jqx-draw {
+    width: 850px;
+    height: 600px;
+}
+jqx-menu {
+    width:600px;
+}
+jqx-data-table, jqx-pivotgrid, jqx-grid, jqx-scheduler, jqx-tree-grid, jqx-docking-layout, jqx-layout, jqx-tree-map, jqx-splitter, jqx-kanban {
+    width: 850px;
+}
+jqx-nav-bar {
+    height:50px;
+}
+jqx-chart{
+    width: 850px;
+    height: 400px;
+}
+jqx-docking-layout, jqx-layout {
+    width: 850px;
+    height: 600px;
+}
+jqx-ribbon, jqx-panel{
+    width: 450px;
+    height: 300px;
+}
+jqx-scheduler {
+    height: 600px;
+}
+jqx-list-box, jqx-text-area{
+    width: 200px;
+    height: 200px;
+}
+jqx-file-upload {
+    width: 300px;
+}
+jqx-complex-input, jqx-formatted-input, jqx-password-input, jqx-input, jqx-number-input, jqx-slider,
+jqx-masked-input, jqx-drop-down-list, jqx-combo-box, jqx-date-time-input, jqx-drop-down-button{
+    width: 300px;
+    height: 35px;
+}
+jqx-loader{
+    width:100px !important;
+    height:60px !important;
+}
+jqx-expander, jqx-navigation-bar {
+    width:350px;
+}
+jqx-navigation-bar{
+    height:450px;
+}
+jqx-range-selector{
+    width:600px;
+}
+jqx-tabs{
+    width:800px;
+}
+jqx-tool-bar {
+    width:800px;
+    height: 35px;
+}
+jqx-editor {
+    width: 600px;
+    height: 400px;
+}
+jqx-tree-map{
+    width: 850px;
+    height: 600px;
+}
+jqx-tree{
+    width:250px;
+}
+jqx-linear-gauge{
+    width:100px;
+}
+jqx-color-picker, jqx-calendar{
+    width: 200px;
+    height: 200px;
+}
+jqx-scroll-bar {
+    width:400px;
+    height:20px;
+}
+jqx-knob {
+     width:600px;
+     height:600px;
+}
+.jqx-input-label {
+    visibility:hidden;
+    position: absolute;
+}
+.jqx-input-bar{
+    visibility:hidden;
+    position: absolute;
+}
+.jqx-info-icon
+{
+    background-image: url('images/icon-info-small.png');
+    background-repeat: no-repeat;
+    background-position: left center;
+    width: 16px;
+    height: 16px;
+    float: left;
 }
