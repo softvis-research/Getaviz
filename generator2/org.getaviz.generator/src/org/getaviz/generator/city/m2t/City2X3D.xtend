@@ -53,7 +53,7 @@ class City2X3D {
 		val segments = new StringBuilder
 		connector.executeRead("MATCH (n:Model)-[:CONTAINS*]->(d:District)-[:VISUALIZES]->(e) WHERE n.building_type = \'" + config.buildingTypeAsString + "\' RETURN d,e").
 		forEach[districts.append(toDistrict(get("d").asNode,get("e").asNode))]
-		connector.executeRead("MATCH (n:Model)-[:CONTAINS*]->(b:Building)-[:VISUALIZES]->(e) WHERE (e:Class OR e:Interface) AND n.building_type = \'" + config.buildingTypeAsString + "\' RETURN b,e").
+		connector.executeRead("MATCH (n:Model)-[:CONTAINS*]->(b:Building)-[:VISUALIZES]->(e) WHERE n.building_type = \'" + config.buildingTypeAsString + "\' RETURN b,e").
 		forEach[buildings.append(toBuilding(get("b").asNode,get("e").asNode))]	
 		if(!(config.buildingType == BuildingType.CITY_ORIGINAL)) {
 			connector.executeRead("MATCH (n:Model)-[:CONTAINS*]->(bs:BuildingSegment)-[:VISUALIZES]->(e) WHERE n.building_type = \'" + config.buildingTypeAsString + "\' RETURN bs, e").forEach[
