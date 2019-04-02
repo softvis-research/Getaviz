@@ -121,7 +121,7 @@ class City2X3D {
 			<Transform translation='«x +" "+ y +" "+ z»'>
 				<Shape>
 				«IF config.buildingType == BuildingType.CITY_PANELS
-						&& segment.hasLabel(Labels.Field.name)
+						&& entity.hasLabel(Labels.Field.name)
 						&& config.showAttributesAsCylinders»
 					<Cylinder radius='«width/2»' height='«height»'></Cylinder>
 				«ELSE»
