@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class GeneratorServlet extends HttpServlet {
 	private static final long serialVersionUID = -5343549433924172589L;
-	private static Log log = LogFactory.getLog(Generator.class);
+	private static Log log = LogFactory.getLog(GeneratorServlet.class);
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.info("Generator Servlet startet");
