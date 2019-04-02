@@ -85,7 +85,7 @@ var generationFormController = (function() {
 		createHeadSection: true
 	}
 	
-	function initialize(setupConfig){																// finished!
+	function initialize(setupConfig){
 		application.transferConfigParams(setupConfig, controllerConfig);
 	}
 	
@@ -106,21 +106,20 @@ var generationFormController = (function() {
 						label: 'input.name',
 						labelAlign: 'right',
 						labelWidth: '325px',
-						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
-					},					
+						info: 'Name of the visualization or the visualized system',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
+					},				
 					{
 						bind: 'input_files',
 						name: 'input.files',
 						type: 'text',
 						label: 'input.files',
-						//required: true,
 						labelAlign: 'right',
 						labelWidth: '325px',
-						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info: 'URL to a .jar or .war file',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},							
 					{
 						bind: 'metaphor',
@@ -135,7 +134,8 @@ var generationFormController = (function() {
 							{ value: 'rd' },
 							{ value: 'city'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info: 'Visualization metaphor of the generated visualization',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},			
 					{
 						type: 'blank',
@@ -158,7 +158,7 @@ var generationFormController = (function() {
 							{ value: 'bricks'},
 							{ value: 'floor'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_scheme',
@@ -173,7 +173,8 @@ var generationFormController = (function() {
 							{ value: 'types' },
 							{ value: 'visibility'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'The active mode to structure and color the methods and attributes. &#013;Possible Values are: &#013;types (default): The class elements are sorted and colored associated to type/functionality of the method. &#013;visibility: The class elements are sorted and colored corresponding to their visibility modifiers.',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_class_elements_mode',
@@ -189,7 +190,8 @@ var generationFormController = (function() {
 							{ value: 'methods_only'},
 							{ value: 'attributes_only'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'Switch to control the elements of the classes to show.',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_class_elements_sort_mode_coarse',
@@ -205,7 +207,7 @@ var generationFormController = (function() {
 							{ value: 'unsorted'},
 							{ value: 'attributes_first'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_class_elements_sort_mode_fine',
@@ -222,7 +224,8 @@ var generationFormController = (function() {
 							{ value: 'alphabetically'},
 							{ value: 'nos'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'The active mode, how to sort the methods or attributes separately among each other. &#013;This means a method is only compared to another method and an attribute is only compared to another attribute in this comparison, according to their values. &#013;If it is set to scheme, a secondary sorting is performed to place methods with high numbers of statements at the bottom.',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_class_elements_sort_mode_fine_direction_reversed',
@@ -237,7 +240,8 @@ var generationFormController = (function() {
 							{ value: 'false' },
 							{ value: 'true'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'If set true, the order of the sorting, defined in class_elements_sort_mode_fine is reversed. &#013;If class_elements_sort_mode_fine is set to scheme, a secondary sorting is performed to place methods with high numbers of statements at the bottom. &#013;This behaviour is not influenced by this switch.',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_show_building_base',
@@ -252,7 +256,8 @@ var generationFormController = (function() {
 							{ value: 'true' },
 							{ value: 'false'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'Switch to show or hide building base in panels or bricks mode. &#013;If set to false, only districts and buildingSegments are visible.',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},						
 					{
 						bind: 'city_blank_node',
@@ -273,7 +278,8 @@ var generationFormController = (function() {
 							{ value: 'true' },
 							{ value: 'false'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'Switch for showing attributes as cylinders instead of boxes. &#013;This setting has only an affect in panels-mode.',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_brick_layout',
@@ -289,7 +295,8 @@ var generationFormController = (function() {
 							{ value: 'straight'},
 							{ value: 'balanced'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'The active mode for the layout of the bricks/methods. &#013;This setting has only an affect in brick-mode.',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_brick_size',
@@ -300,7 +307,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_brick_horizontal_margin',
@@ -311,7 +318,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_brick_horizontal_gap',
@@ -322,7 +329,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_brick_vertical_margin',
@@ -333,7 +340,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_brick_vertical_gap',
@@ -344,7 +351,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_panel_separator_mode',
@@ -360,7 +367,8 @@ var generationFormController = (function() {
 							{ value: 'none'},
 							{ value: 'gap'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'The active mode for the area between panels/methods. &#013;Possible values are &#013;separator (default): Between the panels separators are placed with a fixed height and color. &#013;none: No space between the panels and they are placed on top of each other. &#013;gap: The panels have a free space between them and do not touch each other.',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_panel_height_treshold_nos',
@@ -382,7 +390,8 @@ var generationFormController = (function() {
 							{ value: '192'},
 							{ value: '240'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'Multiplier for height of a panel, declared in panel.height_unit. &#013;The elements of this array are threshold values for the number of statements inside the method and are multiplied with the index+1, so the product will be the actual height of the panel. &#013;The values are inclusive.',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_panel_height_unit',
@@ -393,7 +402,8 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'Height is multiplied by city.panel.height_treshold_nos ',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_panel_horizontal_margin',
@@ -404,7 +414,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_panel_vertical_margin',
@@ -415,7 +425,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_panel_vertical_gap',
@@ -426,7 +436,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_panel_separator_height',
@@ -437,7 +447,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_original_building_metric',
@@ -452,7 +462,7 @@ var generationFormController = (function() {
 							{ value: 'none' },
 							{ value: 'nos'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_width_min',
@@ -463,7 +473,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_height_min',
@@ -474,7 +484,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_building_horizontal_margin',
@@ -485,7 +495,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_building_horizontal_gap',
@@ -496,7 +506,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_building_vertical_margin',
@@ -507,7 +517,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_package_color_start',
@@ -518,7 +528,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_package_color_end',
@@ -529,7 +539,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_class_color_start',
@@ -540,7 +550,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_class_color_end',
@@ -551,7 +561,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_class_color',
@@ -562,7 +572,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_blue',
@@ -573,7 +583,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_aqua',
@@ -584,7 +594,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_light_green',
@@ -595,7 +605,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_dark_green',
@@ -606,7 +616,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_yellow',
@@ -617,7 +627,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_orange',
@@ -628,7 +638,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_red',
@@ -639,7 +649,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_pink',
@@ -650,7 +660,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_violet',
@@ -661,7 +671,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_light_grey',
@@ -672,7 +682,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_dark_grey',
@@ -683,7 +693,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_white',
@@ -694,7 +704,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'city_color_black',
@@ -705,7 +715,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},
 					
 					// Recursive Disk Options 					
@@ -718,7 +728,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_method_factor',
@@ -729,7 +739,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_height',
@@ -740,7 +750,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_height_boost',
@@ -751,7 +761,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_height_multiplicator',
@@ -762,7 +772,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_ring_width',
@@ -773,7 +783,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_ring_width_md',
@@ -784,7 +794,8 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'Sets the ring width of the method disks &#013;Only relevant if disk of type FAMIX.Method exist',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_ring_width_ad',
@@ -795,7 +806,8 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'Equal to ring_width_md but for attribute disks',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_min_area',
@@ -806,7 +818,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_namespace_transparency',
@@ -817,7 +829,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_class_transparency',
@@ -828,7 +840,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_method_transparency',
@@ -839,7 +851,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_data_transparency',
@@ -850,7 +862,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_color_class',
@@ -861,7 +873,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_color_data',
@@ -872,7 +884,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_color_method',
@@ -883,7 +895,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_color_namespace',
@@ -894,7 +906,7 @@ var generationFormController = (function() {
 						labelWidth: '325px',
 						align: 'left',
 						width: '200px',
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_method_disks',
@@ -909,7 +921,8 @@ var generationFormController = (function() {
 							{ value: 'false' },
 							{ value: 'true'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'If true the Methods will be visualized as Disks instead of DiskSegments.',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_data_disks',
@@ -924,7 +937,8 @@ var generationFormController = (function() {
 							{ value: 'false' },
 							{ value: 'true'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'If true Attributes will be visualized as disks.',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
 						bind: 'rd_method_type_mode',
@@ -939,7 +953,8 @@ var generationFormController = (function() {
 							{ value: 'false' },
 							{ value: 'true'}
 						],
-						padding: {left: 0, top: 0, bottom: 0, right: 0}
+						info:'If true visualization will be based on the method type',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},
 					{
 						type: 'blank',
