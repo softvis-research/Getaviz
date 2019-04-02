@@ -156,7 +156,7 @@ class City2X3D {
 	def private toFloor(Node floor, Node entity) {
 		val position = connector.getPosition(floor.id)
 		val result = '''
-		<Group DEF='«entity.get("hash")»'>
+		<Group DEF='«entity.get("hash").asString»'>
 			<Transform translation='«position.get("x").asDouble +" "+ position.get("y").asDouble +" "+ position.get("z").asDouble»'>
 				<Shape>
 					<Box size='«floor.get("width").asDouble +" "+ floor.get("height").asDouble +" "+ floor.get("length").asDouble»'></Box>
@@ -173,7 +173,7 @@ class City2X3D {
 	def private toChimney(Node chimney, Node entity) {
 		val position = connector.getPosition(chimney.id)
 		val result = '''
-		<Group DEF='«entity.get("hash")»'>
+		<Group DEF='«entity.get("hash").asString»'>
 			<Transform translation='«position.get("x").asDouble +" "+ position.get("y").asDouble +" "+ position.get("z").asDouble»'>
 				<Shape>
 					<Cylinder height='«chimney.get("height").asDouble»' radius='«chimney.get("width").asDouble»'></Cylinder>
