@@ -109,11 +109,13 @@ class DatabaseBuilder {
 
 	private def enhanceNode(Record record) {
 		val node = record.get("n").asNode
-		var fqn = node.get("fqn").asString
-		if (fqn.nullOrEmpty) {
+		val fqnValue = node.get("fqn")
+		var fqn = fqnValue.asString
+		if (fqnValue.isNull) {
 			val container = connector.executeRead("MATCH (n)<-[:DECLARES]-(container) WHERE ID(n) = " + node.id +
 				" RETURN container").single.get("container").asNode
 			val containerFqn = container.get("fqn").asString
+			log.debug("containerFQN: " + containerFqn)
 			var name = node.get("name").asString
 			var signature = node.get("signature").asString
 			val index = signature.indexOf(" ") + 1
@@ -131,6 +133,7 @@ class DatabaseBuilder {
 			}
 			connector.executeWrite(
 				"MATCH (n) WHERE ID(n) = " + node.id + " SET n.name = \'" + name + "\', n.fqn = \'" + fqn + "\'")
+				log.debug("final fqn:" + fqn)
 		}
 		connector.executeWrite("MATCH (n) WHERE ID(n) = " + node.id + " SET n.hash = \'" + createHash(fqn) + "\'")
 	}
