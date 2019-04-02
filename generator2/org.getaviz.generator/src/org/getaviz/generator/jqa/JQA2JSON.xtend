@@ -66,12 +66,11 @@ class JQA2JSON {
 	'''	
 	
 	private def toMetaDataNamespace(Node namespace) {
-		log.info("Namespace")
 		val parentHash = connector.executeRead("MATCH (parent:Package)-[:CONTAINS]->(namespace) WHERE ID(namespace) = " + namespace.id 
 			+ " RETURN parent.hash")
 		var belongsTo = "root"
 		if(parentHash.hasNext) {
-			belongsTo = parentHash.single.get("hash").asString
+			belongsTo = parentHash.single.get("parent.hash").asString
 		}
 		val result = '''
 		"id":            "«namespace.get("hash").asString»",
@@ -84,7 +83,6 @@ class JQA2JSON {
 	}
 	
 	def private toMetaDataClass(Node c) {
-		log.info("Class")
 		var belongsTo = ""
 		var parent = connector.executeRead("MATCH (parent:Type)-[:DECLARES]->(class) WHERE ID(class) = " + c.id 
 			+ " RETURN parent")
@@ -109,13 +107,12 @@ class JQA2JSON {
 	}
 	
 	def private toMetaDataAttribute(Node attribute) {
-		log.info("Attribute")
 		var belongsTo = ""
 		var declaredType = ""
 		var parent = connector.executeRead("MATCH (parent)-[:CONTAINS|DECLARES]->(attribute) WHERE ID(attribute) = " + attribute.id 
 			+ " RETURN parent.hash")
 		if(parent.hasNext) {
-			belongsTo = parent.single.get("hash").asString
+			belongsTo = parent.single.get("parent.hash").asString
 		}	
 		val type = connector.executeRead("MATCH (attribute)-[:OF_TYPE]->(t) WHERE ID(attribute) = " + attribute.id 
 			+ " RETURN t").next.get("t").asNode
@@ -136,12 +133,11 @@ class JQA2JSON {
 	}
 	
 	def private toMetaDataMethod(Node method) {
-		log.info("Method: " + method.id)
 		var belongsTo = ""
 		val parent = connector.executeRead("MATCH (parent)-[:DECLARES]->(method) WHERE ID(method) = " + method.id 
 			+ " RETURN parent.hash")
 		if(parent.hasNext) {
-			belongsTo = parent.single.get("hash").asString
+			belongsTo = parent.single.get("parent.hash").asString
 		}		
 		var signature = method.get("signature").asString
 		if(signature.contains(".")) {
@@ -164,12 +160,11 @@ class JQA2JSON {
 	}
 	
 	def private toMetaDataEnum(Node e) {
-		log.info("Enum")
 		var belongsTo = ""
 		val parent = connector.executeRead("MATCH (parent)-[:DECLARES]->(enum) WHERE ID(enum) = " + e.id 
 			+ " RETURN parent.hash")
 		if(parent.hasNext) {
-			belongsTo = parent.single.get("hash").asString
+			belongsTo = parent.single.get("parent.hash").asString
 		}		
 		val result = '''
 		"id":            "«e.get("hash").asString»",
@@ -183,12 +178,11 @@ class JQA2JSON {
 	}
 	
 	def private toMetaDataEnumValue(Node ev) {
-		log.info("EnumValue")
 		var belongsTo = ""
 		val parent = connector.executeRead("MATCH (parent)-[:DECLARES]->(enumValue) WHERE ID(enumValue) = " + ev.id 
 			+ " RETURN parent.hash")
 		if(parent.hasNext) {
-			belongsTo = parent.single.get("hash").asString
+			belongsTo = parent.single.get("parent.hash").asString
 		}
 		val result = '''	
 		"id":            "«ev.get("hash").asString»",
@@ -201,12 +195,11 @@ class JQA2JSON {
 	}
 	
 	def private toMetaDataAnnotation(Node annotation) {
-		log.info("Annotation")
 		var belongsTo = ""
 		val parent = connector.executeRead("MATCH (parent:Package)-[:CONTAINS|DECLARES]->(annotation) WHERE ID(annotation) = " + annotation.id 
 			+ " RETURN parent.hash")
 		if(parent.hasNext) {
-			belongsTo = parent.single.get("hash").asString
+			belongsTo = parent.single.get("parent.hash").asString
 		}		
 		val result = '''
 		"id":            "«annotation.get("hash").asString»",
@@ -313,7 +306,7 @@ class JQA2JSON {
 		connector.executeRead("MATCH (method)-[:HAS]->(p:Parameter) WHERE ID(method) = " + method.id + " RETURN p ORDER BY p.index ASC").forEach[
 			val parameter = get("p").asNode
 			connector.executeRead("MATCH (parameter)-[:OF_TYPE]->(t) WHERE ID(parameter) = " + parameter.id + " RETURN t.name").forEach[
-				parameterList += get("name").asString
+				parameterList += get("t.name").asString
 			]
 		]
 		return parameterList.removeBrackets
