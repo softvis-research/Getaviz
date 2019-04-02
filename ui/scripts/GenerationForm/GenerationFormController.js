@@ -854,14 +854,26 @@ var generationFormController = (function() {
 					{
 						type: 'blank',
 						rowHeight: '25px',
-					},
+					},	
+					// Buttons
 					{
-						name: 'submitButton',
-						type: 'button',
-						text: 'Submit',
-						align: 'right',
-						padding: {left: 20, top: 5, bottom: 5, right: 20}
-					}  
+						columns: [
+							{
+								name: 'defaultButton',
+								type: 'button',
+								text: 'Load Default',
+								width: '262px',
+								columnWidth: '50%'
+							},
+							{
+								name: 'submitButton',
+								type: 'button',
+								text: 'Submit',
+								width: '263px',
+								columnWidth: '50%'
+							}             
+						]
+					}
 					
 				];
 				
@@ -1229,6 +1241,11 @@ var generationFormController = (function() {
 					]
 				});
 				
+				// Load Default Values 
+				var btn_default = settingsForm.jqxForm('getComponentByName', 'defaultButton');
+				btn_default.on('click', function () {
+										
+				});
 				
 				// Submit Form Data 
 				var btn_submit = settingsForm.jqxForm('getComponentByName', 'submitButton');
