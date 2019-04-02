@@ -33,7 +33,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -45,7 +45,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},							
 					{
@@ -54,7 +54,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'metaphor',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'rd' },
@@ -74,7 +74,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.building_type',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'original' },
@@ -90,7 +90,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.scheme',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'types' },
@@ -104,7 +104,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.class_elements_mode',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'methods_and_attributes' },
@@ -119,7 +119,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.class_elements_sort_mode_coarse',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'methods_first' },
@@ -134,7 +134,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.class_elements_sort_mode_fine',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'scheme' },
@@ -150,7 +150,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.class_elements_sort_mode_fine_direction_reversed',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'false' },
@@ -164,7 +164,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.show_building_base',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'true' },
@@ -184,7 +184,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.show_attributes_as_cylinders',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'true' },
@@ -198,7 +198,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.brick.layout',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'progressive' },
@@ -215,7 +215,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -226,7 +226,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -237,7 +237,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -248,7 +248,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -259,7 +259,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -268,7 +268,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.panel.separator_mode',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'separator' },
@@ -283,7 +283,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.panel.height_treshold_nos',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: '3' },
@@ -306,7 +306,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -317,7 +317,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -328,7 +328,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -339,7 +339,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -350,7 +350,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -359,7 +359,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'city.original_building_metric',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'none' },
@@ -375,7 +375,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -386,7 +386,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -397,7 +397,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -408,7 +408,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -419,7 +419,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -430,7 +430,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -441,7 +441,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -452,7 +452,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -463,7 +463,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -474,7 +474,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -485,7 +485,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -496,7 +496,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -507,7 +507,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -518,7 +518,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -529,7 +529,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -540,7 +540,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -551,7 +551,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -562,7 +562,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -573,7 +573,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -584,7 +584,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -595,7 +595,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -606,7 +606,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -617,7 +617,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},
 					
@@ -630,7 +630,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -641,7 +641,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -652,7 +652,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -663,7 +663,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -674,7 +674,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -685,7 +685,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -696,7 +696,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -707,7 +707,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -718,7 +718,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -729,7 +729,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -740,7 +740,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -751,7 +751,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -762,7 +762,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '250px',
+						width: '200px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -773,7 +773,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -784,7 +784,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -795,7 +795,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -806,7 +806,7 @@ var generationFormController = (function() {
 						labelPosition: 'left',
 						labelWidth: '325px',
 						align: 'left',
-						width: '244px',
+						width: '194px',
 						padding: {left: 0, top: 0, bottom: 0, right: 0}
 					},					
 					{
@@ -815,7 +815,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'rd.method_disks',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'false' },
@@ -829,7 +829,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'rd.data_disks',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'false' },
@@ -843,7 +843,7 @@ var generationFormController = (function() {
 						type: 'option',
 						label: 'rd.method_type_mode',
 						labelWidth: '325px',
-						width: '250px',
+						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
 							{ value: 'false' },
@@ -861,7 +861,7 @@ var generationFormController = (function() {
 						text: 'Submit',
 						align: 'right',
 						padding: {left: 20, top: 5, bottom: 5, right: 20}
-					},
+					}  
 					
 				];
 				
@@ -1227,11 +1227,12 @@ var generationFormController = (function() {
 						{ input: manual_rd_color_method, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
 						{ input: manual_rd_color_namespace, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
 					]
-				});			
+				});
+				
 				
 				// Submit Form Data 
-				var btn = settingsForm.jqxForm('getComponentByName', 'submitButton');
-				btn.on('click', function () {
+				var btn_submit = settingsForm.jqxForm('getComponentByName', 'submitButton');
+				btn_submit.on('click', function () {
 					$('#settingsForm').jqxValidator('validate');
 					settingsForm.jqxForm('submit', "http://" + BACKEND +":8080", "_self", 'POST');
 				});
@@ -1337,6 +1338,7 @@ var generationFormController = (function() {
 	
 	function createSettingPopup(rootDiv){
 
+		// Link to CSS File
 		var cssLink = document.createElement("link");
 		cssLink.type = "text/css";
 		cssLink.rel = "stylesheet";
