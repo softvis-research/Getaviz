@@ -1,4 +1,4 @@
-﻿var setup = {
+var setup = {
 
 	loadPopUp: true,
 
@@ -15,23 +15,28 @@
 		{	name: 	"emailController",
 			
 			createHeadSection: false
-		},	
+		},
 		
 		{	name:	"generationFormController",
 		},
+        
+        {
+            name: 'canvasFilterController'
+        },
 
-		{	name: 	"canvasHoverController",			
+        {	name: 	"canvasHoverController",
 		},	
 
 		{	name: 	"canvasMarkController",
 		},	
 		
 		{	name: 	"canvasSelectController" 
-		},	
-
-		{	name: 	"canvasFilterController" 
 		},
-
+        {
+            name: 'filterController',
+            devMode: false,
+            configuration: 'default.json'
+        },
 		{ 	name: 	"canvasFlyToController" 
 		},
 	
@@ -113,6 +118,42 @@
 				},
 
 				{	
+					title:		"Visualizations",
+					subMenu:	true,
+					items:		[
+						{
+							title: 	"City Original",
+							link: 	true,
+							url:	"index.php?setup=web/City freemind&model=City%20original%20freemind"
+						},
+						{
+							title: 	"City Bricks",
+							link: 	true,
+							url:	"index.php?setup=web/City freemind&model=City%20bricks%20freemind"
+						},						
+						{
+							title: 	"City Floors",
+							link: 	true,
+							url:	"index.php?setup=web/City freemind&model=City%20floor%20freemind"
+						},
+						{
+							title: 	"Recursive Disk",
+							link: 	true,
+							url:	"index.php?setup=web/RD freemind&model=RD%20freemind"
+						},
+                        {
+                            title: 	"Recursive Disk 3D",
+                            link: 	true,
+                            url:	"index.php?setup=web/RD reek&model=RD%203D%20reek"
+                        },
+                        {
+                            title: 	"New Visualization",
+                            event:	"generationFormController.openSettingsPopUp"
+                        },
+					]
+				},
+
+				{	
 					title:		"About",
 					subMenu:	true,
 					items:		[
@@ -146,50 +187,39 @@
                             url:	"http://home.uni-leipzig.de/svis/privacy-policy/"
                         }
 					]
-				},
-
-				{	
-					title:		"Visualizations",
-					subMenu:	true,
-					items:		[
-                        {
-                            title: 	"New Visualization",
-                            event:	"generationFormController.openSettingsPopUp"
-                        }
-					]
-				},					
+				},			
 			]
 		},
         {
             name: "legendController",
             entries: [{
                 name: "Package",
-                icon: "setups/web/package.png"
+                icon: "grayCircle"
             }, {
                 name: "Type",
-                icon: "setups/web/type.png",
+                icon: "purpleCircle",
             }, {
                 name: "Method",
-                icon: "setups/web/method.png",
+                icon: "lightBlueCircle",
             }, {
                 name: "Field",
-                icon: "setups/web/field.png",
+                icon: "yellowCircle",
             }, {
                 name: "Navigation",
-                icon: "setups/web/navigation.png",
+                icon: "navigation",
                 entries: [
                     {
                         name: "Rotate",
-                        icon: "setups/web/left.png"
+                        icon: "leftMouseButton"
                     }, {
                         name: "Center",
-                        icon: "setups/web/double.png"
+                        icon: "doubleClick"
                     }, {
                         name: "Move",
-                        icon: "setups/web/middle.png"
+                        icon: "midMouseButton"
                     }, {
                         name: "Zoom",
-                        icon: "setups/web/zoom.png"
+                        icon: "scrolling"
                     }]
             }
             ],
@@ -210,7 +240,7 @@
                 type: "turntable",
 
                 //turntable last 2 values - accepted values are between 0 and PI - 0.0 - 1,5 at Y-axis
-                typeParams: "0.0 0.0 1.57 3.1",
+                typeParams: "0.0 0.0 0.001 1.5",
 
                 //speed: 10
             },
@@ -222,13 +252,13 @@
                 resizable: false,
                 collapsible: false,
                 first: {
-                    size: "75px",
+                    size: "25px",
                     collapsible: false,
                     controllers: [
                         {name: "menuController"},
-                        {name: "searchController"},
+                        //{name: "searchController"},
                         {name: "emailController"},
-                        {name: "generationFormController"},
+						{name: "generationFormController"}	
                     ],
                 },
                 second: {
@@ -247,13 +277,13 @@
                                 name: "packagePanel",
                                 first: {
                                     collapsible: false,
-                                    size: "65%",
+                                    size: "33%",
                                     expanders: [
                                         {
-                                            name: "packageExplorer",
-                                            title: "Package Explorer",
+                                            name: "filterExplorer",
+                                            title: "Filter",
                                             controllers: [
-                                                {name: "packageExplorerController"}
+                                                {name: "filterController"}
                                             ],
                                         }
                                     ]
@@ -263,22 +293,44 @@
                                     area: {
                                         orientation: "horizontal",
                                         name: "legendPanel",
-                                        size: "100%%",
+                                        size: "50%%",
                                         collapsible: false,
                                         first: {
-                                            size: "100%",
+                                            size: "50%",
                                             expanders: [
                                                 {
-                                                    name: "legend",
-                                                    title: "Legend",
-
+                                                    name: "packageExplorer",
+                                                    title: "Package Explorer",
                                                     controllers: [
-                                                        {name: "legendController"}
+                                                        {name: "packageExplorerController"}
                                                     ],
                                                 },
                                             ]
                                         },
                                         second: {
+                                            size: "50%",
+                                            area: {
+                                                orientation: "horizontal",
+                                                name: "legendPanel2",
+                                                size: "100%",
+                                                collapsible: false,
+                                                first: {
+                                                    size: "100%",
+                                                    expanders: [
+                                                        {
+                                                            name: "legend",
+                                                            title: "Legend",
+
+                                                            controllers: [
+                                                                {name: "legendController"}
+                                                            ],
+                                                        },
+                                                    ]
+                                                },
+                                                second: {
+
+                                                }
+                                            },
                                         },
                                     }
                                 },
@@ -350,4 +402,4 @@
             }
         }
 	]
-};
+}; 

@@ -1,40 +1,48 @@
 version: "3"
 services:
-    #db:
-        #image: mysql:5.7
-        #environment:
-            #MYSQL_ROOT_PASSWORD: dbpassword_for_user
-            #MYSQL_DATABASE: eval_server_development
-            #MYSQL_USER: db_username
-            #MYSQL_PASSWORD: dbpassword_for_user
-        #restart: always
-    #eval:
-        #build: evaluationserver
-        #restart: always
-        #env_file: evaluationserver/env
-        #command: "./bin/wait-for-it.sh db:3306 -s -t 30 -- ./bin/docker_start"
-        #volumes:
-        #- ./evaluationserver:/usr/src/app
-        #ports:
-            #- "8081:8081" 
-        #depends_on:
-            #- db
+    db:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: dbpassword_for_user
+            MYSQL_DATABASE: eval_server_development
+            MYSQL_USER: db_username
+            MYSQL_PASSWORD: dbpassword_for_user
+        restart: always
+    eval:
+        build: evaluationserver
+        restart: always
+        env_file: evaluationserver/env
+        command: "./bin/wait-for-it.sh db:3306 -s -t 30 -- ./bin/docker_start"
+        volumes:
+        - ./evaluationserver:/usr/src/app
+        ports:
+            - "8081:8081" 
+        depends_on:
+            - db
     frontend:
         build: ui/
         restart: always
         volumes:
             - ./ui:/var/www/html/ui
+            - data-gen:/var/www/html/ui/data-gen
         ports:
             - "8082:80"
+        networks:
+            - default
+        depends_on:
+            - backend
     backend:
         build: generator2/org.getaviz.generator/
         restart: always
-        #volumes: # uncomment only for development purposes
+        volumes: 
+            - data-gen:/var/lib/jetty/data-gen
             #- ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # uncomment only for development purposes
             #- ./settings.properties:/opt/config/settings.properties # uncomment only for development purposes
             #- ./generator2/output:/var/lib/jetty/output/ # uncomment only for development purposes
         ports:
             - "8083:8080"
+        networks:
+            - default
         depends_on:
             - neo4j
     neo4j:
@@ -45,6 +53,13 @@ services:
             - "7687:7687"
         environment:
             NEO4J_AUTH: "none"
+        networks:
+            - default
 volumes:
+  data-gen:
   bundle:
     driver: local
+    
+networks:
+    default:
+        driver: bridge

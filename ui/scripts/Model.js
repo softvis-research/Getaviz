@@ -118,9 +118,17 @@ var model = (function() {
 						entity.reaches = [];
 					}
 					entity.reachedBy = [];
-					entity.antipattern = element.antipattern.split(",");
-					entity.roles = element.roles.split(",");
-					entity.component = element.component;
+                                        if(entity.antipattern !== false) {
+                                            entity.antipattern = element.antipattern.split(",");
+                                        } else {
+                                            entity.antipattern = [];
+                                        }
+                                        if(entity.roles !== undefined) {
+                                            entity.roles = element.roles.split(",");
+                                        } else {
+                                            entity.roles = [];
+                                        }
+                                        entity.component = element.component;
                     entity.version = element.version;
 					entity.betweennessCentrality = element.betweennessCentrality;
 					entity.changeFrequency = element.changeFrequency;
