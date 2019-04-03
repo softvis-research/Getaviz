@@ -966,7 +966,7 @@ var generationFormController = (function() {
 							{
 								name: 'defaultButton',
 								type: 'button',
-								text: 'Load Default',
+								text: 'Reset',
 								width: '262px',
 								columnWidth: '50%'
 							},
@@ -1051,7 +1051,7 @@ var generationFormController = (function() {
 					rd_method_disks: false,
 					rd_data_disks: false,
 					rd_method_type_mode: false
-				};
+				};	
 				
 				// generate Form 
 				var settingsForm = $('#settingsForm');
@@ -1131,7 +1131,7 @@ var generationFormController = (function() {
 					}					
 				});			
 				
-				// Manually created vars to access the data in the form
+				// Manually created vars to validate the data in the form
 				var manual_input_name = settingsForm.jqxForm('getComponentByName', 'input.name');
 				var manual_input_files = settingsForm.jqxForm('getComponentByName', 'input.files');
 				var manual_city_package_color_start = settingsForm.jqxForm('getComponentByName', 'city.package.color_start');
@@ -1189,9 +1189,12 @@ var generationFormController = (function() {
 				});
 				
 				// Load Default Values 
-				var btn_default = settingsForm.jqxForm('getComponentByName', 'defaultButton');
-				btn_default.on('click', function () {
-										
+				var btn_reset = settingsForm.jqxForm('getComponentByName', 'defaultButton');
+				btn_reset.on('click', function () {
+					
+					$("#settingsPopupWindowDiv").jqxWindow("close");					
+					reset_form(template, defaultValue);
+					openSettingsPopUp();
 				});
 				
 				// Submit Form Data 
@@ -1211,6 +1214,11 @@ var generationFormController = (function() {
 		events.log.manipulation.subscribe(addLogObject);
 	}
 	
+	function reset_form(template, defaultValue) {	
+		
+		$('#settingsForm').jqxForm('val', defaultValue);
+	}
+	
 	// On first load show only the input fields for initially selected options (city, optional)
 	function initial_load_city_optional() {
 
@@ -1221,7 +1229,6 @@ var generationFormController = (function() {
 		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine');
 		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine_direction_reversed');
 		$('#settingsForm').jqxForm('showComponent', 'city.show_building_base');						
-		$('#settingsForm').jqxForm('showComponent', 'city.original_building_metric');
 		$('#settingsForm').jqxForm('showComponent', 'city.width_min');
 		$('#settingsForm').jqxForm('showComponent', 'city.height_min');
 		$('#settingsForm').jqxForm('showComponent', 'city.building.horizontal_margin');
@@ -1245,6 +1252,7 @@ var generationFormController = (function() {
 		$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_grey');
 		$('#settingsForm').jqxForm('hideComponent', 'city.color.white');
 		$('#settingsForm').jqxForm('hideComponent', 'city.color.black');	
+		show_city_original();
 		hide_rd();
 		hide_city_panels();
 		hide_city_bricks();
@@ -1365,9 +1373,11 @@ var generationFormController = (function() {
 	}
 	
 	function show_city_floor() {
+		// no components for this choice
 	}
 	
 	function hide_city_floor() {
+		// no components for this choice
 	}
 	
 	function show_rd() {
