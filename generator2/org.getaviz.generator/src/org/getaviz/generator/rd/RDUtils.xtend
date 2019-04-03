@@ -1,6 +1,6 @@
 package org.getaviz.generator.rd
 
-import org.neo4j.graphdb.GraphDatabaseService
+//import org.neo4j.graphdb.GraphDatabaseService
 import org.getaviz.generator.database.DatabaseConnector
 import org.neo4j.driver.v1.types.Node
 //import org.apache.commons.logging.LogFactory
@@ -30,7 +30,7 @@ class RDUtils {
 		return sum
 	}
 
-	def static getLevel(GraphDatabaseService graph, Long disk) {
+	def static getLevel(Long disk) {
 		return connector.executeRead("MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE ID(m) = " + disk + " RETURN p LIMIT 1").single.get("p").asPath.length
 	}
 }

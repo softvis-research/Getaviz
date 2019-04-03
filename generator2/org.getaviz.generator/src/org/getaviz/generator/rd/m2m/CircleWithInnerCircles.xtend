@@ -3,7 +3,6 @@ package org.getaviz.generator.rd.m2m;
 import java.util.ArrayList
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.getaviz.generator.rd.RDUtils
-import org.getaviz.generator.database.Database
 import org.apache.commons.logging.LogFactory
 import org.neo4j.driver.v1.types.Node
 import org.getaviz.generator.database.DatabaseConnector
@@ -13,7 +12,6 @@ class CircleWithInnerCircles extends Circle {
 	@Accessors val innerCircles = new ArrayList<CircleWithInnerCircles>
 	val log = LogFactory::getLog(class)
 	var Node diskNode
-	val graph = Database::instance
 	val connector = DatabaseConnector::instance
 
 	new(Node disk, Boolean nesting) {
@@ -24,7 +22,7 @@ class CircleWithInnerCircles extends Circle {
 			minArea = RDUtils.sum(methods) + RDUtils.sum(data)
 		} else {
 			minArea = disk.get("netArea").asDouble
-			level = RDUtils.getLevel(graph, disk.id)
+			level = RDUtils.getLevel(disk.id)
 		}
 		ringWidth = disk.get("ringWidth").asDouble
 		serial = connector.getVisualizedEntity(disk.id).id.toString

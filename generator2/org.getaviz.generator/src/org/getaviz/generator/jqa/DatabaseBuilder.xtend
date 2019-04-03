@@ -27,10 +27,6 @@ class DatabaseBuilder {
 				"/opt/jqassistant/bin/jqassistant.sh scan -reset -u " + config.inputFiles + " -storeUri " +
 					config.database)
 			pScan.waitFor()
-			val pRightsDatabase = runtime.exec("chmod -v 777 -R " + config.databaseName)
-			pRightsDatabase.waitFor()
-			val pRightsStoreLock = runtime.exec("chmod -v 777 -R " + config.databaseName + "/../store_lock")
-			pRightsStoreLock.waitFor()
 		} catch (InterruptedException e) {
 			log.error(e);
 			e.printStackTrace();
