@@ -1,51 +1,37 @@
 package org.getaviz.generator.rd
 
-import org.neo4j.graphdb.Node
-import org.neo4j.graphdb.Direction
-import org.getaviz.generator.database.Rels
-import org.getaviz.generator.database.Labels
-import org.neo4j.graphdb.GraphDatabaseService
-import org.neo4j.graphdb.Path
+//import org.neo4j.graphdb.GraphDatabaseService
+import org.getaviz.generator.database.DatabaseConnector
+import org.neo4j.driver.v1.types.Node
+//import org.apache.commons.logging.LogFactory
 
 class RDUtils {
+	static val connector = DatabaseConnector::instance
+	//static val log = LogFactory::getLog(RDUtils)
 	
-	def static getMethods(Node disk) {
-		val methods = disk.getRelationships(Direction.OUTGOING, Rels.CONTAINS).filter [
-			endNode.hasLabel(Labels.DiskSegment)
-		].map[return endNode].filter [
-			getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.Method)
-		]
-		return methods
+	
+	def static getMethods(Long disk) {
+		return connector.executeRead("MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Method) WHERE ID(n) = " + disk + " RETURN d").map[get("d").asNode]
 	}
 
-	def static getSubDisks(Node disk) {
-		val subDisks = disk.getRelationships(Direction.OUTGOING, Rels.CONTAINS).filter [
-			endNode.hasLabel(Labels.Disk)
-		].map[return endNode]
-		return subDisks
+	def static getSubDisks(Long disk) {
+		return connector.executeRead("MATCH (n)-[:CONTAINS]->(d:Disk) WHERE ID(n) = " + disk + " RETURN d")
 	}
 
-	def static getData(Node disk) {
-		val data = disk.getRelationships(Direction.OUTGOING, Rels.CONTAINS).filter [
-			endNode.hasLabel(Labels.DiskSegment)
-		].map[return endNode].filter [
-			getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.Field)
-		]
-		return data
+	def static getData(Long disk) {
+		return connector.executeRead("MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Field) WHERE ID(n) = " + disk + " RETURN d").map[get("d").asNode]
 	}
 
 	def static sum(Iterable<Node> segments) {
-		var sum = 0.0
-		for (segment : segments) {
-			sum += segment.getProperty("size") as Double
+		var sum = 0.0 
+		for(segment: segments) {
+			sum += segment.get("size").asDouble			
 		}
 		return sum
 	}
 
-	def static getLevel(GraphDatabaseService graph, Node disk) {
-		val result = graph.execute(
-			"MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE ID(m) = " + disk.id + " RETURN p LIMIT 1")
-		val path = result.head.get("p") as Path
-		return path.length
+	def static getLevel(Long disk) {
+		return connector.executeRead("MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE ID(m) = " + disk + " RETURN p LIMIT 1").single.get("p").asPath.length
 	}
 }
+

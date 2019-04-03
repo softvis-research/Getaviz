@@ -1,19 +1,17 @@
 package org.getaviz.generator.rd.m2t
 
 import org.getaviz.generator.SettingsConfiguration
-import org.getaviz.generator.database.Database
-import org.neo4j.graphdb.Node
-import org.getaviz.generator.database.Rels
-import org.neo4j.graphdb.Direction
-import org.getaviz.generator.database.Labels
 import org.apache.commons.logging.LogFactory
 import org.getaviz.generator.OutputFormatHelper
 import java.io.FileWriter
 import java.io.IOException
+import org.neo4j.driver.v1.types.Node
+import org.getaviz.generator.database.DatabaseConnector
+import java.util.List
 
 class RD2AFrame {
 	val config = SettingsConfiguration.instance
-	var graph = Database::getInstance(config.databaseName)
+	val connector = DatabaseConnector::instance
 	val log = LogFactory::getLog(class)
 	extension OutputFormatHelper helper = new OutputFormatHelper
 
@@ -39,30 +37,25 @@ class RD2AFrame {
 
 	def private toX3DOMRD() {
 		val elements = new StringBuilder
-		val tx = graph.beginTx
-		try {
-			var result = graph.execute("MATCH (n:Model)-[:CONTAINS*]->(m:Disk) RETURN m").map[return get("m") as Node]
-			result.forEach[elements.append(toDisk)]
-			tx.success
-		} finally {
-			tx.close
-		}
+		connector.executeRead("MATCH (n:Model)-[:CONTAINS*]->(d:Disk)-[:HAS]->(p:Position) RETURN d,p").forEach[
+			elements.append(toDisk(get("d").asNode,get("p").asNode))
+		]
 		return elements.toString
 	}
 
-	def private toDisk(Node disk) {
-		val radius = disk.getProperty("radius") as Double
-		val hash = disk.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.getProperty("hash")
-		val position = disk.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode
-		val segments = disk.getRelationships(Rels.CONTAINS, Direction.OUTGOING).map[return endNode].filter [
-			hasLabel(Labels.DiskSegment)
+	def private toDisk(Node disk, Node position) {
+		val radius = disk.get("radius").asDouble
+		val entity = connector.getVisualizedEntity(disk.id)
+		val segments = newArrayList
+		connector.executeRead("MATCH (n)-[:CONTAINS]->(ds:DiskSegment) WHERE ID(n) = " + disk.id + " RETURN ds").forEach[
+			segments.add(get("ds").asNode)
 		]
 		val result = '''
 			«IF radius - config.RDRingWidth == 0»
-				<a-circle id="«hash»" 
-					position="«position.getProperty("x") + " " + position.getProperty("y") + " " + position.getProperty("z")»"
+				<a-circle id="«entity.get("hash").asString»" 
+					position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
 					radius="«radius»" 
-					color="«disk.getProperty("color") »"
+					color="«disk.get("color").asString »"
 					shader="flat"
 					buffer="true"
 					flat-shading="true"
@@ -72,11 +65,11 @@ class RD2AFrame {
 					«segments.toSegment»
 				</a-circle>
 			«ELSE»
-				<a-ring id="«hash»"
-					position="«position.getProperty("x") + " " + position.getProperty("y") + " " + position.getProperty("z")»"
+				<a-ring id="«entity.get("hash").asString»"
+					position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
 					radius-inner="«radius - config.RDRingWidth»"
 					radius-outer="«radius»" 
-					color="«disk.getProperty("color") »"
+					color="«disk.get("color").asString »"
 					shader="flat"
 					buffer="true"
 					flat-shading="true"
@@ -92,16 +85,16 @@ class RD2AFrame {
 		return result
 	}
 
-	def private toSegment(Iterable<Node> segments) {
+	def private toSegment(List<Node> segments) {
 		val result = '''
 		«FOR segment : segments»
-			«val hash = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.getProperty("hash")»
-			«IF segment.getProperty("innerRadius") as Double == 0»
-				<a-circle id="«hash»"
-					radius="«segment.getProperty("outerRadius")»" 
-					color="«segment.getProperty("color") »"
-					theta-start="«segment.getProperty("anglePosition")»"
-					theta-length="«segment.getProperty("angle")»"
+			«val entity = connector.getVisualizedEntity(segment.id)»
+			«IF segment.get("innerRadius").asDouble == 0»
+				<a-circle id="«entity.get("hash").asString»"
+					radius="«segment.get("outerRadius")»" 
+					color="«segment.get("color").asString »"
+					theta-start="«segment.get("anglePosition")»"
+					theta-length="«segment.get("angle")»"
 					shader="flat"
 					buffer="true"
 					flat-shading="true"
@@ -110,17 +103,17 @@ class RD2AFrame {
 «««					segments="«(segment.getProperty("angle") as Double/20).intValue+1»">
 				</a-circle>
 			«ELSE»
-				<a-ring id="«hash»"
-					radius-inner="«segment.getProperty("innerRadius")»"
-					radius-outer="«segment.getProperty("outerRadius")»" 
-					color="«segment.getProperty("color") »"
+				<a-ring id="«entity.get("hash").asString»"
+					radius-inner="«segment.get("innerRadius")»"
+					radius-outer="«segment.get("outerRadius")»" 
+					color="«segment.get("color").asString »"
 					shader="flat"
 					buffer="true"
 					flat-shading="true"
 					depth-test="false"
 					depth-write="false"
-					theta-start="«segment.getProperty("anglePosition")»"
-					theta-length="«segment.getProperty("angle")»"
+					theta-start="«segment.get("anglePosition")»"
+					theta-length="«segment.get("angle")»"
 «««					segments-theta="«(segment.getProperty("angle") as Double/20).intValue+1»"
 					segments-phi="1">
 				</a-ring>

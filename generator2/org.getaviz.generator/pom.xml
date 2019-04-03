@@ -16,7 +16,7 @@
 	</distributionManagement>
 	<properties>
 		<xtend.version>2.16.0</xtend.version>
-		<neo4j.version>3.5.1</neo4j.version>
+		<neo4j-driver.version>1.7.2</neo4j-driver.version>
 		<junit.jupiter.version>5.3.1</junit.jupiter.version>
 		<dependency.locations.enabled>false</dependency.locations.enabled>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -60,29 +60,10 @@
 		</dependency>
 
 		<!-- neo4j -->
-		<!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-graphdb-api -->
 		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j-graphdb-api</artifactId>
-			<version>${neo4j.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-resource -->
-		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j-resource</artifactId>
-			<version>${neo4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j</artifactId>
-			<version>${neo4j.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.neo4j.test/neo4j-harness -->
-		<dependency>
-			<groupId>org.neo4j.test</groupId>
-			<artifactId>neo4j-harness</artifactId>
-			<version>${neo4j.version}</version>
-			<scope>test</scope>
+			<groupId>org.neo4j.driver</groupId>
+			<artifactId>neo4j-java-driver</artifactId>
+			<version>${neo4j-driver.version}</version>
 		</dependency>
 
 		<!-- Other -->
@@ -235,7 +216,7 @@
 					<arguments>
 						<argument>-Dlog4j.configuration=file:src/main/resources/log4j-console.properties</argument>
 						<!-- uncomment to increase java heap size -->
-						<argument>-Xmx8g</argument>
+<!-- 						<argument>-Xmx8g</argument> -->
 						<argument>-classpath</argument>
 						<classpath />
 						<argument>org.getaviz.generator.Generator</argument>

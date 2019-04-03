@@ -2,34 +2,30 @@ package org.getaviz.generator.jqa
 
 import java.io.Writer
 import java.io.FileWriter
-import org.getaviz.generator.database.Database
-import org.neo4j.graphdb.Node
 import java.io.IOException
 import java.util.List
-import org.getaviz.generator.database.Rels
-import org.neo4j.graphdb.Direction
 import org.apache.commons.lang3.StringUtils
 import static org.apache.commons.text.StringEscapeUtils.escapeHtml4
 import org.getaviz.generator.database.Labels
 import org.getaviz.generator.SettingsConfiguration
 import org.apache.commons.logging.LogFactory
+import org.getaviz.generator.database.DatabaseConnector
+import org.neo4j.driver.v1.types.Node
 
 class JQA2JSON {
-	val graph = Database::instance
 	val config = SettingsConfiguration.instance
 	val log = LogFactory::getLog(class)
+	val connector = DatabaseConnector::instance
 
 	new () {
 		log.info("JQA2JSON has started.")
 		val elements = newArrayList
-		graph.execute("MATCH (n)<-[:VISUALIZES]-() RETURN n").forEach[elements.add(get("n") as Node)]
-		val tx = graph.beginTx
+		connector.executeRead("MATCH (n)<-[:VISUALIZES]-() RETURN n").forEach[elements.add(get("n").asNode)]
 		var Writer fw = null
 		try {
 			val path = config.outputPath + "metaData.json"
 			fw = new FileWriter(path)
 			fw.write(elements.toJSON)
-			tx.success
 		} catch (IOException e) {
 			System.err.println(e);
 		} finally {
@@ -39,47 +35,47 @@ class JQA2JSON {
 				} catch (IOException e) {
 					e.printStackTrace;
 				}
-			tx.close
 		}
 		log.info("JQA2JSON has finished.")
 	}	
 	
 	private def String toJSON (List<Node> list)  '''
 		«FOR el : list BEFORE "[{" SEPARATOR "\n},{" AFTER "}]"»
-			«IF el.hasLabel(Labels.Package)»
+			«IF el.hasLabel(Labels.Package.name)»
 			«toMetaDataNamespace(el)»
 			«ENDIF»
-			«IF el.hasLabel(Labels.Class) || el.hasLabel(Labels.Interface)»
+			«IF el.hasLabel(Labels.Class.name) || el.hasLabel(Labels.Interface.name)»
 			«toMetaDataClass(el)»
 			«ENDIF»		
-			«IF el.hasLabel(Labels.Type) && el.hasLabel(Labels.Annotation)»
+			«IF el.hasLabel(Labels.Type.name) && el.hasLabel(Labels.Annotation.name)»
 			«toMetaDataAnnotation(el)»
 			«ENDIF»		
-			«IF el.hasLabel(Labels.Type) && el.hasLabel(Labels.Enum)»
+			«IF el.hasLabel(Labels.Type.name) && el.hasLabel(Labels.Enum.name)»
 			«toMetaDataEnum(el)»
 			«ENDIF»				
-			«IF el.hasLabel(Labels.Method)»
+			«IF el.hasLabel(Labels.Method.name)»
 			«toMetaDataMethod(el)»
 			«ENDIF»		
-			«IF el.hasLabel(Labels.Field) && !el.hasLabel(Labels.Enum)»
+			«IF el.hasLabel(Labels.Field.name) && !el.hasLabel(Labels.Enum.name)»
 			«toMetaDataAttribute(el)»
 			«ENDIF»		
-			«IF el.hasLabel(Labels.Field) && el.hasLabel(Labels.Enum)»
+			«IF el.hasLabel(Labels.Field.name) && el.hasLabel(Labels.Enum.name)»
 			«toMetaDataEnumValue(el)»
 			«ENDIF»								
 		«ENDFOR»
 	'''	
 	
 	private def toMetaDataNamespace(Node namespace) {
-		val parent = namespace.getRelationships(Rels.CONTAINS, Direction.INCOMING).filter[startNode.hasLabel(Labels.Package)].head
+		val parentHash = connector.executeRead("MATCH (parent:Package)-[:CONTAINS]->(namespace) WHERE ID(namespace) = " + namespace.id 
+			+ " RETURN parent.hash")
 		var belongsTo = "root"
-		if(parent !== null) {
-			belongsTo = parent.startNode.getProperty("hash") as String
+		if(parentHash.hasNext) {
+			belongsTo = parentHash.single.get("parent.hash").asString
 		}
 		val result = '''
-		"id":            "«namespace.getProperty("hash")»",
-		"qualifiedName": "«namespace.getProperty("fqn")»",
-		"name":          "«namespace.getProperty("name")»",
+		"id":            "«namespace.get("hash").asString»",
+		"qualifiedName": "«namespace.get("fqn").asString»",
+		"name":          "«namespace.get("name").asString»",
 		"type":          "FAMIX.Namespace",
 		"belongsTo":     "«belongsTo»"
 	'''	
@@ -88,17 +84,19 @@ class JQA2JSON {
 	
 	def private toMetaDataClass(Node c) {
 		var belongsTo = ""
-		var parent = c.getRelationships(Rels.DECLARES, Direction.INCOMING).filter[startNode.hasLabel(Labels.Type)].head
-		if(parent !== null) {
-			belongsTo = parent.startNode.getProperty("hash", "XXX") as String
+		var parent = connector.executeRead("MATCH (parent:Type)-[:DECLARES]->(class) WHERE ID(class) = " + c.id 
+			+ " RETURN parent")
+		if(parent.hasNext) {
+			belongsTo = parent.single.get("parent").asNode.get("hash").asString("XXX")
 		} else {
-			parent = c.getRelationships(Rels.CONTAINS, Direction.INCOMING).filter[startNode.hasLabel(Labels.Package)].head
-			belongsTo = parent.startNode.getProperty("hash", "YYY") as String
+			parent = connector.executeRead("MATCH (parent:Package)-[:CONTAINS]->(class) WHERE ID(class) = " + c.id 
+			+ " RETURN parent")
+			belongsTo = parent.single.get("parent").asNode.get("hash").asString("YYY")
 		}
 		val result = '''
-		"id":            "«c.getProperty("hash")»",
-		"qualifiedName": "«c.getProperty("fqn")»",
-		"name":          "«c.getProperty("name")»",
+		"id":            "«c.get("hash").asString»",
+		"qualifiedName": "«c.get("fqn").asString»",
+		"name":          "«c.get("name").asString»",
 		"type":          "FAMIX.Class",
 		"modifiers":     "«c.modifiers»",
 		"subClassOf":    "«c.superClasses»",
@@ -111,18 +109,20 @@ class JQA2JSON {
 	def private toMetaDataAttribute(Node attribute) {
 		var belongsTo = ""
 		var declaredType = ""
-		val parent = attribute.getRelationships(Direction.INCOMING, Rels.CONTAINS, Rels.DECLARES).head
-		if(parent !== null) {
-			belongsTo = parent.startNode.getProperty("hash") as String
-		}		
-		val type = attribute.getSingleRelationship(Rels.OF_TYPE, Direction.OUTGOING)
+		var parent = connector.executeRead("MATCH (parent)-[:CONTAINS|DECLARES]->(attribute) WHERE ID(attribute) = " + attribute.id 
+			+ " RETURN parent.hash")
+		if(parent.hasNext) {
+			belongsTo = parent.single.get("parent.hash").asString
+		}	
+		val type = connector.executeRead("MATCH (attribute)-[:OF_TYPE]->(t) WHERE ID(attribute) = " + attribute.id 
+			+ " RETURN t").next.get("t").asNode
 		if(type !== null) {
-			declaredType = type.startNode.getProperty("name") as String
+			declaredType = type.get("name").asString
 		}				
 		val result = '''
-		"id":            "«attribute.getProperty("hash")»",
-		"qualifiedName": "«attribute.getProperty("fqn")»",
-		"name":          "«attribute.getProperty("name")»",
+		"id":            "«attribute.get("hash").asString»",
+		"qualifiedName": "«attribute.get("fqn").asString»",
+		"name":          "«attribute.get("name").asString»",
 		"type":          "FAMIX.Attribute",
 		"modifiers":     "«attribute.getModifiers»",
 		"declaredType":  "«declaredType»",
@@ -134,19 +134,20 @@ class JQA2JSON {
 	
 	def private toMetaDataMethod(Node method) {
 		var belongsTo = ""
-		val parent = method.getSingleRelationship(Rels.DECLARES, Direction.INCOMING)
-		if(parent !== null) {
-			belongsTo = parent.startNode.getProperty("hash") as String
+		val parent = connector.executeRead("MATCH (parent)-[:DECLARES]->(method) WHERE ID(method) = " + method.id 
+			+ " RETURN parent.hash")
+		if(parent.hasNext) {
+			belongsTo = parent.single.get("parent.hash").asString
 		}		
-		var signature = method.getProperty("signature") as String
+		var signature = method.get("signature").asString
 		if(signature.contains(".")) {
 			val lBraceIndex = signature.indexOf("(")
 			signature = signature.substring(0,lBraceIndex + 1) + method.getParameters + ")"
 		}
 		val result = '''
-		"id":            "«method.getProperty("hash")»",
-		"qualifiedName": "«escapeHtml4(method.getProperty("fqn") as String)»",
-		"name":          "«method.getProperty("name")»",
+		"id":            "«method.get("hash").asString»",
+		"qualifiedName": "«escapeHtml4(method.get("fqn").asString)»",
+		"name":          "«method.get("name").asString»",
 		"type":          "FAMIX.Method",
 		"modifiers":     "«method.modifiers»",
 		"signature":  	 "«signature»",
@@ -160,14 +161,15 @@ class JQA2JSON {
 	
 	def private toMetaDataEnum(Node e) {
 		var belongsTo = ""
-		val parent = e.getSingleRelationship(Rels.DECLARES, Direction.INCOMING)
-		if(parent !== null) {
-			belongsTo = parent.startNode.getProperty("hash") as String
-		}			
+		val parent = connector.executeRead("MATCH (parent)-[:DECLARES]->(enum) WHERE ID(enum) = " + e.id 
+			+ " RETURN parent.hash")
+		if(parent.hasNext) {
+			belongsTo = parent.single.get("parent.hash").asString
+		}		
 		val result = '''
-		"id":            "«e.getProperty("hash")»",
-		"qualifiedName": "«e.getProperty("fqn")»",
-		"name":          "«e.getProperty("name")»",
+		"id":            "«e.get("hash").asString»",
+		"qualifiedName": "«e.get("fqn").asString»",
+		"name":          "«e.get("name").asString»",
 		"type":          "FAMIX.Enum",
 		"modifiers":     "«e.modifiers»",
 		"belongsTo":     "«belongsTo»"
@@ -177,14 +179,15 @@ class JQA2JSON {
 	
 	def private toMetaDataEnumValue(Node ev) {
 		var belongsTo = ""
-		val parent = ev.getSingleRelationship(Rels.DECLARES, Direction.INCOMING)
-		if(parent !== null) {
-			belongsTo = parent.startNode.getProperty("hash") as String
-		}	
+		val parent = connector.executeRead("MATCH (parent)-[:DECLARES]->(enumValue) WHERE ID(enumValue) = " + ev.id 
+			+ " RETURN parent.hash")
+		if(parent.hasNext) {
+			belongsTo = parent.single.get("parent.hash").asString
+		}
 		val result = '''	
-		"id":            "«ev.getProperty("hash")»",
-		"qualifiedName": "«ev.getProperty("fqn")»",
-		"name":          "«ev.getProperty("name")»",
+		"id":            "«ev.get("hash").asString»",
+		"qualifiedName": "«ev.get("fqn").asString»",
+		"name":          "«ev.get("name").asString»",
 		"type":          "FAMIX.EnumValue",
 		"belongsTo":     "«belongsTo»"
 	'''
@@ -193,14 +196,15 @@ class JQA2JSON {
 	
 	def private toMetaDataAnnotation(Node annotation) {
 		var belongsTo = ""
-		val parent = annotation.getRelationships(Direction.INCOMING, Rels.CONTAINS, Rels.DECLARES).filter[hasProperty("Package")].head
-		if(parent !== null) {
-			belongsTo = parent.startNode.getProperty("hash") as String
-		}			
+		val parent = connector.executeRead("MATCH (parent:Package)-[:CONTAINS|DECLARES]->(annotation) WHERE ID(annotation) = " + annotation.id 
+			+ " RETURN parent.hash")
+		if(parent.hasNext) {
+			belongsTo = parent.single.get("parent.hash").asString
+		}		
 		val result = '''
-		"id":            "«annotation.getProperty("hash")»",
-		"qualifiedName": "«annotation.getProperty("fqn")»",
-		"name":          "«annotation.getProperty("name")»",
+		"id":            "«annotation.get("hash").asString»",
+		"qualifiedName": "«annotation.get("fqn").asString»",
+		"name":          "«annotation.get("name").asString»",
 		"type":          "FAMIX.AnnotationType",
 		"modifiers":     "«annotation.modifiers»",
 		"subClassOf":    "",
@@ -211,87 +215,87 @@ class JQA2JSON {
 	}
 					
 	def private getSuperClasses(Node element) {
-		val superClasses = element.getRelationships(Rels.EXTENDS, Direction.OUTGOING)
 		val tmp = newArrayList
-		superClasses.forEach[
-			if(endNode.hasProperty("hash")) {
-				tmp += endNode.getProperty("hash") as String
+		connector.executeRead("MATCH (super:Type)<-[:EXTENDS]-(element) WHERE ID(element) = " + element.id + " RETURN super").forEach[
+			val node = get("super").asNode
+			if(node.containsKey("hash")) {
+				tmp += node.get("hash").asString
 			}
 		]
 		return tmp.removeBrackets
 	}	
 	
 	def private getSubClasses(Node element) {
-		val subClasses = element.getRelationships(Rels.EXTENDS, Direction.INCOMING)
 		val tmp = newArrayList
-		subClasses.forEach[
-			if(startNode.hasProperty("hash")) {
-				tmp += startNode.getProperty("hash") as String
+		connector.executeRead("MATCH (sub:Type)-[:EXTENDS]->(element) WHERE ID(element) = " + element.id + " RETURN sub").forEach[
+			val node = get("sub").asNode
+			if(node.containsKey("hash")) {
+				tmp += node.get("hash").asString
 			}
 		]
 		return tmp.removeBrackets
 	}		
 	
 	def private getAccessedBy(Node element) {
-		val accesses = element.getRelationships(Direction.INCOMING, Rels.WRITES, Rels.READS)
 		val tmp = newArrayList
-		accesses.forEach[
-			if(startNode.hasProperty("hash")) {
-				tmp += startNode.getProperty("hash") as String
-			}
+		connector.executeRead("MATCH (access)-[:WRITES|READS]->(element) WHERE ID(element) = " + element.id + " RETURN access").forEach[
+			val node = get("access").asNode
+			if(node.containsKey("hash")) {
+				tmp += node.get("hash").asString
+			}			
 		]
 		return tmp.removeBrackets
 	}		
 	
 	def private getAccesses(Node element) {
-		val accesses = element.getRelationships(Direction.OUTGOING, Rels.WRITES, Rels.READS)
 		val tmp = newArrayList
-		accesses.forEach[
-			if(endNode.hasProperty("hash")) {
-				tmp += endNode.getProperty("hash") as String
-			}				
+		connector.executeRead("MATCH (access)<-[:WRITES|READS]-(element) WHERE ID(element) = " + element.id + " RETURN access").forEach[
+			val node = get("access").asNode
+			if(node.containsKey("hash")) {
+				tmp += node.get("hash").asString
+			}			
 		]
 		return tmp.removeBrackets
 	}		
 		
 	def private getCalls(Node element) {
-		val calls = element.getRelationships(Direction.OUTGOING, Rels.INVOKES)
 		val tmp = newArrayList
-		calls.forEach[
-			if(endNode.hasProperty("hash")) {
-				tmp += endNode.getProperty("hash") as String
-			}			
+		connector.executeRead("MATCH (element)-[:INVOKES]->(call) WHERE ID(element) = " + element.id + " RETURN call").forEach[
+			val node = get("call").asNode
+			if(node.containsKey("hash")) {
+				tmp += node.get("hash").asString
+			}
 		]
 		return tmp.removeBrackets
 	}		
 	
 	def private getCalledBy(Node element) {
-		val calls = element.getRelationships(Direction.INCOMING, Rels.INVOKES)
 		val tmp = newArrayList
-		calls.forEach[
-			if(startNode.hasProperty("hash")) {
-				tmp += startNode.getProperty("hash") as String
-			}			
-		]
+		connector.executeRead("MATCH (element)<-[:INVOKES]-(call) WHERE ID(element) = " + element.id + " RETURN call").forEach[
+			val node = get("call").asNode
+			if(node.containsKey("hash")) {
+				tmp += node.get("hash").asString
+			}
+		]		
 		return tmp.removeBrackets
 	}		
 				
 	def private getModifiers(Node element) {
 		val tmp = newArrayList
-		if (element.hasProperty("visibility")) {
-			tmp += element.getProperty("visibility") as String
+		if (element.containsKey("visibility")) {
+			tmp += element.get("visibility").asString
 		}
-		if (element.hasProperty("final")) {
-			if (element.getProperty("final") === true) {
+		if (element.containsKey("final")) {
+			if (element.get("final").asBoolean === true) {
 				tmp += "final"
 			}
 		}
-		if (element.hasProperty("abstract")) {
-			if (element.getProperty("abstract") === true) {
+		if (element.containsKey("abstract")) {
+			if (element.get("abstract").asBoolean === true) {
 				tmp += "abstract"
 			}
 		}
-		if (element.hasProperty("static")) {
+		if (element.containsKey("static")) {
 			tmp += "static"
 		}
 		return tmp.removeBrackets
@@ -299,13 +303,11 @@ class JQA2JSON {
 	
 	def private getParameters(Node method) {
 		val parameterList = newArrayList
-		val list = method.getRelationships(Rels.HAS, Direction.OUTGOING).map[endNode];
-		list.filter[hasLabel(Labels.Parameter)].sortBy[p|p.getProperty("index", 0) as Integer].forEach[p|
-			try {
-				parameterList += p.getSingleRelationship(Rels.OF_TYPE, Direction.OUTGOING).endNode.getProperty("name") as String
-			} catch (NullPointerException e) {
-				
-			}
+		connector.executeRead("MATCH (method)-[:HAS]->(p:Parameter) WHERE ID(method) = " + method.id + " RETURN p ORDER BY p.index ASC").forEach[
+			val parameter = get("p").asNode
+			connector.executeRead("MATCH (parameter)-[:OF_TYPE]->(t) WHERE ID(parameter) = " + parameter.id + " RETURN t.name").forEach[
+				parameterList += get("t.name").asString
+			]
 		]
 		return parameterList.removeBrackets
 	}

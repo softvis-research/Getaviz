@@ -2,7 +2,7 @@ package org.getaviz.generator.city.m2m
 
 import java.util.Arrays
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.neo4j.graphdb.Node
+import org.neo4j.driver.v1.types.Node
 
 //@TODO: implement additional output that uses (2D-)tuples/Pairs/GeoPoints
 

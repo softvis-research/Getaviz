@@ -1,22 +1,19 @@
 package org.getaviz.generator.city.m2t
 
 import org.getaviz.generator.SettingsConfiguration
-import org.neo4j.graphdb.Transaction
-import org.getaviz.generator.database.Database
 import org.getaviz.generator.SettingsConfiguration.BuildingType
-import org.neo4j.graphdb.Node
-import org.neo4j.graphdb.Direction
-import org.getaviz.generator.database.Rels
 import org.getaviz.generator.database.Labels
 import org.apache.commons.logging.LogFactory
 import java.io.FileWriter
 import org.getaviz.generator.OutputFormatHelper
 import java.io.IOException
+import org.getaviz.generator.database.DatabaseConnector
+import org.neo4j.driver.v1.types.Node
+import java.util.ArrayList
 
 class City2X3D {
 	val config = SettingsConfiguration.instance
-	val graph = Database::instance
-	var Transaction tx
+	val connector = DatabaseConnector.instance
 	val log = LogFactory::getLog(class)
 	extension OutputFormatHelper helper = new OutputFormatHelper
 		
@@ -37,7 +34,8 @@ class City2X3D {
 					fw.write(head + settingsInfo + body + tail)
 			}
 		} catch (IOException e) {
-			log.error("Could not create file");
+			log.error(e)
+			log.error("Could not create file")
 		} finally {
 			if (fw !== null)
 				try {
@@ -53,61 +51,36 @@ class City2X3D {
 		val districts = new StringBuilder
 		val buildings = new StringBuilder
 		val segments = new StringBuilder
-		tx = graph.beginTx
-		try {
-			var result = graph.execute("MATCH (n:Model)-[:CONTAINS*]->(m:District) WHERE n.building_type = \'" + config.buildingTypeAsString + "\' RETURN m").map[return get("m") as Node]
-			result.forEach[districts.append(toDistrict)]
-			tx.success
-		} finally {
-			tx.close
-		}	
-		
-		tx = graph.beginTx
-		try {
-			var result = graph.execute("MATCH (n:Model)-[:CONTAINS*]->(m:Building) WHERE n.building_type = \'" + config.buildingTypeAsString + "\' RETURN m").map[return get("m") as Node]
-			result.forEach[
-				val entity = getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-				if(entity.hasLabel(Labels.Class) || entity.hasLabel(Labels.Interface)) {
-					buildings.append(toBuilding(entity))
+		connector.executeRead("MATCH (n:Model)-[:CONTAINS*]->(d:District)-[:VISUALIZES]->(e) WHERE n.building_type = \'" + config.buildingTypeAsString + "\' RETURN d,e").
+		forEach[districts.append(toDistrict(get("d").asNode,get("e").asNode))]
+		connector.executeRead("MATCH (n:Model)-[:CONTAINS*]->(b:Building)-[:VISUALIZES]->(e) WHERE n.building_type = \'" + config.buildingTypeAsString + "\' RETURN b,e").
+		forEach[buildings.append(toBuilding(get("b").asNode,get("e").asNode))]	
+		if(!(config.buildingType == BuildingType.CITY_ORIGINAL)) {
+			connector.executeRead("MATCH (n:Model)-[:CONTAINS*]->(bs:BuildingSegment)-[:VISUALIZES]->(e) WHERE n.building_type = \'" + config.buildingTypeAsString + "\' RETURN bs, e").forEach[
+				val segment = get("bs").asNode
+				if(segment.hasLabel(Labels.Floor.name)) {
+					segments.append(toFloor(segment, get("e").asNode))
+				} 
+				else if(segment.hasLabel(Labels.Chimney.name)) {
+					segments.append(toChimney(segment,get("e").asNode))
+				}
+				else {
+					segments.append(toBuildingSegment(segment, get("e").asNode))
 				}
 			]
-			tx.success
-		} finally {
-			tx.close
-		}	
-		
-		if(!(config.buildingType == BuildingType.CITY_ORIGINAL)) {
-			tx = graph.beginTx
-			try {
-				var result = graph.execute("MATCH (n:Model)-[:CONTAINS*]->(m:BuildingSegment) WHERE n.building_type = \'" + config.buildingTypeAsString + "\' RETURN m").map[return get("m") as Node]
-				result.forEach[
-					if(hasLabel(Labels.Floor)) {
-						segments.append(toFloor)
-					} else if(hasLabel(Labels.Chimney)) {
-						segments.append(toChimney)
-					}
-					else {
-						segments.append(toBuildingSegment)
-					}
-				]
-				tx.success
-			} finally {
-				tx.close
-			}
 		}			
 		return districts.toString + buildings + segments
 	}
 	
-	def private toDistrict(Node district) {
-		val entity = district.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-		val position = district.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode
+	def private toDistrict(Node district, Node entity) {
+		val position = connector.getPosition(district.id)
 		val result = '''
-		<Group DEF='«entity.getProperty("hash")»'>
-			<Transform translation='«position.getProperty("x") +" "+ position.getProperty("y") +" "+ position.getProperty("z")»'>
+		<Group DEF='«entity.get("hash").asString»'>
+			<Transform translation='«position.get("x").asDouble +" "+ position.get("y").asDouble +" "+ position.get("z").asDouble»'>
 				<Shape>
-					<Box size='«district.getProperty("width") +" "+ district.getProperty("height") +" "+ district.getProperty("length")»'></Box>
+					<Box size='«district.get("width").asDouble +" "+ district.get("height").asDouble +" "+ district.get("length").asDouble»'></Box>
 					<Appearance>
-						<Material diffuseColor='«district.getProperty("color")»'></Material>
+						<Material diffuseColor='«district.get("color").asString»'></Material>
 					</Appearance>
 				</Shape>
 			</Transform>
@@ -117,14 +90,14 @@ class City2X3D {
 	}
 	
 	def private toBuilding(Node building, Node entity) {
-		val position = building.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode
+		val position = connector.getPosition(building.id)
 		val result = '''
-		<Group DEF='«entity.getProperty("hash")»'>
-			<Transform translation='«position.getProperty("x") +" "+ position.getProperty("y") +" "+ position.getProperty("z")»'>
+		<Group DEF='«entity.get("hash").asString»'>
+			<Transform translation='«position.get("x").asDouble +" "+ position.get("y").asDouble +" "+ position.get("z").asDouble»'>
 				<Shape>
-					<Box size='«building.getProperty("width") +" "+ building.getProperty("height") +" "+ building.getProperty("length")»'></Box>
+					<Box size='«building.get("width").asDouble +" "+ building.get("height").asDouble +" "+ building.get("length").asDouble»'></Box>
 					<Appearance>
-						<Material diffuseColor='«building.getProperty("color")»'></Material>
+						<Material diffuseColor='«building.get("color").asString»'></Material>
 					</Appearance>
 				</Shape>
 			</Transform>
@@ -133,41 +106,41 @@ class City2X3D {
 		return result
 	}
 
-	def private String toBuildingSegment(Node segment) {
-		val entity = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-		val has = segment.getRelationships(Rels.HAS, Direction.OUTGOING).map[return endNode]
-		val position = has.filter[hasLabel(Labels.Position)].head
-		val separators = has.filter[hasLabel(Labels.PanelSeparator)]
-		val x = position.getProperty("x")
-		val y = position.getProperty("y")
-		val z = position.getProperty("z")
-		val width = segment.getProperty("width") as Double
-		val height = segment.getProperty("height")
-		val length = segment.getProperty("length")
+	def private String toBuildingSegment(Node segment, Node entity) {
+		val position = connector.getPosition(segment.id)
+		val separators = new ArrayList
+		connector.executeRead("MATCH (n)-[:HAS]->(ps:PanelSeparator)-[:HAS]->(p:Position) WHERE ID(n) = " + segment.id + " RETURN ps,p").forEach[separators.add(it)]
+		val x = position.get("x").asDouble
+		val y = position.get("y").asDouble
+		val z = position.get("z").asDouble
+		val width = segment.get("width").asDouble
+		val height = segment.get("height").asDouble
+		val length = segment.get("length").asDouble
 		val result = '''
-		<Group DEF='«entity.getProperty("hash")»'>
+		<Group DEF='«entity.get("hash").asString»'>
 			<Transform translation='«x +" "+ y +" "+ z»'>
 				<Shape>
 				«IF config.buildingType == BuildingType.CITY_PANELS
-						&& segment.hasLabel(Labels.Field)
+						&& entity.hasLabel(Labels.Field.name)
 						&& config.showAttributesAsCylinders»
 					<Cylinder radius='«width/2»' height='«height»'></Cylinder>
 				«ELSE»
 					<Box size='«width +" "+ height +" "+ length»'></Box>
 				«ENDIF»
 					<Appearance>
-						<Material diffuseColor='«segment.getProperty("color")»'></Material>
+						<Material diffuseColor='«segment.get("color").asString»'></Material>
 					</Appearance>
 				</Shape>
 			</Transform>
-			«FOR separator : separators»
-			«val pos = separator.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode»
-			<Transform translation='«pos.getProperty("x") +" "+ pos.getProperty("y") +" "+ pos.getProperty("z")»'>
+			«FOR record : separators»
+			«val separator = record.get("ps").asNode»
+			«val pos = record.get("p").asNode»
+			<Transform translation='«pos.get("x").asDouble +" "+ pos.get("y").asDouble +" "+ pos.get("z").asDouble»'>
 				<Shape>
-				«IF separator.hasLabel(Labels.Cylinder)»
-					<Cylinder radius='«separator.getProperty("radius")»' height='«config.panelSeparatorHeight»'></Cylinder>
+				«IF separator.hasLabel(Labels.Cylinder.name)»
+					<Cylinder radius='«separator.get("radius").asDouble»' height='«config.panelSeparatorHeight»'></Cylinder>
 				«ELSE»
-					<Box size='«separator.getProperty("width") +" "+ config.panelSeparatorHeight + " "+ separator.getProperty("length")»'></Box>
+					<Box size='«separator.get("width").asDouble +" "+ config.panelSeparatorHeight + " "+ separator.get("length").asDouble»'></Box>
 				«ENDIF»
 					<Appearance>
 						<Material diffuseColor='«config.getCityColorAsPercentage("black")»'></Material>
@@ -180,16 +153,15 @@ class City2X3D {
 		return result
 	}
 	
-	def private toFloor(Node floor) {
-		val entity = floor.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-		val position = floor.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode
+	def private toFloor(Node floor, Node entity) {
+		val position = connector.getPosition(floor.id)
 		val result = '''
-		<Group DEF='«entity.getProperty("hash")»'>
-			<Transform translation='«position.getProperty("x") +" "+ position.getProperty("y") +" "+ position.getProperty("z")»'>
+		<Group DEF='«entity.get("hash").asString»'>
+			<Transform translation='«position.get("x").asDouble +" "+ position.get("y").asDouble +" "+ position.get("z").asDouble»'>
 				<Shape>
-					<Box size='«floor.getProperty("width") +" "+ floor.getProperty("height") +" "+ floor.getProperty("length")»'></Box>
+					<Box size='«floor.get("width").asDouble +" "+ floor.get("height").asDouble +" "+ floor.get("length").asDouble»'></Box>
 					<Appearance>
-						<Material diffuseColor='«floor.getProperty("color")»'></Material>
+						<Material diffuseColor='«floor.get("color").asString»'></Material>
 					</Appearance>
 				</Shape>
 			</Transform>
@@ -198,16 +170,15 @@ class City2X3D {
 		return result
 	}
 	
-	def private toChimney(Node chimney) {
-		val entity = chimney.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-		val position = chimney.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode
+	def private toChimney(Node chimney, Node entity) {
+		val position = connector.getPosition(chimney.id)
 		val result = '''
-		<Group DEF='«entity.getProperty("hash")»'>
-			<Transform translation='«position.getProperty("x") +" "+ position.getProperty("y") +" "+ position.getProperty("z")»'>
+		<Group DEF='«entity.get("hash").asString»'>
+			<Transform translation='«position.get("x").asDouble +" "+ position.get("y").asDouble +" "+ position.get("z").asDouble»'>
 				<Shape>
-					<Cylinder height='«chimney.getProperty("height")»' radius='«chimney.getProperty("width")»'></Cylinder>
+					<Cylinder height='«chimney.get("height").asDouble»' radius='«chimney.get("width").asDouble»'></Cylinder>
 					<Appearance>
-						<Material diffuseColor='«chimney.getProperty("color")»'></Material>
+						<Material diffuseColor='«chimney.get("color").asString»'></Material>
 					</Appearance>
 				</Shape>
 			</Transform>

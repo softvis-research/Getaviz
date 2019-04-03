@@ -12,6 +12,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration.OutputFormat;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class GeneratorServlet extends HttpServlet {
 	private static final long serialVersionUID = -5343549433924172589L;
 	private static Log log = LogFactory.getLog(GeneratorServlet.class);
@@ -22,6 +25,7 @@ public class GeneratorServlet extends HttpServlet {
 		Generator.run();
 		writeResponse(response, config);
 	}
+
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.info("POST request generator");
@@ -42,6 +46,5 @@ public class GeneratorServlet extends HttpServlet {
 		boolean aframe = config.getOutputFormat() == OutputFormat.AFrame;
 		response.setHeader("Location", url + "?aframe=" + Boolean.toString(aframe) + "&model=" + name
 				+ "&setup=web_a-frame/default" + "&srcDir=data-gen");
-
 	}
 }

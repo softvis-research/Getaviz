@@ -1,199 +1,174 @@
 package org.getaviz.generator.rd.s2m
 
-import org.getaviz.generator.database.Database
 import org.getaviz.generator.SettingsConfiguration
 import org.getaviz.generator.database.Labels
 import java.util.GregorianCalendar
-import org.neo4j.graphdb.Node
-import org.getaviz.generator.database.Rels
-import org.neo4j.graphdb.Direction
 import org.getaviz.generator.SettingsConfiguration.OutputFormat
 import org.apache.commons.logging.LogFactory
+import org.getaviz.generator.database.DatabaseConnector
+import org.neo4j.driver.v1.types.Node
 
 class JQA2RD {
 	val config = SettingsConfiguration.getInstance
-	var graph = Database::getInstance(config.databaseName)
+	val connector = DatabaseConnector.instance
 	val log = LogFactory::getLog(class)
-	
-	new () {
+
+	new() {
 		log.info("JQA2RD started")
-		var tx = graph.beginTx
-		try {
-			graph.execute("MATCH (n:RD) DETACH DELETE n")
-			val result = graph.execute("MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN n")
-			val root = graph.createNode(Labels.Model, Labels.RD)
-			root.setProperty("date", new GregorianCalendar().time.toString)
-			val configuration = graph.createNode(Labels.RD, Labels.Configuration)
-			configuration.setProperty("method_type_mode", config.methodTypeMode)
-			configuration.setProperty("method_disks", config.methodDisks)
-			configuration.setProperty("data_disks", config.dataDisks)
-			root.createRelationshipTo(configuration, Rels.USED)
-			val rootNamespaces = result.map[return get("n") as Node]
-			rootNamespaces.forEach [
-				root.createRelationshipTo(namespaceToDisk, Rels.CONTAINS)
-			]
-			tx.success
-		} finally {
-			tx.close
-		}
+		connector.executeWrite("MATCH (n:RD) DETACH DELETE n")
+		val model = connector.addNode(
+			String.format(
+				"CREATE (m:Model:RD {date: \'%s\'})-[:USED]->(c:Configuration:RD {method_type_mode: \'%s\', method_disks: \'%s\', data_disks:\'%s\'})",
+				new GregorianCalendar().time.toString, config.methodTypeMode, config.methodDisks, config.dataDisks),
+			"m").id
+		connector.executeRead("MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN n").
+		forEach [namespaceToDisk(get("n").asNode.id, model)]
 		log.info("JQA2RD finished")
 	}
 
-	def private Node namespaceToDisk(Node namespace) {
-		val disk = graph.createNode(Labels.RD, Labels.Disk)
-		disk.createRelationshipTo(namespace, Rels.VISUALIZES)
-		disk.setProperty("ringWidth", config.RDRingWidth)
-		disk.setProperty("height", config.RDHeight)
-		disk.setProperty("transparency", config.RDNamespaceTransparency)
-		val subElements = namespace.getRelationships(Rels.CONTAINS, Direction.OUTGOING).map[return endNode]
-		val structures = subElements.filter[hasProperty("hash") && !hasLabel(Labels.Inner) && (hasLabel(Labels.Annotation) || hasLabel(Labels.Class) || hasLabel(Labels.Interface) || hasLabel(Labels.Enum))]
-		val subPackages = subElements.filter[hasProperty("hash") && hasLabel(Labels.Package)]
-		structures.forEach[disk.createRelationshipTo(structureToDisk, Rels.CONTAINS)]
-		subPackages.forEach[disk.createRelationshipTo(namespaceToDisk, Rels.CONTAINS)]
-		return disk
+	def private void namespaceToDisk(Long namespace, Long parent) {
+		val properties = String.format("ringWidth: %f, height: %f, transparency: %f", config.RDRingWidth,
+			config.RDHeight, config.RDNamespaceTransparency)
+		val disk = connector.addNode(cypherCreateNode(parent, namespace, Labels.Disk.name, properties), "n").id
+		connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type) WHERE ID(n) = " + namespace +
+			" AND EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) AND NOT t:Inner RETURN t").
+			forEach[structureToDisk(get("t").asNode, disk)]
+		connector.executeRead("MATCH (n)-[:CONTAINS]->(p:Package) WHERE ID(n) = " + namespace +
+			" AND EXISTS(p.hash) RETURN p").
+			forEach[namespaceToDisk(get("p").asNode.id, disk)]
 	}
 
-	def private Node structureToDisk(Node structure) {
-		val disk = graph.createNode(Labels.RD, Labels.Disk)
-		disk.createRelationshipTo(structure, Rels.VISUALIZES)
-		disk.setProperty("ringWidth", config.RDRingWidth)
-		disk.setProperty("height", config.RDHeight)
-		disk.setProperty("transparency", config.RDClassTransparency)
+	def private void structureToDisk(Node structure, Long parent) {
+		var color = config.RDClassColorAsPercentage
 		if (config.outputFormat == OutputFormat::AFrame) {
-			disk.setProperty("color", config.RDClassColorHex)
-		} else {
-			disk.setProperty("color", config.RDClassColorAsPercentage)
+			color = config.RDClassColorHex
 		}
-		val subElements = structure.getRelationships(Rels.DECLARES, Direction.OUTGOING).map[return endNode as Node]
-		val methods = subElements.filter [hasProperty("hash") && hasLabel(Labels.Method)]
-		val attributes = subElements.filter[hasProperty("hash") && !structure.hasLabel(Labels.Enum) && hasLabel(Labels.Field)]
-		val enumValues = subElements.filter[hasProperty("hash") && structure.hasLabel(Labels.Enum) && hasLabel(Labels.Field)]
+		val properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", config.RDRingWidth,
+			config.RDHeight, config.RDClassTransparency, color)
+		val disk = connector.addNode(cypherCreateNode(parent, structure.id, Labels.Disk.name, properties), "n").id
+		val methods = connector.executeRead("MATCH (n)-[:DECLARES]->(m:Method) WHERE ID(n) = " + structure.id +
+			" AND EXISTS(m.hash) RETURN m")
+		val fields = connector.executeRead("MATCH (n)-[:DECLARES]->(f:Field) WHERE ID(n) = " + structure.id +
+			" AND EXISTS(f.hash) RETURN f")
 
 		if (config.methodTypeMode) {
 			methods.forEach [
-				if (hasLabel(Labels.Constructor)) {
-					disk.createRelationshipTo(methodToDiskSegment, Rels.CONTAINS)
+				val method = get("m").asNode
+				if (method.hasLabel(Labels.Constructor.name)) {
+					methodToDiskSegment(method, disk)
 				} else {
-					disk.createRelationshipTo(methodToDisk, Rels.CONTAINS)
+					methodToDisk(method.id, disk)
 				}
 			]
-			attributes.forEach[disk.createRelationshipTo(attributeToDisk, Rels.CONTAINS)]
-			enumValues.forEach[disk.createRelationshipTo(enumValueToDisk, Rels.CONTAINS)]
+			fields.forEach [
+				if (structure.hasLabel(Labels.Enum.name)) {
+					enumValueToDisk(get("f").asNode.id, disk)
+				} else {
+					attributeToDisk(get("f").asNode.id, disk)
+				}
+			]
 		} else {
 			if (config.dataDisks) {
-				attributes.forEach[disk.createRelationshipTo(attributeToDisk, Rels.CONTAINS)]
-				enumValues.forEach[disk.createRelationshipTo(enumValueToDisk, Rels.CONTAINS)]
+				fields.forEach [
+					if (structure.hasLabel(Labels.Enum.name)) {
+						enumValueToDisk(get("f").asNode.id, disk)
+					} else {
+						attributeToDisk(get("f").asNode.id, disk)
+					}
+				]
 			} else {
-				attributes.forEach[disk.createRelationshipTo(attributeToDiskSegment, Rels.CONTAINS)]
-				enumValues.forEach[disk.createRelationshipTo(enumValueToDiskSegment, Rels.CONTAINS)]
+				fields.forEach [
+					if (structure.hasLabel(Labels.Enum.name)) {
+						enumValueToDiskSegment(get("f").asNode.id, disk)
+					} else {
+						attributeToDiskSegment(get("f").asNode.id, disk)
+					}
+				]
 			}
 			if (config.methodDisks) {
-				methods.forEach[disk.createRelationshipTo(methodToDisk, Rels.CONTAINS)]
+				methods.forEach[methodToDisk(get("m").asNode.id, disk)]
 			} else {
-				methods.forEach[disk.createRelationshipTo(methodToDiskSegment, Rels.CONTAINS)]
+				methods.forEach[methodToDiskSegment(get("m").asNode, disk)]
 			}
 		}
-		val subStructures = subElements.filter[hasProperty("hash") && (hasLabel(Labels.Class) || hasLabel(Labels.Interface) || hasLabel(Labels.Enum) || hasLabel(Labels.Annotation))]
-		subStructures.forEach [disk.createRelationshipTo(structureToDisk, Rels.CONTAINS)]
-		return disk
+		connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type) WHERE ID(n) = " + structure.id +
+			" AND EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) RETURN t").
+			forEach[structureToDisk(get("t").asNode, disk)]
 	}
 
-	def private methodToDisk(Node method) {
-		val disk = graph.createNode(Labels.RD, Labels.Disk)
-		disk.createRelationshipTo(method, Rels.VISUALIZES)
-		disk.setProperty("ringWidth", config.RDRingWidth)
-		disk.setProperty("height", config.RDHeight)
-		disk.setProperty("transparency", config.RDMethodTransparency)
+	def private void methodToDisk(Long method, Long parent) {
 		var color = 153 / 255.0 + " " + 0 / 255.0 + " " + 0 / 255.0
 		if (config.outputFormat == OutputFormat::AFrame) {
 			color = config.RDMethodColorHex
 		}
-		disk.setProperty("color", color)
-		return disk
+		val properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", config.RDRingWidth,
+			config.RDHeight, config.RDMethodTransparency, color)
+		connector.executeWrite(cypherCreateNode(parent, method, Labels.Disk.name, properties))
 	}
 
-	def private methodToDiskSegment(Node method) {
-		val diskSegment = graph.createNode(Labels.RD, Labels.DiskSegment)
-		diskSegment.createRelationshipTo(method, Rels.VISUALIZES)
+	def private void methodToDiskSegment(Node method, Long parent) {
 		var frequency = 0.0
 		var luminance = 0.0
 		var height = config.RDHeight
+		var color = config.RDMethodColorAsPercentage
 		if (config.outputFormat == OutputFormat::AFrame) {
-			diskSegment.setProperty("color", config.RDMethodColorHex)
-		} else {
-			diskSegment.setProperty("color", config.RDMethodColorAsPercentage)
+			color = config.RDMethodColorHex
 		}
-		diskSegment.setProperty("transparency", config.RDMethodTransparency)
-		diskSegment.setProperty("frequency", frequency)
-		diskSegment.setProperty("luminance", luminance)
-		diskSegment.setProperty("height", height)
-		var numberOfStatements = 0
-		if (method.hasProperty("effectiveLineCount")) {
-			numberOfStatements = method.getProperty("effectiveLineCount") as Integer
-		}
+		var numberOfStatements = method.get("effectiveLineCount").asInt(0)
+		var size = numberOfStatements.doubleValue
 		if (numberOfStatements <= config.RDMinArea) {
-			diskSegment.setProperty("size", config.RDMinArea)
-		} else {
-			diskSegment.setProperty("size", numberOfStatements.doubleValue)
+			size = config.RDMinArea
 		}
-		return diskSegment
+		val properties = String.format(
+			"frequency: %f, luminance: %f, height: %f, transparency: %f, size: %f, color: \'%s\'", frequency, luminance,
+			height, config.RDMethodTransparency, size, color)
+		connector.executeWrite(cypherCreateNode(parent, method.id, Labels.DiskSegment.name, properties))
 	}
 
-	def private attributeToDisk(Node attribute) {
-		val disk = graph.createNode(Labels.RD, Labels.Disk)
-		disk.createRelationshipTo(attribute, Rels.VISUALIZES)
-		disk.setProperty("ringWidth", config.RDRingWidthAD)
-		disk.setProperty("height", config.RDHeight)
-		disk.setProperty("transparency", config.RDDataTransparency)
+	def private void attributeToDisk(Long attribute, Long parent) {
 		var color = 153 / 255.0 + " " + 0 / 255.0 + " " + 0 / 255.0
 		if (config.outputFormat == OutputFormat::AFrame) {
 			color = config.RDDataColorHex
 		}
-		disk.setProperty("color", color)
-		// TODO: getter und setter als disk segment
-		return disk
+		val properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'",
+			config.RDRingWidthAD, config.RDHeight, config.RDDataTransparency, color)
+		connector.executeWrite(cypherCreateNode(parent, attribute, Labels.Disk.name, properties))
 	}
 
-	def private attributeToDiskSegment(Node attribute) {
-		val diskSegment = graph.createNode(Labels.RD, Labels.DiskSegment)
-		diskSegment.createRelationshipTo(attribute, Rels.VISUALIZES)
-		diskSegment.setProperty("size", 1.0)
-		diskSegment.setProperty("height", config.RDHeight)
+	def private void attributeToDiskSegment(Long attribute, Long parent) {
 		var color = config.RDDataColorAsPercentage
 		if (config.outputFormat == OutputFormat::AFrame) {
 			color = config.RDDataColorHex
 		}
-		diskSegment.setProperty("color", color)
-		diskSegment.setProperty("transparency", config.RDDataTransparency)
-		return diskSegment
+		val properties = String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", 1.0, config.RDHeight,
+			config.RDDataTransparency, color)
+		connector.executeWrite(cypherCreateNode(parent, attribute, Labels.DiskSegment.name, properties))
 	}
 
-	def private enumValueToDisk(Node enumValue) {
-		val disk = graph.createNode(Labels.RD, Labels.Disk)
-		disk.createRelationshipTo(enumValue, Rels.VISUALIZES)
-		disk.setProperty("ringWidth", config.RDRingWidthAD)
-		disk.setProperty("height", config.RDHeight)
-		disk.setProperty("transparency", config.RDDataTransparency)
+	def private void enumValueToDisk(Long enumValue, Long parent) {
 		var color = 153 / 255.0 + " " + 0 / 255.0 + " " + 0 / 255.0
 		if (config.outputFormat == OutputFormat::AFrame) {
 			color = config.RDDataColorHex
 		}
-		disk.setProperty("color", color)
-		return disk
+		val properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'",
+			config.RDRingWidthAD, config.RDHeight, config.RDDataTransparency, color)
+		connector.executeWrite(cypherCreateNode(parent, enumValue, Labels.Disk.name, properties))
 	}
 
-	def private enumValueToDiskSegment(Node enumValue) {
-		val diskSegment = graph.createNode(Labels.RD, Labels.DiskSegment)
-		diskSegment.createRelationshipTo(enumValue, Rels.VISUALIZES)
-		diskSegment.setProperty("size", 1.0)
-		diskSegment.setProperty("height", config.RDHeight)
+	def private void enumValueToDiskSegment(Long enumValue, Long parent) {
 		var color = config.RDDataColorAsPercentage
 		if (config.outputFormat == OutputFormat::AFrame) {
 			color = config.RDDataColorHex
 		}
-		diskSegment.setProperty("color", color)
-		diskSegment.setProperty("transparency", config.RDDataTransparency)
-		return diskSegment
+		val properties = String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", 1.0, config.RDHeight,
+			config.RDDataTransparency, color)
+		connector.executeWrite(cypherCreateNode(parent, enumValue, Labels.DiskSegment.name, properties))
+
 	}
-	
+
+	def private cypherCreateNode(Long parent, Long visualizedNode, String label, String properties) {
+		return String.format(
+			"MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->(n:RD:%s {%s})-[:VISUALIZES]->(s)",
+			parent, visualizedNode, label, properties)
+	}
 }

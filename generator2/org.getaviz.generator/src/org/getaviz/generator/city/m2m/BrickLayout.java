@@ -2,24 +2,21 @@ package org.getaviz.generator.city.m2m;
 
 import java.util.List;
 
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Result;
+import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.types.Node;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.city.CityUtils;
-import org.getaviz.generator.database.Labels;
-import org.getaviz.generator.database.Rels;
-import org.getaviz.generator.database.Database;
+import org.getaviz.generator.database.DatabaseConnector;
 
 public class BrickLayout {
 	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
-	private static GraphDatabaseService graph = Database.getInstance();
+	private static DatabaseConnector connector = DatabaseConnector.getInstance();
 
-	public static void brickLayout(Node model) {
-		Result buildings = graph.execute("MATCH (n:City:Model)-[:CONTAINS*]->(m:Building) WHERE ID(n) = " + model.getId() + " RETURN m");
-		while(buildings.hasNext()) {
-			Node building = (Node)buildings.next().get("m");
+	public static void brickLayout(Long model) {
+		StatementResult buildings = connector
+				.executeRead("MATCH (n:City:Model)-[:CONTAINS*]->(b:Building) WHERE ID(n) = " + model + " RETURN b");
+		while (buildings.hasNext()) {
+			Node building = buildings.next().get("b").asNode();
 			separateBuilding(building);
 		}
 	}
@@ -28,7 +25,7 @@ public class BrickLayout {
 	private static void separateBuilding(Node building) {
 		// Don't build up bricks, if this building isn't visualized or isn't positioned
 		// (e.g. is an inner classes)
-		if (building.getSingleRelationship(Rels.HAS, Direction.OUTGOING).getEndNode() == null) {
+		if (!connector.executeRead("MATCH (b)-[:HAS]->(n) WHERE ID(b) = " + building.id() + " RETURN n").hasNext()) {
 			return;
 		}
 
@@ -37,27 +34,27 @@ public class BrickLayout {
 																									// north,east,...
 				bsPosIndex_X, bsPosIndex_Y, bsPosIndex_Z;
 		double b_lowerLeftX, b_upperY, b_lowerLeftZ;
-		sideCapacity = (Integer) building.getProperty("sideCapacity");
+		sideCapacity = building.get("sideCapacity").asInt();
 		List<Node> classElements = null;
 		switch (config.getClassElementsMode()) {
 		case ATTRIBUTES_ONLY:
-			classElements = CityUtils.getData(building);
-			CityUtils.sortBuildingSegments(CityUtils.getData(building));
+			classElements = CityUtils.getData(building.id());
+			CityUtils.sortBuildingSegments(CityUtils.getData(building.id()));
 			break;
 		case METHODS_ONLY:
-			classElements = CityUtils.getMethods(building);
-			CityUtils.sortBuildingSegments(CityUtils.getMethods(building));
+			classElements = CityUtils.getMethods(building.id());
+			CityUtils.sortBuildingSegments(CityUtils.getMethods(building.id()));
 			break;
 		default:
-			classElements = CityUtils.getChildren(building);
+			classElements = CityUtils.getChildren(building.id());
 			break;
 		}
 		CityUtils.sortBuildingSegments(classElements);
 		// coordinates of edges of building
-		Node position = building.getSingleRelationship(Rels.HAS, Direction.OUTGOING).getEndNode();
-		b_lowerLeftX = (Double)position.getProperty("x") - (Double)building.getProperty("width") / 2;
-		b_lowerLeftZ = (Double)position.getProperty("z") - (Double)building.getProperty("length") / 2;
-		b_upperY = (Double)position.getProperty("y") + (Double)building.getProperty("height") / 2;
+		Node position = connector.getPosition(building.id());
+		b_lowerLeftX = position.get("x").asDouble() - building.get("width").asDouble() / 2;
+		b_lowerLeftZ = position.get("z").asDouble() - building.get("length").asDouble() / 2;
+		b_upperY = position.get("y").asDouble() + building.get("height").asDouble() / 2;
 		// System.out.println("");
 		// set positions for all methods in current class
 		for (int i = 0; i < classElements.size(); ++i) {
@@ -95,17 +92,18 @@ public class BrickLayout {
 			bsPosIndex_Y = i / layerCapacity;
 
 			// setting position for brick
-			Node pos = graph.createNode(Labels.Position, Labels.City, Labels.Dummy);
-			classElements.get(i).createRelationshipTo(pos, Rels.HAS);
-			pos.setProperty("x", b_lowerLeftX + config.getBrickHorizontalMargin()
+			double x = b_lowerLeftX + config.getBrickHorizontalMargin()
 					+ (config.getBrickHorizontalGap() + config.getBrickSize()) * bsPosIndex_X
-					+ config.getBrickSize() * 0.5);
-			pos.setProperty("y", b_upperY + config.getBrickVerticalMargin()
+					+ config.getBrickSize() * 0.5;
+			double y = b_upperY + config.getBrickVerticalMargin()
 					+ (config.getBrickVerticalGap() + config.getBrickSize()) * bsPosIndex_Y
-					+ config.getBrickSize() * 0.5);
-			pos.setProperty("z", b_lowerLeftZ + config.getBrickHorizontalMargin()
-			+ (config.getBrickHorizontalGap() + config.getBrickSize()) * bsPosIndex_Z
-			+ config.getBrickSize() * 0.5);
+					+ config.getBrickSize() * 0.5;
+			double z = b_lowerLeftZ + config.getBrickHorizontalMargin()
+					+ (config.getBrickHorizontalGap() + config.getBrickSize()) * bsPosIndex_Z
+					+ config.getBrickSize() * 0.5;
+			connector.executeWrite(String.format(
+					"MATCH (n) WHERE ID(n) = %d CREATE (n)-[:HAS]->(p:City:Position {x: %f, y: %f, z: %f})",
+					classElements.get(i).id(), x, y, z));
 		}
 	}
 }

@@ -22,9 +22,12 @@ public class Generator {
 	}
 
 	public static void run() {
+		log.info("Generator startet");
 		// start generation process
 		try {
-			new DatabaseBuilder();
+			if(config.isSkipScan() == false) {
+				new DatabaseBuilder();
+			}
 			switch (config.getMetaphor()) {
 			case CITY: {
 				new JQA2City();
@@ -32,9 +35,9 @@ public class Generator {
 				new City2City();
 				switch (config.getOutputFormat()) {
 				case X3D:
-					new City2X3D();
+					new City2X3D(); break;
 				case AFrame:
-					new City2AFrame();
+					new City2AFrame(); break;
 				}
 				break;
 			}
@@ -58,7 +61,6 @@ public class Generator {
 
 		} catch (Exception e) {
 			log.error(e);
-		} 
-//		Database.getInstance().shutdown();
+		}
 	}
 }

@@ -6,7 +6,6 @@ import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 
 import java.awt.Color;
-
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
@@ -71,6 +70,10 @@ public class SettingsConfiguration {
 		loadConfig("settings.properties");
 	}
 	
+	public boolean isSkipScan() {
+		return config.getBoolean("input.skip_scan", false);
+	}
+	
 	public String getInputFiles() {
 		String[] fileArray = config.getStringArray("input.files");
 		if(fileArray.length == 0) {
@@ -110,10 +113,6 @@ public class SettingsConfiguration {
 
 	public String getRepositoryOwner() {
 		return config.getString("history.repository_owner", "");
-	}
-
-	public String getDatabaseName() {
-		return config.getString("database_name", "/var/lib/jetty/databases/graph.db");
 	}
 
 	public OutputFormat getOutputFormat() {
@@ -236,7 +235,7 @@ public class SettingsConfiguration {
 	}
 
 	public SeparatorModes getPanelSeparatorMode() {
-		String value = config.getString("city.panel_separator_mode", "separator");
+		String value = config.getString("city.panel.separator_mode", "separator");
 		switch (value) {
 		case "none":
 			return SeparatorModes.NONE;

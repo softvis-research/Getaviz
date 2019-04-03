@@ -8,16 +8,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.driver.v1.Record;
+import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.types.Node;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.city.m2m.Rectangle;
 import org.getaviz.generator.database.Labels;
-import org.getaviz.generator.database.Rels;
-import org.getaviz.generator.database.Database;
+import org.getaviz.generator.database.DatabaseConnector;
 
 public class CityLayout {
 	private static boolean DEBUG = false;
@@ -25,33 +22,21 @@ public class CityLayout {
 	private static String info = "[INFOstream] ";
 	public static Rectangle rootRectangle;
 	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
-	private static GraphDatabaseService graph = Database.getInstance();
-	private static Transaction tx;
-	//This is to hold actual values of width (index 0) and length (index 1) of database object before transaction can save them
+	private static DatabaseConnector connector = DatabaseConnector.getInstance();
+	// This is to hold actual values of width (index 0) and length (index 1) of
+	// database object before transaction can save them
 	private static Map<Long, double[]> properties;
 
-	public static void cityLayout(Node model, Map<Long, double[]> testMap) {
+	public static void cityLayout(Long model, Map<Long, double[]> testMap) {
 		properties = testMap;
-		tx = graph.beginTx();
-		try {
 			arrangeChildrenRoot(model);
-			tx.success();
-		} finally {
-			tx.close();
-		}
-
-		tx = graph.beginTx();
-		try {
 			adjustPositions(getChildren(model), 0, 0, 0);
-			tx.success();
-		} finally {
-			tx.close();
-		}
+
 	}
 
 	/* functions for Document */
-	
-	private static void arrangeChildrenRoot(Node model) {
+
+	private static void arrangeChildrenRoot(Long model) {
 		// get maxArea (worst case) for root of KDTree
 		Rectangle docRectangle = calculateMaxAreaRoot(model);
 		CityKDTree ptree = new CityKDTree(docRectangle);
@@ -95,7 +80,7 @@ public class CityLayout {
 
 			// set fitNode as occupied
 			fitNode.setOccupied(true);
-			
+
 			// give Entity it's Position
 			setNewPositionFromNode(el, fitNode);
 
@@ -109,24 +94,24 @@ public class CityLayout {
 		rootRectangle = covrec; // used to adjust viewpoint in x3d
 	}
 
-	private static Rectangle calculateMaxAreaRoot(Node model) {
+	private static Rectangle calculateMaxAreaRoot(Long model) {
 		double sum_width = 0;
 		double sum_length = 0;
 		for (Node child : getChildren(model)) {
-			Node entity = child.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).getEndNode();
+			Node entity = connector.getVisualizedEntity(child.id());
 //			Map<String, Double> properties = null;
-			if (entity.hasLabel(Labels.Package)) {
-				arrangeChildren(child);
+			if (entity.hasLabel(Labels.Package.name())) {
+				arrangeChildren(child.id());
 			}
-			sum_width += properties.get(child.getId())[0] + config.getBuildingHorizontalGap();
-			sum_length += properties.get(child.getId())[1] + config.getBuildingHorizontalGap();
+			sum_width += properties.get(child.id())[0] + config.getBuildingHorizontalGap();
+			sum_length += properties.get(child.id())[1] + config.getBuildingHorizontalGap();
 		}
 		return new Rectangle(0, 0, sum_width, sum_length, 1);
 	}
 
 	/* functions for Entity */
 
-	private static void arrangeChildren(Node entity) {
+	private static void arrangeChildren(Long entity) {
 		// get maxArea (worst case) for root of KDTree
 		Rectangle entityRec = calculateMaxArea(entity);
 		CityKDTree ptree = new CityKDTree(entityRec);
@@ -184,20 +169,20 @@ public class CityLayout {
 				+ (config.getBuildingHorizontalMargin() - config.getBuildingHorizontalGap() / 2) * 2;
 		double length = covrec.getBottomRightY()
 				+ (config.getBuildingHorizontalMargin() - config.getBuildingHorizontalGap() / 2) * 2;
-		double[] array = {width,length};
-		properties.put(entity.getId(), array);
+		double[] array = { width, length };
+		properties.put(entity, array);
 	}
 
-	private static Rectangle calculateMaxArea(Node entity) {
+	private static Rectangle calculateMaxArea(Long entity) {
 		double sum_width = 0;
 		double sum_length = 0;
 		for (Node child : getChildren(entity)) {
-			Node element = child.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).getEndNode();
-			if (element.hasLabel(Labels.Package)) {
-				arrangeChildren(child);
+			Node element = connector.getVisualizedEntity(child.id());
+			if (element.hasLabel(Labels.Package.name())) {
+				arrangeChildren(child.id());
 			}
-			sum_width += properties.get(child.getId())[0] + config.getBuildingHorizontalGap();
-			sum_length += properties.get(child.getId())[1] + config.getBuildingHorizontalGap();
+			sum_width += properties.get(child.id())[0] + config.getBuildingHorizontalGap();
+			sum_length += properties.get(child.id())[1] + config.getBuildingHorizontalGap();
 		}
 		return new Rectangle(0, 0, sum_width, sum_length, 1);
 	}
@@ -208,8 +193,8 @@ public class CityLayout {
 		// copy all child-elements into a List<Rectangle> (for easier sort) with links
 		// to former entities
 		for (Node child : children) {
-			double width = properties.get(child.getId())[0];
-			double length = properties.get(child.getId())[1];
+			double width = properties.get(child.id())[0];
+			double length = properties.get(child.id())[1];
 
 			Rectangle rectangle = new Rectangle(0, 0, width + config.getBuildingHorizontalGap(),
 					length + config.getBuildingHorizontalGap(), 1);
@@ -368,18 +353,16 @@ public class CityLayout {
 			return node;
 		}
 	}
+
 	private static void setNewPositionFromNode(Rectangle el, CityKDTreeNode fitNode) {
 		Node node = el.getNodeLink();
 		// mapping 2D rectangle on 3D building
 		double x = fitNode.getRectangle().getCenterX() - config.getBuildingHorizontalGap() / 2;
-		double y = ((Double) (node.getProperty("height")) / 2);
+		double y = node.get("height").asDouble() / 2;
 		double z = fitNode.getRectangle().getCenterY() - config.getBuildingHorizontalGap() / 2;
-		Node position = graph.createNode(Labels.Position, Labels.City);
-		position.setProperty("name", "position");
-		position.setProperty("x", x);
-		position.setProperty("y", y);
-		position.setProperty("z", z);
-		node.createRelationshipTo(position, Rels.HAS);
+		connector.executeWrite(String.format(
+				"MATCH (n) WHERE ID(n) = %d CREATE (n)-[:HAS]->(p:Position:City {name: \'position\', x: %f, y: %f, z: %f})",
+				node.id(), x, y, z));
 	}
 
 	private static void updateCovrec(CityKDTreeNode fitNode, Rectangle covrec) {
@@ -397,48 +380,40 @@ public class CityLayout {
 		}
 	}
 
-	private static void adjustPositions(List<Node> children, double parentX, double parentY,
-			double parentZ) {
+	private static void adjustPositions(List<Node> children, double parentX, double parentY, double parentZ) {
 		for (Node child : children) {
-			Node entity = child.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).getEndNode();
-			Node position = null;
-			Iterable<Relationship> tmp = child.getRelationships(Rels.HAS, Direction.OUTGOING);
-			for (Relationship element : tmp) {
-				Node node = element.getEndNode();
-				if (node.hasLabel(Labels.Position)) {
-					position = node;
-				}
-			}
-			double centerX = (Double) (position.getProperty("x"));
-			double centerZ = (Double) (position.getProperty("z"));
-			double centerY = (Double) (position.getProperty("y"));
+			Record record = connector.executeRead(
+					"MATCH (p:Position)<-[:HAS]-(n)-[:VISUALIZES]->(e) WHERE ID(n) = " + child.id() + " RETURN e, p")
+					.single();
+			Node entity = record.get("e").asNode();
+			Node position = record.get("p").asNode();
+			double centerX = position.get("x").asDouble();
+			double centerZ = position.get("z").asDouble();
+			double centerY = position.get("y").asDouble();
 			double setX = centerX + parentX + config.getBuildingHorizontalMargin();
 			double setZ = centerZ + parentZ + config.getBuildingHorizontalMargin();
 			double setY = centerY + parentY + config.getBuildingVerticalMargin();
-			double width = properties.get(child.getId())[0];
-			double length = properties.get(child.getId())[1];
-			child.setProperty("width", width);
-			child.setProperty("length", length);
-			position.setProperty("x", setX);
-			position.setProperty("y", setY);
-			position.setProperty("z", setZ);
-			double height = (Double) (child.getProperty("height"));
-			if (entity.hasLabel(Labels.Package)) {
+			double width = properties.get(child.id())[0];
+			double length = properties.get(child.id())[1];
+			connector.executeWrite(String.format(
+					"MATCH (c),(p) WHERE ID(c) = %d AND ID(p) = %d SET c.width = %f, c.length = %f, p.x = %f, p.y = %f, p.z = %f",
+					child.id(), position.id(), width, length, setX, setY, setZ));
+			double height = child.get("height").asDouble();
+			if (entity.hasLabel(Labels.Package.name())) {
 				double newUpperLeftX = setX - width / 2;
 				double newUpperLeftZ = setZ - length / 2;
 				double newUpperLeftY = setY - height / 2;
-				adjustPositions(getChildren(child), newUpperLeftX, newUpperLeftY, newUpperLeftZ);
+				adjustPositions(getChildren(child.id()), newUpperLeftX, newUpperLeftY, newUpperLeftZ);
 			}
 		}
 	}
 
-	private static List<Node> getChildren(Node entity) {
+	private static List<Node> getChildren(Long entity) {
 		List<Node> children = new ArrayList<Node>();
-		for(Relationship relationship : entity.getRelationships(Rels.CONTAINS, Direction.OUTGOING)) {
-			Node child = relationship.getEndNode();
-			if(child.hasLabel(Labels.District) || child.hasLabel(Labels.Building)) {
-				children.add(child);
-			}	
+		StatementResult childs = connector.executeRead(
+				"MATCH (n)-[:CONTAINS]->(c) WHERE (c:District OR c:Building) AND ID(n) = " + entity + " RETURN c");
+		while (childs.hasNext()) {
+			children.add(childs.next().get("c").asNode());
 		}
 		return children;
 	}

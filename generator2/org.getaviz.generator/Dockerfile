@@ -10,8 +10,8 @@ RUN mvn package
 FROM jetty:9.4.12-jre8
 COPY --from=MAVEN_TOOL_CHAIN /tmp/generator2/target/org.getaviz.generator*.war /var/lib/jetty/webapps/root.war
 COPY --from=MAVEN_TOOL_CHAIN /opt/jqassistant-commandline-neo4jv3-1.6.0/ /opt/jqassistant/
-RUN mkdir -p /var/lib/jetty/data-gen/ && mkdir -p /var/lib/jetty/logs/ && mkdir -p /var/lib/jetty/databases/ && mkdir -p /var/lib/jetty/databases/logs && chmod -v 777 -R /var/lib/jetty/data-gen/
+RUN mkdir -p /var/lib/jetty/data-gen/ && mkdir -p /var/lib/jetty/logs/ && mkdir -p /var/lib/jetty/output/
 EXPOSE 8080
-VOLUME ["/var/lib/jetty/webapps/", "/opt/config/", "/var/lib/jetty/databases/", "/var/lib/jetty/data-gen/"]
+VOLUME ["/var/lib/jetty/webapps/", "/opt/config/", "/var/lib/jetty/output/", "/var/lib/jetty/data-gen/"]
 LABEL maintainer="david.baum@uni-leipzig.de" \
  version="1.0"

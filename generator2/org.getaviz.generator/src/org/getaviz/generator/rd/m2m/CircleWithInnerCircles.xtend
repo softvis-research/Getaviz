@@ -2,45 +2,36 @@ package org.getaviz.generator.rd.m2m;
 
 import java.util.ArrayList
 import org.eclipse.xtend.lib.annotations.Accessors
-import org.neo4j.graphdb.Node
-import org.getaviz.generator.database.Rels
-import org.neo4j.graphdb.Direction
-import org.getaviz.generator.database.Labels
 import org.getaviz.generator.rd.RDUtils
-import org.getaviz.generator.database.Database
 import org.apache.commons.logging.LogFactory
+import org.neo4j.driver.v1.types.Node
+import org.getaviz.generator.database.DatabaseConnector
 
 class CircleWithInnerCircles extends Circle {
 	@Accessors int level
 	@Accessors val innerCircles = new ArrayList<CircleWithInnerCircles>
 	val log = LogFactory::getLog(class)
 	var Node diskNode
-	val graph = Database::instance
+	val connector = DatabaseConnector::instance
 
 	new(Node disk, Boolean nesting) {
 		diskNode = disk
-		val data = RDUtils.getData(disk)
-		val methods = RDUtils.getMethods(disk)
+		val data = RDUtils.getData(disk.id).toIterable
+		val methods = RDUtils.getMethods(disk.id).toIterable
 		if (nesting == true) {
 			minArea = RDUtils.sum(methods) + RDUtils.sum(data)
 		} else {
-			minArea = disk.getProperty("netArea") as Double
-			level = RDUtils.getLevel(graph, disk)
+			minArea = disk.get("netArea").asDouble
+			level = RDUtils.getLevel(disk.id)
 		}
-		ringWidth = disk.getProperty("ringWidth") as Double
-		serial = disk.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.id.toString
-		netArea = disk.getProperty("netArea") as Double
+		ringWidth = disk.get("ringWidth").asDouble
+		serial = connector.getVisualizedEntity(disk.id).id.toString
+		netArea = disk.get("netArea").asDouble
 		log.debug("set netArea to " + netArea + "for disk " + diskNode.id)
-		radius = disk.getProperty("radius", 0.0) as Double
-
-		if (disk.hasProperty("grossArea")) {
-			grossArea = disk.getProperty("grossArea") as Double
-		} else {
-			grossArea = 0.0
-		}
-		val subDisks = RDUtils.getSubDisks(disk)
-		subDisks.forEach [
-			innerCircles.add(new CircleWithInnerCircles(it, true))
+		radius = disk.get("radius").asDouble(0.0)
+		grossArea = disk.get("grossArea").asDouble(0.0)
+		RDUtils.getSubDisks(disk.id).forEach [
+			innerCircles.add(new CircleWithInnerCircles(get("d").asNode, true))
 		]
 	}
 
@@ -49,22 +40,21 @@ class CircleWithInnerCircles extends Circle {
 	 * 
 	 */
 	def void updateDiskNode() {
-		diskNode.setProperty("radius", radius)
-		diskNode.setProperty("netArea", netArea)
-		diskNode.setProperty("grossArea", grossArea)
-		log.debug("set netArea to " + netArea + "for disk " + diskNode.id)
-		val position = diskNode.getSingleRelationship(Rels.HAS, Direction.OUTGOING)
-		val newPosition = graph.createNode(Labels.Position, Labels.RD)
-		var oldZPosition = 0.0
-		if (position !== null) {
-			oldZPosition = position.endNode.getProperty("z") as Double
-		} else {
-			diskNode.createRelationshipTo(newPosition, Rels.HAS)
-		}
-		newPosition.setProperty("x", centre.x)
-		newPosition.setProperty("y", centre.y)
-		newPosition.setProperty("z", oldZPosition)
+		val updateNode = String.format(
+			"MATCH (n) WHERE ID(n) = %d SET n.radius = %f, n.netArea = %f, n.grossArea = %f ", diskNode.id, radius,
+			netArea, grossArea)
 
+		log.debug("set netArea to " + netArea + "for disk " + diskNode.id)
+		val position = connector.executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + diskNode.id +
+			" RETURN p")
+		var oldZPosition = 0.0
+		if (!position.nullOrEmpty) {
+			val node = position.single().get("p").asNode();
+			oldZPosition = node.get("z").asDouble
+		}
+		val createPosition = String.format("CREATE (n)-[:HAS]->(:RD:Position {x: %f, y: %f, z: %f})", centre.x,
+			centre.y, oldZPosition)
+		connector.executeWrite(updateNode + createPosition)
 		innerCircles.forEach[updateDiskNode]
 	}
 }

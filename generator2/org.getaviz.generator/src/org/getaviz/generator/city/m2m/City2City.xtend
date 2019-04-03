@@ -1,16 +1,10 @@
 package org.getaviz.generator.city.m2m
 
-import org.neo4j.graphdb.GraphDatabaseService
 import org.getaviz.generator.SettingsConfiguration
-import org.getaviz.generator.database.Database
 import org.getaviz.generator.database.Labels
 import org.getaviz.generator.SettingsConfiguration.BuildingType
-import org.neo4j.graphdb.Node
 import org.getaviz.generator.city.CityUtils
-import org.getaviz.generator.database.Rels
-import org.neo4j.graphdb.Direction
 import org.getaviz.generator.SettingsConfiguration.ClassElementsModes
-import org.neo4j.graphdb.Path
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric
 import org.getaviz.generator.SettingsConfiguration.OutputFormat
 import java.util.HashMap
@@ -18,129 +12,108 @@ import java.util.List
 import java.util.ArrayList
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes
 import org.apache.commons.logging.LogFactory
+import org.getaviz.generator.database.DatabaseConnector
+import org.neo4j.driver.v1.types.Node
+import org.neo4j.driver.v1.types.Path
 
 class City2City {
-	var GraphDatabaseService graph
 	val config = SettingsConfiguration.instance
 	val log = LogFactory::getLog(class)
 	var RGBColor[] PCKG_colors
 	var RGBColor[] NOS_colors
 	var properties = new HashMap<Long, double[]>
 	var Node model
-		
-	new () {
-		log.info("City2City started")
-		graph = Database::getInstance(config.databaseName)
-			var tx = graph.beginTx
-			try {
-				model = graph.findNode(Labels.Model, "building_type", config.buildingTypeAsString)
-				if (config.buildingType == BuildingType::CITY_BRICKS ||
-					config.buildingType == BuildingType::CITY_PANELS) {
-					val buildingSegments = graph.execute(
-						"MATCH (n:Model:City)-[:CONTAINS*]->(m:BuildingSegment) RETURN m").map[return get("m") as Node]
-					buildingSegments.forEach[setBuildingSegmentAttributes]
-				}
+	val connector = DatabaseConnector::instance
 
-				val result = graph.execute(
-						"MATCH p=(n:District)-[:CONTAINS*]->(m:District) WHERE NOT (m)-[:CONTAINS]->(:District) RETURN length(p) AS length ORDER BY length(p) DESC LIMIT 1")
-				val packageMaxLevel = (result.head.get("length") as Long).intValue + 1
-					PCKG_colors = createColorGradiant(new RGBColor(config.packageColorStart),
-				new RGBColor(config.packageColorEnd), packageMaxLevel)
-				
-				if (config.originalBuildingMetric == BuildingMetric::NOS) {
-					val result2 = graph.execute("MATCH (n:Building) RETURN max(n.numberOfStatements) AS nos")
-					val NOS_max = result2.head.get("nos") as Integer
-					NOS_colors = createColorGradiant(new RGBColor(config.classColorStart),
-					new RGBColor(config.classColorEnd), NOS_max + 1)
-				}			
-				
-				val districtPaths = graph.execute("MATCH p=(n:Model:City)-[:CONTAINS*]->(m:District) RETURN p").map[return get("p") as Path]
-				val buildingNodes = graph.execute("MATCH (n:Model:City)-[:CONTAINS*]->(m:Building) RETURN m").map[return get("m") as Node]
-				districtPaths.forEach[setDistrictAttributes]
-				buildingNodes.forEach[setBuildingAttributes]	
-				tx.success
-			} finally {
-				tx.close
-			}
-			
-			tx = graph.beginTx
-			try {
-				val districtPaths = graph.execute("MATCH (n:Model:City)-[:CONTAINS*]->(m:District) RETURN m").map[return get("m") as Node]
-				val buildingNodes = graph.execute("MATCH (n:Model:City)-[:CONTAINS*]->(m:Building) RETURN m").map[return get("m") as Node]
-				districtPaths.forEach[
-					var width = 0.0
-					var length = 0.0
-					if(hasProperty("width")) {
-						width = getProperty("width") as Double
-					}
-					if(hasProperty("length")) {
-						length = getProperty("length") as Double
-					}					
-					val double[] array = #[width, length]
-					properties.put(id, array)
+	new() {
+		log.info("City2City started")
+		model = connector.executeRead("MATCH (n:Model {building_type: \'" + config.buildingTypeAsString +
+			"\'}) RETURN n").next.get("n").asNode
+		if (config.buildingType == BuildingType::CITY_BRICKS || config.buildingType == BuildingType::CITY_PANELS) {
+			connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(m:BuildingSegment) RETURN m").forEach [
+				setBuildingSegmentAttributes(get("m").asNode.id)
+			]
+		}
+		val packageMaxLevel = connector.executeRead("MATCH p=(n:District)-[:CONTAINS*]->(m:District) 
+							   WHERE NOT (m)-[:CONTAINS]->(:District) RETURN length(p) AS length ORDER BY length(p) DESC LIMIT 1").
+			single.get("length").asLong.intValue + 1
+		PCKG_colors = createColorGradiant(new RGBColor(config.packageColorStart), new RGBColor(config.packageColorEnd),
+			packageMaxLevel)
+
+		if (config.originalBuildingMetric == BuildingMetric::NOS) {
+			val NOS_max = connector.executeRead("MATCH (n:Building) RETURN max(n.numberOfStatements) AS nos").single.
+				get("nos").asInt
+			NOS_colors = createColorGradiant(new RGBColor(config.classColorStart), new RGBColor(config.classColorEnd),
+				NOS_max + 1)
+		}
+
+		connector.executeRead("MATCH p=(n:Model:City)-[:CONTAINS*]->(m:District) RETURN p").forEach [
+			setDistrictAttributes(get("p").asPath)
+		]
+		connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building) RETURN b").forEach [
+			setBuildingAttributes(get("b").asNode)
+		]
+		connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(d:District) RETURN d").forEach [
+			val node = get("d").asNode
+			var width = node.get("width").asDouble(0.0)
+			var length = node.get("length").asDouble(0.0)
+			val double[] array = #[width, length]
+			properties.put(node.id, array)
+		]
+		connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building) RETURN b").forEach [
+			val node = get("b").asNode
+			var width = node.get("width").asDouble(0.0)
+			var length = node.get("length").asDouble(0.0)
+			val double[] array = #[width, length]
+			properties.put(node.id, array)
+		]
+
+		CityLayout::cityLayout(model.id, properties)
+
+		switch (config.buildingType) {
+			case CITY_BRICKS:
+				BrickLayout.brickLayout(model.id) // Layout for buildingSegments
+			case CITY_PANELS:
+				connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building) RETURN b").forEach [
+					setBuildingSegmentPositions(get("b").asNode);
 				]
-				buildingNodes.forEach[
-					var width = 0.0
-					var length = 0.0
-					if(hasProperty("width")) {
-						width = getProperty("width") as Double
-					}
-					if(hasProperty("length")) {
-						length = getProperty("length") as Double
-					}					
-					val double[] array = #[width, length]
-					properties.put(id, array)]	
-					tx.success
-			} finally {
-				tx.close
-			}
-			CityLayout::cityLayout(model, properties)
-			tx = graph.beginTx
-			try {
-				val buildingNodes = graph.execute("MATCH (n:Model:City)-[:CONTAINS*]->(m:Building) RETURN m").map[return get("m") as Node]
-				switch (config.buildingType) {
-					case CITY_BRICKS:
-						BrickLayout.brickLayout(model) // Layout for buildingSegments
-					case CITY_PANELS:
-						buildingNodes.forEach[setBuildingSegmentPositions]
-					case CITY_FLOOR: {
-						buildingNodes.forEach[calculateSegments]
-					}
-					default: {
-					} // CityDebugUtils.infoEntities(cityRoot.document.entities, 0, true, true)	
-				}
-				tx.success
-			} finally {
-				tx.close
-			}
-			log.info("City2City finished")
+			case CITY_FLOOR:
+				connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building) RETURN b").forEach [
+					calculateSegments(get("b").asNode);
+				]
+			default: {
+			} // CityDebugUtils.infoEntities(cityRoot.document.entities, 0, true, true)	
+		}
+		log.info("City2City finished")
 	}
 
 	def private void setDistrictAttributes(Path districtPath) {
 		var color = ""
-		val district = districtPath.endNode
-		district.setProperty("height", config.heightMin)
 		if (config.outputFormat == OutputFormat::AFrame) {
 			color = config.packageColorHex
 		} else {
 			color = PCKG_colors.get(districtPath.length - 1).asPercentage
 		}
-		district.setProperty("color", color)
+		connector.executeWrite(
+			String.format("MATCH (n) WHERE ID(n) = %d SET n.height = %f, n.color = \'%s\'", districtPath.end.id,
+				config.heightMin, color))
 	}
-	
-	def private setBuildingAttributes(Node building) {
-		val entity = building.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-		val subElements = entity.getRelationships(Rels.DECLARES, Direction.OUTGOING).map[return endNode as Node]
-		val methodCounter = subElements.filter [hasLabel(Labels.Method)].size
-		val dataCounter = subElements.filter[!entity.hasLabel(Labels.Enum) && hasLabel(Labels.Field)].size
+
+	def private void setBuildingAttributes(Node building) {
+		val methodCounter = connector.executeRead(
+			"MATCH (n)-[:VISUALIZES]->(o)-[:DECLARES]->(m:Method) WHERE ID(n) = " + building.id +
+				" RETURN COUNT(m) AS mCount").single.get("mCount").asInt
+		val dataCounter = connector.executeRead(
+			"MATCH (n)-[:VISUALIZES]->(o)-[:DECLARES]->(f:Field) WHERE ID(n) = " + building.id +
+				" AND NOT o:Enum RETURN COUNT(f) AS fCount").single.get("fCount").asInt
 		switch (config.buildingType) {
 			case CITY_ORIGINAL: setBuildingAttributesOriginal(building, methodCounter, dataCounter)
 			case CITY_PANELS: setBuildingAttributesPanels(building, methodCounter, dataCounter)
 			case CITY_BRICKS: setBuildingAttributesBricks(building, methodCounter, dataCounter)
 			case CITY_FLOOR: setBuildingAttributesFloors(building, methodCounter, dataCounter)
 		}
-	}				
-	
+	}
+
 	def private setBuildingAttributesOriginal(Node building, int methodCounter, int dataCounter) {
 		var width = 0.0
 		var length = 0.0
@@ -159,18 +132,15 @@ class City2City {
 			height = methodCounter
 		}
 		if (config.originalBuildingMetric == BuildingMetric::NOS) {
-			color = NOS_colors.get(building.getProperty("numberOfStatements") as Integer).asPercentage
+			color = NOS_colors.get(building.get("numberOfStatements").asInt(0)).asPercentage
 		} else if (config.outputFormat == OutputFormat::AFrame) {
 			color = config.classColorHex
 		} else {
 			color = new RGBColor(config.classColor).asPercentage
 		}
-		building.setProperty("width", width)
-		building.setProperty("length", length)
-		building.setProperty("height", height)		
-		building.setProperty("color", color)
+		connector.executeWrite(cypherSetBuildingSegmentAttributes(building.id, width, length, height, color))
 	}
-	
+
 	def private setBuildingAttributesPanels(Node building, int methodCounter, int dataCounter) {
 		var height = 0.0
 		var width = 0.0
@@ -199,12 +169,9 @@ class City2City {
 		} else {
 			color = new RGBColor(config.classColor).asPercentage
 		}
-		building.setProperty("height", height)
-		building.setProperty("width", width)
-		building.setProperty("length", length)
-		building.setProperty("color", color)
-	}	
-	
+		connector.executeWrite(cypherSetBuildingSegmentAttributes(building.id, width, length, height, color))
+	}
+
 	def setBuildingAttributesBricks(Node building, int methodCounter, int dataCounter) {
 		var height = 0.0
 		var width = 0.0
@@ -248,12 +215,10 @@ class City2City {
 			config.brickHorizontalGap * (sideCapacity - 1)
 		length = config.brickSize * sideCapacity + config.brickHorizontalMargin * 2 +
 			config.brickHorizontalGap * (sideCapacity - 1)
-		building.setProperty("height", height)
-		building.setProperty("width", width)
-		building.setProperty("length", length)
-		building.setProperty("sideCapacity", sideCapacity)
-		building.setProperty("color", color)
-	}	
+		connector.executeWrite(
+			cypherSetBuildingSegmentAttributes(building.id, width, length, height, color) + ", n.sideCapacity = " +
+				sideCapacity)
+	}
 
 	def void setBuildingAttributesFloors(Node building, int methodCounter, int dataCounter) {
 		var width = 0.0
@@ -277,13 +242,10 @@ class City2City {
 		} else {
 			color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0 // pko 2016
 		}
-		building.setProperty("width", width)
-		building.setProperty("length", length)
-		building.setProperty("height", height)
-		building.setProperty("color", color)
-	}	
-			
-	def private void setBuildingSegmentAttributes(Node segment) {
+		connector.executeWrite(cypherSetBuildingSegmentAttributes(building.id, width, length, height, color))
+	}
+
+	def private void setBuildingSegmentAttributes(Long segment) {
 		switch (config.buildingType) {
 			case CITY_PANELS:
 				setBuildingSegmentAttributesPanels(segment)
@@ -294,28 +256,20 @@ class City2City {
 		}
 	}
 
-	def private setBuildingSegmentAttributesPanels(Node segment) {
-		val relatedEntity = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-		val parent = segment.getSingleRelationship(Rels.CONTAINS, Direction.INCOMING).startNode
-		val childs = parent.getRelationships(Direction.OUTGOING, Rels.CONTAINS).map[return endNode]
-		childs.filter [
-			val entity = getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-			entity.hasLabel(Labels.Field) &&
-				!entity.getSingleRelationship(Rels.DECLARES, Direction.INCOMING).startNode.hasLabel(Labels.Enum)
-		].size
-
+	def private setBuildingSegmentAttributesPanels(Long segment) {
+		val path = connector.executeRead(
+			"MATCH p = (parent)-[:CONTAINS]->(s)-[:VISUALIZES]->(e) WHERE ID(s) = " + segment + " RETURN p").next.get(
+			"p").asPath
+		val relatedEntity = path.end
+		val parent = path.start.id
+		val childs = connector.executeRead(
+			"MATCH (s)-[:CONTAINS]->(child)-[r:VISUALIZES]->(e) WHERE ID(s) = " + parent +
+				" AND (e:Field OR e:Method)" + " AND NOT (e)<-[:DECLARES]-(:Enum) RETURN e").map[get("e").asNode]
 		var int areaUnit = 1
 		if (config.classElementsMode == ClassElementsModes::ATTRIBUTES_ONLY) {
-			areaUnit = childs.filter [
-				val entity = getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-				entity.hasLabel(Labels.Method)
-			].size
+			areaUnit = childs.filter[hasLabel(Labels.Method.name)].size
 		} else {
-			areaUnit = childs.filter [
-				val entity = getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-				entity.hasLabel(Labels.Field) &&
-					!entity.getSingleRelationship(Rels.DECLARES, Direction.INCOMING).startNode.hasLabel(Labels.Enum)
-			].size
+			areaUnit = childs.filter[hasLabel(Labels.Field.name)].size
 		}
 		var width = 0.0
 		var length = 0.0
@@ -327,25 +281,26 @@ class City2City {
 			length = config.widthMin * areaUnit
 		}
 		var index = 0
-		var effectiveLineCount = 0
-		if(relatedEntity.hasProperty("effectiveLineCount")) {
-			effectiveLineCount = (relatedEntity.getProperty("effectiveLineCount") as Long).intValue
-		}
+		val effectiveLineCount = relatedEntity.get("effectiveLineCount").asLong(0).intValue
 		while (index < config.panelHeightTresholdNos.size &&
 			effectiveLineCount >= config.panelHeightTresholdNos.get(index)) {
 			index = index + 1
 		}
-		segment.setProperty("width", width)
-		segment.setProperty("length", length)		
-		segment.setProperty("height", config.panelHeightUnit * (index + 1))
-		CityUtils.setBuildingSegmentColor(segment);
-	}	
+		val height = config.panelHeightUnit * (index + 1)
+		connector.executeWrite(
+			cypherSetBuildingSegmentAttributes(segment, width, length, height,
+				CityUtils.setBuildingSegmentColor(relatedEntity)))
+	}
 
-	def private setBuildingSegmentAttributesBricks(Node segment) {
-		segment.setProperty("width", config.brickSize)
-		segment.setProperty("height", config.brickSize)
-		segment.setProperty("length", config.brickSize)
-		CityUtils.setBuildingSegmentColor(segment);
+	def private setBuildingSegmentAttributesBricks(Long segment) {
+		val path = connector.executeRead(
+			"MATCH p = (parent)-[:CONTAINS]->(s)-[:VISUALIZES]->(e) WHERE ID(s) = " + segment + " RETURN p").next.get(
+			"p").asPath
+		val relatedEntity = path.end
+		connector.executeWrite(
+			cypherSetBuildingSegmentAttributes(segment, config.brickSize, config.brickSize, config.brickSize,
+				CityUtils.setBuildingSegmentColor(relatedEntity)))
+		CityUtils.setBuildingSegmentColor(relatedEntity);
 	}
 
 	def private void setBuildingSegmentPositions(Node building) {
@@ -353,37 +308,35 @@ class City2City {
 		var List<Node> classElements = new ArrayList
 		switch (config.classElementsMode) {
 			case ATTRIBUTES_ONLY:
-				classElements += CityUtils.getData(building)
+				classElements += CityUtils.getData(building.id)
 			case METHODS_AND_ATTRIBUTES: {
-				classElements += CityUtils.getData(building)
-				classElements += CityUtils.getMethods(building)
+				classElements += CityUtils.getData(building.id)
+				classElements += CityUtils.getMethods(building.id)
 			}
 			default:
-				classElements += CityUtils.getMethods(building)
+				classElements += CityUtils.getMethods(building.id)
 		}
 		CityUtils.sortBuildingSegments(classElements)
-
 		// upper bound of the panel below the actual panel inside the loop
-		val position = building.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode
-		var lowerBsPosY = position.getProperty("y") as Double + building.getProperty("height") as Double / 2 + config.panelVerticalMargin
+		val position = connector.getPosition(building.id);
+		var lowerBsPosY = position.get("y").asDouble + building.get("height").asDouble / 2 + config.panelVerticalMargin
 
 		// Correcting the initial gap on top of building depending on SeparatorMode
-		if (config.panelSeparatorMode == SeparatorModes::GAP || config.panelSeparatorMode == SeparatorModes::SEPARATOR)
+		if (config.panelSeparatorMode == SeparatorModes::GAP || config.panelSeparatorMode == SeparatorModes::SEPARATOR) {
 			lowerBsPosY = lowerBsPosY - config.panelVerticalGap
+		}
 		// System.out.println("")
 		// Looping through methods of building
 		for (var i = 0; i < classElements.size(); i++) {
-			val segment = classElements.get(i)
-			val height = segment.getProperty("height") as Double
-			val width = segment.getProperty("width") as Double
+			val segment = classElements.get(i);
+			val height = segment.get("height").asDouble
+			val width = segment.get("width").asDouble
 			// System.out.println(bs.getType() + " " + bs.getValue() + " " + bs.getModifiers() + " " + bs.getNumberOfStatements());
 //			val bsPos = cityFactory.createPosition
-			val pos = graph.createNode(Labels.City, Labels.Position)
-			val x = position.getProperty("x") as Double
+			val x = position.get("x").asDouble
 			var double y
-			val z = position.getProperty("z") as Double
-			pos.setProperty("x", x)
-			pos.setProperty("z", z)
+			val z = position.get("z").asDouble
+			var panelSeparatorCypher = ""
 			switch (config.panelSeparatorMode) {
 				case NONE: { // place segments on top of each other
 					y = lowerBsPosY + height / 2
@@ -395,83 +348,75 @@ class City2City {
 				}
 				case SEPARATOR: { // Placing additional separators
 					y = lowerBsPosY + height / 2
-
 					// Placing a separator on top of the current method if it is not last method
 					if (i < classElements.size() - 1) {
-						val sepPos = graph.createNode(Labels.City, Labels.Position)
 						val sepY = y + height / 2 + config.panelSeparatorHeight / 2
-						sepPos.setProperty("x", x)
-						sepPos.setProperty("y", sepY)
-						sepPos.setProperty("z", z)
-
 						// Deciding which shape the separator has to have
-						val nextElementType = classElements.get(i + 1).getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-						val segmentType = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
-						val panelSeparator = graph.createNode(Labels.City, Labels.PanelSeparator)
-						panelSeparator.createRelationshipTo(sepPos, Rels.HAS)
-						segment.createRelationshipTo(panelSeparator, Rels.HAS)
-						if ((segmentType.hasLabel(Labels.Method) && nextElementType.hasLabel(Labels.Method)) ||
-							!config.showAttributesAsCylinders) {
-							panelSeparator.addLabel(Labels.Box)
-							panelSeparator.setProperty("width", width)
-							panelSeparator.setProperty("length", segment.getProperty("length"))
+						val nextElementType = connector.getVisualizedEntity(classElements.get(i + 1).id)
+						val segmentType = connector.getVisualizedEntity(segment.id)
+						panelSeparatorCypher = String.format(
+							"(psp:City:Position {x: %f, y: %f, z: %f})<-[:HAS]-(ps:City:PanelSeparator", x, sepY, z)
+						if ((segmentType.hasLabel(Labels.Method.name) &&
+							nextElementType.hasLabel(Labels.Method.name)) || !config.showAttributesAsCylinders) {
+							panelSeparatorCypher +=
+								String.format(":Box {width: %f, length: %f})<-[:HAS]-", width,
+									segment.get("length").asDouble)
 						} else {
-							panelSeparator.addLabel(Labels.Cylinder)
-							panelSeparator.setProperty("radius", width / 2)
+							panelSeparatorCypher += String.format(":Cylinder {radius: %f})<-[:HAS]-", width / 2)
 						}
-
-						lowerBsPosY = x + config.panelSeparatorHeight / 2
+						lowerBsPosY = sepY + config.panelSeparatorHeight / 2
 					}
 				}
 			}
-			pos.setProperty("y", y);
-			segment.createRelationshipTo(pos, Rels.HAS)
+			val s = String.format("MATCH(n) WHERE ID(n) = %d CREATE %s(n)-[:HAS]->(p:Position:City {x: %f, y: %f, z: %f})",
+					segment.id, panelSeparatorCypher, x, y, z)
+			connector.executeWrite(s)
 		}
 	}
-	
+
 	def calculateSegments(Node building) {
 		building.calculateFloors
 		building.calculateChimneys
 	}
 
 	def void calculateFloors(Node building) {
-		val position = building.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode
-		val bHeight = building.getProperty("height") as Double
-		val bWidth = building.getProperty("width") as Double
-		val bLength = building.getProperty("length") as Double
-		val bPosX = position.getProperty("x") as Double
-		val bPosY = position.getProperty("y") as Double
-		val bPosZ = position.getProperty("z") as Double
-		val floors = building.getRelationships(Rels.CONTAINS, Direction.OUTGOING).map[return endNode].filter[(hasLabel(Labels.Floor))]
-		val floorNumber = floors.length
+		val position = connector.getPosition(building.id)
+		val bHeight = building.get("height").asDouble
+		val bWidth = building.get("width").asDouble
+		val bLength = building.get("length").asDouble
+		val bPosX = position.get("x").asDouble
+		val bPosY = position.get("y").asDouble
+		val bPosZ = position.get("z").asDouble
+		val floors = connector.executeRead("MATCH (n)-[:CONTAINS]->(f:Floor) WHERE ID(n) = " + building.id +
+			" RETURN f")
+		var floorNumberValue = connector.executeRead("MATCH (n)-[:CONTAINS]->(f:Floor) WHERE ID(n) = " + building.id + " RETURN COUNT(f) as floorNumber").single.get("floorNumber")
+
 		var floorCounter = 0
-		for (floor : floors) {
+		while (floors.hasNext) {
+			val record = floors.next
+			val floor = record.get("f").asNode.id
 			floorCounter++
-			floor.setProperty("height", bHeight / ( floorNumber + 2 ) * 0.80)
-			floor.setProperty("width", bWidth * 1.1)
-			floor.setProperty("length", bLength * 1.1)
 			var color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0
 			if (config.outputFormat == OutputFormat::AFrame) {
 				color = "#1485CC"
 			}
-			floor.setProperty("color", color)
-			val floorPosition = graph.createNode(Labels.City, Labels.Position)
-			floorPosition.setProperty("x", bPosX)
-			floorPosition.setProperty("y", (bPosY - ( bHeight / 2) ) + bHeight / ( floorNumber + 2 ) * floorCounter)
-			floorPosition.setProperty("z", bPosZ)
-			floor.createRelationshipTo(floorPosition, Rels.HAS)
+			var statement = cypherSetBuildingSegmentAttributes(floor, bWidth * 1.1, bLength * 1.1,
+				bHeight / (floorNumberValue.asInt + 2 ) * 0.80, color)
+			statement +=
+				String.format("CREATE (n)-[:HAS]->(p:City:Position {x: %f, y: %f, z: %f})", bPosX,
+					(bPosY - ( bHeight / 2) ) + bHeight / ( floorNumberValue.asInt + 2 ) * floorCounter, bPosZ)
+			connector.executeWrite(statement)
 		}
-	}	
-		
+	}
+
 	def void calculateChimneys(Node building) {
-		val position = building.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode
-		val bHeight = building.getProperty("height") as Double
-		val bWidth = building.getProperty("width") as Double
-		val bPosX = position.getProperty("x") as Double
-		val bPosY = position.getProperty("y") as Double
-		val bPosZ = position.getProperty("z") as Double
-		val chimneys = building.getRelationships(Rels.CONTAINS, Direction.OUTGOING).map[return endNode].filter[(hasLabel(Labels.Chimney))]
-				
+		val position = connector.getPosition(building.id)
+		val bHeight = building.get("height").asDouble
+		val bWidth = building.get("width").asDouble
+		val bPosX = position.get("x").asDouble
+		val bPosY = position.get("y").asDouble
+		val bPosZ = position.get("z").asDouble
+
 		// val chimneyNumber = chimneys.length
 		var courner1 = newArrayList()
 		var courner2 = newArrayList()
@@ -479,61 +424,71 @@ class City2City {
 		var courner4 = newArrayList()
 
 		var chimneyCounter = 0
-		for (chimney : chimneys) {
-			chimney.setProperty("height", 1.0)
-			chimney.setProperty("width", 0.5)
-			chimney.setProperty("length", 0.5)
+		val chimneys = connector.executeRead("MATCH (n)-[:CONTAINS]->(c:Chimney) WHERE ID(n) = " + building.id +
+			" RETURN c")
+		while (chimneys.hasNext) {
+			val chimney = chimneys.next.get("c").asNode.id
 			var color = 255 / 255.0 + " " + 252 / 255.0 + " " + 25 / 255.0
 			if (config.outputFormat == OutputFormat::AFrame) {
 				color = "#FFFC19"
 			}
-			chimney.setProperty("color", color)
-			val chimneyPosition = graph.createNode(Labels.City, Labels.Position)
-			chimney.createRelationshipTo(chimneyPosition, Rels.HAS)
-
+			connector.executeWrite(cypherSetBuildingSegmentAttributes(chimney, 0.5, 0.5, 1.0, color))
 			if (chimneyCounter % 4 == 0) {
-				courner1.add(chimneyPosition)
+				courner1.add(chimney)
 			}
 			if (chimneyCounter % 4 == 1) {
-				courner2.add(chimneyPosition)
+				courner2.add(chimney)
 			}
 			if (chimneyCounter % 4 == 2) {
-				courner3.add(chimneyPosition)
+				courner3.add(chimney)
 			}
 			if (chimneyCounter % 4 == 3) {
-				courner4.add(chimneyPosition)
+				courner4.add(chimney)
 			}
 			chimneyCounter++
+
 		}
 		chimneyCounter = 0
-		for (chimneyPosition : courner1) {
-			chimneyPosition.setProperty("x", (bPosX - ( bWidth / 2) ) + 0.5 + (1 * chimneyCounter))
-			chimneyPosition.setProperty("y", (bPosY + ( bHeight / 2) ) + 0.5)
-			chimneyPosition.setProperty("z", (bPosZ - ( bWidth / 2) ) + 0.5)
+		for (chimney : courner1) {
+			val x = (bPosX - ( bWidth / 2) ) + 0.5 + (1 * chimneyCounter)
+			val y = (bPosY + ( bHeight / 2) ) + 0.5
+			val z = (bPosZ - ( bWidth / 2) ) + 0.5
+			connector.executeWrite(
+				String.format("MATCH (n) WHERE ID(n) = %d CREATE (n)-[:HAS]->(p:City:Position {x: %f, y: %f, z: %f})",
+					chimney, x, y, z))
 			chimneyCounter++
 		}
 		chimneyCounter = 0
-		for (chimneyPosition : courner2) {
-			chimneyPosition.setProperty("x", (bPosX + ( bWidth / 2) ) - 0.5)
-			chimneyPosition.setProperty("y", (bPosY + ( bHeight / 2) ) + 0.5)
-			chimneyPosition.setProperty("z", (bPosZ - ( bWidth / 2) ) + 0.5 + (1 * chimneyCounter))
+		for (chimney : courner2) {
+			val x = (bPosX + ( bWidth / 2) ) - 0.5
+			val y = (bPosY + ( bHeight / 2) ) + 0.5
+			val z = (bPosZ - ( bWidth / 2) ) + 0.5 + (1 * chimneyCounter)
+			connector.executeWrite(
+				String.format("MATCH (n) WHERE ID(n) = %d CREATE (n)-[:HAS]->(p:City:Position {x: %f, y: %f, z: %f})",
+					chimney, x, y, z))
 			chimneyCounter++
 		}
 		chimneyCounter = 0
-		for (chimneyPosition : courner3) {
-			chimneyPosition.setProperty("x", (bPosX + ( bWidth / 2) ) - 0.5 - (1 * chimneyCounter))
-			chimneyPosition.setProperty("y", (bPosY + ( bHeight / 2) ) + 0.5)
-			chimneyPosition.setProperty("z", (bPosZ + ( bWidth / 2) ) - 0.5)			
+		for (chimney : courner3) {
+			val x = (bPosX + ( bWidth / 2) ) - 0.5 - (1 * chimneyCounter)
+			val y = (bPosY + ( bHeight / 2) ) + 0.5
+			val z = (bPosZ + ( bWidth / 2) ) - 0.5
+			connector.executeWrite(
+				String.format("MATCH (n) WHERE ID(n) = %d CREATE (n)-[:HAS]->(p:City:Position {x: %f, y: %f, z: %f})",
+					chimney, x, y, z))
 			chimneyCounter++
 		}
 		chimneyCounter = 0
-		for (chimneyPosition : courner4) {
-			chimneyPosition.setProperty("x", (bPosX - ( bWidth / 2) ) + 0.5)
-			chimneyPosition.setProperty("y", (bPosY + ( bHeight / 2) ) + 0.5)
-			chimneyPosition.setProperty("z", (bPosZ + ( bWidth / 2) ) - 0.5 - (1 * chimneyCounter))				
+		for (chimney : courner4) {
+			val x = (bPosX - ( bWidth / 2) ) + 0.5
+			val y = (bPosY + ( bHeight / 2) ) + 0.5
+			val z = (bPosZ + ( bWidth / 2) ) - 0.5 - (1 * chimneyCounter)
+			connector.executeWrite(
+				String.format("MATCH (n) WHERE ID(n) = %d CREATE (n)-[:HAS]->(p:City:Position {x: %f, y: %f, z: %f})",
+					chimney, x, y, z))
 			chimneyCounter++
 		}
-	}			
+	}
 
 	def private RGBColor[] createColorGradiant(RGBColor start, RGBColor end, int maxLevel) {
 		var steps = maxLevel - 1
@@ -570,5 +525,13 @@ class City2City {
 		} while (bcMax < value)
 
 		return sc;
-	}			
+	}
+
+	def private String cypherSetBuildingSegmentAttributes(Long segment, double width, double length, double height,
+		String color) {
+		return String.format(
+			"MATCH (n) WHERE ID(n) = %d SET n.width = %f, n.length = %f, n.height = %f, n.color = \'%s\'", segment,
+			width, length, height, color)
+	}
+
 }

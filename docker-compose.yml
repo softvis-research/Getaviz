@@ -34,15 +34,25 @@ services:
     backend:
         build: generator2/org.getaviz.generator/
         restart: always
-        volumes:
-           # - ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # Only use for development purpose
-            - ./settings.properties:/opt/config/settings.properties
-            - ./generator2/output:/var/lib/jetty/output/
-            - ./generator2/databases:/var/lib/jetty/databases/
+        volumes: 
             - data-gen:/var/lib/jetty/data-gen
+            #- ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # uncomment only for development purposes
+            #- ./settings.properties:/opt/config/settings.properties # uncomment only for development purposes
+            #- ./generator2/output:/var/lib/jetty/output/ # uncomment only for development purposes
         ports:
-        
             - "8083:8080"
+        networks:
+            - default
+        depends_on:
+            - neo4j
+    neo4j:
+        image: neo4j:3.5.1
+        restart: always
+        ports:
+            - "7474:7474"
+            - "7687:7687"
+        environment:
+            NEO4J_AUTH: "none"
         networks:
             - default
 volumes:
