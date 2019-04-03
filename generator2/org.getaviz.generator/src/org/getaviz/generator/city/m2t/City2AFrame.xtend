@@ -69,14 +69,15 @@ class City2AFrame {
 	}
 	
 	def private String toDistrict(Node district, Node position) {
+		val entity = connector.getVisualizedEntity(district.id)
 		val result = '''
-		<a-box position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
+		<a-box id="«entity.get("hash").asString»"
+			position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
 			width="«district.get("width")»"
 			height="«district.get("height")»"
 			depth="«district.get("length")»"
-			color="«district.get("color")»"
+			color="«district.get("color").asString»"
 			shader="flat"
-			fog="false"
 			flat-shading="true">
 		</a-box>
 	'''
@@ -84,14 +85,15 @@ class City2AFrame {
 	}
 
 	def private String toBuilding(Node building, Node position) {
+		val entity = connector.getVisualizedEntity(building.id)
 		val result = '''
-		<a-box position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
+		<a-box id="«entity.get("hash").asString»"
+				position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
 				width="«building.get("width")»"
 				height="«building.get("height")»"
 				depth="«building.get("length")»"
-				color="«building.get("color")»"
+				color="«building.get("color").asString»"
 				shader="flat"
-				fog="false"
 				flat-shading="true">
 		</a-box>
 	'''
@@ -109,49 +111,49 @@ class City2AFrame {
 			«IF config.buildingType == BuildingType.CITY_PANELS
 					&& entity.hasLabel(Labels.Field.name)
 					&& config.showAttributesAsCylinders»
-				<a-cylinder position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
-					 radius="«width/2»"
-					 height="«height»" 
-					 color="«segment.get("color")»"
-					 shader="flat"
-					 fog="false"
-					 flat-shading="true"
-					 segments-height="2"
-					 segments-radial="20">
+				<a-cylinder id="«entity.get("hash").asString»"
+					position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
+					radius="«width/2»"
+					height="«height»" 
+					color="«segment.get("color").asString»"
+					shader="flat"
+					flat-shading="true"
+					segments-height="2"
+					segments-radial="20">
 				</a-cylinder>
 			«ELSE»
-				<a-box position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
-						width="«width»"
-						height="«height»"
-						depth="«length»"
-						color="«segment.get("color")»"
-						shader="flat"
-						fog="false"
-						flat-shading="true">
+				<a-box id="«entity.get("hash").asString»"
+					position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
+					width="«width»"
+					height="«height»"
+					depth="«length»"
+					color="«segment.get("color").asString»"
+					shader="flat"
+					flat-shading="true">
 				</a-box>
 			«ENDIF»		
 			«FOR separator : separators»
 			«val pos = connector.getPosition(separator.id)»
 			«IF separator.hasLabel(Labels.Cylinder.name)»
-				<a-cylinder position="«pos.get("x") + " " + pos.get("y") + " " + pos.get("z")»"
-					 radius="«separator.get("radius")»" 
-					 height="«config.panelSeparatorHeight»" 
-					 color="«config.getCityColorHex("black")»"
-					 shader="flat"
-					 fog="false"
-					 flat-shading="true"
-					 segments-height="2"
-					 segments-radial="20">
+				<a-cylinder  id="«entity.get("hash").asString»"
+					position="«pos.get("x") + " " + pos.get("y") + " " + pos.get("z")»"
+					radius="«separator.get("radius")»" 
+					height="«config.panelSeparatorHeight»" 
+					color="«config.getCityColorHex("black")»"
+					shader="flat"
+					flat-shading="true"
+					segments-height="2"
+					segments-radial="20">
 				</a-cylinder>
 			«ELSE»
-				<a-box position="«pos.get("x") + " " + pos.get("y") + " " + pos.get("z")»"
-						width="«separator.get("width")»"
-						height="«config.panelSeparatorHeight»"
-						depth="«separator.get("length")»"
-						color="«config.getCityColorHex("black")»"
-						shader="flat"
-						fog="false"
-						flat-shading="true">
+				<a-box id="«entity.get("hash").asString»"
+					position="«pos.get("x") + " " + pos.get("y") + " " + pos.get("z")»"
+					width="«separator.get("width")»"
+					height="«config.panelSeparatorHeight»"
+					depth="«separator.get("length")»"
+					color="«config.getCityColorHex("black")»"
+					shader="flat"
+					flat-shading="true">
 				</a-box>
 			«ENDIF»
 		«ENDFOR»
@@ -160,29 +162,31 @@ class City2AFrame {
 	}	
 
 	def private toFloor(Node floor, Node position) {
+		val entity = connector.getVisualizedEntity(floor.id)
 		val result = '''
-			<a-box position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
+			<a-box id="«entity.get("hash").asString»"
+				position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
 				width="«floor.get("width")»"
 				height="«floor.get("height")»"
 				depth="«floor.get("length")»"
-				color="«floor.get("color")»"
+				color="«floor.get("color").asString»"
 				shader="flat"
-				fog="false"
 				flat-shading="true">
 			</a-box>
 	'''
 		return result
 	}
 
-	def private toChimney(Node chimney, Node position) {		
+	def private toChimney(Node chimney, Node position) {
+		val entity = connector.getVisualizedEntity(chimney.id)		
 		val result = '''
-			<a-box position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
+			<a-box id="«entity.get("hash").asString»"
+				position="«position.get("x") + " " + position.get("y") + " " + position.get("z")»"
 				width="«chimney.get("width")»"
 				height="«chimney.get("height")»"
 				depth="«chimney.get("length")»"
-				color="«chimney.get("color")»"
+				color="«chimney.get("color").asString»"
 				shader="flat"
-				fog="false"
 				flat-shading="true">
 			</a-box>
 	'''	
