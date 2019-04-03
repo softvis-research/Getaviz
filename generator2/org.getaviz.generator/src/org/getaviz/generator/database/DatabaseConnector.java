@@ -1,6 +1,5 @@
 package org.getaviz.generator.database;
 
-import org.getaviz.generator.SettingsConfiguration;
 import org.neo4j.driver.v1.AccessMode;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
@@ -11,14 +10,18 @@ import org.neo4j.driver.v1.TransactionWork;
 import org.neo4j.driver.v1.types.Node;
 
 public class DatabaseConnector implements AutoCloseable {
+	private static final String URL = "bolt://neo4j:7687";
 	private final Driver driver;
 	private static DatabaseConnector instance = null;
-	private SettingsConfiguration config = SettingsConfiguration.getInstance();
 
 	private DatabaseConnector() {
-		driver = GraphDatabase.driver(config.getDatabase());
+		driver = GraphDatabase.driver(URL);
 	}
-
+	
+	public static String getDatabaseURL() {
+		return URL;
+	}
+	
 	public static DatabaseConnector getInstance() {
 		if (instance == null) {
 			instance = new DatabaseConnector();

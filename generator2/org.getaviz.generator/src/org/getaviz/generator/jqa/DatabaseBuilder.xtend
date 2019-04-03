@@ -21,11 +21,10 @@ class DatabaseBuilder {
 	def scan() {
 		log.info("jQA scan started.")
 		log.info("Scanning from URI(s) " + config.inputFiles);
-		log.info("Scanning to database " + config.databaseName);
 		try {
 			val pScan = runtime.exec(
 				"/opt/jqassistant/bin/jqassistant.sh scan -reset -u " + config.inputFiles + " -storeUri " +
-					config.database)
+					DatabaseConnector::databaseURL)
 			pScan.waitFor()
 		} catch (InterruptedException e) {
 			log.error(e);
