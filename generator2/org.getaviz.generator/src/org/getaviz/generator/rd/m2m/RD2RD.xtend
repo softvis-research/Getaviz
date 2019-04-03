@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory
 import org.getaviz.generator.database.DatabaseConnector
 import org.neo4j.driver.v1.types.Node
 import java.util.Iterator
+import java.util.List
 
 class RD2RD {
 	val config = SettingsConfiguration.instance
@@ -48,21 +49,15 @@ class RD2RD {
 			}
 			connector.executeWrite("MATCH (n) WHERE ID(n) = " + disk.id + setString)
 		]
-		log.debug("vor calulate net area")
 		getRootDisks.calculateNetArea
-		log.debug("nach calulate net area")
 
 		getDisks.forEach[get("d").asNode.calculateRadius]
-		log.debug("nach calulate net radius")
 
 		getRootDisks.calculateLayout
-		log.debug("Nach calculate Layout")
 
 		getDisks.forEach[get("d").asNode.postLayout]
-		log.debug("Nach postLayout")
 
 		getDisks.forEach[get("d").asNode.postLayout2]
-		log.debug("Nach postLayout2")
 
 		log.info("RD2RD finished")
 	}
@@ -112,8 +107,8 @@ class RD2RD {
 	}
 
 	def private postLayout(Node disk) {
-		val data = RDUtils.getData(disk.id)
-		val methods = RDUtils.getMethods(disk.id)
+		var data = RDUtils.getData(disk.id).toList
+		var methods = RDUtils.getMethods(disk.id).toList
 		disk.fractions(data, methods)
 		data.fractions
 		methods.fractions
@@ -126,7 +121,7 @@ class RD2RD {
 		disk.calculateRings
 	}
 
-	def private fractions(Node disk, Iterator<Node> data, Iterator<Node> methods) {
+	def private fractions(Node disk, Iterable<Node> data, Iterable<Node> methods) {
 		val netArea = disk.get("netArea").asDouble
 		var currentMethodArea = RDUtils.sum(methods) / netArea
 		var currentDataArea = RDUtils.sum(data) / netArea
@@ -135,11 +130,11 @@ class RD2RD {
 				currentDataArea)
 	}
 
-	def private fractions(Iterator<Node> segments) {
+	def private fractions(Iterable<Node> segments) {
 		val sum = RDUtils.sum(segments)
-		segments.forEach [
-			connector.executeWrite("MATCH (n) WHERE ID(n) = " + id + " SET n.size = n.size/" + sum)
-		]
+		for(segment: segments) {
+			connector.executeWrite("MATCH (n) WHERE ID(n) = " + segment.id + " SET n.size = n.size/" + sum)	
+		}
 	}
 
 	def private calculateRings(Node disk) {
@@ -155,21 +150,14 @@ class RD2RD {
 			calculateCrossSection(disk.id, ringWidth, height)
 		}
 		calculateSpines(disk.id, radius - (0.5 * ringWidth))
-		log.debug("in calculate rings")
 		if (RDUtils::getSubDisks(disk.id).nullOrEmpty) {
 			val r_data = Math::sqrt(dataArea * netArea / Math::PI)
 			val r_methods = radius - ringWidth
 			val b_methods = r_methods - r_data
-			val diskMethods = RDUtils.getMethods(disk.id)
-			val diskData = RDUtils.getData(disk.id)
+			val diskMethods = RDUtils.getMethods(disk.id).toList
+			val diskData = RDUtils.getData(disk.id).toList
 			if (!diskMethods.nullOrEmpty) {
-				log.debug("Wenn in calc rings methods nicht leer")
 				diskMethods.calculateCrossSection(b_methods, height)
-//				val crossSection = calculateCrossSection(b_methods, height)
-//				connector.executeWrite(
-//					"MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Method) WHERE ID(n) = " + disk.id +
-//						" SET d.crossSection = \'" + crossSection + "\'")
-				log.debug("Ist das durch?")
 				calculateSpines(diskMethods, r_methods - 0.5 * b_methods)
 				if (config.outputFormat == OutputFormat::AFrame) {
 					diskMethods.forEach [
@@ -180,7 +168,6 @@ class RD2RD {
 				}
 			}
 			if (!diskData.nullOrEmpty) {
-				log.debug("Wenn in calc rings data nicht leer")
 				diskData.calculateCrossSection(r_data, height)
 				calculateSpines(diskData, 0.5 * r_data)
 				if (config.outputFormat == OutputFormat::AFrame) {
@@ -197,7 +184,7 @@ class RD2RD {
 			val b_data = r_data - outerRadius
 			val r_methods = Math::sqrt((methodArea * netArea / Math::PI) + (r_data * r_data))
 			val b_methods = r_methods - r_data
-			val diskMethods = RDUtils.getMethods(disk.id)
+			val diskMethods = RDUtils.getMethods(disk.id).toList
 			if (!diskMethods.nullOrEmpty) {
 				diskMethods.calculateCrossSection(b_methods, height)
 				calculateSpines(diskMethods, r_methods - 0.5 * b_methods)
@@ -209,7 +196,7 @@ n.innerRadius = " + r_data)
 					]
 				}
 			}
-			val diskData = RDUtils.getData(disk.id)
+			val diskData = RDUtils.getData(disk.id).toList
 			if (!diskData.nullOrEmpty) {
 				diskData.calculateCrossSection(b_data, height)
 				calculateSpines(diskData, r_data - 0.5 * b_data)
@@ -228,7 +215,6 @@ n.outerRadius = " + r_data + "
 	}
 
 	def private calculateOuterRadius(Long disk) {
-		log.debug("In calculate outer radius: " + disk)
 		val coordinates = new CoordinateList()
 		RDUtils::getSubDisks(disk).forEach [
 			val node = get("d").asNode
@@ -258,20 +244,15 @@ n.outerRadius = " + r_data + "
 		return shapeFactory.createCircle
 	}
 
-	def private calculateCrossSection(Iterator<Node> segments, double width, double height) {
+	def private calculateCrossSection(List<Node> segments, double width, double height) {
 		val crossSection = (-(width / 2 ) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", " +
 			((width / 2 ) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height))
 		val statementList = newArrayList
 		segments.forEach [
-			statementList += "MATCH (n) WHERE ID(n) = " + id + " SET n.crossSection = \'" + crossSection + "\'"
+			statementList += "MATCH (n) WHERE 
+ID(n) = " + id + " SET n.crossSection = \'" + crossSection + "\'"
 		]
 		connector.executeWrite(statementList)
-	}
-
-	def private calculateCrossSection(double width, double height) {
-		val crossSection = (-(width / 2 ) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", " +
-			((width / 2 ) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height))
-		return crossSection
 	}
 
 	def private calculateCrossSection(Long disk, double width, double height) {
@@ -280,8 +261,7 @@ n.outerRadius = " + r_data + "
 		connector.executeWrite("MATCH (n)  WHERE ID(n) = " + disk + " SET n.crossSection = \'" + crossSection + "\'")
 	}
 
-	def private calculateSpines(Iterator<Node> segments, double factor) {
-		log.debug("in calculate spines")
+	def private calculateSpines(List<Node> segments, double factor) {
 		if (config.outputFormat == OutputFormat::X3D) {
 			var spinePointCount = 0
 			if (segments.size < 50) {
@@ -300,41 +280,36 @@ n.outerRadius = " + r_data + "
 			var start = 0
 			var end = 0
 			val statementList = newArrayList
-			while (segments.hasNext) {
-				val segment = segments.next
+			for(segment : segments) {
 				val size = segment.get("size").asDouble
-				// val entity = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
 				start = end;
 				end = start + Math::floor(spinePointCount * size).intValue
 				if (end > (completeSpine.length - 1)) {
 					end = completeSpine.length - 1
 				}
-				if (segment == segments.last) {
+				if (segment === segments.last) {
 					end = completeSpine.length - 1
 				}
 				val partSpine = newArrayOfSize(end - start);
 				for (j : 0 ..< end - start) {
 					partSpine.set(j, completeSpine.get(start + j))
 				}
-				statementList +=
-					"MATCH (n) WHERE ID(n) = " + segment.id + " SET n.spine = \'" + partSpine.removeBrackets + "\'"
+				statementList += "MATCH (n) WHERE ID(n) = " + segment.id + " SET n.spine = \'" + partSpine.removeBrackets + "\'"
 			}
 			connector.executeWrite(statementList)
+			
 		}
 		if (config.outputFormat == OutputFormat::AFrame) {
 			if (!segments.empty) {
 				var length = segments.size
 				var sizeSum = 0.0
 				var position = 0.0
-				while (segments.hasNext) {
-					val segment = segments.next
+				for(segment: segments) {
 					val size = segment.get("size").asDouble
 					sizeSum += size
 				}
 				sizeSum += sizeSum / 360 * length
-				while (segments.hasNext) {
-					log.info("Nach erstem Iterator-Durchlauf sind wir wieder am Anfang")
-					val segment = segments.next
+				for(segment:segments) {
 					val angle = (segment.get("size").asDouble / sizeSum) * 360
 					connector.executeWrite(
 						"MATCH (n) WHERE ID(n) = " + segment.id + " SET n.angle = " + angle + ", n.anglePosition = " +

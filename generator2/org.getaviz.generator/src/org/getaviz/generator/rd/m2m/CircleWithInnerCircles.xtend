@@ -18,8 +18,8 @@ class CircleWithInnerCircles extends Circle {
 
 	new(Node disk, Boolean nesting) {
 		diskNode = disk
-		val data = RDUtils.getData(disk.id)
-		val methods = RDUtils.getMethods(disk.id)
+		val data = RDUtils.getData(disk.id).toIterable
+		val methods = RDUtils.getMethods(disk.id).toIterable
 		if (nesting == true) {
 			minArea = RDUtils.sum(methods) + RDUtils.sum(data)
 		} else {
