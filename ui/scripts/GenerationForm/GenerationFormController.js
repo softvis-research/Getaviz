@@ -93,7 +93,7 @@ var generationFormController = (function() {
 		
 		createSettingPopup(rootDiv);
 		
-		$("#settingsPopupWindowDiv").jqxWindow({ theme: "metro", width: 650, height: 950, isModal: true, autoOpen: false, resizable: true, cancelButton: $("#defaultButton"), initContent: function() {
+		$("#settingsPopupWindowDiv").jqxWindow({ theme: "metro", width: 650, height: 950, isModal: true, autoOpen: false, resizable: true, closeButtonSize: 0, initContent: function() {
 		   
 				// Add Form Inputs and Labels here
  				var template = [
@@ -1473,7 +1473,7 @@ var generationFormController = (function() {
 		// The Windows Title
 		var settingsPopupTitleDiv = document.createElement("DIV");
 		settingsPopupWindowDiv.appendChild(settingsPopupTitleDiv);
-		settingsPopupTitleDiv.innerHTML = "New Visualization";
+		settingsPopupTitleDiv.innerHTML = "Generate new visualization";
 		
 		// The Windows DIV
 		var settingsPopupContentDiv = document.createElement("DIV");
