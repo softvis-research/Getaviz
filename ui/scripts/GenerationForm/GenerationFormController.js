@@ -967,16 +967,26 @@ var generationFormController = (function() {
 								name: 'defaultButton',
 								type: 'button',
 								text: 'Reset',
-								width: '262px',
+								align: 'left',
+								width: '131px',
 								columnWidth: '50%'
 							},
 							{
 								name: 'submitButton',
 								type: 'button',
 								text: 'Submit',
-								width: '263px',
-								columnWidth: '50%'
-							}             
+								align: 'right',
+								width: '131px',
+								columnWidth: '25%'
+							},
+							{
+								name: 'cancelButton',
+								type: 'button',
+								text: 'Cancel',
+								align: 'right',
+								width: '131px',
+								columnWidth: '25%'
+							}      
 						]
 					}
 					
@@ -1188,7 +1198,7 @@ var generationFormController = (function() {
 					]
 				});
 				
-				// Load Default Values 
+				// Reset Form Data
 				var btn_reset = settingsForm.jqxForm('getComponentByName', 'defaultButton');
 				btn_reset.on('click', function () {
 					
@@ -1197,9 +1207,17 @@ var generationFormController = (function() {
 					openSettingsPopUp();
 				});
 				
+				// Cancel Form Data 
+				var btn_cancel = settingsForm.jqxForm('getComponentByName', 'cancelButton');
+				btn_cancel.on('click', function () {
+					
+					$("#settingsPopupWindowDiv").jqxWindow("close");
+				});
+				
 				// Submit Form Data 
 				var btn_submit = settingsForm.jqxForm('getComponentByName', 'submitButton');
 				btn_submit.on('click', function () {
+					
 					$('#settingsForm').jqxValidator('validate');
 					settingsForm.jqxForm('submit', "http://" + BACKEND +":8080", "_self", 'POST');
 				});
