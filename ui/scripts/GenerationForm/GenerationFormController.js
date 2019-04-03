@@ -1204,6 +1204,7 @@ var generationFormController = (function() {
 					
 					$("#settingsPopupWindowDiv").jqxWindow("close");					
 					reset_form(template, defaultValue);
+					initial_load_city_optional();
 					openSettingsPopUp();
 				});
 				
