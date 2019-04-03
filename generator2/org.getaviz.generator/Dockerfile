@@ -4,7 +4,6 @@ COPY pom.xml /tmp/generator2/
 COPY src /tmp/generator2/src/
 ADD https://jqassistant.org/wp-content/uploads/2018/12/jqassistant-commandline-neo4jv3-1.6.0-distribution.zip /opt/
 RUN cd /opt && unzip jqassistant-commandline-neo4jv3-1.6.0-distribution.zip
-RUN ls /opt
 WORKDIR /tmp/generator2/
 RUN mvn package
 
