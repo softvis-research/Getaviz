@@ -1173,28 +1173,28 @@ var generationFormController = (function() {
 					rules: [
 						{ input: manual_input_name, message: 'Please enter an input.name!', action: 'keyup', position: 'top:0,15', rule: 'required' },
 						{ input: manual_input_files, message: 'Please enter the path to your input.files!', action: 'keyup, focus, blur, valuechanged', position: 'top:0,15', rule: 'required' },
-						{ input: manual_city_package_color_start, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_package_color_end, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_class_color_start, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_class_color_end, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_class_color, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_blue, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_aqua, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_light_green, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_dark_green, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_yellow, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_orange, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_red, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_pink, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_violet, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_light_grey, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_dark_grey, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_white, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_city_color_black, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_rd_color_class, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_rd_color_data, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_rd_color_method, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
-						{ input: manual_rd_color_namespace, message: 'Please enter a HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: 'length=7,7',},
+						{ input: manual_city_package_color_start, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_package_color_end, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_class_color_start, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_class_color_end, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_class_color, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex },
+						{ input: manual_city_color_blue, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_aqua, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_light_green, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_dark_green, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_yellow, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_orange, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_red, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_pink, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_violet, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_light_grey, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_dark_grey, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_white, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_black, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_rd_color_class, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_rd_color_data, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_rd_color_method, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_rd_color_namespace, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
 					]
 				});
 				
@@ -1231,6 +1231,32 @@ var generationFormController = (function() {
 		events.log.action.subscribe(addLogObject);
 		events.log.event.subscribe(addLogObject);
 		events.log.manipulation.subscribe(addLogObject);
+	}
+	
+	// manual function to validate input of colors
+	function validate_hex(input) {
+		
+		if (input.val()[0] != '#')
+			return false;
+		
+		if (input.val().length != 4 && input.val().length != 7)
+			return false;
+		
+		if ((input.val()[1] <= 'F' || input.val()[1] <= 'f') && (input.val()[2] <= 'F' || input.val()[2] <= 'f') && (input.val()[3] <= 'F' || input.val()[3] <= 'f')) {
+		
+			if (input.val().length > 4) {
+				
+				if ((input.val()[4] <= 'F' || input.val()[4] <= 'f') && (input.val()[5] <= 'F' || input.val()[5] <= 'f') && (input.val()[6] <= 'F' || input.val()[6] <= 'f')) {									
+					return true;
+				}
+				else
+					return false;
+			}
+			else
+				return true;
+		}
+		else
+			return false;
 	}
 	
 	function reset_form(template, defaultValue) {	
