@@ -19,7 +19,6 @@ var generationFormController = (function() {
 	// city.class_elements_sort_mode_fine
 	// city.class_elements_sort_mode_fine_direction_reversed
 	// city.show_building_base
-	// 		city_blank_node
 	// city.show_attributes_as_cylinders
 	// city.brick.layout
 	// city.brick.size
@@ -258,12 +257,6 @@ var generationFormController = (function() {
 						],
 						info:'Switch to show or hide building base in panels or bricks mode. &#013;If set to false, only districts and buildingSegments are visible.',
 						padding: {left: 8, top: 0, bottom: 0, right: 8}
-					},						
-					{
-						bind: 'city_blank_node',
-						name: 'city_blank_node',
-						type: 'blank',
-						rowHeight: '25px'
 					},					
 					{
 						bind: 'city_show_attributes_as_cylinders',
@@ -1446,7 +1439,6 @@ var generationFormController = (function() {
 		$('#settingsForm').jqxForm('showComponent', 'rd.method_disks');
 		$('#settingsForm').jqxForm('showComponent', 'rd.data_disks');
 		$('#settingsForm').jqxForm('showComponent', 'rd.method_type_mode');
-		$('#settingsForm').jqxForm('hideComponent', 'city_blank_node');
 	}
 	
 	function hide_rd() {		
@@ -1470,7 +1462,6 @@ var generationFormController = (function() {
 		$('#settingsForm').jqxForm('hideComponent', 'rd.method_disks');
 		$('#settingsForm').jqxForm('hideComponent', 'rd.data_disks');
 		$('#settingsForm').jqxForm('hideComponent', 'rd.method_type_mode');	
-		$('#settingsForm').jqxForm('showComponent', 'city_blank_node');
 	}
 	
 	function reset(){
