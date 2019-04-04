@@ -93,7 +93,7 @@ var generationFormController = (function() {
 		
 		createSettingPopup(rootDiv);
 		
-		$("#settingsPopupWindowDiv").jqxWindow({ theme: "metro", width: 650, height: 950, isModal: true, draggable: false, autoOpen: false, resizable: true, closeButtonSize: 0, initContent: function() {
+		$("#settingsPopupWindowDiv").jqxWindow({ theme: "metro", width: '33%', height: '70%', isModal: true, draggable: false, autoOpen: false, resizable: true, closeButtonSize: 0, initContent: function() {
 		   
 				// Add Form Inputs and Labels here
  				var template = [
