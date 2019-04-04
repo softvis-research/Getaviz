@@ -4,3 +4,6 @@ td {
 .jqx-info-icon {
     margin-left: 150px !important;	
 }
+table {
+	border: 0px !important;
+}
