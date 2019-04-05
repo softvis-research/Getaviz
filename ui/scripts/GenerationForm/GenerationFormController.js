@@ -1,11 +1,14 @@
-var generationFormController = (function() {
+
+	/**
+	* @author Jens Thomann <jt23coqi@studserv.uni-leipzig.de>
+	*/
 	
 	// Name Conversion Rules from "label" to "bind"
 	// Example: city.building_type --> city_building_type	
 	// Most options in the file settings.properties contain a "."
 	// If "." is used in "bind" the ui does not load ("." is interpreted as a function call)
 	
-	// Order of Options:
+	// JSON - Order of Options:
 	// input.name
 	// input.files
 	// metaphor
@@ -74,6 +77,8 @@ var generationFormController = (function() {
 	// rd.method_disks
 	// rd.data_disks
 	// rd.method_type_mode
+	
+var generationFormController = (function() {
 	
 	var logObjectMap = new Map();
 	
