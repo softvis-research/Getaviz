@@ -116,6 +116,7 @@ var generationFormController = (function() {
 						name: 'input.files',
 						type: 'text',
 						label: 'input.files',
+						required: true,
 						labelAlign: 'right',
 						labelWidth: '325px',
 						width: '200px',
@@ -1157,29 +1158,29 @@ var generationFormController = (function() {
 					hintType: "label",
 					rules: [
 						{ input: manual_input_name, message: 'Please enter an input.name!', action: 'keyup', position: 'top:0,15', rule: 'required' },
-						{ input: manual_input_files, message: 'Please enter a valid URL!', action: 'keyup, focus, blur, valuechanged', position: 'top:0,15', rule: validate_url },
-						{ input: manual_city_package_color_start, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_package_color_end, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_class_color_start, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_class_color_end, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_class_color, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex },
-						{ input: manual_city_color_blue, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_aqua, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_light_green, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_dark_green, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_yellow, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_orange, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_red, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_pink, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_violet, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_light_grey, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_dark_grey, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_white, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_city_color_black, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_rd_color_class, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_rd_color_data, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_rd_color_method, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
-						{ input: manual_rd_color_namespace, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_input_files, message: 'Please enter a valid URL!', action: 'keyup, focus, blur, change', position: 'top:0,15', rule: validate_url },
+						{ input: manual_city_package_color_start, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_package_color_end, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_class_color_start, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_class_color_end, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_class_color, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex },
+						{ input: manual_city_color_blue, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_aqua, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_light_green, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_dark_green, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_yellow, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_orange, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_red, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_pink, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_violet, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_light_grey, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_dark_grey, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_white, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_city_color_black, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_rd_color_class, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_rd_color_data, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_rd_color_method, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_rd_color_namespace, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
 					]
 				});
 				
@@ -1187,10 +1188,8 @@ var generationFormController = (function() {
 				var btn_reset = settingsForm.jqxForm('getComponentByName', 'resetButton');
 				btn_reset.on('click', function () {
 					
-					$("#settingsPopupWindowDiv").jqxWindow("close");					
 					reset_form(template, defaultValue);
 					initial_load_city_optional();
-					openSettingsPopUp();
 				});
 				
 				// Submit Form Data 
@@ -1221,7 +1220,7 @@ var generationFormController = (function() {
 	// Validate input of url (jqxValidator has no support for this)
 	function validate_url(input) {
 		
-		if (input.val().includes('http://') || input.val().includes('https://'))
+		if (input.val().startsWith('http://') || input.val().startsWith('https://'))
 			return true;
 		else
 			return false;
@@ -1230,23 +1229,20 @@ var generationFormController = (function() {
 	// Validate input of HEX colors (jqxValidator has no support for this)
 	function validate_hex(input) {
 		
-		var result;
-		
 		if (input.val()[0] != '#')
 			return false;
 		
 		if (input.val().length != 4 && input.val().length != 7)
 			return false;
 		
-		for (var i = 0; i < input.val().length; i++) {
-			
-			if (((input.val()[i] <= 'F' || input.val()[i] <= 'f') && (input.val()[i] >= 'A' || input.val()[i] >= 'a')) || (input.val()[i] <= 9 && input.val()[i] >= 0))
-				result = true;
+		for (var i = 1; i < input.val().length; i++) {			
+			if (((input.val()[i] >= 'a' && input.val()[i] <= 'f') || (input.val()[i] >= 'A' && input.val()[i] <= 'F')) || (input.val()[i] >= 0 && input.val()[i] <= 9))
+				{}
 			else
-				result = false;			
+				return false;			
 		}
 			
-		return result;
+		return true;
 	}
 	
 	// Reset the form
