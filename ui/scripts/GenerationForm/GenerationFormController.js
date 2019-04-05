@@ -241,7 +241,7 @@ var generationFormController = (function() {
 							{ value: 'false' },
 							{ value: 'true'}
 						],
-						info:'If set true, the order of the sorting, defined in class_elements_sort_mode_fine is reversed. &#013;If class_elements_sort_mode_fine is set to scheme, a secondary sorting is performed to place methods with high numbers of statements at the bottom. &#013;This behaviour is not influenced by this switch.',
+						info:'If set true, the order of the sorting, defined in class_elements_sort_mode_fine is reversed. &#013;If class_elements_sort_mode_fine is set to scheme, a secondary sorting is performed to place methods with high numbers of statements at the bottom. &#013;This behavior is not influenced by this switch.',
 						padding: {left: 8, top: 0, bottom: 0, right: 8}
 					},					
 					{
