@@ -3,10 +3,7 @@ var generationFormController = (function() {
 	// Name Conversion Rules from "label" to "bind"
 	// Example: city.building_type --> city_building_type	
 	// Most options in the file settings.properties contain a "."
-	// If "." is used in "bind" the ui does not load ("." is interpreted as a function call)	
-	
-	// width for DropDownLists = 200px
-	// to align simple InputFields with the DDLs, choose 200px-6px = 194px
+	// If "." is used in "bind" the ui does not load ("." is interpreted as a function call)
 	
 	// Order of Options:
 	// input.name
