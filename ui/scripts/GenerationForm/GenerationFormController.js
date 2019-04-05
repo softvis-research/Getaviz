@@ -1222,7 +1222,7 @@ var generationFormController = (function() {
 	// Validate input of url (jqxValidator has no support for this)
 	function validate_url(input) {
 		
-		if (input.val().includes('http://') || input.val().includes('https://'))
+		if (input.val().startsWith('http://') || input.val().startsWith('https://'))
 			return true;
 		else
 			return false;
@@ -1237,10 +1237,9 @@ var generationFormController = (function() {
 		if (input.val().length != 4 && input.val().length != 7)
 			return false;
 		
-		for (var i = 1; i < input.val().length; i++) {
-			
-			if (((input.val()[i] >= 'a' && input.val()[i] <= 'f') || (input.val()[i] >= 'A' && input.val()[i] <= 'F')) || (input.val()[i] <= 9 && input.val()[i] >= 0))
-			{}
+		for (var i = 1; i < input.val().length; i++) {			
+			if (((input.val()[i] >= 'a' && input.val()[i] <= 'f') || (input.val()[i] >= 'A' && input.val()[i] <= 'F')) || (input.val()[i] >= 0 && input.val()[i] <= 9))
+				{}
 			else
 				return false;			
 		}
