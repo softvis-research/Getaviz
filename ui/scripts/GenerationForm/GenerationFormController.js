@@ -1241,7 +1241,7 @@ var generationFormController = (function() {
 		
 		for (var i = 0; i < input.val().length; i++) {
 			
-			if (((input.val()[i] <= 'F' || input.val()[i] <= 'f') && (input.val()[i] >= 'A' || input.val()[i] >= 'a')) || (input.val()[i] <= 9 && input.val()[i] >= 0))
+			if (((input.val()[i] >= 'a' && input.val()[i] <= 'f') || (input.val()[i] >= 'A' && input.val()[i] <= 'F')) || (input.val()[i] <= 9 && input.val()[i] >= 0))
 				result = true;
 			else
 				result = false;			
