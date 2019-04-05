@@ -1231,8 +1231,6 @@ var generationFormController = (function() {
 	// Validate input of HEX colors (jqxValidator has no support for this)
 	function validate_hex(input) {
 		
-		var result;
-		
 		if (input.val()[0] != '#')
 			return false;
 		
@@ -1242,12 +1240,12 @@ var generationFormController = (function() {
 		for (var i = 1; i < input.val().length; i++) {
 			
 			if (((input.val()[i] >= 'a' && input.val()[i] <= 'f') || (input.val()[i] >= 'A' && input.val()[i] <= 'F')) || (input.val()[i] <= 9 && input.val()[i] >= 0))
-				result = true;
+			{}
 			else
 				return false;			
 		}
 			
-		return result;
+		return true;
 	}
 	
 	// Reset the form
