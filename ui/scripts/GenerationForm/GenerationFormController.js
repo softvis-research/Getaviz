@@ -988,6 +988,7 @@ var generationFormController = (function() {
 				// Default Values 				
 				var defaultValue = {
 					input_name: 'default',
+					input_files: '',
 					metaphor: 'city',
 					city_building_type: 'original',
 					city_scheme: 'types',
@@ -1165,7 +1166,7 @@ var generationFormController = (function() {
 					hintType: "label",
 					rules: [
 						{ input: manual_input_name, message: 'Please enter an input.name!', action: 'keyup', position: 'top:0,15', rule: 'required' },
-						{ input: manual_input_files, message: 'Please enter the path to your input.files!', action: 'keyup, focus, blur, valuechanged', position: 'top:0,15', rule: 'required' },
+						{ input: manual_input_files, message: 'Please enter a valid URL!', action: 'keyup, focus, blur, valuechanged', position: 'top:0,15', rule: validate_url },
 						{ input: manual_city_package_color_start, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
 						{ input: manual_city_package_color_end, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
 						{ input: manual_city_class_color_start, message: 'Please enter a valid HEX Color!', action: 'keyup, valuechanged', position: 'top:0,15', rule: validate_hex},
@@ -1226,7 +1227,16 @@ var generationFormController = (function() {
 		events.log.manipulation.subscribe(addLogObject);
 	}
 	
-	// manual function to validate input of colors
+	// validate input of url (jqxValidator has no support for this)
+	function validate_url(input) {
+		
+		if (input.val().includes('http://') || input.val().includes('https://'))
+			return true;
+		else
+			return false;
+	}
+	
+	// validate input of HEX colors (jqxValidator has no support for this)
 	function validate_hex(input) {
 		
 		var result;
