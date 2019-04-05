@@ -1079,22 +1079,23 @@ var generationFormController = (function() {
 
 					// Elements shown/hidden based on choice 'city' vs 'rd' 
 					if (newValue.metaphor == 'city') {
-						show_city();
-						hide_city_original();
-						hide_rd();
+						
+						toggle_city_visibility('showComponent');
+						toggle_city_original_visibility('hideComponent');
+						toggle_rd_visibility('hideComponent');
 					
 						// Elements shown/hidden based on choice 'panels' vs 'bricks' vs 'original' vs 'floor' 
 						if (newValue.city_building_type == 'panels') {	
 						
-							hide_city_original();
-							show_city_panels();
-							hide_city_bricks();
+							toggle_city_original_visibility('hideComponent');
+							toggle_city_panels_visibility('showComponent');
+							toggle_city_bricks_visibility('hideComponent');
 							
 						} else if (newValue.city_building_type == 'floor') {
 						
-							hide_city_original();
-							hide_city_panels();
-							hide_city_bricks();								
+							toggle_city_original_visibility('hideComponent');
+							toggle_city_panels_visibility('hideComponent');
+							toggle_city_bricks_visibility('hideComponent');							
 							
 						} else if (newValue.city_building_type == 'original') {
 							
@@ -1116,24 +1117,24 @@ var generationFormController = (function() {
 							$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_grey');
 							$('#settingsForm').jqxForm('hideComponent', 'city.color.white');
 							$('#settingsForm').jqxForm('hideComponent', 'city.color.black');
-							show_city_original();
-							hide_city_panels();	
-							hide_city_bricks();					
+							toggle_city_original_visibility('showComponent');
+							toggle_city_panels_visibility('hideComponent');
+							toggle_city_bricks_visibility('hideComponent');				
 							
 						} else if (newValue.city_building_type == 'bricks') {
 						
-							hide_city_original();
-							hide_city_panels();			
-							show_city_bricks();
+							toggle_city_original_visibility('hideComponent');
+							toggle_city_panels_visibility('hideComponent');
+							toggle_city_bricks_visibility('showComponent');
 						}
 						
 					} else if (newValue.metaphor == 'rd') {
 						
-						hide_city();
-						hide_city_original();
-						hide_city_panels();	
-						hide_city_bricks();
-						show_rd();
+						toggle_city_visibility('hideComponent');
+						toggle_city_original_visibility('hideComponent');
+						toggle_city_panels_visibility('hideComponent');
+						toggle_city_bricks_visibility('hideComponent');
+						toggle_rd_visibility('showComponent');
 					}					
 				});			
 				
@@ -1297,179 +1298,95 @@ var generationFormController = (function() {
 		$('#settingsForm').jqxForm('hideComponent', 'city.color.light_grey');
 		$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_grey');
 		$('#settingsForm').jqxForm('hideComponent', 'city.color.white');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.black');	
-		show_city_original();
-		hide_rd();
-		hide_city_panels();
-		hide_city_bricks();
+		$('#settingsForm').jqxForm('hideComponent', 'city.color.black');
+		toggle_city_original_visibility('showComponent');
+		toggle_city_panels_visibility('hideComponent');
+		toggle_city_bricks_visibility('hideComponent');
+		toggle_rd_visibility('hideComponent');
 	}
 	
-	function show_city() {
-		$('#settingsForm').jqxForm('showComponent', 'city.building_type');
-		$('#settingsForm').jqxForm('showComponent', 'city.scheme');
-		$('#settingsForm').jqxForm('showComponent', 'city.class_elements_mode');
-		$('#settingsForm').jqxForm('showComponent', 'city.class_elements_sort_mode_coarse');
-		$('#settingsForm').jqxForm('showComponent', 'city.class_elements_sort_mode_fine');
-		$('#settingsForm').jqxForm('showComponent', 'city.class_elements_sort_mode_fine_direction_reversed');
-		$('#settingsForm').jqxForm('showComponent', 'city.show_building_base');	
-		$('#settingsForm').jqxForm('showComponent', 'city.width_min');
-		$('#settingsForm').jqxForm('showComponent', 'city.height_min');
-		$('#settingsForm').jqxForm('showComponent', 'city.building.horizontal_margin');
-		$('#settingsForm').jqxForm('showComponent', 'city.building.horizontal_gap');
-		$('#settingsForm').jqxForm('showComponent', 'city.building.vertical_margin');
-		$('#settingsForm').jqxForm('showComponent', 'city.package.color_start');
-		$('#settingsForm').jqxForm('showComponent', 'city.package.color_end');
-		$('#settingsForm').jqxForm('showComponent', 'city.class.color_start');
-		$('#settingsForm').jqxForm('showComponent', 'city.class.color_end');
-		$('#settingsForm').jqxForm('showComponent', 'city.class.color');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.blue');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.aqua');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.light_green');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.dark_green');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.yellow');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.orange');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.red');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.pink');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.violet');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.light_grey');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.dark_grey');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.white');
-		$('#settingsForm').jqxForm('showComponent', 'city.color.black');
+	function toggle_city_visibility(componentVisibility) {
+		$('#settingsForm').jqxForm(componentVisibility, 'city.building_type');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.scheme');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_mode');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_sort_mode_coarse');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_sort_mode_fine');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_sort_mode_fine_direction_reversed');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.show_building_base');	
+		$('#settingsForm').jqxForm(componentVisibility, 'city.width_min');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.height_min');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.building.horizontal_margin');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.building.horizontal_gap');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.building.vertical_margin');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.package.color_start');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.package.color_end');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color_start');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color_end');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.blue');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.aqua');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.light_green');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.dark_green');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.yellow');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.orange');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.red');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.pink');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.violet');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.light_grey');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.dark_grey');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.white');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.color.black');
 	}
 	
-	function hide_city() {
-		$('#settingsForm').jqxForm('hideComponent', 'city.building_type');
-		$('#settingsForm').jqxForm('hideComponent', 'city.scheme');
-		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_mode');
-		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_coarse');
-		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine');
-		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine_direction_reversed');
-		$('#settingsForm').jqxForm('hideComponent', 'city.show_building_base');
-		$('#settingsForm').jqxForm('hideComponent', 'city.width_min');
-		$('#settingsForm').jqxForm('hideComponent', 'city.height_min');
-		$('#settingsForm').jqxForm('hideComponent', 'city.building.horizontal_margin');
-		$('#settingsForm').jqxForm('hideComponent', 'city.building.horizontal_gap');
-		$('#settingsForm').jqxForm('hideComponent', 'city.building.vertical_margin');
-		$('#settingsForm').jqxForm('hideComponent', 'city.package.color_start');
-		$('#settingsForm').jqxForm('hideComponent', 'city.package.color_end');
-		$('#settingsForm').jqxForm('hideComponent', 'city.class.color_start');
-		$('#settingsForm').jqxForm('hideComponent', 'city.class.color_end');
-		$('#settingsForm').jqxForm('hideComponent', 'city.class.color');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.blue');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.aqua');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.light_green');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_green');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.yellow');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.orange');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.red');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.pink');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.violet');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.light_grey');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_grey');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.white');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.black');	
+	function toggle_city_original_visibility(componentVisibility) {
+		$('#settingsForm').jqxForm(componentVisibility, 'city.original_building_metric');
 	}
 	
-	function show_city_original() {
-		$('#settingsForm').jqxForm('showComponent', 'city.original_building_metric');
+	function toggle_city_panels_visibility(componentVisibility) {
+		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.separator_mode');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.height_treshold_nos');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.height_unit');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.horizontal_margin');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.vertical_margin');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.vertical_gap');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.separator_height');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.show_attributes_as_cylinders');
 	}
 	
-	function hide_city_original() {
-		$('#settingsForm').jqxForm('hideComponent', 'city.original_building_metric');
+	function toggle_city_bricks_visibility(componentVisibility) {
+		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.layout');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.size');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.horizontal_margin');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.horizontal_gap');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.vertical_margin');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.vertical_gap');	
 	}
 	
-	function show_city_panels() {
-		$('#settingsForm').jqxForm('showComponent', 'city.panel.separator_mode');
-		$('#settingsForm').jqxForm('showComponent', 'city.panel.height_treshold_nos');
-		$('#settingsForm').jqxForm('showComponent', 'city.panel.height_unit');
-		$('#settingsForm').jqxForm('showComponent', 'city.panel.horizontal_margin');
-		$('#settingsForm').jqxForm('showComponent', 'city.panel.vertical_margin');
-		$('#settingsForm').jqxForm('showComponent', 'city.panel.vertical_gap');
-		$('#settingsForm').jqxForm('showComponent', 'city.panel.separator_height');
-		$('#settingsForm').jqxForm('showComponent', 'city.show_attributes_as_cylinders');
+	function toggle_city_floor_visibility(componentVisibility) {
+		// no components for this choice yet - Anticipation of Change
 	}
 	
-	function hide_city_panels() {
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel.separator_mode');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel.height_treshold_nos');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel.height_unit');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel.horizontal_margin');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel.vertical_margin');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel.vertical_gap');
-		$('#settingsForm').jqxForm('hideComponent', 'city.panel.separator_height');
-		$('#settingsForm').jqxForm('hideComponent', 'city.show_attributes_as_cylinders');
-	}
-	
-	function show_city_bricks() {
-		$('#settingsForm').jqxForm('showComponent', 'city.brick.layout');
-		$('#settingsForm').jqxForm('showComponent', 'city.brick.size');
-		$('#settingsForm').jqxForm('showComponent', 'city.brick.horizontal_margin');
-		$('#settingsForm').jqxForm('showComponent', 'city.brick.horizontal_gap');
-		$('#settingsForm').jqxForm('showComponent', 'city.brick.vertical_margin');
-		$('#settingsForm').jqxForm('showComponent', 'city.brick.vertical_gap');	
-	}
-	
-	function hide_city_bricks() {
-		$('#settingsForm').jqxForm('hideComponent', 'city.brick.layout');
-		$('#settingsForm').jqxForm('hideComponent', 'city.brick.size');
-		$('#settingsForm').jqxForm('hideComponent', 'city.brick.horizontal_margin');
-		$('#settingsForm').jqxForm('hideComponent', 'city.brick.horizontal_gap');
-		$('#settingsForm').jqxForm('hideComponent', 'city.brick.vertical_margin');
-		$('#settingsForm').jqxForm('hideComponent', 'city.brick.vertical_gap');	
-	}
-	
-	function show_city_floor() {
-		// no components for this choice
-	}
-	
-	function hide_city_floor() {
-		// no components for this choice
-	}
-	
-	function show_rd() {
-		$('#settingsForm').jqxForm('showComponent', 'rd.data_factor');
-		$('#settingsForm').jqxForm('showComponent', 'rd.method_factor');
-		$('#settingsForm').jqxForm('showComponent', 'rd.height');
-		$('#settingsForm').jqxForm('showComponent', 'rd.height_boost');
-		$('#settingsForm').jqxForm('showComponent', 'rd.height_multiplicator');
-		$('#settingsForm').jqxForm('showComponent', 'rd.ring_width');
-		$('#settingsForm').jqxForm('showComponent', 'rd.ring_width_md');
-		$('#settingsForm').jqxForm('showComponent', 'rd.ring_width_ad');
-		$('#settingsForm').jqxForm('showComponent', 'rd.min_area');
-		$('#settingsForm').jqxForm('showComponent', 'rd.namespace_transparency');
-		$('#settingsForm').jqxForm('showComponent', 'rd.class_transparency');
-		$('#settingsForm').jqxForm('showComponent', 'rd.method_transparency');
-		$('#settingsForm').jqxForm('showComponent', 'rd.data_transparency');
-		$('#settingsForm').jqxForm('showComponent', 'rd.color.class');
-		$('#settingsForm').jqxForm('showComponent', 'rd.color.data');
-		$('#settingsForm').jqxForm('showComponent', 'rd.color.method');
-		$('#settingsForm').jqxForm('showComponent', 'rd.color.namespace');
-		$('#settingsForm').jqxForm('showComponent', 'rd.method_disks');
-		$('#settingsForm').jqxForm('showComponent', 'rd.data_disks');
-		$('#settingsForm').jqxForm('showComponent', 'rd.method_type_mode');
-	}
-	
-	function hide_rd() {		
-		$('#settingsForm').jqxForm('hideComponent', 'rd.data_factor');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.method_factor');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.height');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.height_boost');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.height_multiplicator');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.ring_width');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.ring_width_md');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.ring_width_ad');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.min_area');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.namespace_transparency');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.class_transparency');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.method_transparency');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.data_transparency');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.color.class');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.color.data');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.color.method');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.color.namespace');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.method_disks');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.data_disks');
-		$('#settingsForm').jqxForm('hideComponent', 'rd.method_type_mode');	
+	function toggle_rd_visibility(componentVisibility) {
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.data_factor');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.method_factor');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.height');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.height_boost');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.height_multiplicator');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.ring_width');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.ring_width_md');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.ring_width_ad');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.min_area');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.namespace_transparency');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.class_transparency');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.method_transparency');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.data_transparency');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.color.class');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.color.data');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.color.method');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.color.namespace');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.method_disks');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.data_disks');
+		$('#settingsForm').jqxForm(componentVisibility, 'rd.method_type_mode');
 	}
 	
 	function reset(){
