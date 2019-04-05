@@ -1229,27 +1229,23 @@ var generationFormController = (function() {
 	// manual function to validate input of colors
 	function validate_hex(input) {
 		
+		var result;
+		
 		if (input.val()[0] != '#')
 			return false;
 		
 		if (input.val().length != 4 && input.val().length != 7)
 			return false;
 		
-		if ((input.val()[1] <= 'F' || input.val()[1] <= 'f') && (input.val()[2] <= 'F' || input.val()[2] <= 'f') && (input.val()[3] <= 'F' || input.val()[3] <= 'f')) {
-		
-			if (input.val().length > 4) {
-				
-				if ((input.val()[4] <= 'F' || input.val()[4] <= 'f') && (input.val()[5] <= 'F' || input.val()[5] <= 'f') && (input.val()[6] <= 'F' || input.val()[6] <= 'f')) {									
-					return true;
-				}
-				else
-					return false;
-			}
+		for (var i = 0; i < input.val().length; i++) {
+			
+			if (((input.val()[i] <= 'F' || input.val()[i] <= 'f') && (input.val()[i] >= 'A' || input.val()[i] >= 'a')) || (input.val()[i] <= 9 && input.val()[i] >= 0))
+				result = true;
 			else
-				return true;
+				result = false;			
 		}
-		else
-			return false;
+			
+		return result;
 	}
 	
 	function reset_form(template, defaultValue) {	
