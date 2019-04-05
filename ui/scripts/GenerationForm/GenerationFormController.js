@@ -954,7 +954,7 @@ var generationFormController = (function() {
 					{
 						columns: [
 							{
-								name: 'defaultButton',
+								name: 'resetButton',
 								type: 'button',
 								text: 'Reset',
 								align: 'left',
@@ -1190,7 +1190,7 @@ var generationFormController = (function() {
 				});
 				
 				// Reset Form Data
-				var btn_reset = settingsForm.jqxForm('getComponentByName', 'defaultButton');
+				var btn_reset = settingsForm.jqxForm('getComponentByName', 'resetButton');
 				btn_reset.on('click', function () {
 					
 					$("#settingsPopupWindowDiv").jqxWindow("close");					
@@ -1199,19 +1199,19 @@ var generationFormController = (function() {
 					openSettingsPopUp();
 				});
 				
-				// Cancel Form Data 
-				var btn_cancel = settingsForm.jqxForm('getComponentByName', 'cancelButton');
-				btn_cancel.on('click', function () {
-					
-					$("#settingsPopupWindowDiv").jqxWindow("close");
-				});
-				
 				// Submit Form Data 
 				var btn_submit = settingsForm.jqxForm('getComponentByName', 'submitButton');
 				btn_submit.on('click', function () {
 					
 					$('#settingsForm').jqxValidator('validate');
 					settingsForm.jqxForm('submit', "http://" + BACKEND +":8080", "_self", 'POST');
+				});
+				
+				// Cancel Form Data 
+				var btn_cancel = settingsForm.jqxForm('getComponentByName', 'cancelButton');
+				btn_cancel.on('click', function () {
+					
+					$("#settingsPopupWindowDiv").jqxWindow("close");
 				});
             }
         });
