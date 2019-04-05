@@ -1059,7 +1059,7 @@ var generationFormController = (function() {
 					rd_method_type_mode: false
 				};	
 				
-				// generate Form 
+				// Generate Form 
 				var settingsForm = $('#settingsForm');
 				settingsForm.jqxForm({
 					template: template,
@@ -1081,6 +1081,8 @@ var generationFormController = (function() {
 					if (newValue.metaphor == 'city') {
 						
 						toggle_city_visibility('showComponent');
+						toggle_city_color_visibility('showComponent');
+						toggle_city_class_elements_visibility('showComponent');						
 						toggle_city_original_visibility('hideComponent');
 						toggle_rd_visibility('hideComponent');
 					
@@ -1099,24 +1101,8 @@ var generationFormController = (function() {
 							
 						} else if (newValue.city_building_type == 'original') {
 							
-							$('#settingsForm').jqxForm('hideComponent', 'city.scheme');
-							$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_mode');
-							$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_coarse');
-							$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine');
-							$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine_direction_reversed');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.blue');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.aqua');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.light_green');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_green');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.yellow');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.orange');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.red');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.pink');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.violet');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.light_grey');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_grey');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.white');
-							$('#settingsForm').jqxForm('hideComponent', 'city.color.black');
+							toggle_city_class_elements_visibility('hideComponent');
+							toggle_city_color_visibility('hideComponent');
 							toggle_city_original_visibility('showComponent');
 							toggle_city_panels_visibility('hideComponent');
 							toggle_city_bricks_visibility('hideComponent');				
@@ -1131,6 +1117,8 @@ var generationFormController = (function() {
 					} else if (newValue.metaphor == 'rd') {
 						
 						toggle_city_visibility('hideComponent');
+						toggle_city_color_visibility('hideComponent');
+						toggle_city_class_elements_visibility('hideComponent');						
 						toggle_city_original_visibility('hideComponent');
 						toggle_city_panels_visibility('hideComponent');
 						toggle_city_bricks_visibility('hideComponent');
@@ -1230,7 +1218,7 @@ var generationFormController = (function() {
 		events.log.manipulation.subscribe(addLogObject);
 	}
 	
-	// validate input of url (jqxValidator has no support for this)
+	// Validate input of url (jqxValidator has no support for this)
 	function validate_url(input) {
 		
 		if (input.val().includes('http://') || input.val().includes('https://'))
@@ -1239,7 +1227,7 @@ var generationFormController = (function() {
 			return false;
 	}
 	
-	// validate input of HEX colors (jqxValidator has no support for this)
+	// Validate input of HEX colors (jqxValidator has no support for this)
 	function validate_hex(input) {
 		
 		var result;
@@ -1261,68 +1249,35 @@ var generationFormController = (function() {
 		return result;
 	}
 	
+	// Reset the form
 	function reset_form(template, defaultValue) {	
 		
 		$('#settingsForm').jqxForm('val', defaultValue);
 	}
 	
-	// On first load show only the input fields for initially selected options (city, optional)
+	// On first load show only the input fields for initially selected options (city && optional)
 	function initial_load_city_optional() {
 
-		$('#settingsForm').jqxForm('showComponent', 'city.building_type');
-		$('#settingsForm').jqxForm('hideComponent', 'city.scheme');
-		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_mode');
-		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_coarse');
-		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine');
-		$('#settingsForm').jqxForm('hideComponent', 'city.class_elements_sort_mode_fine_direction_reversed');
-		$('#settingsForm').jqxForm('showComponent', 'city.show_building_base');						
-		$('#settingsForm').jqxForm('showComponent', 'city.width_min');
-		$('#settingsForm').jqxForm('showComponent', 'city.height_min');
-		$('#settingsForm').jqxForm('showComponent', 'city.building.horizontal_margin');
-		$('#settingsForm').jqxForm('showComponent', 'city.building.horizontal_gap');
-		$('#settingsForm').jqxForm('showComponent', 'city.building.vertical_margin');
-		$('#settingsForm').jqxForm('showComponent', 'city.package.color_start');
-		$('#settingsForm').jqxForm('showComponent', 'city.package.color_end');
-		$('#settingsForm').jqxForm('showComponent', 'city.class.color_start');
-		$('#settingsForm').jqxForm('showComponent', 'city.class.color_end');
-		$('#settingsForm').jqxForm('showComponent', 'city.class.color');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.blue');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.aqua');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.light_green');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_green');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.yellow');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.orange');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.red');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.pink');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.violet');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.light_grey');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.dark_grey');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.white');
-		$('#settingsForm').jqxForm('hideComponent', 'city.color.black');
+		toggle_city_class_elements_visibility('hideComponent');
+		toggle_city_color_visibility('hideComponent');		
+		toggle_city_visibility('showComponent');		
 		toggle_city_original_visibility('showComponent');
 		toggle_city_panels_visibility('hideComponent');
 		toggle_city_bricks_visibility('hideComponent');
 		toggle_rd_visibility('hideComponent');
 	}
 	
-	function toggle_city_visibility(componentVisibility) {
-		$('#settingsForm').jqxForm(componentVisibility, 'city.building_type');
+	// Toggle visibility of city.scheme && city.class options
+	function toggle_city_class_elements_visibility(componentVisibility) {
 		$('#settingsForm').jqxForm(componentVisibility, 'city.scheme');
 		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_mode');
 		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_sort_mode_coarse');
 		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_sort_mode_fine');
 		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_sort_mode_fine_direction_reversed');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.show_building_base');	
-		$('#settingsForm').jqxForm(componentVisibility, 'city.width_min');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.height_min');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.building.horizontal_margin');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.building.horizontal_gap');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.building.vertical_margin');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.package.color_start');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.package.color_end');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color_start');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color_end');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color');
+	}
+	
+	// Toggle visibility of city.color options
+	function toggle_city_color_visibility(componentVisibility) {
 		$('#settingsForm').jqxForm(componentVisibility, 'city.color.blue');
 		$('#settingsForm').jqxForm(componentVisibility, 'city.color.aqua');
 		$('#settingsForm').jqxForm(componentVisibility, 'city.color.light_green');
@@ -1338,10 +1293,28 @@ var generationFormController = (function() {
 		$('#settingsForm').jqxForm(componentVisibility, 'city.color.black');
 	}
 	
+	// Toggle visibility of certain city. options
+	function toggle_city_visibility(componentVisibility) {
+		$('#settingsForm').jqxForm(componentVisibility, 'city.building_type');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.show_building_base');	
+		$('#settingsForm').jqxForm(componentVisibility, 'city.width_min');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.height_min');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.building.horizontal_margin');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.building.horizontal_gap');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.building.vertical_margin');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.package.color_start');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.package.color_end');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color_start');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color_end');
+		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color');
+	}
+	
+	// Toggle visibility of city.original options
 	function toggle_city_original_visibility(componentVisibility) {
 		$('#settingsForm').jqxForm(componentVisibility, 'city.original_building_metric');
 	}
 	
+	// Toggle visibility of city.panel options
 	function toggle_city_panels_visibility(componentVisibility) {
 		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.separator_mode');
 		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.height_treshold_nos');
@@ -1353,6 +1326,7 @@ var generationFormController = (function() {
 		$('#settingsForm').jqxForm(componentVisibility, 'city.show_attributes_as_cylinders');
 	}
 	
+	// Toggle visibility of city.brick options
 	function toggle_city_bricks_visibility(componentVisibility) {
 		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.layout');
 		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.size');
@@ -1362,10 +1336,12 @@ var generationFormController = (function() {
 		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.vertical_gap');	
 	}
 	
+	// Toggle visibility of city.floor options (none yet)
 	function toggle_city_floor_visibility(componentVisibility) {
 		// no components for this choice yet - Anticipation of Change
 	}
 	
+	// Toggle visibility of rd. options
 	function toggle_rd_visibility(componentVisibility) {
 		$('#settingsForm').jqxForm(componentVisibility, 'rd.data_factor');
 		$('#settingsForm').jqxForm(componentVisibility, 'rd.method_factor');
