@@ -116,6 +116,7 @@ var generationFormController = (function() {
 						name: 'input.files',
 						type: 'text',
 						label: 'input.files',
+						required: true,
 						labelAlign: 'right',
 						labelWidth: '325px',
 						width: '200px',
