@@ -29,11 +29,6 @@
 		
 		{	name: 	"canvasSelectController" 
 		},
-        {
-            name: 'filterController',
-            devMode: false,
-            configuration: 'default.json'
-        },
 		{ 	name: 	"canvasFlyToController" 
 		},
 	
@@ -49,7 +44,7 @@
 		},
         {	name:	"macroExplorerController",
             //should the filtered elements be "removed" or just "transparent"?
-            filterMode: "removed"
+            filterMode: "transparent"
 		},
 		{ 	name: 	"relationConnectorController",		
 						
@@ -277,10 +272,10 @@
                                     size: "33%",
                                     expanders: [
                                         {
-                                            name: "filterExplorer",
-                                            title: "Filter",
+                                            name: "macroExplorer",
+                                            title: "Macro Explorer",
                                             controllers: [
-                                                {name: "filterController"}
+                                                {name: "macroExplorerController"}
                                             ],
                                         }
                                     ]
@@ -382,10 +377,10 @@
                                             oriontation: "horizontal",
                                             expanders: [
                                                 {
-                                                    name: "macroExplorer",
-                                                    title: "Macro Explorer",
+                                                    name: "systeminfo",
+                                                    title: "Info",
                                                     controllers: [
-                                                        {name: "macroExplorerController"}
+                                                        {name: "systeminfoController"}
                                                     ],
                                                 },
                                             ],

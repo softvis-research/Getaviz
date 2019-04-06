@@ -110,10 +110,33 @@ var macroExplorerController = (function() {
 			events.macroChanged.on.publish(applicationEvent);
 		} 
 	}
+
+	function sendInitialEvent(){
+		var allNodes = tree.getNodes();
+		for (var i = 0; i < allNodes.length; i++) {
+			var currentNode = allNodes[i];
+			allTreeNodesById.set(currentNode.id, currentNode)
+		}
+
+		var entities = [];
+		allNodes.forEach(function(node){
+			entities.push(node.id);
+		});
+								
+		var applicationEvent = {			
+			sender: 	macroExplorerController,
+			entities:	entities,
+			allTreeNodesById: allTreeNodesById,
+			filterMode: controllerConfig.filterMode
+		};
+		
+		events.macroChanged.on.publish(applicationEvent);
+	}
     
     return {
         initialize: initialize,
 		activate: activate,
-		reset: reset
+		reset: reset,
+		sendInitialEvent: sendInitialEvent
     };
 })();
