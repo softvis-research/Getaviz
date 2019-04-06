@@ -111,32 +111,18 @@
 
 				{	
 					title:		"Visualizations",
-					subMenu:	true,
+                                        subMenu: "true",
 					items:		[
 						{
 							title: 	"City Original",
 							link: 	true,
-							url:	"index.php?setup=web/City freemind&model=City%20original%20freemind"
-						},
-						{
-							title: 	"City Bricks",
-							link: 	true,
-							url:	"index.php?setup=web/City freemind&model=City%20bricks%20freemind"
-						},						
-						{
-							title: 	"City Floors",
-							link: 	true,
-							url:	"index.php?setup=web/City freemind&model=City%20floor%20freemind"
+							url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
 						},
 						{
 							title: 	"Recursive Disk",
 							link: 	true,
-							url:	"index.php?setup=web/RD freemind&model=RD%20freemind"
-						}, {
-                            title: 	"Recursive Disk 3D",
-                            link: 	true,
-                            url:	"index.php?setup=web/RD reek&model=RD%203D%20reek"
-                        },
+							url:	"index.php?setup=web/RD bank&model=RD%20bank"
+						},
                         {
                             title: 	"New Visualization",
                             event:	"generationFormController.openSettingsPopUp"
