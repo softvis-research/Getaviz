@@ -8,87 +8,19 @@
 	// Most options in the file settings.properties contain a "."
 	// If "." is used in "bind" the ui does not load ("." is interpreted as a function call)
 	
-	// JSON - Order of Options:
-	// input.name
-	// input.files
-	// metaphor
-	// city.building_type
-	// city.scheme
-	// city.class_elements_mode
-	// city.class_elements_sort_mode_coarse
-	// city.class_elements_sort_mode_fine
-	// city.class_elements_sort_mode_fine_direction_reversed
-	// city.show_building_base
-	// city.show_attributes_as_cylinders
-	// city.brick.layout
-	// city.brick.size
-	// city.brick.horizontal_margin
-	// city.brick.horizontal_gap
-	// city.brick.vertical_margin
-	// city.brick.vertical_gap
-	// city.panel.separator_mode
-	// city.panel.height_treshold_nos
-	// city.panel.height_unit
-	// city.panel.horizontal_margin
-	// city.panel.vertical_margin
-	// city.panel.vertical_gap
-	// city.panel.separator_height
-	// city.original_building_metric
-	// city.width_min
-	// city.height_min
-	// city.building.horizontal_margin
-	// city.building.horizontal_gap
-	// city.building.vertical_margin
-	// city.package.color_start
-	// city.package.color_end
-	// city.class.color_start
-	// city.class.color_end
-	// city.class.color
-	// city.color.blue
-	// city.color.aqua
-	// city.color.light_green
-	// city.color.dark_green
-	// city.color.yellow
-	// city.color.orange
-	// city.color.red
-	// city.color.pink
-	// city.color.violet
-	// city.color.light_grey
-	// city.color.dark_grey
-	// city.color.white
-	// city.color.black
-	// rd.data_factor
-	// rd.method_factor
-	// rd.height
-	// rd.height_boost
-	// rd.height_multiplicator
-	// rd.ring_width
-	// rd.ring_width_md
-	// rd.ring_width_ad
-	// rd.min_area
-	// rd.namespace_transparency
-	// rd.class_transparency
-	// rd.method_transparency
-	// rd.data_transparency
-	// rd.color.class
-	// rd.color.data
-	// rd.color.method
-	// rd.color.namespace
-	// rd.method_disks
-	// rd.data_disks
-	// rd.method_type_mode
-	
 var generationFormController = (function() {
+
+	let settingsForm ;
 	
-	var logObjectMap = new Map();
-	
-	var controllerConfig = {
+	let controllerConfig = {
 		createHeadSection: true
-	}
-	
+	};
+
 	function initialize(setupConfig){
 		application.transferConfigParams(setupConfig, controllerConfig);
 	}
+
+
 	
 	function activate(rootDiv){
 		
@@ -97,7 +29,7 @@ var generationFormController = (function() {
 		$("#settingsPopupWindowDiv").jqxWindow({ theme: "metro", width: '33%', minWidth: 650, height: '70%', isModal: true, draggable: false, autoOpen: false, resizable: true, closeButtonSize: 0, initContent: function() {
 		   
 				// Add Form Inputs and Labels here
- 				var template = [
+ 				const template = [
 					
 					// Independent Options 					
 					{
@@ -989,7 +921,7 @@ var generationFormController = (function() {
 				];
 				
 				// Default Values 				
-				var defaultValue = {
+				const defaultValue = {
 					input_name: 'default',
 					input_files: '',
 					metaphor: 'city',
@@ -1061,12 +993,12 @@ var generationFormController = (function() {
 				};	
 				
 				// Generate Form 
-				var settingsForm = $('#settingsForm');
+				settingsForm = $('#settingsForm');
 				settingsForm.jqxForm({
 					template: template,
 					value: defaultValue,
-					padding: { left: 5, top: 5, right: 5, bottom: 5 }
-					
+					padding: { left: 5, top: 5, right: 5, bottom: 5 },
+					theme: "metro"
 				});	
 
 				// On first load show only the input fields for initially selected options (city, optional)
@@ -1074,12 +1006,11 @@ var generationFormController = (function() {
 				
 				// formDataChange Event
 				settingsForm.on('formDataChange', function (event) {
-					var args = event.args;
-					var newValue = args.value;
-					var previousValue = args.previousValue;		
+					const args = event.args;
+					const newValue = args.value;
 
 					// Elements shown/hidden based on choice 'city' vs 'rd' 
-					if (newValue.metaphor == 'city') {
+					if (newValue.metaphor === 'city') {
 						
 						toggle_city_visibility('showComponent');
 						toggle_city_color_visibility('showComponent');
@@ -1088,19 +1019,19 @@ var generationFormController = (function() {
 						toggle_rd_visibility('hideComponent');
 					
 						// Elements shown/hidden based on choice 'panels' vs 'bricks' vs 'original' vs 'floor' 
-						if (newValue.city_building_type == 'panels') {	
+						if (newValue.city_building_type === 'panels') {
 						
 							toggle_city_original_visibility('hideComponent');
 							toggle_city_panels_visibility('showComponent');
 							toggle_city_bricks_visibility('hideComponent');
 							
-						} else if (newValue.city_building_type == 'floor') {
+						} else if (newValue.city_building_type === 'floor') {
 						
 							toggle_city_original_visibility('hideComponent');
 							toggle_city_panels_visibility('hideComponent');
 							toggle_city_bricks_visibility('hideComponent');							
 							
-						} else if (newValue.city_building_type == 'original') {
+						} else if (newValue.city_building_type === 'original') {
 							
 							toggle_city_class_elements_visibility('hideComponent');
 							toggle_city_color_visibility('hideComponent');
@@ -1108,14 +1039,14 @@ var generationFormController = (function() {
 							toggle_city_panels_visibility('hideComponent');
 							toggle_city_bricks_visibility('hideComponent');				
 							
-						} else if (newValue.city_building_type == 'bricks') {
+						} else if (newValue.city_building_type === 'bricks') {
 						
 							toggle_city_original_visibility('hideComponent');
 							toggle_city_panels_visibility('hideComponent');
 							toggle_city_bricks_visibility('showComponent');
 						}
 						
-					} else if (newValue.metaphor == 'rd') {
+					} else if (newValue.metaphor === 'rd') {
 						
 						toggle_city_visibility('hideComponent');
 						toggle_city_color_visibility('hideComponent');
@@ -1128,30 +1059,30 @@ var generationFormController = (function() {
 				});			
 				
 				// Manually created vars to validate the data in the form
-				var manual_input_name = settingsForm.jqxForm('getComponentByName', 'input.name');
-				var manual_input_files = settingsForm.jqxForm('getComponentByName', 'input.files');
-				var manual_city_package_color_start = settingsForm.jqxForm('getComponentByName', 'city.package.color_start');
-				var manual_city_package_color_end = settingsForm.jqxForm('getComponentByName', 'city.package.color_end');
-				var manual_city_class_color_start = settingsForm.jqxForm('getComponentByName', 'city.class.color_start');
-				var manual_city_class_color_end = settingsForm.jqxForm('getComponentByName', 'city.class.color_end');
-				var manual_city_class_color = settingsForm.jqxForm('getComponentByName', 'city.class.color');
-				var manual_city_color_blue = settingsForm.jqxForm('getComponentByName', 'city.color.blue');
-				var manual_city_color_aqua = settingsForm.jqxForm('getComponentByName', 'city.color.aqua');
-				var manual_city_color_light_green = settingsForm.jqxForm('getComponentByName', 'city.color.light_green');
-				var manual_city_color_dark_green = settingsForm.jqxForm('getComponentByName', 'city.color.dark_green');
-				var manual_city_color_yellow = settingsForm.jqxForm('getComponentByName', 'city.color.yellow');
-				var manual_city_color_orange = settingsForm.jqxForm('getComponentByName', 'city.color.orange');
-				var manual_city_color_red = settingsForm.jqxForm('getComponentByName', 'city.color.red');
-				var manual_city_color_pink = settingsForm.jqxForm('getComponentByName', 'city.color.pink');
-				var manual_city_color_violet = settingsForm.jqxForm('getComponentByName', 'city.color.violet');
-				var manual_city_color_light_grey = settingsForm.jqxForm('getComponentByName', 'city.color.light_grey');
-				var manual_city_color_dark_grey = settingsForm.jqxForm('getComponentByName', 'city.color.dark_grey');
-				var manual_city_color_white = settingsForm.jqxForm('getComponentByName', 'city.color.white');
-				var manual_city_color_black = settingsForm.jqxForm('getComponentByName', 'city.color.black');
-				var manual_rd_color_class = settingsForm.jqxForm('getComponentByName', 'rd.color.class');
-				var manual_rd_color_data = settingsForm.jqxForm('getComponentByName', 'rd.color.data');
-				var manual_rd_color_method = settingsForm.jqxForm('getComponentByName', 'rd.color.method');
-				var manual_rd_color_namespace = settingsForm.jqxForm('getComponentByName', 'rd.color.namespace');
+				const manual_input_name = settingsForm.jqxForm('getComponentByName', 'input.name');
+				const manual_input_files = settingsForm.jqxForm('getComponentByName', 'input.files');
+				const manual_city_package_color_start = settingsForm.jqxForm('getComponentByName', 'city.package.color_start');
+				const manual_city_package_color_end = settingsForm.jqxForm('getComponentByName', 'city.package.color_end');
+				const manual_city_class_color_start = settingsForm.jqxForm('getComponentByName', 'city.class.color_start');
+				const manual_city_class_color_end = settingsForm.jqxForm('getComponentByName', 'city.class.color_end');
+				const manual_city_class_color = settingsForm.jqxForm('getComponentByName', 'city.class.color');
+				const manual_city_color_blue = settingsForm.jqxForm('getComponentByName', 'city.color.blue');
+				const manual_city_color_aqua = settingsForm.jqxForm('getComponentByName', 'city.color.aqua');
+				const manual_city_color_light_green = settingsForm.jqxForm('getComponentByName', 'city.color.light_green');
+				const manual_city_color_dark_green = settingsForm.jqxForm('getComponentByName', 'city.color.dark_green');
+				const manual_city_color_yellow = settingsForm.jqxForm('getComponentByName', 'city.color.yellow');
+				const manual_city_color_orange = settingsForm.jqxForm('getComponentByName', 'city.color.orange');
+				const manual_city_color_red = settingsForm.jqxForm('getComponentByName', 'city.color.red');
+				const manual_city_color_pink = settingsForm.jqxForm('getComponentByName', 'city.color.pink');
+				const manual_city_color_violet = settingsForm.jqxForm('getComponentByName', 'city.color.violet');
+				const manual_city_color_light_grey = settingsForm.jqxForm('getComponentByName', 'city.color.light_grey');
+				const manual_city_color_dark_grey = settingsForm.jqxForm('getComponentByName', 'city.color.dark_grey');
+				const manual_city_color_white = settingsForm.jqxForm('getComponentByName', 'city.color.white');
+				const manual_city_color_black = settingsForm.jqxForm('getComponentByName', 'city.color.black');
+				const manual_rd_color_class = settingsForm.jqxForm('getComponentByName', 'rd.color.class');
+				const manual_rd_color_data = settingsForm.jqxForm('getComponentByName', 'rd.color.data');
+				const manual_rd_color_method = settingsForm.jqxForm('getComponentByName', 'rd.color.method');
+				const manual_rd_color_namespace = settingsForm.jqxForm('getComponentByName', 'rd.color.namespace');
 				
 				// Validation rules
 				$('#settingsForm').jqxValidator({
@@ -1185,58 +1116,44 @@ var generationFormController = (function() {
 				});
 				
 				// Reset Form Data
-				var btn_reset = settingsForm.jqxForm('getComponentByName', 'resetButton');
+				const btn_reset = settingsForm.jqxForm('getComponentByName', 'resetButton');
 				btn_reset.on('click', function () {
-					
 					reset_form(template, defaultValue);
 					initial_load_city_optional();
 				});
 				
 				// Submit Form Data 
-				var btn_submit = settingsForm.jqxForm('getComponentByName', 'submitButton');
+				const btn_submit = settingsForm.jqxForm('getComponentByName', 'submitButton');
 				btn_submit.on('click', function () {
-					
-					$('#settingsForm').jqxValidator('validate');
+					settingsForm.jqxValidator('validate');
 					settingsForm.jqxForm('submit', "http://" + BACKEND +":8080", "_self", 'POST');
 				});
 				
 				// Cancel Form Data 
-				var btn_cancel = settingsForm.jqxForm('getComponentByName', 'cancelButton');
+				const btn_cancel = settingsForm.jqxForm('getComponentByName', 'cancelButton');
 				btn_cancel.on('click', function () {
-					
 					$("#settingsPopupWindowDiv").jqxWindow("close");
 				});
             }
         });
-		
-		events.log.info.subscribe(addLogObject);
-		events.log.warning.subscribe(addLogObject);
-		events.log.error.subscribe(addLogObject);
-		events.log.action.subscribe(addLogObject);
-		events.log.event.subscribe(addLogObject);
-		events.log.manipulation.subscribe(addLogObject);
 	}
 	
 	// Validate input of url (jqxValidator has no support for this)
 	function validate_url(input) {
-		
-		if (input.val().startsWith('http://') || input.val().startsWith('https://'))
-			return true;
-		else
-			return false;
+		return (input.val().startsWith('http://') || input.val().startsWith('https://'));
 	}
 	
 	// Validate input of HEX colors (jqxValidator has no support for this)
 	function validate_hex(input) {
 		
-		if (input.val()[0] != '#')
+		if (input.val()[0] !== '#')
 			return false;
 		
-		if (input.val().length != 4 && input.val().length != 7)
+		if (input.val().length !== 4 && input.val().length !== 7)
 			return false;
 		
-		for (var i = 1; i < input.val().length; i++) {			
-			if (((input.val()[i] >= 'a' && input.val()[i] <= 'f') || (input.val()[i] >= 'A' && input.val()[i] <= 'F')) || (input.val()[i] >= 0 && input.val()[i] <= 9))
+		for (let i = 1; i < input.val().length; i++) {
+			if ((input.val()[i] >= 'a' && input.val()[i] <= 'f') || (input.val()[i] >= 'A' && input.val()[i] <= 'F') || (input.val()[i] >= 0 && input.val()[i] <= 9))
 				{}
 			else
 				return false;			
@@ -1265,71 +1182,71 @@ var generationFormController = (function() {
 	
 	// Toggle visibility of city.scheme && city.class options
 	function toggle_city_class_elements_visibility(componentVisibility) {
-		$('#settingsForm').jqxForm(componentVisibility, 'city.scheme');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_mode');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_sort_mode_coarse');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_sort_mode_fine');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.class_elements_sort_mode_fine_direction_reversed');
+		settingsForm.jqxForm(componentVisibility, 'city.scheme');
+		settingsForm.jqxForm(componentVisibility, 'city.class_elements_mode');
+		settingsForm.jqxForm(componentVisibility, 'city.class_elements_sort_mode_coarse');
+		settingsForm.jqxForm(componentVisibility, 'city.class_elements_sort_mode_fine');
+		settingsForm.jqxForm(componentVisibility, 'city.class_elements_sort_mode_fine_direction_reversed');
 	}
 	
 	// Toggle visibility of city.color options
 	function toggle_city_color_visibility(componentVisibility) {
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.blue');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.aqua');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.light_green');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.dark_green');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.yellow');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.orange');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.red');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.pink');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.violet');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.light_grey');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.dark_grey');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.white');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.color.black');
+		settingsForm.jqxForm(componentVisibility, 'city.color.blue');
+		settingsForm.jqxForm(componentVisibility, 'city.color.aqua');
+		settingsForm.jqxForm(componentVisibility, 'city.color.light_green');
+		settingsForm.jqxForm(componentVisibility, 'city.color.dark_green');
+		settingsForm.jqxForm(componentVisibility, 'city.color.yellow');
+		settingsForm.jqxForm(componentVisibility, 'city.color.orange');
+		settingsForm.jqxForm(componentVisibility, 'city.color.red');
+		settingsForm.jqxForm(componentVisibility, 'city.color.pink');
+		settingsForm.jqxForm(componentVisibility, 'city.color.violet');
+		settingsForm.jqxForm(componentVisibility, 'city.color.light_grey');
+		settingsForm.jqxForm(componentVisibility, 'city.color.dark_grey');
+		settingsForm.jqxForm(componentVisibility, 'city.color.white');
+		settingsForm.jqxForm(componentVisibility, 'city.color.black');
 	}
 	
 	// Toggle visibility of certain city. options
 	function toggle_city_visibility(componentVisibility) {
-		$('#settingsForm').jqxForm(componentVisibility, 'city.building_type');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.show_building_base');	
-		$('#settingsForm').jqxForm(componentVisibility, 'city.width_min');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.height_min');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.building.horizontal_margin');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.building.horizontal_gap');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.building.vertical_margin');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.package.color_start');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.package.color_end');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color_start');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color_end');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.class.color');
+		settingsForm.jqxForm(componentVisibility, 'city.building_type');
+		settingsForm.jqxForm(componentVisibility, 'city.show_building_base');
+		settingsForm.jqxForm(componentVisibility, 'city.width_min');
+		settingsForm.jqxForm(componentVisibility, 'city.height_min');
+		settingsForm.jqxForm(componentVisibility, 'city.building.horizontal_margin');
+		settingsForm.jqxForm(componentVisibility, 'city.building.horizontal_gap');
+		settingsForm.jqxForm(componentVisibility, 'city.building.vertical_margin');
+		settingsForm.jqxForm(componentVisibility, 'city.package.color_start');
+		settingsForm.jqxForm(componentVisibility, 'city.package.color_end');
+		settingsForm.jqxForm(componentVisibility, 'city.class.color_start');
+		settingsForm.jqxForm(componentVisibility, 'city.class.color_end');
+		settingsForm.jqxForm(componentVisibility, 'city.class.color');
 	}
 	
 	// Toggle visibility of city.original options
 	function toggle_city_original_visibility(componentVisibility) {
-		$('#settingsForm').jqxForm(componentVisibility, 'city.original_building_metric');
+		settingsForm.jqxForm(componentVisibility, 'city.original_building_metric');
 	}
 	
 	// Toggle visibility of city.panel options
 	function toggle_city_panels_visibility(componentVisibility) {
-		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.separator_mode');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.height_treshold_nos');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.height_unit');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.horizontal_margin');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.vertical_margin');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.vertical_gap');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.panel.separator_height');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.show_attributes_as_cylinders');
+		settingsForm.jqxForm(componentVisibility, 'city.panel.separator_mode');
+		settingsForm.jqxForm(componentVisibility, 'city.panel.height_treshold_nos');
+		settingsForm.jqxForm(componentVisibility, 'city.panel.height_unit');
+		settingsForm.jqxForm(componentVisibility, 'city.panel.horizontal_margin');
+		settingsForm.jqxForm(componentVisibility, 'city.panel.vertical_margin');
+		settingsForm.jqxForm(componentVisibility, 'city.panel.vertical_gap');
+		settingsForm.jqxForm(componentVisibility, 'city.panel.separator_height');
+		settingsForm.jqxForm(componentVisibility, 'city.show_attributes_as_cylinders');
 	}
 	
 	// Toggle visibility of city.brick options
 	function toggle_city_bricks_visibility(componentVisibility) {
-		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.layout');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.size');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.horizontal_margin');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.horizontal_gap');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.vertical_margin');
-		$('#settingsForm').jqxForm(componentVisibility, 'city.brick.vertical_gap');	
+		settingsForm.jqxForm(componentVisibility, 'city.brick.layout');
+		settingsForm.jqxForm(componentVisibility, 'city.brick.size');
+		settingsForm.jqxForm(componentVisibility, 'city.brick.horizontal_margin');
+		settingsForm.jqxForm(componentVisibility, 'city.brick.horizontal_gap');
+		settingsForm.jqxForm(componentVisibility, 'city.brick.vertical_margin');
+		settingsForm.jqxForm(componentVisibility, 'city.brick.vertical_gap');
 	}
 	
 	// Toggle visibility of city.floor options (none yet)
@@ -1339,26 +1256,26 @@ var generationFormController = (function() {
 	
 	// Toggle visibility of rd. options
 	function toggle_rd_visibility(componentVisibility) {
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.data_factor');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.method_factor');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.height');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.height_boost');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.height_multiplicator');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.ring_width');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.ring_width_md');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.ring_width_ad');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.min_area');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.namespace_transparency');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.class_transparency');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.method_transparency');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.data_transparency');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.color.class');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.color.data');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.color.method');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.color.namespace');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.method_disks');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.data_disks');
-		$('#settingsForm').jqxForm(componentVisibility, 'rd.method_type_mode');
+		settingsForm.jqxForm(componentVisibility, 'rd.data_factor');
+		settingsForm.jqxForm(componentVisibility, 'rd.method_factor');
+		settingsForm.jqxForm(componentVisibility, 'rd.height');
+		settingsForm.jqxForm(componentVisibility, 'rd.height_boost');
+		settingsForm.jqxForm(componentVisibility, 'rd.height_multiplicator');
+		settingsForm.jqxForm(componentVisibility, 'rd.ring_width');
+		settingsForm.jqxForm(componentVisibility, 'rd.ring_width_md');
+		settingsForm.jqxForm(componentVisibility, 'rd.ring_width_ad');
+		settingsForm.jqxForm(componentVisibility, 'rd.min_area');
+		settingsForm.jqxForm(componentVisibility, 'rd.namespace_transparency');
+		settingsForm.jqxForm(componentVisibility, 'rd.class_transparency');
+		settingsForm.jqxForm(componentVisibility, 'rd.method_transparency');
+		settingsForm.jqxForm(componentVisibility, 'rd.data_transparency');
+		settingsForm.jqxForm(componentVisibility, 'rd.color.class');
+		settingsForm.jqxForm(componentVisibility, 'rd.color.data');
+		settingsForm.jqxForm(componentVisibility, 'rd.color.method');
+		settingsForm.jqxForm(componentVisibility, 'rd.color.namespace');
+		settingsForm.jqxForm(componentVisibility, 'rd.method_disks');
+		settingsForm.jqxForm(componentVisibility, 'rd.data_disks');
+		settingsForm.jqxForm(componentVisibility, 'rd.method_type_mode');
 	}
 	
 	function reset(){
@@ -1368,34 +1285,31 @@ var generationFormController = (function() {
 		$("#settingsPopupWindowDiv").jqxWindow("open");
 	}
 	
-	function addLogObject(logObject){																
-	}
-	
 	function createSettingPopup(rootDiv){
 
 		// Link to CSS File
-		var cssLink = document.createElement("link");
+		 let cssLink = document.createElement("link");
 		cssLink.type = "text/css";
 		cssLink.rel = "stylesheet";
 		cssLink.href = "scripts/GenerationForm/GenerationFormController.css";
-		document.getElementsByTagName("head")[0].appendChild(cssLink);
+		 document.getElementsByTagName("head")[0].appendChild(cssLink);
 		
 		// The Window
-		var settingsPopupWindowDiv = document.createElement("DIV");
+		let settingsPopupWindowDiv = document.createElement("DIV");
 		rootDiv.appendChild(settingsPopupWindowDiv);
 		settingsPopupWindowDiv.id = "settingsPopupWindowDiv";
 		
 		// The Windows Title
-		var settingsPopupTitleDiv = document.createElement("DIV");
+		let settingsPopupTitleDiv = document.createElement("DIV");
 		settingsPopupWindowDiv.appendChild(settingsPopupTitleDiv);
 		settingsPopupTitleDiv.innerHTML = "Generate new visualization";
 		
 		// The Windows DIV
-		var settingsPopupContentDiv = document.createElement("DIV");
+		let settingsPopupContentDiv = document.createElement("DIV");
 		settingsPopupWindowDiv.appendChild(settingsPopupContentDiv);
 		
 		// The Form DIV
-		var settingsForm = document.createElement("DIV");
+		let settingsForm = document.createElement("DIV");
 		settingsForm.id = "settingsForm";
 		settingsPopupContentDiv.appendChild(settingsForm);
 	}
