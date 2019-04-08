@@ -230,19 +230,29 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.2.2</version>
 			</plugin>
+			<plugin>
+            <groupId>com.buschmais.jqassistant</groupId>
+            <artifactId>jqassistant-maven-plugin</artifactId>
+            <version>1.6.0</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>scan</goal>
+                        <goal>analyze</goal>
+                    </goals>
+                    <configuration>
+                    	<groups>
+                    		<group>packages:Default</group>
+                    	</groups>
+                        <warnOnSeverity>MINOR</warnOnSeverity>
+                        <failOnSeverity>MAJOR</failOnSeverity>
+                        <rule>
+                    		<defaultConceptSeverity>INFO</defaultConceptSeverity>
+                		</rule>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
 		</plugins>
 	</build>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 </project>
