@@ -113,6 +113,27 @@
 				},
 
 				{	
+					title:		"Visualizations",
+					subMenu:	true,
+					items:		[
+						{
+							title: 	"City Original",
+							link: 	true,
+							url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
+						},
+						{
+							title: 	"Recursive Disk",
+							link: 	true,
+							url:	"index.php?setup=web/RD bank&model=RD%20bank"
+						},
+                        {
+                            title: 	"New Visualization",
+                            event:	"generationFormController.openSettingsPopUp"
+                        },
+					]
+				},
+
+				{	
 					title:		"About",
 					subMenu:	true,
 					items:		[
@@ -144,18 +165,7 @@
                             title: 	"Privacy Policy",
                             link: 	true,
                             url:	"http://home.uni-leipzig.de/svis/privacy-policy/"
-                        }
-					]
-				},
-
-				{	
-					title:		"Visualizations",
-					subMenu:	true,
-					items:		[
-                        {
-                            title: 	"New Visualization",
-                            event:	"generationFormController.openSettingsPopUp"
-                        }
+                    }
 					]
 				},					
 			]
@@ -164,32 +174,32 @@
             name: "legendController",
             entries: [{
                 name: "Package",
-                icon: "setups/web/package.png"
+                icon: "grayCircle"
             }, {
                 name: "Type",
-                icon: "setups/web/type.png",
+                icon: "purpleCircle",
             }, {
                 name: "Method",
-                icon: "setups/web/method.png",
+                icon: "lightBlueCircle",
             }, {
                 name: "Field",
-                icon: "setups/web/field.png",
+                icon: "yellowCircle",
             }, {
                 name: "Navigation",
-                icon: "setups/web/navigation.png",
+                icon: "navigation",
                 entries: [
                     {
                         name: "Rotate",
-                        icon: "setups/web/left.png"
+                        icon: "leftMouseButton"
                     }, {
                         name: "Center",
-                        icon: "setups/web/double.png"
+                        icon: "doubleClick"
                     }, {
                         name: "Move",
-                        icon: "setups/web/middle.png"
+                        icon: "midMouseButton"
                     }, {
                         name: "Zoom",
-                        icon: "setups/web/zoom.png"
+                        icon: "scrolling"
                     }]
             }
             ],
