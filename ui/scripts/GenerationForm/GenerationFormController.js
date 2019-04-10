@@ -171,8 +171,8 @@ var generationFormController = (function() {
 						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
-							{ value: 'false' },
-							{ value: 'true'}
+							{ value: 'true' },
+							{ value: 'false'}
 						],
 						info:'If set true, the order of the sorting, defined in class_elements_sort_mode_fine is reversed. &#013;If class_elements_sort_mode_fine is set to scheme, a secondary sorting is performed to place methods with high numbers of statements at the bottom. &#013;This behavior is not influenced by this switch.',
 						padding: {left: 8, top: 0, bottom: 0, right: 8}
@@ -846,8 +846,8 @@ var generationFormController = (function() {
 						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
-							{ value: 'false' },
-							{ value: 'true'}
+							{ value: 'true' },
+							{ value: 'false'}
 						],
 						info:'If true the Methods will be visualized as Disks instead of DiskSegments.',
 						padding: {left: 8, top: 0, bottom: 0, right: 8}
@@ -862,8 +862,8 @@ var generationFormController = (function() {
 						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
-							{ value: 'false' },
-							{ value: 'true'}
+							{ value: 'true' },
+							{ value: 'false'}
 						],
 						info:'If true Attributes will be visualized as disks.',
 						padding: {left: 8, top: 0, bottom: 0, right: 8}
@@ -878,8 +878,8 @@ var generationFormController = (function() {
 						width: '200px',
 						component: 'jqxDropDownList',
 						options: [
-							{ value: 'false' },
-							{ value: 'true'}
+							{ value: 'true' },
+							{ value: 'false'}
 						],
 						info:'If true visualization will be based on the method type',
 						padding: {left: 8, top: 0, bottom: 0, right: 8}
