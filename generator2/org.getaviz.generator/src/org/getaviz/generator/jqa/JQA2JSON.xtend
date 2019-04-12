@@ -97,6 +97,12 @@ class JQA2JSON {
 			«IF el.hasLabel(Labels.Union)»
 			«toMetaDataUnion(el)»
 			«ENDIF»
+			«IF el.hasLabel(Labels.Enum) && el.hasLabel(Labels.C)»
+			«toMetaDataCEnum(el)»
+			«ENDIF»
+			«IF el.hasLabel(Labels.EnumConstant) && el.hasLabel(Labels.C)»
+			«toMetaDataCEnumValue(el)»
+			«ENDIF»
 		«ENDFOR»
 	'''
 	
@@ -409,6 +415,52 @@ class JQA2JSON {
 		"qualifiedName": "«union.getProperty("fqn")»",
 		"name":          "«union.getProperty("name")»",
 		"type":          "Union",
+		"belongsTo":     "«belongsTo»",
+		"dependsOn":     "«dependsOn»"
+		'''
+		return result
+	}
+	
+	def toMetaDataCEnum(Node enumNode) {
+		var belongsTo = ""
+		var dependsOn = ""
+		val parent = enumNode.getRelationships(Direction.INCOMING, Rels.DECLARES).head
+		if(parent !== null) {
+			belongsTo = parent.startNode.getProperty("hash") as String
+		}			
+		var dependent = enumNode.getRelationships(Direction.OUTGOING, Rels.DEPENDS_ON).head
+		if(dependent !== null){
+			dependsOn = dependent.endNode.getProperty("hash") as String
+		}
+					
+		val result = '''
+		"id":            "«enumNode.getProperty("hash")»",
+		"qualifiedName": "«enumNode.getProperty("fqn")»",
+		"name":          "«enumNode.getProperty("name")»",
+		"type":          "Enum",
+		"belongsTo":     "«belongsTo»",
+		"dependsOn":     "«dependsOn»"
+		'''
+		return result
+	}
+	
+	def toMetaDataCEnumValue(Node enumValue) {
+		var belongsTo = ""
+		var dependsOn = ""
+		val parent = enumValue.getRelationships(Direction.INCOMING, Rels.DECLARES).head
+		if(parent !== null) {
+			belongsTo = parent.startNode.getProperty("hash") as String
+		}			
+		var dependent = enumValue.getRelationships(Direction.OUTGOING, Rels.DEPENDS_ON).head
+		if(dependent !== null){
+			dependsOn = dependent.endNode.getProperty("hash") as String
+		}
+					
+		val result = '''
+		"id":            "«enumValue.getProperty("hash")»",
+		"qualifiedName": "«enumValue.getProperty("fqn")»",
+		"name":          "«enumValue.getProperty("name")»",
+		"type":          "EnumValue",
 		"belongsTo":     "«belongsTo»",
 		"dependsOn":     "«dependsOn»"
 		'''

@@ -75,12 +75,14 @@ public class JQACEnhancement {
 				if(declaration != null) {
 					declaringParent = declaration.getStartNode();
 				}
-				//If variable is part of a struct or union it could have the same name as another struct or union variable.
-				if(child.hasLabel(Labels.Variable) && declaringParent != null && (declaringParent.hasLabel(Labels.Struct) || declaringParent.hasLabel(Labels.Union))) {
+				//If variable/constant is part of a struct, union or enum it could have the same name as another variable/constant therefore add parent name to name.
+				if((child.hasLabel(Labels.Variable) || child.hasLabel(Labels.EnumConstant)) && declaringParent != null 
+						&& (declaringParent.hasLabel(Labels.Struct) || declaringParent.hasLabel(Labels.Union) || declaringParent.hasLabel(Labels.Enum))) {
 					child.setProperty("fqn", fileName + "_" + declaringParent.getProperty("name") + "_" + child.getProperty("name"));
 				} else if(!child.hasProperty("fqn")){
 					child.setProperty("fqn", (fileName + "_" + child.getProperty("name")));
 				}
+				
 				if(!child.hasProperty("hash")){
 					child.setProperty("hash", createHash(child.getProperty("fqn").toString()));
 				}

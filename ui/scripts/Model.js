@@ -278,6 +278,7 @@ var model = (function() {
 					break;
 				case "Struct":
 				case "Union":
+				case "Enum":
 					entity.dependsOn = element.dependsOn;
 					break;
 				default: 
@@ -441,6 +442,7 @@ var model = (function() {
 				case "Variable":
 				case "Struct":
 				case "Union":
+				case "Enum":
 					if(entity.dependsOn !== undefined && entity.dependsOn !== ""){
 						retrieveAllUsedMacros(entity.dependsOn, entity.id);
 					}

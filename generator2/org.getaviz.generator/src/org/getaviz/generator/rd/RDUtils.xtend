@@ -32,6 +32,7 @@ class RDUtils {
 		].map[return endNode].filter [
 			getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.Field)
 			|| getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.Variable)
+			|| getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.hasLabel(Labels.EnumConstant)
 		]
 		return data
 	}

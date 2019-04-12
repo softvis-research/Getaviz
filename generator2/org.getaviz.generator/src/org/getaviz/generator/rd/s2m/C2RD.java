@@ -68,7 +68,7 @@ public class C2RD {
 		}
 		List<Node> functions = new ArrayList<>();
 		List<Node> variables = new ArrayList<>();
-		List<Node> unionsAndStructs = new ArrayList<>();
+		List<Node> unionsStructsEnums = new ArrayList<>();
 		
 		for(Node element : subElements) {
 			if(element.hasLabel(Labels.Function)) {
@@ -77,8 +77,8 @@ public class C2RD {
 			if(element.hasLabel(Labels.Variable)) {
 				variables.add(element);
 			}
-			if(element.hasLabel(Labels.Struct) || element.hasLabel(Labels.Union)) {
-				unionsAndStructs.add(element);
+			if(element.hasLabel(Labels.Struct) || element.hasLabel(Labels.Union) || element.hasLabel(Labels.Enum)) {
+				unionsStructsEnums.add(element);
 			}
 		}
 
@@ -92,7 +92,7 @@ public class C2RD {
 		} else {
 			functions.forEach(function -> disk.createRelationshipTo(functionToDiskSegment(function), Rels.CONTAINS));
 		}
-		unionsAndStructs.forEach(element -> disk.createRelationshipTo(unionOrStructToDisk(element), Rels.CONTAINS));
+		unionsStructsEnums.forEach(element -> disk.createRelationshipTo(unionStructEnumToDisk(element), Rels.CONTAINS));
 		
 		return disk;
 	}
@@ -166,7 +166,7 @@ public class C2RD {
 		return diskSegment;
 	}
 	
-	private Node unionOrStructToDisk(Node element) {
+	private Node unionStructEnumToDisk(Node element) {
 		final Node disk = graph.createNode(Labels.RD, Labels.Disk);
 		disk.createRelationshipTo(element, Rels.VISUALIZES);
 		disk.setProperty("ringWidth", config.getRDRingWidth());
@@ -178,15 +178,15 @@ public class C2RD {
 		}
 		disk.setProperty("color", color);
 		
-		List<Node> variables = new ArrayList<>();
+		List<Node> subElements = new ArrayList<>();
 		for(Relationship relationship : element.getRelationships(Rels.DECLARES, Direction.OUTGOING)) {
-			variables.add(relationship.getEndNode());
+			subElements.add(relationship.getEndNode());
 		}
 		
 		if (config.isDataDisks()) {
-			variables.forEach(variable -> disk.createRelationshipTo(variableToDisk(variable), Rels.CONTAINS));
+			subElements.forEach(variable -> disk.createRelationshipTo(variableToDisk(variable), Rels.CONTAINS));
 		} else {
-			variables.forEach(variable -> disk.createRelationshipTo(variableToDiskSegment(variable), Rels.CONTAINS));
+			subElements.forEach(variable -> disk.createRelationshipTo(variableToDiskSegment(variable), Rels.CONTAINS));
 		}
 		
 		return disk;
