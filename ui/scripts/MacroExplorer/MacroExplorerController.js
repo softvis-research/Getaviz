@@ -130,7 +130,9 @@ var macroExplorerController = (function() {
 			filterMode: controllerConfig.filterMode
 		};
 		
-		events.macroChanged.on.publish(applicationEvent);
+		if(entities.length > 0){
+			events.macroChanged.on.publish(applicationEvent);
+		}
 	}
     
     return {
