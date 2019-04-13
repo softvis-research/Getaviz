@@ -438,7 +438,29 @@ var model = (function() {
 					entity.accesses = accesses;
 					
 					break;				
-				case "Function":
+				case "Function":	
+					let callsFunction = [];
+					entity.calls.forEach(function(callsId){
+						let relatedEntity = entitiesById.get(callsId.trim());
+						if(relatedEntity !== undefined){
+							callsFunction.push(relatedEntity);
+						}
+					});
+					entity.calls = callsFunction;
+					
+					let calledByFunction = [];
+					entity.calledBy.forEach(function(calledById){
+						let relatedEntity = entitiesById.get(calledById.trim());
+						if(relatedEntity !== undefined){
+							calledByFunction.push(relatedEntity);
+						}
+					});
+					entity.calledBy = calledByFunction;
+
+					if(entity.dependsOn !== undefined && entity.dependsOn !== ""){
+						retrieveAllUsedMacros(entity.dependsOn, entity.id);
+					}
+					break;
 				case "Variable":
 				case "Struct":
 				case "Union":

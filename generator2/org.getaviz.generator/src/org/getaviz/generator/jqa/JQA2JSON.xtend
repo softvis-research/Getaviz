@@ -275,10 +275,9 @@ class JQA2JSON {
 		"qualifiedName": "«escapeHtml4(function.getProperty("fqn") as String)»",
 		"name":          "«function.getProperty("name")»",
 		"type":          "FAMIX.Function",
-		"modifiers":     "",
 		"signature":  	 "«function.getFunctionSignature»",
-		"calls":		 "",
-		"calledBy":		 "",
+		"calls":		 "«function.getCalls»",
+		"calledBy":		 "«function.getCalledBy»",
 		"accesses":	 	 "",
 		"belongsTo":     "«belongsTo»",
 		"dependsOn":     "«dependsOn»"
@@ -286,7 +285,7 @@ class JQA2JSON {
 		return result
 	}
 	
-	def toMetaDataVariable(Node variable) {
+	private def toMetaDataVariable(Node variable) {
 		var belongsTo = ""
 		var declaredType = ""
 		var dependsOn = ""
@@ -315,7 +314,7 @@ class JQA2JSON {
 		return result
 	}
 	
-	def toMetaDataSingleCondition(Node singleCondition) {
+	private def toMetaDataSingleCondition(Node singleCondition) {
 		val result = '''
 		"id":            "«singleCondition.getProperty("hash")»",
 		"qualifiedName": "«singleCondition.getProperty("fqn")»",
@@ -325,7 +324,7 @@ class JQA2JSON {
 		return result
 	}
 	
-	def toMetaDataNegation(Node negation) {
+	private def toMetaDataNegation(Node negation) {
 		var negated = ""
 		val negatedNode = negation.getRelationships(Direction.OUTGOING, Rels.NEGATES).head.endNode
 		if(negatedNode !== null) {
@@ -340,7 +339,7 @@ class JQA2JSON {
 		return result
 	}
 	
-	def toMetaDataAnd(Node andNode) {
+	private def toMetaDataAnd(Node andNode) {
 		val connectedConditions = newArrayList
 		val connections = andNode.getRelationships(Direction.OUTGOING, Rels.CONNECTS)
 		connections.forEach[
@@ -357,7 +356,7 @@ class JQA2JSON {
 		return result
 	}
 	
-	def toMetaDataOr(Node orNode) {
+	private def toMetaDataOr(Node orNode) {
 		val connectedConditions = newArrayList
 		val connections = orNode.getRelationships(Direction.OUTGOING, Rels.CONNECTS)
 		connections.forEach[
@@ -374,8 +373,7 @@ class JQA2JSON {
 		return result
 	}
 	
-		
-	def toMetaDataStruct(Node struct) {
+	private def toMetaDataStruct(Node struct) {
 		var belongsTo = ""
 		var dependsOn = ""
 		val parent = struct.getRelationships(Direction.INCOMING, Rels.DECLARES).head
@@ -398,7 +396,7 @@ class JQA2JSON {
 		return result
 	}
 	
-	def toMetaDataUnion(Node union) {
+	private def toMetaDataUnion(Node union) {
 		var belongsTo = ""
 		var dependsOn = ""
 		val parent = union.getRelationships(Direction.INCOMING, Rels.DECLARES).head
@@ -421,7 +419,7 @@ class JQA2JSON {
 		return result
 	}
 	
-	def toMetaDataCEnum(Node enumNode) {
+	private def toMetaDataCEnum(Node enumNode) {
 		var belongsTo = ""
 		var dependsOn = ""
 		val parent = enumNode.getRelationships(Direction.INCOMING, Rels.DECLARES).head
@@ -444,7 +442,7 @@ class JQA2JSON {
 		return result
 	}
 	
-	def toMetaDataCEnumValue(Node enumValue) {
+	private def toMetaDataCEnumValue(Node enumValue) {
 		var belongsTo = ""
 		var dependsOn = ""
 		val parent = enumValue.getRelationships(Direction.INCOMING, Rels.DECLARES).head
