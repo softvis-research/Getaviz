@@ -1,0 +1,39 @@
+version: "3"
+services:
+    frontend:
+        build: ui/
+        restart: always
+        volumes:
+            - data-gen:/var/www/html/ui/data-gen
+        networks:
+            - default
+        depends_on:
+            - backend
+    backend:
+        build: generator2/org.getaviz.generator/
+        restart: always
+        volumes: 
+            - data-gen:/var/lib/jetty/data-gen
+        networks:
+            - default
+        depends_on:
+            - neo4j
+    tests:
+        build: integrationtests/org.getaviz.tests/
+        networks:
+            - default
+        depends_on:
+            - neo4j
+    neo4j:
+        image: neo4j:3.5.1
+        restart: always
+        environment:
+            NEO4J_AUTH: "none"
+        networks:
+            - default
+volumes:
+  data-gen:
+    
+networks:
+    default:
+        driver: bridge

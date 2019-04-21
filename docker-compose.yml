@@ -57,8 +57,6 @@ services:
             - default
 volumes:
   data-gen:
-  bundle:
-    driver: local
     
 networks:
     default:
