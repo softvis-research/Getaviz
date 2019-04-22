@@ -53,22 +53,26 @@ class City2City {
 		connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building) RETURN b").forEach [
 			setBuildingAttributes(get("b").asNode)
 		]
-		connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(d:District) RETURN d").forEach [
+		connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(d:District)-[:VISUALIZES]->(element)  RETURN d, element.hash as hash ORDER BY element.hash").forEach [
 			val node = get("d").asNode
 			var width = node.get("width").asDouble(0.0)
 			var length = node.get("length").asDouble(0.0)
 			val double[] array = #[width, length]
 			properties.put(node.id, array)
+			log.debug("New Package: " + get("hash").asString);
+			log.debug("width: " + width)
+			log.debug("length: " + length)
 		]
-		connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building)-[:VISUALIZES]->(element) RETURN b, element.hash as hash " +
-			"ORDER BY element.hash"
+		connector.executeRead(
+			"MATCH (n:Model:City)-[:CONTAINS*]->(b:Building)-[:VISUALIZES]->(element) " +
+				"RETURN b, element.hash as hash " + "ORDER BY element.hash"
 		).forEach [
 			val node = get("b").asNode
 			var width = node.get("width").asDouble(0.0)
 			var length = node.get("length").asDouble(0.0)
 			val double[] array = #[width, length]
 			properties.put(node.id, array)
-			log.debug("New node: " + get("hash").asString);
+			log.debug("New Type: " + get("hash").asString);
 			log.debug("width: " + width)
 			log.debug("length: " + length)
 		]
@@ -327,7 +331,8 @@ class City2City {
 		var lowerBsPosY = position.get("y").asDouble + building.get("height").asDouble / 2 + config.panelVerticalMargin
 
 		// Correcting the initial gap on top of building depending on SeparatorMode
-		if (config.panelSeparatorMode == SeparatorModes::GAP || config.panelSeparatorMode == SeparatorModes::SEPARATOR) {
+		if (config.panelSeparatorMode == SeparatorModes::GAP ||
+			config.panelSeparatorMode == SeparatorModes::SEPARATOR) {
 			lowerBsPosY = lowerBsPosY - config.panelVerticalGap
 		}
 		// System.out.println("")
@@ -373,8 +378,9 @@ class City2City {
 					}
 				}
 			}
-			val s = String.format("MATCH(n) WHERE ID(n) = %d CREATE %s(n)-[:HAS]->(p:Position:City {x: %f, y: %f, z: %f})",
-					segment.id, panelSeparatorCypher, x, y, z)
+			val s = String.format(
+				"MATCH(n) WHERE ID(n) = %d CREATE %s(n)-[:HAS]->(p:Position:City {x: %f, y: %f, z: %f})", segment.id,
+				panelSeparatorCypher, x, y, z)
 			connector.executeWrite(s)
 		}
 	}
@@ -394,7 +400,8 @@ class City2City {
 		val bPosZ = position.get("z").asDouble
 		val floors = connector.executeRead("MATCH (n)-[:CONTAINS]->(f:Floor) WHERE ID(n) = " + building.id +
 			" RETURN f")
-		var floorNumberValue = connector.executeRead("MATCH (n)-[:CONTAINS]->(f:Floor) WHERE ID(n) = " + building.id + " RETURN COUNT(f) as floorNumber").single.get("floorNumber")
+		var floorNumberValue = connector.executeRead("MATCH (n)-[:CONTAINS]->(f:Floor) WHERE ID(n) = " + building.id +
+			" RETURN COUNT(f) as floorNumber").single.get("floorNumber")
 
 		var floorCounter = 0
 		while (floors.hasNext) {
