@@ -19,11 +19,14 @@ services:
         depends_on:
             - neo4j
     tests:
-        build: integrationtests/org.getaviz.tests/
+        build: integrationtests/
+        command: "/bin/wait-for-it.sh neo4j:7687 -s -t 30 -- mvn install"
         networks:
             - default
         depends_on:
             - neo4j
+            - frontend
+            - backend
     neo4j:
         image: neo4j:3.5.1
         restart: always
