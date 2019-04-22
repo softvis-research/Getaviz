@@ -36,3 +36,7 @@ matrix:
         - cat ./config/database.yml
         - echo $RAILS_ENV
         - bundle exec rake --version
+notifications:
+  email:
+    on_success: never # default: change
+    on_failure: never # default: always
