@@ -411,7 +411,7 @@ public class CityLayout {
 	private static List<Node> getChildren(Long entity) {
 		List<Node> children = new ArrayList<Node>();
 		StatementResult childs = connector.executeRead(
-				"MATCH (n)-[:CONTAINS]->(c) WHERE (c:District OR c:Building) AND ID(n) = " + entity + " RETURN c");
+				"MATCH (n)-[:CONTAINS]->(c)-[:VISUALIZES]->(element) WHERE (c:District OR c:Building) AND ID(n) = " + entity + " RETURN c, element.hash as hash ORDER BY element.hash");
 		while (childs.hasNext()) {
 			children.add(childs.next().get("c").asNode());
 		}
