@@ -131,9 +131,32 @@
 			<artifactId>xtend-maven-plugin</artifactId>
 			<version>${xtend.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>neo4j</artifactId>
+			<version>1.11.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>1.11.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j</artifactId>
+			<version>3.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-bolt</artifactId>
+			<version>3.5.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.xtend</groupId>
@@ -161,29 +184,6 @@
 					<target>1.8</target>
 					<useIncrementalCompilation>true</useIncrementalCompilation>
 				</configuration>
-				<executions>
-					<execution>
-						<id>default-testCompile</id>
-						<phase>none</phase>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.19.1</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.junit.platform</groupId>
-						<artifactId>junit-platform-surefire-provider</artifactId>
-						<version>1.1.0</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.jupiter</groupId>
-						<artifactId>junit-jupiter-engine</artifactId>
-						<version>5.3.1</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -197,62 +197,80 @@
 					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.4.0</version>
-				<executions>
-					<execution>
-						<phase>deploy</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<executable>java</executable>
-					<includeProjectDependencies>true</includeProjectDependencies>
-					<includePluginDependencies>true</includePluginDependencies>
-					<arguments>
-						<argument>-Dlog4j.configuration=file:src/main/resources/log4j-console.properties</argument>
-						<!-- uncomment to increase java heap size -->
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.codehaus.mojo</groupId> -->
+<!-- 				<artifactId>exec-maven-plugin</artifactId> -->
+<!-- 				<version>1.4.0</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<phase>deploy</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>java</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<executable>java</executable> -->
+<!-- 					<includeProjectDependencies>true</includeProjectDependencies> -->
+<!-- 					<includePluginDependencies>true</includePluginDependencies> -->
+<!-- 					<arguments> -->
+<!-- 						uncomment to increase java heap size -->
 <!-- 						<argument>-Xmx8g</argument> -->
-						<argument>-classpath</argument>
-						<classpath />
-						<argument>org.getaviz.generator.Generator</argument>
-						<argument>-p</argument>
-						<argument>runtimeProject=${project.basedir}</argument>
-					</arguments>
-				</configuration>
-			</plugin>
+<!-- 						<argument>-classpath</argument> -->
+<!-- 						<classpath /> -->
+<!-- 						<argument>org.getaviz.generator.Generator</argument> -->
+<!-- 						<argument>-p</argument> -->
+<!-- 						<argument>runtimeProject=${project.basedir}</argument> -->
+<!-- 					</arguments> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.2.2</version>
 			</plugin>
 			<plugin>
-            <groupId>com.buschmais.jqassistant</groupId>
-            <artifactId>jqassistant-maven-plugin</artifactId>
-            <version>1.6.0</version>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>scan</goal>
-                        <goal>analyze</goal>
-                    </goals>
-                    <configuration>
-                    	<groups>
-                    		<group>packages:Default</group>
-                    	</groups>
-                        <warnOnSeverity>MINOR</warnOnSeverity>
-                        <failOnSeverity>MAJOR</failOnSeverity>
-                        <rule>
-                    		<defaultConceptSeverity>INFO</defaultConceptSeverity>
-                		</rule>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
+				<groupId>com.buschmais.jqassistant</groupId>
+				<artifactId>jqassistant-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>scan</goal>
+							<goal>analyze</goal>
+						</goals>
+						<configuration>
+							<groups>
+								<group>packages:Default</group>
+							</groups>
+							<warnOnSeverity>MINOR</warnOnSeverity>
+							<failOnSeverity>MAJOR</failOnSeverity>
+							<rule>
+								<defaultConceptSeverity>INFO</defaultConceptSeverity>
+							</rule>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M3</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.junit.jupiter</groupId>
+							<artifactId>junit-jupiter-engine</artifactId>
+							<version>5.3.1</version>
+						</dependency>
+					</dependencies>
+					<configuration>
+						<argLine>-Duser.language=en -Duser.region=US</argLine>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 </project>
