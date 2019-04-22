@@ -85,9 +85,9 @@ public class CityIT {
 	    double x = result.get("x").asDouble();
 	    double y = result.get("y").asDouble();
 	    double z = result.get("z").asDouble();
-	    assertEquals(151.5, x);
+	    assertEquals(90.5, x);
 	 	assertEquals(12.0, y);
-	 	assertEquals(75.5, z);
+	 	assertEquals(146.5, z);
 	}
 
 	@Test
