@@ -38,5 +38,5 @@ matrix:
         - bundle exec rake --version
 notifications:
   email:
-    on_success: never # default: change
-    on_failure: never # default: always
+    on_success: change # options: change, never, always
+    on_failure: always # options: change, never, always
