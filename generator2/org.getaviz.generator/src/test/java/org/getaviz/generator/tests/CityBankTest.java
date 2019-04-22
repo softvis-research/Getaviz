@@ -59,7 +59,7 @@ public class CityBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(19.5, x);
+		assertEquals(9.5, x);
 		assertEquals(2.5, y);
 		assertEquals(11.5, z);
 	}
@@ -74,7 +74,7 @@ public class CityBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(19.5, x);
+		assertEquals(9.5, x);
 		assertEquals(4, y);
 		assertEquals(13.5, z);
 	}
