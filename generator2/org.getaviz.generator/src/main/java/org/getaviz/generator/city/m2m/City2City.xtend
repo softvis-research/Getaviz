@@ -59,9 +59,6 @@ class City2City {
 			var length = node.get("length").asDouble(0.0)
 			val double[] array = #[width, length]
 			properties.put(node.id, array)
-			log.debug("New Package: " + get("hash").asString);
-			log.debug("width: " + width)
-			log.debug("length: " + length)
 		]
 		connector.executeRead(
 			"MATCH (n:Model:City)-[:CONTAINS*]->(b:Building)-[:VISUALIZES]->(element) " +
@@ -72,9 +69,6 @@ class City2City {
 			var length = node.get("length").asDouble(0.0)
 			val double[] array = #[width, length]
 			properties.put(node.id, array)
-			log.debug("New Type: " + get("hash").asString);
-			log.debug("width: " + width)
-			log.debug("length: " + length)
 		]
 
 		CityLayout::cityLayout(model.id, properties)
