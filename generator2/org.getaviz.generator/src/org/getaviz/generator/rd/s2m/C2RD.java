@@ -127,8 +127,8 @@ public class C2RD {
 		diskSegment.setProperty("luminance", luminance);
 		diskSegment.setProperty("height", height);
 		Integer numberOfStatements = 0;
-		if (function.hasProperty("effectiveLineCount")) {
-			numberOfStatements = (Integer)function.getProperty("effectiveLineCount");
+		if (function.hasProperty("lineCount")) {
+			numberOfStatements = (Integer)function.getProperty("lineCount");
 		}
 		if (numberOfStatements <= config.getRDMinArea()) {
 			diskSegment.setProperty("size", config.getRDMinArea());
