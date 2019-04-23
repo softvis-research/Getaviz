@@ -278,7 +278,7 @@ class JQA2JSON {
 		"signature":  	 "«function.getFunctionSignature»",
 		"calls":		 "«function.getCalls»",
 		"calledBy":		 "«function.getCalledBy»",
-		"accesses":	 	 "",
+		"accesses":	 	 "«function.getAccesses»",
 		"belongsTo":     "«belongsTo»",
 		"dependsOn":     "«dependsOn»"
 		'''
@@ -308,6 +308,7 @@ class JQA2JSON {
 		"name":          "«variable.getProperty("name")»",
 		"type":          "FAMIX.Variable",
 		"declaredType":  "«declaredType»",
+		"accessedBy":	 "«variable.getAccessedBy»",
 		"belongsTo":     "«belongsTo»",
 		"dependsOn":     "«dependsOn»"
 		'''

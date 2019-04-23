@@ -457,11 +457,33 @@ var model = (function() {
 					});
 					entity.calledBy = calledByFunction;
 
+					let functionAccesses = [];
+					entity.accesses.forEach(function(accessesId){
+						let relatedEntity = entitiesById.get(accessesId.trim());
+						if(relatedEntity !== undefined && !functionAccesses.includes(relatedEntity)){
+							functionAccesses.push(relatedEntity);
+						}
+					});
+					entity.accesses = functionAccesses;
+
 					if(entity.dependsOn !== undefined && entity.dependsOn !== ""){
 						retrieveAllUsedMacros(entity.dependsOn, entity.id);
 					}
 					break;
-				case "Variable":
+				case "Variable":	
+					let variableAccessedBy = [];
+					entity.accessedBy.forEach(function(accessedById){
+						let relatedEntity = entitiesById.get(accessedById.trim());
+						if(relatedEntity !== undefined && !variableAccessedBy.includes(relatedEntity)){
+							variableAccessedBy.push(relatedEntity);
+						}
+					});
+					entity.accessedBy = variableAccessedBy;	
+
+					if(entity.dependsOn !== undefined && entity.dependsOn !== ""){
+						retrieveAllUsedMacros(entity.dependsOn, entity.id);
+					}
+					break;
 				case "Struct":
 				case "Union":
 				case "Enum":
