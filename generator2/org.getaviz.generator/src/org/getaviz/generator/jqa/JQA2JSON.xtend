@@ -253,7 +253,8 @@ class JQA2JSON {
 		"qualifiedName": "«translationUnit.getProperty("fqn")»",
 		"name":          "«translationUnit.getProperty("name")»",
 		"type":          "TranslationUnit",
-		"belongsTo":     "«belongsTo»"
+		"belongsTo":     "«belongsTo»",
+		"filename":		 "«translationUnit.getProperty("fileName")»"
 		'''	
 		return result
 	}
@@ -280,7 +281,8 @@ class JQA2JSON {
 		"calledBy":		 "«function.getCalledBy»",
 		"accesses":	 	 "«function.getAccesses»",
 		"belongsTo":     "«belongsTo»",
-		"dependsOn":     "«dependsOn»"
+		"dependsOn":     "«dependsOn»",
+		"filename":		 "«function.getProperty("fileName")»"
 		'''
 		return result
 	}
@@ -310,7 +312,8 @@ class JQA2JSON {
 		"declaredType":  "«declaredType»",
 		"accessedBy":	 "«variable.getAccessedBy»",
 		"belongsTo":     "«belongsTo»",
-		"dependsOn":     "«dependsOn»"
+		"dependsOn":     "«dependsOn»",
+		"filename":		 "«variable.getProperty("fileName")»"
 		'''
 		return result
 	}
@@ -392,7 +395,8 @@ class JQA2JSON {
 		"name":          "«struct.getProperty("name")»",
 		"type":          "Struct",
 		"belongsTo":     "«belongsTo»",
-		"dependsOn":     "«dependsOn»"
+		"dependsOn":     "«dependsOn»",
+		"filename":		 "«struct.getProperty("fileName")»"
 		'''
 		return result
 	}
@@ -415,7 +419,8 @@ class JQA2JSON {
 		"name":          "«union.getProperty("name")»",
 		"type":          "Union",
 		"belongsTo":     "«belongsTo»",
-		"dependsOn":     "«dependsOn»"
+		"dependsOn":     "«dependsOn»",
+		"filename":		 "«union.getProperty("fileName")»"
 		'''
 		return result
 	}
@@ -438,7 +443,8 @@ class JQA2JSON {
 		"name":          "«enumNode.getProperty("name")»",
 		"type":          "Enum",
 		"belongsTo":     "«belongsTo»",
-		"dependsOn":     "«dependsOn»"
+		"dependsOn":     "«dependsOn»",
+		"filename":		 "«enumNode.getProperty("fileName")»"
 		'''
 		return result
 	}
@@ -461,7 +467,8 @@ class JQA2JSON {
 		"name":          "«enumValue.getProperty("name")»",
 		"type":          "EnumValue",
 		"belongsTo":     "«belongsTo»",
-		"dependsOn":     "«dependsOn»"
+		"dependsOn":     "«dependsOn»",
+		"filename":		 "«enumValue.getProperty("fileName")»"
 		'''
 		return result
 	}

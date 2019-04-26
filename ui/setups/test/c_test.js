@@ -39,8 +39,8 @@
         
             elementsSelectable: false
 		},
-		{	name: 	"sourceCodeController",
-            url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
+        {	name: 	"sourceCodeController",
+            fileType : "c"
 		},
         {	name:	"macroExplorerController",
             //should the filtered elements be "removed" or just "transparent"?

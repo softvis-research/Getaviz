@@ -233,6 +233,7 @@ var model = (function() {
 					}
 
 					entity.dependsOn = element.dependsOn;
+					entity.filename = element.filename;
 
 					break;
 				case "Variable":
@@ -255,9 +256,11 @@ var model = (function() {
 					}
 
 					entity.dependsOn = element.dependsOn;
+					entity.filename = element.filename;
 
 					break;
 				case "TranslationUnit":
+					entity.filename = element.filename;
 					break;
 				case "Macro":
 					macrosById.set(element.id, entity);
@@ -279,7 +282,9 @@ var model = (function() {
 				case "Struct":
 				case "Union":
 				case "Enum":
+				case "EnumValue":
 					entity.dependsOn = element.dependsOn;
+					entity.filename = element.filename;
 					break;
 				default: 
 					return;
