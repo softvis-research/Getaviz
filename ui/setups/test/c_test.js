@@ -63,10 +63,6 @@
 		},
         {
             name:   "systeminfoController",
-            system: "Bank",
-            link: "https://github.com/softvis-research/Bank",
-            noc: true,
-            loc: 192
         },
 		{	name: 	"menuController",
 			menuMapping: [
@@ -186,16 +182,16 @@
         {
             name: "legendController",
             entries: [{
-                name: "Package",
+                name: "Translation unit",
                 icon: "grayCircle"
             }, {
-                name: "Type",
+                name: "Struct/Union/Enum",
                 icon: "purpleCircle",
             }, {
-                name: "Method",
+                name: "Function",
                 icon: "lightBlueCircle",
             }, {
-                name: "Field",
+                name: "Variable/Enum constant",
                 icon: "yellowCircle",
             }, {
                 name: "Navigation",

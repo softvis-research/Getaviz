@@ -54,7 +54,7 @@ var packageExplorerController = (function() {
 				if(entity.type !== "issue" && entity.type !== "Macro"
 				&& entity.type !== "And" && entity.type !== "Or"
 				&& entity.type !== "Negation") {
-					if(entity.type === "Namespace") {
+					if(entity.type === "Namespace" || entity.type === "TranslationUnit") {
                         item = {
                             id: entity.id,
                             open: false,
