@@ -100,6 +100,7 @@
     <script type="text/javascript" src="scripts/PatternExplorer/PatternExplorerController.js"></script>
     <script type="text/javascript" src="scripts/VersionExplorer/VersionExplorerController.js"></script>
     <script type="text/javascript" src="scripts/IssueExplorer/IssueExplorerController.js"></script>
+	<script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script
     
      <!-- filter -->
   <script type="text/javascript" src="scripts/Filter/Helpers/Constants.js"></script>
