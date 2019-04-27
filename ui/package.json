@@ -1,0 +1,21 @@
+{
+  "name": "Getaviz",
+  "version": "1.0.0",
+  "description": "UI for Getaviz",
+  "private": true,
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jqwidgets-scripts": "7.1.0",
+    "aframe": "0.9.1",
+    "d3": "4.13.0",
+    "prismjs": "1.16.0",
+    "@ztree/ztree_v3": "3.5.40",
+    "jquery": "1.11.1",
+    "typeahead.js": "0.10.5",
+    "handlebars": "2.0.0"
+  },
+  "devDependencies": {
+    "webpack-bundle-analyzer": "^3.3.2",
+    "webpack-cli": "^3.3.1"
+  }
+}

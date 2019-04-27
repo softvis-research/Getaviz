@@ -24,9 +24,9 @@
     $metaDataJsonUrl = $modelUrl . "/metaData.json";
 
     if (isset($_GET["aframe"]) && $_GET["aframe"] == 'true') {
-        $loadFramework = "<script src=\"libs/aframe/aframe-v0.8.2.min.js\"></script>";
+        $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v0.9.1.min.js\"></script>";
         $loadVisualizationSpecificScripts = <<<'EOT'
-        <script src="libs/aframe/aframe-v0.8.2.min.js"></script>
+        <script src="node_modules/aframe/dist/aframe-v0.9.1.min.js"></script>
         <script type="text/javascript" src="scripts/AframeCanvasManipulator.js"></script>
         <script type="text/javascript" src="scripts/AframeActionController.js"></script>
 	    <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
@@ -92,43 +92,43 @@ EOT;
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	
     <!--Main-->
-    <script type="text/javascript" src="libs/jquery-1.11.1.js"></script>
-    <script type="text/javascript" src="libs/typeahead.bundle.js"></script>
-    <script type="text/javascript" src="libs/handlebars-v2.0.0.js"></script>
+    <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules/typeahead.js/dist/typeahead.bundle.min.js"></script>    
+    <script type="text/javascript" src="node_modules/handlebars/dist/handlebars.min.js"></script>
 
 	<!--jqwidgets-->	
-    <script type="text/javascript" src="libs/jqwidgets/jqxcore.js"></script>
-	<script type="text/javascript" src="libs/jqwidgets/jqxdata.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxbuttons.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxmenu.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxsplitter.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxscrollbar.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxpanel.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxcheckbox.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxradiobutton.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxexpander.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxinput.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxnavigationbar.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxwindow.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxnotification.js"></script>
-	<script type="text/javascript" src="libs/jqwidgets/jqxtextarea.js"></script>
-	<script type="text/javascript" src="libs/jqwidgets/jqxswitchbutton.js"></script>
-	<script type="text/javascript" src="libs/jqwidgets/jqxprogressbar.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxcombobox.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxlistbox.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxdropdownlist.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxslider.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxnumberinput.js"></script>
-    <script type="text/javascript" src="libs/jqwidgets/jqxform.js"></script>	
-    <script type="text/javascript" src="libs/jqwidgets/jqxvalidator.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxsplitter.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxpanel.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxcheckbox.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxradiobutton.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxexpander.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxinput.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxnavigationbar.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxwindow.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxnotification.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxtextarea.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxswitchbutton.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxprogressbar.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxcombobox.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxslider.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxnumberinput.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxform.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxvalidator.js"></script>
 	
-    <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.base.css" type="text/css" />
-    <link rel="stylesheet" href="libs/jqwidgets/styles/jqx.metro.css" type="text/css" />
+    <link rel="stylesheet" href="node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.metro.css" type="text/css" />
     <!-- ztree -->
-    <script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.core.js"></script>
-    <script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.exhide.js"></script>
-    <script type="text/javascript" src="libs/zTree_v3/js/jquery.ztree.excheck.js"></script>
-    <link rel="stylesheet" href="libs/zTree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.core.min.js"></script>
+    <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.exhide.min.js"></script>
+    <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.excheck.min.js"></script>
+    <link rel="stylesheet" href="node_modules/@ztree/ztree_v3/css/metroStyle/metroStyle.css" type="text/css">
     <link rel="stylesheet" href="scripts/PackageExplorer/zt.css" type="text/css">
 	
 	<script type="text/javascript" src="scripts/CanvasFilter/CanvasFilterController.js"></script>
