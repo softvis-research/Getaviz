@@ -49,8 +49,8 @@ EOT;
         $multipartJsonUrl = $modelUrl . "/multiPart.json";
         $loadVisualizationSpecificScripts = <<<'EOT'
         	<!--x3dom-->
-        <script type="text/javascript" src="libs/x3dom/x3dom.debug.js"></script>
-        <link rel="stylesheet" href="libs/x3dom/x3dom.css" type="text/css"/>
+        <script type="text/javascript" src="node_modules/x3dom/x3dom.js"></script>
+        <link rel="stylesheet" href="node_modules/x3dom/x3dom.css" type="text/css"/>
         <script type="text/javascript" src="scripts/CanvasManipulator.js"></script>
         <script type="text/javascript" src="scripts/ActionController.js"></script>
 	    <script type="text/javascript" src="scripts/RelationConnector/RelationConnectorController.js"></script>

@@ -12,7 +12,8 @@
     "@ztree/ztree_v3": "3.5.40",
     "jquery": "1.11.1",
     "typeahead.js": "0.10.5",
-    "handlebars": "2.0.0"
+    "handlebars": "2.0.0",
+    "x3dom": "1.7.0"
   },
   "devDependencies": {
     "webpack-bundle-analyzer": "^3.3.2",
