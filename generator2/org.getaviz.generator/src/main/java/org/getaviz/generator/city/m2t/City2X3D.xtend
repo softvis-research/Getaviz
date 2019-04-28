@@ -15,7 +15,6 @@ class City2X3D {
 	val config = SettingsConfiguration.instance
 	val connector = DatabaseConnector.instance
 	val log = LogFactory::getLog(class)
-	extension OutputFormatHelper helper = new OutputFormatHelper
 		
 	new () {
 		log.info("CityOutput started")
