@@ -27,7 +27,6 @@ public class RD2RD {
 	SettingsConfiguration config = SettingsConfiguration.getInstance();
 	DatabaseConnector connector = DatabaseConnector.getInstance();
 	Log log = LogFactory.getLog(RD2RD.class);
-	Helper util = new Helper();
 
 // TODO set colors via RGBColor class for all entities
 // color scheme
@@ -270,7 +269,6 @@ public class RD2RD {
 
 	private void calculateSpines(List<Node> segments, double factor) {
 		if (config.getOutputFormat() == OutputFormat.X3D) {
-			log.info("x3d");
 			int spinePointCount = 0;
 			if (segments.size() < 50) {
 				spinePointCount = 400;
@@ -303,7 +301,7 @@ public class RD2RD {
 					partSpine.add(completeSpine.get(start + j));
 				}
 				statementList.add("MATCH (n) WHERE ID(n) = " + segment.id() + " SET n.spine = \'"
-						+ util.removeBrackets(partSpine) + "\'");
+						+ Helper.removeBrackets(partSpine) + "\'");
 			}
 			connector.executeWrite(statementList.stream().toArray(String[]::new));
 
@@ -337,7 +335,7 @@ public class RD2RD {
 		}
 		completeSpine.add(completeSpine.get(0));
 		connector.executeWrite(
-				"MATCH (n) WHERE ID(n) = " + disk + " SET n.spine = \'" + util.removeBrackets(completeSpine) + "\'");
+				"MATCH (n) WHERE ID(n) = " + disk + " SET n.spine = \'" + Helper.removeBrackets(completeSpine) + "\'");
 	}
 
 	private List<RGBColor> createColorGradiant(RGBColor start, RGBColor end, int maxLevel) {
@@ -346,7 +344,6 @@ public class RD2RD {
 		double g_step = (end.g() - start.g()) / steps;
 		double b_step = (end.b() - start.b()) / steps;
 
-//		RGBColor[] colorRange = new RGBColor[maxLevel];
 		List<RGBColor> colorRange = new ArrayList<>();
 		for (int i = 0; i < maxLevel; ++i) {
 			double newR = start.r() + i * r_step;
