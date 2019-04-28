@@ -3,6 +3,7 @@ package org.getaviz.generator
 //import org.apache.commons.logging.LogFactory
 import org.apache.commons.lang3.StringUtils
 import org.getaviz.generator.city.m2m.RGBColor
+import java.util.List
 
 class Helper {
 //	val log = LogFactory::getLog(class)
@@ -26,6 +27,12 @@ class Helper {
 	def removeBrackets(String[] array) {
 		return removeBrackets(array.toString)
 	}
+	
+		
+	def removeBrackets(List<String> list) {
+		return removeBrackets(list.toString)
+	}
+	
 	
 	def removeBrackets(String string) {
 		return StringUtils::remove(StringUtils::remove(string, "["), "]")
