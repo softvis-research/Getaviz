@@ -14,7 +14,6 @@ public class RD2X3D {
 	SettingsConfiguration config = SettingsConfiguration.getInstance();
 	DatabaseConnector connector = DatabaseConnector.getInstance();
 	Log log = LogFactory.getLog(this.getClass());
-	OutputFormatHelper helper = new OutputFormatHelper();
 
 	public RD2X3D() {
 		log.info("RD2X3D has started");
@@ -22,7 +21,7 @@ public class RD2X3D {
 		String fileName = "model.x3d";
 		try {
 			fw = new FileWriter(config.getOutputPath() + fileName);
-			fw.write(helper.X3DHead() + toRD() + helper.X3DTail());
+			fw.write(OutputFormatHelper.X3DHead() + toRD() + OutputFormatHelper.X3DTail());
 		} catch (IOException e) {
 			log.error("Could not create file " + fileName);
 		} finally {
