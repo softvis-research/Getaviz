@@ -5,11 +5,11 @@ import org.getaviz.generator.SettingsConfiguration.BuildingType
 import org.getaviz.generator.database.Labels
 import org.apache.commons.logging.LogFactory
 import java.io.FileWriter
-import org.getaviz.generator.OutputFormatHelper
 import java.io.IOException
 import org.getaviz.generator.database.DatabaseConnector
 import org.neo4j.driver.v1.types.Node
 import java.util.ArrayList
+import org.getaviz.generator.OutputFormatHelper
 
 class City2X3D {
 	val config = SettingsConfiguration.instance
@@ -20,9 +20,9 @@ class City2X3D {
 	new () {
 		log.info("CityOutput started")
 		var FileWriter fw = null
-		var head = X3DHead()
-		var body = viewports() + toX3DModel()
-		var tail = X3DTail()
+		var head = OutputFormatHelper.X3DHead();
+		var body = OutputFormatHelper.viewports() + toX3DModel();
+		var tail =OutputFormatHelper.X3DTail();
 		var fileName = "model.x3d"
 		try {
 			fw = new FileWriter(config.outputPath + fileName)
@@ -31,7 +31,7 @@ class City2X3D {
 				case BuildingType::CITY_PANELS,
 				case BuildingType::CITY_FLOOR,
 				case BuildingType::CITY_BRICKS:
-					fw.write(head + settingsInfo + body + tail)
+					fw.write(head + OutputFormatHelper.settingsInfo + body + tail)
 			}
 		} catch (IOException e) {
 			log.error(e)

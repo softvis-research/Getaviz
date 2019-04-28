@@ -16,7 +16,6 @@ public class RD2AFrame {
 	SettingsConfiguration config = SettingsConfiguration.getInstance();
 	DatabaseConnector connector = DatabaseConnector.getInstance();
 	Log log = LogFactory.getLog(this.getClass());
-	OutputFormatHelper helper = new OutputFormatHelper();
 
 	public RD2AFrame() {
 		log.info("RD2AFrame has started");
@@ -24,7 +23,7 @@ public class RD2AFrame {
 		String fileName = "model.html";
 		try {
 			fw = new FileWriter(config.getOutputPath() + fileName);
-			fw.write(helper.AFrameHead() + toX3DOMRD() + helper.AFrameTail());
+			fw.write(OutputFormatHelper.AFrameHead() + toX3DOMRD() + OutputFormatHelper.AFrameTail());
 		} catch (IOException e) {
 			log.error("Could not create file");
 		} finally {

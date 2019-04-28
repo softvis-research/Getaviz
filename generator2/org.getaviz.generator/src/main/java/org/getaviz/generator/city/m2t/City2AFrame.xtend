@@ -6,10 +6,10 @@ import org.getaviz.generator.SettingsConfiguration.BuildingType
 import org.apache.commons.logging.LogFactory
 import java.io.IOException
 import java.io.FileWriter
-import org.getaviz.generator.OutputFormatHelper
 import org.getaviz.generator.database.DatabaseConnector
 import org.neo4j.driver.v1.types.Node
 import java.util.ArrayList
+import org.getaviz.generator.OutputFormatHelper
 
 class City2AFrame {
 	val config = SettingsConfiguration.instance
@@ -24,7 +24,7 @@ class City2AFrame {
 		
 		try {
 			fw = new FileWriter(config.outputPath + fileName)
-			fw.write(AFrameHead() + toAFrameModel() + AFrameTail())
+			fw.write(OutputFormatHelper.AFrameHead() + toAFrameModel() + OutputFormatHelper.AFrameTail())
 		} catch (IOException e) {
 			log.error("Could not create file");
 		} finally {
