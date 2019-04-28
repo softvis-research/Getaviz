@@ -208,6 +208,7 @@ public class City2City {
 					case METHODS_AND_ATTRIBUTES: sideCapacity = calculateSideCapacity(dataCounter + methodCounter); break;
 					default: sideCapacity = calculateSideCapacity(dataCounter);
 				}
+				break;
 			}
 			case PROGRESSIVE: {
 				switch (config.getClassElementsMode()) {
@@ -215,6 +216,7 @@ public class City2City {
 					case METHODS_AND_ATTRIBUTES: sideCapacity = calculateSideCapacity(dataCounter + methodCounter); break;
 					default: sideCapacity = calculateSideCapacity(dataCounter);
 				}
+				break;
 			}
 			default: {
 				sideCapacity = 1;
@@ -321,12 +323,15 @@ public class City2City {
 		switch (config.getClassElementsMode()) {
 			case ATTRIBUTES_ONLY:
 				classElements.addAll(CityUtils.getData(building.id()));
+				break;
 			case METHODS_AND_ATTRIBUTES: {
 				classElements.addAll(CityUtils.getData(building.id()));
 				classElements.addAll(CityUtils.getMethods(building.id()));
+				break;
 			}
 			default:
 				classElements.addAll(CityUtils.getMethods(building.id()));
+				break;
 		}
 		CityUtils.sortBuildingSegments(classElements);
 		// upper bound of the panel below the actual panel inside the loop
@@ -354,10 +359,12 @@ public class City2City {
 				case NONE: { // place segments on top of each other
 					y = lowerBsPosY + height / 2;
 					lowerBsPosY = y + height / 2;
+					break;
 				}
 				case GAP: { // Leave a free space between segments
 					y = lowerBsPosY + config.getPanelVerticalGap() + height / 2;
 					lowerBsPosY = y + height / 2;
+					break;
 				}
 				case SEPARATOR: { // Placing additional separators
 					y = lowerBsPosY + height / 2;
@@ -378,6 +385,7 @@ public class City2City {
 							panelSeparatorCypher += String.format(":Cylinder {radius: %f})<-[:HAS]-", width / 2);
 						}
 						lowerBsPosY = sepY + config.getPanelSeparatorHeight() / 2;
+						break;
 					}
 				}
 			}
