@@ -5,7 +5,6 @@ import org.getaviz.generator.SettingsConfiguration.BuildingType;
 import org.getaviz.generator.database.Labels;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.xtend2.lib.StringConcatenation;
 import java.io.FileWriter;
 import java.io.IOException;
 import org.getaviz.generator.database.DatabaseConnector;
@@ -85,57 +84,57 @@ public class City2X3D {
 
 	private String toDistrict(Node district, Node entity) {
 		Node position = connector.getPosition(district.id());
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 		builder.append("<Group DEF=\'" + entity.get("hash").asString() + "\'>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t <Transform translation=\'" + position.get("x").asDouble() + " "
 				+ position.get("y").asDouble() + " " + position.get("z").asDouble() + "\'>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t <Shape>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t <Box size=\'" + district.get("width").asDouble() + " "
 				+ district.get("height").asDouble() + " " + district.get("length").asDouble() + "\'></Box>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t <Appearance>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t\t <Material diffuseColor=\'" + district.get("color").asString() + "\'></Material>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t </Appearance>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t </Shape>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t </Transform>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("</Group>\t\t");
-		builder.newLine();
+		builder.append("\n");
 		return builder.toString();
 	}
 
 	private String toBuilding(Node building, Node entity) {
 		Node position = connector.getPosition(building.id());
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 		builder.append("<Group DEF=\'" + entity.get("hash").asString() + "\'>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t <Transform translation=\'" + position.get("x").asDouble() + " "
 				+ position.get("y").asDouble() + " " + position.get("z").asDouble() + "\'>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t <Shape>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t <Box size=\'" + building.get("width").asDouble() + " " + building.get("height").asDouble()
 				+ " " + building.get("length").asDouble() + "\'></Box>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t <Appearance>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t\t <Material diffuseColor=\'" + building.get("color").asString() + "\'></Material>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t </Appearance>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t </Shape>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t </Transform>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("</Group>\t\t");
-		builder.newLine();
+		builder.append("\n");
 		return builder.toString();
 	}
 
@@ -152,122 +151,122 @@ public class City2X3D {
 		double width = segment.get("width").asDouble();
 		double height = segment.get("height").asDouble();
 		double length = segment.get("length").asDouble();
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 		builder.append("<Group DEF=\'" + entity.get("hash").asString() + "\'>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t");
 		builder.append("<Transform translation=\'" + x + " " + y + " " + z + "\'>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t <Shape>");
-		builder.newLine();
+		builder.append("\n");
 		if (config.getBuildingType() == BuildingType.CITY_PANELS && entity.hasLabel(Labels.Field.name())
 				&& config.isShowAttributesAsCylinders()) {
 			builder.append("\t\t <Cylinder radius=\'" + width / 2);
 			builder.append("\' height=\'" + height + "\'></Cylinder>");
-			builder.newLine();
+			builder.append("\n");
 		} else {
 			builder.append("\t\t <Box size=\'" + width + " " + height + " " + length + "\'></Box>");
-			builder.newLine();
+			builder.append("\n");
 		}
 		builder.append("\t\t\t <Appearance>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t\t <Material diffuseColor=\'" + segment.get("color").asString() + "\'></Material>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t </Appearance>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t </Shape>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t </Transform>");
-		builder.newLine();
+		builder.append("\n");
 		for (final Record record : separators) {
 			builder.append("\t");
 			final Node separator = record.get("ps").asNode();
-			builder.newLineIfNotEmpty();
+			builder.append("\n");
 			builder.append("\t");
 			final Node pos = record.get("p").asNode();
-			builder.newLineIfNotEmpty();
+			builder.append("\n");
 			builder.append("\t <Transform translation=\'" + pos.get("x").asDouble() + " " + pos.get("y").asDouble()
 					+ " " + pos.get("z").asDouble() + "\'>");
-			builder.newLine();
+			builder.append("\n");
 			builder.append("\t\t<Shape>");
-			builder.newLine();
+			builder.append("\n");
 			if (separator.hasLabel(Labels.Cylinder.name())) {
 				builder.append("\t\t <Cylinder radius=\'" + separator.get("radius").asDouble() + "\' height=\'"
 						+ "\'></Cylinder>");
-				builder.newLine();
+				builder.append("\n");
 			} else {
 				builder.append("\t\t <Box size=\'" + separator.get("width").asDouble() + " "
 						+ config.getPanelSeparatorHeight() + " " + separator.get("length").asDouble() + "\'></Box>");
-				builder.newLine();
+				builder.append("\n");
 			}
 			builder.append("\t\t\t <Appearance>");
-			builder.newLine();
+			builder.append("\n");
 			builder.append(
 					"\t\t\t\t <Material diffuseColor=\'" + config.getCityColorAsPercentage("black") + "\'></Material>");
-			builder.newLine();
+			builder.append("\n");
 			builder.append("\t\t\t </Appearance>");
-			builder.newLine();
+			builder.append("\n");
 			builder.append("\t\t </Shape>");
-			builder.newLine();
+			builder.append("\n");
 			builder.append("\t </Transform>");
-			builder.newLine();
+			builder.append("\n");
 		}
 		builder.append("</Group>");
-		builder.newLine();
+		builder.append("\n");
 		return builder.toString();
 	}
 
 	private String toFloor(Node floor, Node entity) {
 		Node position = connector.getPosition(floor.id());
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 		builder.append("<Group DEF=\'" + entity.get("hash").asString() + "\'>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t <Transform translation=\'" + position.get("x").asDouble() + " "
 				+ position.get("y").asDouble() + " " + position.get("z").asDouble() + "\'>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t <Shape>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t <Box size=\'" + floor.get("width").asDouble() + " " + floor.get("height").asDouble()
 				+ " " + floor.get("length").asDouble() + "\'></Box>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t <Appearance>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t\t <Material diffuseColor=\'" + floor.get("color").asString() + "\'></Material>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t\t </Appearance>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t\t </Shape>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\t </Transform>");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("</Group>\t\t");
-		builder.newLine();
+		builder.append("\n");
 		return builder.toString();
 	}
 
 	private String toChimney(Node chimney, Node entity) {
 		final Node position = connector.getPosition(chimney.id());
-	    StringConcatenation builder = new StringConcatenation();
+	    StringBuilder builder = new StringBuilder();
 	    builder.append("<Group DEF=\'" + entity.get("hash").asString() + "\'>");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\t <Transform translation=\'" + position.get("x").asDouble() + " " + position.get("y").asDouble() + " " + position.get("z").asDouble() + "\'>");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\t\t <Shape>");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\t\t\t <Cylinder height=\'" + chimney.get("height").asDouble() + "\' radius=\'" + chimney.get("width").asDouble() + "\'></Cylinder>");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\t\t\t <Appearance>");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\t\t\t\t <Material diffuseColor=\'" + chimney.get("color").asString() + "\'></Material>");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\t\t\t </Appearance>");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\t\t </Shape>");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\t </Transform>");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("</Group>\t\t");
-	    builder.newLine();
+	    builder.append("\n");
 	    return builder.toString();
 	}
 }

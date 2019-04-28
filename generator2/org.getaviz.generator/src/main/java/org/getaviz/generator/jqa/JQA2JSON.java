@@ -11,7 +11,6 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.text.StringEscapeUtils;
-import org.eclipse.xtend2.lib.StringConcatenation;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
@@ -47,41 +46,41 @@ public class JQA2JSON {
 	}
 
 	private String toJSON(List<Node> list) {
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 		boolean hasElements = false;
 		for (final Node el : list) {
 			if (!hasElements) {
 				hasElements = true;
 				builder.append("[{");
 			} else {
-				builder.appendImmediate("\n},{", "");
+				builder.append("\n},{");
 			}
 			if (el.hasLabel(Labels.Package.name())) {
 				builder.append(toMetaDataNamespace(el));
-				builder.newLineIfNotEmpty();
+				builder.append("\n");
 			}
 			if ((el.hasLabel(Labels.Class.name()) || el.hasLabel(Labels.Interface.name()))) {
 				builder.append(toMetaDataClass(el));
-				builder.newLineIfNotEmpty();
+				builder.append("\n");
 			}
 			if ((el.hasLabel(Labels.Type.name()) && el.hasLabel(Labels.Annotation.name()))) {
 				builder.append(toMetaDataAnnotation(el));
-				builder.newLineIfNotEmpty();
+				builder.append("\n");
 			}
 			if ((el.hasLabel(Labels.Type.name()) && el.hasLabel(Labels.Enum.name()))) {
 				builder.append(toMetaDataEnum(el));
-				builder.newLineIfNotEmpty();
+				builder.append("\n");
 			}
 			if (el.hasLabel(Labels.Method.name())) {
 				builder.append(toMetaDataMethod(el));
-				builder.newLineIfNotEmpty();
+				builder.append("\n");
 			}
 			if ((el.hasLabel(Labels.Field.name()) && (!el.hasLabel(Labels.Enum.name())))) {
 				builder.append(toMetaDataAttribute(el));
 			}
 			if ((el.hasLabel(Labels.Field.name()) && el.hasLabel(Labels.Enum.name()))) {
 				builder.append(toMetaDataEnumValue(el));
-				builder.newLineIfNotEmpty();
+				builder.append("\n");
 			}
 		}
 		if (hasElements) {
@@ -98,17 +97,17 @@ public class JQA2JSON {
 		if (parentHash.hasNext()) {
 			belongsTo = parentHash.single().get("parent.hash").asString();
 		}
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 		builder.append("\"id\":            \"" + namespace.get("hash").asString() + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"qualifiedName\": \"" + namespace.get("fqn").asString() + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"name\":          \"" + namespace.get("name").asString() + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"type\":          \"FAMIX.Namespace\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-		builder.newLine();
+		builder.append("\n");
 		return builder.toString();
 	}
 
@@ -123,23 +122,23 @@ public class JQA2JSON {
 					"MATCH (parent:Package)-[:CONTAINS]->(class) WHERE ID(class) = " + c.id() + " RETURN parent");
 			belongsTo = parent.single().get("parent").asNode().get("hash").asString("YYY");
 		}
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 		builder.append("\"id\":            \"" + c.get("hash").asString() + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"qualifiedName\": \"" + c.get("fqn").asString() + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"name\":          \"" + c.get("name").asString() + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"type\":          \"FAMIX.Class\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"modifiers\":     \"" + getModifiers(c) + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"subClassOf\":    \"" + getSuperClasses(c) + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"superClassOf\":  \"" + getSubClasses(c) + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-		builder.newLine();
+		builder.append("\n");
 		return builder.toString();
 	}
 
@@ -158,23 +157,23 @@ public class JQA2JSON {
 		if (type != null) {
 			declaredType = type.get("name").asString();
 		}
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 		builder.append("\"id\":            \"" + attribute.get("hash").asString() + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"qualifiedName\": \"" + attribute.get("fqn").asString() + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"name\":          \"" + attribute.get("name").asString() + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"type\":          \"FAMIX.Attribute\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"modifiers\":     \"" + getModifiers(attribute) + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"declaredType\":  \"" + declaredType + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"accessedBy\":\t \"" + getAccessedBy(attribute) + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-		builder.newLine();
+		builder.append("\n");
 		return builder.toString();
 	}
 
@@ -190,27 +189,27 @@ public class JQA2JSON {
 			int lBraceIndex = signature.indexOf("(");
 			signature = signature.substring(0, lBraceIndex + 1) + getParameters(method) + ")";
 		}
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 		builder.append("\"id\":            \"" + method.get("hash").asString() + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"qualifiedName\": \"" + StringEscapeUtils.escapeHtml4(method.get("fqn").asString()) + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"name\":          \"" + method.get("name").asString() + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"type\":          \"FAMIX.Method\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"modifiers\":     \"" + getModifiers(method) + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"signature\":  \t \"" + signature + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"calls\":\t\t \"" + getCalls(method) + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"calledBy\":\t\t \"" + getCalledBy(method) + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"accesses\":\t \t \"" + getAccesses(method) + "\",");
-		builder.newLine();
+		builder.append("\n");
 		builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-		builder.newLine();
+		builder.append("\n");
 		return builder.toString();
 	}
 
@@ -221,19 +220,19 @@ public class JQA2JSON {
 		if(parent.hasNext()) {
 			belongsTo = parent.single().get("parent.hash").asString();
 		}		
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 	    builder.append("\"id\":            \"" + e.get("hash").asString() + "\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"qualifiedName\": \"" +  e.get("fqn").asString() + "\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"name\":          \"" + e.get("name").asString() + "\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"type\":          \"FAMIX.Enum\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"modifiers\":     \"" + getModifiers(e) + "\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-	    builder.newLine();
+	    builder.append("\n");
 	    return builder.toString();
 	}
 
@@ -244,17 +243,17 @@ public class JQA2JSON {
 		if(parent.hasNext()) {
 			belongsTo = parent.single().get("parent.hash").asString();
 		}
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 	    builder.append("\"id\":            \"" + ev.get("hash").asString() + "\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"qualifiedName\": \"" + ev.get("fqn").asString() + "\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"name\":          \"" + ev.get("name").asString() + "\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"type\":          \"FAMIX.EnumValue\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-	    builder.newLine();
+	    builder.append("\n");
 	    return builder.toString();
 	}
 
@@ -265,23 +264,23 @@ public class JQA2JSON {
 		if(parent.hasNext()) {
 			belongsTo = parent.single().get("parent.hash").asString();
 		}		
-		StringConcatenation builder = new StringConcatenation();
+		StringBuilder builder = new StringBuilder();
 	    builder.append("\"id\":            \"" + annotation.get("hash").asString() + "\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"qualifiedName\": \"" + annotation.get("fqn").asString() + "\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"name\":          \"" + annotation.get("name").asString() + "\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"type\":          \"FAMIX.AnnotationType\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"modifiers\":     \"" + getModifiers(annotation) + "\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"subClassOf\":    \"\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"superClassOf\":  \"\",");
-	    builder.newLine();
+	    builder.append("\n");
 	    builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-	    builder.newLine();
+	    builder.append("\n");
 	    return builder.toString();
 	}
 
