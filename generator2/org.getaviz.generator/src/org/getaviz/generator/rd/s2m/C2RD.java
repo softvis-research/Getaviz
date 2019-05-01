@@ -179,15 +179,29 @@ public class C2RD {
 		disk.setProperty("color", color);
 		
 		List<Node> subElements = new ArrayList<>();
+		List<Node> variables = new ArrayList<>();
+		List<Node> structures = new ArrayList<>();
 		for(Relationship relationship : element.getRelationships(Rels.DECLARES, Direction.OUTGOING)) {
 			subElements.add(relationship.getEndNode());
 		}
 		
-		if (config.isDataDisks()) {
-			subElements.forEach(variable -> disk.createRelationshipTo(variableToDisk(variable), Rels.CONTAINS));
-		} else {
-			subElements.forEach(variable -> disk.createRelationshipTo(variableToDiskSegment(variable), Rels.CONTAINS));
+		for(Node subElement : subElements) {
+			if(subElement.hasLabel(Labels.Variable)) {
+				variables.add(subElement);
+			}
+			//create disks for nested structs, unions, enums
+			if(subElement.hasLabel(Labels.Struct) || subElement.hasLabel(Labels.Union) || subElement.hasLabel(Labels.Enum)) {
+				structures.add(subElement);
+			}
 		}
+		
+		if (config.isDataDisks()) {
+			variables.forEach(variable -> disk.createRelationshipTo(variableToDisk(variable), Rels.CONTAINS));
+		} else {
+			variables.forEach(variable -> disk.createRelationshipTo(variableToDiskSegment(variable), Rels.CONTAINS));
+		}
+		
+		structures.forEach(structure -> disk.createRelationshipTo(unionStructEnumToDisk(structure), Rels.CONTAINS));
 		
 		return disk;
 	}
