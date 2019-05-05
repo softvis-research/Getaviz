@@ -22,7 +22,7 @@ services:
     frontend:
         build: ui/
         restart: always
-        #volumes:
+        volumes:
             #- ./ui:/var/www/html/ui
             - data-gen:/var/www/html/ui/data-gen
         ports:
