@@ -85,11 +85,7 @@ public class RDLayout {
 		final Point2D.Double centre = new Point2D.Double(mbc.getCentre().x, mbc.getCentre().y);
 		
 		outerCircle.setCentre(centre);
-		if (((CircleWithInnerCircles)outerCircle).getLevel()==1){
-			outerCircle.setRadius(outerCircle.getRingWidth() + radius);
-		}else{
-			outerCircle.setRadius(outerCircle.getRingWidth() + radius + calculateB(calculateD(outerCircle.getMinArea(), radius), radius));
-		}
+		outerCircle.setRadius(outerCircle.getRingWidth() + radius + calculateB(calculateD(outerCircle.getMinArea(), radius), radius));
 		normalizePositionOfInnerCircles(outerCircle, innerCircles);
 	}
 	
