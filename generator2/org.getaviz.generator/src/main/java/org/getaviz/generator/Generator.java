@@ -23,7 +23,6 @@ public class Generator {
 
 	public static void run() {
 		log.info("Generator started");
-		// start generation process
 		try {
 			if(!config.isSkipScan()) {
 				new DatabaseBuilder();
