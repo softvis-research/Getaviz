@@ -5,8 +5,6 @@ import java.awt.geom.Point2D.Double;
 abstract class Circle implements Comparable<Circle> {
 
 	protected double radius = 0;
-
-//	@Accessors double radius = 0
 	protected Double centre = new Double(0, 0);
 	protected double minArea = 0;
 	protected double netArea;
