@@ -374,7 +374,7 @@ public class RD2RD {
 				.stream().map(s -> s.get("d").asNode()).collect(Collectors.toList()).listIterator();
 	}
 
-	private static String removeBrackets(List<String> list) {
+	private String removeBrackets(List<String> list) {
 		return StringUtils.remove(StringUtils.remove(list.toString(), "["), "]");
 	}
 }
