@@ -406,28 +406,12 @@ public class SettingsConfiguration {
 		return config.getDouble("rd.data_factor", 4.0);
 	}
 
-	public double getRDMethodFactor() {
-		return config.getDouble("rd.method_factor", 1.0);
-	}
-
 	public double getRDHeight() {
 		return config.getDouble("rd.height", 1.0);
 	}
 
-	public int getRDHeightBoost() {
-		return config.getInt("rd.height_boost", 8);
-	}
-
-	public float getRDHeightMultiplicator() {
-		return (float)config.getDouble("rd.height_multiplicator", 50.0);
-	}
-
 	public double getRDRingWidth() {
 		return config.getDouble("rd.ring_width", 2.0);
-	}
-
-	public double getRDRingWidthMD() {
-		return config.getDouble("rd.ring_width_md", 0);
 	}
 
 	public double getRDRingWidthAD() {
@@ -498,10 +482,6 @@ public class SettingsConfiguration {
 		return config.getString("rd.color.namespace", "#969696");
 	}
 
-	public String getRDNamespaceColorAsPercentage() {
-		return getColorFormatted(getRDNamespaceColor());
-	}
-	
 	public boolean isMethodDisks() {
 		return config.getBoolean("rd.method_disks", false);
 	}

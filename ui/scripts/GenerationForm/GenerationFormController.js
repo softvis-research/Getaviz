@@ -657,18 +657,7 @@ var generationFormController = (function() {
 						align: 'left',
 						width: '200px',
 						padding: {left: 8, top: 0, bottom: 0, right: 8}
-					},					
-					{
-						bind: 'rd_method_factor',
-						name: 'rd.method_factor',
-						type: 'number',
-						label: 'rd.method_factor',
-						labelAlign: 'right',
-						labelWidth: '325px',
-						align: 'left',
-						width: '200px',
-						padding: {left: 8, top: 0, bottom: 0, right: 8}
-					},					
+					},										
 					{
 						bind: 'rd_height',
 						name: 'rd.height',
@@ -679,29 +668,7 @@ var generationFormController = (function() {
 						align: 'left',
 						width: '200px',
 						padding: {left: 8, top: 0, bottom: 0, right: 8}
-					},					
-					{
-						bind: 'rd_height_boost',
-						name: 'rd.height_boost',
-						type: 'number',
-						label: 'rd.height_boost',
-						labelAlign: 'right',
-						labelWidth: '325px',
-						align: 'left',
-						width: '200px',
-						padding: {left: 8, top: 0, bottom: 0, right: 8}
-					},					
-					{
-						bind: 'rd_height_multiplicator',
-						name: 'rd.height_multiplicator',
-						type: 'number',
-						label: 'rd.height_multiplicator',
-						labelAlign: 'right',
-						labelWidth: '325px',
-						align: 'left',
-						width: '200px',
-						padding: {left: 8, top: 0, bottom: 0, right: 8}
-					},					
+					},															
 					{
 						bind: 'rd_ring_width',
 						name: 'rd.ring_width',
@@ -712,19 +679,7 @@ var generationFormController = (function() {
 						align: 'left',
 						width: '200px',
 						padding: {left: 8, top: 0, bottom: 0, right: 8}
-					},					
-					{
-						bind: 'rd_ring_width_md',
-						name: 'rd.ring_width_md',
-						type: 'number',
-						label: 'rd.ring_width_md',
-						labelAlign: 'right',
-						labelWidth: '325px',
-						align: 'left',
-						width: '200px',
-						info:'Sets the ring width of the method disks &#013;Only relevant if disk of type FAMIX.Method exist',
-						padding: {left: 8, top: 0, bottom: 0, right: 8}
-					},					
+					},										
 					{
 						bind: 'rd_ring_width_ad',
 						name: 'rd.ring_width_ad',
