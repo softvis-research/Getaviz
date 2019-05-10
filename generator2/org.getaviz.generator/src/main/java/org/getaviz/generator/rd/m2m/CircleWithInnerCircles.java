@@ -9,7 +9,6 @@ import org.neo4j.driver.v1.types.Node;
 import org.getaviz.generator.database.DatabaseConnector;
 
 class CircleWithInnerCircles extends Circle {
-	private int level;
 	private ArrayList<CircleWithInnerCircles> innerCircles = new ArrayList<CircleWithInnerCircles>();
 	private Log log = LogFactory.getLog(CircleWithInnerCircles.class);
 	private Node diskNode;
@@ -23,7 +22,6 @@ class CircleWithInnerCircles extends Circle {
 			minArea = RDUtils.sum(methods) + RDUtils.sum(data);
 		} else {
 			minArea = disk.get("netArea").asDouble();
-			level = RDUtils.getLevel(disk.id());
 		}
 		ringWidth = disk.get("ringWidth").asDouble();
 		serial = connector.getVisualizedEntity(disk.id()).id() + "";
@@ -63,9 +61,5 @@ class CircleWithInnerCircles extends Circle {
 
 	public ArrayList<CircleWithInnerCircles> getInnerCircles() {
 		return innerCircles;
-	}
-
-	public int getLevel() {
-		return level;
 	}
 }

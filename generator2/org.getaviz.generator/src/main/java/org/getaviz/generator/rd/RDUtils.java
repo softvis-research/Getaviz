@@ -50,14 +50,5 @@ public class RDUtils {
 		}
 		return sum;
 	}
-
-	public static int getLevel(Long disk) {
-		return connector.executeRead(
-			"MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) " +
-			"WHERE ID(m) = " + disk + " " +
-			"RETURN p " + 
-			"LIMIT 1"
-		).single().get("p").asPath().length();
-	}
 }
 
