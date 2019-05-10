@@ -16,9 +16,9 @@ import java.util.List;
 import org.getaviz.generator.OutputFormatHelper;
 
 public class City2X3D {
-	SettingsConfiguration config = SettingsConfiguration.getInstance();
-	DatabaseConnector connector = DatabaseConnector.getInstance();
-	Log log = LogFactory.getLog(this.getClass());
+	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private DatabaseConnector connector = DatabaseConnector.getInstance();
+	private Log log = LogFactory.getLog(this.getClass());
 
 	public City2X3D() {
 		log.info("CityOutput started");

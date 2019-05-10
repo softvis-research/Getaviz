@@ -15,9 +15,9 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
 
 public class JQA2City {
-	SettingsConfiguration config = SettingsConfiguration.getInstance();
-	Log log = LogFactory.getLog(this.getClass());
-	DatabaseConnector connector = DatabaseConnector.getInstance();
+	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private Log log = LogFactory.getLog(this.getClass());
+	private DatabaseConnector connector = DatabaseConnector.getInstance();
 
 	public JQA2City() {
 		log.info("JQA2City started");

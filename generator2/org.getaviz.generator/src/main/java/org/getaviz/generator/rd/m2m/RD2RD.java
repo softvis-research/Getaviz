@@ -24,15 +24,15 @@ import com.google.common.collect.Lists;
 import java.util.stream.Collectors;
 
 public class RD2RD {
-	SettingsConfiguration config = SettingsConfiguration.getInstance();
-	DatabaseConnector connector = DatabaseConnector.getInstance();
-	Log log = LogFactory.getLog(RD2RD.class);
+	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private DatabaseConnector connector = DatabaseConnector.getInstance();
+	private Log log = LogFactory.getLog(RD2RD.class);
 
 // TODO set colors via RGBColor class for all entities
 // color scheme
-	RGBColor NS_colorStart = new RGBColor(150, 150, 150);
-	RGBColor NS_colorEnd = new RGBColor(240, 240, 240); // from CodeCity
-	List<RGBColor> NS_colors;
+	private RGBColor NS_colorStart = new RGBColor(150, 150, 150);
+	private RGBColor NS_colorEnd = new RGBColor(240, 240, 240); // from CodeCity
+	private List<RGBColor> NS_colors;
 
 	public RD2RD() {
 		log.info("RD2RD started");

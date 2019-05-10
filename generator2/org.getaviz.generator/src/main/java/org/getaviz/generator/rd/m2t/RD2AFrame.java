@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RD2AFrame {
-	SettingsConfiguration config = SettingsConfiguration.getInstance();
-	DatabaseConnector connector = DatabaseConnector.getInstance();
-	Log log = LogFactory.getLog(this.getClass());
+	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private DatabaseConnector connector = DatabaseConnector.getInstance();
+	private Log log = LogFactory.getLog(this.getClass());
 
 	public RD2AFrame() {
 		log.info("RD2AFrame has started");

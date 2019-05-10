@@ -21,13 +21,13 @@ import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Path;
 
 public class City2City {
-	SettingsConfiguration config = SettingsConfiguration.getInstance();
-	Log log = LogFactory.getLog(this.getClass());
-	List<RGBColor> PCKG_colors;
-	List<RGBColor> NOS_colors;
-	HashMap<Long, double[]> properties = new HashMap<Long, double[]>();
-	Node model;
-	DatabaseConnector connector = DatabaseConnector.getInstance();
+	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private Log log = LogFactory.getLog(this.getClass());
+	private List<RGBColor> PCKG_colors;
+	private List<RGBColor> NOS_colors;
+	private HashMap<Long, double[]> properties = new HashMap<Long, double[]>();
+	private Node model;
+	private DatabaseConnector connector = DatabaseConnector.getInstance();
 
 	public City2City() {
 		log.info("City2City started");

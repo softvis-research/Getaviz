@@ -15,9 +15,9 @@ import java.util.List;
 import org.getaviz.generator.OutputFormatHelper;
 
 public class City2AFrame {
-	SettingsConfiguration config = SettingsConfiguration.getInstance();
-	DatabaseConnector connector = DatabaseConnector.getInstance();
-	Log log = LogFactory.getLog(this.getClass());
+	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private DatabaseConnector connector = DatabaseConnector.getInstance();
+	private Log log = LogFactory.getLog(this.getClass());
 
 	public City2AFrame() {
 		log.info("City2AFrame has started");

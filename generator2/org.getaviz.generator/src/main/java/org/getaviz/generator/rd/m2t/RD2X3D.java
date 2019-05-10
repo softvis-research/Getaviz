@@ -10,9 +10,9 @@ import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.types.Node;
 
 public class RD2X3D {
-	SettingsConfiguration config = SettingsConfiguration.getInstance();
-	DatabaseConnector connector = DatabaseConnector.getInstance();
-	Log log = LogFactory.getLog(this.getClass());
+	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private DatabaseConnector connector = DatabaseConnector.getInstance();
+	private Log log = LogFactory.getLog(this.getClass());
 
 	public RD2X3D() {
 		log.info("RD2X3D has started");

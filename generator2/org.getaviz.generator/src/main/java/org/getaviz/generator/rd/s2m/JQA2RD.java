@@ -11,9 +11,9 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 
 public class JQA2RD {
-	SettingsConfiguration config = SettingsConfiguration.getInstance();
-	DatabaseConnector connector = DatabaseConnector.getInstance();
-	Log log = LogFactory.getLog(JQA2RD.class );
+	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private DatabaseConnector connector = DatabaseConnector.getInstance();
+	private Log log = LogFactory.getLog(JQA2RD.class );
 
 	public JQA2RD() {
 		log.info("JQA2RD started");
