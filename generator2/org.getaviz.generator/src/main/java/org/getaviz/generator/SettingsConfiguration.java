@@ -67,17 +67,10 @@ public class SettingsConfiguration {
 		}
 	}
 
-	public void loadDefault() {
-		loadConfig("settings.properties");
-	}
-	
 	public boolean isSkipScan() {
 		return config.getBoolean("input.skip_scan", false);
 	}
-	
-	public void setBoltURL() {
-	}
-	
+
 	public String getInputFiles() {
 		String[] fileArray = config.getStringArray("input.files");
 		if(fileArray.length == 0) {
