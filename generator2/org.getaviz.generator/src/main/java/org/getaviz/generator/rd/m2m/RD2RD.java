@@ -1,5 +1,6 @@
 package org.getaviz.generator.rd.m2m;
 
+import org.apache.commons.lang3.StringUtils;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.SettingsConfiguration.OutputFormat;
@@ -12,7 +13,6 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.algorithm.MinimumBoundingCircle;
 import com.vividsolutions.jts.geom.CoordinateList;
 import com.vividsolutions.jts.geom.Coordinate;
-import org.getaviz.generator.Helper;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 import org.getaviz.generator.database.DatabaseConnector;
@@ -301,7 +301,7 @@ public class RD2RD {
 					partSpine.add(completeSpine.get(start + j));
 				}
 				statementList.add("MATCH (n) WHERE ID(n) = " + segment.id() + " SET n.spine = \'"
-						+ Helper.removeBrackets(partSpine) + "\'");
+						+ removeBrackets(partSpine) + "\'");
 			}
 			connector.executeWrite(statementList.stream().toArray(String[]::new));
 
@@ -335,7 +335,7 @@ public class RD2RD {
 		}
 		completeSpine.add(completeSpine.get(0));
 		connector.executeWrite(
-				"MATCH (n) WHERE ID(n) = " + disk + " SET n.spine = \'" + Helper.removeBrackets(completeSpine) + "\'");
+				"MATCH (n) WHERE ID(n) = " + disk + " SET n.spine = \'" + removeBrackets(completeSpine) + "\'");
 	}
 
 	private List<RGBColor> createColorGradiant(RGBColor start, RGBColor end, int maxLevel) {
@@ -372,5 +372,9 @@ public class RD2RD {
 				.executeRead("MATCH (n:RD:Model)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element) " + "RETURN d "
 						+ "ORDER BY element.hash")
 				.stream().map(s -> s.get("d").asNode()).collect(Collectors.toList()).listIterator();
+	}
+
+	private static String removeBrackets(List<String> list) {
+		return StringUtils.remove(StringUtils.remove(list.toString(), "["), "]");
 	}
 }
