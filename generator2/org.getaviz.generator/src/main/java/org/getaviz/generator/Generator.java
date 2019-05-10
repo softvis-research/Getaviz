@@ -25,7 +25,7 @@ public class Generator {
 		log.info("Generator startet");
 		// start generation process
 		try {
-			if(config.isSkipScan() == false) {
+			if(!config.isSkipScan()) {
 				new DatabaseBuilder();
 			}
 			switch (config.getMetaphor()) {
