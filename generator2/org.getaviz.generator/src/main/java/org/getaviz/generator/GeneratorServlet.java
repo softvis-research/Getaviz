@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.InetAddress;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration.OutputFormat;
@@ -30,7 +29,7 @@ public class GeneratorServlet extends HttpServlet {
 		writeResponse(response, config);
 	}
 	
-	public void writeResponse(HttpServletResponse response, SettingsConfiguration config) throws IOException {
+	private void writeResponse(HttpServletResponse response, SettingsConfiguration config) throws IOException {
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
 		out.println("<h1>Getaviz</h1>");
