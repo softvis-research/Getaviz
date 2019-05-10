@@ -14,7 +14,7 @@ import org.getaviz.generator.city.s2m.JQA2City;
 import org.getaviz.generator.rd.s2m.JQA2RD;
 
 public class Generator {
-	static SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 	private static Log log = LogFactory.getLog(Generator.class);
 
 	public static void main(String[] args) {
