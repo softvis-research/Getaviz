@@ -90,6 +90,7 @@ EOT;
 <html>
 	<title>Getaviz</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
 	
     <!--Main-->
     <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
