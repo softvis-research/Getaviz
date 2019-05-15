@@ -17,13 +17,9 @@ public class DatabaseBuilder implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Runtime runtime = Runtime.getRuntime();
 	private String inputFiles;
-	private String repositoryName;
-	private String repositoryOwner;
 
 	public DatabaseBuilder(SettingsConfiguration config) {
 		this.inputFiles = config.getInputFiles();
-		this.repositoryName = config.getRepositoryName();
-		this.repositoryOwner = config.getRepositoryOwner();
 	}
 
 	public void run() {
@@ -64,7 +60,7 @@ public class DatabaseBuilder implements Step {
 	}
 
 	private String createHash(String fqn) {
-		return "ID_" + DigestUtils.sha1Hex(fqn + repositoryName + repositoryOwner);
+		return "ID_" + DigestUtils.sha1Hex(fqn);
 	}
 
 	private String labelPrimitives() {

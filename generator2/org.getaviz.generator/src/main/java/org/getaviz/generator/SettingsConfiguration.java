@@ -115,14 +115,6 @@ public class SettingsConfiguration {
 	public String getOutputPath() {
 		return config.getString("output.path", "/var/lib/jetty/data-gen/") + getName() + "/model/";
 	}
-	
-	public String getRepositoryName() {
-		return config.getString("history.repository_name", "");
-	}
-
-	public String getRepositoryOwner() {
-		return config.getString("history.repository_owner", "");
-	}
 
 	public OutputFormat getOutputFormat() {
 		switch (config.getString("output.format", "aframe")) {
