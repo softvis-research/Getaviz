@@ -42,8 +42,6 @@ public class Util {
 	}
 
 	public static boolean intersect(Circle firstPoint, Circle secondPoint) {
-		//TODO remove
-		//System.out.println(((SnailCircle)secondPoint).getSerial());
 		double a = Math.abs(firstPoint.getCentre().y - secondPoint.getCentre().y);
 		double b = Math.abs(firstPoint.getCentre().x - secondPoint.getCentre().x);
 		// there must be a little tolerance!

@@ -17,46 +17,6 @@ public class CityUtils {
 
 	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 	private static DatabaseConnector connector = DatabaseConnector.getInstance();
-	public static String getFamixClassString(final String className) {
-		String s = className.substring(0, 5) + "." + className.substring(5, className.length());
-		if (className.endsWith("Impl"))
-			s = s.substring(0, s.length() - 4);
-		return s;
-	}
-
-	/**
-	 * Creates the color gradient for the packages depending on your hierarchy
-	 * level.
-	 *
-	 * @param start
-	 *            RGBColor
-	 * @param end
-	 *            RGBColor
-	 * @param maxLevel
-	 *            int
-	 * @return color range
-	 */
-	public static RGBColor[] createPackageColorGradient(final RGBColor start, final RGBColor end, final int maxLevel) {
-		int steps = maxLevel - 1;
-		if (maxLevel == 1) {
-			steps++;
-		}
-		double r_step = (end.r() - start.r()) / steps;
-		double g_step = (end.g() - start.g()) / steps;
-		double b_step = (end.b() - start.b()) / steps;
-
-		RGBColor[] colorRange = new RGBColor[maxLevel];
-		double newR, newG, newB;
-		for (int i = 0; i < maxLevel; ++i) {
-			newR = start.r() + i * r_step;
-			newG = start.g() + i * g_step;
-			newB = start.b() + i * b_step;
-
-			colorRange[i] = new RGBColor(newR, newG, newB);
-		}
-
-		return colorRange;
-	}
 
 	public static String setBuildingSegmentColor(Node relatedEntity) {
 		String color = "";

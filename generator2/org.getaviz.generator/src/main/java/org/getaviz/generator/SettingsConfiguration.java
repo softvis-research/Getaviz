@@ -70,7 +70,7 @@ public class SettingsConfiguration {
 	public boolean isSkipScan() {
 		return config.getBoolean("input.skip_scan", false);
 	}
-
+	
 	public String getInputFiles() {
 		String[] fileArray = config.getStringArray("input.files");
 		if(fileArray.length == 0) {
@@ -498,8 +498,8 @@ public class SettingsConfiguration {
 		return Color.decode(hex);
 	}
 
-	public static enum OutputFormat {
-		X3D, AFrame;
+	public enum OutputFormat {
+		X3D, AFrame
 	}
 	
 	/**
@@ -508,8 +508,8 @@ public class SettingsConfiguration {
 	 * it can either be in a static or dynamic way 
 	 */
 	
-	public static enum BuildingType{
-		CITY_ORIGINAL, CITY_PANELS, CITY_BRICKS, CITY_FLOOR; 
+	public static enum BuildingType {
+		CITY_ORIGINAL, CITY_PANELS, CITY_BRICKS, CITY_FLOOR;
 	}
 	
 	/**
@@ -518,11 +518,11 @@ public class SettingsConfiguration {
 	 * 
 	 * @see CitySettings#SET_SCHEME SET_SCHEME
 	 */
-	public static enum Schemes {
+	public enum Schemes {
 		/**
 		 * The class elements are sorted and colored corresponding to there
 		 * visibility modifiers.
-		 * 
+		 *
 		 * @see SortPriorities_Visibility
 		 */
 		VISIBILITY,
@@ -530,19 +530,19 @@ public class SettingsConfiguration {
 		/**
 		 * The class elements are sorted and colored associated to
 		 * type/functionality of the method.
-		 * 
+		 *
 		 * @see Methods.SortPriorities_Types
 		 * @see Attributes.SortPriorities_Types
 		 */
-		TYPES;
-	};
+		TYPES
+	}
 	
 	/**
 	 * Defines which elements of a class are to show.
 	 * 
 	 * @see CitySettings#SET_CLASS_ELEMENTS_MODE SET_CLASS_ELEMENTS_MODE
 	 */
-	public static enum ClassElementsModes {
+	public enum ClassElementsModes {
 		METHODS_ONLY, ATTRIBUTES_ONLY, METHODS_AND_ATTRIBUTES;
 	}
 	
@@ -552,8 +552,8 @@ public class SettingsConfiguration {
 	 * @see CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_COARSE
 	 *      SET_CLASS_ELEMENTS_SORT_MODE_COARSE
 	 */
-	public static enum ClassElementsSortModesCoarse {
-		UNSORTED, ATTRIBUTES_FIRST, METHODS_FIRST;
+	public enum ClassElementsSortModesCoarse {
+		UNSORTED, ATTRIBUTES_FIRST, METHODS_FIRST
 	}
 
 	/**
@@ -565,7 +565,7 @@ public class SettingsConfiguration {
 	 * @see Methods.SortPriorities_Types
 	 * @see Attributes.SortPriorities_Types
 	 */
-	public static enum ClassElementsSortModesFine {
+	public enum ClassElementsSortModesFine {
 		/** Class elements won't be sorted. */
 		UNSORTED,
 
@@ -580,7 +580,7 @@ public class SettingsConfiguration {
 		SCHEME,
 
 		/** Methods will be sorted according to there number of statements. */
-		NOS;
+		NOS
 	}
 
 	/**
@@ -592,14 +592,14 @@ public class SettingsConfiguration {
 	 * @see ClassElementsSortModesFine
 	 * 
 	 */
-	public static enum SortPriorities_Visibility {;
+	public enum SortPriorities_Visibility {;
 		public static int PRIVATE = 1;
 		public static int PROTECTED = 2;
 		public static int PACKAGE = 3;
 		public static int PUBLIC = 4;
 	}
 
-	public static enum Methods {;
+	public enum Methods {;
 
 		/**
 		 * A list of types of a method with the associated priority value.<br>
@@ -647,7 +647,7 @@ public class SettingsConfiguration {
 
 	}
 
-	public static enum Attributes {;
+	public enum Attributes {;
 
 		/**
 		 * A list of types of a method with the associated priority value.<br>
@@ -670,7 +670,7 @@ public class SettingsConfiguration {
 
 	}
 
-	public static enum Bricks {;
+	public enum Bricks {;
 
 		/**
 		 * Defines the layout for the BuildingSegments of the city model, which
@@ -678,7 +678,7 @@ public class SettingsConfiguration {
 		 * 
 		 * @see CitySettings#SET_BRICK_LAYOUT SET_BRICK_LAYOUT
 		 */
-		public static enum Layout {
+		public enum Layout {
 
 			/**
 			 * One-dimensional bricks layout, where the segments simply are
@@ -758,15 +758,15 @@ public class SettingsConfiguration {
 		}
 	}
 	
-	public static enum Original {
+	public enum Original {
 		;
-		public static enum BuildingMetric {
+		public enum BuildingMetric {
 			NONE,
 			NOS;
 		}
 	}
 	
-	public static enum Metaphor {
+	public enum Metaphor {
 		RD, CITY
 	}
 }

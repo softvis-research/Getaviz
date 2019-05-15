@@ -2,6 +2,9 @@ package org.getaviz.generator.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.Step;
+import org.getaviz.generator.StepFactory;
 import org.getaviz.generator.city.m2m.City2City;
 import org.getaviz.generator.city.s2m.JQA2City;
 import org.getaviz.generator.database.DatabaseConnector;
@@ -21,9 +24,12 @@ public class CityBankTest {
 		mockup.setupDatabase("./test/databases/CityBankTest.db");
 		mockup.loadProperties("CityBankTest.properties");
 		connector = mockup.getConnector();
-
-		new JQA2City();
-		new City2City();
+		SettingsConfiguration config = SettingsConfiguration.getInstance();
+		StepFactory factory = new StepFactory(config);
+		Step s2m = factory.createSteps2m();
+		Step m2m = factory.createStepm2m();
+		s2m.run();
+		m2m.run();
 	}
 	
 	@AfterAll

@@ -1,6 +1,7 @@
 package org.getaviz.generator.city.s2m;
 
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
@@ -14,21 +15,31 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
 
-public class JQA2City {
-	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+public class JQA2City implements Step {
 	private Log log = LogFactory.getLog(this.getClass());
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
+	private ClassElementsModes classElementsMode;
+	private String buildingTypeAsString;
+	private BuildingType buildingType;
+	private BuildingMetric originalBuildingMetric;
 
-	public JQA2City() {
+	public JQA2City(SettingsConfiguration config) {
+		this.classElementsMode = config.getClassElementsMode();
+		this.buildingTypeAsString = config.getBuildingTypeAsString();
+		this.buildingType = config.getBuildingType();
+		this.originalBuildingMetric = config.getOriginalBuildingMetric();
+	}
+
+	public void run() {
 		log.info("JQA2City started");
 		connector.executeWrite("MATCH (n:City) DETACH DELETE n");
 		long model = connector.addNode(
-			String.format("CREATE (n:Model:City {date: \'%s\', building_type: \'%s\'})",
-				new GregorianCalendar().getTime().toString(), config.getBuildingTypeAsString()),"n").id();
+				String.format("CREATE (n:Model:City {date: \'%s\', building_type: \'%s\'})",
+						new GregorianCalendar().getTime().toString(), buildingTypeAsString),"n").id();
 		connector.executeRead(
-			"MATCH (n:Package) " +
-			"WHERE NOT (n)<-[:CONTAINS]-(:Package) " + 
-			"RETURN n" 
+				"MATCH (n:Package) " +
+						"WHERE NOT (n)<-[:CONTAINS]-(:Package) " +
+						"RETURN n"
 		).forEachRemaining((result) -> {
 			long namespace = result.get("n").asNode().id();
 			namespaceToDistrict(namespace, model);
@@ -57,7 +68,7 @@ public class JQA2City {
 			" AND EXISTS(m.hash) RETURN m");
 		StatementResult attributes = connector.executeRead("MATCH (n)-[:DECLARES]->(a:Field) WHERE ID(n) = " + structure +
 			" AND EXISTS(a.hash) RETURN a");
-		if (config.getBuildingType() == BuildingType.CITY_FLOOR && methods != null) {
+		if (buildingType == BuildingType.CITY_FLOOR && methods != null) {
 			methods.forEachRemaining((result) -> {
 				methodToFloor(result.get("m").asNode().id(), building);
 			});
@@ -65,7 +76,7 @@ public class JQA2City {
 				attributeToChimney(result.get("a").asNode().id(), building);
 			});
 		} else {
-			if (config.getOriginalBuildingMetric() == BuildingMetric.NOS) {
+			if (originalBuildingMetric == BuildingMetric.NOS) {
 				int numberOfStatements = 0;
 				for(Record record : methods.list()) {
 					Node method = record.get("m").asNode();
@@ -79,15 +90,15 @@ public class JQA2City {
 					numberOfStatements);
 			}
 
-			if ((config.getClassElementsMode() == ClassElementsModes.METHODS_AND_ATTRIBUTES ||
-				config.getClassElementsMode() == ClassElementsModes.METHODS_ONLY)) {
+			if ((classElementsMode == ClassElementsModes.METHODS_AND_ATTRIBUTES ||
+				classElementsMode == ClassElementsModes.METHODS_ONLY)) {
 				methods.forEachRemaining((result) -> {
 					methodToBuildingSegment(result.get("m").asNode().id(), building);
 				});
 			}
 
-			if (config.getClassElementsMode() == ClassElementsModes.METHODS_AND_ATTRIBUTES ||
-				config.getClassElementsMode() == ClassElementsModes.ATTRIBUTES_ONLY) {
+			if (classElementsMode == ClassElementsModes.METHODS_AND_ATTRIBUTES ||
+				classElementsMode == ClassElementsModes.ATTRIBUTES_ONLY) {
 				attributes.forEachRemaining((result) -> {
 					attributeToBuildingSegment(result.get("a").asNode().id(), building);
 				});

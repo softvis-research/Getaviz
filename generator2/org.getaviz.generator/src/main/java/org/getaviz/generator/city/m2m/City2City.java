@@ -1,12 +1,14 @@
 package org.getaviz.generator.city.m2m;
 
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.SettingsConfiguration.BuildingType;
 import org.getaviz.generator.city.CityUtils;
 import org.getaviz.generator.SettingsConfiguration.ClassElementsModes;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.OutputFormat;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,34 +22,95 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Path;
 
-public class City2City {
-	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+public class City2City implements Step {
 	private Log log = LogFactory.getLog(this.getClass());
 	private List<RGBColor> PCKG_colors;
 	private List<RGBColor> NOS_colors;
 	private HashMap<Long, double[]> properties = new HashMap<Long, double[]>();
-	private Node model;
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
+	private OutputFormat outputFormat;
 
-	public City2City() {
+	private Color packageColorStart;
+	private Color packageColorEnd;
+	private String packageColorHex;
+
+	private BuildingType buildingType;
+	private String buildingTypeAsString;
+	private BuildingMetric originalBuildingMetric;
+	private Color classColorStart;
+	private Color classColorEnd;
+	private String classColorHex;
+	private Color classColor;
+	private boolean showBuildingBase;
+
+	private double heightMin;
+	private double widthMin;
+
+	private ClassElementsModes classElementsMode;
+	private double panelHorizontalMargin;
+	private int[] panelHeightTresholdNos;
+	private double panelHeightUnit;
+	private double panelVerticalMargin;
+	private SeparatorModes panelSeparatorMode;
+	private double panelVerticalGap;
+	private double panelSeparatorHeight;
+
+	private SettingsConfiguration.Bricks.Layout brickLayout;
+	private double brickSize;
+	private double brickHorizontalMargin;
+	private double brickHorizontalGap;
+
+	private boolean showAttributesAsCylinders;
+
+	public City2City(SettingsConfiguration config) {
+		this.buildingType = config.getBuildingType();
+		this.buildingTypeAsString = config.getBuildingTypeAsString();
+		this.packageColorStart = config.getPackageColorStart();
+		this.packageColorEnd = config.getPackageColorEnd();
+		this.originalBuildingMetric = config.getOriginalBuildingMetric();
+		this.classColorStart = config.getClassColorStart();
+		this.classColorEnd = config.getClassColorEnd();
+		this.outputFormat = config.getOutputFormat();
+		this.packageColorHex = config.getPackageColorHex();
+		this.heightMin = config.getHeightMin();
+		this.widthMin = config.getWidthMin();
+		this.classColorHex = config.getClassColorHex();
+		this.classColor = config.getClassColor();
+		this.showBuildingBase = config.isShowBuildingBase();
+		this.classElementsMode = config.getClassElementsMode();
+		this.panelHorizontalMargin = config.getPanelHorizontalMargin();
+		this.brickLayout = config.getBrickLayout();
+		this.brickSize = config.getBrickSize();
+		this.brickHorizontalMargin = config.getBrickHorizontalMargin();
+		this.brickHorizontalGap = config.getBrickHorizontalGap();
+		this.panelHeightTresholdNos = config.getPanelHeightTresholdNos();
+		this.panelHeightUnit = config.getPanelHeightUnit();
+		this.panelVerticalMargin = config.getPanelVerticalMargin();
+		this.panelSeparatorMode = config.getPanelSeparatorMode();
+		this.panelVerticalGap = config.getPanelVerticalGap();
+		this.panelSeparatorHeight = config.getPanelSeparatorHeight();
+		this.showAttributesAsCylinders = config.isShowAttributesAsCylinders();
+	}
+
+	public void run() {
 		log.info("City2City started");
-		model = connector.executeRead("MATCH (n:Model {building_type: \'" + config.getBuildingTypeAsString() +
-			"\'}) RETURN n").next().get("n").asNode();
-		if (config.getBuildingType() == BuildingType.CITY_BRICKS || config.getBuildingType() == BuildingType.CITY_PANELS) {
+		Node model = connector.executeRead("MATCH (n:Model {building_type: \'" + buildingTypeAsString +
+				"\'}) RETURN n").next().get("n").asNode();
+		if (buildingType == BuildingType.CITY_BRICKS || buildingType == BuildingType.CITY_PANELS) {
 			connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(m:BuildingSegment) RETURN m").forEachRemaining((result) -> {
 				setBuildingSegmentAttributes(result.get("m").asNode().id());
 			});
 		}
 		int packageMaxLevel = connector.executeRead("MATCH p=(n:District)-[:CONTAINS*]->(m:District) WHERE NOT (m)-[:CONTAINS]->(:District) RETURN length(p) AS length ORDER BY length(p) DESC LIMIT 1").
-			single().get("length").asInt() + 1;
-		PCKG_colors = createColorGradiant(new RGBColor(config.getPackageColorStart()), new RGBColor(config.getPackageColorEnd()),
-			packageMaxLevel);
+				single().get("length").asInt() + 1;
+		PCKG_colors = createColorGradiant(new RGBColor(packageColorStart), new RGBColor(packageColorEnd),
+				packageMaxLevel);
 
-		if (config.getOriginalBuildingMetric() == BuildingMetric.NOS) {
+		if (originalBuildingMetric == BuildingMetric.NOS) {
 			int NOS_max = connector.executeRead("MATCH (n:Building) RETURN max(n.numberOfStatements) AS nos").single().
-				get("nos").asInt();
-			NOS_colors = createColorGradiant(new RGBColor(config.getClassColorStart()), new RGBColor(config.getClassColorEnd()),
-				NOS_max + 1);
+					get("nos").asInt();
+			NOS_colors = createColorGradiant(new RGBColor(classColorStart), new RGBColor(classColorEnd),
+					NOS_max + 1);
 		}
 
 		connector.executeRead("MATCH p=(n:Model:City)-[:CONTAINS*]->(m:District) RETURN p").forEachRemaining((result) -> {
@@ -64,8 +127,8 @@ public class City2City {
 			properties.put(node.id(), array);
 		});
 		connector.executeRead(
-			"MATCH (n:Model:City)-[:CONTAINS*]->(b:Building)-[:VISUALIZES]->(element) " +
-				"RETURN b, element.hash as hash " + "ORDER BY element.hash"
+				"MATCH (n:Model:City)-[:CONTAINS*]->(b:Building)-[:VISUALIZES]->(element) " +
+						"RETURN b, element.hash as hash " + "ORDER BY element.hash"
 		).forEachRemaining((result) -> {
 			Node node = result.get("b").asNode();
 			double width = node.get("width").asDouble(0.0);
@@ -76,7 +139,7 @@ public class City2City {
 
 		CityLayout.cityLayout(model.id(), properties);
 
-		switch (config.getBuildingType()) {
+		switch (buildingType) {
 			case CITY_BRICKS:
 				BrickLayout.brickLayout(model.id()); break; // Layout for buildingSegments
 			case CITY_PANELS:
@@ -90,21 +153,21 @@ public class City2City {
 				});
 				break;
 			default: {
-			} // CityDebugUtils.infoEntities(cityRoot.document.entities, 0, true, true)	
+			} // CityDebugUtils.infoEntities(cityRoot.document.entities, 0, true, true)
 		}
 		log.info("City2City finished");
 	}
 
 	private void setDistrictAttributes(Path districtPath) {
 		String color = "";
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			color = config.getPackageColorHex();
+		if (outputFormat == OutputFormat.AFrame) {
+			color = packageColorHex;
 		} else {
 			color = PCKG_colors.get(districtPath.length() - 1).asPercentage();
 		}
 		connector.executeWrite(
 			String.format("MATCH (n) WHERE ID(n) = %d SET n.height = %f, n.color = \'%s\'", districtPath.end().id(),
-				config.getHeightMin(), color));
+				heightMin, color));
 	}
 
 	private void setBuildingAttributes(Node building) {
@@ -114,7 +177,7 @@ public class City2City {
 		int dataCounter = connector.executeRead(
 			"MATCH (n)-[:VISUALIZES]->(o)-[:DECLARES]->(f:Field) WHERE ID(n) = " + building.id() +
 				" AND NOT o:Enum RETURN COUNT(f) AS fCount").single().get("fCount").asInt();
-		switch (config.getBuildingType()) {
+		switch (buildingType) {
 			case CITY_ORIGINAL: setBuildingAttributesOriginal(building, methodCounter, dataCounter); break;
 			case CITY_PANELS: setBuildingAttributesPanels(building, methodCounter, dataCounter); break;
 			case CITY_BRICKS: setBuildingAttributesBricks(building, methodCounter, dataCounter); break;
@@ -128,23 +191,23 @@ public class City2City {
 		double height = 0.0;
 		String color = "";
 		if (dataCounter == 0) {
-			width = config.getWidthMin();
-			length = config.getWidthMin();
+			width = widthMin;
+			length = widthMin;
 		} else {
 			width = dataCounter;
 			length = dataCounter;
 		}
 		if (methodCounter == 0) {
-			height = config.getHeightMin();
+			height = heightMin;
 		} else {
 			height = methodCounter;
 		}
-		if (config.getOriginalBuildingMetric() == BuildingMetric.NOS) {
+		if (originalBuildingMetric == BuildingMetric.NOS) {
 			color = NOS_colors.get(building.get("numberOfStatements").asInt(0)).asPercentage();
-		} else if (config.getOutputFormat() == OutputFormat.AFrame) {
-			color = config.getClassColorHex();
+		} else if (outputFormat == OutputFormat.AFrame) {
+			color = classColorHex;
 		} else {
-			color = new RGBColor(config.getClassColor()).asPercentage();
+			color = new RGBColor(classColor).asPercentage();
 		}
 		connector.executeWrite(cypherSetBuildingSegmentAttributes(building.id(), width, length, height, color));
 	}
@@ -154,28 +217,28 @@ public class City2City {
 		double width = 0.0;
 		double length = 0.0;
 		String color = "";
-		if (config.isShowBuildingBase()) {
-			height = config.getHeightMin();
+		if (showBuildingBase) {
+			height = heightMin;
 		} else {
 			height = 0;
 		}
 		int areaUnit = 1;
-		if (config.getClassElementsMode() == ClassElementsModes.ATTRIBUTES_ONLY) {
+		if (classElementsMode == ClassElementsModes.ATTRIBUTES_ONLY) {
 			areaUnit = methodCounter;
 		} else {
 			areaUnit = dataCounter;
 		}
 		if (areaUnit <= 1) {
-			width = config.getWidthMin() + config.getPanelHorizontalMargin() * 2;
-			length = config.getWidthMin() + config.getPanelHorizontalMargin() * 2;
+			width = widthMin + panelHorizontalMargin * 2;
+			length = widthMin + panelHorizontalMargin * 2;
 		} else {
-			width = config.getWidthMin() * areaUnit + config.getPanelHorizontalMargin() * 2;
-			length = config.getWidthMin() * areaUnit + config.getPanelHorizontalMargin() * 2;
+			width = widthMin * areaUnit + panelHorizontalMargin * 2;
+			length = widthMin * areaUnit + panelHorizontalMargin * 2;
 		} 
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			color = config.getClassColorHex();
+		if (outputFormat == OutputFormat.AFrame) {
+			color = classColorHex;
 		} else {
-			color = new RGBColor(config.getClassColor()).asPercentage();
+			color = new RGBColor(classColor).asPercentage();
 		}
 		connector.executeWrite(cypherSetBuildingSegmentAttributes(building.id(), width, length, height, color));
 	}
@@ -186,24 +249,24 @@ public class City2City {
 		double length = 0.0;
 		int sideCapacity = 0;
 		String color = "";
-		if (config.isShowBuildingBase()) {
-			height = config.getHeightMin();
+		if (showBuildingBase) {
+			height = heightMin;
 		} else {
 			height = 0;
 		}
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			color = config.getClassColorHex();
+		if (outputFormat == OutputFormat.AFrame) {
+			color = classColorHex;
 		} else {
-			color = new RGBColor(config.getClassColor()).asPercentage();
+			color = new RGBColor(classColor).asPercentage();
 		}
 		// Setting width, height & sideCapacity
-		switch (config.getBrickLayout()) {
+		switch (brickLayout) {
 			case STRAIGHT: {
 				sideCapacity = 1;
 				break;
 			}
 			case BALANCED: {
-				switch (config.getClassElementsMode()) {
+				switch (classElementsMode) {
 					case ATTRIBUTES_ONLY: sideCapacity = calculateSideCapacity(methodCounter); break;
 					case METHODS_AND_ATTRIBUTES: sideCapacity = calculateSideCapacity(dataCounter + methodCounter); break;
 					default: sideCapacity = calculateSideCapacity(dataCounter);
@@ -211,7 +274,7 @@ public class City2City {
 				break;
 			}
 			case PROGRESSIVE: {
-				switch (config.getClassElementsMode()) {
+				switch (classElementsMode) {
 					case METHODS_ONLY: sideCapacity = calculateSideCapacity(methodCounter); break;
 					case METHODS_AND_ATTRIBUTES: sideCapacity = calculateSideCapacity(dataCounter + methodCounter); break;
 					default: sideCapacity = calculateSideCapacity(dataCounter);
@@ -222,10 +285,10 @@ public class City2City {
 				sideCapacity = 1;
 			}
 		}
-		width = config.getBrickSize() * sideCapacity + config.getBrickHorizontalMargin() * 2 +
-			config.getBrickHorizontalGap() * (sideCapacity - 1);
-		length = config.getBrickSize() * sideCapacity + config.getBrickHorizontalMargin() * 2 +
-			config.getBrickHorizontalGap() * (sideCapacity - 1);
+		width = brickSize * sideCapacity + brickHorizontalMargin * 2 +
+			brickHorizontalGap * (sideCapacity - 1);
+		length = brickSize * sideCapacity + brickHorizontalMargin * 2 +
+			brickHorizontalGap * (sideCapacity - 1);
 		connector.executeWrite(
 			cypherSetBuildingSegmentAttributes(building.id(), width, length, height, color) + ", n.sideCapacity = " +
 				sideCapacity);
@@ -244,12 +307,12 @@ public class City2City {
 			length = Math.ceil(dataCounter / 4.0) + 1; // pko 2016
 		}
 		if (methodCounter == 0) {
-			height = config.getHeightMin();
+			height = heightMin;
 		} else {
 			height = methodCounter;
 		}
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			color = config.getClassColorHex();
+		if (outputFormat == OutputFormat.AFrame) {
+			color = classColorHex;
 		} else {
 			color = 53 / 255.0 + " " + 53 / 255.0 + " " + 89 / 255.0; // pko 2016
 		}
@@ -257,7 +320,7 @@ public class City2City {
 	}
 
 	private void setBuildingSegmentAttributes(Long segment) {
-		switch (config.getBuildingType()) {
+		switch (buildingType) {
 			case CITY_PANELS:
 				setBuildingSegmentAttributesPanels(segment); break;
 			case CITY_BRICKS:
@@ -280,7 +343,7 @@ public class City2City {
 				"MATCH (s)-[:CONTAINS]->(child)-[r:VISUALIZES]->(e:Field) WHERE ID(s) = " + parent +
 					" AND NOT (e)<-[:DECLARES]-(:Enum) RETURN e").stream().map(s -> s.get("e").asNode()).collect(Collectors.toList());
 		int areaUnit = 1;
-		if (config.getClassElementsMode() == ClassElementsModes.ATTRIBUTES_ONLY) {
+		if (classElementsMode == ClassElementsModes.ATTRIBUTES_ONLY) {
 			areaUnit = childsM.size();
 		} else {
 			areaUnit = childsA.size();
@@ -288,19 +351,19 @@ public class City2City {
 		double width = 0.0;
 		double length = 0.0;
 		if (areaUnit <= 1) {
-			width = config.getWidthMin();
-			length = config.getWidthMin();
+			width = widthMin;
+			length = widthMin;
 		} else {
-			width = config.getWidthMin() * areaUnit;
-			length = config.getWidthMin() * areaUnit;
+			width = widthMin * areaUnit;
+			length = widthMin * areaUnit;
 		}
 		int index = 0;
 		int effectiveLineCount = relatedEntity.get("effectiveLineCount").asInt(0);
-		while (index < config.getPanelHeightTresholdNos().length &&
-			effectiveLineCount >= config.getPanelHeightTresholdNos()[index]) {
+		while (index < panelHeightTresholdNos.length &&
+			effectiveLineCount >= panelHeightTresholdNos[index]) {
 			index = index + 1;
 		}
-		double height = config.getPanelHeightUnit() * (index + 1);
+		double height = panelHeightUnit * (index + 1);
 		connector.executeWrite(
 			cypherSetBuildingSegmentAttributes(segment, width, length, height,
 				CityUtils.setBuildingSegmentColor(relatedEntity)));
@@ -312,7 +375,7 @@ public class City2City {
 			"p").asPath();
 		Node relatedEntity = path.end();
 		connector.executeWrite(
-			cypherSetBuildingSegmentAttributes(segment, config.getBrickSize(), config.getBrickSize(), config.getBrickSize(),
+			cypherSetBuildingSegmentAttributes(segment, brickSize, brickSize, brickSize,
 				CityUtils.setBuildingSegmentColor(relatedEntity)));
 		CityUtils.setBuildingSegmentColor(relatedEntity);
 	}
@@ -320,7 +383,7 @@ public class City2City {
 	private void setBuildingSegmentPositions(Node building) {
 		// Sorting elements
 		List<Node> classElements = new ArrayList<>();
-		switch (config.getClassElementsMode()) {
+		switch (classElementsMode) {
 			case ATTRIBUTES_ONLY:
 				classElements.addAll(CityUtils.getData(building.id()));
 				break;
@@ -336,12 +399,12 @@ public class City2City {
 		CityUtils.sortBuildingSegments(classElements);
 		// upper bound of the panel below the actual panel inside the loop
 		Node position = connector.getPosition(building.id());
-		double lowerBsPosY = position.get("y").asDouble() + building.get("height").asDouble() / 2 + config.getPanelVerticalMargin();
+		double lowerBsPosY = position.get("y").asDouble() + building.get("height").asDouble() / 2 + panelVerticalMargin;
 
 		// Correcting the initial gap on top of building depending on SeparatorMode
-		if (config.getPanelSeparatorMode() == SeparatorModes.GAP ||
-			config.getPanelSeparatorMode() == SeparatorModes.SEPARATOR) {
-			lowerBsPosY = lowerBsPosY - config.getPanelVerticalGap();
+		if (panelSeparatorMode == SeparatorModes.GAP ||
+			panelSeparatorMode == SeparatorModes.SEPARATOR) {
+			lowerBsPosY = lowerBsPosY - panelVerticalGap;
 		}
 		// System.out.println("")
 		// Looping through methods of building
@@ -355,14 +418,14 @@ public class City2City {
 			double y = 0;
 			double z = position.get("z").asDouble();
 			String panelSeparatorCypher = "";
-			switch (config.getPanelSeparatorMode()) {
+			switch (panelSeparatorMode) {
 				case NONE: { // place segments on top of each other
 					y = lowerBsPosY + height / 2;
 					lowerBsPosY = y + height / 2;
 					break;
 				}
 				case GAP: { // Leave a free space between segments
-					y = lowerBsPosY + config.getPanelVerticalGap() + height / 2;
+					y = lowerBsPosY + panelVerticalGap + height / 2;
 					lowerBsPosY = y + height / 2;
 					break;
 				}
@@ -370,21 +433,21 @@ public class City2City {
 					y = lowerBsPosY + height / 2;
 					// Placing a separator on top of the current method if it is not last method
 					if (i < classElements.size() - 1) {
-						double sepY = y + height / 2 + config.getPanelSeparatorHeight() / 2;
+						double sepY = y + height / 2 + panelSeparatorHeight / 2;
 						// Deciding which shape the separator has to have
 						Node nextElementType = connector.getVisualizedEntity(classElements.get(i + 1).id());
 						Node segmentType = connector.getVisualizedEntity(segment.id());
 						panelSeparatorCypher = String.format(
 							"(psp:City:Position {x: %f, y: %f, z: %f})<-[:HAS]-(ps:City:PanelSeparator", x, sepY, z);
 						if ((segmentType.hasLabel(Labels.Method.name()) &&
-							nextElementType.hasLabel(Labels.Method.name())) || !config.isShowAttributesAsCylinders()) {
+							nextElementType.hasLabel(Labels.Method.name())) || !showAttributesAsCylinders) {
 							panelSeparatorCypher +=
 								String.format(":Box {width: %f, length: %f})<-[:HAS]-", width,
 									segment.get("length").asDouble());
 						} else {
 							panelSeparatorCypher += String.format(":Cylinder {radius: %f})<-[:HAS]-", width / 2);
 						}
-						lowerBsPosY = sepY + config.getPanelSeparatorHeight() / 2;
+						lowerBsPosY = sepY + panelSeparatorHeight / 2;
 						break;
 					}
 				}
@@ -420,7 +483,7 @@ public class City2City {
 			long floor = record.get("f").asNode().id();
 			floorCounter++;
 			String color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0;
-			if (config.getOutputFormat() == OutputFormat.AFrame) {
+			if (outputFormat == OutputFormat.AFrame) {
 				color = "#1485CC";
 			}
 			String statement = cypherSetBuildingSegmentAttributes(floor, bWidth * 1.1, bLength * 1.1,
@@ -452,7 +515,7 @@ public class City2City {
 		while (chimneys.hasNext()) {
 			long chimney = chimneys.next().get("c").asNode().id();
 			String color = 255 / 255.0 + " " + 252 / 255.0 + " " + 25 / 255.0;
-			if (config.getOutputFormat() == OutputFormat.AFrame) {
+			if (outputFormat == OutputFormat.AFrame) {
 				color = "#FFFC19";
 			}
 			connector.executeWrite(cypherSetBuildingSegmentAttributes(chimney, 0.5, 0.5, 1.0, color));
