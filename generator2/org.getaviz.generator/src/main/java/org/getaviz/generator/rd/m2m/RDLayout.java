@@ -66,7 +66,6 @@ class RDLayout {
 		}
 	}
 	
-	// TODO optimize
 	private static void calculateRadiusForOuterCircles(CircleWithInnerCircles outerCircle, List<CircleWithInnerCircles> innerCircles) {
 
 		CoordinateList coordinates = new CoordinateList();

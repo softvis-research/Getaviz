@@ -275,7 +275,7 @@ public class City2City implements Step {
 		double length;
 		double height;
 		if (dataCounter < 2) { // pko 2016
-			width = 2; // TODO in settings datei aufnehmen
+			width = 2;
 			length = 2;
 		} else {
 			width = Math.ceil(dataCounter / 4.0) + 1; // pko 2016

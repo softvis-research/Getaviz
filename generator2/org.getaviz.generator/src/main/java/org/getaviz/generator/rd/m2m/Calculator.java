@@ -9,12 +9,10 @@ class Calculator {
 	static void calculate(final List<CircleWithInnerCircles> circleList) {
 
 		if (circleList == null || circleList.size() == 0) {
-			// TODO throw exception
 			return;
 		}
 
 		Collections.sort(circleList);
-		// TODO order the circles
 		int m = 0;
 
 		// angle is the angle between m and n
