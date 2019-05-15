@@ -140,12 +140,10 @@ public class CityUtils {
 	}
 
 	/**
-	 * Sorting the {@link BuildingSegment}s with help of
-	 * {@link BuildingSegmentComparator} based on sorting settings in
-	 * {@link CitySettings}.
+	 * Sorting the BuildingSegments with help of
+	 * {@link BuildingSegmentComparator} based on sorting settings
 	 * 
-	 * @param bsList
-	 *            BuildingSegments which are to be sorted.
+	 * @param segments BuildingSegments which are to be sorted.
 	 *
 	 */
 	

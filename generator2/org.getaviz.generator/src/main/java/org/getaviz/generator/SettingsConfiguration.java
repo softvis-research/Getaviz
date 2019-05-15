@@ -452,8 +452,6 @@ public class SettingsConfiguration {
 	/**
 	 * Defines how the methods and attributes are sorted and colored in the city
 	 * model.
-	 * 
-	 * @see CitySettings#SET_SCHEME SET_SCHEME
 	 */
 	public enum Schemes {
 		/**
@@ -476,8 +474,6 @@ public class SettingsConfiguration {
 	
 	/**
 	 * Defines which elements of a class are to show.
-	 * 
-	 * @see CitySettings#SET_CLASS_ELEMENTS_MODE SET_CLASS_ELEMENTS_MODE
 	 */
 	public enum ClassElementsModes {
 		METHODS_ONLY, ATTRIBUTES_ONLY, METHODS_AND_ATTRIBUTES;
@@ -485,9 +481,6 @@ public class SettingsConfiguration {
 	
 	/**
 	 * Defines which how the elements of a class are sorted.
-	 * 
-	 * @see CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_COARSE
-	 *      SET_CLASS_ELEMENTS_SORT_MODE_COARSE
 	 */
 	public enum ClassElementsSortModesCoarse {
 		UNSORTED, ATTRIBUTES_FIRST, METHODS_FIRST
@@ -497,7 +490,6 @@ public class SettingsConfiguration {
 	 * A list of types of a method with the associated priority value.<br>
 	 * Highest priority/smallest number is placed on the bottom, lowest on top.
 	 * 
-	 * @see #SET_CLASS_ELEMENTS_SORT_MODE_FINE SET_CLASS_ELEMENTS_SORT_MODE_FINE
 	 * @see SortPriorities_Visibility
 	 * @see Methods.SortPriorities_Types
 	 * @see Attributes.SortPriorities_Types
@@ -511,7 +503,6 @@ public class SettingsConfiguration {
 
 		/**
 		 * Methods will be sorted according to the active
-		 * {@link CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_FINE
 		 * SET_CLASS_ELEMENTS_SORT_MODE_FINE}.
 		 */
 		SCHEME,
@@ -525,7 +516,6 @@ public class SettingsConfiguration {
 	 * value.<br>
 	 * Highest priority/smallest number is placed on the bottom, lowest on top.
 	 * 
-	 * @see #SET_CLASS_ELEMENTS_SORT_MODE_FINE SET_CLASS_ELEMENTS_SORT_MODE_FINE
 	 * @see ClassElementsSortModesFine
 	 * 
 	 */
@@ -542,9 +532,7 @@ public class SettingsConfiguration {
 		 * A list of types of a method with the associated priority value.<br>
 		 * Highest priority/smallest number is placed on the bottom, lowest on
 		 * top.
-		 * 
-		 * @see CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_FINE
-		 *      SET_CLASS_ELEMENTS_SORT_MODE_FINE
+		 *
 		 * @see ClassElementsSortModesFine
 		 * @see SortPriorities_Visibility
 		 */
@@ -590,9 +578,6 @@ public class SettingsConfiguration {
 		 * A list of types of a method with the associated priority value.<br>
 		 * Highest priority/smallest number is placed on the bottom, lowest on
 		 * top.
-		 * 
-		 * @see CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_FINE
-		 *      SET_CLASS_ELEMENTS_SORT_MODE_FINE
 		 * @see ClassElementsSortModesFine
 		 */
 		public static enum SortPriorities_Types {;
@@ -612,8 +597,6 @@ public class SettingsConfiguration {
 		/**
 		 * Defines the layout for the BuildingSegments of the city model, which
 		 * represents the methods and/or attributes of a class.
-		 * 
-		 * @see CitySettings#SET_BRICK_LAYOUT SET_BRICK_LAYOUT
 		 */
 		public enum Layout {
 
@@ -625,16 +608,14 @@ public class SettingsConfiguration {
 
 			/**
 			 * Three-dimensional brick layout, where the base area is computed
-			 * depending on the {@link CitySettings#SET_CLASS_ELEMENTS_MODE
-			 * SET_CLASS_ELEMENTS_MODE}.<br>
+			 * depending on the {@link ClassElementsModes}.<br>
 			 * If only methods are shown, the base area is computed by the
 			 * number of attributes and vice versa.<br>
 			 * In case of methods and attributes are shown, the base area is
 			 * computed by the sum of the numbers of attributes and methods
 			 * inside the class.
 			 * <p>
-			 * When {@link CitySettings#SET_CLASS_ELEMENTS_MODE
-			 * SET_CLASS_ELEMENTS_MODE} is set to
+			 * When {@link ClassElementsModes} is set to
 			 * {@code METHODS_AND_ATTRIBUTES}, the {@code BALANCED} layout and
 			 * {@link Layout#PROGRESSIVE PROGRESSIVE} layout are identical.
 			 */
@@ -642,14 +623,12 @@ public class SettingsConfiguration {
 
 			/**
 			 * Three-dimensional brick layout, where the base area is computed
-			 * depending on the {@link CitySettings#SET_CLASS_ELEMENTS_MODE
-			 * SET_CLASS_ELEMENTS_MODE}.<br>
+			 * depending on the {@link ClassElementsModes}.<br>
 			 * If only methods are shown, the base area is computed by the
 			 * number of methods and vice versa. So the aspect lies on only one
 			 * type of element of a class and is visualized.
 			 * <p>
-			 * When {@link CitySettings#SET_CLASS_ELEMENTS_MODE
-			 * SET_CLASS_ELEMENTS_MODE} is set to
+			 * When {@link ClassElementsModes} is set to
 			 * {@code METHODS_AND_ATTRIBUTES}, the {@link Layout#BALANCED
 			 * PROGRESSIVE} layout and {@code PROGRESSIVE} layout are identical.
 			 */
@@ -665,8 +644,6 @@ public class SettingsConfiguration {
 		 * Defines the the space between the panels.<br>
 		 * The panels can either touch each other without a gap, leave a gap
 		 * between them, or fill the space with a separator of a defined color.
-		 * 
-		 * @see CitySettings#SET_PANEL_SEPARATOR_MODE SET_PANEL_SEPARATOR_MODE
 		 */
 		public static enum SeparatorModes {
 
@@ -679,16 +656,12 @@ public class SettingsConfiguration {
 			/**
 			 * The panels have a free space between them and don't touch each
 			 * other.
-			 * 
-			 * @see Panels#PANEL_VERTICAL_GAP PANEL_VERTICAL_GAP
 			 */
 			GAP,
 
 			/**
 			 * Between the panels separators are placed with a fix height and
 			 * color.
-			 * 
-			 * @see Panels#SEPARATOR_HEIGHT SEPARATOR_HEIGHT
 			 */
 			SEPARATOR;
 
