@@ -10,7 +10,6 @@ import org.getaviz.generator.SettingsConfiguration.ClassElementsModes;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.OutputFormat;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -184,7 +183,7 @@ public class City2City implements Step {
 			height = methodCounter;
 		}
 		if (originalBuildingMetric == BuildingMetric.NOS) {
-			color = asPercentage(NOS_colors.get(building.get("numberOfStatements").asInt(0)));
+			color = NOS_colors.get(building.get("numberOfStatements").asInt(0)).toString();
 		} else  {
 			color = classColor.toString();
 		}
@@ -215,13 +214,6 @@ public class City2City implements Step {
 		} 
 
 		connector.executeWrite(cypherSetBuildingSegmentAttributes(building.id(), width, length, height, classColor.toString()));
-	}
-
-	private String asPercentage(Color color) {
-		double r = color.getRed() / 255.0;
-		double g = color.getGreen() / 255.0;
-		double b = color.getBlue() / 255.0;
-		return r + " " + g + " " + b;
 	}
 
 	private void setBuildingAttributesBricks(Node building, int methodCounter, int dataCounter) {
