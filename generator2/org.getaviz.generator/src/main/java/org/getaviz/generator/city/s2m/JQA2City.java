@@ -47,44 +47,37 @@ public class JQA2City implements Step {
 		log.info("JQA2City finished");
 	}
 
-	private Long namespaceToDistrict(Long namespace, Long parent) {
+	private void namespaceToDistrict(Long namespace, Long parent) {
 		long district = connector.addNode(cypherCreateNode(parent,namespace,Labels.District.name()),"n").id();
 		StatementResult subPackages = connector.executeRead("MATCH (n)-[:CONTAINS]->(p:Package) WHERE ID(n) = " + namespace +
 			" RETURN p");
 		StatementResult subTypes = connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type) WHERE ID(n) = " + namespace +
 			" AND EXISTS(t.hash) AND (t:Class OR t:Interface) AND NOT t:Inner RETURN t");
-		subPackages.forEachRemaining((result) -> {
-			namespaceToDistrict(result.get("p").asNode().id(), district);
-		});
-		subTypes.forEachRemaining((result) -> {
-			structureToBuilding(result.get("t").asNode().id(), district);
-		});
-		return district;
+		subPackages.forEachRemaining((result) -> namespaceToDistrict(result.get("p").asNode().id(), district));
+		subTypes.forEachRemaining((result) -> structureToBuilding(result.get("t").asNode().id(), district));
 	}
 
-	private Long structureToBuilding(Long structure, Long parent) {
+	private void structureToBuilding(Long structure, Long parent) {
 		long building = connector.addNode(cypherCreateNode(parent, structure, Labels.Building.name()),"n").id();
 		StatementResult methods = connector.executeRead("MATCH (n)-[:DECLARES]->(m:Method) WHERE ID(n) = " + structure +
 			" AND EXISTS(m.hash) RETURN m");
 		StatementResult attributes = connector.executeRead("MATCH (n)-[:DECLARES]->(a:Field) WHERE ID(n) = " + structure +
 			" AND EXISTS(a.hash) RETURN a");
 		if (buildingType == BuildingType.CITY_FLOOR && methods != null) {
-			methods.forEachRemaining((result) -> {
-				methodToFloor(result.get("m").asNode().id(), building);
-			});
-			attributes.forEachRemaining((result) -> {
-				attributeToChimney(result.get("a").asNode().id(), building);
-			});
+			methods.forEachRemaining((result) -> methodToFloor(result.get("m").asNode().id(), building));
+			attributes.forEachRemaining((result) -> attributeToChimney(result.get("a").asNode().id(), building));
 		} else {
 			if (originalBuildingMetric == BuildingMetric.NOS) {
 				int numberOfStatements = 0;
-				for(Record record : methods.list()) {
-					Node method = record.get("m").asNode();
-					int effectiveLineCount = 0;
-					if (method.containsKey("effectiveLineCount")) {
-						effectiveLineCount = method.get("effectiveLineCount").asInt();
+				if (methods != null) {
+					for(Record record : methods.list()) {
+						Node method = record.get("m").asNode();
+						int effectiveLineCount = 0;
+						if (method.containsKey("effectiveLineCount")) {
+							effectiveLineCount = method.get("effectiveLineCount").asInt();
+						}
+						numberOfStatements += effectiveLineCount;
 					}
-					numberOfStatements += effectiveLineCount;
 				}
 				connector.executeWrite("MATCH(n) WHERE ID(n) = " + building + " SET n.numberOfStatements = " +
 					numberOfStatements);
@@ -92,24 +85,19 @@ public class JQA2City implements Step {
 
 			if ((classElementsMode == ClassElementsModes.METHODS_AND_ATTRIBUTES ||
 				classElementsMode == ClassElementsModes.METHODS_ONLY)) {
-				methods.forEachRemaining((result) -> {
-					methodToBuildingSegment(result.get("m").asNode().id(), building);
-				});
+				if (methods != null) {
+					methods.forEachRemaining((result) -> methodToBuildingSegment(result.get("m").asNode().id(), building));
+				}
 			}
 
 			if (classElementsMode == ClassElementsModes.METHODS_AND_ATTRIBUTES ||
 				classElementsMode == ClassElementsModes.ATTRIBUTES_ONLY) {
-				attributes.forEachRemaining((result) -> {
-					attributeToBuildingSegment(result.get("a").asNode().id(), building);
-				});
+				attributes.forEachRemaining((result) -> attributeToBuildingSegment(result.get("a").asNode().id(), building));
 			}
 		}
 		StatementResult subStructures = connector.executeRead("MATCH (n)-[:DECLARES]->(t:Type:Inner) WHERE ID(n) = " + structure +
 			" AND EXISTS(t.hash) RETURN t");
-		subStructures.forEachRemaining((result) -> {
-			structureToBuilding(result.get("t").asNode().id(), parent);
-		});
-		return building;
+		subStructures.forEachRemaining((result) -> structureToBuilding(result.get("t").asNode().id(), parent));
 	}
 
 	private void methodToBuildingSegment(Long method, Long parent) {
