@@ -11,17 +11,17 @@ import com.vividsolutions.jts.geom.MultiPoint;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
 import java.util.ArrayList;
 
-public class RDLayout {
+class RDLayout {
 	
-	public static void nestedLayout(ArrayList<CircleWithInnerCircles> circleList) {
+	static void nestedLayout(ArrayList<CircleWithInnerCircles> circleList) {
 		layout(circleList);
 		transformPositions(circleList);
 	}
 
 	private static void layout(List<CircleWithInnerCircles> circleList) {
 		for (CircleWithInnerCircles circle : circleList) {
-			if (((CircleWithInnerCircles) circle).getInnerCircles().size() > 0) {
-				List<CircleWithInnerCircles> innerCircles = ((CircleWithInnerCircles) circle).getInnerCircles();
+			if (circle.getInnerCircles().size() > 0) {
+				List<CircleWithInnerCircles> innerCircles = circle.getInnerCircles();
 				layout(innerCircles);
 				calculateRadiusForOuterCircles(circle,innerCircles);
 			}
@@ -42,10 +42,10 @@ public class RDLayout {
 	private static void updateArea(List<CircleWithInnerCircles> circleList) {
 		for (CircleWithInnerCircles circle : circleList) {
 			circle.setGrossArea(circle.getRadius() * circle.getRadius() * Math.PI);
-			if (((CircleWithInnerCircles) circle).getInnerCircles().size() < 1) {
+			if (circle.getInnerCircles().size() < 1) {
 				circle.setNetArea(circle.getGrossArea());
 			} else {
-				List<CircleWithInnerCircles> innerCircles = ((CircleWithInnerCircles) circle).getInnerCircles();
+				List<CircleWithInnerCircles> innerCircles = circle.getInnerCircles();
 				circle.setNetArea(circle.getNetArea() + (2 * circle.getRadius() - circle.getRingWidth()) * circle.getRingWidth() * Math.PI);
 				
 				for (CircleWithInnerCircles c : innerCircles) {
@@ -81,7 +81,7 @@ public class RDLayout {
 //		outerCircle.setCentre(centre);
 //		outerCircle.setRadius(RING_WIDTH + radius + calculateB(calculateD(outerCircle.getMinArea(), radius), radius));
 //		normalizePositionOfInnerCircles(outerCircle, innerCircles);
-		final double radius =  mbc.getRadius();
+		final double radius = mbc.getRadius();
 		final Point2D.Double centre = new Point2D.Double(mbc.getCentre().x, mbc.getCentre().y);
 		
 		outerCircle.setCentre(centre);

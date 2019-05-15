@@ -4,45 +4,13 @@ import java.awt.geom.Point2D;
 import java.util.Collections;
 import java.util.List;
 
-import org.getaviz.generator.rd.m2m.Circle;
-import org.getaviz.generator.rd.m2m.CircleWithInnerCircles;
+class Calculator {
 
-public class Calculator {
-
-	public static final int SILENT = 0;
-	public static final int DEBUG = 1;
-
-	private static int VERBOSE_MODE = SILENT;
-
-	public static void setVerboseMode(int mode) {
-		switch (mode) {
-		case SILENT:
-			VERBOSE_MODE = SILENT;
-			break;
-		case DEBUG:
-			VERBOSE_MODE = DEBUG;
-			break;
-		default:
-			VERBOSE_MODE = SILENT;
-			break;
-		}
-	}
-
-	public static void printCircle(Circle c, int number) {
-		if (VERBOSE_MODE != DEBUG)
-			return;
-		System.out.println("Circle numer " + number);
-		System.out.println("----------------------");
-		System.out.println("Radius: " + c.getRadius());
-		System.out.println("Centre: " + c.getCentre().x + "|" + c.getCentre().y);
-		System.out.println("");
-	}
-
-	public static List<CircleWithInnerCircles> calculate(final List<CircleWithInnerCircles> circleList) {
+	static void calculate(final List<CircleWithInnerCircles> circleList) {
 
 		if (circleList == null || circleList.size() == 0) {
 			// TODO throw exception
-			return null;
+			return;
 		}
 
 		Collections.sort(circleList);
@@ -57,18 +25,14 @@ public class Calculator {
 		Circle first = circleList.get(0);
 		first.setCentre(new Point2D.Double(0, 0));
 
-		printCircle(first, 0);
-
 		if (circleList.size() < 2) {
-			return circleList;
+			return;
 		}
 
 		// Instantiate the second circle
 		Circle second = circleList.get(1);
 
 		second.setCentre(Util.calculateCentre(first, second, angle));
-
-		printCircle(second, 1);
 
 		// start from the third circle, because the first and the second are fix
 
@@ -87,7 +51,7 @@ public class Calculator {
 			// (m,n,n-1)
 			// so angle + triangle_angle will be the angle of the new circle
 			// at this point angle ist the angle between m and n-1
-			double triangle_angle = 0;
+			double triangle_angle;
 			double a = n_circle.getRadius() + n_minus1_circle.getRadius();
 			double b = m_circle.getRadius() + n_circle.getRadius();
 			double c = m_circle.getRadius() + n_minus1_circle.getRadius();
@@ -110,7 +74,7 @@ public class Calculator {
 				// all circles that are are at the same side in the range of m
 				// to n-1
 				Circle m_plus1_cirle = circleList.get(m + 1);
-				double angle2 = 0;
+				double angle2;
 				a = n_circle.getRadius() + n_minus1_circle.getRadius();
 				b = Util.distance(circleList.get(m + 1), circleList.get(n - 1));
 				c = m_plus1_cirle.getRadius() + n_circle.getRadius();
@@ -168,10 +132,7 @@ public class Calculator {
 
 				// angle is now the angle between m and n
 			}
-
-			printCircle(n_circle, n);
 		}
 		// return the result
-		return circleList;
 	}
 }
