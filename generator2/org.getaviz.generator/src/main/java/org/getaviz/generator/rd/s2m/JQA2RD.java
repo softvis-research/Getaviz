@@ -64,9 +64,7 @@ public class JQA2RD implements Step {
 						"WHERE NOT (n)<-[:CONTAINS]-(:Package) " +
 						"RETURN n"
 		);
-		results.forEachRemaining((node) -> {
-			namespaceToDisk(node.get("n").asNode().id(), model);
-		});
+		results.forEachRemaining((node) -> namespaceToDisk(node.get("n").asNode().id(), model));
 		log.info("JQA2RD finished");
 	}
 
@@ -76,14 +74,10 @@ public class JQA2RD implements Step {
 		long disk = connector.addNode(cypherCreateNode(parent, namespace, Labels.Disk.name(), properties), "n").id();
 		connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type) WHERE ID(n) = " + namespace +
 			" AND EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) AND NOT t:Inner RETURN t").
-			forEachRemaining((result) -> {
-				structureToDisk(result.get("t").asNode(), disk);
-			});
+			forEachRemaining((result) -> structureToDisk(result.get("t").asNode(), disk));
 		connector.executeRead("MATCH (n)-[:CONTAINS]->(p:Package) WHERE ID(n) = " + namespace +
 			" AND EXISTS(p.hash) RETURN p").
-			forEachRemaining((result) -> {
-				namespaceToDisk(result.get("p").asNode().id(), disk);
-			});
+			forEachRemaining((result) -> namespaceToDisk(result.get("p").asNode().id(), disk));
 	}
 
 	private void structureToDisk(Node structure, Long parent) {
@@ -130,20 +124,14 @@ public class JQA2RD implements Step {
 				});
 			}
 			if (methodDisks) {
-				methods.forEachRemaining((result) -> {
-					methodToDisk(result.get("m").asNode().id(), disk);
-				});
+				methods.forEachRemaining((result) -> methodToDisk(result.get("m").asNode().id(), disk));
 			} else {
-				methods.forEachRemaining((result) -> {
-					methodToDiskSegment(result.get("m").asNode(), disk);
-				});
+				methods.forEachRemaining((result) -> methodToDiskSegment(result.get("m").asNode(), disk));
 			}
 		}
 		connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type) WHERE ID(n) = " + structure.id() +
 			" AND EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) RETURN t").
-			forEachRemaining((result) -> {
-				structureToDisk(result.get("t").asNode(), disk);
-			});
+			forEachRemaining((result) -> structureToDisk(result.get("t").asNode(), disk));
 	}
 
 	private void methodToDisk(Long method, Long parent) {
@@ -157,8 +145,8 @@ public class JQA2RD implements Step {
 		double luminance = 0.0;
 		String color = methodColor.toString();
 
-		Integer numberOfStatements = method.get("effectiveLineCount").asInt(0);
-		double size = numberOfStatements.doubleValue();
+		int numberOfStatements = method.get("effectiveLineCount").asInt(0);
+		double size = numberOfStatements;
 		if (numberOfStatements <= minArea) {
 			size = minArea;
 		}
