@@ -1,10 +1,10 @@
 package org.getaviz.generator.rd.s2m;
 
+import org.getaviz.generator.output.OutputColor;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
 import java.util.GregorianCalendar;
-import org.getaviz.generator.SettingsConfiguration.OutputFormat;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
@@ -17,15 +17,15 @@ public class JQA2RD implements Step {
 
 	private double namespaceTransparency;
 
-	private String classColor;
+	private OutputColor classColor;
 	private double classTransparency;
 
-	private String methodColor;
+	private OutputColor methodColor;
 	private double methodTransparency;
 	private boolean methodTypeMode;
 	private boolean methodDisks;
 
-	private String dataColor;
+	private OutputColor dataColor;
 	private double dataTransparency;
 	private double ringWidthAD;
 	private boolean dataDisks;
@@ -155,7 +155,7 @@ public class JQA2RD implements Step {
 	private void methodToDiskSegment(Node method, Long parent) {
 		double frequency = 0.0;
 		double luminance = 0.0;
-		String color = methodColor;
+		String color = methodColor.toString();
 
 		Integer numberOfStatements = method.get("effectiveLineCount").asInt(0);
 		double size = numberOfStatements.doubleValue();
@@ -190,7 +190,6 @@ public class JQA2RD implements Step {
 		String properties = String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", 1.0, height,
 			dataTransparency, dataColor);
 		connector.executeWrite(cypherCreateNode(parent, enumValue, Labels.DiskSegment.name(), properties));
-
 	}
 
 	private String cypherCreateNode(Long parent, Long visualizedNode, String label, String properties) {

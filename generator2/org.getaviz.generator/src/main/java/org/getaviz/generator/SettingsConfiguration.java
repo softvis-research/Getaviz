@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
-
 import javax.servlet.http.HttpServletRequest;
-
-import java.awt.Color;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
@@ -16,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
+import org.getaviz.generator.output.OutputColor;
 
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
@@ -317,75 +315,62 @@ public class SettingsConfiguration {
 		return config.getDouble("city.building.vertical_margin", 1.0);
 	}
 
-	public String getPackageColorHex() {
-		return config.getString("city.package.color_start", "#969696");
+	public OutputColor getPackageColorStart() {
+		return new OutputColor(config.getString("city.package.color_start", "#969696"));
 	}
 
-	public Color getPackageColorStart() {
-		return getColor(config.getString("city.package.color_start", "#969696"));
+	public OutputColor getPackageColorEnd() {
+		return new OutputColor(config.getString("city.package.color_end", "#f0f0f0"));
 	}
 
-	public Color getPackageColorEnd() {
-		return getColor(config.getString("city.package.color_end", "#f0f0f0"));
+	public OutputColor getClassColorStart() {
+		return new OutputColor(config.getString("city.class.color_start", "#131615"));
 	}
 
-	public String getClassColorHex() {
-		return config.getString("city.class.color", "#353559");
+	public OutputColor getClassColorEnd() {
+		return new OutputColor(config.getString("city.class.color_end", "#00ff00"));
 	}
 
-	public Color getClassColorStart() {
-		return getColor(config.getString("city.class.color_start", "#131615"));
+	public OutputColor getClassColor() {
+		final String color = config.getString("city.class.color", "#353559");
+		return new OutputColor(color);
 	}
 
-	public Color getClassColorEnd() {
-		return getColor(config.getString("city.class.color_end", "#00ff00"));
-	}
-
-	public Color getClassColor() {
-		return getColor(config.getString("city.class.color", "#353559"));
-	}
-
-	public Color getCityColor(String name) {
-		return getColor(getCityColorHex(name));
-	}
-
-	public String getCityColorHex(String name) {
-		String color = name.toLowerCase();
+	public OutputColor getCityColor(String name) {
+		String colorName = name.toLowerCase();
 		String defaultColor = "";
-		switch (name) {
-		case "aqua":
-			defaultColor = "#99CCFF"; break;
-		case "blue":
-			defaultColor = "#99FFCC"; break;
-		case "light_green":
-			defaultColor = "#CCFF99"; break;
-		case "dark_green":
-			defaultColor = "#99FF99"; break;
-		case "yellow":
-			defaultColor = "#FFFF99"; break;
-		case "orange":
-			defaultColor = "#FFCC99"; break;
-		case "red":
-			defaultColor = "#FF9999"; break;
-		case "pink":
-			defaultColor = "#FF99FF"; break;
-		case "violet":
-			defaultColor = "#9999FF"; break;
-		case "light_grey":
-			defaultColor = "#CCCCCC"; break;
-		case "dark_grey":
-			defaultColor = "#999999"; break;
-		case "white":
-			defaultColor = "#FFFFFF"; break;
-		case "black":
-			defaultColor = "#000000"; break;
+		switch (colorName) {
+			case "aqua":
+				defaultColor = "#99CCFF"; break;
+			case "blue":
+				defaultColor = "#99FFCC"; break;
+			case "light_green":
+				defaultColor = "#CCFF99"; break;
+			case "dark_green":
+				defaultColor = "#99FF99"; break;
+			case "yellow":
+				defaultColor = "#FFFF99"; break;
+			case "orange":
+				defaultColor = "#FFCC99"; break;
+			case "red":
+				defaultColor = "#FF9999"; break;
+			case "pink":
+				defaultColor = "#FF99FF"; break;
+			case "violet":
+				defaultColor = "#9999FF"; break;
+			case "light_grey":
+				defaultColor = "#CCCCCC"; break;
+			case "dark_grey":
+				defaultColor = "#999999"; break;
+			case "white":
+				defaultColor = "#FFFFFF"; break;
+			case "black":
+				defaultColor = "#000000"; break;
 		}
-		return config.getString("city.color." + color, defaultColor);
+		final String color = config.getString("city.color." + colorName, defaultColor);
+		return new OutputColor(color);
 	}
 
-	public String getCityColorAsPercentage(String name) {
-		return getColorFormatted(getCityColor(name));
-	}
 	
 	public double getRDDataFactor() {
 		return config.getDouble("rd.data_factor", 4.0);
@@ -423,35 +408,19 @@ public class SettingsConfiguration {
 		return config.getDouble("rd.data_transparency", 0);
 	}
 
-	public String getRDClassColor() {
+	public OutputColor getRDClassColor() {
 		final String color = config.getString("rd.color.class", "#353559");
-		if(this.getOutputFormat() == OutputFormat.AFrame) {
-			return color;
-		} else {
-			return getColorFormatted(getColor(color));
-		}
+		return new OutputColor(color);
 	}
 
-	public String getRDDataColor() {
+	public OutputColor getRDDataColor() {
 		final String color = config.getString("rd.color.data", "#fffc19");
-		if(this.getOutputFormat() == OutputFormat.AFrame) {
-			return color;
-		} else {
-			return getColorFormatted(getColor(color));
-		}
+		return new OutputColor(color);
 	}
 
-	public String getRDMethodColor() {
+	public OutputColor getRDMethodColor() {
 		final String color = config.getString("rd.color.method", "#1485cc");
-		if(this.getOutputFormat() == OutputFormat.AFrame) {
-			return color;
-		} else {
-			return getColorFormatted(getColor(color));
-		}
-	}
-
-	public String getRDNamespaceColorHex() {
-		return config.getString("rd.color.namespace", "#969696");
+		return new OutputColor(color);
 	}
 
 	public boolean isMethodDisks() {
@@ -464,17 +433,6 @@ public class SettingsConfiguration {
 
 	public boolean isMethodTypeMode() {
 		return config.getBoolean("rd.method_type_mode", false);
-	}
-
-	private String getColorFormatted(Color color) {
-		double r = color.getRed() / 255.0;
-		double g = color.getGreen() / 255.0;
-		double b = color.getBlue() / 255.0;
-		return r + " " + g + " " + b;
-	}
-
-	private Color getColor(String hex) {
-		return Color.decode(hex);
 	}
 
 	public enum OutputFormat {

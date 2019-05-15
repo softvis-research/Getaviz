@@ -1,6 +1,7 @@
 package org.getaviz.generator.rd.m2m;
 
 import org.apache.commons.lang3.StringUtils;
+import org.getaviz.generator.output.OutputColor;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
@@ -22,21 +23,20 @@ import java.util.Iterator;
 import java.util.List;
 import org.neo4j.driver.v1.StatementResult;
 import com.google.common.collect.Lists;
+
 import java.util.stream.Collectors;
 
 public class RD2RD implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(RD2RD.class);
-	private RGBColor NS_colorStart = new RGBColor(150, 150, 150);
-	private RGBColor NS_colorEnd = new RGBColor(240, 240, 240); // from CodeCity
-	private List<RGBColor> NS_colors;
+	private OutputColor NS_colorStart = new OutputColor(150/255, 150/255, 150/255);
+	private OutputColor NS_colorEnd = new OutputColor(240/255, 240/255, 240/255);;
+	private List<OutputColor> NS_colors;
 	private OutputFormat outputFormat;
-	private String namespaceColorHex;
 	private double dataFactor;
 
 	public RD2RD(SettingsConfiguration config) {
 		this.outputFormat = config.getOutputFormat();
-		this.namespaceColorHex = config.getRDNamespaceColorHex();
 		this.dataFactor = config.getRDDataFactor();
 	}
 
@@ -49,7 +49,7 @@ public class RD2RD implements Step {
 				"MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE NOT (m)-[:CONTAINS]->(:RD:Disk) RETURN max(length(p)) AS length");
 		int diskMaxLevel = length.single().get("length").asInt() + 1;
 
-		NS_colors = createColorGradiant(NS_colorStart, NS_colorEnd, namespaceMaxLevel);
+		NS_colors = OutputColor.createColorGradient(NS_colorStart, NS_colorEnd, namespaceMaxLevel);
 
 		connector.executeRead(
 				"MATCH p = (n:Model:RD)-[:CONTAINS*]->(d:Disk)-[:VISUALIZES]->(e) RETURN d,e,length(p)-1 AS length")
@@ -81,11 +81,7 @@ public class RD2RD implements Step {
 	}
 
 	private String setNamespaceColor(int level) {
-		if (outputFormat == OutputFormat.AFrame) {
-			return namespaceColorHex;
-		} else {
-			return NS_colors.get(level - 1).asPercentage();
-		}
+		return NS_colors.get(level - 1).toString();
 	}
 
 	private void calculateNetArea(Iterator<Node> disks) {
@@ -342,23 +338,6 @@ public class RD2RD implements Step {
 		completeSpine.add(completeSpine.get(0));
 		connector.executeWrite(
 				"MATCH (n) WHERE ID(n) = " + disk + " SET n.spine = \'" + removeBrackets(completeSpine) + "\'");
-	}
-
-	private List<RGBColor> createColorGradiant(RGBColor start, RGBColor end, int maxLevel) {
-		int steps = maxLevel;
-		double r_step = (end.r() - start.r()) / steps;
-		double g_step = (end.g() - start.g()) / steps;
-		double b_step = (end.b() - start.b()) / steps;
-
-		List<RGBColor> colorRange = new ArrayList<>();
-		for (int i = 0; i < maxLevel; ++i) {
-			double newR = start.r() + i * r_step;
-			double newG = start.g() + i * g_step;
-			double newB = start.b() + i * b_step;
-
-			colorRange.add(i, new RGBColor(newR, newG, newB));
-		}
-		return colorRange;
 	}
 
 	private StatementResult getDisks() {

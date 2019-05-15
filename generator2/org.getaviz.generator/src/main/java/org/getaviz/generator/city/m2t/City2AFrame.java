@@ -10,6 +10,7 @@ import org.getaviz.generator.SettingsConfiguration.BuildingType;
 import java.io.IOException;
 import java.io.FileWriter;
 import org.getaviz.generator.output.AFrame;
+import org.getaviz.generator.output.OutputColor;
 import org.neo4j.driver.v1.types.Node;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class City2AFrame implements Step {
 	private String buildingTypeAsString;
 	private boolean showAttributesAsCylinders;
 	private double panelSeparatorHeight;
-	private String color;
+	private OutputColor color;
 	private boolean showBuildingBase;
 	private AFrame outputFormat;
 
@@ -32,7 +33,7 @@ public class City2AFrame implements Step {
 		this.buildingTypeAsString = config.getBuildingTypeAsString();
 		this.showAttributesAsCylinders = config.isShowAttributesAsCylinders();
 		this.panelSeparatorHeight = config.getPanelSeparatorHeight();
-		this.color = config.getCityColorHex("black");
+		this.color = config.getCityColor("black");
 		this.showBuildingBase = config.isShowBuildingBase();
 		this.outputFormat = new AFrame();
 	}

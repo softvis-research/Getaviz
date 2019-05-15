@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 import org.getaviz.generator.StepFactory;
-import org.getaviz.generator.city.m2m.City2City;
-import org.getaviz.generator.city.s2m.JQA2City;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
 import org.junit.jupiter.api.AfterAll;
@@ -14,10 +12,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
-public class CityBankTest {
+class CityBankTest {
 
-	static DatabaseConnector connector;
-	static Bank mockup = new Bank();
+	private static DatabaseConnector connector;
+	private static Bank mockup = new Bank();
 
 	@BeforeAll
 	static void setup() {

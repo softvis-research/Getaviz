@@ -32,7 +32,7 @@ public class City2X3D implements Step {
 		this.buildingTypeAsString = config.getBuildingTypeAsString();
 		this.showAttributesAsCylinders = config.isShowAttributesAsCylinders();
 		this.panelSeparatorHeight = config.getPanelSeparatorHeight();
-		this.colorAsPercentage = config.getCityColorAsPercentage("black");
+		this.colorAsPercentage = config.getCityColor("black").toString();
 		this.outputFormat = new X3D(config);
 	}
 
