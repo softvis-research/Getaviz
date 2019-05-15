@@ -28,7 +28,7 @@ public class City2City implements Step {
 	private Log log = LogFactory.getLog(this.getClass());
 	private List<OutputColor> PCKG_colors;
 	private List<OutputColor> NOS_colors;
-	private HashMap<Long, double[]> properties = new HashMap<Long, double[]>();
+	private HashMap<Long, double[]> properties = new HashMap<>();
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private OutputFormat outputFormat;
 
@@ -95,9 +95,7 @@ public class City2City implements Step {
 		Node model = connector.executeRead("MATCH (n:Model {building_type: \'" + buildingTypeAsString +
 				"\'}) RETURN n").next().get("n").asNode();
 		if (buildingType == BuildingType.CITY_BRICKS || buildingType == BuildingType.CITY_PANELS) {
-			connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(m:BuildingSegment) RETURN m").forEachRemaining((result) -> {
-				setBuildingSegmentAttributes(result.get("m").asNode().id());
-			});
+			connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(m:BuildingSegment) RETURN m").forEachRemaining((result) -> setBuildingSegmentAttributes(result.get("m").asNode().id()));
 		}
 		int packageMaxLevel = connector.executeRead("MATCH p=(n:District)-[:CONTAINS*]->(m:District) WHERE NOT (m)-[:CONTAINS]->(:District) RETURN length(p) AS length ORDER BY length(p) DESC LIMIT 1").
 				single().get("length").asInt() + 1;
@@ -109,12 +107,8 @@ public class City2City implements Step {
 			NOS_colors = OutputColor.createColorGradient(classColorStart, classColorEnd, NOS_max + 1);
 		}
 
-		connector.executeRead("MATCH p=(n:Model:City)-[:CONTAINS*]->(m:District) RETURN p").forEachRemaining((result) -> {
-			setDistrictAttributes(result.get("p").asPath());
-		});
-		connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building) RETURN b").forEachRemaining((result) -> {
-			setBuildingAttributes(result.get("b").asNode());
-		});
+		connector.executeRead("MATCH p=(n:Model:City)-[:CONTAINS*]->(m:District) RETURN p").forEachRemaining((result) -> setDistrictAttributes(result.get("p").asPath()));
+		connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building) RETURN b").forEachRemaining((result) -> setBuildingAttributes(result.get("b").asNode()));
 		connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(d:District)-[:VISUALIZES]->(element)  RETURN d, element.hash as hash ORDER BY element.hash").forEachRemaining((result) -> {
 			Node node = result.get("d").asNode();
 			double width = node.get("width").asDouble(0.0);
@@ -139,14 +133,10 @@ public class City2City implements Step {
 			case CITY_BRICKS:
 				BrickLayout.brickLayout(model.id()); break; // Layout for buildingSegments
 			case CITY_PANELS:
-				connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building) RETURN b").forEachRemaining((result) -> {
-					setBuildingSegmentPositions(result.get("b").asNode());
-				});
+				connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building) RETURN b").forEachRemaining((result) -> setBuildingSegmentPositions(result.get("b").asNode()));
 				break;
 			case CITY_FLOOR:
-				connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building) RETURN b").forEachRemaining((result) -> {
-					calculateSegments(result.get("b").asNode());
-				});
+				connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(b:Building) RETURN b").forEachRemaining((result) -> calculateSegments(result.get("b").asNode()));
 				break;
 			default: {
 			} // CityDebugUtils.infoEntities(cityRoot.document.entities, 0, true, true)
@@ -177,10 +167,10 @@ public class City2City implements Step {
 	}
 
 	private void setBuildingAttributesOriginal(Node building, int methodCounter, int dataCounter) {
-		double width = 0.0;
-		double length = 0.0;
-		double height = 0.0;
-		String color = "";
+		double width;
+		double length;
+		double height;
+		String color;
 		if (dataCounter == 0) {
 			width = widthMin;
 			length = widthMin;
@@ -202,16 +192,15 @@ public class City2City implements Step {
 	}
 
 	private void setBuildingAttributesPanels(Node building, int methodCounter, int dataCounter) {
-		double height = 0.0;
-		double width = 0.0;
-		double length = 0.0;
-		String color = "";
+		double height;
+		double width;
+		double length;
 		if (showBuildingBase) {
 			height = heightMin;
 		} else {
 			height = 0;
 		}
-		int areaUnit = 1;
+		int areaUnit;
 		if (classElementsMode == ClassElementsModes.ATTRIBUTES_ONLY) {
 			areaUnit = methodCounter;
 		} else {
@@ -235,17 +224,11 @@ public class City2City implements Step {
 		return r + " " + g + " " + b;
 	}
 
-	private String asPercentage(String color) {
-		Color c = Color.decode(color);
-		return asPercentage(c);
-	}
-
 	private void setBuildingAttributesBricks(Node building, int methodCounter, int dataCounter) {
-		double height = 0.0;
-		double width = 0.0;
-		double length = 0.0;
-		int sideCapacity = 0;
-		String color = "";
+		double height;
+		double width;
+		int sideCapacity;
+		String color;
 		if (showBuildingBase) {
 			height = heightMin;
 		} else {
@@ -280,18 +263,17 @@ public class City2City implements Step {
 		}
 		width = brickSize * sideCapacity + brickHorizontalMargin * 2 +
 			brickHorizontalGap * (sideCapacity - 1);
-		length = brickSize * sideCapacity + brickHorizontalMargin * 2 +
-			brickHorizontalGap * (sideCapacity - 1);
+		double length = brickSize * sideCapacity + brickHorizontalMargin * 2 +
+				brickHorizontalGap * (sideCapacity - 1);
 		connector.executeWrite(
 			cypherSetBuildingSegmentAttributes(building.id(), width, length, height, color) + ", n.sideCapacity = " +
 				sideCapacity);
 	}
 
 	private void setBuildingAttributesFloors(Node building, int methodCounter, int dataCounter) {
-		double width = 0.0;
-		double length = 0.0;
-		double height = 0.0;
-		String color = "";
+		double width;
+		double length;
+		double height;
 		if (dataCounter < 2) { // pko 2016
 			width = 2; // TODO in settings datei aufnehmen
 			length = 2;
@@ -330,14 +312,14 @@ public class City2City implements Step {
 		List<Node> childsA = connector.executeRead(
 				"MATCH (s)-[:CONTAINS]->(child)-[r:VISUALIZES]->(e:Field) WHERE ID(s) = " + parent +
 					" AND NOT (e)<-[:DECLARES]-(:Enum) RETURN e").stream().map(s -> s.get("e").asNode()).collect(Collectors.toList());
-		int areaUnit = 1;
+		int areaUnit;
 		if (classElementsMode == ClassElementsModes.ATTRIBUTES_ONLY) {
 			areaUnit = childsM.size();
 		} else {
 			areaUnit = childsA.size();
 		}
-		double width = 0.0;
-		double length = 0.0;
+		double width;
+		double length;
 		if (areaUnit <= 1) {
 			width = widthMin;
 			length = widthMin;
@@ -567,10 +549,10 @@ public class City2City implements Step {
 	// Calculates side capacity for progressive/balanced bricks layout
 	private int calculateSideCapacity(double value) {
 		int sc = 0; // side capacity
-		int lc = 0; // layer capacity
-		int nolMin = 0; // number of layers
-		int bcMin = 0; // building capacity min
-		int bcMax = 0; // building capacity max
+		int lc; // layer capacity
+		int nolMin; // number of layers
+		int bcMin; // building capacity min
+		int bcMax; // building capacity max
 		do {
 			sc++;
 			lc = sc * 4;
