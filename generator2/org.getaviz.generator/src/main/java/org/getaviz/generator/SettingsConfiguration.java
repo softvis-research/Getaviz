@@ -423,44 +423,31 @@ public class SettingsConfiguration {
 		return config.getDouble("rd.data_transparency", 0);
 	}
 
-	public Color getRDClassColor() {
-		return getColor(getRDClassColorHex());
+	public String getRDClassColor() {
+		final String color = config.getString("rd.color.class", "#353559");
+		if(this.getOutputFormat() == OutputFormat.AFrame) {
+			return color;
+		} else {
+			return getColorFormatted(getColor(color));
+		}
 	}
 
-	public String getRDClassColorHex() {
-		return config.getString("rd.color.class", "#353559");
+	public String getRDDataColor() {
+		final String color = config.getString("rd.color.data", "#fffc19");
+		if(this.getOutputFormat() == OutputFormat.AFrame) {
+			return color;
+		} else {
+			return getColorFormatted(getColor(color));
+		}
 	}
 
-	public String getRDClassColorAsPercentage() {
-		return getColorFormatted(getRDClassColor());
-	}
-
-	public Color getRDDataColor() {
-		return getColor(getRDDataColorHex());
-	}
-
-	public String getRDDataColorHex() {
-		return config.getString("rd.color.data", "#fffc19");
-	}
-
-	public String getRDDataColorAsPercentage() {
-		return getColorFormatted(getRDDataColor());
-	}
-
-	public Color getRDMethodColor() {
-		return getColor(getRDMethodColorHex());
-	}
-
-	public String getRDMethodColorHex() {
-		return config.getString("rd.color.method", "#1485cc");
-	}
-
-	public String getRDMethodColorAsPercentage() {
-		return getColorFormatted(getRDMethodColor());
-	}
-
-	public Color getRDNamespaceColor() {
-		return getColor(getRDNamespaceColorHex());
+	public String getRDMethodColor() {
+		final String color = config.getString("rd.color.method", "#1485cc");
+		if(this.getOutputFormat() == OutputFormat.AFrame) {
+			return color;
+		} else {
+			return getColorFormatted(getColor(color));
+		}
 	}
 
 	public String getRDNamespaceColorHex() {

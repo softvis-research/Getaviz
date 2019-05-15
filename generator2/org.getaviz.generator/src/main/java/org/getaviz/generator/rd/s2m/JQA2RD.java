@@ -14,23 +14,19 @@ import org.neo4j.driver.v1.types.Node;
 public class JQA2RD implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
-	private OutputFormat outputFormat;
 
 	private double namespaceTransparency;
 
-	private String classColorAsPercentage;
-	private String classColorHex;
+	private String classColor;
 	private double classTransparency;
 
-	private String methodColorHex;
+	private String methodColor;
 	private double methodTransparency;
-	private String methodColorAsPercentage;
 	private boolean methodTypeMode;
 	private boolean methodDisks;
 
-	private String dataColorHex;
+	private String dataColor;
 	private double dataTransparency;
-	private String dataColorAsPercentage;
 	private double ringWidthAD;
 	private boolean dataDisks;
 
@@ -45,18 +41,14 @@ public class JQA2RD implements Step {
 		this.height = config.getRDHeight();
 		this.namespaceTransparency = config.getRDNamespaceTransparency();
 		this.ringWidth = config.getRDRingWidth();
-		this.classColorAsPercentage = config.getRDClassColorAsPercentage();
-		this.outputFormat = config.getOutputFormat();
-		this.classColorHex = config.getClassColorHex();
+		this.classColor = config.getRDClassColor();
 		this.classTransparency = config.getRDClassTransparency();
-		this.methodColorHex = config.getRDMethodColorHex();
+		this.methodColor = config.getRDMethodColor();
 		this.methodTransparency = config.getRDMethodTransparency();
-		this.methodColorAsPercentage = config.getRDMethodColorAsPercentage();
 		this.minArea = config.getRDMinArea();
-		this.dataColorHex = config.getRDDataColorHex();
+		this.dataColor = config.getRDDataColor();
 		this.dataTransparency = config.getRDDataTransparency();
 		this.ringWidthAD = config.getRDRingWidthAD();
-		this.dataColorAsPercentage = config.getRDDataColorAsPercentage();
 	}
 
 	public void run() {
@@ -95,12 +87,8 @@ public class JQA2RD implements Step {
 	}
 
 	private void structureToDisk(Node structure, Long parent) {
-		String color = classColorAsPercentage;
-		if (outputFormat == OutputFormat.AFrame) {
-			color = classColorHex;
-		}
 		String properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
-			height, classTransparency, color);
+			height, classTransparency, classColor);
 		long disk = connector.addNode(cypherCreateNode(parent, structure.id(), Labels.Disk.name(), properties), "n").id();
 		StatementResult methods = connector.executeRead("MATCH (n)-[:DECLARES]->(m:Method) WHERE ID(n) = " + structure.id() +
 			" AND EXISTS(m.hash) RETURN m");
@@ -159,22 +147,16 @@ public class JQA2RD implements Step {
 	}
 
 	private void methodToDisk(Long method, Long parent) {
-		String color = 153 / 255.0 + " " + 0 / 255.0 + " " + 0 / 255.0;
-		if (outputFormat == OutputFormat.AFrame) {
-			color = methodColorHex;
-		}
 		String properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
-			height, methodTransparency, color);
+			height, methodTransparency, methodColor);
 		connector.executeWrite(cypherCreateNode(parent, method, Labels.Disk.name(), properties));
 	}
 
 	private void methodToDiskSegment(Node method, Long parent) {
 		double frequency = 0.0;
 		double luminance = 0.0;
-		String color = methodColorAsPercentage;
-		if (outputFormat == OutputFormat.AFrame) {
-			color = methodColorHex;
-		}
+		String color = methodColor;
+
 		Integer numberOfStatements = method.get("effectiveLineCount").asInt(0);
 		double size = numberOfStatements.doubleValue();
 		if (numberOfStatements <= minArea) {
@@ -187,42 +169,26 @@ public class JQA2RD implements Step {
 	}
 
 	private void attributeToDisk(Long attribute, Long parent) {
-		String color = 153 / 255.0 + " " + 0 / 255.0 + " " + 0 / 255.0;
-		if (outputFormat == OutputFormat.AFrame) {
-			color = dataColorHex;
-		}
 		String properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'",
-			ringWidthAD, height, dataTransparency, color);
+			ringWidthAD, height, dataTransparency, dataColor);
 		connector.executeWrite(cypherCreateNode(parent, attribute, Labels.Disk.name(), properties));
 	}
 
 	private void attributeToDiskSegment(Long attribute, Long parent) {
-		String color = dataColorAsPercentage;
-		if (outputFormat == OutputFormat.AFrame) {
-			color = dataColorHex;
-		}
 		String properties = String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", 1.0, height,
-			dataTransparency, color);
+			dataTransparency, dataColor);
 		connector.executeWrite(cypherCreateNode(parent, attribute, Labels.DiskSegment.name(), properties));
 	}
 
 	private void enumValueToDisk(Long enumValue, Long parent) {
-		String color = 153 / 255.0 + " " + 0 / 255.0 + " " + 0 / 255.0;
-		if (outputFormat == OutputFormat.AFrame) {
-			color = dataColorHex;
-		}
 		String properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'",
-			ringWidthAD, height, dataTransparency, color);
+			ringWidthAD, height, dataTransparency, dataColor);
 		connector.executeWrite(cypherCreateNode(parent, enumValue, Labels.Disk.name(), properties));
 	}
 
 	private void enumValueToDiskSegment(Long enumValue, Long parent) {
-		String color = dataColorAsPercentage;
-		if (outputFormat == OutputFormat.AFrame) {
-			color = dataColorHex;
-		}
 		String properties = String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", 1.0, height,
-			dataTransparency, color);
+			dataTransparency, dataColor);
 		connector.executeWrite(cypherCreateNode(parent, enumValue, Labels.DiskSegment.name(), properties));
 
 	}
