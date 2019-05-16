@@ -22,7 +22,7 @@ public class City2AFrame {
 	public City2AFrame() {
 		log.info("City2AFrame has started");
 		FileWriter fw = null;
-		String fileName = "model2.html";
+		String fileName = "model.html";
 
 		try {
 			fw = new FileWriter(config.getOutputPath() + fileName);
