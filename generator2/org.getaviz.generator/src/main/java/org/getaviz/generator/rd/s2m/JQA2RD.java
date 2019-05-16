@@ -1,6 +1,5 @@
 package org.getaviz.generator.rd.s2m;
 
-import org.getaviz.generator.output.OutputColor;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
@@ -17,15 +16,15 @@ public class JQA2RD implements Step {
 
 	private double namespaceTransparency;
 
-	private OutputColor classColor;
+	private String classColor;
 	private double classTransparency;
 
-	private OutputColor methodColor;
+	private String methodColor;
 	private double methodTransparency;
 	private boolean methodTypeMode;
 	private boolean methodDisks;
 
-	private OutputColor dataColor;
+	private String dataColor;
 	private double dataTransparency;
 	private double ringWidthAD;
 	private boolean dataDisks;
@@ -143,7 +142,7 @@ public class JQA2RD implements Step {
 	private void methodToDiskSegment(Node method, Long parent) {
 		double frequency = 0.0;
 		double luminance = 0.0;
-		String color = methodColor.toString();
+		String color = methodColor;
 
 		int numberOfStatements = method.get("effectiveLineCount").asInt(0);
 		double size = numberOfStatements;

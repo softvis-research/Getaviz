@@ -13,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
-import org.getaviz.generator.output.OutputColor;
 
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
@@ -315,28 +314,27 @@ public class SettingsConfiguration {
 		return config.getDouble("city.building.vertical_margin", 1.0);
 	}
 
-	public OutputColor getPackageColorStart() {
-		return new OutputColor(config.getString("city.package.color_start", "#969696"));
+	public String getPackageColorStart() {
+		return config.getString("city.package.color_start", "#969696");
 	}
 
-	public OutputColor getPackageColorEnd() {
-		return new OutputColor(config.getString("city.package.color_end", "#f0f0f0"));
+	public String getPackageColorEnd() {
+		return config.getString("city.package.color_end", "#f0f0f0");
 	}
 
-	public OutputColor getClassColorStart() {
-		return new OutputColor(config.getString("city.class.color_start", "#131615"));
+	public String getClassColorStart() {
+		return config.getString("city.class.color_start", "#131615");
 	}
 
-	public OutputColor getClassColorEnd() {
-		return new OutputColor(config.getString("city.class.color_end", "#00ff00"));
+	public String getClassColorEnd() {
+		return config.getString("city.class.color_end", "#00ff00");
 	}
 
-	public OutputColor getClassColor() {
-		final String color = config.getString("city.class.color", "#353559");
-		return new OutputColor(color);
+	public String getClassColor() {
+		return config.getString("city.class.color", "#353559");
 	}
 
-	public OutputColor getCityColor(String name) {
+	public String getCityColor(String name) {
 		String colorName = name.toLowerCase();
 		String defaultColor = "";
 		switch (colorName) {
@@ -367,10 +365,16 @@ public class SettingsConfiguration {
 			case "black":
 				defaultColor = "#000000"; break;
 		}
-		final String color = config.getString("city.color." + colorName, defaultColor);
-		return new OutputColor(color);
+		return config.getString("city.color." + colorName, defaultColor);
 	}
 
+	public String getCityFloorColor() {
+		return config.getString("city.floor.color", "#1485CC");
+	}
+
+	public String getCityChimneyColor() {
+		return config.getString("city.floor.chimney.color", "#FFFC19");
+	}
 	
 	public double getRDDataFactor() {
 		return config.getDouble("rd.data_factor", 4.0);
@@ -408,19 +412,16 @@ public class SettingsConfiguration {
 		return config.getDouble("rd.data_transparency", 0);
 	}
 
-	public OutputColor getRDClassColor() {
-		final String color = config.getString("rd.color.class", "#353559");
-		return new OutputColor(color);
+	public String getRDClassColor() {
+		return config.getString("rd.color.class", "#353559");
 	}
 
-	public OutputColor getRDDataColor() {
-		final String color = config.getString("rd.color.data", "#fffc19");
-		return new OutputColor(color);
+	public String getRDDataColor() {
+		return config.getString("rd.color.data", "#fffc19");
 	}
 
-	public OutputColor getRDMethodColor() {
-		final String color = config.getString("rd.color.method", "#1485cc");
-		return new OutputColor(color);
+	public String getRDMethodColor() {
+		return config.getString("rd.color.method", "#1485cc");
 	}
 
 	public boolean isMethodDisks() {

@@ -93,7 +93,7 @@ public class RD2X3D implements Step {
 		builder.append("\n");
 		builder.append("\t\t\t\t\t <Material");
 		builder.append("\n");
-		builder.append("\t\t\t\t\t\t diffuseColor=\'" + disk.get("color").asString() + "\'");
+		builder.append("\t\t\t\t\t\t diffuseColor=\'" + outputFormat.printColor(disk.get("color").asString()) + "\'");
 		builder.append("\n");
 		builder.append("\t\t\t\t\t\t transparency=\'" + disk.get("transparency") + "\'");
 		builder.append("\n");
@@ -143,7 +143,7 @@ public class RD2X3D implements Step {
 		builder.append("\n");
 		builder.append("\t\t\t\t\t <Material");
 		builder.append("\n");
-		builder.append("\t\t\t\t\t\t diffuseColor=\'" + segment.get("color").asString() + "\'");
+		builder.append("\t\t\t\t\t\t diffuseColor=\'" + outputFormat.printColor(segment.get("color").asString()) + "\'");
 		builder.append("\n");
 		builder.append("\t\t\t\t\t\t transparency=\'" + segment.get("transparency") + "\'");
 		builder.append("\n");

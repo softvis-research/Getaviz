@@ -1,6 +1,6 @@
 package org.getaviz.generator.city.m2m;
 
-import org.getaviz.generator.output.OutputColor;
+import org.getaviz.generator.ColorGradient;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
@@ -8,8 +8,6 @@ import org.getaviz.generator.SettingsConfiguration.BuildingType;
 import org.getaviz.generator.city.CityUtils;
 import org.getaviz.generator.SettingsConfiguration.ClassElementsModes;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
-import org.getaviz.generator.SettingsConfiguration.OutputFormat;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,21 +23,22 @@ import org.neo4j.driver.v1.types.Path;
 
 public class City2City implements Step {
 	private Log log = LogFactory.getLog(this.getClass());
-	private List<OutputColor> PCKG_colors;
-	private List<OutputColor> NOS_colors;
+	private List<String> PCKG_colors;
+	private List<String> NOS_colors;
 	private HashMap<Long, double[]> properties = new HashMap<>();
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
-	private OutputFormat outputFormat;
 
-	private OutputColor packageColorStart;
-	private OutputColor packageColorEnd;
+	private String packageColorStart;
+	private String packageColorEnd;
 
 	private BuildingType buildingType;
 	private String buildingTypeAsString;
 	private BuildingMetric originalBuildingMetric;
-	private OutputColor classColorStart;
-	private OutputColor classColorEnd;
-	private OutputColor classColor;
+	private String classColorStart;
+	private String classColorEnd;
+	private String classColor;
+	private String floorColor;
+	private String chimneyColor;
 	private boolean showBuildingBase;
 
 	private double heightMin;
@@ -69,7 +68,8 @@ public class City2City implements Step {
 		this.originalBuildingMetric = config.getOriginalBuildingMetric();
 		this.classColorStart = config.getClassColorStart();
 		this.classColorEnd = config.getClassColorEnd();
-		this.outputFormat = config.getOutputFormat();
+		this.floorColor = config.getCityFloorColor();
+		this.chimneyColor = config.getCityChimneyColor();
 		this.heightMin = config.getHeightMin();
 		this.widthMin = config.getWidthMin();
 		this.classColor = config.getClassColor();
@@ -98,12 +98,12 @@ public class City2City implements Step {
 		}
 		int packageMaxLevel = connector.executeRead("MATCH p=(n:District)-[:CONTAINS*]->(m:District) WHERE NOT (m)-[:CONTAINS]->(:District) RETURN length(p) AS length ORDER BY length(p) DESC LIMIT 1").
 				single().get("length").asInt() + 1;
-		PCKG_colors = OutputColor.createColorGradient(packageColorStart, packageColorEnd, packageMaxLevel);
+		PCKG_colors = ColorGradient.createColorGradient(packageColorStart, packageColorEnd, packageMaxLevel);
 
 		if (originalBuildingMetric == BuildingMetric.NOS) {
 			int NOS_max = connector.executeRead("MATCH (n:Building) RETURN max(n.numberOfStatements) AS nos").single().
 					get("nos").asInt();
-			NOS_colors = OutputColor.createColorGradient(classColorStart, classColorEnd, NOS_max + 1);
+			NOS_colors = ColorGradient.createColorGradient(classColorStart, classColorEnd, NOS_max + 1);
 		}
 
 		connector.executeRead("MATCH p=(n:Model:City)-[:CONTAINS*]->(m:District) RETURN p").forEachRemaining((result) -> setDistrictAttributes(result.get("p").asPath()));
@@ -144,7 +144,7 @@ public class City2City implements Step {
 	}
 
 	private void setDistrictAttributes(Path districtPath) {
-		String color = PCKG_colors.get(districtPath.length() - 1).toString();
+		String color = PCKG_colors.get(districtPath.length() - 1);
 		connector.executeWrite(
 			String.format("MATCH (n) WHERE ID(n) = %d SET n.height = %f, n.color = \'%s\'", districtPath.end().id(),
 				heightMin, color));
@@ -183,9 +183,9 @@ public class City2City implements Step {
 			height = methodCounter;
 		}
 		if (originalBuildingMetric == BuildingMetric.NOS) {
-			color = NOS_colors.get(building.get("numberOfStatements").asInt(0)).toString();
+			color = NOS_colors.get(building.get("numberOfStatements").asInt(0));
 		} else  {
-			color = classColor.toString();
+			color = classColor;
 		}
 		connector.executeWrite(cypherSetBuildingSegmentAttributes(building.id(), width, length, height, color));
 	}
@@ -213,7 +213,7 @@ public class City2City implements Step {
 			length = widthMin * areaUnit + panelHorizontalMargin * 2;
 		} 
 
-		connector.executeWrite(cypherSetBuildingSegmentAttributes(building.id(), width, length, height, classColor.toString()));
+		connector.executeWrite(cypherSetBuildingSegmentAttributes(building.id(), width, length, height, classColor));
 	}
 
 	private void setBuildingAttributesBricks(Node building, int methodCounter, int dataCounter) {
@@ -226,7 +226,7 @@ public class City2City implements Step {
 		} else {
 			height = 0;
 		}
-		color = classColor.toString();
+		color = classColor;
 		// Setting width, height & sideCapacity
 		switch (brickLayout) {
 			case STRAIGHT: {
@@ -278,7 +278,7 @@ public class City2City implements Step {
 		} else {
 			height = methodCounter;
 		}
-		connector.executeWrite(cypherSetBuildingSegmentAttributes(building.id(), width, length, height, classColor.toString()));
+		connector.executeWrite(cypherSetBuildingSegmentAttributes(building.id(), width, length, height, classColor));
 	}
 
 	private void setBuildingSegmentAttributes(Long segment) {
@@ -444,12 +444,8 @@ public class City2City implements Step {
 			Record record = floors.next();
 			long floor = record.get("f").asNode().id();
 			floorCounter++;
-			String color = 20 / 255.0 + " " + 133 / 255.0 + " " + 204 / 255.0;
-			if (outputFormat == OutputFormat.AFrame) {
-				color = "#1485CC";
-			}
 			String statement = cypherSetBuildingSegmentAttributes(floor, bWidth * 1.1, bLength * 1.1,
-				bHeight / (floorNumberValue + 2 ) * 0.80, color);
+				bHeight / (floorNumberValue + 2 ) * 0.80, floorColor);
 			statement +=
 				String.format("CREATE (n)-[:HAS]->(p:City:Position {x: %f, y: %f, z: %f})", bPosX,
 					(bPosY - ( bHeight / 2) ) + bHeight / ( floorNumberValue + 2 ) * floorCounter, bPosZ);
@@ -476,11 +472,7 @@ public class City2City implements Step {
 			" RETURN c");
 		while (chimneys.hasNext()) {
 			long chimney = chimneys.next().get("c").asNode().id();
-			String color = 255 / 255.0 + " " + 252 / 255.0 + " " + 25 / 255.0;
-			if (outputFormat == OutputFormat.AFrame) {
-				color = "#FFFC19";
-			}
-			connector.executeWrite(cypherSetBuildingSegmentAttributes(chimney, 0.5, 0.5, 1.0, color));
+			connector.executeWrite(cypherSetBuildingSegmentAttributes(chimney, 0.5, 0.5, 1.0, chimneyColor));
 			if (chimneyCounter % 4 == 0) {
 				courner1.add(chimney);
 			}

@@ -26,8 +26,10 @@ class CityBankTest {
 		StepFactory factory = new StepFactory(config);
 		Step s2m = factory.createSteps2m();
 		Step m2m = factory.createStepm2m();
+		//Step m2t = factory.createStepm2t();
 		s2m.run();
 		m2m.run();
+		//m2t.run();
 	}
 	
 	@AfterAll

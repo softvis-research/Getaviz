@@ -5,6 +5,8 @@ import org.getaviz.generator.city.m2m.CityLayout;
 import org.getaviz.generator.city.m2m.Rectangle;
 import org.getaviz.generator.SettingsConfiguration.BuildingType;
 
+import java.awt.*;
+
 public class X3D implements OutputFormat {
     private SettingsConfiguration.ClassElementsModes classElementMode;
     private SettingsConfiguration.ClassElementsSortModesCoarse classElementsSortModesCoarse;
@@ -53,6 +55,11 @@ public class X3D implements OutputFormat {
         builder.append("<Scene>");
         builder.append("\n");
         return builder.toString();
+    }
+
+    public String printColor(String hexColor) {
+        Color color = Color.decode(hexColor);
+        return color.getRed()/255f + " " + color.getGreen()/255f + " " + color.getBlue()/255f;
     }
 
     public String settingsInfo() {

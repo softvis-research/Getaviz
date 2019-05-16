@@ -1,7 +1,7 @@
 package org.getaviz.generator.rd.m2m;
 
 import org.apache.commons.lang3.StringUtils;
-import org.getaviz.generator.output.OutputColor;
+import org.getaviz.generator.ColorGradient;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 public class RD2RD implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(RD2RD.class);
-	private OutputColor NS_colorStart = new OutputColor(150/255, 150/255, 150/255);
-	private OutputColor NS_colorEnd = new OutputColor(240/255, 240/255, 240/255);;
-	private List<OutputColor> NS_colors;
+	private String NS_colorStart = "#969696";
+	private String NS_colorEnd = "#F0F0F0";
+	private List<String> NS_colors;
 	private OutputFormat outputFormat;
 	private double dataFactor;
 
@@ -49,7 +49,7 @@ public class RD2RD implements Step {
 				"MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE NOT (m)-[:CONTAINS]->(:RD:Disk) RETURN max(length(p)) AS length");
 		int diskMaxLevel = length.single().get("length").asInt() + 1;
 
-		NS_colors = OutputColor.createColorGradient(NS_colorStart, NS_colorEnd, namespaceMaxLevel);
+		NS_colors = ColorGradient.createColorGradient(NS_colorStart, NS_colorEnd, namespaceMaxLevel);
 
 		connector.executeRead(
 				"MATCH p = (n:Model:RD)-[:CONTAINS*]->(d:Disk)-[:VISUALIZES]->(e) RETURN d,e,length(p)-1 AS length")
@@ -64,24 +64,18 @@ public class RD2RD implements Step {
 				});
 		calculateNetArea(getRootDisks());
 
-		getDisks().forEachRemaining((result) -> {
-			calculateRadius(result.get("d").asNode());
-		});
+		getDisks().forEachRemaining((result) -> calculateRadius(result.get("d").asNode()));
 		calculateLayout(getRootDisks());
 
-		getDisks().forEachRemaining((result) -> {
-			postLayout(result.get("d").asNode());
-		});
+		getDisks().forEachRemaining((result) -> postLayout(result.get("d").asNode()));
 
-		getDisks().forEachRemaining((result) -> {
-			postLayout2(result.get("d").asNode());
-		});
+		getDisks().forEachRemaining((result) -> postLayout2(result.get("d").asNode()));
 
 		log.info("RD2RD finished");
 	}
 
 	private String setNamespaceColor(int level) {
-		return NS_colors.get(level - 1).toString();
+		return NS_colors.get(level - 1);
 	}
 
 	private void calculateNetArea(Iterator<Node> disks) {
@@ -92,7 +86,7 @@ public class RD2RD implements Step {
 	}
 
 	private void calculateNetArea(Long disk) {
-		double netArea = 0.0;
+		double netArea;
 		double dataSum = connector
 				.executeRead("MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Field) WHERE ID(n) = " + disk
 						+ " SET d.size = d.size * " + dataFactor + " RETURN SUM(d.size) AS sum")
@@ -113,10 +107,8 @@ public class RD2RD implements Step {
 	}
 
 	private void calculateLayout(Iterator<Node> disks) {
-		ArrayList<CircleWithInnerCircles> nestedCircles = new ArrayList<CircleWithInnerCircles>();
-		disks.forEachRemaining((disk) -> {
-			nestedCircles.add(new CircleWithInnerCircles(disk, false));
-		});
+		ArrayList<CircleWithInnerCircles> nestedCircles = new ArrayList<>();
+		disks.forEachRemaining((disk) -> nestedCircles.add(new CircleWithInnerCircles(disk, false)));
 		RDLayout.nestedLayout(nestedCircles);
 		for (CircleWithInnerCircles circle : nestedCircles) {
 			circle.updateDiskNode();
@@ -132,9 +124,7 @@ public class RD2RD implements Step {
 	}
 
 	private void postLayout2(Node disk) {
-		RDUtils.getSubDisks(disk.id()).forEachRemaining((result) -> {
-			calculateRings(result.get("d").asNode());
-		});
+		RDUtils.getSubDisks(disk.id()).forEachRemaining((result) -> calculateRings(result.get("d").asNode()));
 		calculateRings(disk);
 	}
 
@@ -229,8 +219,8 @@ public class RD2RD implements Step {
 			Node node = subDisk.get("d").asNode();
 			StatementResult position = connector
 					.executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + node.id() + " RETURN p");
-			double x = 0.0;
-			double y = 0.0;
+			double x;
+			double y;
 			Node posNode = position.single().get("p").asNode();
 			x = posNode.get("x").asDouble();
 			y = posNode.get("y").asDouble();
@@ -259,8 +249,7 @@ public class RD2RD implements Step {
 			statementList
 					.add("MATCH (n) WHERE ID(n) = " + segment.id() + " SET n.crossSection = \'" + crossSection + "\'");
 		}
-		;
-		connector.executeWrite(statementList.stream().toArray(String[]::new));
+		connector.executeWrite(statementList.toArray(new String[0]));
 	}
 
 	private void calculateCrossSection(Long disk, double width, double height) {
@@ -271,7 +260,7 @@ public class RD2RD implements Step {
 
 	private void calculateSpines(List<Node> segments, double factor) {
 		if (outputFormat == OutputFormat.X3D) {
-			int spinePointCount = 0;
+			int spinePointCount;
 			if (segments.size() < 50) {
 				spinePointCount = 400;
 			} else {
@@ -285,7 +274,7 @@ public class RD2RD implements Step {
 			}
 			completeSpine.add(completeSpine.get(0));
 			// calculate spines according to fractions
-			int start = 0;
+			int start;
 			int end = 0;
 			List<String> statementList = new ArrayList<>();
 			for (Node segment : segments) {
@@ -305,7 +294,7 @@ public class RD2RD implements Step {
 				statementList.add("MATCH (n) WHERE ID(n) = " + segment.id() + " SET n.spine = \'"
 						+ removeBrackets(partSpine) + "\'");
 			}
-			connector.executeWrite(statementList.stream().toArray(String[]::new));
+			connector.executeWrite(statementList.toArray(new String[0]));
 
 		}
 		if (outputFormat == OutputFormat.AFrame) {
