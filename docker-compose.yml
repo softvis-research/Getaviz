@@ -37,7 +37,7 @@ services:
         volumes: 
             - data-gen:/var/lib/jetty/data-gen
             #- ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # uncomment only for development purposes
-            #- ./settings.properties:/opt/config/settings.properties # uncomment only for development purposes
+            #- ./generator2/org.getaviz.generator/settings.properties:/opt/config/settings.properties # uncomment only for development purposes
             #- ./generator2/output:/var/lib/jetty/output/ # uncomment only for development purposes
         ports:
             - "8083:8080"
