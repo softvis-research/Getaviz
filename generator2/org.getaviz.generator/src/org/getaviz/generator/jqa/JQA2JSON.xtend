@@ -297,7 +297,7 @@ class JQA2JSON {
 		}		
 		val type = variable.getSingleRelationship(Rels.OF_TYPE, Direction.OUTGOING)
 		if(type !== null) {
-			declaredType = type.endNode.getProperty("name") as String
+			declaredType = type.endNode.getProperty("name", null) as String
 		}	
 		var dependent = variable.getRelationships(Direction.OUTGOING, Rels.DEPENDS_ON).head
 		if(dependent !== null){
@@ -307,13 +307,13 @@ class JQA2JSON {
 		val result = '''
 		"id":            "«variable.getProperty("hash")»",
 		"qualifiedName": "«variable.getProperty("fqn")»",
-		"name":          "«variable.getProperty("name")»",
+		"name":          "«variable.getProperty("name", null)»",
 		"type":          "FAMIX.Variable",
 		"declaredType":  "«declaredType»",
 		"accessedBy":	 "«variable.getAccessedBy»",
 		"belongsTo":     "«belongsTo»",
 		"dependsOn":     "«dependsOn»",
-		"filename":		 "«variable.getProperty("fileName")»"
+		"filename":		 "«variable.getProperty("fileName", null)»"
 		'''
 		return result
 	}
