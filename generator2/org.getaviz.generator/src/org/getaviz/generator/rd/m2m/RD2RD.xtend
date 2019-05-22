@@ -296,7 +296,7 @@ class RD2RD {
 			if (segments.length < 50) {
 				spinePointCount = 400
 			} else {
-				spinePointCount = 1000
+				spinePointCount = 20000
 			}
 			val completeSpine = newArrayOfSize(spinePointCount)
 			val stepX = 2 * Math::PI / spinePointCount;
