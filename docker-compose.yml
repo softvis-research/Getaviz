@@ -23,7 +23,7 @@ services:
         build: ui/
         restart: always
         volumes:
-            #- ./ui:/var/www/html/ui
+            #- ./ui:/var/www/html/ui # uncomment only for ui development
             - data-gen:/var/www/html/ui/data-gen
         ports:
             - "8082:80"
@@ -36,9 +36,9 @@ services:
         restart: always
         volumes: 
             - data-gen:/var/lib/jetty/data-gen
-            #- ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # uncomment only for development purposes
-            #- ./generator2/org.getaviz.generator/settings.properties:/opt/config/settings.properties # uncomment only for development purposes
-            #- ./generator2/output:/var/lib/jetty/output/ # uncomment only for development purposes
+            #- ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # uncomment only for generator development
+            #- ./generator2/org.getaviz.generator/settings.properties:/opt/config/settings.properties # uncomment only for generator development
+            #- ./generator2/output:/var/lib/jetty/output/ # uncomment only for generator development
         ports:
             - "8083:8080"
         networks:
