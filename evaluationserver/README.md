@@ -1,8 +1,8 @@
-# README #
+# README
 
 The evaluation server is a rails application capable to support the evaluation of websites. Currently its main use is the evaluation of x3dom software visualizations.  
 
-### features ###
+## Features
 
 * administration of different experiments
 * creation of different question types
@@ -10,15 +10,9 @@ The evaluation server is a rails application capable to support the evaluation o
 * export of results
 * login only required fpr administrative functions
 
-### Setup ###
-
-#### Docker ####
-
-* Run `docker-compose up` in the evaluationserver directory
-* Open `localhost:8081` in your web browser
-
-#### manual setup ####
-
+<!--
+#### manual setup ####-->
+<!--
 * install Ruby in version 2.0 or above (along with ruby, bundler, rake)
 * install mySQL oder equivalent drop-in-replacement (e.g. MariaDB)
 * create mySQL user
@@ -28,3 +22,4 @@ The evaluation server is a rails application capable to support the evaluation o
 * bundle exec rake db:create
 * bundle exec rake db:migrate
 * bundle exec rails server -p [port]
+-->
