@@ -1,6 +1,6 @@
 # README #
 
-*This component is deprecated and will be replaced by generator2.*
+**This component is deprecated and will be replaced by generator2.**
 
 The generator takes a famix, dynamic, and/or hismo model as input and generates a software visualization that can be explored using the ui component.
 
