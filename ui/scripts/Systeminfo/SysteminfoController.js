@@ -2,8 +2,10 @@ var systeminfoController = (function() {
 
     let controllerConfig = {
         system: "",
+        version: "",
         link: "",
         noc: false,
+        not: false,
         loc: 0
     };
 
@@ -22,6 +24,20 @@ var systeminfoController = (function() {
             rightCell.setAttribute("class", "grid-item-right");
             let nameElement1 = document.createTextNode("System");
             let nameElement2 = document.createTextNode(controllerConfig.system);
+            leftCell.appendChild(nameElement1);
+            rightCell.appendChild(nameElement2);
+            container.appendChild(leftCell);
+            container.appendChild(rightCell);
+
+        }
+        
+         if(controllerConfig.version !== "") {
+            let leftCell = document.createElement("div");
+            let rightCell = document.createElement("div");
+            leftCell.setAttribute("class", "grid-item-left");
+            rightCell.setAttribute("class", "grid-item-right");
+            let nameElement1 = document.createTextNode("Version");
+            let nameElement2 = document.createTextNode(controllerConfig.version);
             leftCell.appendChild(nameElement1);
             rightCell.appendChild(nameElement2);
             container.appendChild(leftCell);
@@ -53,6 +69,19 @@ var systeminfoController = (function() {
             rightCell.setAttribute("class", "grid-item-right");
             let nocElement1 = document.createTextNode("Classes");
             let nocElement2 = document.createTextNode(model.getEntitiesByType("Class").length);
+            leftCell.appendChild(nocElement1);
+            rightCell.appendChild(nocElement2);
+            container.appendChild(leftCell);
+            container.appendChild(rightCell);
+        }
+        
+        if(controllerConfig.not) {
+            let leftCell = document.createElement("div");
+            let rightCell = document.createElement("div");
+            leftCell.setAttribute("class", "grid-item-left");
+            rightCell.setAttribute("class", "grid-item-right");
+                    let nocElement1 = document.createTextNode("Transl. Units");
+            let nocElement2 = document.createTextNode(model.getEntitiesByType("TranslationUnit").length);
             leftCell.appendChild(nocElement1);
             rightCell.appendChild(nocElement2);
             container.appendChild(leftCell);
