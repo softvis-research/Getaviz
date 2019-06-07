@@ -71,13 +71,13 @@ public class C2RD {
 		List<Node> unionsStructsEnums = new ArrayList<>();
 		
 		for(Node element : subElements) {
-			if(element.hasLabel(Labels.Function)) {
+			if(element.hasLabel(Labels.Function) && element.hasProperty("hash")) {
 				functions.add(element);
 			}
-			if(element.hasLabel(Labels.Variable)) {
+			if(element.hasLabel(Labels.Variable) && element.hasProperty("hash")) {
 				variables.add(element);
 			}
-			if(element.hasLabel(Labels.Struct) || element.hasLabel(Labels.Union) || element.hasLabel(Labels.Enum)) {
+			if(element.hasProperty("hash") && (element.hasLabel(Labels.Struct) || element.hasLabel(Labels.Union) || element.hasLabel(Labels.Enum))) {
 				unionsStructsEnums.add(element);
 			}
 		}

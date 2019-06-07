@@ -23,6 +23,7 @@ public class JQACEnhancement {
 	private final Log log = LogFactory.getLog(JQACEnhancement.class);
 	private final SettingsConfiguration config = SettingsConfiguration.getInstance();
 	private final GraphDatabaseService graph = Database.getInstance(config.getDatabaseName());
+	private String fileNameTranslationUnit;
 	
 	public JQACEnhancement() {
 		log.info("JQACEnhancement has started.");
@@ -48,12 +49,15 @@ public class JQACEnhancement {
 		for(Node translationUnit : translationUnits) {
 			//build translationUnit name, fqn and hash from the filename of the containing file
 			String fileName = translationUnit.getSingleRelationship(Rels.CONTAINS, Direction.INCOMING).getStartNode().getProperty("fileName").toString();
+			System.out.println(fileNameTranslationUnit);
 			if(fileName.endsWith(".ast")) {
 				fileName = fileName.replaceAll(".ast", "");
 				if(!fileName.endsWith(".h")) {
 					fileName = fileName + ".c";
 				}
 			}
+			this.fileNameTranslationUnit = fileName;
+
 			if(!translationUnit.hasProperty("name")){
 				translationUnit.setProperty("name", fileName);
 			}
@@ -67,24 +71,29 @@ public class JQACEnhancement {
 			//build fqn and hash for functions etc. from the name of the translation unit plus their own name
 			ResourceIterable<Node> nodes = this.graph.traversalDescription().depthFirst().relationships(Rels.DECLARES, Direction.OUTGOING).traverse(translationUnit).nodes();
 			for(Node child : nodes) {
-				if(!child.hasProperty("name")){
-					child.setProperty("name", Long.toString(((Node)child).getId()));
-				}
-				Relationship declaration = child.getSingleRelationship(Rels.DECLARES, Direction.INCOMING);
-				Node declaringParent = null;
-				if(declaration != null) {
-					declaringParent = declaration.getStartNode();
-				}
-				//If variable/constant is part of a struct, union or enum it could have the same name as another variable/constant therefore add parent name to name.
-				if((child.hasLabel(Labels.Variable) || child.hasLabel(Labels.EnumConstant)) && declaringParent != null 
-						&& (declaringParent.hasLabel(Labels.Struct) || declaringParent.hasLabel(Labels.Union) || declaringParent.hasLabel(Labels.Enum))) {
-					child.setProperty("fqn", fileName + "_" + declaringParent.getProperty("name") + "_" + child.getProperty("name"));
-				} else if(!child.hasProperty("fqn")){
-					child.setProperty("fqn", (fileName + "_" + child.getProperty("name")));
-				}
+				String fileNameChild = child.getProperty("fileName", "").toString();
+				System.out.println(fileNameChild);
 				
-				if(!child.hasProperty("hash")){
-					child.setProperty("hash", createHash(child.getProperty("fqn").toString()));
+				if (fileNameChild.equals(fileNameTranslationUnit)) {
+					if(!child.hasProperty("name")){
+						child.setProperty("name", Long.toString(((Node)child).getId()));
+					}
+					Relationship declaration = child.getSingleRelationship(Rels.DECLARES, Direction.INCOMING);
+					Node declaringParent = null;
+					if(declaration != null) {
+						declaringParent = declaration.getStartNode();
+					}
+					//If variable/constant is part of a struct, union or enum it could have the same name as another variable/constant therefore add parent name to name.
+					if((child.hasLabel(Labels.Variable) || child.hasLabel(Labels.EnumConstant)) && declaringParent != null
+							&& (declaringParent.hasLabel(Labels.Struct) || declaringParent.hasLabel(Labels.Union) || declaringParent.hasLabel(Labels.Enum))) {
+						child.setProperty("fqn", fileName + "_" + declaringParent.getProperty("name") + "_" + child.getProperty("name"));
+					} else if(!child.hasProperty("fqn")){
+						child.setProperty("fqn", (fileName + "_" + child.getProperty("name")));
+					}
+					
+					if(!child.hasProperty("hash")){
+						child.setProperty("hash", createHash(child.getProperty("fqn").toString()));
+					}
 				}
 			}
 		}
