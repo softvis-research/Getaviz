@@ -41,7 +41,7 @@ var packageExplorerController = (function() {
     
     function prepareTreeView() {
         
-        let entities = model.getAllEntities();
+        let entities = model.getCodeEntities();
         let items = [];
 		
 		//build items for ztree
