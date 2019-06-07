@@ -291,12 +291,15 @@ class RD2RD {
 	}
 
 	def private calculateSpines(Iterable<Node> segments, double factor) {
+		val segments2 = segments.sortBy[a|a.getProperty("size") as Double]
 		if (config.outputFormat == OutputFormat::X3D) {
 			var spinePointCount = 0
 			if (segments.length < 50) {
 				spinePointCount = 400
+			} else if(segments.length < 100) {
+				spinePointCount = 40000
 			} else {
-				spinePointCount = 20000
+				spinePointCount = 40000
 			}
 			val completeSpine = newArrayOfSize(spinePointCount)
 			val stepX = 2 * Math::PI / spinePointCount;
@@ -308,16 +311,17 @@ class RD2RD {
 			// calculate spines according  to fractions
 			var start = 0
 			var end = 0
-	
-			for (segment : segments) {
+			println("new disk")
+			for (segment : segments2) {
 				val size = segment.getProperty("size") as Double
+				println(size)
 				// val entity = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
 				start = end;
 				end = start + Math::floor(spinePointCount * size).intValue
 				if (end > (completeSpine.length - 1)) {
 					end = completeSpine.length - 1
 				}
-				if (segment == segments.last) {
+				if (segment == segments2.last) {
 					end = completeSpine.length - 1
 				}
 				val partSpine = newArrayOfSize(end - start);
@@ -328,16 +332,16 @@ class RD2RD {
 			}
 		}
 		if (config.outputFormat == OutputFormat::AFrame) {
-			if (!segments.empty) {
+			if (!segments2.empty) {
 				var length = segments.length
 				var sizeSum = 0.0
-				var position = 0.0
-				for (segment : segments) {
+				var position = 90.0
+				for (segment : segments2) {
 					val size = segment.getProperty("size") as Double
 					sizeSum += size
 				}
 				sizeSum += sizeSum / 360 * length
-				for (segment : segments) {
+				for (segment : segments2) {
 					val angle = (segment.getProperty("size") as Double / sizeSum) * 360
 					segment.setProperty("angle", angle)
 					segment.setProperty("anglePosition", position)
