@@ -24,7 +24,7 @@ class JQA2JSON {
 		log.info("JQA2JSON has started.")
 		val elements = newArrayList
 		graph.execute("MATCH (n:Condition) RETURN n").forEach[elements.add(get("n") as Node)]
-		graph.execute("MATCH (n)<-[:VISUALIZES]-() RETURN n").forEach[elements.add(get("n") as Node)]
+		graph.execute("MATCH (n)<-[:VISUALIZES]-() WHERE exists (n.hash) RETURN n").forEach[elements.add(get("n") as Node)]
 		val tx = graph.beginTx
 		var Writer fw = null
 		try {
@@ -321,8 +321,8 @@ class JQA2JSON {
 	private def toMetaDataSingleCondition(Node singleCondition) {
 		val result = '''
 		"id":            "«singleCondition.getProperty("hash")»",
-		"qualifiedName": "«singleCondition.getProperty("fqn")»",
-		"name":     	 "«singleCondition.getProperty("MacroName")»",
+		"qualifiedName": "«singleCondition.getProperty("fqn", "")»",
+		"name":     	 "«singleCondition.getProperty("MacroName", "")»",
 		"type":          "Macro"
 		'''
 		return result
@@ -330,11 +330,16 @@ class JQA2JSON {
 	
 	private def toMetaDataNegation(Node negation) {
 		var negated = ""
-		val negatedNode = negation.getRelationships(Direction.OUTGOING, Rels.NEGATES).head.endNode
-		if(negatedNode !== null) {
-			negated = negatedNode.getProperty("hash") as String
+		var Node negatedNode
+		try {
+			negatedNode = negation.getRelationships(Direction.OUTGOING, Rels.NEGATES).head.endNode
+			if(negatedNode !== null) {
+				negated = negatedNode.getProperty("hash") as String
+			}
+		} catch (Exception e) {
+			negated = ""
 		}
-		
+
 		val result = '''
 		"id":            "«negation.getProperty("hash")»",
 		"type":          "Negation",
@@ -444,7 +449,7 @@ class JQA2JSON {
 		"type":          "Enum",
 		"belongsTo":     "«belongsTo»",
 		"dependsOn":     "«dependsOn»",
-		"filename":		 "«enumNode.getProperty("fileName")»"
+		"filename":		 "«enumNode.getProperty("fileName", "")»"
 		'''
 		return result
 	}
