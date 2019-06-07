@@ -762,8 +762,16 @@ var model = (function() {
 		});
 		return entities;
 	}
-
-
+	
+	function getCodeEntities(type) {
+		let entities = [];
+		entitiesById.forEach(function(value){
+			if(value.type !== "Negation" && value.type !== "Macro" && value.type !== "And" && value.type !== "Or"){
+				entities.push(value)
+			}
+		});
+		return entities;
+	}
 
     function getLabels(){
 	    return labels;
@@ -805,7 +813,8 @@ var model = (function() {
 		getPaths					: getPaths,
         getRole 					: getRole,
 		getRoleBetween				: getRoleBetween,
-        getLabels                   : getLabels
+        getLabels                   : getLabels,
+        getCodeEntities: getCodeEntities
     };
 	
 })();
