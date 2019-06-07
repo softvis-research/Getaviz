@@ -95,36 +95,36 @@ class RD2AFrame {
 	def private toSegment(Iterable<Node> segments) {
 		val result = '''
 		«FOR segment : segments»
-			«val hash = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.getProperty("hash")»
-			«IF segment.getProperty("innerRadius") as Double == 0»
-				<a-circle id="«hash»"
-					radius="«segment.getProperty("outerRadius")»" 
-					color="«segment.getProperty("color") »"
-					theta-start="«segment.getProperty("anglePosition")»"
-					theta-length="«segment.getProperty("angle")»"
-					shader="flat"
-					buffer="true"
-					flat-shading="true"
-					depth-test="false"
-					depth-write="false">
-«««					segments="«(segment.getProperty("angle") as Double/20).intValue+1»">
-				</a-circle>
-			«ELSE»
-				<a-ring id="«hash»"
-					radius-inner="«segment.getProperty("innerRadius")»"
-					radius-outer="«segment.getProperty("outerRadius")»" 
-					color="«segment.getProperty("color") »"
-					shader="flat"
-					buffer="true"
-					flat-shading="true"
-					depth-test="false"
-					depth-write="false"
-					theta-start="«segment.getProperty("anglePosition")»"
-					theta-length="«segment.getProperty("angle")»"
-«««					segments-theta="«(segment.getProperty("angle") as Double/20).intValue+1»"
-					segments-phi="1">
-				</a-ring>
-			«ENDIF»
+			«val hash = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode.getProperty("hash","NOHASH").toString»
+				«IF segment.getProperty("innerRadius") as Double == 0»
+					<a-circle id="«hash»"
+						radius="«segment.getProperty("outerRadius")»" 
+						color="«segment.getProperty("color") »"
+						theta-start="«segment.getProperty("anglePosition")»"
+						theta-length="«segment.getProperty("angle")»"
+						shader="flat"
+						buffer="true"
+						flat-shading="true"
+						depth-test="false"
+						depth-write="false">
+	«««					segments="«(segment.getProperty("angle") as Double/20).intValue+1»">
+					</a-circle>
+				«ELSE»
+					<a-ring id="«hash»"
+						radius-inner="«segment.getProperty("innerRadius")»"
+						radius-outer="«segment.getProperty("outerRadius")»" 
+						color="«segment.getProperty("color") »"
+						shader="flat"
+						buffer="true"
+						flat-shading="true"
+						depth-test="false"
+						depth-write="false"
+						theta-start="«segment.getProperty("anglePosition")»"
+						theta-length="«segment.getProperty("angle")»"
+	«««					segments-theta="«(segment.getProperty("angle") as Double/20).intValue+1»"
+						segments-phi="1">
+					</a-ring>
+				«ENDIF»
 		«ENDFOR»
 		'''
 		return result

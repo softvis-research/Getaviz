@@ -92,10 +92,12 @@ class RD2X3D {
 		val parent = segment.getSingleRelationship(Rels.CONTAINS, Direction.INCOMING).startNode
 		val position = parent.getSingleRelationship(Rels.HAS, Direction.OUTGOING).endNode
 		val entity = segment.getSingleRelationship(Rels.VISUALIZES, Direction.OUTGOING).endNode
+		var spines = segment.getProperty("spine") as String
+		if(spines.isNullOrEmpty) return ""
 		val result = '''
 			<Transform  translation='«position.getProperty("x") + " " + position.getProperty("y") + " " +
 			position.getProperty("z")»' rotation='0 0 1 1.57'>
-				<Transform DEF='«entity.getProperty("hash") as String»'>
+				<Transform DEF='«entity.getProperty("hash", "NOHASH") as String»'>
 					<Shape>
 						<Extrusion
 							convex='true'
