@@ -58,7 +58,17 @@ var macroExplorerController = (function() {
 		});
 		
 		//sort alphanumerically
-		items.sort();
+		items.sort(function(obj1, obj2) {
+                    return obj1.name.localeCompare(obj2.name);
+                    /*if (obj1.name < obj2.name){
+					return -1;
+				}
+				if (obj1.name > obj1.name){
+					return 1;
+				}			
+				
+				return 0;*/
+                });;
 		
 		//settings
 		var settings = {
