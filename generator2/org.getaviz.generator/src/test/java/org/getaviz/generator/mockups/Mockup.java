@@ -1,5 +1,6 @@
 package org.getaviz.generator.mockups;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -46,13 +47,15 @@ public class Mockup {
 	
 	protected void runCypherScript (String resource) {
 		ClassLoader classLoader = this.getClass().getClassLoader();
-		String path = classLoader.getResource(resource).getPath();
+		String filePath = classLoader.getResource(resource).getFile();
+		File file = new File(filePath);
+		String path = file.getAbsolutePath();
 		try {
 			path = URLDecoder.decode(path, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		byte[] encoded = null;   
+		byte[] encoded;
 		try {
 			encoded = Files.readAllBytes(Paths.get(path));
 			connector.executeWrite(new String(encoded));
