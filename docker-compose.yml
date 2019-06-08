@@ -39,6 +39,7 @@ services:
             #- ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # uncomment only for generator development
             #- ./generator2/org.getaviz.generator/settings.properties:/opt/config/settings.properties # uncomment only for generator development
             #- ./generator2/output:/var/lib/jetty/output/ # uncomment only for generator development
+            #- ./generator2/logs:/var/lib/jetty/logs # uncomment only for generator development
         ports:
             - "8083:8080"
         networks:
