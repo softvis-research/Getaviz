@@ -15,14 +15,14 @@ public class GeneratorServlet extends HttpServlet {
 	private static final long serialVersionUID = -5343549433924172589L;
 	private static Log log = LogFactory.getLog(GeneratorServlet.class);
 
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.info("GET request generator");
 		SettingsConfiguration config = SettingsConfiguration.getInstance("/opt/config/settings.properties");
 		Generator.run();
 		writeGetResponse(response);
 	}
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.info("POST request generator");
 		SettingsConfiguration config = SettingsConfiguration.getInstance(request);
 		Generator.run();
