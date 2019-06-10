@@ -19,17 +19,17 @@ public class GeneratorServlet extends HttpServlet {
 		log.info("GET request generator");
 		SettingsConfiguration config = SettingsConfiguration.getInstance("/opt/config/settings.properties");
 		Generator.run();
-		writeResponse(response, config);
+		writeGetResponse(response);
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		log.info("POST request generator");
 		SettingsConfiguration config = SettingsConfiguration.getInstance(request);
 		Generator.run();
-		writeResponse(response, config);
+		writePostResponse(response, config);
 	}
 	
-	private void writeResponse(HttpServletResponse response, SettingsConfiguration config) throws IOException {
+	private void writePostResponse(HttpServletResponse response, SettingsConfiguration config) throws IOException {
 		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
 		out.println("<h1>Getaviz</h1>");
@@ -41,5 +41,12 @@ public class GeneratorServlet extends HttpServlet {
 		boolean aframe = config.getOutputFormat() == OutputFormat.AFrame;
 		response.setHeader("Location", url + "?aframe=" + Boolean.toString(aframe) + "&model=" + name
 				+ "&setup=web_a-frame/default" + "&srcDir=data-gen");
+	}
+
+	private void writeGetResponse(HttpServletResponse response) throws IOException {
+		PrintWriter out = response.getWriter();
+		response.setContentType("text/html");
+		out.println("<h1>Getaviz</h1>");
+		out.println("<h3>Visualization has been generated to the output directory.</h3>");
 	}
 }
