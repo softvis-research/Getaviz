@@ -32,19 +32,3 @@ You find a hosted version at [https://home.uni-leipzig.de/svis/getaviz/Index.htm
 * Use the index.php file as described above to show the new visualization at the browser user interface
 * Optional you could add the sourcecode in a "src"-folder in your model folder
 -->
-
-
-## Contribution Guidelines ###
-
-### Architectur Concepts
-
-* Model, View, Controllers
-* Actions and Events
-
-### Files, folders and meaning
-
-* root
-* data
-* libs
-* scripts
-* setups
