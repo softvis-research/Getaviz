@@ -83,7 +83,7 @@ $result = file_get_contents($url, false, $context);
 
 // false, because we receive redirect
 if ($result === FALSE) { 
-  header("Location: http://localhost:8082/ui/index.php?aframe=true&model=$model&setup=web_a-frame/default&srcDir=data-gen");
+  header("Location: index.php?aframe=true&model=$model&setup=web_a-frame/default&srcDir=data-gen");
   die();
 }
 
