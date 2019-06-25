@@ -14,7 +14,6 @@ public class GeneratorServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		log.info("GET request generator");
-		SettingsConfiguration config = SettingsConfiguration.getInstance("/opt/config/settings.properties");
 		Generator.run();
 		writeGetResponse(response);
 	}
