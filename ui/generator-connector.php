@@ -70,19 +70,13 @@ $payload = array(
   'rd.method_type_mode'         => $_REQUEST['rd_method_type_mode']
 );
 
-// use key 'http' even if you send the request to https://..
-$options = array(
-  'http' => array(
-    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-    'method'  => 'POST',
-    'content' => http_build_query($payload)
-  )
-);
-$context  = stream_context_create($options);
-$result = file_get_contents($url, false, $context);
-
-// false, because we receive redirect
-if ($result === FALSE) { 
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, $url);
+curl_setopt($curl, CURLOPT_POST, 1);
+curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($payload));
+$return = curl_exec($curl);
+curl_close ($curl);
+if ($return == "OK") {
   header("Location: index.php?aframe=true&model=$model&setup=web_a-frame/default&srcDir=data-gen");
   die();
 }
