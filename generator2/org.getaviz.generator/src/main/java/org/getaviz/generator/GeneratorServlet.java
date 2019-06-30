@@ -20,6 +20,7 @@ public class GeneratorServlet extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) {
 		log.info("POST request generator");
+		SettingsConfiguration config = SettingsConfiguration.getInstance(request);
 		Generator.run();
 		writePostResponse(response);
 	}
