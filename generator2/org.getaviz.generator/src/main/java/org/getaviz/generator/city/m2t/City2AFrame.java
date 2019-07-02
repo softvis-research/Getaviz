@@ -40,7 +40,7 @@ public class City2AFrame implements Step {
 	public void run() {
 		log.info("City2AFrame has started");
 		FileWriter fw = null;
-		String fileName = "model2.html";
+		String fileName = "model.html";
 
 		try {
 			fw = new FileWriter(outputPath + fileName);
