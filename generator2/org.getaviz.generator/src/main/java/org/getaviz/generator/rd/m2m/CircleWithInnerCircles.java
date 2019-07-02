@@ -18,7 +18,7 @@ class CircleWithInnerCircles extends Circle {
 		diskNode = disk;
 		Iterable<Node> data = () -> RDUtils.getData(disk.id());
 		Iterable<Node> methods = () -> RDUtils.getMethods(disk.id());
-		if (nesting == true) {
+		if (nesting) {
 			minArea = RDUtils.sum(methods) + RDUtils.sum(data);
 		} else {
 			minArea = disk.get("netArea").asDouble();
@@ -29,16 +29,14 @@ class CircleWithInnerCircles extends Circle {
 		log.debug("set netArea to " + netArea + "for disk " + diskNode.id());
 		radius = disk.get("radius").asDouble(0.0);
 		grossArea = disk.get("grossArea").asDouble(0.0);
-		RDUtils.getSubDisks(disk.id()).forEachRemaining((subDisk) -> {
-			innerCircles.add(new CircleWithInnerCircles(subDisk.get("d").asNode(), true));
-		});
+		RDUtils.getSubDisks(disk.id()).forEachRemaining((subDisk) -> innerCircles.add(new CircleWithInnerCircles(subDisk.get("d").asNode(), true)));
 	}
 
 	/**
 	 * write calculated positions into extended disk
 	 * 
 	 */
-	public void updateDiskNode() {
+	void updateDiskNode() {
 		String updateNode = String.format(
 				"MATCH (n) WHERE ID(n) = %d SET n.radius = %f, n.netArea = %f, n.grossArea = %f ", diskNode.id(),
 				radius, netArea, grossArea);
@@ -59,7 +57,7 @@ class CircleWithInnerCircles extends Circle {
 		}
 	}
 
-	public ArrayList<CircleWithInnerCircles> getInnerCircles() {
+	ArrayList<CircleWithInnerCircles> getInnerCircles() {
 		return innerCircles;
 	}
 }

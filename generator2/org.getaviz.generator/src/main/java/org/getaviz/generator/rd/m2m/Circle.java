@@ -5,21 +5,15 @@ import java.awt.geom.Point2D.Double;
 abstract class Circle implements Comparable<Circle> {
 
 	protected double radius = 0;
-	protected Double centre = new Double(0, 0);
-	protected double minArea = 0;
-	protected double netArea;
-	protected double grossArea;
-	protected String serial = "";
-	protected double ringWidth;
+	Double centre = new Double(0, 0);
+	double minArea = 0;
+	double netArea;
+	double grossArea;
+	String serial = "";
+	double ringWidth;
 
 	public int compareTo(Circle circle) {
-		if (netArea < circle.getNetArea()) {
-			return 1;
-		} else if (netArea > circle.getNetArea()) {
-			return -1;
-		} else {
-			return 0;
-		}
+		return java.lang.Double.compare(circle.getNetArea(), netArea);
 	}
 
 	public double getRadius() {
@@ -30,35 +24,35 @@ abstract class Circle implements Comparable<Circle> {
 		this.radius = radius;
 	}
 
-	public Double getCentre() {
+	Double getCentre() {
 		return centre;
 	}
 
-	public void setCentre(Double centre) {
+	void setCentre(Double centre) {
 		this.centre = centre;
 	}
 
-	public double getMinArea() {
+	double getMinArea() {
 		return minArea;
 	}
 
-	public double getNetArea() {
+	double getNetArea() {
 		return netArea;
 	}
 
-	public void setNetArea(double netArea) {
+	void setNetArea(double netArea) {
 		this.netArea = netArea;
 	}
 
-	public double getGrossArea() {
+	double getGrossArea() {
 		return grossArea;
 	}
 
-	public void setGrossArea(double grossArea) {
+	void setGrossArea(double grossArea) {
 		this.grossArea = grossArea;
 	}
 
-	public double getRingWidth() {
+	double getRingWidth() {
 		return ringWidth;
 	}
 }

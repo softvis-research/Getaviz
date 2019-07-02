@@ -2,28 +2,32 @@ package org.getaviz.generator.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
-import org.getaviz.generator.rd.m2m.RD2RD;
-import org.getaviz.generator.rd.s2m.JQA2RD;
+import org.getaviz.generator.StepFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
-public class RDBankTest {
+class RDBankTest {
 
-	static DatabaseConnector connector;
-	static Bank mockup = new Bank();
+	private static DatabaseConnector connector;
+	private static Bank mockup = new Bank();
 
 	@BeforeAll
 	static void setup() {
 		mockup.setupDatabase("./test/databases/RDBankTest.db");
 		mockup.loadProperties("RDBankTest.properties");
 		connector = mockup.getConnector();
-
-		new JQA2RD();
-		new RD2RD();
+		SettingsConfiguration config = SettingsConfiguration.getInstance();
+		StepFactory factory = new StepFactory(config);
+		Step s2m = factory.createSteps2m();
+		Step m2m = factory.createStepm2m();
+		s2m.run();
+		m2m.run();
 	}
 
 	@AfterAll

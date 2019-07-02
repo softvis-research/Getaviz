@@ -1,7 +1,9 @@
 package org.getaviz.generator.rd.m2m;
 
 import org.apache.commons.lang3.StringUtils;
+import org.getaviz.generator.ColorGradient;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.SettingsConfiguration.OutputFormat;
 import org.getaviz.generator.rd.RDUtils;
@@ -21,20 +23,24 @@ import java.util.Iterator;
 import java.util.List;
 import org.neo4j.driver.v1.StatementResult;
 import com.google.common.collect.Lists;
+
 import java.util.stream.Collectors;
 
-public class RD2RD {
-	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+public class RD2RD implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(RD2RD.class);
+	private String NS_colorStart = "#969696";
+	private String NS_colorEnd = "#F0F0F0";
+	private List<String> NS_colors;
+	private OutputFormat outputFormat;
+	private double dataFactor;
 
-// TODO set colors via RGBColor class for all entities
-// color scheme
-	private RGBColor NS_colorStart = new RGBColor(150, 150, 150);
-	private RGBColor NS_colorEnd = new RGBColor(240, 240, 240); // from CodeCity
-	private List<RGBColor> NS_colors;
+	public RD2RD(SettingsConfiguration config) {
+		this.outputFormat = config.getOutputFormat();
+		this.dataFactor = config.getRDDataFactor();
+	}
 
-	public RD2RD() {
+	public void run() {
 		log.info("RD2RD started");
 		StatementResult length = connector.executeRead(
 				"MATCH p=(n:Package)-[:CONTAINS*]->(m:Package) WHERE NOT (m)-[:CONTAINS]->(:Package) RETURN max(length(p)) AS length");
@@ -43,7 +49,7 @@ public class RD2RD {
 				"MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE NOT (m)-[:CONTAINS]->(:RD:Disk) RETURN max(length(p)) AS length");
 		int diskMaxLevel = length.single().get("length").asInt() + 1;
 
-		NS_colors = createColorGradiant(NS_colorStart, NS_colorEnd, namespaceMaxLevel);
+		NS_colors = ColorGradient.createColorGradient(NS_colorStart, NS_colorEnd, namespaceMaxLevel);
 
 		connector.executeRead(
 				"MATCH p = (n:Model:RD)-[:CONTAINS*]->(d:Disk)-[:VISUALIZES]->(e) RETURN d,e,length(p)-1 AS length")
@@ -58,28 +64,18 @@ public class RD2RD {
 				});
 		calculateNetArea(getRootDisks());
 
-		getDisks().forEachRemaining((result) -> {
-			calculateRadius(result.get("d").asNode());
-		});
+		getDisks().forEachRemaining((result) -> calculateRadius(result.get("d").asNode()));
 		calculateLayout(getRootDisks());
 
-		getDisks().forEachRemaining((result) -> {
-			postLayout(result.get("d").asNode());
-		});
+		getDisks().forEachRemaining((result) -> postLayout(result.get("d").asNode()));
 
-		getDisks().forEachRemaining((result) -> {
-			postLayout2(result.get("d").asNode());
-		});
+		getDisks().forEachRemaining((result) -> postLayout2(result.get("d").asNode()));
 
 		log.info("RD2RD finished");
 	}
 
 	private String setNamespaceColor(int level) {
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			return config.getRDNamespaceColorHex();
-		} else {
-			return NS_colors.get(level - 1).asPercentage();
-		}
+		return NS_colors.get(level - 1);
 	}
 
 	private void calculateNetArea(Iterator<Node> disks) {
@@ -90,14 +86,14 @@ public class RD2RD {
 	}
 
 	private void calculateNetArea(Long disk) {
-		double netArea = 0.0;
+		double netArea;
 		double dataSum = connector
 				.executeRead("MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Field) WHERE ID(n) = " + disk
-						+ " SET d.size = d.size * " + config.getRDDataFactor() + " RETURN SUM(d.size) AS sum")
+						+ " SET d.size = d.size * " + dataFactor + " RETURN SUM(d.size) AS sum")
 				.single().get("sum").asDouble();
 		double methodSum = connector
 				.executeRead("MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Method) WHERE ID(n) = " + disk
-						+ " SET d.size = d.size * " + config.getRDDataFactor() + " RETURN SUM(d.size) AS sum")
+						+ " SET d.size = d.size * " + dataFactor + " RETURN SUM(d.size) AS sum")
 				.single().get("sum").asDouble();
 		netArea = dataSum + methodSum;
 		connector.executeWrite("MATCH (n) WHERE ID(n) = " + disk + " SET n.netArea = " + netArea);
@@ -111,10 +107,8 @@ public class RD2RD {
 	}
 
 	private void calculateLayout(Iterator<Node> disks) {
-		ArrayList<CircleWithInnerCircles> nestedCircles = new ArrayList<CircleWithInnerCircles>();
-		disks.forEachRemaining((disk) -> {
-			nestedCircles.add(new CircleWithInnerCircles(disk, false));
-		});
+		ArrayList<CircleWithInnerCircles> nestedCircles = new ArrayList<>();
+		disks.forEachRemaining((disk) -> nestedCircles.add(new CircleWithInnerCircles(disk, false)));
 		RDLayout.nestedLayout(nestedCircles);
 		for (CircleWithInnerCircles circle : nestedCircles) {
 			circle.updateDiskNode();
@@ -130,9 +124,7 @@ public class RD2RD {
 	}
 
 	private void postLayout2(Node disk) {
-		RDUtils.getSubDisks(disk.id()).forEachRemaining((result) -> {
-			calculateRings(result.get("d").asNode());
-		});
+		RDUtils.getSubDisks(disk.id()).forEachRemaining((result) -> calculateRings(result.get("d").asNode()));
 		calculateRings(disk);
 	}
 
@@ -173,7 +165,7 @@ public class RD2RD {
 			if (!diskMethods.isEmpty()) {
 				calculateCrossSection(diskMethods, b_methods, height);
 				calculateSpines(diskMethods, r_methods - 0.5 * b_methods);
-				if (config.getOutputFormat() == OutputFormat.AFrame) {
+				if (outputFormat == OutputFormat.AFrame) {
 					for (Node method : diskMethods) {
 						connector.executeWrite("MATCH (n) WHERE ID(n) = " + method.id() + " SET n.outerRadius = "
 								+ r_methods + ", n.innerRadius = " + r_data);
@@ -183,7 +175,7 @@ public class RD2RD {
 			if (!diskData.isEmpty()) {
 				calculateCrossSection(diskData, r_data, height);
 				calculateSpines(diskData, 0.5 * r_data);
-				if (config.getOutputFormat() == OutputFormat.AFrame) {
+				if (outputFormat == OutputFormat.AFrame) {
 					for (Node data : diskData) {
 						connector.executeWrite("MATCH (n) WHERE ID(n) = " + data.id() + " SET n.outerRadius = " + r_data
 								+ ", n.innerRadius = " + 0.0);
@@ -200,7 +192,7 @@ public class RD2RD {
 			if (!diskMethods.isEmpty()) {
 				calculateCrossSection(diskMethods, b_methods, height);
 				calculateSpines(diskMethods, r_methods - 0.5 * b_methods);
-				if (config.getOutputFormat() == OutputFormat.AFrame) {
+				if (outputFormat == OutputFormat.AFrame) {
 					for (Node method : diskMethods) {
 						connector.executeWrite("MATCH (n) WHERE ID(n) = " + method.id() + " SET n.outerRadius = "
 								+ r_methods + ",n.innerRadius = " + r_data);
@@ -211,7 +203,7 @@ public class RD2RD {
 			if (!diskData.isEmpty()) {
 				calculateCrossSection(diskData, b_data, height);
 				calculateSpines(diskData, r_data - 0.5 * b_data);
-				if (config.getOutputFormat() == OutputFormat.AFrame) {
+				if (outputFormat == OutputFormat.AFrame) {
 					for (Node data : diskData) {
 						connector.executeWrite("MATCH (n) WHERE ID (n)= " + data.id() + " SET n.outerRadius = " + r_data
 								+ ", n.innerRadius = " + (r_data - b_data));
@@ -227,8 +219,8 @@ public class RD2RD {
 			Node node = subDisk.get("d").asNode();
 			StatementResult position = connector
 					.executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + node.id() + " RETURN p");
-			double x = 0.0;
-			double y = 0.0;
+			double x;
+			double y;
 			Node posNode = position.single().get("p").asNode();
 			x = posNode.get("x").asDouble();
 			y = posNode.get("y").asDouble();
@@ -257,8 +249,7 @@ public class RD2RD {
 			statementList
 					.add("MATCH (n) WHERE ID(n) = " + segment.id() + " SET n.crossSection = \'" + crossSection + "\'");
 		}
-		;
-		connector.executeWrite(statementList.stream().toArray(String[]::new));
+		connector.executeWrite(statementList.toArray(new String[0]));
 	}
 
 	private void calculateCrossSection(Long disk, double width, double height) {
@@ -268,8 +259,8 @@ public class RD2RD {
 	}
 
 	private void calculateSpines(List<Node> segments, double factor) {
-		if (config.getOutputFormat() == OutputFormat.X3D) {
-			int spinePointCount = 0;
+		if (outputFormat == OutputFormat.X3D) {
+			int spinePointCount;
 			if (segments.size() < 50) {
 				spinePointCount = 400;
 			} else {
@@ -283,7 +274,7 @@ public class RD2RD {
 			}
 			completeSpine.add(completeSpine.get(0));
 			// calculate spines according to fractions
-			int start = 0;
+			int start;
 			int end = 0;
 			List<String> statementList = new ArrayList<>();
 			for (Node segment : segments) {
@@ -303,10 +294,10 @@ public class RD2RD {
 				statementList.add("MATCH (n) WHERE ID(n) = " + segment.id() + " SET n.spine = \'"
 						+ removeBrackets(partSpine) + "\'");
 			}
-			connector.executeWrite(statementList.stream().toArray(String[]::new));
+			connector.executeWrite(statementList.toArray(new String[0]));
 
 		}
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
+		if (outputFormat == OutputFormat.AFrame) {
 			if (!segments.isEmpty()) {
 				int length = segments.size();
 				double sizeSum = 0.0;
@@ -338,23 +329,6 @@ public class RD2RD {
 				"MATCH (n) WHERE ID(n) = " + disk + " SET n.spine = \'" + removeBrackets(completeSpine) + "\'");
 	}
 
-	private List<RGBColor> createColorGradiant(RGBColor start, RGBColor end, int maxLevel) {
-		int steps = maxLevel;
-		double r_step = (end.r() - start.r()) / steps;
-		double g_step = (end.g() - start.g()) / steps;
-		double b_step = (end.b() - start.b()) / steps;
-
-		List<RGBColor> colorRange = new ArrayList<>();
-		for (int i = 0; i < maxLevel; ++i) {
-			double newR = start.r() + i * r_step;
-			double newG = start.g() + i * g_step;
-			double newB = start.b() + i * b_step;
-
-			colorRange.add(i, new RGBColor(newR, newG, newB));
-		}
-		return colorRange;
-	}
-
 	private StatementResult getDisks() {
 		return connector.executeRead("MATCH (n:Model:RD)-[:CONTAINS*]->(d:Disk)-[:VISUALIZES]->(element) " + "RETURN d "
 				+ "ORDER BY element.hash");
@@ -374,7 +348,12 @@ public class RD2RD {
 				.stream().map(s -> s.get("d").asNode()).collect(Collectors.toList()).listIterator();
 	}
 
-	private String removeBrackets(List<String> list) {
-		return StringUtils.remove(StringUtils.remove(list.toString(), "["), "]");
+	private static String removeBrackets(List<String> list) {
+		return removeBrackets(list.toString());
+	}
+
+
+	private static String removeBrackets(String string) {
+		return StringUtils.remove(StringUtils.remove(string, "["), "]");
 	}
 }

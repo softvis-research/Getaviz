@@ -1,26 +1,33 @@
 package org.getaviz.generator.rd.m2t;
 
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.OutputFormatHelper;
 import java.io.FileWriter;
 import java.io.IOException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.Step;
+import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.output.X3D;
 import org.neo4j.driver.v1.types.Node;
 
-public class RD2X3D {
-	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+public class RD2X3D implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
+	private String outputPath;
+	private X3D outputFormat;
 
-	public RD2X3D() {
+	public RD2X3D(SettingsConfiguration config) {
+		this.outputPath = config.getOutputPath();
+		this.outputFormat = new X3D(config);
+	}
+
+	public void run() {
 		log.info("RD2X3D has started");
 		FileWriter fw = null;
 		String fileName = "model.x3d";
 		try {
-			fw = new FileWriter(config.getOutputPath() + fileName);
-			fw.write(OutputFormatHelper.X3DHead() + toRD() + OutputFormatHelper.X3DTail());
+			fw = new FileWriter(outputPath + fileName);
+			fw.write(outputFormat.head() + toRD() + outputFormat.tail());
 		} catch (IOException e) {
 			log.error("Could not create file " + fileName);
 		} finally {
@@ -33,6 +40,7 @@ public class RD2X3D {
 		}
 		log.info("RD2X3D has finished");
 	}
+
 
 	private String toRD() {
 		StringBuilder disks = new StringBuilder();
@@ -85,7 +93,7 @@ public class RD2X3D {
 		builder.append("\n");
 		builder.append("\t\t\t\t\t <Material");
 		builder.append("\n");
-		builder.append("\t\t\t\t\t\t diffuseColor=\'" + disk.get("color").asString() + "\'");
+		builder.append("\t\t\t\t\t\t diffuseColor=\'" + outputFormat.printColor(disk.get("color").asString()) + "\'");
 		builder.append("\n");
 		builder.append("\t\t\t\t\t\t transparency=\'" + disk.get("transparency") + "\'");
 		builder.append("\n");
@@ -135,7 +143,7 @@ public class RD2X3D {
 		builder.append("\n");
 		builder.append("\t\t\t\t\t <Material");
 		builder.append("\n");
-		builder.append("\t\t\t\t\t\t diffuseColor=\'" + segment.get("color").asString() + "\'");
+		builder.append("\t\t\t\t\t\t diffuseColor=\'" + outputFormat.printColor(segment.get("color").asString()) + "\'");
 		builder.append("\n");
 		builder.append("\t\t\t\t\t\t transparency=\'" + segment.get("transparency") + "\'");
 		builder.append("\n");
