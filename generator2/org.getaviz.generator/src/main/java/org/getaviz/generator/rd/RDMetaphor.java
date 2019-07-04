@@ -17,6 +17,7 @@ public class RDMetaphor implements Metaphor {
     public RDMetaphor(SettingsConfiguration config) {
         StepFactory factory = new StepFactory(config);
         if(!config.isSkipScan()) {
+            steps.add(factory.createScanStep());
             steps.add(factory.createEnhancementStep());
         }
         steps.add(factory.createSteps2m());

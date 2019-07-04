@@ -1,50 +1,19 @@
 package org.getaviz.generator.jqa;
 
-import org.getaviz.generator.SettingsConfiguration;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import java.io.IOException;
-
 import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
-public class DatabaseBuilder implements Step {
+public class Java2JQA implements Step {
 	private Log log = LogFactory.getLog(this.getClass());
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
-	private Runtime runtime = Runtime.getRuntime();
-	private String inputFiles;
-
-	public DatabaseBuilder(SettingsConfiguration config) {
-		this.inputFiles = config.getInputFiles();
-	}
 
 	public void run() {
-		scan();
-		enhance();
-	}
-
-	public void scan() {
-		log.info("jQA scan started.");
-		log.info("Scanning from URI(s) " + inputFiles);
-		try {
-			Process pScan = runtime.exec("/opt/jqassistant/bin/jqassistant.sh scan -reset -u " + inputFiles + " -storeUri " +
-					DatabaseConnector.getDatabaseURL());
-			pScan.waitFor();
-		} catch (InterruptedException e) {
-			log.error(e);
-			e.printStackTrace();
-		} catch (IOException e) {
-			log.error(e);
-			e.printStackTrace();
-		}
-		log.info("jQA scan ended.");
-	}
-
-	public void enhance() {
 		log.info("jQA enhancement started.");
 		connector.executeWrite(labelGetter(), labelSetter(), labelPrimitives(), labelInnerTypes());
 		connector.executeWrite(labelAnonymousInnerTypes());
@@ -53,10 +22,10 @@ public class DatabaseBuilder implements Step {
 	}
 
 	private void addHashes() {
-		connector.executeRead(collectAllPackages()).forEachRemaining((result) -> { enhanceNode(result); });
-		connector.executeRead(collectAllTypes()).forEachRemaining((result) -> { enhanceNode(result); });
-		connector.executeRead(collectAllFields()).forEachRemaining((result) -> { enhanceNode(result); });
-		connector.executeRead(collectAllMethods()).forEachRemaining((result) -> { enhanceNode(result); });
+		connector.executeRead(collectAllPackages()).forEachRemaining(this::enhanceNode);
+		connector.executeRead(collectAllTypes()).forEachRemaining(this::enhanceNode);
+		connector.executeRead(collectAllFields()).forEachRemaining(this::enhanceNode);
+		connector.executeRead(collectAllMethods()).forEachRemaining(this::enhanceNode);
 	}
 
 	private String createHash(String fqn) {

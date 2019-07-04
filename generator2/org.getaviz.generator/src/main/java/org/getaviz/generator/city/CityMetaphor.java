@@ -16,6 +16,7 @@ public class CityMetaphor implements Metaphor {
     public CityMetaphor(SettingsConfiguration config) {
         StepFactory factory = new StepFactory(config);
         if(!config.isSkipScan()) {
+            steps.add(factory.createScanStep());
             steps.add(factory.createEnhancementStep());
         }
         steps.add(factory.createSteps2m());
