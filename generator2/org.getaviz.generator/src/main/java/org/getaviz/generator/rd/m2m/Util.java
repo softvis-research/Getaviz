@@ -2,19 +2,30 @@ package org.getaviz.generator.rd.m2m;
 
 import java.awt.geom.Point2D;
 
-class Util {
-	static double correctAngle(double angle) {
+import org.getaviz.generator.rd.m2m.Circle;
+
+public class Util {
+	public static double correctAngle(double angle) {
 		return angle % 360;
 	}
 
-	static double distance(Circle firstPoint, Circle secondPoint) {
+	public static double correctAngleWithin90(double angle) {
+
+		double result = Double.valueOf(angle);
+		while (result > 90) {
+			result -= 90;
+		}
+		return result;
+	}
+
+	public static double distance(Circle firstPoint, Circle secondPoint) {
 		double a = Math.abs(firstPoint.getCentre().y - secondPoint.getCentre().y);
 		double b = Math.abs(firstPoint.getCentre().x - secondPoint.getCentre().x);
 
 		return Math.sqrt(a * a + b * b);
 	}
 
-	static double angleBetweenPoints_XasKatethe(Circle firstPoint, Circle secondPoint) {
+	public static double angleBetweenPoints_XasKatethe(Circle firstPoint, Circle secondPoint) {
 		double a = Math.abs(firstPoint.getCentre().y - secondPoint.getCentre().y);
 		double b = Math.abs(firstPoint.getCentre().x - secondPoint.getCentre().x);
 		double c = Math.sqrt(a * a + b * b);
@@ -22,7 +33,7 @@ class Util {
 
 	}
 
-	static double angleBetweenPoints_YasKatethe(Circle firstPoint, Circle secondPoint) {
+	public static double angleBetweenPoints_YasKatethe(Circle firstPoint, Circle secondPoint) {
 		double a = Math.abs(firstPoint.getCentre().y - secondPoint.getCentre().y);
 		double b = Math.abs(firstPoint.getCentre().x - secondPoint.getCentre().x);
 		double c = Math.sqrt(a * a + b * b);
@@ -30,30 +41,32 @@ class Util {
 
 	}
 
-	static boolean intersect(Circle firstPoint, Circle secondPoint) {
+	public static boolean intersect(Circle firstPoint, Circle secondPoint) {
+		//TODO remove
+		//System.out.println(((SnailCircle)secondPoint).getSerial());
 		double a = Math.abs(firstPoint.getCentre().y - secondPoint.getCentre().y);
 		double b = Math.abs(firstPoint.getCentre().x - secondPoint.getCentre().x);
 		// there must be a little tolerance!
-		return (Math.sqrt(a * a + b * b) <= firstPoint.getRadius() + secondPoint.getRadius() - 0.001);
+		return (Math.sqrt(a * a + b * b) <= firstPoint.getRadius() + secondPoint.getRadius() - 0.001) ? true : false;
 	}
 
-	static boolean isLeftOf(Circle firstPoint, Circle secondPoint) {
-		return firstPoint.getCentre().x < secondPoint.getCentre().x;
+	public static boolean isLeftOf(Circle firstPoint, Circle secondPoint) {
+		return firstPoint.getCentre().x < secondPoint.getCentre().x ? true : false;
 	}
 
-	static boolean isRightOf(Circle firstPoint, Circle secondPoint) {
-		return firstPoint.getCentre().x > secondPoint.getCentre().x;
+	public static boolean isRightOf(Circle firstPoint, Circle secondPoint) {
+		return firstPoint.getCentre().x > secondPoint.getCentre().x ? true : false;
 	}
 
-	static boolean isAboveOf(Circle firstPoint, Circle secondPoint) {
-		return firstPoint.getCentre().y > secondPoint.getCentre().y;
+	public static boolean isAboveOf(Circle firstPoint, Circle secondPoint) {
+		return firstPoint.getCentre().y > secondPoint.getCentre().y ? true : false;
 	}
 
-	static boolean isBelowOf(Circle firstPoint, Circle secondPoint) {
-		return firstPoint.getCentre().y < secondPoint.getCentre().y ;
+	public static boolean isBelowOf(Circle firstPoint, Circle secondPoint) {
+		return firstPoint.getCentre().y < secondPoint.getCentre().y ? true : false;
 	}
 
-	static Point2D.Double calculateCentre(Circle m, Circle n, double angle) {
+	public static Point2D.Double calculateCentre(Circle m, Circle n, double angle) {
 		angle = Util.correctAngle(angle);
 		if (angle == 0 || angle == 360) {
 			return new Point2D.Double(m.getCentre().x, m.getCentre().y + n.getRadius() + m.getRadius());
@@ -89,4 +102,16 @@ class Util {
 		}
 		return null;
 	}
+
+	public static double calculateAngle(Circle m, Circle n, Circle n_minus_1, double alpha_m_n_minus_1) {
+
+		double rm = m.getRadius();
+		double rn = n.getRadius();
+		double rn_minus_1 = n_minus_1.getRadius();
+
+		return alpha_m_n_minus_1
+				+ Math.toDegrees(Math.acos((rm * rm + rm * rn_minus_1 + rm * rn - rn_minus_1 * rn)
+						/ (rm * rm + rm * rn_minus_1 + rm * rn + rn_minus_1 * rn)));
+	}
+	
 }

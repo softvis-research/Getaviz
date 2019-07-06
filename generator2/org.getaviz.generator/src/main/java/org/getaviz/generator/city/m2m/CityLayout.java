@@ -12,6 +12,7 @@ import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.city.m2m.Rectangle;
 import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.database.DatabaseConnector;
 
@@ -26,7 +27,7 @@ public class CityLayout {
 	// database object before transaction can save them
 	private static Map<Long, double[]> properties;
 
-	static void cityLayout(Long model, Map<Long, double[]> testMap) {
+	public static void cityLayout(Long model, Map<Long, double[]> testMap) {
 		properties = testMap;
 			arrangeChildrenRoot(model);
 			adjustPositions(getChildren(model), 0, 0, 0);
@@ -45,12 +46,12 @@ public class CityLayout {
 		// algorithm
 		for (Rectangle el : elements) {
 			List<CityKDTreeNode> pnodes = ptree.getFittingNodes(el);
-			Map<CityKDTreeNode, Double> preservers = new LinkedHashMap<>(); // LinkedHashMap
+			Map<CityKDTreeNode, Double> preservers = new LinkedHashMap<CityKDTreeNode, Double>(); // LinkedHashMap
 																									// necessary, so
 																									// elements are
 																									// ordered by
 																									// inserting-order
-			Map<CityKDTreeNode, Double> expanders = new LinkedHashMap<>();
+			Map<CityKDTreeNode, Double> expanders = new LinkedHashMap<CityKDTreeNode, Double>();
 			CityKDTreeNode targetNode = new CityKDTreeNode();
 			CityKDTreeNode fitNode = new CityKDTreeNode();
 
@@ -61,7 +62,7 @@ public class CityLayout {
 			}
 
 			// choose best-fitting pnode
-			if (!preservers.isEmpty()) {
+			if (preservers.isEmpty() != true) {
 				targetNode = bestFitIsPreserver(preservers.entrySet());
 			} else {
 				targetNode = bestFitIsExpander(expanders.entrySet());
@@ -78,7 +79,7 @@ public class CityLayout {
 			}
 
 			// set fitNode as occupied
-			fitNode.setOccupied();
+			fitNode.setOccupied(true);
 
 			// give Entity it's Position
 			setNewPositionFromNode(el, fitNode);
@@ -120,12 +121,12 @@ public class CityLayout {
 		// start algorithm
 		for (Rectangle el : elements) {
 			List<CityKDTreeNode> pnodes = ptree.getFittingNodes(el);
-			Map<CityKDTreeNode, Double> preservers = new LinkedHashMap<>(); // LinkedHashMap
+			Map<CityKDTreeNode, Double> preservers = new LinkedHashMap<CityKDTreeNode, Double>(); // LinkedHashMap
 																									// necessary, so
 																									// elements are
 																									// ordered by
 																									// inserting-order
-			Map<CityKDTreeNode, Double> expanders = new LinkedHashMap<>();
+			Map<CityKDTreeNode, Double> expanders = new LinkedHashMap<CityKDTreeNode, Double>();
 			CityKDTreeNode targetNode = new CityKDTreeNode();
 			CityKDTreeNode fitNode = new CityKDTreeNode();
 
@@ -136,7 +137,7 @@ public class CityLayout {
 			}
 
 			// choose best-fitting pnode
-			if (!preservers.isEmpty()) {
+			if (preservers.isEmpty() != true) {
 				targetNode = bestFitIsPreserver(preservers.entrySet());
 			} else {
 				targetNode = bestFitIsExpander(expanders.entrySet());
@@ -153,7 +154,7 @@ public class CityLayout {
 			}
 
 			// set fitNode as occupied
-			fitNode.setOccupied();
+			fitNode.setOccupied(true);
 
 			// give Entity it's Position
 			setNewPositionFromNode(el, fitNode);
@@ -188,7 +189,7 @@ public class CityLayout {
 
 	/* functions for algorithm */
 	private static List<Rectangle> sortChildrenAsRectangles(List<Node> children) {
-		List<Rectangle> elements = new ArrayList<>();
+		List<Rectangle> elements = new ArrayList<Rectangle>();
 		// copy all child-elements into a List<Rectangle> (for easier sort) with links
 		// to former entities
 		for (Node child : children) {
@@ -293,7 +294,7 @@ public class CityLayout {
 			node.setRightChild(new CityKDTreeNode(new Rectangle(nodeUpperLeftX, (nodeUpperLeftY + r.getLength()),
 					nodeBottomRightX, nodeBottomRightY)));
 			// set node as occupied (only leaves can contain elements)
-			node.setOccupied();
+			node.setOccupied(true);
 
 			if (DEBUG_Part2) {
 				System.out.println("\t\t\t" + info + "horizontal");
@@ -321,7 +322,7 @@ public class CityLayout {
 			node.setRightChild(new CityKDTreeNode(new Rectangle((nodeUpperLeftX + r.getWidth()), nodeUpperLeftY,
 					nodeBottomRightX, nodeBottomRightY)));
 			// set node as occupied (only leaves can contain elements)
-			node.setOccupied();
+			node.setOccupied(true);
 
 			if (DEBUG_Part2) {
 				System.out.println("\t\t\t" + info + "vertical");
@@ -408,7 +409,7 @@ public class CityLayout {
 	}
 
 	private static List<Node> getChildren(Long entity) {
-		List<Node> children = new ArrayList<>();
+		List<Node> children = new ArrayList<Node>();
 		StatementResult childs = connector.executeRead(
 				"MATCH (n)-[:CONTAINS]->(c)-[:VISUALIZES]->(element) WHERE (c:District OR c:Building) AND ID(n) = " + entity + " RETURN c, element.hash as hash ORDER BY element.hash");
 		while (childs.hasNext()) {

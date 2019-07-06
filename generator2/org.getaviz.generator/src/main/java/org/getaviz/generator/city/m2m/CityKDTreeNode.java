@@ -1,15 +1,15 @@
 package org.getaviz.generator.city.m2m;
 
 import java.util.List;
-
+import org.getaviz.generator.city.m2m.Rectangle;
 /**
  * This class is specifically designed for a KD-Tree used in SVIS-Generato,
  * following the example of Richard Wettel's CodeCity-Visualization Tool
  * 
  * @see <a href="http://www.blackpawn.com/texts/lightmaps/"></a>
  */
-class CityKDTreeNode {
-	CityKDTreeNode() {
+public class CityKDTreeNode {
+	public CityKDTreeNode() {
 		super();
 		this.leftChild = null;
 		this.rightChild = null;
@@ -17,7 +17,7 @@ class CityKDTreeNode {
 		this.occupied = false;
 	}
 
-	CityKDTreeNode(Rectangle rectangle) {
+	public CityKDTreeNode(Rectangle rectangle) {
 		super();
 		this.leftChild = null;
 		this.rightChild = null;
@@ -25,13 +25,21 @@ class CityKDTreeNode {
 		this.occupied = false;
 	}
 
+	public CityKDTreeNode(CityKDTreeNode leftChild, CityKDTreeNode rightChild, Rectangle rectangle) {
+		super();
+		this.leftChild = leftChild;
+		this.rightChild = rightChild;
+		this.rectangle = rectangle;
+		this.occupied = false;
+	}
+	
 	private CityKDTreeNode leftChild;
 	private CityKDTreeNode rightChild;
 	private Rectangle rectangle;
 	private boolean occupied;
 	
-	void isEmptyLeaf(Rectangle r, List<CityKDTreeNode> list){
-		if(this.rectangle.getWidth() >= r.getWidth() && this.rectangle.getLength() >= r.getLength() && !this.occupied){
+	public void isEmptyLeaf(Rectangle r, List<CityKDTreeNode> list){
+		if(this.rectangle.getWidth() >= r.getWidth() && this.rectangle.getLength() >= r.getLength() && this.occupied == false){
 			list.add(this);
 		}
 		if(this.leftChild != null){
@@ -41,23 +49,28 @@ class CityKDTreeNode {
 			this.rightChild.isEmptyLeaf(r, list);
 		}
 	}
-	CityKDTreeNode getLeftChild() {
+	public CityKDTreeNode getLeftChild() {
 		return leftChild;
 	}
-	void setLeftChild(CityKDTreeNode leftChild) {
+	public void setLeftChild(CityKDTreeNode leftChild) {
 		this.leftChild = leftChild;
 	}
-	CityKDTreeNode getRightChild() {
+	public CityKDTreeNode getRightChild() {
 		return rightChild;
 	}
-	void setRightChild(CityKDTreeNode rightChild) {
+	public void setRightChild(CityKDTreeNode rightChild) {
 		this.rightChild = rightChild;
 	}
-	Rectangle getRectangle() {
+	public Rectangle getRectangle() {
 		return rectangle;
 	}
-
-	void setOccupied() {
-		this.occupied = true;
+	public void setRectangle(Rectangle rectangle) {
+		this.rectangle = rectangle;
+	}
+	public boolean isOccupied() {
+		return occupied;
+	}
+	public void setOccupied(boolean occupied) {
+		this.occupied = occupied;
 	}
 }

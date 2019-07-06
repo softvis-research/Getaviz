@@ -6,6 +6,7 @@ import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Transaction;
+import org.neo4j.driver.v1.TransactionWork;
 import org.neo4j.driver.v1.types.Node;
 
 public class DatabaseConnector implements AutoCloseable {
@@ -43,17 +44,20 @@ public class DatabaseConnector implements AutoCloseable {
 
 	public void executeWrite(String... statements) {
 		try (Session session = driver.session(AccessMode.WRITE)) {
-			session.writeTransaction((Transaction tx) -> {
-				for (String statement : statements) {
-					tx.run(statement);
+			session.writeTransaction(new TransactionWork<Integer>() {
+				@Override 
+				public Integer execute(Transaction tx) {
+					for(String statement : statements) {
+						tx.run(statement);
+					}
+					return 1;
 				}
-				return 1;
-			});
+			});		
 		}
 	}
 	
 	public Node addNode(String statement, String parameterName) {
-		Node result;
+		Node result = null;
 		try (Session session = driver.session()) {
             try (Transaction tx = session.beginTransaction()) {
                 result = tx.run(statement + " RETURN " + parameterName).next().get(parameterName).asNode();
@@ -63,9 +67,22 @@ public class DatabaseConnector implements AutoCloseable {
 		return result;
 	}
 	
+	public void addRelationship(Long from, Long to, String relationship) {
+		try (Session session = driver.session(AccessMode.WRITE)) {
+			session.writeTransaction(new TransactionWork<Integer>() {
+				@Override 
+				public Integer execute(Transaction tx) {
+						tx.run(String.format("MATCH (from),(to) WHERE ID(from) = %d AND ID(to) = %d CREATE (from)-[r:%s]->(to)", from, to, relationship));
+					return 1;
+				}
+			});		
+		}
+	}
+	
 	public StatementResult executeRead(String statement) {
 		try (Session session = driver.session(AccessMode.READ)) {
-			return session.run(statement);
+			StatementResult result = session.run(statement);
+			return result;
 		}
 	}
 	
@@ -78,7 +95,7 @@ public class DatabaseConnector implements AutoCloseable {
 	}
 
 	@Override
-	public void close() {
+	public void close() throws Exception {
 		driver.close();
 	}
 }

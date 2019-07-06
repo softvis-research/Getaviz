@@ -5,33 +5,27 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import java.io.IOException;
-
-import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
-public class DatabaseBuilder implements Step {
-	private Log log = LogFactory.getLog(this.getClass());
-	private DatabaseConnector connector = DatabaseConnector.getInstance();
-	private Runtime runtime = Runtime.getRuntime();
-	private String inputFiles;
+public class DatabaseBuilder {
+	Log log = LogFactory.getLog(this.getClass());
+	SettingsConfiguration config = SettingsConfiguration.getInstance();
+	DatabaseConnector connector = DatabaseConnector.getInstance();
+	Runtime runtime = Runtime.getRuntime();
 
-	public DatabaseBuilder(SettingsConfiguration config) {
-		this.inputFiles = config.getInputFiles();
-	}
-
-	public void run() {
+	public DatabaseBuilder() {
 		scan();
 		enhance();
 	}
 
 	public void scan() {
 		log.info("jQA scan started.");
-		log.info("Scanning from URI(s) " + inputFiles);
+		log.info("Scanning from URI(s) " + config.getInputFiles());
 		try {
-			Process pScan = runtime.exec("/opt/jqassistant/bin/jqassistant.sh scan -reset -u " + inputFiles + " -storeUri " +
+			Process pScan = runtime.exec("/opt/jqassistant/bin/jqassistant.sh scan -reset -u " + config.getInputFiles() + " -storeUri " +
 					DatabaseConnector.getDatabaseURL());
 			pScan.waitFor();
 		} catch (InterruptedException e) {
@@ -60,7 +54,7 @@ public class DatabaseBuilder implements Step {
 	}
 
 	private String createHash(String fqn) {
-		return "ID_" + DigestUtils.sha1Hex(fqn);
+		return "ID_" + DigestUtils.sha1Hex(fqn + config.getRepositoryName() + config.getRepositoryOwner());
 	}
 
 	private String labelPrimitives() {

@@ -12,6 +12,7 @@ import org.getaviz.generator.database.Labels;
 public class BuildingSegmentComparator implements Comparable<BuildingSegmentComparator> {
 	private Node segment;
 	private Node relatedEntity;
+	// Temporary attribute to use db and famix in same transformation
 	private int coarseValue; // compares class elements (methods <-> attributes)
 	private int fineValue; // compared after coarseValue
 	private int finerValue; // compared after finevalue, if it was equal
@@ -38,27 +39,40 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 		case NOS: // numberOfStatements compared directly in compareTo-method
 			finerValue = getCompValue_Type(relatedEntity); // If NOS are equal, sort for types
 			break;
-			case UNSORTED:
-			default:
+		case UNSORTED:
+			break;
+		default:
 			break;
 		}
 	}
 
-	private static int getCompValue_Visibility(final Node relatedEntity) {
+	static int getCompValue_Visibility(final String modifier) {
+		if (modifier.indexOf("private") >= 0) {
+			return SortPriorities_Visibility.PRIVATE;
+		} else if (modifier.indexOf("protected") >= 0) {
+			return SortPriorities_Visibility.PROTECTED;
+		} else if (modifier.indexOf("public") >= 0) {
+			return SortPriorities_Visibility.PUBLIC;
+		} else {
+			return SortPriorities_Visibility.PACKAGE;
+		}
+
+	}
+
+	static int getCompValue_Visibility(final Node relatedEntity) {
 		String visbility = relatedEntity.get("visibility").asString();
-		switch (visbility) {
-			case "private":
-				return SortPriorities_Visibility.PRIVATE;
-			case "protected":
-				return SortPriorities_Visibility.PROTECTED;
-			case "public":
-				return SortPriorities_Visibility.PUBLIC;
-			default:
-				return SortPriorities_Visibility.PACKAGE;
+		if (visbility.equals("private")) {
+			return SortPriorities_Visibility.PRIVATE;
+		} else if (visbility.equals("protected")) {
+			return SortPriorities_Visibility.PROTECTED;
+		} else if (visbility.equals("public")) {
+			return SortPriorities_Visibility.PUBLIC;
+		} else {
+			return SortPriorities_Visibility.PACKAGE;
 		}
 	}
 
-	private static int getCompValue_Type(final Node relatedEntity) {
+	static int getCompValue_Type(final Node relatedEntity) {
 		if (relatedEntity.hasLabel(Labels.Field.name())) {
 			boolean isPrimitive = false;
 			StatementResult result = connector.executeRead("MATCH (n)-[OF_TYPE]->(t:Primitive) WHERE ID(n) = " + relatedEntity.id() + " RETURN t");
@@ -91,9 +105,15 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 
 	@Override
 	public int compareTo(final BuildingSegmentComparator comp) {
+		int result;
 		// Coarse sorting after attributes and methods if elements aren't the same type
 		// of class element
-		int result = Integer.compare(coarseValue, comp.coarseValue);
+		if (coarseValue < comp.coarseValue)
+			result = -1;
+		else if (coarseValue > comp.coarseValue)
+			result = 1;
+		else
+			result = 0;
 
 		if (result != 0)
 			return result;
@@ -101,7 +121,9 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 		// Sorting after fine sort mode between equal class elements types (e.g. method
 		// compared to method)
 		switch (config.getClassElementsSortModeFine()) {
-			case ALPHABETICALLY:
+		case UNSORTED:
+			return 0;
+		case ALPHABETICALLY:
 			String name = relatedEntity.get("name").asString();
 			result = name.compareTo(comp.relatedEntity.get("name").asString());
 			break;
@@ -123,8 +145,7 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 				else
 					return 0;
 			break;
-			case UNSORTED:
-			default:
+		default:
 			return 0;
 		}
 
@@ -139,7 +160,12 @@ public class BuildingSegmentComparator implements Comparable<BuildingSegmentComp
 	private int compareNOS(final BuildingSegmentComparator comp) {
 		long numberOfStatements = relatedEntity.get("effectiveLineCount").asLong(0);
 		long numberOfStatementsComp = comp.relatedEntity.get("effectiveLineCount").asLong(0);
-		return Long.compare(numberOfStatementsComp, numberOfStatements);
+		if (numberOfStatements < numberOfStatementsComp)
+			return 1;
+		else if (numberOfStatements > numberOfStatementsComp)
+			return -1;
+		else
+			return 0;
 	}
 
 	public Node getSegment() {

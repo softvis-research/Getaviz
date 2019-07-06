@@ -389,11 +389,15 @@ public class JQA2JSON {
 		return removeBrackets(parameterList);
 	}
 
-	private String removeBrackets(List<String> list) {
+	public String removeBrackets(String[] array) {
+		return removeBrackets(array.toString());
+	}
+	
+	public String removeBrackets(List<String> list) {
 		return removeBrackets(list.toString());
 	}
 
-	private String removeBrackets(String string) {
+	public String removeBrackets(String string) {
 		return StringUtils.remove(StringUtils.remove(string, "["), "]");
 	}
 }

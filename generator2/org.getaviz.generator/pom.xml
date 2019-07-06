@@ -155,8 +155,37 @@
 				<configuration>
 					<skip>false</skip>
 					<quiet>true</quiet>
+					<!--<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>-->
 				</configuration>
 			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.codehaus.mojo</groupId> -->
+<!-- 				<artifactId>exec-maven-plugin</artifactId> -->
+<!-- 				<version>1.4.0</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<phase>deploy</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>java</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<executable>java</executable> -->
+<!-- 					<includeProjectDependencies>true</includeProjectDependencies> -->
+<!-- 					<includePluginDependencies>true</includePluginDependencies> -->
+<!-- 					<arguments> -->
+<!-- 						uncomment to increase java heap size -->
+<!-- 						<argument>-Xmx8g</argument> -->
+<!-- 						<argument>-classpath</argument> -->
+<!-- 						<classpath /> -->
+<!-- 						<argument>org.getaviz.generator.Generator</argument> -->
+<!-- 						<argument>-p</argument> -->
+<!-- 						<argument>runtimeProject=${project.basedir}</argument> -->
+<!-- 					</arguments> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>

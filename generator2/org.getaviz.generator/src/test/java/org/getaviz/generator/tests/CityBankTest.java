@@ -2,9 +2,8 @@ package org.getaviz.generator.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.Step;
-import org.getaviz.generator.StepFactory;
+import org.getaviz.generator.city.m2m.City2City;
+import org.getaviz.generator.city.s2m.JQA2City;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
 import org.junit.jupiter.api.AfterAll;
@@ -12,24 +11,19 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
-class CityBankTest {
+public class CityBankTest {
 
-	private static DatabaseConnector connector;
-	private static Bank mockup = new Bank();
+	static DatabaseConnector connector;
+	static Bank mockup = new Bank();
 
 	@BeforeAll
 	static void setup() {
 		mockup.setupDatabase("./test/databases/CityBankTest.db");
 		mockup.loadProperties("CityBankTest.properties");
 		connector = mockup.getConnector();
-		SettingsConfiguration config = SettingsConfiguration.getInstance();
-		StepFactory factory = new StepFactory(config);
-		Step s2m = factory.createSteps2m();
-		Step m2m = factory.createStepm2m();
-		//Step m2t = factory.createStepm2t();
-		s2m.run();
-		m2m.run();
-		//m2t.run();
+
+		new JQA2City();
+		new City2City();
 	}
 	
 	@AfterAll

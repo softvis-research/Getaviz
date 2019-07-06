@@ -1,50 +1,32 @@
 package org.getaviz.generator.city.m2t;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.Step;
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.SettingsConfiguration.BuildingType;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import java.io.IOException;
 import java.io.FileWriter;
-import org.getaviz.generator.output.AFrame;
+import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.types.Node;
 import java.util.ArrayList;
 import java.util.List;
 
-public class City2AFrame implements Step {
+import org.getaviz.generator.OutputFormatHelper;
+
+public class City2AFrame {
+	private SettingsConfiguration config = SettingsConfiguration.getInstance();
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
-	private BuildingType buildingType;
-	private String outputPath;
-	private String buildingTypeAsString;
-	private boolean showAttributesAsCylinders;
-	private double panelSeparatorHeight;
-	private String color;
-	private boolean showBuildingBase;
-	private AFrame outputFormat;
 
-	public City2AFrame(SettingsConfiguration config) {
-		this.buildingType = config.getBuildingType();
-		this.outputPath = config.getOutputPath();
-		this.buildingTypeAsString = config.getBuildingTypeAsString();
-		this.showAttributesAsCylinders = config.isShowAttributesAsCylinders();
-		this.panelSeparatorHeight = config.getPanelSeparatorHeight();
-		this.color = config.getCityColor("black");
-		this.showBuildingBase = config.isShowBuildingBase();
-		this.outputFormat = new AFrame();
-	}
-
-	public void run() {
+	public City2AFrame() {
 		log.info("City2AFrame has started");
 		FileWriter fw = null;
 		String fileName = "model.html";
 
 		try {
-			fw = new FileWriter(outputPath + fileName);
-			fw.write(outputFormat.head() + toAFrameModel() + outputFormat.tail());
+			fw = new FileWriter(config.getOutputPath() + fileName);
+			fw.write(OutputFormatHelper.AFrameHead() + toAFrameModel() + OutputFormatHelper.AFrameTail());
 		} catch (IOException e) {
 			log.error("Could not create file");
 		} finally {
@@ -64,23 +46,23 @@ public class City2AFrame implements Step {
 		StringBuilder segments = new StringBuilder();
 		connector.executeRead(
 				"MATCH (n:Model)-[:CONTAINS*]->(d:District)-[:HAS]->(p:Position) WHERE n.building_type = \'"
-						+ buildingTypeAsString + "\' RETURN d,p")
+						+ config.getBuildingTypeAsString() + "\' RETURN d,p")
 				.forEachRemaining((record) -> {
 					districts.append(toDistrict(record.get("d").asNode(), record.get("p").asNode()));
 				});
-		if (buildingType == BuildingType.CITY_ORIGINAL || showBuildingBase) {
+		if (config.getBuildingType() == BuildingType.CITY_ORIGINAL || config.isShowBuildingBase()) {
 			connector.executeRead(
 					"MATCH (n:Model)-[:CONTAINS*]->(b:Building)-[:HAS]->(p:Position) WHERE n.building_type = \'"
-							+ buildingTypeAsString + "\' RETURN b,p")
+							+ config.getBuildingTypeAsString() + "\' RETURN b,p")
 					.forEachRemaining((record) -> {
 						buildings.append(toBuilding(record.get("b").asNode(), record.get("p").asNode()));
 					});
 		}
 
-		if (!(buildingType == BuildingType.CITY_ORIGINAL)) {
+		if (!(config.getBuildingType() == BuildingType.CITY_ORIGINAL)) {
 			connector.executeRead(
 					"MATCH (n:Model)-[:CONTAINS*]->(bs:BuildingSegment)-[:HAS]->(p:Position) WHERE n.building_type = \'"
-							+ buildingTypeAsString + "\' RETURN bs,p")
+							+ config.getBuildingTypeAsString() + "\' RETURN bs,p")
 					.forEachRemaining((record) -> {
 						Node segment = record.get("bs").asNode();
 						if (segment.hasLabel(Labels.Floor.name())) {
@@ -161,8 +143,8 @@ public class City2AFrame implements Step {
 		double height = segment.get("height").asDouble();
 		double length = segment.get("length").asDouble();
 		StringBuilder builder = new StringBuilder();
-		if (buildingType == BuildingType.CITY_PANELS && entity.hasLabel(Labels.Field.name())
-				&& showAttributesAsCylinders) {
+		if (config.getBuildingType() == BuildingType.CITY_PANELS && entity.hasLabel(Labels.Field.name())
+				&& config.isShowAttributesAsCylinders()) {
 			builder.append("<a-cylinder id=\"" + entity.get("hash").asString() + "\"");
 			builder.append("\n");
 			builder.append(buildPosition(position));
@@ -213,9 +195,9 @@ public class City2AFrame implements Step {
 				builder.append("\n");
 				builder.append("\t radius=\"" + separator.get("radius") + "\" ");
 				builder.append("\n");
-				builder.append("\t height=\"" + panelSeparatorHeight + "\" ");
+				builder.append("\t height=\"" + config.getPanelSeparatorHeight() + "\" ");
 				builder.append("\n");
-				builder.append("\t color=\"" + color + "\"");
+				builder.append("\t color=\"" + config.getCityColorHex("black") + "\"");
 				builder.append("\n");
 				builder.append("\t shader=\"flat\"");
 				builder.append("\n");
@@ -234,11 +216,11 @@ public class City2AFrame implements Step {
 				builder.append("\n");
 				builder.append("\t width=\"" + separator.get("width") + "\"");
 				builder.append("\n");
-				builder.append("\t height=\"" + panelSeparatorHeight + "\"");
+				builder.append("\t height=\"" + config.getPanelSeparatorHeight() + "\"");
 				builder.append("\n");
 				builder.append("\t depth=\"" + separator.get("length") + "\"");
 				builder.append("\n");
-				builder.append("\t color=\"" + color + "\"");
+				builder.append("\t color=\"" + config.getCityColorHex("black") + "\"");
 				builder.append("\n");
 				builder.append("\t shader=\"flat\"");
 				builder.append("\n");

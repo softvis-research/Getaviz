@@ -1,38 +1,28 @@
 package org.getaviz.generator.rd.m2t;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
+import org.getaviz.generator.SettingsConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.Step;
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.output.AFrame;
+import org.getaviz.generator.OutputFormatHelper;
+import java.io.FileWriter;
+import java.io.IOException;
 import org.neo4j.driver.v1.types.Node;
+import org.getaviz.generator.database.DatabaseConnector;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RD2AFrame implements Step {
+public class RD2AFrame {
+	private SettingsConfiguration config = SettingsConfiguration.getInstance();
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
-	private double ringWidth;
-	private String outputPath;
-	private AFrame outputFormat;
 
-	public RD2AFrame(SettingsConfiguration config) {
-		this.ringWidth = config.getRDRingWidth();
-		this.outputPath = config.getOutputPath();
-		this.outputFormat = new AFrame();
-	}
-
-	public void run() {
+	public RD2AFrame() {
 		log.info("RD2AFrame has started");
 		FileWriter fw = null;
 		String fileName = "model.html";
 		try {
-			fw = new FileWriter(outputPath+ fileName);
-			fw.write(outputFormat.head() + toX3DOMRD() + outputFormat.tail());
+			fw = new FileWriter(config.getOutputPath() + fileName);
+			fw.write(OutputFormatHelper.AFrameHead() + toX3DOMRD() + OutputFormatHelper.AFrameTail());
 		} catch (IOException e) {
 			log.error("Could not create file");
 		} finally {
@@ -65,7 +55,7 @@ public class RD2AFrame implements Step {
 					segments.add(result.get("ds").asNode());
 				});
 		StringBuilder builder = new StringBuilder();
-		if (radius - ringWidth == 0) {
+		if (radius - config.getRDRingWidth() == 0) {
 			builder.append("<a-circle id=\"" + entity.get("hash").asString() + "\" ");
 			builder.append("\n");
 			builder.append("\t position=\"" + position.get("x") + " ");
@@ -97,7 +87,7 @@ public class RD2AFrame implements Step {
 			builder.append(position.get("y") + " ");
 			builder.append(position.get("z") + "\"");
 			builder.append("\n");
-			builder.append("\t radius-inner=\"" + (radius - ringWidth) + "\"");
+			builder.append("\t radius-inner=\"" + (radius - config.getRDRingWidth()) + "\"");
 			builder.append("\n");
 			builder.append("\t radius-outer=\"" + radius + "\" ");
 			builder.append("\n");

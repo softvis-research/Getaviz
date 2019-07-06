@@ -11,23 +11,26 @@ import org.neo4j.driver.v1.types.Node;
  * available to ensure data validity, for interaction use changeRectangle
  */
 public class Rectangle implements Comparable<Rectangle> {
-	private double width;
-	private double length;
-	private double area;
-	private Node nodeLink;
-	private double upperLeftX;
-	private double upperLeftY;
-	private double bottomRightX;
-	private double bottomRightY;
-	private double centerX;
-	private double centerY;
+//	@Accessors(PUBLIC_GETTER) var double width
+//	@Accessors(PUBLIC_GETTER) var double length
+	double width;
+	double length;
+	double area;
+//	@Accessors(PUBLIC_GETTER, PUBLIC_SETTER) var Node nodeLink
+	Node nodeLink;
+	double upperLeftX;
+	double upperLeftY;
+	double bottomRightX;
+	double bottomRightY;
+	double centerX;
+	double centerY;
 
-	Rectangle() {
+	public Rectangle() {
 		super();
 		changeRectangle(0, 0, 0, 0);
 	}
 
-	Rectangle(double x1, double y1, double x2, double y2) {
+	public Rectangle(double x1, double y1, double x2, double y2) {
 		super();
 		changeRectangle(x1, y1, x2, y2);
 	}
@@ -44,7 +47,7 @@ public class Rectangle implements Comparable<Rectangle> {
 	 *                      UpperRight 3: P(x|y) is BottomRight 4: P(x|y) is
 	 *                      BottomLeft
 	 */
-	Rectangle(double pX, double pY, double width, double length, int pointPosition) {
+	public Rectangle(double pX, double pY, double width, double length, int pointPosition) {
 		super();
 		changeRectangle(pX, pY, width, length, pointPosition);
 	}
@@ -57,7 +60,7 @@ public class Rectangle implements Comparable<Rectangle> {
 	 * @param x2 corner2 of Rectangle
 	 * @param y2 corner2 of Rectangle
 	 */
-	void changeRectangle(double x1, double y1, double x2, double y2) {
+	public void changeRectangle(double x1, double y1, double x2, double y2) {
 		setCornerPoints(x1, y1, x2, y2);
 		update();
 	}
@@ -74,7 +77,7 @@ public class Rectangle implements Comparable<Rectangle> {
 	 *                      UpperRight 3: P(x|y) is BottomRight 4: P(x|y) is
 	 *                      BottomLeft
 	 */
-	private void changeRectangle(double x, double y, double width, double length, int pointPosition) {
+	public void changeRectangle(double x, double y, double width, double length, int pointPosition) {
 		// method forces width & length to equal/be greater than zero: using absolute
 		// value
 		double w = Math.abs(width);
@@ -103,7 +106,7 @@ public class Rectangle implements Comparable<Rectangle> {
 		update();
 	}
 
-	private void setCornerPoints(double x1, double y1, double x2, double y2) {
+	public void setCornerPoints(double x1, double y1, double x2, double y2) {
 		// upperLeftCorner of a rectangle always has the leftmost X-coordinate and the
 		// smallest Y-coordinate as it's values
 		// bottomRightCorner always uses the rightmost X-coordinate and the highest
@@ -141,7 +144,7 @@ public class Rectangle implements Comparable<Rectangle> {
 		}
 	}
 
-	double getArea() {
+	public double getArea() {
 		return area;
 	}
 	
@@ -153,35 +156,35 @@ public class Rectangle implements Comparable<Rectangle> {
 		return width;
 	}
 	
-	double getBottomRightX() {
+	public double getBottomRightX() {
 		return bottomRightX;
 	}
 	
-	double getBottomRightY() {
+	public double getBottomRightY() {
 		return bottomRightY;
 	}
 	
-	double getCenterX() {
+	public double getCenterX() {
 		return centerX;
 	}
 	
-	double getCenterY() {
+	public double getCenterY() {
 		return centerY;
 	}
 	
-	double getUpperLeftX() {
+	public double getUpperLeftX() {
 		return upperLeftX;
 	}
 	
-	double getUpperLeftY() {
+	public double getUpperLeftY() {
 		return upperLeftY;
 	}
 	
-	Node getNodeLink() {
+	public Node getNodeLink() {
 		return nodeLink;
 	}
 	
-	void setNodeLink(Node nodeLink) {
+	public void setNodeLink(Node nodeLink) {
 		this.nodeLink = nodeLink;
 	}
 }
