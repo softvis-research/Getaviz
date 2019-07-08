@@ -21,21 +21,21 @@ var sourceCodeController = (function(){
 	function activate(rootDiv){
 
         //load zTree javascript-files
-		$.getScript("libs/prism/prism.js", function(){
+		$.getScript("node_modules/prismjs/prism.js", function(){
 			$.getScript("scripts/SourceCode/CodeHelperFunctions.js", function(){	
 				
 				//load zTree css-files
 				let cssLink = document.createElement("link");
 				cssLink.type = "text/css";
 				cssLink.rel = "stylesheet";
-				cssLink.href = "libs/prism/prism.css";
+				cssLink.href = "node_modules/prismjs/themes/prism.css";
 				document.getElementsByTagName("head")[0].appendChild(cssLink);
 				
 				
 				cssLink = document.createElement("link");
 				cssLink.type = "text/css";
 				cssLink.rel = "stylesheet";
-				cssLink.href = "libs/prism/prismPluginCodeController.css";
+				cssLink.href = "scripts/SourceCode/prismPluginCodeController.css";
 				document.getElementsByTagName("head")[0].appendChild(cssLink);
 				
 				//create html elements

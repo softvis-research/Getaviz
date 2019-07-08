@@ -5,6 +5,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Getaviz Generator</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern></url-pattern>
     </servlet-mapping>
 </web-app> 
