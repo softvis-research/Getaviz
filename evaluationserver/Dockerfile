@@ -1,4 +1,4 @@
-FROM getaviz/evaluationserver-base:1.2.0
+FROM getaviz/evaluationserver-base:1.2.1
 WORkDIR /usr/src/app/
 COPY . .
 RUN bundle install --jobs 20 --retry 5 && gem install bundler
