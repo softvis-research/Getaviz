@@ -25,8 +25,8 @@ Getaviz is mainly developed by the research group [Visual Software Analytics](ht
 * [Pascal Kovacs](https://github.com/PascalKovacs)
 * [David Baum](http://home.uni-leipzig.de/svis/Research%20Group/#DavidBaum)
 
-Many thanks to all the contributors who have improved Getaviz by implementing new features or fixing bugs, especially: Denise Zilch, [André Naumann](https://github.com/sk2andy), [Stefan Faulhaber](https://github.com/StefanFaulhaber), [Dan Häberlein](https://github.com/dhaeb),  [Lisa Vogelsberg](https://github.com/Valekta/), [Aaron Sillus](https://github.com/AaronSil), and [Jens Thomann](https://github.com/jt23coqi)
-
+Many thanks to all the contributors who have improved Getaviz by implementing new features or fixing bugs, especially: Denise Zilch, [André Naumann](https://github.com/sk2andy), [Stefan Faulhaber](https://github.com/StefanFaulhaber), [Dan Häberlein](https://github.com/dhaeb),  [Lisa Vogelsberg](https://github.com/Valekta/), [Aaron Sillus](https://github.com/AaronSil), [Jens Thomann](https://github.com/jt23coqi), and [Vladislavs Terjaniks](https://github.com/VlaD-T).
+ 
 ## Publications
 * David Baum, Jens Dietrich, Craig Anslow, Richard Müller: [Visualizing Design Erosion: How Big Balls of Mud are Made](https://arxiv.org/abs/1807.06136), IEEE VISSOFT, 2018.
 * David Baum. Jan Schilbach, Pascal Kovacs, Ulrich Eisenecker, Richard Müller: [GETAVIZ: Generating Structural, Behavioral, and Evolutionary Views of Software Systems for Empirical Evaluation](https://www.researchgate.net/publication/320083290_GETAVIZ_Generating_Structural_Behavioral_and_Evolutionary_Views_of_Software_Systems_for_Empirical_Evaluation), IEEE VISSOFT, 2017.
