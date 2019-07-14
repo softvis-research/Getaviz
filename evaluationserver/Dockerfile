@@ -1,5 +1,7 @@
 FROM ruby:2.4.2-slim
 
+
+
 RUN apt-get update && apt-get install -qq -y netcat-openbsd build-essential nodejs libxslt-dev libxml2-dev zlib1g-dev libmysqlclient-dev --fix-missing --no-install-recommends
 
 RUN mkdir /app

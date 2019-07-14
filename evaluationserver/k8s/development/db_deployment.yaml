@@ -51,12 +51,12 @@ spec:
         - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-pass
+              name: mysql-secret
               key: password
         - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
-              name: mysql-user
+              name: mysql-secret
               key: user
         - name: MYSQL_DATABASE
           value: "database"

@@ -46,12 +46,12 @@ spec:
         - name: DEVELOPMENT_MYSQL_DB_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: mysql-pass
+              name: mysql-secret
               key: password
         - name: DEVELOPMENT_MYSQL_DB_USERNAME
           valueFrom:
             secretKeyRef:
-              name: mysql-user
+              name: mysql-secret
               key: user
         ports:
         - containerPort: 3000

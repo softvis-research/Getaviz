@@ -22,12 +22,7 @@ public/system/tests/
 source.sh
 .env
 
-db-deployment.yaml
-db-service.yaml
-web-claim0-persistentvolumeclaim.yaml
-web-deployment.yaml
-web-env-configmap.yaml
-web-service.yaml
+
 coverage
 
 # Ignore encrypted secrets key file.
