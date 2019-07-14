@@ -15,20 +15,12 @@
 		</site>
 	</distributionManagement>
 	<properties>
-		<xtend.version>2.16.0</xtend.version>
-		<neo4j.version>3.5.1</neo4j.version>
+		<neo4j-driver.version>1.7.2</neo4j-driver.version>
 		<junit.jupiter.version>5.3.1</junit.jupiter.version>
 		<dependency.locations.enabled>false</dependency.locations.enabled>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
-		<!-- Apache Commons -->
-		<!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.2</version>
-		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -58,40 +50,14 @@
 			<artifactId>commons-beanutils</artifactId>
 			<version>1.9.3</version>
 		</dependency>
-
 		<!-- neo4j -->
-		<!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-graphdb-api -->
 		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j-graphdb-api</artifactId>
-			<version>${neo4j.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.neo4j/neo4j-resource -->
-		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j-resource</artifactId>
-			<version>${neo4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j</artifactId>
-			<version>${neo4j.version}</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.neo4j.test/neo4j-harness -->
-		<dependency>
-			<groupId>org.neo4j.test</groupId>
-			<artifactId>neo4j-harness</artifactId>
-			<version>${neo4j.version}</version>
-			<scope>test</scope>
+			<groupId>org.neo4j.driver</groupId>
+			<artifactId>neo4j-java-driver</artifactId>
+			<version>${neo4j-driver.version}</version>
 		</dependency>
 
 		<!-- Other -->
-		<!-- https://mvnrepository.com/artifact/org.eclipse.xtend/org.eclipse.xtend.lib -->
-		<dependency>
-			<groupId>org.eclipse.xtend</groupId>
-			<artifactId>org.eclipse.xtend.lib</artifactId>
-			<version>${xtend.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -141,36 +107,37 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.11.1</version>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.xtend</groupId>
-			<artifactId>xtend-maven-plugin</artifactId>
-			<version>${xtend.version}</version>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>neo4j</artifactId>
+			<version>1.11.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>1.11.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j</artifactId>
+			<version>3.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-bolt</artifactId>
+			<version>3.5.1</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
-		<sourceDirectory>src</sourceDirectory>
 		<plugins>
-			<plugin>
-				<groupId>org.eclipse.xtend</groupId>
-				<artifactId>xtend-maven-plugin</artifactId>
-				<version>${xtend.version}</version>
-				<configuration>
-					<outputDirectory>${basedir}/xtend-gen</outputDirectory>
-					<testOutputDirectory>${basedir}/test-xtend-gen</testOutputDirectory>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>compile</goal>
-							<goal>testCompile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -180,88 +147,92 @@
 					<target>1.8</target>
 					<useIncrementalCompilation>true</useIncrementalCompilation>
 				</configuration>
-				<executions>
-					<execution>
-						<id>default-testCompile</id>
-						<phase>none</phase>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.19.1</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.junit.platform</groupId>
-						<artifactId>junit-platform-surefire-provider</artifactId>
-						<version>1.1.0</version>
-					</dependency>
-					<dependency>
-						<groupId>org.junit.jupiter</groupId>
-						<artifactId>junit-jupiter-engine</artifactId>
-						<version>5.3.1</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.10.3</version>
 				<configuration>
-					<sourcepath>${basedir}/xtend-gen/:${basedir}/src/</sourcepath>
 					<skip>false</skip>
 					<quiet>true</quiet>
-					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+					<!--<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>-->
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.4.0</version>
-				<executions>
-					<execution>
-						<phase>deploy</phase>
-						<goals>
-							<goal>java</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<executable>java</executable>
-					<includeProjectDependencies>true</includeProjectDependencies>
-					<includePluginDependencies>true</includePluginDependencies>
-					<arguments>
-						<argument>-Dlog4j.configuration=file:src/main/resources/log4j-console.properties</argument>
-						<!-- uncomment to increase java heap size -->
-						<argument>-Xmx8g</argument>
-						<argument>-classpath</argument>
-						<classpath />
-						<argument>org.getaviz.generator.Generator</argument>
-						<argument>-p</argument>
-						<argument>runtimeProject=${project.basedir}</argument>
-					</arguments>
-				</configuration>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.codehaus.mojo</groupId> -->
+<!-- 				<artifactId>exec-maven-plugin</artifactId> -->
+<!-- 				<version>1.4.0</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<phase>deploy</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>java</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<executable>java</executable> -->
+<!-- 					<includeProjectDependencies>true</includeProjectDependencies> -->
+<!-- 					<includePluginDependencies>true</includePluginDependencies> -->
+<!-- 					<arguments> -->
+<!-- 						uncomment to increase java heap size -->
+<!-- 						<argument>-Xmx8g</argument> -->
+<!-- 						<argument>-classpath</argument> -->
+<!-- 						<classpath /> -->
+<!-- 						<argument>org.getaviz.generator.Generator</argument> -->
+<!-- 						<argument>-p</argument> -->
+<!-- 						<argument>runtimeProject=${project.basedir}</argument> -->
+<!-- 					</arguments> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.2.2</version>
 			</plugin>
-		</plugins>
-	</build>
-	<reporting>
-		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-				</configuration>
+				<groupId>com.buschmais.jqassistant</groupId>
+				<artifactId>jqassistant-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>scan</goal>
+							<goal>analyze</goal>
+						</goals>
+						<configuration>
+							<groups>
+								<group>packages:Default</group>
+							</groups>
+							<warnOnSeverity>MINOR</warnOnSeverity>
+							<failOnSeverity>MAJOR</failOnSeverity>
+							<rule>
+								<defaultConceptSeverity>INFO</defaultConceptSeverity>
+							</rule>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
-	</reporting>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M3</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.junit.jupiter</groupId>
+							<artifactId>junit-jupiter-engine</artifactId>
+							<version>5.3.1</version>
+						</dependency>
+					</dependencies>
+					<configuration>
+						<argLine>-Duser.language=en -Duser.region=US</argLine>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>

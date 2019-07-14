@@ -1,0 +1,20 @@
+/* group everything nice and tight */
+td {
+   padding: 1px;
+}
+/* margin-left equals distance of the info-icon relative to the label */
+.jqx-info-icon {
+    margin-left: 150px !important;
+}
+/* remove border of the form */
+table {
+	border: 0px !important;
+}
+/* width for dropDownLists */
+.jqx-listbox {
+ 	width: 198px !important;
+}
+/* font-size for labels, inputFields & dropDownLists */
+.jqx-widget-content {
+	font-size: 12px !important;
+}
