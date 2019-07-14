@@ -90,3 +90,8 @@ gem 'rails_serve_static_assets'
 gem "cocoon"
 gem 'multi-select-rails'
 gem "puma"
+
+
+group :development do
+  gem 'seed_dump'
+end
