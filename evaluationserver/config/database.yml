@@ -23,6 +23,7 @@ test:
   pool: 5
   username: "<%=ENV['TEST_MYSQL_DB_USERNAME']%>"
   password: "<%=ENV['TEST_MYSQL_DB_PASSWORD']%>"
+  host: "<%=ENV['DEVELOPMENT_MYSQL_DB_HOST']%>"
 
 production:
   adapter: mysql2
