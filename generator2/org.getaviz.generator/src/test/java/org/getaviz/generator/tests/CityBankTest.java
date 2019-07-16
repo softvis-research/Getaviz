@@ -52,7 +52,7 @@ class CityBankTest {
 				.executeRead("MATCH (building:Building)-[:VISUALIZES]->(:Type) RETURN count(building) AS result")
 				.single();
 		int numberOfVisualizedTypes = result.get("result").asInt();
-		assertEquals(4, numberOfVisualizedTypes);
+		assertEquals(7, numberOfVisualizedTypes);
 	}
 
 	@Test
@@ -65,9 +65,9 @@ class CityBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(9.5, x);
+		assertEquals(11.0, x);
 		assertEquals(2.5, y);
-		assertEquals(11.5, z);
+		assertEquals(14.0, z);
 	}
 
 	@Test
@@ -80,9 +80,9 @@ class CityBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(9.5, x);
-		assertEquals(4, y);
-		assertEquals(13.5, z);
+		assertEquals(10.5, x);
+		assertEquals(5, y);
+		assertEquals(17.5, z);
 	}
 
 	@Test
@@ -95,8 +95,8 @@ class CityBankTest {
 		double height = result.get("height").asDouble();
 		double length = result.get("length").asDouble();
 		double width = result.get("width").asDouble();
-		assertEquals(2.0, height);
-		assertEquals(1.0, length);
-		assertEquals(1.0, width);
+		assertEquals(4.0, height);
+		assertEquals(3.0, length);
+		assertEquals(3.0, width);
 	}
 }

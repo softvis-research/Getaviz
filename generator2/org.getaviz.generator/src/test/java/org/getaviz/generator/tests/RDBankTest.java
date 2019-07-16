@@ -48,7 +48,7 @@ class RDBankTest {
 		Record result = connector.executeRead("MATCH (disk:Disk)-[:VISUALIZES]->(:Type) RETURN count(disk) AS result")
 				.single();
 		int numberOfVisualizedTypes = result.get("result").asInt();
-		assertEquals(4, numberOfVisualizedTypes);
+		assertEquals(7, numberOfVisualizedTypes);
 	}
 
 	@Test
@@ -57,7 +57,7 @@ class RDBankTest {
 				.executeRead("MATCH (segment:DiskSegment)-[:VISUALIZES]->(:Method) RETURN count(segment) AS result")
 				.single();
 		int numberOfVisualizedMethods = result.get("result").asInt();
-		assertEquals(2, numberOfVisualizedMethods);
+		assertEquals(20, numberOfVisualizedMethods);
 	}
 
 	@Test
@@ -70,8 +70,8 @@ class RDBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(0, x);
-		assertEquals(-6, y);
+		assertEquals(-9.214771, x);
+		assertEquals(-11.790536, y);
 		assertEquals(0, z);
 	}
 
@@ -85,8 +85,8 @@ class RDBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(0, x);
-		assertEquals(-8, y);
+		assertEquals(-9.214771, x);
+		assertEquals(-1.498676, y);
 		assertEquals(0, z);
 	}
 
@@ -96,6 +96,6 @@ class RDBankTest {
 		Record result = connector.executeRead("MATCH (segment:DiskSegment)-[:VISUALIZES]->(:Method {hash: '" + hash
 				+ "'}) RETURN segment.anglePosition as anglePosition").single();
 		double anglePosition = result.get("anglePosition").asDouble();
-		assertEquals(180.00552486187846, anglePosition);
+		assertEquals(270.03296703296706, anglePosition);
 	}
 }
