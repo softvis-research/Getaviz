@@ -6,7 +6,7 @@ import org.getaviz.generator.database.Labels;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 
-public class Disk {
+public class Disk implements RDElement{
 
     private DatabaseConnector connector;
 
@@ -19,107 +19,70 @@ public class Disk {
     private double height;
     private double ringWidth;
     private double minArea;
-    private Long parent;
-    private Long attribute;
+    private long parentID;
+    private long visualizedNodeID;
+    private long newParentID;
+    private long internID;
     private String color;
+    private String properties;
 
-    private SettingsConfiguration config;
 
-    // Für namespace aufgerufen
-    public Disk(SettingsConfiguration config, DatabaseConnector connector) {
-        this.transparency = config.getRDNamespaceTransparency();
-        this.height = config.getRDHeight();
-        this.ringWidth = config.getRDRingWidth();
-        this.config = config;
-        this.connector = connector;
-
-    }
-
-    public Disk(Node structure, Long parent, SettingsConfiguration config, DatabaseConnector connector, double transparency) {
-        this.methodTypeMode = config.isMethodTypeMode();
-        this.methodDisks = config.isMethodDisks();
-        this.dataDisks = config.isDataDisks();
-        this.height = config.getRDHeight();
-        this.ringWidth = config.getRDRingWidth();
-        this.minArea = config.getRDMinArea();
-        this.config = config;
-        this.connector = connector;
+    public Disk(long visualizedNodeId, long parentID, double ringWidth, double height, double transparency,
+                DatabaseConnector connector) {
+        this.visualizedNodeID = visualizedNodeId;
+        this.parentID = parentID;
         this.transparency = transparency;
-        this.parent = parent;
-        run(structure, parent);
-    }
-
-    public Disk(Long attribute, Long parent, SettingsConfiguration config, DatabaseConnector connector, double transparency,
-                String color, double ringWidth) {
-        this.height = config.getRDHeight();
+        this.height = height;
         this.ringWidth = ringWidth;
-        this.config = config;
         this.connector = connector;
+
+        properties = String.format("ringWidth: %f, height: %f, transparency: %f", ringWidth,
+                height, transparency);
+    }
+
+    public Disk(long visualizedNodeId, long parentID, double ringWidth, double height, double transparency, String color,
+                DatabaseConnector connector) {
+        this.visualizedNodeID = visualizedNodeId;
+        this.parentID = parentID;
         this.transparency = transparency;
-        this.parent = parent;
-        this.attribute = attribute;
+        this.height = height;
+        this.ringWidth = ringWidth;
+        this.connector = connector;
         this.color = color;
+
+        properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
+                height, transparency, color);
     }
 
-    public Long getParent() {
-        return this.parent;
+    public long getParentID() {
+        return this.parentID;
     }
 
-    public Long getAttribute() {
-        return this.attribute;
+    public long getVisualizedNodeID() {
+        return this.visualizedNodeID;
     }
 
     public String getColor() {
         return this.color;
     }
 
-    private void run(Node structure, Long parent) {
-        String properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
-                height, transparency, config.getRDClassColor());
-        long disk = connector.addNode(CypherCreateNode.create(parent, structure.id(), Labels.Disk.name(), properties), "n").id();
-        StatementResult methods = connector.executeRead("MATCH (n)-[:DECLARES]->(m:Method) WHERE ID(n) = " + structure.id() +
-                " AND EXISTS(m.hash) RETURN m");
-        StatementResult fields = connector.executeRead("MATCH (n)-[:DECLARES]->(f:Field) WHERE ID(n) = " + structure.id() +
-                " AND EXISTS(f.hash) RETURN f");
+    public String getProperties() {
+        return properties;
+    }
 
-        if (methodTypeMode) {
-            methods.forEachRemaining((result) -> {
-                Node method = result.get("m").asNode();
-                if (method.hasLabel(Labels.Constructor.name())) {
-                    JQA2RD.toStack(new DiskSegment(method, disk, config, config.getRDMethodTransparency(),
-                            config.getRDMethodColor()));
-                } else {
-                    JQA2RD.toStack((new Disk(method.id(), disk, config, connector, config.getRDMethodTransparency(),
-                            config.getRDMethodColor(), config.getRDRingWidth())));
-                }
-            });
-            fields.forEachRemaining((result) -> {
-                JQA2RD.toStack((new Disk(result.get("f").asNode().id(), disk, config, connector, config.getRDDataTransparency(),
-                        config.getRDDataColor(), config.getRDRingWidthAD())));
-            });
-        } else {
-            if (dataDisks) {
-                fields.forEachRemaining((result) -> {
-                    JQA2RD.toStack((new Disk(result.get("f").asNode().id(), disk, config, connector, config.getRDDataTransparency(),
-                            config.getRDDataColor(), config.getRDRingWidthAD())));
-                });
-            } else {
-                fields.forEachRemaining((result) -> {
-                    JQA2RD.toStack((new DiskSegment(result.get("f").asNode().id(), disk, config, config.getRDDataTransparency(),
-                            config.getRDDataColor())));
-                });
-            }
-            if (methodDisks) {
-                methods.forEachRemaining((result) -> JQA2RD.toStack((new Disk(result.get("m").asNode().id(), disk, config, connector,
-                        config.getRDMethodTransparency(), config.getRDMethodColor(), config.getRDRingWidth()))));
-            } else {
-                methods.forEachRemaining((result) -> JQA2RD.toStack(new DiskSegment(result.get("m").asNode(), disk, config,
-                        config.getRDClassTransparency(), config.getRDMethodColor())));
-            }
-        }
-        connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type) WHERE ID(n) = " + structure.id() +
-                " AND EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) RETURN t").
-                forEachRemaining((result) -> JQA2RD.toStack((new Disk(result.get("t").asNode(), disk, config, connector,
-                        config.getRDClassTransparency()))));
+    public long getInternID() {
+        return internID;
+    }
+
+    public long getNewParentID() {
+        return newParentID;
+    }
+
+    public void setNewParentID(long id) {
+        this.newParentID = id;
+    }
+
+    public void setInternID(long id) {
+        this.internID = id;
     }
 }
