@@ -19,7 +19,6 @@ import org.neo4j.driver.v1.types.Node;
 public class JQA2RD implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
-	private SettingsConfiguration config;
 	private boolean methodTypeMode;
 	private boolean methodDisks;
 	private boolean dataDisks;
@@ -37,11 +36,10 @@ public class JQA2RD implements Step {
 	private long model;
 	private static ArrayList<Disk> packages = new ArrayList<>();
 	private static ArrayList<Disk> types = new ArrayList<>();
-	private static ArrayList<Disk> parentNodes = new ArrayList();
+	private static ArrayList<Disk> parentNodes = new ArrayList<>();
 	private static ArrayList<RDElement> methodsAndFields = new ArrayList<>();
 
 	public JQA2RD(SettingsConfiguration config) {
-		this.config = config;
 		this.methodTypeMode = config.isMethodTypeMode();
 		this.methodDisks = config.isMethodDisks();
 		this.dataDisks = config.isDataDisks();
@@ -150,44 +148,30 @@ public class JQA2RD implements Step {
 			if (p.getParentID() == model) {
 				p.setNewParentID(model);
 			} else {
-				Iterator<Disk> iterator = parentNodes.iterator();
-				boolean found = false;
-				while ((iterator.hasNext() && (!found))) {
-					Disk disk = iterator.next();
-					if (p.getParentID() == disk.getVisualizedNodeID()) {
-						p.setNewParentID(disk.getInternID());
-						found = true;
-					}
-				}
+				searchForParent(p);
 			}
-			p.setInternID(connector.addNode(String.format(
-					"MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
-							"(n:RD:%s {%s})-[:VISUALIZES]->(s)",
-					p.getNewParentID(), p.getVisualizedNodeID(), Labels.Disk.name(), p.getProperties()), "n")
-					.id());
+			p.setInternID(p.addNode());
 		});
 		methodsAndFields.forEach(mf -> {
-			Iterator<Disk> iterator = parentNodes.iterator();
-			boolean found = false;
-			while ((iterator.hasNext() && (!found))) {
-				Disk disk = iterator.next();
-				if (mf.getParentID() == disk.getVisualizedNodeID()) {
-					mf.setNewParentID(disk.getInternID());
-					found = true;
-				}
-			}
+			searchForParent(mf);
 			if (mf instanceof Disk) {
-				connector.executeWrite(String.format(
-						"MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->(" +
-								"n:RD:%s {%s})-[:VISUALIZES]->(s)",
-						mf.getNewParentID(), mf.getVisualizedNodeID(), Labels.Disk.name(), mf.getProperties()));
+				mf.write();
 			} else {
-				connector.executeWrite(String.format(
-						"MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
-								"(n:RD:%s {%s})-[:VISUALIZES]->(s)",
-						mf.getNewParentID(), mf.getVisualizedNodeID(), Labels.DiskSegment.name(), mf.getProperties()));
-				}
+				mf.write();
+			}
 		});
+	}
+
+	private void searchForParent(RDElement element) {
+		Iterator<Disk> iterator = parentNodes.iterator();
+		boolean found = false;
+		while ((iterator.hasNext() && (!found))) {
+			Disk disk = iterator.next();
+			if (element.getParentID() == disk.getVisualizedNodeID()) {
+				element.setNewParentID(disk.getInternID());
+				found = true;
+			}
+		}
 	}
 }
 

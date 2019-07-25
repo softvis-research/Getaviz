@@ -1,27 +1,25 @@
 package org.getaviz.generator.rd.s2m;
 
 import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.database.Labels;
 import org.neo4j.driver.v1.types.Node;
 
 public class DiskSegment implements RDElement {
-    private double height;
+    private double size;
     private String properties;
-    private String color;
     private long visualizedNodeID;
     private long parentID;
     private long newParentID;
-    private long internID;
     private DatabaseConnector connector;
-
 
     public DiskSegment (long visualizedNodeID, long parentID, double transparency, double height, String color,
                         DatabaseConnector connector) {
         this.visualizedNodeID = visualizedNodeID;
         this.parentID = parentID;
-        this.height = height;
-        this.color = color;
         this.connector = connector;
-        properties = String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", 1.0, height,
+        this.size = 1.0;
+
+        properties = String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", size, height,
                 transparency, color);
     }
 
@@ -29,21 +27,22 @@ public class DiskSegment implements RDElement {
                         DatabaseConnector connector) {
         this.visualizedNodeID = structure.id();
         this.parentID = parentID;
-        this.height = height;
-        this.color = color;
         this.connector = connector;
 
         int numberOfStatements = structure.get("effectiveLineCount").asInt(0);
-        double size = numberOfStatements;
+        size = numberOfStatements;
         if (numberOfStatements <= minArea) {
             size = minArea;
         }
         properties = String.format(
-                "height: %f, transparency: %f, size: %f, color: \'%s\'", height, transparency, size, color);
+                "size: %f, height: %f, transparency: %f, color: \'%s\'", size, height, transparency, color);
     }
 
-    public String getProperties() {
-        return properties;
+    public void write() {
+        connector.executeWrite(String.format(
+                "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
+                        "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
+                newParentID, visualizedNodeID, Labels.DiskSegment.name(), properties));
     }
 
     public long getParentID(){
@@ -52,10 +51,6 @@ public class DiskSegment implements RDElement {
 
     public long getVisualizedNodeID() {
         return visualizedNodeID;
-    }
-
-    public long getNewParentID() {
-        return newParentID;
     }
 
     public void setNewParentID(long newParentID) {
