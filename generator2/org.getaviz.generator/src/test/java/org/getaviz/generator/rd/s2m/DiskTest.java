@@ -40,12 +40,12 @@ public class DiskTest {
         Record type = connector
                 .executeRead("CREATE (n:Type) RETURN ID(n) AS result").single();
         nodeWrite = type.get("result").asLong();
-        diskAdd = new Disk(nodeAdd, model, 1.5,1.0, 0.0, connector);
-        diskAdd.setNewParentID(model);
-        diskAdd.setInternID(diskAdd.addNode());
-        diskWrite = new Disk(nodeWrite, model, 1.5, 1.0, 0.0, "#000000", connector);
-        diskAdd.setNewParentID(model);
-        diskWrite.write();
+        diskAdd = new Disk(nodeAdd, model, 1.5,1.0, 0.0);
+        diskAdd.setParentVisualizedNodeID(model);
+        diskAdd.setId(diskAdd.addNode(connector));
+        diskWrite = new Disk(nodeWrite, model, 1.5, 1.0, 0.0, "#000000");
+        diskAdd.setParentVisualizedNodeID(model);
+        diskWrite.write(connector);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class DiskTest {
                 .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + nodeAdd +
                         " RETURN ID(d) AS result").single();
         long diskID = result.get("result").asLong();
-        assertEquals(diskAdd.getInternID(), diskID);
+        assertEquals(diskAdd.getId(), diskID);
     }
 
     @Test

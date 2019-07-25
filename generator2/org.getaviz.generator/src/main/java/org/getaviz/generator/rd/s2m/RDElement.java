@@ -1,9 +1,11 @@
 package org.getaviz.generator.rd.s2m;
 
+import org.getaviz.generator.database.DatabaseConnector;
+
 public interface RDElement {
 
-    long getParentID();
+    long getParentVisualizedNodeID();
     long getVisualizedNodeID();
-    void setNewParentID (long id);
-    void write();
+    void setParentVisualizedNodeID(long id);
+    void write(DatabaseConnector connector);
 }

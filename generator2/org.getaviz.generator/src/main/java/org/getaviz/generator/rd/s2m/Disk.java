@@ -5,65 +5,68 @@ import org.getaviz.generator.database.Labels;
 
 public class Disk implements RDElement{
 
-    private DatabaseConnector connector;
-
-    private long parentID;
+    private long parentVisualizedNodeID;
     private long visualizedNodeID;
-    private long newParentID;
-    private long internID;
-    private String properties;
+    private long parentID;
+    private long id;
+    private double ringWidth;
+    private double height;
+    private double transparency;
+    private String color;
 
-    public Disk(long visualizedNodeId, long parentID, double ringWidth, double height, double transparency,
-                DatabaseConnector connector) {
+    public Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency) {
         this.visualizedNodeID = visualizedNodeId;
-        this.parentID = parentID;
-        this.connector = connector;
-
-        properties = String.format("ringWidth: %f, height: %f, transparency: %f", ringWidth,
-                height, transparency);
+        this.parentVisualizedNodeID = parentVisualizedNodeID;
+        this.ringWidth = ringWidth;
+        this.height = height;
+        this.transparency = transparency;
     }
 
-    public Disk(long visualizedNodeId, long parentID, double ringWidth, double height, double transparency, String color,
-                DatabaseConnector connector) {
+    public Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency, String color) {
         this.visualizedNodeID = visualizedNodeId;
-        this.parentID = parentID;
-        this.connector = connector;
-
-        properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
-                height, transparency, color);
+        this.parentVisualizedNodeID = parentVisualizedNodeID;
+        this.ringWidth = ringWidth;
+        this.height = height;
+        this.transparency = transparency;
+        this.color = color;
     }
 
-    public long addNode() {
+    public long addNode(DatabaseConnector connector) {
         return connector.addNode(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
                         "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
-                newParentID, visualizedNodeID, Labels.Disk.name(), properties), "n").id();
+                parentID, visualizedNodeID, Labels.Disk.name(), getProperties()), "n").id();
     }
 
-    public void write() {
+    public void write(DatabaseConnector connector) {
         connector.executeWrite(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
                         "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
-                newParentID,visualizedNodeID, Labels.Disk.name(), properties));
+                parentID,visualizedNodeID, Labels.Disk.name(), getProperties()));
     }
 
-    public long getParentID() {
-        return this.parentID;
+    public long getParentVisualizedNodeID() {
+        return this.parentVisualizedNodeID;
     }
 
     public long getVisualizedNodeID() {
         return this.visualizedNodeID;
     }
 
-    public long getInternID() {
-        return internID;
+    public long getId() {
+        return id;
     }
 
-    public void setNewParentID(long id) {
-        this.newParentID = id;
+    public String getProperties() {
+        return String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
+                height, transparency, color);
     }
 
-    public void setInternID(long id) {
-        this.internID = id;
+    public void setParentVisualizedNodeID(long id) {
+        this.parentID = id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

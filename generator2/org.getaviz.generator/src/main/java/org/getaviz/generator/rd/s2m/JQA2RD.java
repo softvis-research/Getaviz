@@ -6,7 +6,6 @@ import org.getaviz.generator.Step;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
-import java.util.Stack;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,6 +16,7 @@ import org.neo4j.driver.v1.types.Node;
 
 
 public class JQA2RD implements Step {
+
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
 	private boolean methodTypeMode;
@@ -79,11 +79,12 @@ public class JQA2RD implements Step {
 		StatementResult packagesNoRoot = connector.executeRead(
 				"MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN ID(n) AS id");
 		packagesNoRoot.forEachRemaining((node) -> list.add(new Disk(node.get("id").asLong(), model, ringWidth, height,
-				namespaceTransparency, connector)));
+				namespaceTransparency)));
+
 		StatementResult packagesRoot = connector.executeRead(
 				"MATCH (n)-[:CONTAINS]->(p:Package) WHERE EXISTS (p.hash) RETURN ID(p) AS pID, ID(n) AS nID");
 		packagesRoot.forEachRemaining(node -> list.add(new Disk(node.get("pID").asLong(), node.get("nID").asLong(),
-				ringWidth, height, namespaceTransparency, connector)));
+				ringWidth, height, namespaceTransparency)));
 		return list;
 	}
 
@@ -93,7 +94,7 @@ public class JQA2RD implements Step {
 				"MATCH (n)-[:CONTAINS]->(t:Type) WHERE EXISTS(t.hash) AND (t:Class OR t:Interface " +
 						"OR t:Annotation OR t:Enum) AND NOT t:Inner RETURN ID(t) AS tID, ID(n) AS nID");
 		result.forEachRemaining(node -> list.add(new Disk(node.get("tID").asLong(), node.get("nID").asLong(),
-				ringWidth, height, classTransparency, classColor, connector)));
+				ringWidth, height, classTransparency, classColor)));
 		return list;
 	}
 
@@ -109,34 +110,34 @@ public class JQA2RD implements Step {
 							Node method = result.get("m").asNode();
 							if (method.hasLabel(Labels.Constructor.name())) {
 								list.add(new DiskSegment(method, t.getVisualizedNodeID(), methodTransparency, minArea,height,
-										methodColor, connector));
+										methodColor));
 							} else {
 								list.add(new Disk(method.id(), t.getVisualizedNodeID(), ringWidth, height, methodTransparency,
-										methodColor, connector));
+										methodColor));
 							}
 						});
 						fields.forEachRemaining((result) ->
 							list.add(new Disk(result.get("f").asNode().id(), t.getVisualizedNodeID(), ringWidthAD, height,
-									dataTransparency, dataColor, connector)));
+									dataTransparency, dataColor)));
 					} else {
 						if (dataDisks) {
 							fields.forEachRemaining((result) ->
 								list.add(new Disk(result.get("f").asNode().id(), t.getVisualizedNodeID(), ringWidthAD, height,
-										dataTransparency, dataColor, connector)));
+										dataTransparency, dataColor)));
 						} else {
 							fields.forEachRemaining((result) ->
 								list.add(new DiskSegment(result.get("f").asNode().id(), t.getVisualizedNodeID(), dataTransparency,
-										height, dataColor, connector)));
+										height, dataColor)));
 
 						}
 						if (methodDisks) {
 							methods.forEachRemaining((result) ->
 									list.add(new Disk(result.get("m").asNode().id(), t.getVisualizedNodeID(), ringWidthAD,
-									height, methodTransparency, methodColor, connector)));
+									height, methodTransparency, methodColor)));
 						} else {
 							methods.forEachRemaining((result) ->
 									list.add(new DiskSegment(result.get("m").asNode(), t.getVisualizedNodeID(), classTransparency,
-									minArea, height, classColor, connector)));
+									minArea, height, classColor)));
 						}
 					}
 					});
@@ -145,20 +146,16 @@ public class JQA2RD implements Step {
 
 	private void writeToDB() {
 		parentNodes.forEach(p -> {
-			if (p.getParentID() == model) {
-				p.setNewParentID(model);
+			if (p.getParentVisualizedNodeID() == model) {
+				p.setParentVisualizedNodeID(model);
 			} else {
 				searchForParent(p);
 			}
-			p.setInternID(p.addNode());
+			p.setId(p.addNode(connector));
 		});
 		methodsAndFields.forEach(mf -> {
 			searchForParent(mf);
-			if (mf instanceof Disk) {
-				mf.write();
-			} else {
-				mf.write();
-			}
+			mf.write(connector);
 		});
 	}
 
@@ -167,8 +164,8 @@ public class JQA2RD implements Step {
 		boolean found = false;
 		while ((iterator.hasNext() && (!found))) {
 			Disk disk = iterator.next();
-			if (element.getParentID() == disk.getVisualizedNodeID()) {
-				element.setNewParentID(disk.getInternID());
+			if (element.getParentVisualizedNodeID() == disk.getVisualizedNodeID()) {
+				element.setParentVisualizedNodeID(disk.getId());
 				found = true;
 			}
 		}

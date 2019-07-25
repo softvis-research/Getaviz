@@ -35,9 +35,9 @@ public class DiskSegmentTest {
         Record result = connector
                 .executeRead("CREATE (n:Field) RETURN ID(n) AS result").single();
         node = result.get("result").asLong();
-        diskSegment = new DiskSegment(node, model, 1.5, 0.5, "#66000000", connector);
-        diskSegment.setNewParentID(model);
-        diskSegment.write();
+        diskSegment = new DiskSegment(node, model, 1.5, 0.5, "#66000000");
+        diskSegment.setParentVisualizedNodeID(model);
+        diskSegment.write(connector);
     }
 
     @Test
