@@ -3,7 +3,7 @@ package org.getaviz.generator.rd.s2m;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
 
-public class Disk implements RDElement{
+class Disk implements RDElement{
 
     private long parentVisualizedNodeID;
     private long visualizedNodeID;
@@ -14,7 +14,7 @@ public class Disk implements RDElement{
     private double transparency;
     private String color;
 
-    public Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency) {
+   Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency) {
         this.visualizedNodeID = visualizedNodeId;
         this.parentVisualizedNodeID = parentVisualizedNodeID;
         this.ringWidth = ringWidth;
@@ -22,12 +22,8 @@ public class Disk implements RDElement{
         this.transparency = transparency;
     }
 
-    public Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency, String color) {
-        this.visualizedNodeID = visualizedNodeId;
-        this.parentVisualizedNodeID = parentVisualizedNodeID;
-        this.ringWidth = ringWidth;
-        this.height = height;
-        this.transparency = transparency;
+    Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency, String color) {
+        this(visualizedNodeId, parentVisualizedNodeID, ringWidth, height, transparency);
         this.color = color;
     }
 
@@ -36,13 +32,6 @@ public class Disk implements RDElement{
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
                         "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
                 parentID, visualizedNodeID, Labels.Disk.name(), getProperties()), "n").id();
-    }
-
-    public void write(DatabaseConnector connector) {
-        connector.executeWrite(String.format(
-                "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
-                        "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
-                parentID,visualizedNodeID, Labels.Disk.name(), getProperties()));
     }
 
     public long getParentVisualizedNodeID() {
@@ -57,7 +46,7 @@ public class Disk implements RDElement{
         return id;
     }
 
-    public String getProperties() {
+    String getProperties() {
         return String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
                 height, transparency, color);
     }

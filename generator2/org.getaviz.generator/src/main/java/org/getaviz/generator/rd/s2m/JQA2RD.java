@@ -12,7 +12,6 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
 import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.types.Node;
 
 
 public class JQA2RD implements Step {
@@ -65,16 +64,16 @@ public class JQA2RD implements Step {
 								"method_disks: \'%s\', data_disks:\'%s\'})",
 						new GregorianCalendar().getTime().toString(), methodTypeMode, methodDisks, dataDisks),
 				"m").id();
-		packages = addPackages();
-		types = addTypes();
-		methodsAndFields = addMethodsAndFields();
+		packages = getPackages();
+		types = getTypes();
+		methodsAndFields = getMethodsAndFields();
 		parentNodes.addAll(packages);
 		parentNodes.addAll(types);
 		writeToDB();
 		log.info("JQA2RD finished");
 	}
 
-	private ArrayList<Disk> addPackages() {
+	private ArrayList<Disk> getPackages() {
 		ArrayList<Disk> list = new ArrayList<>();
 		StatementResult packagesNoRoot = connector.executeRead(
 				"MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN ID(n) AS id");
@@ -88,7 +87,7 @@ public class JQA2RD implements Step {
 		return list;
 	}
 
-	private ArrayList<Disk> addTypes() {
+	private ArrayList<Disk> getTypes() {
 		ArrayList<Disk> list = new ArrayList<>();
 		StatementResult result = connector.executeRead(
 				"MATCH (n)-[:CONTAINS]->(t:Type) WHERE EXISTS(t.hash) AND (t:Class OR t:Interface " +
@@ -98,21 +97,20 @@ public class JQA2RD implements Step {
 		return list;
 	}
 
-	private ArrayList<RDElement> addMethodsAndFields() {
+	private ArrayList<RDElement> getMethodsAndFields() {
 		ArrayList<RDElement> list = new ArrayList<>();
 		types.forEach(t -> {
 			StatementResult methods = connector.executeRead("MATCH (n)-[:DECLARES]->(m:Method) WHERE ID(n) = "
-					+ t.getVisualizedNodeID() + " AND EXISTS(m.hash) RETURN m");
+					+ t.getVisualizedNodeID() + " AND EXISTS(m.hash) RETURN m AS m, m.effectiveLineCount AS line");
 			StatementResult fields = connector.executeRead("MATCH (n)-[:DECLARES]->(f:Field) WHERE ID(n) = "
 					+ t.getVisualizedNodeID() +	" AND EXISTS(f.hash) RETURN f");
 					if (methodTypeMode) {
 						methods.forEachRemaining((result) -> {
-							Node method = result.get("m").asNode();
-							if (method.hasLabel(Labels.Constructor.name())) {
-								list.add(new DiskSegment(method, t.getVisualizedNodeID(), methodTransparency, minArea,height,
-										methodColor));
+							if (result.get("m").asNode().hasLabel(Labels.Constructor.name())) {
+								list.add(new DiskSegment(result.get("m").asNode().id(), t.getVisualizedNodeID(),
+										methodTransparency, minArea,height,	methodColor, result.get("line").asInt(0)));
 							} else {
-								list.add(new Disk(method.id(), t.getVisualizedNodeID(), ringWidth, height, methodTransparency,
+								list.add(new Disk(result.get("m").asNode().id(), t.getVisualizedNodeID(), ringWidth, height, methodTransparency,
 										methodColor));
 							}
 						});
@@ -128,7 +126,6 @@ public class JQA2RD implements Step {
 							fields.forEachRemaining((result) ->
 								list.add(new DiskSegment(result.get("f").asNode().id(), t.getVisualizedNodeID(), dataTransparency,
 										height, dataColor)));
-
 						}
 						if (methodDisks) {
 							methods.forEachRemaining((result) ->
@@ -136,8 +133,8 @@ public class JQA2RD implements Step {
 									height, methodTransparency, methodColor)));
 						} else {
 							methods.forEachRemaining((result) ->
-									list.add(new DiskSegment(result.get("m").asNode(), t.getVisualizedNodeID(), classTransparency,
-									minArea, height, classColor)));
+									list.add(new DiskSegment(result.get("m").asNode().id(), t.getVisualizedNodeID(), classTransparency,
+									minArea, height, classColor, result.get("line").asInt(0))));
 						}
 					}
 					});
@@ -155,7 +152,7 @@ public class JQA2RD implements Step {
 		});
 		methodsAndFields.forEach(mf -> {
 			searchForParent(mf);
-			mf.write(connector);
+			mf.setId(mf.addNode(connector));
 		});
 	}
 

@@ -1,9 +1,8 @@
-package org.getaviz.generator.tests.generator.rd.s2m;
+package org.getaviz.generator.rd.s2m;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
-import org.getaviz.generator.rd.s2m.DiskSegment;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
@@ -37,7 +36,16 @@ public class DiskSegmentTest {
         node = result.get("result").asLong();
         diskSegment = new DiskSegment(node, model, 1.5, 0.5, "#66000000");
         diskSegment.setParentVisualizedNodeID(model);
-        diskSegment.write(connector);
+        diskSegment.setId(diskSegment.addNode(connector));
+    }
+
+    @Test
+    void addNodeTest() {
+        Record result = connector
+                .executeRead("MATCH (d:DiskSegment)-[:VISUALIZES]->(n:Field) WHERE ID(n) = " + node +
+                        " RETURN ID(d) AS result").single();
+        long diskID = result.get("result").asLong();
+        assertEquals(diskSegment.getId(), diskID);
     }
 
     @Test

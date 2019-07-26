@@ -1,9 +1,8 @@
-package org.getaviz.generator.tests.generator.rd.s2m;
+package org.getaviz.generator.rd.s2m;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
-import org.getaviz.generator.rd.s2m.JQA2RD;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
@@ -17,7 +16,7 @@ public class JQA2RDTest {
 
     @BeforeAll
     static void setup() {
-        mockup.setupDatabase("./test/databases/RDBankTest.db");
+        mockup.setupDatabase("./test/databases/JQA2RDTest.db");
         mockup.loadProperties("RDBankTest.properties");
         connector = mockup.getConnector();
         SettingsConfiguration config = SettingsConfiguration.getInstance();

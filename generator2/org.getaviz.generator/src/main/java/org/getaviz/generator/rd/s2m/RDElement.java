@@ -7,5 +7,7 @@ public interface RDElement {
     long getParentVisualizedNodeID();
     long getVisualizedNodeID();
     void setParentVisualizedNodeID(long id);
-    void write(DatabaseConnector connector);
+    void setId(long id);
+    long addNode(DatabaseConnector connector);
+
 }

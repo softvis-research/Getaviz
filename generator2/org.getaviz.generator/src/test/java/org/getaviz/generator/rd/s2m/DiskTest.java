@@ -1,9 +1,8 @@
-package org.getaviz.generator.tests.generator.rd.s2m;
+package org.getaviz.generator.rd.s2m;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
-import org.getaviz.generator.rd.s2m.Disk;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
@@ -16,10 +15,8 @@ public class DiskTest {
 
     private static DatabaseConnector connector;
     private static Bank mockup = new Bank();
-    private static Disk diskAdd;
-    private static Disk diskWrite;
-    private static long nodeAdd;
-    private static long nodeWrite;
+    private static Disk disk;
+    private static long node;
 
     @BeforeAll
     static void setup() {
@@ -36,31 +33,25 @@ public class DiskTest {
                 "m").id();
         Record result = connector
                 .executeRead("CREATE (n:Package) RETURN ID(n) AS result").single();
-        nodeAdd = result.get("result").asLong();
-        Record type = connector
-                .executeRead("CREATE (n:Type) RETURN ID(n) AS result").single();
-        nodeWrite = type.get("result").asLong();
-        diskAdd = new Disk(nodeAdd, model, 1.5,1.0, 0.0);
-        diskAdd.setParentVisualizedNodeID(model);
-        diskAdd.setId(diskAdd.addNode(connector));
-        diskWrite = new Disk(nodeWrite, model, 1.5, 1.0, 0.0, "#000000");
-        diskAdd.setParentVisualizedNodeID(model);
-        diskWrite.write(connector);
+        node = result.get("result").asLong();
+        disk = new Disk(node, model, 1.5,1.0, 0.0, "#000000");
+        disk.setParentVisualizedNodeID(model);
+        disk.setId(disk.addNode(connector));
     }
 
     @Test
     void addNodeTest() {
         Record result = connector
-                .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + nodeAdd +
+                .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + node +
                         " RETURN ID(d) AS result").single();
         long diskID = result.get("result").asLong();
-        assertEquals(diskAdd.getId(), diskID);
+        assertEquals(disk.getId(), diskID);
     }
 
     @Test
     void addNodeHeightTest() {
         Record result = connector
-                .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + nodeAdd +
+                .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + node +
                         " RETURN d.height AS result").single();
         double height = result.get("result").asDouble();
         assertEquals(1.0, height);
@@ -69,25 +60,25 @@ public class DiskTest {
     @Test
     void addNodeRingWithTest() {
         Record result = connector
-                .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + nodeAdd +
+                .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + node +
                         " RETURN d.ringWidth AS result").single();
         double ringWidth = result.get("result").asDouble();
         assertEquals(1.5, ringWidth);
     }
 
     @Test
-    void writeTransparencyTest() {
+    void addNodeTransparencyTest() {
         Record result = connector
-                .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Type) WHERE ID(n) = " + nodeWrite +
+                .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + node +
                         " RETURN d.transparency AS result").single();
         double transparency = result.get("result").asDouble();
         assertEquals(0.0, transparency);
     }
 
     @Test
-    void writeColorTest() {
+    void addNodeColorTest() {
         Record result = connector
-                .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Type) WHERE ID(n) = " + nodeWrite +
+                .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + node +
                         " RETURN d.color AS result").single();
         String color = result.get("result").asString();
         assertEquals("#000000", color);
