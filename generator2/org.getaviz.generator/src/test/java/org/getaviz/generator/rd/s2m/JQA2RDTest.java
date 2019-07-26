@@ -17,7 +17,6 @@ public class JQA2RDTest {
     @BeforeAll
     static void setup() {
         mockup.setupDatabase("./test/databases/JQA2RDTest.db");
-        mockup.loadProperties("RDBankTest.properties");
         connector = mockup.getConnector();
         SettingsConfiguration config = SettingsConfiguration.getInstance();
         JQA2RD testInstance = new JQA2RD(config);

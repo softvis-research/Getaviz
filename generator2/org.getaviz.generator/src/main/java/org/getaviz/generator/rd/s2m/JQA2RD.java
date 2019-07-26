@@ -4,7 +4,6 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
@@ -18,6 +17,7 @@ public class JQA2RD implements Step {
 
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
+	private DBModel model;
 	private boolean methodTypeMode;
 	private boolean methodDisks;
 	private boolean dataDisks;
@@ -32,10 +32,9 @@ public class JQA2RD implements Step {
 	private String classColor;
 	private String methodColor;
 	private String dataColor;
-	private long model;
 	private static ArrayList<Disk> packages = new ArrayList<>();
 	private static ArrayList<Disk> types = new ArrayList<>();
-	private static ArrayList<Disk> parentNodes = new ArrayList<>();
+	private static ArrayList<RDElement> allNodesToVisualize = new ArrayList<>();
 	private static ArrayList<RDElement> methodsAndFields = new ArrayList<>();
 
 	public JQA2RD(SettingsConfiguration config) {
@@ -58,28 +57,24 @@ public class JQA2RD implements Step {
 	public void run() {
 		log.info("JQA2RD started");
 		connector.executeWrite("MATCH (n:RD) DETACH DELETE n");
-		model = connector.addNode(
-				String.format(
-						"CREATE (m:Model:RD {date: \'%s\'})-[:USED]->(c:Configuration:RD {method_type_mode: \'%s\', " +
-								"method_disks: \'%s\', data_disks:\'%s\'})",
-						new GregorianCalendar().getTime().toString(), methodTypeMode, methodDisks, dataDisks),
-				"m").id();
-		packages = getPackages();
-		types = getTypes();
-		methodsAndFields = getMethodsAndFields();
-		parentNodes.addAll(packages);
-		parentNodes.addAll(types);
+		model = new DBModel(methodTypeMode, methodDisks,dataDisks, connector);
+		queriesToLists();
+		allNodesToVisualize = mergeLists();
 		writeToDB();
 		log.info("JQA2RD finished");
 	}
 
-	private ArrayList<Disk> getPackages() {
+	private ArrayList<Disk> getPackagesNoRoot() {
 		ArrayList<Disk> list = new ArrayList<>();
 		StatementResult packagesNoRoot = connector.executeRead(
 				"MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN ID(n) AS id");
-		packagesNoRoot.forEachRemaining((node) -> list.add(new Disk(node.get("id").asLong(), model, ringWidth, height,
+		packagesNoRoot.forEachRemaining((node) -> list.add(new Disk(node.get("id").asLong(), -1, ringWidth, height,
 				namespaceTransparency)));
+		return list;
+	}
 
+	private ArrayList<Disk> getPackagesWithRoot() {
+		ArrayList<Disk> list = new ArrayList<>();
 		StatementResult packagesRoot = connector.executeRead(
 				"MATCH (n)-[:CONTAINS]->(p:Package) WHERE EXISTS (p.hash) RETURN ID(p) AS pID, ID(n) AS nID");
 		packagesRoot.forEachRemaining(node -> list.add(new Disk(node.get("pID").asLong(), node.get("nID").asLong(),
@@ -97,7 +92,7 @@ public class JQA2RD implements Step {
 		return list;
 	}
 
-	private ArrayList<RDElement> getMethodsAndFields() {
+	private ArrayList<RDElement> getMethods() {
 		ArrayList<RDElement> list = new ArrayList<>();
 		types.forEach(t -> {
 			StatementResult methods = connector.executeRead("MATCH (n)-[:DECLARES]->(m:Method) WHERE ID(n) = "
@@ -108,7 +103,7 @@ public class JQA2RD implements Step {
 						methods.forEachRemaining((result) -> {
 							if (result.get("m").asNode().hasLabel(Labels.Constructor.name())) {
 								list.add(new DiskSegment(result.get("m").asNode().id(), t.getVisualizedNodeID(),
-										methodTransparency, minArea,height,	methodColor, result.get("line").asInt(0)));
+										height, methodTransparency, minArea, methodColor, result.get("line").asInt(0)));
 							} else {
 								list.add(new Disk(result.get("m").asNode().id(), t.getVisualizedNodeID(), ringWidth, height, methodTransparency,
 										methodColor));
@@ -124,8 +119,8 @@ public class JQA2RD implements Step {
 										dataTransparency, dataColor)));
 						} else {
 							fields.forEachRemaining((result) ->
-								list.add(new DiskSegment(result.get("f").asNode().id(), t.getVisualizedNodeID(), dataTransparency,
-										height, dataColor)));
+								list.add(new DiskSegment(result.get("f").asNode().id(), t.getVisualizedNodeID(), height,
+										dataTransparency, dataColor)));
 						}
 						if (methodDisks) {
 							methods.forEachRemaining((result) ->
@@ -133,39 +128,80 @@ public class JQA2RD implements Step {
 									height, methodTransparency, methodColor)));
 						} else {
 							methods.forEachRemaining((result) ->
-									list.add(new DiskSegment(result.get("m").asNode().id(), t.getVisualizedNodeID(), classTransparency,
-									minArea, height, classColor, result.get("line").asInt(0))));
+									list.add(new DiskSegment(result.get("m").asNode().id(), t.getVisualizedNodeID(), height,
+											classTransparency, minArea, classColor, result.get("line").asInt(0))));
 						}
 					}
-					});
-					return list;
-				}
+			});
+		return list;
+	}
+
+	/*private ArrayList<RDElement> getFields () {
+		ArrayList<RDElement> list = new ArrayList<>();
+		types.forEach(t -> {
+			StatementResult fields = connector.executeRead("MATCH (n)-[:DECLARES]->(f:Field) WHERE ID(n) = "
+					+ t.getVisualizedNodeID() +	" AND EXISTS(f.hash) RETURN f");
+					if (methodTypeMode) {
+						fields.forEachRemaining((result) ->
+							list.add(new Disk(result.get("f").asNode().id(), t.getVisualizedNodeID(), ringWidthAD, height,
+									dataTransparency, dataColor)));
+					} else {
+						if (dataDisks) {
+							fields.forEachRemaining((result) ->
+								list.add(new Disk(result.get("f").asNode().id(), t.getVisualizedNodeID(), ringWidthAD, height,
+										dataTransparency, dataColor)));
+						} else {
+							fields.forEachRemaining((result) ->
+								list.add(new DiskSegment(result.get("f").asNode().id(), t.getVisualizedNodeID(), height,
+										dataTransparency, dataColor)));
+						}
+					}
+			});
+		return list;
+	}*/
+
+	private void queriesToLists() {
+		packages = getPackagesNoRoot();
+		packages.addAll(getPackagesWithRoot());
+		types = getTypes();
+		methodsAndFields = getMethods();
+	}
+
+	private ArrayList<RDElement> mergeLists() {
+		ArrayList<RDElement> list = new ArrayList<>();
+		list.addAll(packages);
+		list.addAll(types);
+		list.addAll(methodsAndFields);
+		return list;
+	}
 
 	private void writeToDB() {
-		parentNodes.forEach(p -> {
-			if (p.getParentVisualizedNodeID() == model) {
-				p.setParentVisualizedNodeID(model);
+		model.createModel();
+		long modelID = model.getId();
+		allNodesToVisualize.forEach(p -> {
+			if (p.getParentVisualizedNodeID() == -1) {
+				p.setParentID(modelID);
+				write(p);
 			} else {
-				searchForParent(p);
+				search(p);
+				write(p);
 			}
-			p.setId(p.addNode(connector));
-		});
-		methodsAndFields.forEach(mf -> {
-			searchForParent(mf);
-			mf.setId(mf.addNode(connector));
 		});
 	}
 
-	private void searchForParent(RDElement element) {
-		Iterator<Disk> iterator = parentNodes.iterator();
-		boolean found = false;
-		while ((iterator.hasNext() && (!found))) {
-			Disk disk = iterator.next();
+	private void search(RDElement element) {
+		Iterator<RDElement> iterator = allNodesToVisualize.iterator();
+		while ((iterator.hasNext())) {
+			RDElement disk = iterator.next();
 			if (element.getParentVisualizedNodeID() == disk.getVisualizedNodeID()) {
-				element.setParentVisualizedNodeID(disk.getId());
-				found = true;
+				element.setParentID(disk.getId());
+				return;
 			}
 		}
+	}
+
+	private void write(RDElement p) {
+		p.createNodeForVisualization(connector);
 	}
 }
 

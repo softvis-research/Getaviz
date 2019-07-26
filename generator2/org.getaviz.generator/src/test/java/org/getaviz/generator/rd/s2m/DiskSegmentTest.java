@@ -1,6 +1,5 @@
 package org.getaviz.generator.rd.s2m;
 
-import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,22 +20,15 @@ public class DiskSegmentTest {
     @BeforeAll
     static void setup () {
         mockup.setupDatabase("./test/databases/DiskSegmentTest.db");
-        mockup.loadProperties("RDBankTest.properties");
         connector = mockup.getConnector();
-        SettingsConfiguration config = SettingsConfiguration.getInstance();
-        long model = connector.addNode(
-                String.format(
-                        "CREATE (m:Model:RD {date: \'%s\'})-[:USED]->(c:Configuration:RD {method_type_mode: \'%s\', " +
-                                "method_disks: \'%s\', data_disks:\'%s\'})",
-                        new GregorianCalendar().getTime().toString(), config.isMethodTypeMode(), config.isMethodDisks(),
-                        config.isDataDisks()),
-                "m").id();
+        DBModel model = new DBModel(false,false,false, connector);
+        long modelID = model.getId();
         Record result = connector
                 .executeRead("CREATE (n:Field) RETURN ID(n) AS result").single();
         node = result.get("result").asLong();
-        diskSegment = new DiskSegment(node, model, 1.5, 0.5, "#66000000");
-        diskSegment.setParentVisualizedNodeID(model);
-        diskSegment.setId(diskSegment.addNode(connector));
+        diskSegment = new DiskSegment(node, modelID, 1.5, 0.5, "#66000000");
+        diskSegment.setParentID(modelID);
+        diskSegment.createNodeForVisualization(connector);
     }
 
     @Test
@@ -53,7 +45,7 @@ public class DiskSegmentTest {
         Record result = connector
                 .executeRead("MATCH (d:DiskSegment)-[:VISUALIZES]->(n:Field) RETURN d.height AS result").single();
         double height = result.get("result").asDouble();
-        assertEquals(0.5, height);
+        assertEquals(1.5, height);
     }
 
     @Test
@@ -61,7 +53,7 @@ public class DiskSegmentTest {
         Record result = connector
                 .executeRead("MATCH (d:DiskSegment)-[:VISUALIZES]->(n:Field) RETURN d.transparency AS result").single();
         double transparency= result.get("result").asDouble();
-        assertEquals(1.5, transparency);
+        assertEquals(0.5, transparency);
     }
 
     @Test

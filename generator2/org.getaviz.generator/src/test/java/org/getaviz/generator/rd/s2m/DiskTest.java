@@ -1,6 +1,5 @@
 package org.getaviz.generator.rd.s2m;
 
-import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,22 +20,15 @@ public class DiskTest {
     @BeforeAll
     static void setup() {
         mockup.setupDatabase("./test/databases/DiskTest.db");
-        mockup.loadProperties("RDBankTest.properties");
         connector = mockup.getConnector();
-        SettingsConfiguration config = SettingsConfiguration.getInstance();
-        long model = connector.addNode(
-                String.format(
-                        "CREATE (m:Model:RD {date: \'%s\'})-[:USED]->(c:Configuration:RD {method_type_mode: \'%s\', " +
-                                "method_disks: \'%s\', data_disks:\'%s\'})",
-                        new GregorianCalendar().getTime().toString(), config.isMethodTypeMode(), config.isMethodDisks(),
-                        config.isDataDisks()),
-                "m").id();
+        DBModel model = new DBModel(false,false,false,connector);
+        long modelID = model.getId();
         Record result = connector
                 .executeRead("CREATE (n:Package) RETURN ID(n) AS result").single();
         node = result.get("result").asLong();
-        disk = new Disk(node, model, 1.5,1.0, 0.0, "#000000");
-        disk.setParentVisualizedNodeID(model);
-        disk.setId(disk.addNode(connector));
+        disk = new Disk(node, modelID, 1.5,1.0, 0.0, "#000000");
+        disk.setParentID(modelID);
+        disk.createNodeForVisualization(connector);
     }
 
     @Test

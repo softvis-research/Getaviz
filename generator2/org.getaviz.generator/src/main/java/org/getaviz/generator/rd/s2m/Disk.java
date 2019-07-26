@@ -5,14 +5,15 @@ import org.getaviz.generator.database.Labels;
 
 class Disk implements RDElement{
 
+    private double height;
+    private double transparency;
+    private double ringWidth;
+    private String color;
+    private String label;
     private long parentVisualizedNodeID;
     private long visualizedNodeID;
     private long parentID;
     private long id;
-    private double ringWidth;
-    private double height;
-    private double transparency;
-    private String color;
 
    Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency) {
         this.visualizedNodeID = visualizedNodeId;
@@ -20,6 +21,7 @@ class Disk implements RDElement{
         this.ringWidth = ringWidth;
         this.height = height;
         this.transparency = transparency;
+        this.label = Labels.Disk.name();
     }
 
     Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency, String color) {
@@ -27,11 +29,11 @@ class Disk implements RDElement{
         this.color = color;
     }
 
-    public long addNode(DatabaseConnector connector) {
-        return connector.addNode(String.format(
+    public void createNodeForVisualization(DatabaseConnector connector) {
+       id = connector.addNode(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
                         "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
-                parentID, visualizedNodeID, Labels.Disk.name(), getProperties()), "n").id();
+                parentID, visualizedNodeID, label, getVisualizationProperties()), "n").id();
     }
 
     public long getParentVisualizedNodeID() {
@@ -46,16 +48,12 @@ class Disk implements RDElement{
         return id;
     }
 
-    String getProperties() {
+    private String getVisualizationProperties() {
         return String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
                 height, transparency, color);
     }
 
-    public void setParentVisualizedNodeID(long id) {
+    public void setParentID(long id) {
         this.parentID = id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 }
