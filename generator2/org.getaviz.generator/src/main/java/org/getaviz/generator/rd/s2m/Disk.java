@@ -30,10 +30,11 @@ class Disk implements RDElement{
     }
 
     public void createNodeForVisualization(DatabaseConnector connector) {
-       id = connector.addNode(String.format(
+       long id = connector.addNode(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
                         "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
-                parentID, visualizedNodeID, label, getVisualizationProperties()), "n").id();
+                parentID, visualizedNodeID, label, propertiesToString()), "n").id();
+       setId(id);
     }
 
     public long getParentVisualizedNodeID() {
@@ -48,12 +49,16 @@ class Disk implements RDElement{
         return id;
     }
 
-    private String getVisualizationProperties() {
+    private String propertiesToString() {
         return String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
                 height, transparency, color);
     }
 
     public void setParentID(long id) {
         this.parentID = id;
+    }
+
+    private void setId(long id) {
+       this.id = id;
     }
 }

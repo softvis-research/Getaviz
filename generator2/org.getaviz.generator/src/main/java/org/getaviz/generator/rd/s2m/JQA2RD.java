@@ -32,10 +32,7 @@ public class JQA2RD implements Step {
 	private String classColor;
 	private String methodColor;
 	private String dataColor;
-	private static ArrayList<Disk> packages = new ArrayList<>();
-	private static ArrayList<Disk> types = new ArrayList<>();
 	private static ArrayList<RDElement> allNodesToVisualize = new ArrayList<>();
-	private static ArrayList<RDElement> methodsAndFields = new ArrayList<>();
 
 	public JQA2RD(SettingsConfiguration config) {
 		this.methodTypeMode = config.isMethodTypeMode();
@@ -58,8 +55,7 @@ public class JQA2RD implements Step {
 		log.info("JQA2RD started");
 		connector.executeWrite("MATCH (n:RD) DETACH DELETE n");
 		model = new DBModel(methodTypeMode, methodDisks,dataDisks, connector);
-		queriesToLists();
-		allNodesToVisualize = mergeLists();
+		QueriesToDiskElement();
 		writeToDB();
 		log.info("JQA2RD finished");
 	}
@@ -92,13 +88,11 @@ public class JQA2RD implements Step {
 		return list;
 	}
 
-	private ArrayList<RDElement> getMethods() {
+	private ArrayList<RDElement> getMethods(ArrayList<Disk> types) {
 		ArrayList<RDElement> list = new ArrayList<>();
 		types.forEach(t -> {
 			StatementResult methods = connector.executeRead("MATCH (n)-[:DECLARES]->(m:Method) WHERE ID(n) = "
 					+ t.getVisualizedNodeID() + " AND EXISTS(m.hash) RETURN m AS m, m.effectiveLineCount AS line");
-			StatementResult fields = connector.executeRead("MATCH (n)-[:DECLARES]->(f:Field) WHERE ID(n) = "
-					+ t.getVisualizedNodeID() +	" AND EXISTS(f.hash) RETURN f");
 					if (methodTypeMode) {
 						methods.forEachRemaining((result) -> {
 							if (result.get("m").asNode().hasLabel(Labels.Constructor.name())) {
@@ -109,19 +103,7 @@ public class JQA2RD implements Step {
 										methodColor));
 							}
 						});
-						fields.forEachRemaining((result) ->
-							list.add(new Disk(result.get("f").asNode().id(), t.getVisualizedNodeID(), ringWidthAD, height,
-									dataTransparency, dataColor)));
 					} else {
-						if (dataDisks) {
-							fields.forEachRemaining((result) ->
-								list.add(new Disk(result.get("f").asNode().id(), t.getVisualizedNodeID(), ringWidthAD, height,
-										dataTransparency, dataColor)));
-						} else {
-							fields.forEachRemaining((result) ->
-								list.add(new DiskSegment(result.get("f").asNode().id(), t.getVisualizedNodeID(), height,
-										dataTransparency, dataColor)));
-						}
 						if (methodDisks) {
 							methods.forEachRemaining((result) ->
 									list.add(new Disk(result.get("m").asNode().id(), t.getVisualizedNodeID(), ringWidthAD,
@@ -136,7 +118,7 @@ public class JQA2RD implements Step {
 		return list;
 	}
 
-	/*private ArrayList<RDElement> getFields () {
+	private ArrayList<RDElement> getFields (ArrayList<Disk> types) {
 		ArrayList<RDElement> list = new ArrayList<>();
 		types.forEach(t -> {
 			StatementResult fields = connector.executeRead("MATCH (n)-[:DECLARES]->(f:Field) WHERE ID(n) = "
@@ -158,21 +140,16 @@ public class JQA2RD implements Step {
 					}
 			});
 		return list;
-	}*/
-
-	private void queriesToLists() {
-		packages = getPackagesNoRoot();
-		packages.addAll(getPackagesWithRoot());
-		types = getTypes();
-		methodsAndFields = getMethods();
 	}
 
-	private ArrayList<RDElement> mergeLists() {
-		ArrayList<RDElement> list = new ArrayList<>();
-		list.addAll(packages);
-		list.addAll(types);
-		list.addAll(methodsAndFields);
-		return list;
+	private void QueriesToDiskElement() {
+		ArrayList<Disk> types;
+		allNodesToVisualize.addAll(getPackagesNoRoot());
+		allNodesToVisualize.addAll(getPackagesWithRoot());
+		types = getTypes();
+		allNodesToVisualize.addAll(types);
+		allNodesToVisualize.addAll(getMethods(types));
+		allNodesToVisualize.addAll(getFields(types));
 	}
 
 	private void writeToDB() {

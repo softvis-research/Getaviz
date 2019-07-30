@@ -36,10 +36,11 @@ class DiskSegment implements RDElement {
     }
 
     public void createNodeForVisualization(DatabaseConnector connector) {
-        id = connector.addNode(String.format(
+        long id = connector.addNode(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
                         "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
-                parentID, visualizedNodeID, label, getVisualizationProperties()), "n").id();
+                parentID, visualizedNodeID, label, propertiesToString()), "n").id();
+        setId(id);
     }
 
     public long getParentVisualizedNodeID(){
@@ -50,7 +51,7 @@ class DiskSegment implements RDElement {
         return visualizedNodeID;
     }
 
-   private String getVisualizationProperties() {
+   private String propertiesToString() {
         return String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", size, height,
                 transparency, color);
     }
@@ -61,5 +62,9 @@ class DiskSegment implements RDElement {
 
     public void setParentID(long newParentID) {
         this.parentID = newParentID;
+    }
+
+    private void setId(long id) {
+        this.id = id;
     }
 }
