@@ -6,35 +6,33 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
-import java.util.GregorianCalendar;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DiskSegmentTest {
+class DiskSegmentTest {
 
     private static DatabaseConnector connector;
     private static Bank mockup = new Bank();
+    private static Model model;
     private static DiskSegment diskSegment;
-    private static long node;
+    private static long nodeID;
+    private static ArrayList<RDElement> RDElementsList = new ArrayList<>();
 
     @BeforeAll
     static void setup () {
         mockup.setupDatabase("./test/databases/DiskSegmentTest.db");
         connector = mockup.getConnector();
-        DBModel model = new DBModel(false,false,false, connector);
-        long modelID = model.getId();
-        Record result = connector
-                .executeRead("CREATE (n:Field) RETURN ID(n) AS result").single();
-        node = result.get("result").asLong();
-        diskSegment = new DiskSegment(node, modelID, 1.5, 0.5, "#66000000");
-        diskSegment.setParentID(modelID);
-        diskSegment.createNodeForVisualization(connector);
+        createTestObjects();
+        RDElementsList.add(diskSegment);
+        model.setRDElementsList(RDElementsList);
+        model.createVisualization(connector);
     }
 
     @Test
     void addNodeTest() {
         Record result = connector
-                .executeRead("MATCH (d:DiskSegment)-[:VISUALIZES]->(n:Field) WHERE ID(n) = " + node +
+                .executeRead("MATCH (d:DiskSegment)-[:VISUALIZES]->(n:Field) WHERE ID(n) = " + nodeID +
                         " RETURN ID(d) AS result").single();
         long diskID = result.get("result").asLong();
         assertEquals(diskSegment.getId(), diskID);
@@ -62,5 +60,13 @@ public class DiskSegmentTest {
                 .executeRead("MATCH (d:DiskSegment)-[:VISUALIZES]->(n:Field) RETURN d.color AS result").single();
         String  color = result.get("result").asString();
         assertEquals("#66000000", color);
+    }
+
+    private static void createTestObjects() {
+        model = new Model(false,false,false, connector);
+        Record result = connector
+                .executeRead("CREATE (n:Field) RETURN ID(n) AS result").single();
+        nodeID = result.get("result").asLong();
+        diskSegment = new DiskSegment(nodeID, -1, 1.5, 0.5, "#66000000");
     }
 }

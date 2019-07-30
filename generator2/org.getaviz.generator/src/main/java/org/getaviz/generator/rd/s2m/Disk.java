@@ -9,7 +9,6 @@ class Disk implements RDElement{
     private double transparency;
     private double ringWidth;
     private String color;
-    private String label;
     private long parentVisualizedNodeID;
     private long visualizedNodeID;
     private long parentID;
@@ -21,7 +20,6 @@ class Disk implements RDElement{
         this.ringWidth = ringWidth;
         this.height = height;
         this.transparency = transparency;
-        this.label = Labels.Disk.name();
     }
 
     Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency, String color) {
@@ -29,7 +27,8 @@ class Disk implements RDElement{
         this.color = color;
     }
 
-    public void createNodeForVisualization(DatabaseConnector connector) {
+    public void writeToDataBank(DatabaseConnector connector) {
+       String label = Labels.Disk.name();
        long id = connector.addNode(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
                         "(n:RD:%s {%s})-[:VISUALIZES]->(s)",

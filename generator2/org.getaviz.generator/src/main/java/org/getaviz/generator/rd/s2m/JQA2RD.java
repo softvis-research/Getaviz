@@ -4,7 +4,6 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,7 +16,7 @@ public class JQA2RD implements Step {
 
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
-	private DBModel model;
+	private Model model;
 	private boolean methodTypeMode;
 	private boolean methodDisks;
 	private boolean dataDisks;
@@ -32,7 +31,7 @@ public class JQA2RD implements Step {
 	private String classColor;
 	private String methodColor;
 	private String dataColor;
-	private static ArrayList<RDElement> allNodesToVisualize = new ArrayList<>();
+	private static ArrayList<RDElement> RDElementsList = new ArrayList<>();
 
 	public JQA2RD(SettingsConfiguration config) {
 		this.methodTypeMode = config.isMethodTypeMode();
@@ -54,8 +53,8 @@ public class JQA2RD implements Step {
 	public void run() {
 		log.info("JQA2RD started");
 		connector.executeWrite("MATCH (n:RD) DETACH DELETE n");
-		model = new DBModel(methodTypeMode, methodDisks,dataDisks, connector);
-		QueriesToDiskElement();
+		model = new Model(methodTypeMode, methodDisks,dataDisks, connector);
+		queriesToRDElementList();
 		writeToDB();
 		log.info("JQA2RD finished");
 	}
@@ -99,8 +98,8 @@ public class JQA2RD implements Step {
 								list.add(new DiskSegment(result.get("m").asNode().id(), t.getVisualizedNodeID(),
 										height, methodTransparency, minArea, methodColor, result.get("line").asInt(0)));
 							} else {
-								list.add(new Disk(result.get("m").asNode().id(), t.getVisualizedNodeID(), ringWidth, height, methodTransparency,
-										methodColor));
+								list.add(new Disk(result.get("m").asNode().id(), t.getVisualizedNodeID(), ringWidth, height,
+										methodTransparency, methodColor));
 							}
 						});
 					} else {
@@ -142,43 +141,19 @@ public class JQA2RD implements Step {
 		return list;
 	}
 
-	private void QueriesToDiskElement() {
+	private void queriesToRDElementList() {
 		ArrayList<Disk> types;
-		allNodesToVisualize.addAll(getPackagesNoRoot());
-		allNodesToVisualize.addAll(getPackagesWithRoot());
+		RDElementsList.addAll(getPackagesNoRoot());
+		RDElementsList.addAll(getPackagesWithRoot());
 		types = getTypes();
-		allNodesToVisualize.addAll(types);
-		allNodesToVisualize.addAll(getMethods(types));
-		allNodesToVisualize.addAll(getFields(types));
+		RDElementsList.addAll(types);
+		RDElementsList.addAll(getMethods(types));
+		RDElementsList.addAll(getFields(types));
 	}
 
 	private void writeToDB() {
-		model.createModel();
-		long modelID = model.getId();
-		allNodesToVisualize.forEach(p -> {
-			if (p.getParentVisualizedNodeID() == -1) {
-				p.setParentID(modelID);
-				write(p);
-			} else {
-				search(p);
-				write(p);
-			}
-		});
-	}
-
-	private void search(RDElement element) {
-		Iterator<RDElement> iterator = allNodesToVisualize.iterator();
-		while ((iterator.hasNext())) {
-			RDElement disk = iterator.next();
-			if (element.getParentVisualizedNodeID() == disk.getVisualizedNodeID()) {
-				element.setParentID(disk.getId());
-				return;
-			}
-		}
-	}
-
-	private void write(RDElement p) {
-		p.createNodeForVisualization(connector);
+		model.setRDElementsList(RDElementsList);
+		model.createVisualization(connector);
 	}
 }
 

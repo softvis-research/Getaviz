@@ -9,7 +9,6 @@ class DiskSegment implements RDElement {
     private double height;
     private double transparency;
     private String color;
-    private String label;
     private long visualizedNodeID;
     private long parentVisualizedNodeID;
     private long parentID;
@@ -22,7 +21,6 @@ class DiskSegment implements RDElement {
         this.transparency = transparency;
         this.height = height;
         this.color = color;
-        label = Labels.DiskSegment.name();
     }
 
     DiskSegment (long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, double minArea, String color,
@@ -35,7 +33,8 @@ class DiskSegment implements RDElement {
         }
     }
 
-    public void createNodeForVisualization(DatabaseConnector connector) {
+    public void writeToDataBank(DatabaseConnector connector) {
+        String label = Labels.DiskSegment.name();
         long id = connector.addNode(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
                         "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
