@@ -8,6 +8,6 @@ public interface RDElement {
     long getVisualizedNodeID();
     long getId();
     void setParentID(long id);
-    void writeToDataBank(DatabaseConnector connector);
+    void writeToDatabase(DatabaseConnector connector);
 
 }

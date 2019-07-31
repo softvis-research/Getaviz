@@ -27,7 +27,7 @@ class Disk implements RDElement{
         this.color = color;
     }
 
-    public void writeToDataBank(DatabaseConnector connector) {
+    public void writeToDatabase(DatabaseConnector connector) {
        String label = Labels.Disk.name();
        long id = connector.addNode(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +

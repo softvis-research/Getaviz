@@ -18,17 +18,15 @@ class ModelTest {
     private static Disk disk;
     private static DiskSegment diskSegment;
     private static long modelID;
-    private static ArrayList<RDElement> RDElementsList = new ArrayList<>();
 
     @BeforeAll
     static void setup() {
         mockup.setupDatabase("./test/databases/ModelTest.db");
         connector = mockup.getConnector();
         createTestObjects();
-        RDElementsList.add(disk);
-        RDElementsList.add(diskSegment);
-        model.setRDElementsList(RDElementsList);
-        model.createVisualization(connector);
+        model.setList(disk);
+        model.setList(diskSegment);
+        model.writeToDatabase(connector);
         modelID = model.getId();
     }
 
@@ -43,7 +41,7 @@ class ModelTest {
     void writtenVisualisationsTest() {
         Record result = connector.executeRead("MATCH (n)-[:VISUALIZES]->(s) RETURN count(n) as result").single();
         long count  = result.get("result").asLong();
-        assertEquals(RDElementsList.size(), count);
+        assertEquals(2, count);
     }
 
     @Test
@@ -57,7 +55,7 @@ class ModelTest {
     }
 
     private static void createTestObjects() {
-        model = new Model(false,false,false, connector);
+        model = new Model(false,false,false);
         Record resultDisk = connector
                 .executeRead("CREATE (n:Package) RETURN ID(n) AS result").single();
         long nodeID4Disk = resultDisk.get("result").asLong();

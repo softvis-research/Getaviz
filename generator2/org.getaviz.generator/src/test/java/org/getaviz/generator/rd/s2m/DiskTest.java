@@ -10,23 +10,21 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DiskTest {
+class DiskTest {
 
     private static DatabaseConnector connector;
     private static Model model;
     private static Bank mockup = new Bank();
     private static Disk disk;
     private static long nodeID;
-    private static ArrayList<RDElement> RDElementsList = new ArrayList<>();
 
     @BeforeAll
     static void setup() {
         mockup.setupDatabase("./test/databases/DiskTest.db");
         connector = mockup.getConnector();
         createObjectsForTests();
-        RDElementsList.add(disk);
-        model.setRDElementsList(RDElementsList);
-        model.createVisualization(connector);
+        model.setList(disk);
+        model.writeToDatabase(connector);
     }
 
     @Test
@@ -39,7 +37,7 @@ public class DiskTest {
     }
 
     @Test
-    void addNodeHeightTest() {
+    void heightTest() {
         Record result = connector
                 .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + nodeID +
                         " RETURN d.height AS result").single();
@@ -48,7 +46,7 @@ public class DiskTest {
     }
 
     @Test
-    void addNodeRingWithTest() {
+    void ringWithTest() {
         Record result = connector
                 .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + nodeID +
                         " RETURN d.ringWidth AS result").single();
@@ -57,7 +55,7 @@ public class DiskTest {
     }
 
     @Test
-    void addNodeTransparencyTest() {
+    void transparencyTest() {
         Record result = connector
                 .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + nodeID +
                         " RETURN d.transparency AS result").single();
@@ -75,7 +73,7 @@ public class DiskTest {
     }
 
     private static void createObjectsForTests() {
-        model = new Model(false,false,false, connector);
+        model = new Model(false,false,false);
         Record result = connector
                 .executeRead("CREATE (n:Package) RETURN ID(n) AS result").single();
         nodeID = result.get("result").asLong();

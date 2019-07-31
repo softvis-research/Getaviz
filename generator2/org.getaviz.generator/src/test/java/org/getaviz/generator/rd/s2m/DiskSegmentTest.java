@@ -17,16 +17,14 @@ class DiskSegmentTest {
     private static Model model;
     private static DiskSegment diskSegment;
     private static long nodeID;
-    private static ArrayList<RDElement> RDElementsList = new ArrayList<>();
 
     @BeforeAll
     static void setup () {
         mockup.setupDatabase("./test/databases/DiskSegmentTest.db");
         connector = mockup.getConnector();
         createTestObjects();
-        RDElementsList.add(diskSegment);
-        model.setRDElementsList(RDElementsList);
-        model.createVisualization(connector);
+        model.setList(diskSegment);
+        model.writeToDatabase(connector);
     }
 
     @Test
@@ -39,7 +37,7 @@ class DiskSegmentTest {
     }
 
     @Test
-    void writeHeightTest() {
+    void heightTest() {
         Record result = connector
                 .executeRead("MATCH (d:DiskSegment)-[:VISUALIZES]->(n:Field) RETURN d.height AS result").single();
         double height = result.get("result").asDouble();
@@ -47,7 +45,7 @@ class DiskSegmentTest {
     }
 
     @Test
-    void writeTransparencyTest() {
+    void transparencyTest() {
         Record result = connector
                 .executeRead("MATCH (d:DiskSegment)-[:VISUALIZES]->(n:Field) RETURN d.transparency AS result").single();
         double transparency= result.get("result").asDouble();
@@ -55,7 +53,7 @@ class DiskSegmentTest {
     }
 
     @Test
-    void writeColorTest() {
+    void colorTest() {
         Record result = connector
                 .executeRead("MATCH (d:DiskSegment)-[:VISUALIZES]->(n:Field) RETURN d.color AS result").single();
         String  color = result.get("result").asString();
@@ -63,7 +61,7 @@ class DiskSegmentTest {
     }
 
     private static void createTestObjects() {
-        model = new Model(false,false,false, connector);
+        model = new Model(false,false,false);
         Record result = connector
                 .executeRead("CREATE (n:Field) RETURN ID(n) AS result").single();
         nodeID = result.get("result").asLong();
