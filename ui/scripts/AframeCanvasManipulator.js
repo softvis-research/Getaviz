@@ -67,6 +67,32 @@ var canvasManipulator = (function () {
         });
     }
 
+    function startBlinkingAnimationForEntities(entities, color) {
+        entities.forEach(function (entity) {
+
+            // https://aframe.io/docs/0.9.0/components/animation.html
+            // https://blog.prototypr.io/learning-a-frame-how-to-do-animations-2aac1ae461da
+
+
+            if (!(entity == undefined)) {
+                var component = document.getElementById(entity.id);
+            }
+            if (component == undefined) {
+                events.log.error.publish({text: "CanvasManipualtor - changeColorOfEntities - components for entityIds not found"});
+                return;
+            }
+
+            //component.setAttribute("animation__color1", "property: components.material.material.color; type: color; from: red; to: green; dur: 500; loop: true");
+            component.setAttribute("animation", "property: scale; from: 1 1 1; to: 2 2 2; dur: 500; delay: 500 loop: true");
+            //component.setAttribute("animation", "property: scale; from: 2 2 2; to: 1 1 1; dur: 500; delay: 1000 loop: true");
+
+
+            //component.setAttribute("animation", "property: position; to: 5 1.6 0; dur: 1500; easing: linear");
+
+            }
+        );
+    }
+    
     function changeColorOfEntities(entities, color) {
         entities.forEach(function (entity) {
                 if (!(entity == undefined)) {
@@ -230,6 +256,8 @@ var canvasManipulator = (function () {
 
         changeTransparencyOfEntities: changeTransparencyOfEntities,
         resetTransparencyOfEntities: resetTransparencyOfEntities,
+
+        startBlinkingAnimationForEntities : startBlinkingAnimationForEntities,
 
         changeColorOfEntities: changeColorOfEntities,
         resetColorOfEntities: resetColorOfEntities,

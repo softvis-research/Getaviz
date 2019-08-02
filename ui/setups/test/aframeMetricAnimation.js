@@ -10,10 +10,10 @@
 			logInfoConsole		: false,
 			logActionConsole	: false,
 			logEventConsole		: false
-		},		
+		},	
 		
-		{	name: 	"emailController",
-			
+		{	name:	"emailController",
+		
 			createHeadSection: false
 		},	
 		
@@ -34,26 +34,23 @@
 
 		{ 	name: 	"canvasFlyToController" 
 		},
-	
 		{	name: 	"searchController" 
 		},
 
 		{	name: 	"packageExplorerController",
 		},
 		{	name: 	"sourceCodeController",
-            url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
+            url:    "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
 		},
-		
-		{ 	name: 	"relationConnectorController",		
-						
-			fixPositionZ : 1,
-			showInnerRelations : true,
-			elementShape : "circle",					
-			sourceStartAtParentBorder : true,
-			targetEndAtParentBorder : false,
-			createEndpoints: true,
-		},
-
+        { 	name: 	"relationConnectorController",
+            fixPositionY : false,
+            showInnerRelations : true,
+            sourceStartAtParentBorder : false,
+            targetEndAtParentBorder : false,
+            sourceStartAtBorder: true,
+            targetEndAtBorder: true,
+            createEndpoints : true
+        },
 		{ 	name: 	"relationTransparencyController",
 		},
 			
@@ -169,9 +166,9 @@
                             title: 	"Privacy Policy",
                             link: 	true,
                             url:	"http://home.uni-leipzig.de/svis/privacy-policy/"
-                    }
+                        }
 					]
-				},					
+				},			
 			]
 		},
         {
@@ -183,21 +180,12 @@
                 name: "Type",
                 icon: "purpleCircle",
             }, {
-                name: "Method",
-                icon: "lightBlueCircle",
-            }, {
-                name: "Field",
-                icon: "yellowCircle",
-            }, {
                 name: "Navigation",
                 icon: "navigation",
                 entries: [
                     {
                         name: "Rotate",
                         icon: "leftMouseButton"
-                    }, {
-                        name: "Center",
-                        icon: "doubleClick"
                     }, {
                         name: "Move",
                         icon: "midMouseButton"
@@ -224,7 +212,7 @@
                 type: "turntable",
 
                 //turntable last 2 values - accepted values are between 0 and PI - 0.0 - 1,5 at Y-axis
-                typeParams: "0.0 0.0 1.57 3.1",
+                typeParams: "0.0 0.0 0.001 1.5",
 
                 //speed: 10
             },
@@ -236,13 +224,13 @@
                 resizable: false,
                 collapsible: false,
                 first: {
-                    size: "75px",
+                    size: "25px",
                     collapsible: false,
                     controllers: [
                         {name: "menuController"},
-                        {name: "searchController"},
+                        //{name: "searchController"},
                         {name: "emailController"},
-                        {name: "generationFormController"},
+						{name: "generationFormController"}	
                     ],
                 },
                 second: {
@@ -261,13 +249,13 @@
                                 name: "packagePanel",
                                 first: {
                                     collapsible: false,
-                                    size: "30%",
+                                    size: "33%",
                                     expanders: [
                                         {
-                                            name: "packageExplorer",
-                                            title: "Package Explorer",
+                                           name: "filterExplorer",
+                                            title: "Filter",
                                             controllers: [
-                                                {name: "packageExplorerController"}
+                                               // {name: "filterController"}
                                             ],
                                         }
                                     ]
@@ -277,33 +265,44 @@
                                     area: {
                                         orientation: "horizontal",
                                         name: "legendPanel",
-                                        size: "100%",
+                                        size: "50%%",
                                         collapsible: false,
                                         first: {
                                             size: "50%",
                                             expanders: [
                                                 {
-                                                    name: "legend",
-                                                    title: "Legend",
-
+                                                    name: "packageExplorer",
+                                                    title: "Package Explorer",
                                                     controllers: [
-                                                        {name: "legendController"}
+                                                        {name: "packageExplorerController"}
                                                     ],
                                                 },
                                             ]
                                         },
                                         second: {
                                             size: "50%",
-                                            expanders: [
-                                                {
-                                                    name: "metricAnimation",
-                                                    title: "Metric Animations",
+                                            area: {
+                                                orientation: "horizontal",
+                                                name: "legendPanel2",
+                                                size: "100%",
+                                                collapsible: false,
+                                                first: {
+                                                    size: "100%",
+                                                    expanders: [
+                                                        {
+                                                            name: "legend",
+                                                            title: "Legend",
 
-                                                    controllers: [
-                                                        {name: "metricAnimationController"}
-                                                    ],
+                                                            controllers: [
+                                                                {name: "legendController"}
+                                                            ],
+                                                        },
+                                                    ]
                                                 },
-                                            ]
+                                                second: {
+
+                                                }
+                                            },
                                         },
                                     }
                                 },
@@ -339,7 +338,7 @@
                                         name: "rightPael",
                                         size: "80%",
                                         first: {
-                                            size: "80%",
+                                            size: "50%",
                                             min: "200",
                                             oriontation: "horizontal",
                                             expanders: [
@@ -353,18 +352,40 @@
                                             ],
                                         },
                                         second: {
-                                            size: "20%",
-                                            min: "200",
-                                            oriontation: "horizontal",
-                                            expanders: [
-                                                {
-                                                    name: "systeminfo",
-                                                    title: "Info",
-                                                    controllers: [
-                                                        {name: "systeminfoController"}
+                                            area: {
+                                                orientation: "horizontal",
+                                                collapsible: false,
+                                                name: "rightBottomPanel",
+                                                size: "50%",
+                                                first: {
+                                                    size: "50%",
+                                                    min: "200",
+                                                    oriontation: "horizontal",
+                                                    expanders: [
+                                                        {
+                                                            name: "metricAnimation",
+                                                            title: "Metric Animations",
+                                                            controllers: [
+                                                                {name: "metricAnimationController"}
+                                                            ],
+                                                        },
                                                     ],
                                                 },
-                                            ],
+                                                second: {
+                                                    size: "50%",
+                                                    min: "200",
+                                                    oriontation: "horizontal",
+                                                    expanders: [
+                                                        {
+                                                            name: "systeminfo",
+                                                            title: "Info",
+                                                            controllers: [
+                                                                {name: "systeminfoController"}
+                                                            ],
+                                                        },
+                                                    ],
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -374,5 +395,5 @@
                 }
             }
         }
-	]
+    ]
 };

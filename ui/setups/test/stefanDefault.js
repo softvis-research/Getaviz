@@ -1,64 +1,64 @@
 ﻿var setup = {
 
-	loadPopUp: true,
+    loadPopUp: true,
 
-		
-	controllers: [	
 
-		{ 	name: 	"defaultLogger",
+    controllers: [
 
-			logInfoConsole		: false,
-			logActionConsole	: false,
-			logEventConsole		: false
-		},		
-		
-		{	name: 	"emailController",
-			
-			createHeadSection: false
-		},	
-		
-		{	name:	"generationFormController",
-		},
+        { 	name: 	"defaultLogger",
 
-		{	name: 	"canvasHoverController",			
-		},	
+            logInfoConsole		: false,
+            logActionConsole	: false,
+            logEventConsole		: false
+        },
 
-		{	name: 	"canvasMarkController",
-		},	
-		
-		{	name: 	"canvasSelectController" 
-		},	
+        {	name: 	"emailController",
 
-		{	name: 	"canvasFilterController" 
-		},
+            createHeadSection: false
+        },
 
-		{ 	name: 	"canvasFlyToController" 
-		},
-	
-		{	name: 	"searchController" 
-		},
+        {	name:	"generationFormController",
+        },
 
-		{	name: 	"packageExplorerController",
-		},
-		{	name: 	"sourceCodeController",
+        {	name: 	"canvasHoverController",
+        },
+
+        {	name: 	"canvasMarkController",
+        },
+
+        {	name: 	"canvasSelectController"
+        },
+
+        {	name: 	"canvasFilterController"
+        },
+
+        { 	name: 	"canvasFlyToController"
+        },
+
+        {	name: 	"searchController"
+        },
+
+        {	name: 	"packageExplorerController",
+        },
+        {	name: 	"sourceCodeController",
             url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
-		},
-		
-		{ 	name: 	"relationConnectorController",		
-						
-			fixPositionZ : 1,
-			showInnerRelations : true,
-			elementShape : "circle",					
-			sourceStartAtParentBorder : true,
-			targetEndAtParentBorder : false,
-			createEndpoints: true,
-		},
+        },
 
-		{ 	name: 	"relationTransparencyController",
-		},
-			
-		{ 	name: 	"relationHighlightController" 
-		},
+        { 	name: 	"relationConnectorController",
+
+            fixPositionZ : 1,
+            showInnerRelations : true,
+            elementShape : "circle",
+            sourceStartAtParentBorder : true,
+            targetEndAtParentBorder : false,
+            createEndpoints: true,
+        },
+
+        { 	name: 	"relationTransparencyController",
+        },
+
+        { 	name: 	"relationHighlightController"
+        },
         {
             name:   "systeminfoController",
             system: "Bank",
@@ -66,112 +66,112 @@
             noc: true,
             loc: 192
         },
-		{	name: 	"menuController",
-			menuMapping: [
+        {	name: 	"menuController",
+            menuMapping: [
 
-				{	
-					title:		"View",
-					subMenu:	true,
-					items:		[
-						{
-							title: 		"FlyTo",
-							toggle: 	true,	
-							eventOn: 	"canvasFlyToController.activate",
-							eventOff: 	"canvasFlyToController.deactivate",									
-						},
+                {
+                    title:		"View",
+                    subMenu:	true,
+                    items:		[
+                        {
+                            title: 		"FlyTo",
+                            toggle: 	true,
+                            eventOn: 	"canvasFlyToController.activate",
+                            eventOff: 	"canvasFlyToController.deactivate",
+                        },
 
-						{
-							title: "Reset Visualization",
-							event: "application.reset",
-						},
-					]
-				},
+                        {
+                            title: "Reset Visualization",
+                            event: "application.reset",
+                        },
+                    ]
+                },
 
-				{	
-					title:		"Relations",
-					subMenu:	true,
-					items:		[
-						{
-							title: 		"Relation Connectors",
-							toggle: 	true,	
-							eventOn: 	"relationConnectorController.activate",
-							eventOff: 	"relationConnectorController.deactivate",			
-						},
-						{
-							title: 		"Relation Transparency",
-							toggle: 	true,	
-							eventOn: 	"relationTransparencyController.activate",
-							eventOff: 	"relationTransparencyController.deactivate",			
-						},
-						{
-							title: 		"Relation Highlight",
-							toggle: 	true,	
-							eventOn: 	"relationHighlightController.activate",
-							eventOff: 	"relationHighlightController.deactivate",			
-						},
-					]
-				},
+                {
+                    title:		"Relations",
+                    subMenu:	true,
+                    items:		[
+                        {
+                            title: 		"Relation Connectors",
+                            toggle: 	true,
+                            eventOn: 	"relationConnectorController.activate",
+                            eventOff: 	"relationConnectorController.deactivate",
+                        },
+                        {
+                            title: 		"Relation Transparency",
+                            toggle: 	true,
+                            eventOn: 	"relationTransparencyController.activate",
+                            eventOff: 	"relationTransparencyController.deactivate",
+                        },
+                        {
+                            title: 		"Relation Highlight",
+                            toggle: 	true,
+                            eventOn: 	"relationHighlightController.activate",
+                            eventOff: 	"relationHighlightController.deactivate",
+                        },
+                    ]
+                },
 
-				{	
-					title:		"Visualizations",
-					subMenu:	true,
-					items:		[
-						{
-							title: 	"City Original",
-							link: 	true,
-							url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
-						},
-						{
-							title: 	"Recursive Disk",
-							link: 	true,
-							url:	"index.php?setup=web/RD bank&model=RD%20bank"
-						},
+                {
+                    title:		"Visualizations",
+                    subMenu:	true,
+                    items:		[
+                        {
+                            title: 	"City Original",
+                            link: 	true,
+                            url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
+                        },
+                        {
+                            title: 	"Recursive Disk",
+                            link: 	true,
+                            url:	"index.php?setup=web/RD bank&model=RD%20bank"
+                        },
                         {
                             title: 	"New Visualization",
                             event:	"generationFormController.openSettingsPopUp"
                         },
-					]
-				},
+                    ]
+                },
 
-				{	
-					title:		"About",
-					subMenu:	true,
-					items:		[
-						{
-							title: 	"University Leipzig",
-							link: 	true,
-							url:	"https://www.wifa.uni-leipzig.de/en/information-systems-institute/se/research/softwarevisualization-in-3d-and-vr.html"							
-						},
-						{
-							title: 		"Feedback!",
-							event: 		"emailController.openMailPopUp",
-						},
-						{
-							title: 		"Impressum",
-							popup:		true,
-							text: 		"<b>Universität Leipzig</b><br\/\>"+
-										" <br\/\>"+										
-										"Wirtschaftswissenschaftliche Fakultät<br\/\>"+
-										"Institut für Wirtschaftsinformatik<br\/\>"+
-										"Grimmaische Straße 12<br\/\>"+
-										"D - 04109 Leipzig<br\/\>"+
-										" <br\/\>"+
-										"<b>Dr. Richard Müller</b><br\/\>"+
-										"rmueller(-a-t-)wifa.uni-leipzig.de<br\/\>",
-							height: 	200,
-							width:		2050,
-						},
+                {
+                    title:		"About",
+                    subMenu:	true,
+                    items:		[
+                        {
+                            title: 	"University Leipzig",
+                            link: 	true,
+                            url:	"https://www.wifa.uni-leipzig.de/en/information-systems-institute/se/research/softwarevisualization-in-3d-and-vr.html"
+                        },
+                        {
+                            title: 		"Feedback!",
+                            event: 		"emailController.openMailPopUp",
+                        },
+                        {
+                            title: 		"Impressum",
+                            popup:		true,
+                            text: 		"<b>Universität Leipzig</b><br\/\>"+
+                                " <br\/\>"+
+                                "Wirtschaftswissenschaftliche Fakultät<br\/\>"+
+                                "Institut für Wirtschaftsinformatik<br\/\>"+
+                                "Grimmaische Straße 12<br\/\>"+
+                                "D - 04109 Leipzig<br\/\>"+
+                                " <br\/\>"+
+                                "<b>Dr. Richard Müller</b><br\/\>"+
+                                "rmueller(-a-t-)wifa.uni-leipzig.de<br\/\>",
+                            height: 	200,
+                            width:		2050,
+                        },
                         {
                             title: 	"Privacy Policy",
                             link: 	true,
                             url:	"http://home.uni-leipzig.de/svis/privacy-policy/"
-                    }
-					]
-				},					
-			]
-		},
+                        }
+                    ]
+                },
+            ]
+        },
         {
-            name: "legendController",
+            name: "metricAnimationController",
             entries: [{
                 name: "Package",
                 icon: "grayCircle"
@@ -204,12 +204,12 @@
             }
             ],
         }
-	],
-	
-	
-	
+    ],
 
-	uis: [
+
+
+
+    uis: [
 
 
         {
@@ -283,7 +283,7 @@
                                                     title: "Legend",
 
                                                     controllers: [
-                                                        {name: "legendController"}
+                                                        {name: "metricAnimationController"}
                                                     ],
                                                 },
                                             ]
@@ -359,5 +359,5 @@
                 }
             }
         }
-	]
+    ]
 };
