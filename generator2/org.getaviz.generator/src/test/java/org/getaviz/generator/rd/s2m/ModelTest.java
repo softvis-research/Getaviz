@@ -6,8 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ModelTest {
@@ -56,12 +54,8 @@ class ModelTest {
 
     private static void createTestObjects() {
         model = new Model(false,false,false);
-        Record resultDisk = connector
-                .executeRead("CREATE (n:Package) RETURN ID(n) AS result").single();
-        long nodeID4Disk = resultDisk.get("result").asLong();
-        Record resultDiskSegment = connector
-                .executeRead("CREATE (n:Field) RETURN ID(n) AS result").single();
-        long nodeID4DiskSegment = resultDiskSegment.get("result").asLong();
+        long nodeID4Disk = connector.addNode(("CREATE (n:Package)"), "n").id();
+        long nodeID4DiskSegment = connector.addNode(("CREATE (n:Field)"), "n").id();
         disk = new Disk(nodeID4Disk, -1, 1.5,1.0, 0.0, "#000000");
         diskSegment = new DiskSegment(nodeID4DiskSegment, nodeID4Disk, 1.5, 0.5, "#66000000");
     }

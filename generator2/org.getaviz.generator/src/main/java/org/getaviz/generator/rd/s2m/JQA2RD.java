@@ -2,13 +2,9 @@ package org.getaviz.generator.rd.s2m;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
-
-import java.util.ArrayList;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.database.Labels;
 import org.neo4j.driver.v1.StatementResult;
 
 
@@ -17,6 +13,7 @@ public class JQA2RD implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
 	private Model model;
+	private  RDElementsFactory factory;
 	private boolean methodTypeMode;
 	private boolean methodDisks;
 	private boolean dataDisks;
@@ -31,9 +28,6 @@ public class JQA2RD implements Step {
 	private String classColor;
 	private String methodColor;
 	private String dataColor;
-	
-    private static ArrayList<Disk> types = new ArrayList<>();
-
 
 	public JQA2RD(SettingsConfiguration config) {
 		this.methodTypeMode = config.isMethodTypeMode();
@@ -55,7 +49,8 @@ public class JQA2RD implements Step {
 	public void run() {
 		log.info("JQA2RD started");
 		connector.executeWrite("MATCH (n:RD) DETACH DELETE n");
-		model = new Model(methodTypeMode, methodDisks,dataDisks);
+		model = new Model(methodTypeMode, methodDisks, dataDisks);
+		factory = new RDElementsFactory(model);
 		queriesToRDElementList();
 		writeToDatabase();
 		log.info("JQA2RD finished");
@@ -89,76 +84,28 @@ public class JQA2RD implements Step {
 		    Disk disk = new Disk(node.get("tID").asLong(), node.get("nID").asLong(),
                     ringWidth, height, classTransparency, classColor);
 		    model.setList(disk);
-		    types.add(disk);
         });
 	}
 
 	private void addMethods() {
-		types.forEach(t -> {
-			StatementResult methods = connector.executeRead("MATCH (n)-[:DECLARES]->(m:Method) WHERE ID(n) = "
-					+ t.getVisualizedNodeID() + " AND EXISTS(m.hash) RETURN m AS m, m.effectiveLineCount AS line");
-					if (methodTypeMode) {
-						methods.forEachRemaining((result) -> {
-							if (result.get("m").asNode().hasLabel(Labels.Constructor.name())) {
-								DiskSegment diskSegment = new DiskSegment(result.get("m").asNode().id(), t.getVisualizedNodeID(),
-										height, methodTransparency, minArea, methodColor, result.get("line").asInt(0));
-								model.setList(diskSegment);
-							} else {
-								Disk disk = new Disk(result.get("m").asNode().id(), t.getVisualizedNodeID(), ringWidth, height,
-										methodTransparency, methodColor);
-								model.setList(disk);
-							}
-						});
-					} else {
-						if (methodDisks) {
-							methods.forEachRemaining((result) -> {
-									Disk disk = new Disk(result.get("m").asNode().id(), t.getVisualizedNodeID(), ringWidthAD,
-									height, methodTransparency, methodColor);
-									model.setList(disk);
-                            });
-						} else {
-							methods.forEachRemaining((result) -> {
-									DiskSegment diskSegment = new DiskSegment(result.get("m").asNode().id(), t.getVisualizedNodeID(), height,
-											classTransparency, minArea, classColor, result.get("line").asInt(0));
-									model.setList(diskSegment);
-                            });
-						}
-					}
-			});
+		StatementResult methods = connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type)-[:DECLARES]->(m:Method)" +
+				" WHERE EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) AND NOT t:Inner AND EXISTS(m.hash)" +
+				" RETURN m AS node, m.effectiveLineCount AS line, ID(t) AS tID");
+		factory.create(methods, height, ringWidth, ringWidthAD, methodTransparency,
+				classTransparency, minArea, methodColor, classColor);
 	}
 
 	private void addFields() {
-		types.forEach(t -> {
-			StatementResult fields = connector.executeRead("MATCH (n)-[:DECLARES]->(f:Field) WHERE ID(n) = "
-					+ t.getVisualizedNodeID() +	" AND EXISTS(f.hash) RETURN f");
-					if (methodTypeMode) {
-						fields.forEachRemaining((result) -> {
-							Disk disk = new Disk(result.get("f").asNode().id(), t.getVisualizedNodeID(), ringWidthAD, height,
-									dataTransparency, dataColor);
-							model.setList(disk);
-                        });
-					} else {
-						if (dataDisks) {
-                            fields.forEachRemaining((result) -> {
-                                   Disk disk = new Disk(result.get("f").asNode().id(), t.getVisualizedNodeID(), ringWidthAD, height,
-                                            dataTransparency, dataColor);
-                                   model.setList(disk);
-                        });
-						} else {
-							fields.forEachRemaining((result) -> {
-								DiskSegment diskSegment = new DiskSegment(result.get("f").asNode().id(), t.getVisualizedNodeID(), height,
-										dataTransparency, dataColor);
-								model.setList(diskSegment);
-                            });
-						}
-					}
-			});
+		StatementResult fields = connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type)-[:DECLARES]->(f:Field)" +
+				" WHERE EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) AND NOT t:Inner AND EXISTS(f.hash)" +
+				" RETURN f AS node, ID(t) AS tID");
+		factory.create(fields, ringWidthAD, height, dataTransparency, dataColor);
 	}
 
 	private void queriesToRDElementList() {
 	    addPackagesNoRoot();
 		addPackagesWithRoot();
-		addTypes();;
+		addTypes();
 		addMethods();
 		addFields();
 	}

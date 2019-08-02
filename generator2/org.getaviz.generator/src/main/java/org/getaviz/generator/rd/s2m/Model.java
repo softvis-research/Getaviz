@@ -64,15 +64,31 @@ public class Model {
         RDElementsList.add(element);
     }
 
-    private void writeNodes(RDElement p, DatabaseConnector connector) {
-        p.writeToDatabase(connector);
-    }
-
     private void setID (long id) {
         this.id = id;
     }
 
+    public ArrayList<RDElement> getRDElementsList() {
+        return RDElementsList;
+    }
+
     public long getId() {
         return id;
+    }
+
+    boolean isMethodTypeMode() {
+        return methodTypeMode;
+    }
+
+    boolean isMethodDisks() {
+        return methodDisks;
+    }
+
+    boolean isDataDisks() {
+        return dataDisks;
+    }
+
+    private void writeNodes(RDElement p, DatabaseConnector connector) {
+        p.writeToDatabase(connector);
     }
 }
