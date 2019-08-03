@@ -67,30 +67,74 @@ var canvasManipulator = (function () {
         });
     }
 
-    function startBlinkingAnimationForEntities(entities, color) {
-        entities.forEach(function (entity) {
+    function startBlinkingAnimationForEntity(entity, color, intensity) {
+        // https://aframe.io/docs/0.9.0/components/animation.html
+        // https://blog.prototypr.io/learning-a-frame-how-to-do-animations-2aac1ae461da
 
-            // https://aframe.io/docs/0.9.0/components/animation.html
-            // https://blog.prototypr.io/learning-a-frame-how-to-do-animations-2aac1ae461da
+        if (!(entity == undefined)) {
+            var component = document.getElementById(entity.id);
+        }
+        if (component == undefined) {
+            events.log.error.publish({text: "CanvasManipualtor - startBlinkingAnimationForEntities - component for entityId not found"});
+            return;
+        }
+        if (entity.originalColor == undefined) {
+            entity.originalColor = component.getAttribute("color");
+        }
 
+        let blinkingMaxFrequency = 3000;
+        let blinkingFrequency = blinkingMaxFrequency - (blinkingMaxFrequency * intensity);
 
-            if (!(entity == undefined)) {
-                var component = document.getElementById(entity.id);
-            }
-            if (component == undefined) {
-                events.log.error.publish({text: "CanvasManipualtor - changeColorOfEntities - components for entityIds not found"});
-                return;
-            }
+        component.setAttribute("animation__blinking",
+            "property: components.material.material.color; type: color; from: " + entity.originalColor +
+            "; to: " + color + "; dur: " + blinkingFrequency + "; loop: true");
+    }
 
-            //component.setAttribute("animation__color1", "property: components.material.material.color; type: color; from: red; to: green; dur: 500; loop: true");
-            component.setAttribute("animation", "property: scale; from: 1 1 1; to: 2 2 2; dur: 500; delay: 500 loop: true");
-            //component.setAttribute("animation", "property: scale; from: 2 2 2; to: 1 1 1; dur: 500; delay: 1000 loop: true");
+    function stopBlinkingAnimationForEntity(entity) {
+        if (!(entity == undefined)) {
+            var component = document.getElementById(entity.id);
+        }
+        if (component == undefined) {
+            events.log.error.publish({text: "CanvasManipualtor - startBlinkingAnimationForEntities - component for entityId not found"});
+            return;
+        }
 
+        component.setAttribute("animation__blinking",
+            "property: components.material.material.color; type: color; from: " + entity.originalColor +
+            "; to: " + entity.originalColor + "; dur: 0");
 
-            //component.setAttribute("animation", "property: position; to: 5 1.6 0; dur: 1500; easing: linear");
+        component.removeAttribute("animation__blinking");
+        //component.setAttribute("color", entity.originalColor);
+    }
 
-            }
-        );
+    function startGrowShrinkAnimationForEntity(entity, intensity) {
+        if (!(entity == undefined)) {
+            var component = document.getElementById(entity.id);
+        }
+        if (component == undefined) {
+            events.log.error.publish({text: "CanvasManipualtor - startGrowShrinkAnimationForEntity - component for entityId not found"});
+            return;
+        }
+
+        let maxGrow = 3;
+        let growSize = 1 + (maxGrow * intensity);
+        let scale = growSize + " " + growSize + " " + growSize;
+
+        component.setAttribute("animation__grow", "property: scale; from: 1 1 1; to: " + scale + "; dur: 2000; loop: true");
+        //component.setAttribute("animation__shrink", "property: scale; from: 2 2 2; to: 1 1 1; dur: 2000; delay: 2000; loop: true");
+    }
+
+    function stopGrowShrinkAnimationForEntity(entity) {
+        if (!(entity == undefined)) {
+            var component = document.getElementById(entity.id);
+        }
+        if (component == undefined) {
+            events.log.error.publish({text: "CanvasManipualtor - stopGrowShrinkAnimationForEntity - component for entityId not found"});
+            return;
+        }
+
+        component.removeAttribute("animation__grow");
+        component.setAttribute("scale", "1 1 1");
     }
     
     function changeColorOfEntities(entities, color) {
@@ -257,7 +301,11 @@ var canvasManipulator = (function () {
         changeTransparencyOfEntities: changeTransparencyOfEntities,
         resetTransparencyOfEntities: resetTransparencyOfEntities,
 
-        startBlinkingAnimationForEntities : startBlinkingAnimationForEntities,
+        startBlinkingAnimationForEntity : startBlinkingAnimationForEntity,
+        stopBlinkingAnimationForEntity : stopBlinkingAnimationForEntity,
+
+        startGrowShrinkAnimationForEntity : startGrowShrinkAnimationForEntity,
+        stopGrowShrinkAnimationForEntity : stopGrowShrinkAnimationForEntity,
 
         changeColorOfEntities: changeColorOfEntities,
         resetColorOfEntities: resetColorOfEntities,

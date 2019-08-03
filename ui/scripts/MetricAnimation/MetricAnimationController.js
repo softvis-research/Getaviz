@@ -1,5 +1,8 @@
 var metricAnimationController = (function() {
 
+    let metricMaxValues = new Map();
+    let activeAnimations = new Map();
+
     var controllerConfig = {
         bla : true
     };
@@ -18,6 +21,8 @@ var metricAnimationController = (function() {
         appendMetricSelectionUiComponent(container, "NrAttributes","number of attributes:")
 
         rootDiv.appendChild(container);
+
+        initializeMetricMaxValues();
     }
 
     function appendMetricSelectionUiComponent(container, metric, metricLabel) {
@@ -34,9 +39,9 @@ var metricAnimationController = (function() {
         let option3 = document.createElement("option");
         let option4 = document.createElement("option");
         option0.setAttribute("value", "nothing");
-        option1.setAttribute("value", "red");
-        option2.setAttribute("value", "green");
-        option3.setAttribute("value", "blue");
+        option1.setAttribute("value", "blinking_red");
+        option2.setAttribute("value", "blinking_green");
+        option3.setAttribute("value", "blinking_blue");
         option4.setAttribute("value", "size");
         let labelOption0 = document.createTextNode("do nothing");
         let labelOption1 = document.createTextNode("blinking red");
@@ -61,25 +66,134 @@ var metricAnimationController = (function() {
     }
 
     function metricSelectionChanged(sel) {
-        let currentMetric = sel.id;
-        let currentVisualization = sel.value;
+        let selectedMetric = sel.id.substring("select".length);
+        let selectedVisualization = sel.value;
 
-        console.log(currentMetric + " - " + currentVisualization);
+        const methods = model.getEntitiesByType("Method");
+        const classes = model.getEntitiesByType("Class");
 
-        const entities = model.getEntitiesByType("Class");
+        switch(selectedMetric) {
+            case "CallsIn":
+                startAnimationForEntities(methods, selectedMetric, selectedVisualization);
+                break;
+            case "CallsOut":
+                startAnimationForEntities(methods, selectedMetric, selectedVisualization);
+                break;
+            case "NrAttributes":
+                startAnimationForEntities(classes, selectedMetric, selectedVisualization);
+                break;
+            default:
+                events.log.error.publish({text: "MetricAnimationController - metricSelectionChanged - unknown metric: " + selectedMetric});
+                return;
+        }
 
-        //canvasManipulator.changeColorOfEntities(entities, "green");
+        activeAnimations.set(selectedMetric, selectedVisualization);
+    }
 
-        canvasManipulator.startBlinkingAnimationForEntities(entities, "green");
 
-        // Metric scheint man im model zu finden!
-        // entity.calls
-        // entity.calledBy
-        // entity.accessedBy
+    function startAnimationForEntities(entities, metric, animation) {
 
-        // entities.forEach(function(entity){
-        //
-        // });
+        if (activeAnimations.has(metric)){
+            stopAnimationForMetric(entities, metric);
+        }
+
+        if (animation.startsWith("blinking_")){
+            let color = animation.substring("blinking_".length);
+
+            entities.forEach(function (entity) {
+                let intensity = getAnimationIntensity(entity, metric);
+                canvasManipulator.startBlinkingAnimationForEntity(entity, color, intensity);
+            });
+        }
+        else if (animation === "size"){
+            entities.forEach(function (entity) {
+                let intensity = getAnimationIntensity(entity, metric);
+                canvasManipulator.startGrowShrinkAnimationForEntity(entity, intensity);
+            });
+        }
+    }
+
+
+    function stopAnimationForMetric(entities, metric) {
+        let runningAnimation = activeAnimations.get(metric);
+
+        if (runningAnimation.startsWith("blinking_")){
+            entities.forEach(function (entity) {
+                canvasManipulator.stopBlinkingAnimationForEntity(entity);
+            });
+        }
+        else if (runningAnimation === "size"){
+            entities.forEach(function (entity) {
+                canvasManipulator.stopGrowShrinkAnimationForEntity(entity);
+            });
+        }
+
+        activeAnimations.delete(metric);
+    }
+
+    function getAnimationIntensity(entity, metric) {
+
+        let entitiesValue = getMetricValueOfEntity(entity, metric);
+        let maxValue = getMetricMaxValue(metric);
+
+        let intensity = maxValue / entitiesValue;
+
+        return intensity;
+    }
+
+    function getMetricMaxValue(metric){
+        let maxValue = metricMaxValues.get(metric);
+        if(maxValue === undefined) {
+            events.log.error.publish({text: "MetricAnimationController - getMetricMaxValue - maxValue for metric not found"});
+        }
+        return maxValue;
+    }
+
+    function initializeMetricMaxValues() {
+
+        // todo: hier geht was schief beim setzen der Max Values
+
+        const methods = model.getEntitiesByType("Method");
+        const classes = model.getEntitiesByType("Class");
+
+        metricMaxValues.set("CallsIn", getMetricMaxValueOfCollection(methods, "CallsIn"));
+        metricMaxValues.set("CallsOut", getMetricMaxValueOfCollection(methods, "CallsOut"));
+        metricMaxValues.set("NrAttributes", getMetricMaxValueOfCollection(classes, "NrAttributes"));
+    }
+
+    function getMetricMaxValueOfCollection(entities, metric) {
+        let maxValue = -1;
+        entities.forEach(function (entity) {
+            let metricValue = getMetricValueOfEntity(entity, metric);
+            if (metricValue > maxValue){
+                maxValue = metricValue;
+            }
+        });
+        return maxValue;
+    }
+    
+    function getMetricValueOfEntity(entity, metric) {
+        let result = -1;
+        switch(metric) {
+            case "CallsIn":
+                result = entity.calls.length;
+                break;
+            case "CallsOut":
+                result = entity.calledBy.length;
+                break;
+            case "NrAttributes":
+                let nrAttributes = 0;
+                entity.children.forEach(function (child) {
+                    if (child.type === "Attribute"){
+                        nrAttributes++;
+                    }
+                });
+                result = nrAttributes;
+                break;
+            default:
+                return;
+        }
+        return result;
     }
 
     function reset(){
