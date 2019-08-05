@@ -2,17 +2,20 @@ package org.getaviz.generator.rd.s2m;
 
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
+import org.neo4j.driver.v1.types.Node;
 
-class Disk implements RDElement{
+public class Disk implements RDElement{
 
     private double height;
     private double transparency;
     private double ringWidth;
+    private double netArea;
     private String color;
     private long parentVisualizedNodeID;
     private long visualizedNodeID;
     private long parentID;
     private long id;
+    private Node node;
 
    Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency) {
         this.visualizedNodeID = visualizedNodeId;
@@ -25,6 +28,18 @@ class Disk implements RDElement{
     Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency, String color) {
         this(visualizedNodeId, parentVisualizedNodeID, ringWidth, height, transparency);
         this.color = color;
+    }
+
+    public Disk(Node node, long id) {
+       this.node = node;
+       this.id = id;
+    }
+
+    public Disk(Node node, long id, double netArea, double ringWidth) {
+       this.node = node;
+       this.id= id;
+       this.netArea = netArea;
+       this.ringWidth = ringWidth;
     }
 
     public void writeToDatabase(DatabaseConnector connector) {
@@ -48,6 +63,18 @@ class Disk implements RDElement{
         return id;
     }
 
+    public double getNetArea() {
+       return this.netArea;
+    }
+
+    public double getRingWidth() {
+        return ringWidth;
+    }
+
+    public Node getNode() {
+       return this.node;
+    }
+
     private String propertiesToString() {
         return String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
                 height, transparency, color);
@@ -59,5 +86,9 @@ class Disk implements RDElement{
 
     private void setId(long id) {
        this.id = id;
+    }
+
+    public void setNetArea(double netArea) {
+        this.netArea = netArea;
     }
 }

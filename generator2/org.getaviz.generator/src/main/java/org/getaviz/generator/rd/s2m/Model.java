@@ -68,7 +68,7 @@ public class Model {
         this.id = id;
     }
 
-    public ArrayList<RDElement> getRDElementsList() {
+    ArrayList<RDElement> getRDElementsList() {
         return RDElementsList;
     }
 

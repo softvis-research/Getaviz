@@ -8,6 +8,7 @@ class DiskSegment implements RDElement {
     private double size;
     private double height;
     private double transparency;
+    private double netArea;
     private String color;
     private long visualizedNodeID;
     private long parentVisualizedNodeID;
@@ -65,5 +66,9 @@ class DiskSegment implements RDElement {
 
     private void setId(long id) {
         this.id = id;
+    }
+
+    public void setNetArea(double netArea) {
+       this.netArea = netArea;
     }
 }

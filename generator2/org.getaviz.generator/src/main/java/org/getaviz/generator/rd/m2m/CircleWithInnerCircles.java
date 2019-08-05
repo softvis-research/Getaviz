@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import org.getaviz.generator.rd.RDUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.rd.s2m.Disk;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 import org.getaviz.generator.database.DatabaseConnector;
@@ -30,6 +31,24 @@ class CircleWithInnerCircles extends Circle {
 		radius = disk.get("radius").asDouble(0.0);
 		grossArea = disk.get("grossArea").asDouble(0.0);
 		RDUtils.getSubDisks(disk.id()).forEachRemaining((subDisk) -> innerCircles.add(new CircleWithInnerCircles(subDisk.get("d").asNode(), true)));
+	}
+
+	CircleWithInnerCircles(Disk disk, Boolean nesting) {
+		diskNode = disk.getNode();
+		Iterable<Node> data = () -> RDUtils.getData(disk.getId());
+		Iterable<Node> methods = () -> RDUtils.getMethods(disk.getId());
+		if (nesting) {
+			minArea = RDUtils.sum(methods) + RDUtils.sum(data);
+		} else {
+			minArea = disk.getNetArea();
+		}
+		ringWidth = diskNode.get("ringWidth").asDouble();
+		serial = connector.getVisualizedEntity(disk.getId()).id() + "";
+		netArea = disk.getNetArea();
+		log.debug("set netArea to " + netArea + "for disk " + diskNode.id());
+		radius = diskNode.get("radius").asDouble(0.0);
+		grossArea = diskNode.get("grossArea").asDouble(0.0);
+		RDUtils.getSubDisks(disk.getId()).forEachRemaining((subDisk) -> innerCircles.add(new CircleWithInnerCircles(subDisk.get("d").asNode(), true)));
 	}
 
 	/**
