@@ -32,6 +32,7 @@
 	    <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
 	    <script type="text/javascript" src="scripts/CanvasHover/AframeCanvasHoverController.js"></script>
         <script type="text/javascript" src="scripts/camera-beta.js"></script>
+        <script type="text/javascript" src="scripts/MagGlass/MagGlassController.js"></script>
 EOT;
         $canvasId = "aframe-canvas";
         $visMode = "aframe";
@@ -54,7 +55,8 @@ EOT;
         <script type="text/javascript" src="scripts/CanvasManipulator.js"></script>
         <script type="text/javascript" src="scripts/ActionController.js"></script>
 	    <script type="text/javascript" src="scripts/RelationConnector/RelationConnectorController.js"></script>
-	    <script type="text/javascript" src="scripts/CanvasHover/CanvasHoverController.js"></script>
+        <script type="text/javascript" src="scripts/CanvasHover/CanvasHoverController.js"></script>
+        <script type="text/javascript" src="scripts/MagGlass/MagGlassController.js"></script>
 EOT;
         $canvasId = "x3dom-x3dElement-canvas";
         $visMode = "x3dom";
@@ -130,7 +132,8 @@ EOT;
     <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.excheck.min.js"></script>
     <link rel="stylesheet" href="node_modules/@ztree/ztree_v3/css/metroStyle/metroStyle.css" type="text/css">
     <link rel="stylesheet" href="scripts/PackageExplorer/zt.css" type="text/css">
-	
+    
+    <script type="text/javascript" src="scripts/MagGlass/MagGlassController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasFilter/CanvasFilterController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasMark/CanvasMarkController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasFlyTo/CanvasFlyToController.js"></script>
