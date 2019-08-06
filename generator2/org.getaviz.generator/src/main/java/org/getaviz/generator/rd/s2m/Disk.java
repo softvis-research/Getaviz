@@ -10,6 +10,10 @@ public class Disk implements RDElement{
     private double transparency;
     private double ringWidth;
     private double netArea;
+    private double methodArea;
+    private double dataArea;
+    private double radius;
+    private double grossArea;
     private String color;
     private long parentVisualizedNodeID;
     private long visualizedNodeID;
@@ -30,16 +34,14 @@ public class Disk implements RDElement{
         this.color = color;
     }
 
-    public Disk(Node node, long id) {
+    public Disk(Node node, long parentID, long id, double grossArea, double netArea, double ringWidth, double height) {
        this.node = node;
+       this.parentID = parentID;
        this.id = id;
-    }
-
-    public Disk(Node node, long id, double netArea, double ringWidth) {
-       this.node = node;
-       this.id= id;
+       this.grossArea = grossArea;
        this.netArea = netArea;
        this.ringWidth = ringWidth;
+       this.height = height;
     }
 
     public void writeToDatabase(DatabaseConnector connector) {
@@ -52,23 +54,39 @@ public class Disk implements RDElement{
     }
 
     public long getParentVisualizedNodeID() {
-        return this.parentVisualizedNodeID;
+        return parentVisualizedNodeID;
     }
 
     public long getVisualizedNodeID() {
-        return this.visualizedNodeID;
+        return visualizedNodeID;
     }
 
     public long getId() {
         return id;
     }
 
+    public long getParentID() {
+        return parentID;
+    }
+
     public double getNetArea() {
-       return this.netArea;
+       return netArea;
     }
 
     public double getRingWidth() {
         return ringWidth;
+    }
+
+    public double getRadius() { return radius; }
+
+    public double getGrossArea() { return grossArea; }
+
+    public double getHeight() { return height; }
+
+    public double getMethodArea() { return  methodArea; }
+
+    public double getDataArea() {
+        return dataArea;
     }
 
     public Node getNode() {
@@ -90,5 +108,17 @@ public class Disk implements RDElement{
 
     public void setNetArea(double netArea) {
         this.netArea = netArea;
+    }
+
+    public void setRadius (double radius) { this.radius = radius; }
+
+    public void setGrossArea(double grossArea) { this.grossArea = grossArea; }
+
+    public void setDataArea(double dataArea) {
+        this.dataArea = dataArea;
+    }
+
+    public void setMethodArea(double methodArea) {
+        this.methodArea = methodArea;
     }
 }

@@ -21,7 +21,6 @@ public class RDUtils {
 			"RETURN d " +
 			"ORDER BY method.hash"
 		).stream().map(s -> s.get("d").asNode()).collect(Collectors.toList()).listIterator();
-
 	}
 
 	public static StatementResult getSubDisks(Long disk) {

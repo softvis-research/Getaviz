@@ -2,8 +2,9 @@ package org.getaviz.generator.rd.s2m;
 
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
+import org.neo4j.driver.v1.types.Node;
 
-class DiskSegment implements RDElement {
+public class DiskSegment implements RDElement {
 
     private double size;
     private double height;
@@ -14,6 +15,7 @@ class DiskSegment implements RDElement {
     private long parentVisualizedNodeID;
     private long parentID;
     private long id;
+    private Node node;
 
     DiskSegment (long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, String color) {
         this.visualizedNodeID = visualizedNodeID;
@@ -32,6 +34,13 @@ class DiskSegment implements RDElement {
         if (numberOfStatements <= minArea) {
             size = minArea;
         }
+    }
+
+    public DiskSegment (Node node, long parentID, long id, double size) {
+        this.node = node;
+        this.parentID = parentID;
+        this.id = id;
+        this.size = size;
     }
 
     public void writeToDatabase(DatabaseConnector connector) {
@@ -60,6 +69,14 @@ class DiskSegment implements RDElement {
         return id;
     }
 
+    public long getParentID() {
+        return parentID;
+    }
+
+    public double getSize() {
+        return size;
+    }
+
     public void setParentID(long newParentID) {
         this.parentID = newParentID;
     }
@@ -70,5 +87,9 @@ class DiskSegment implements RDElement {
 
     public void setNetArea(double netArea) {
        this.netArea = netArea;
+    }
+
+    public void setSize(double size) {
+        this.size = size;
     }
 }
