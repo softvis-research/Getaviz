@@ -9,6 +9,7 @@ public interface RDElement {
     long getId();
     void setParentID(long id);
     void setNetArea(double netArea);
-    void writeToDatabase(DatabaseConnector connector);
+    void JQA2RDWriteToDatabase(DatabaseConnector connector);
+    void RD2RDWriteToDatabase(DatabaseConnector connector);
 
 }

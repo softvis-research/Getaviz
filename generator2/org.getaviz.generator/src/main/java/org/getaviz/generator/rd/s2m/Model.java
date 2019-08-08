@@ -89,6 +89,6 @@ public class Model {
     }
 
     private void writeNodes(RDElement p, DatabaseConnector connector) {
-        p.writeToDatabase(connector);
+        p.JQA2RDWriteToDatabase(connector);
     }
 }

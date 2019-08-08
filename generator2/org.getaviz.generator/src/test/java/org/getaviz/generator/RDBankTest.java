@@ -1,12 +1,9 @@
-package org.getaviz.generator.tests;
+package org.getaviz.generator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
-import org.getaviz.generator.StepFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

@@ -14,12 +14,14 @@ public class Disk implements RDElement{
     private double dataArea;
     private double radius;
     private double grossArea;
+    private double posX;
+    private double posY;
+    private double posZ;
     private String color;
     private long parentVisualizedNodeID;
     private long visualizedNodeID;
     private long parentID;
     private long id;
-    private Node node;
 
    Disk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency) {
         this.visualizedNodeID = visualizedNodeId;
@@ -34,8 +36,7 @@ public class Disk implements RDElement{
         this.color = color;
     }
 
-    public Disk(Node node, long parentID, long id, double grossArea, double netArea, double ringWidth, double height) {
-       this.node = node;
+    public Disk(long parentID, long id, double grossArea, double netArea, double ringWidth, double height) {
        this.parentID = parentID;
        this.id = id;
        this.grossArea = grossArea;
@@ -44,13 +45,21 @@ public class Disk implements RDElement{
        this.height = height;
     }
 
-    public void writeToDatabase(DatabaseConnector connector) {
+    public void JQA2RDWriteToDatabase(DatabaseConnector connector) {
        String label = Labels.Disk.name();
        long id = connector.addNode(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
                         "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
                 parentID, visualizedNodeID, label, propertiesToString()), "n").id();
        setId(id);
+    }
+
+    public void RD2RDWriteToDatabase(DatabaseConnector connector) {
+        String updateNode = String.format(
+                "MATCH (n) WHERE ID(n) = %d SET n.radius = %f, n.netArea = %f, n.grossArea = %f, n.methodArea = %f, " +
+                        "n.dataArea = %f ", id, radius, netArea, grossArea, methodArea, dataArea);
+        String createPosition = String.format("CREATE (n)-[:HAS]->(:RD:Position {x: %f, y: %f, z: %f})", posX, posY, posZ);
+        connector.executeWrite(updateNode + createPosition);
     }
 
     public long getParentVisualizedNodeID() {
@@ -89,8 +98,12 @@ public class Disk implements RDElement{
         return dataArea;
     }
 
-    public Node getNode() {
-       return this.node;
+    public double getPosX() {
+        return posX;
+    }
+
+    public double getPosY() {
+        return posY;
     }
 
     private String propertiesToString() {
@@ -121,4 +134,11 @@ public class Disk implements RDElement{
     public void setMethodArea(double methodArea) {
         this.methodArea = methodArea;
     }
+
+    public void setPosition(double posX, double posY, double posZ) {
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
+    }
+
 }

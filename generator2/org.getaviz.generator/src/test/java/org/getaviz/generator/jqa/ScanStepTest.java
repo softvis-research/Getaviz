@@ -1,4 +1,4 @@
-package org.getaviz.generator.tests;
+package org.getaviz.generator.jqa;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;

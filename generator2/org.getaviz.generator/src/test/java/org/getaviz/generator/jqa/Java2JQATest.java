@@ -1,4 +1,4 @@
-package org.getaviz.generator.tests;
+package org.getaviz.generator.jqa;
 
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.jqa.Java2JQA;

@@ -10,12 +10,13 @@ public class DiskSegment implements RDElement {
     private double height;
     private double transparency;
     private double netArea;
+    private double innerRadius;
+    private double outerRadius;
     private String color;
     private long visualizedNodeID;
     private long parentVisualizedNodeID;
     private long parentID;
     private long id;
-    private Node node;
 
     DiskSegment (long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, String color) {
         this.visualizedNodeID = visualizedNodeID;
@@ -36,14 +37,13 @@ public class DiskSegment implements RDElement {
         }
     }
 
-    public DiskSegment (Node node, long parentID, long id, double size) {
-        this.node = node;
+    public DiskSegment (long parentID, long id, double size) {
         this.parentID = parentID;
         this.id = id;
         this.size = size;
     }
 
-    public void writeToDatabase(DatabaseConnector connector) {
+    public void JQA2RDWriteToDatabase(DatabaseConnector connector) {
         String label = Labels.DiskSegment.name();
         long id = connector.addNode(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
@@ -52,17 +52,18 @@ public class DiskSegment implements RDElement {
         setId(id);
     }
 
+    public void RD2RDWriteToDatabase(DatabaseConnector connector) {
+        connector.executeWrite("MATCH (s) WHERE ID(s) = " + id + " SET s.size =" +
+                size + ", s.outerRadius = " + outerRadius + ", s.innerRadius = " +
+                innerRadius);
+    }
+
     public long getParentVisualizedNodeID(){
         return parentVisualizedNodeID;
     }
 
     public long getVisualizedNodeID() {
         return visualizedNodeID;
-    }
-
-   private String propertiesToString() {
-        return String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", size, height,
-                transparency, color);
     }
 
     public long getId() {
@@ -91,5 +92,15 @@ public class DiskSegment implements RDElement {
 
     public void setSize(double size) {
         this.size = size;
+    }
+
+    public void setOuterAndInnerRadius (double outerRadius, double innerRadius) {
+        this.outerRadius = outerRadius;
+        this.innerRadius = innerRadius;
+    }
+
+    private String propertiesToString() {
+        return String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", size, height,
+                transparency, color);
     }
 }

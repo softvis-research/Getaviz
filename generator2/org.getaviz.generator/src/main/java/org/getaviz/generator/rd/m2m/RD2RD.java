@@ -6,9 +6,7 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.SettingsConfiguration.OutputFormat;
-import org.getaviz.generator.rd.RDUtils;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
@@ -22,20 +20,13 @@ import org.apache.commons.logging.Log;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.rd.s2m.Disk;
 import org.getaviz.generator.rd.s2m.DiskSegment;
-import org.getaviz.generator.rd.s2m.RDElement;
 import org.neo4j.driver.v1.types.Node;
-import java.util.Iterator;
 import java.util.List;
 import org.neo4j.driver.v1.StatementResult;
-import com.google.common.collect.Lists;
-
-import java.util.stream.Collectors;
 
 public class RD2RD implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(RD2RD.class);
-	private String NS_colorStart = "#969696";
-	private String NS_colorEnd = "#F0F0F0";
 	private List<String> NS_colors;
 	private OutputFormat outputFormat;
 	private double dataFactor;
@@ -58,6 +49,8 @@ public class RD2RD implements Step {
 				"MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE NOT (m)-[:CONTAINS]->(:RD:Disk) RETURN max(length(p)) AS length");
 		int diskMaxLevel = length.single().get("length").asInt() + 1;
 
+		String NS_colorStart = "#969696";
+		String NS_colorEnd = "#F0F0F0";
 		NS_colors = ColorGradient.createColorGradient(NS_colorStart, NS_colorEnd, namespaceMaxLevel);
 
 		connector.executeRead(
@@ -71,22 +64,15 @@ public class RD2RD implements Step {
 					}
 					connector.executeWrite("MATCH (n) WHERE ID(n) = " + disk.id() + setString);
 				});
-		//calculateNetArea(getRootDisks());
-		createRootDisksList();
-		createDisksList();
-		createFieldsList();
-		createMethodsList();
+
+		createLists();
 		calculateNetArea(rootDisksList);
 		calculateRadius(disksList);
-
-		//getDisks().forEachRemaining((result) -> calculateRadius(result.get("d").asNode()));
-		//calculateLayout(getRootDisks());
 		calculateLayout(rootDisksList);
-
-		//getDisks().forEachRemaining((result) -> postLayout(result.get("d").asNode()));
 		postLayout(disksList);
+		postLayout2(disksList);
 
-		getDisks().forEachRemaining((result) -> postLayout2(result.get("d").asNode()));
+		writeToDatabase();
 
 		log.info("RD2RD finished");
 	}
@@ -95,58 +81,25 @@ public class RD2RD implements Step {
 		return NS_colors.get(level - 1);
 	}
 
-	/*private void calculateNetArea(Iterator<Node> disks) {
-		disks.forEachRemaining((disk) -> {
-			 calculateNetArea(getSubDisks(disk.id()));
-			calculateNetArea(disk.id());
-		});
-	}*/
-
 	private void calculateNetArea(ArrayList<Disk> list) {
 		list.forEach((disk) -> {
 			long id = disk.getId();
 			ArrayList<Disk> subDisks = getSubDisk(id);
 			calculateNetArea(subDisks);
-			//calculateNetArea(getSubDisks(id));
 			calculateNetArea(disk);
 		});
 	}
 
-	/*private void calculateNetArea(Long disk) {
+	private void calculateNetArea(Disk disk) {
 		double netArea;
-		double dataSum = connector
-				.executeRead("MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Field) WHERE ID(n) = " + disk
-						+ " SET d.size = d.size * " + dataFactor + " RETURN SUM(d.size) AS sum")
-				.single().get("sum").asDouble();
-		double methodSum = connector
-				.executeRead("MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Method) WHERE ID(n) = " + disk
-						+ " SET d.size = d.size * " + dataFactor + " RETURN SUM(d.size) AS sum")
-				.single().get("sum").asDouble();
+		long id = disk.getId();
+		ArrayList<DiskSegment> sizeFields = getDiskSegment(id, fields);
+		ArrayList<DiskSegment> sizeMethods = getDiskSegment(id, methods);
+		double dataSum = calculateDiskSegmentSizeSum(sizeFields);
+		double methodSum = calculateDiskSegmentSizeSum(sizeMethods);
 		netArea = dataSum + methodSum;
-		connector.executeWrite("MATCH (n) WHERE ID(n) = " + disk + " SET n.netArea = " + netArea);
-	}*/
-
-	private void calculateNetArea(RDElement disk) {
-		double netArea;
-		double dataSum = connector
-				.executeRead("MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Field) WHERE ID(n) = " + disk.getId()
-						+ " SET d.size = d.size * " + dataFactor + " RETURN SUM(d.size) AS sum")
-				.single().get("sum").asDouble();
-		double methodSum = connector
-				.executeRead("MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(:Method) WHERE ID(n) = " + disk.getId()
-						+ " SET d.size = d.size * " + dataFactor + " RETURN SUM(d.size) AS sum")
-				.single().get("sum").asDouble();
-		netArea = dataSum + methodSum;
-		disk.setNetArea(netArea);
-		connector.executeWrite("MATCH (n) WHERE ID(n) = " + disk.getId() + " SET n.netArea = " + netArea);
+		disk.setNetArea(netArea);;
 	}
-
-	/*private void calculateRadius(Node disk) {
-		double netArea = disk.get("netArea").asDouble();
-		double ringWidth = disk.get("ringWidth").asDouble();
-		double radius = Math.sqrt(netArea / Math.PI) + ringWidth;
-		connector.executeWrite("MATCH(n) WHERE ID(n) = " + disk.id() + " SET n.radius = " + radius);
-	}*/
 
 	private void calculateRadius(ArrayList<Disk> list) {
 		list.forEach(disk -> {
@@ -154,18 +107,8 @@ public class RD2RD implements Step {
 					double ringWidth = disk.getRingWidth();
 					double radius = Math.sqrt(netArea / Math.PI) + ringWidth;
 					disk.setRadius(radius);
-					connector.executeWrite("MATCH(n) WHERE ID(n) = " + disk.getId() + " SET n.radius = " + radius);
 		});
 	}
-
-	/*private void calculateLayout(Iterator<Node> disks) {
-		ArrayList<CircleWithInnerCircles> nestedCircles = new ArrayList<>();
-		disks.forEachRemaining((disk) -> nestedCircles.add(new CircleWithInnerCircles(disk, false)));
-		RDLayout.nestedLayout(nestedCircles);
-		for (CircleWithInnerCircles circle : nestedCircles) {
-			circle.updateDiskNode();
-		}
-	}*/
 
 	private void calculateLayout(ArrayList<Disk> list) {
 		ArrayList<CircleWithInnerCircles> nestedCircles = new ArrayList<>();
@@ -178,18 +121,8 @@ public class RD2RD implements Step {
 		}
 	}
 
-	/*private void postLayout(Node disk) {
-		List<Node> data = Lists.newArrayList(RDUtils.getData(disk.id()));
-		List<Node> methods = Lists.newArrayList(RDUtils.getMethods(disk.id()));
-		fractions(disk, data, methods);
-		fractions(data);
-		fractions(methods);
-	}*/
-
 	private void postLayout(ArrayList<Disk> list) {
 		list.forEach(disk -> {
-			//List<Node> data = Lists.newArrayList(RDUtils.getData(disk.getId()));
-			//List<Node> methods = Lists.newArrayList(RDUtils.getMethods(disk.getId()));
 			ArrayList<DiskSegment> data = getDiskSegment(disk.getId(), fields);
 			ArrayList<DiskSegment> method = getDiskSegment(disk.getId(), methods);
 			fractions(disk, data, method);
@@ -198,18 +131,13 @@ public class RD2RD implements Step {
 		});
 	}
 
-	private void postLayout2(Node disk) {
-		RDUtils.getSubDisks(disk.id()).forEachRemaining((result) -> calculateRings(result.get("d").asNode()));
-		calculateRings(disk);
+	private void postLayout2(ArrayList<Disk> list) {
+		list.forEach(disk->{
+			ArrayList<Disk> subDisks = getSubDisk(disk.getId());
+				subDisks.forEach(this::calculateRings);
+			calculateRings(disk);
+		});
 	}
-
-	/*private void fractions(Node disk, Iterable<Node> data, Iterable<Node> methods) {
-		double netArea = disk.get("netArea").asDouble();
-		double currentMethodArea = RDUtils.sum(methods) / netArea;
-		double currentDataArea = RDUtils.sum(data) / netArea;
-		connector.executeWrite("MATCH (n) WHERE ID(n) = " + disk.id() + " SET n.methodArea = " + currentMethodArea
-				+ ", n.dataArea = " + currentDataArea);
-	}*/
 
 	private void fractions(Disk disk, ArrayList<DiskSegment> data, ArrayList<DiskSegment> method) {
 		double netArea = disk.getNetArea();
@@ -217,8 +145,6 @@ public class RD2RD implements Step {
 		double currentDataArea = sum(data) / netArea;
 		disk.setMethodArea(currentMethodArea);
 		disk.setDataArea(currentDataArea);
-		connector.executeWrite("MATCH (n) WHERE ID(n) = " + disk.getId() + " SET n.methodArea = " + currentMethodArea
-				+ ", n.dataArea = " + currentDataArea);
 	}
 
 	private void fractions(ArrayList<DiskSegment> list) {
@@ -226,77 +152,6 @@ public class RD2RD implements Step {
 		for (DiskSegment segment : list) {
 			double newSize = segment.getSize()/ sum;
 			segment.setSize(newSize);
-			connector.executeWrite("MATCH (n) WHERE ID(n) = " + segment.getId() + " SET n.size = n.size/" + sum);
-		}
-	}
-
-	private void calculateRings(Node disk) {
-		double ringWidth = disk.get("ringWidth").asDouble();
-		double height = disk.get("height").asDouble();
-		double radius = disk.get("radius").asDouble();
-		double methodArea = disk.get("methodArea").asDouble();
-		double dataArea = disk.get("dataArea").asDouble();
-		double netArea = disk.get("netArea").asDouble();
-		if (ringWidth == 0) {
-			calculateCrossSection(disk.id(), ringWidth, 0);
-		} else {
-			calculateCrossSection(disk.id(), ringWidth, height);
-		}
-		calculateSpines(disk.id(), radius - (0.5 * ringWidth));
-		if (RDUtils.getSubDisks(disk.id()).list().size() == 0) {
-			double r_data = Math.sqrt(dataArea * netArea / Math.PI);
-			double r_methods = radius - ringWidth;
-			double b_methods = r_methods - r_data;
-			List<Node> diskMethods = Lists.newArrayList(RDUtils.getMethods(disk.id()));
-			List<Node> diskData = Lists.newArrayList(RDUtils.getData(disk.id()));
-			if (!diskMethods.isEmpty()) {
-				calculateCrossSection(diskMethods, b_methods, height);
-				calculateSpines(diskMethods, r_methods - 0.5 * b_methods);
-				if (outputFormat == OutputFormat.AFrame) {
-					for (Node method : diskMethods) {
-						connector.executeWrite("MATCH (n) WHERE ID(n) = " + method.id() + " SET n.outerRadius = "
-								+ r_methods + ", n.innerRadius = " + r_data);
-					}
-				}
-			}
-			if (!diskData.isEmpty()) {
-				calculateCrossSection(diskData, r_data, height);
-				calculateSpines(diskData, 0.5 * r_data);
-				if (outputFormat == OutputFormat.AFrame) {
-					for (Node data : diskData) {
-						connector.executeWrite("MATCH (n) WHERE ID(n) = " + data.id() + " SET n.outerRadius = " + r_data
-								+ ", n.innerRadius = " + 0.0);
-					}
-				}
-			}
-		} else {
-			double outerRadius = calculateOuterRadius(disk.id());
-			double r_data = Math.sqrt((dataArea * netArea / Math.PI) + (outerRadius * outerRadius));
-			double b_data = r_data - outerRadius;
-			double r_methods = Math.sqrt((methodArea * netArea / Math.PI) + (r_data * r_data));
-			double b_methods = r_methods - r_data;
-			List<Node> diskMethods = Lists.newArrayList(RDUtils.getMethods(disk.id()));
-			if (!diskMethods.isEmpty()) {
-				calculateCrossSection(diskMethods, b_methods, height);
-				calculateSpines(diskMethods, r_methods - 0.5 * b_methods);
-				if (outputFormat == OutputFormat.AFrame) {
-					for (Node method : diskMethods) {
-						connector.executeWrite("MATCH (n) WHERE ID(n) = " + method.id() + " SET n.outerRadius = "
-								+ r_methods + ",n.innerRadius = " + r_data);
-					}
-				}
-			}
-			List<Node> diskData = Lists.newArrayList(RDUtils.getData(disk.id()));
-			if (!diskData.isEmpty()) {
-				calculateCrossSection(diskData, b_data, height);
-				calculateSpines(diskData, r_data - 0.5 * b_data);
-				if (outputFormat == OutputFormat.AFrame) {
-					for (Node data : diskData) {
-						connector.executeWrite("MATCH (n) WHERE ID (n)= " + data.id() + " SET n.outerRadius = " + r_data
-								+ ", n.innerRadius = " + (r_data - b_data));
-					}
-				}
-			}
 		}
 	}
 
@@ -314,75 +169,68 @@ public class RD2RD implements Step {
 			calculateCrossSection(id, ringWidth, height);
 		}
 		calculateSpines(id, radius - (0.5 * ringWidth));
-		if (RDUtils.getSubDisks(id).list().size() == 0) {
+		ArrayList<Disk> subDisks = getSubDisk(id);
+		if (subDisks.size() == 0) {
 			double r_data = Math.sqrt(dataArea * netArea / Math.PI);
 			double r_methods = radius - ringWidth;
 			double b_methods = r_methods - r_data;
-			List<Node> diskMethods = Lists.newArrayList(RDUtils.getMethods(id));
-			List<Node> diskData = Lists.newArrayList(RDUtils.getData(id));
+			ArrayList<DiskSegment> diskMethods = getDiskSegment(id, methods);
+			ArrayList<DiskSegment> diskData = getDiskSegment(id, fields);
 			if (!diskMethods.isEmpty()) {
-				calculateCrossSection(diskMethods, b_methods, height);
+				diskMethods.forEach(method -> calculateCrossSection(method.getId(), b_methods, height));
 				calculateSpines(diskMethods, r_methods - 0.5 * b_methods);
 				if (outputFormat == OutputFormat.AFrame) {
-					for (Node method : diskMethods) {
-						connector.executeWrite("MATCH (n) WHERE ID(n) = " + method.id() + " SET n.outerRadius = "
-								+ r_methods + ", n.innerRadius = " + r_data);
+					for (DiskSegment method : diskMethods) {
+						method.setOuterAndInnerRadius(r_methods, r_data);
 					}
 				}
 			}
 			if (!diskData.isEmpty()) {
-				calculateCrossSection(diskData, r_data, height);
+				diskData.forEach(field -> calculateCrossSection(field.getId(), r_data, height));
+				//calculateCrossSection(diskData, r_data, height);
 				calculateSpines(diskData, 0.5 * r_data);
 				if (outputFormat == OutputFormat.AFrame) {
-					for (Node data : diskData) {
-						connector.executeWrite("MATCH (n) WHERE ID(n) = " + data.id() + " SET n.outerRadius = " + r_data
-								+ ", n.innerRadius = " + 0.0);
+					for (DiskSegment data : diskData) {
+						data.setOuterAndInnerRadius(r_data, 0.0);
 					}
 				}
 			}
 		} else {
-			double outerRadius = calculateOuterRadius(id);
+			double outerRadius = calculateOuterRadius(disk);
 			double r_data = Math.sqrt((dataArea * netArea / Math.PI) + (outerRadius * outerRadius));
 			double b_data = r_data - outerRadius;
 			double r_methods = Math.sqrt((methodArea * netArea / Math.PI) + (r_data * r_data));
 			double b_methods = r_methods - r_data;
-			List<Node> diskMethods = Lists.newArrayList(RDUtils.getMethods(id));
+			ArrayList<DiskSegment> diskMethods = getDiskSegment(id, methods);
 			if (!diskMethods.isEmpty()) {
-				calculateCrossSection(diskMethods, b_methods, height);
+				diskMethods.forEach(method -> calculateCrossSection(method.getId(), b_methods, height) );
 				calculateSpines(diskMethods, r_methods - 0.5 * b_methods);
 				if (outputFormat == OutputFormat.AFrame) {
-					for (Node method : diskMethods) {
-						connector.executeWrite("MATCH (n) WHERE ID(n) = " + method.id() + " SET n.outerRadius = "
-								+ r_methods + ",n.innerRadius = " + r_data);
+					for (DiskSegment method : diskMethods) {
+						method.setOuterAndInnerRadius(r_methods, r_data);
 					}
 				}
 			}
-			List<Node> diskData = Lists.newArrayList(RDUtils.getData(id));
+			ArrayList<DiskSegment> diskData = getDiskSegment(id, fields);
 			if (!diskData.isEmpty()) {
-				calculateCrossSection(diskData, b_data, height);
+				diskData.forEach(field -> calculateCrossSection(field.getId(), b_data, height));
 				calculateSpines(diskData, r_data - 0.5 * b_data);
 				if (outputFormat == OutputFormat.AFrame) {
-					for (Node data : diskData) {
-						connector.executeWrite("MATCH (n) WHERE ID (n)= " + data.id() + " SET n.outerRadius = " + r_data
-								+ ", n.innerRadius = " + (r_data - b_data));
+					for (DiskSegment data : diskData) {
+						data.setOuterAndInnerRadius(r_data, (r_data - b_data));
 					}
 				}
 			}
 		}
 	}
 
-	private double calculateOuterRadius(Long disk) {
+	private double calculateOuterRadius(Disk disk) {
 		CoordinateList coordinates = new CoordinateList();
-		RDUtils.getSubDisks(disk).forEachRemaining((subDisk) -> {
-			Node node = subDisk.get("d").asNode();
-			StatementResult position = connector
-					.executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + node.id() + " RETURN p");
-			double x;
-			double y;
-			Node posNode = position.single().get("p").asNode();
-			x = posNode.get("x").asDouble();
-			y = posNode.get("y").asDouble();
-			coordinates.add(createCircle(x, y, node.get("radius").asDouble()).getCoordinates(), false);
+		ArrayList<Disk> subDisks = getSubDisk(disk.getId());
+		subDisks.forEach(d -> {
+			double x = disk.getPosX();
+			double y = disk.getPosY();
+			coordinates.add(createCircle(x, y, disk.getRadius()).getCoordinates(), false);
 		});
 		GeometryFactory geoFactory = new GeometryFactory();
 		MultiPoint innerCircleMultiPoint = geoFactory.createMultiPoint(coordinates.toCoordinateArray());
@@ -399,24 +247,13 @@ public class RD2RD implements Step {
 		return shapeFactory.createCircle();
 	}
 
-	private void calculateCrossSection(List<Node> segments, double width, double height) {
-		String crossSection = (-(width / 2) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", "
-				+ ((width / 2) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height));
-		List<String> statementList = Lists.newArrayList();
-		for (Node segment : segments) {
-			statementList
-					.add("MATCH (n) WHERE ID(n) = " + segment.id() + " SET n.crossSection = \'" + crossSection + "\'");
-		}
-		connector.executeWrite(statementList.toArray(new String[0]));
-	}
-
 	private void calculateCrossSection(Long disk, double width, double height) {
 		String crossSection = (-(width / 2) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", "
 				+ ((width / 2) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height));
 		connector.executeWrite("MATCH (n)  WHERE ID(n) = " + disk + " SET n.crossSection = \'" + crossSection + "\'");
 	}
 
-	private void calculateSpines(List<Node> segments, double factor) {
+	private void calculateSpines(ArrayList<DiskSegment> segments, double factor) {
 		if (outputFormat == OutputFormat.X3D) {
 			int spinePointCount;
 			if (segments.size() < 50) {
@@ -435,8 +272,8 @@ public class RD2RD implements Step {
 			int start;
 			int end = 0;
 			List<String> statementList = new ArrayList<>();
-			for (Node segment : segments) {
-				double size = segment.get("size").asDouble();
+			for (DiskSegment segment : segments) {
+				double size = segment.getSize();
 				start = end;
 				end = start + (int) Math.floor(spinePointCount * size);
 				if (end > (completeSpine.size() - 1)) {
@@ -449,7 +286,7 @@ public class RD2RD implements Step {
 				for (int j = 0; j < end - start; j++) {
 					partSpine.add(completeSpine.get(start + j));
 				}
-				statementList.add("MATCH (n) WHERE ID(n) = " + segment.id() + " SET n.spine = \'"
+				statementList.add("MATCH (n) WHERE ID(n) = " + segment.getId() + " SET n.spine = \'"
 						+ removeBrackets(partSpine) + "\'");
 			}
 			connector.executeWrite(statementList.toArray(new String[0]));
@@ -460,14 +297,14 @@ public class RD2RD implements Step {
 				int length = segments.size();
 				double sizeSum = 0.0;
 				double position = 0.0;
-				for (Node segment : segments) {
-					double size = segment.get("size").asDouble();
+				for (DiskSegment segment : segments) {
+					double size = segment.getSize();
 					sizeSum += size;
 				}
 				sizeSum += sizeSum / 360 * length;
-				for (Node segment : segments) {
-					double angle = (segment.get("size").asDouble() / sizeSum) * 360;
-					connector.executeWrite("MATCH (n) WHERE ID(n) = " + segment.id() + " SET n.angle = " + angle
+				for (DiskSegment segment : segments) {
+					double angle = (segment.getSize() / sizeSum) * 360;
+					connector.executeWrite("MATCH (n) WHERE ID(n) = " + segment.getId() + " SET n.angle = " + angle
 							+ ", n.anglePosition = " + position);
 					position += angle + 1;
 				}
@@ -487,29 +324,9 @@ public class RD2RD implements Step {
 				"MATCH (n) WHERE ID(n) = " + disk + " SET n.spine = \'" + removeBrackets(completeSpine) + "\'");
 	}
 
-	private StatementResult getDisks() {
-		return connector.executeRead("MATCH (n:Model:RD)-[:CONTAINS*]->(d:Disk)-[:VISUALIZES]->(element) " + "RETURN d "
-				+ "ORDER BY element.hash");
-	}
-
-	/*private Iterator<Node> getSubDisks(Long entity) {
-		return connector
-				.executeRead("MATCH (n)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element) " + "WHERE ID(n) = " + entity
-						+ " " + "RETURN d " + "ORDER BY element.hash")
-				.stream().map(s -> s.get("d").asNode()).collect(Collectors.toList()).listIterator();
-	}*/
-
-	/*private Iterator<Node> getRootDisks() {
-		return connector
-				.executeRead("MATCH (n:RD:Model)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element) " + "RETURN d "
-						+ "ORDER BY element.hash")
-				.stream().map(s -> s.get("d").asNode()).collect(Collectors.toList()).listIterator();
-	}*/
-
 	private static String removeBrackets(List<String> list) {
 		return removeBrackets(list.toString());
 	}
-
 
 	private static String removeBrackets(String string) {
 		return StringUtils.remove(StringUtils.remove(string, "["), "]");
@@ -519,11 +336,11 @@ public class RD2RD implements Step {
 		disksList.addAll(rootDisksList);
 		StatementResult result = connector.executeRead("MATCH (p:Disk)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element) "
 				+ "RETURN d AS d, d.grossArea AS grossArea, d.netArea AS netArea, d.ringWidth AS ringWidth, d.height as height," +
-				" ID(d) AS id, ID(p) AS parentID ORDER BY element.hash");
+				" d.size AS size, ID(d) AS id, ID(p) AS parentID ORDER BY element.hash");
 		result.forEachRemaining(d -> {
 			double grossArea = d.get("grossArea").asDouble(0.0);
 			double netArea = d.get("netArea").asDouble(0.0);
-			Disk disk = new Disk(d.get("d").asNode(), d.get("parentID").asLong(), d.get("id").asLong(), grossArea, netArea,
+			Disk disk = new Disk (d.get("parentID").asLong(), d.get("id").asLong(), grossArea, netArea,
 					d.get("ringWidth").asDouble(), d.get("height").asDouble());
 			disksList.add(disk);
 		});
@@ -533,11 +350,11 @@ public class RD2RD implements Step {
 		StatementResult result = connector
 				.executeRead("MATCH (n:RD:Model)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element) " + "RETURN d "
 						+ " AS d, d.grossArea AS grossArea,d.netArea AS netArea, d.ringWidth AS ringWidth, d.height AS height," +
-						" ID(d) as id, ID(n) AS parentID ORDER BY element.hash");
+						" d.size AS size, ID(d) as id, ID(n) AS parentID ORDER BY element.hash");
 		result.forEachRemaining(d -> {
 			double grossArea = d.get("grossArea").asDouble(0.0);
 			double netArea = d.get("netArea").asDouble(0.0);
-			Disk disk = new Disk(d.get("d").asNode(), d.get("parentID").asLong(), d.get("id").asLong(), grossArea, netArea,
+			Disk disk = new Disk(d.get("parentID").asLong(), d.get("id").asLong(), grossArea, netArea,
 					d.get("ringWidth").asDouble(), d.get("height").asDouble());
 			rootDisksList.add(disk);
 		});
@@ -548,8 +365,7 @@ public class RD2RD implements Step {
 				"MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(field:Field) " +
 						"RETURN d AS d, d.size AS size, ID(d) as id, ID(n) as parentID ORDER BY field.hash");
 		result.forEachRemaining(f -> {
-			DiskSegment field = new DiskSegment(f.get("d").asNode(), f.get("parentID").asLong(), f.get("id").asLong(),
-			f.get("size").asDouble());
+			DiskSegment field = new DiskSegment(f.get("parentID").asLong(), f.get("id").asLong(),f.get("size").asDouble());
 			fields.add(field);
 		});
 	}
@@ -559,8 +375,7 @@ public class RD2RD implements Step {
 				"MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(method:Method) " +
 						"RETURN d AS d, d.size AS size, ID(d) as id, ID(n) as parentID ORDER BY method.hash");
 		result.forEachRemaining(f -> {
-			DiskSegment method = new DiskSegment(f.get("d").asNode(), f.get("parentID").asLong(), f.get("id").asLong(),
-					f.get("size").asDouble());
+			DiskSegment method = new DiskSegment(f.get("parentID").asLong(), f.get("id").asLong(),f.get("size").asDouble());
 			methods.add(method);
 		});
 	}
@@ -587,19 +402,43 @@ public class RD2RD implements Step {
 		return list;
 	}
 
-	public static ArrayList<DiskSegment> getFields() {
+	private void createLists() {
+		createRootDisksList();
+		createDisksList();
+		createFieldsList();
+		createMethodsList();
+	}
+
+	private void writeToDatabase() {
+		String write;
+		fields.forEach(field-> field.RD2RDWriteToDatabase(connector));
+		methods.forEach(methods -> methods.RD2RDWriteToDatabase(connector));
+		disksList.forEach(disk -> disk.RD2RDWriteToDatabase(connector));
+	}
+
+	static ArrayList<DiskSegment> getFields() {
 	    return fields;
     }
 
-    public static ArrayList<DiskSegment> getMethods() {
+    static ArrayList<DiskSegment> getMethods() {
         return methods;
     }
 
-    public static double sum(ArrayList<DiskSegment> list) {
+    static double sum(ArrayList<DiskSegment> list) {
 		double sum = 0.0;
 		for(DiskSegment segment: list) {
 			sum += segment.getSize();
 		}
 		return sum;
+	}
+
+	private double calculateDiskSegmentSizeSum (ArrayList<DiskSegment> list) {
+		double sizeSum = 0.0;
+		for (DiskSegment segment : list) {
+			double newSize = segment.getSize() * dataFactor;
+			sizeSum += newSize;
+			segment.setSize(newSize);
+		}
+		return sizeSum;
 	}
 }

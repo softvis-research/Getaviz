@@ -1,4 +1,4 @@
-package org.getaviz.generator.tests;
+package org.getaviz.generator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
