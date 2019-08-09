@@ -17,7 +17,10 @@ public class Disk implements RDElement{
     private double posX;
     private double posY;
     private double posZ;
+    private int maxLevel;
     private String color;
+    private String crossSection;
+    private String spine;
     private long parentVisualizedNodeID;
     private long visualizedNodeID;
     private long parentID;
@@ -36,7 +39,8 @@ public class Disk implements RDElement{
         this.color = color;
     }
 
-    public Disk(long parentID, long id, double grossArea, double netArea, double ringWidth, double height) {
+    public Disk(long visualizedNodeID, long parentID, long id, double grossArea, double netArea, double ringWidth, double height) {
+       this.visualizedNodeID = visualizedNodeID;
        this.parentID = parentID;
        this.id = id;
        this.grossArea = grossArea;
@@ -57,10 +61,49 @@ public class Disk implements RDElement{
     public void RD2RDWriteToDatabase(DatabaseConnector connector) {
         String updateNode = String.format(
                 "MATCH (n) WHERE ID(n) = %d SET n.radius = %f, n.netArea = %f, n.grossArea = %f, n.methodArea = %f, " +
-                        "n.dataArea = %f ", id, radius, netArea, grossArea, methodArea, dataArea);
+                        "n.dataArea = %f, n.maxLevel = %d, n.crossSection = " + crossSection +  ", n.spine = "
+                        + spine + ", n.color = " + color + " ", id, radius, netArea, grossArea, methodArea, dataArea, maxLevel);
         String createPosition = String.format("CREATE (n)-[:HAS]->(:RD:Position {x: %f, y: %f, z: %f})", posX, posY, posZ);
         connector.executeWrite(updateNode + createPosition);
     }
+
+    public void setParentID(long id) {
+        this.parentID = id;
+    }
+
+    private void setId(long id) {
+        this.id = id;
+    }
+
+    public void setNetArea(double netArea) {
+        this.netArea = netArea;
+    }
+
+    public void setRadius (double radius) { this.radius = radius; }
+
+    public void setGrossArea(double grossArea) { this.grossArea = grossArea; }
+
+    public void setDataArea(double dataArea) {
+        this.dataArea = dataArea;
+    }
+
+    public void setMethodArea(double methodArea) {
+        this.methodArea = methodArea;
+    }
+
+    public void setMaxLevel(int maxLevel) { this.maxLevel = maxLevel; }
+
+    public void setPosition(double posX, double posY, double posZ) {
+        this.posX = posX;
+        this.posY = posY;
+        this.posZ = posZ;
+    }
+
+    public void setCrossSection (String crossSection) { this.crossSection = "\'" +  crossSection + "\'"; }
+
+    public void setSpine (String spine) { this.spine = spine;}
+
+    public void setColor (String color) {this.color = color;}
 
     public long getParentVisualizedNodeID() {
         return parentVisualizedNodeID;
@@ -78,9 +121,7 @@ public class Disk implements RDElement{
         return parentID;
     }
 
-    public double getNetArea() {
-       return netArea;
-    }
+    public double getNetArea() { return netArea; }
 
     public double getRingWidth() {
         return ringWidth;
@@ -106,39 +147,10 @@ public class Disk implements RDElement{
         return posY;
     }
 
+    public Double getPosZ() {return posZ;}
+
     private String propertiesToString() {
         return String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
                 height, transparency, color);
     }
-
-    public void setParentID(long id) {
-        this.parentID = id;
-    }
-
-    private void setId(long id) {
-       this.id = id;
-    }
-
-    public void setNetArea(double netArea) {
-        this.netArea = netArea;
-    }
-
-    public void setRadius (double radius) { this.radius = radius; }
-
-    public void setGrossArea(double grossArea) { this.grossArea = grossArea; }
-
-    public void setDataArea(double dataArea) {
-        this.dataArea = dataArea;
-    }
-
-    public void setMethodArea(double methodArea) {
-        this.methodArea = methodArea;
-    }
-
-    public void setPosition(double posX, double posY, double posZ) {
-        this.posX = posX;
-        this.posY = posY;
-        this.posZ = posZ;
-    }
-
 }

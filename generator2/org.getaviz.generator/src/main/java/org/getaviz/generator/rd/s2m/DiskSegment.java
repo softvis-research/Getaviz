@@ -9,10 +9,13 @@ public class DiskSegment implements RDElement {
     private double size;
     private double height;
     private double transparency;
-    private double netArea;
     private double innerRadius;
     private double outerRadius;
+    private double angle;
+    private double anglePosition;
     private String color;
+    private String crossSection;
+    private String spine;
     private long visualizedNodeID;
     private long parentVisualizedNodeID;
     private long parentID;
@@ -53,9 +56,9 @@ public class DiskSegment implements RDElement {
     }
 
     public void RD2RDWriteToDatabase(DatabaseConnector connector) {
-        connector.executeWrite("MATCH (s) WHERE ID(s) = " + id + " SET s.size =" +
-                size + ", s.outerRadius = " + outerRadius + ", s.innerRadius = " +
-                innerRadius);
+        connector.executeWrite("MATCH (s) WHERE ID(s) = " + id + " SET s.size = " + size + ", s.outerRadius = " +
+                outerRadius + ", s.innerRadius = " + innerRadius + ", s.angle = " + angle + ", s.anglePosition = " +
+                anglePosition + ", s.spine = " + spine + ", s.crossSection =  " + crossSection + " ");
     }
 
     public long getParentVisualizedNodeID(){
@@ -86,17 +89,29 @@ public class DiskSegment implements RDElement {
         this.id = id;
     }
 
-    public void setNetArea(double netArea) {
-       this.netArea = netArea;
-    }
-
     public void setSize(double size) {
         this.size = size;
+    }
+
+    public void setCrossSection (String crossSection) {
+        this.crossSection = "\'" +  crossSection + "\'";
     }
 
     public void setOuterAndInnerRadius (double outerRadius, double innerRadius) {
         this.outerRadius = outerRadius;
         this.innerRadius = innerRadius;
+    }
+
+    public void setSpine (String spine) {
+        this.spine = spine;
+    }
+
+    public void setAngle (double angle) {
+        this.angle = angle;
+    }
+
+    public void setAnglePosition (double anglePosition) {
+        this.anglePosition = anglePosition;
     }
 
     private String propertiesToString() {
