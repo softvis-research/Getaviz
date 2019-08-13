@@ -21,7 +21,7 @@ class DiskTest {
         mockup.setupDatabase("./test/databases/DiskTest.db");
         connector = mockup.getConnector();
         createObjectsForTests();
-        model.setList(disk);
+        model.addRDElement(disk);
         model.writeToDatabase(connector);
     }
 

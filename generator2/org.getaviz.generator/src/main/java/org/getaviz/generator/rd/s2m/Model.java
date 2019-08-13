@@ -60,7 +60,7 @@ public class Model {
         return id;
     }
 
-    public void setList(RDElement element) {
+    void addRDElement(RDElement element) {
         RDElementsList.add(element);
     }
 
@@ -68,24 +68,8 @@ public class Model {
         this.id = id;
     }
 
-    ArrayList<RDElement> getRDElementsList() {
-        return RDElementsList;
-    }
-
     public long getId() {
         return id;
-    }
-
-    boolean isMethodTypeMode() {
-        return methodTypeMode;
-    }
-
-    boolean isMethodDisks() {
-        return methodDisks;
-    }
-
-    boolean isDataDisks() {
-        return dataDisks;
     }
 
     private void writeNodes(RDElement p, DatabaseConnector connector) {

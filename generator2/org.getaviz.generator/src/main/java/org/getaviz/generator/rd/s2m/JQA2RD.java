@@ -7,7 +7,6 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.StatementResult;
 
-
 public class JQA2RD implements Step {
 
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
@@ -50,7 +49,7 @@ public class JQA2RD implements Step {
 		log.info("JQA2RD started");
 		connector.executeWrite("MATCH (n:RD) DETACH DELETE n");
 		model = new Model(methodTypeMode, methodDisks, dataDisks);
-		factory = new RDElementsFactory(model);
+		factory = new RDElementsFactory(methodTypeMode, methodDisks, dataDisks);
 		queriesToRDElementList();
 		writeToDatabase();
 		log.info("JQA2RD finished");
@@ -62,7 +61,7 @@ public class JQA2RD implements Step {
 		packagesNoRoot.forEachRemaining((node) -> {
 		    Disk disk = new Disk(node.get("id").asLong(), -1, ringWidth, height,
                     namespaceTransparency);
-		    model.setList(disk);
+		    model.addRDElement(disk);
             });
 	}
 
@@ -72,7 +71,7 @@ public class JQA2RD implements Step {
 		packagesRoot.forEachRemaining(node -> {
 		    Disk disk =  new Disk(node.get("pID").asLong(), node.get("nID").asLong(),
                     ringWidth, height, namespaceTransparency);
-		    model.setList(disk);
+		    model.addRDElement(disk);
         });
 	}
 
@@ -83,7 +82,7 @@ public class JQA2RD implements Step {
 		result.forEachRemaining(node -> {
 		    Disk disk = new Disk(node.get("tID").asLong(), node.get("nID").asLong(),
                     ringWidth, height, classTransparency, classColor);
-		    model.setList(disk);
+		    model.addRDElement(disk);
         });
 	}
 
@@ -91,15 +90,20 @@ public class JQA2RD implements Step {
 		StatementResult methods = connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type)-[:DECLARES]->(m:Method)" +
 				" WHERE EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) AND NOT t:Inner AND EXISTS(m.hash)" +
 				" RETURN m AS node, m.effectiveLineCount AS line, ID(t) AS tID");
-		factory.create(methods, height, ringWidth, ringWidthAD, methodTransparency,
-				classTransparency, minArea, methodColor, classColor);
+		methods.forEachRemaining(result -> {
+			RDElement element = factory.createFromMethod(result, height, ringWidth, ringWidthAD, methodTransparency, minArea, methodColor);
+			model.addRDElement(element);
+		});
 	}
 
 	private void addFields() {
 		StatementResult fields = connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type)-[:DECLARES]->(f:Field)" +
 				" WHERE EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) AND NOT t:Inner AND EXISTS(f.hash)" +
 				" RETURN f AS node, ID(t) AS tID");
-		factory.create(fields, ringWidthAD, height, dataTransparency, dataColor);
+		fields.forEachRemaining(result -> {
+			RDElement element = factory.createFromField(result, ringWidthAD, height, dataTransparency, dataColor);
+			model.addRDElement(element);
+		});
 	}
 
 	private void queriesToRDElementList() {
@@ -110,8 +114,7 @@ public class JQA2RD implements Step {
 		addFields();
 	}
 
-	private void writeToDatabase() {
-		model.writeToDatabase(connector);
-	}
+	private void writeToDatabase() { model.writeToDatabase(connector); }
+
 }
 

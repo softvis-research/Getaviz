@@ -4,19 +4,17 @@ import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.neo4j.driver.v1.StatementResult;
-import java.util.ArrayList;
+import org.neo4j.driver.v1.Record;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RDElementFactoryTest {
 
-    private static Model model;
     private static RDElementsFactory factory;
     private static DatabaseConnector connector;
     private static Bank mockup = new Bank();
-    private static StatementResult methods;
-    private static StatementResult fields;
+    private static Record method;
+    private static Record field;
 
     @BeforeAll
     static void setup() {
@@ -27,22 +25,19 @@ class RDElementFactoryTest {
 
     @Test
     void methodToRDElementTest() {
-        factory.create(methods, 1.0, 0.5, 1.5, 1.0, 1.5,
-                0.5, "#000000", "#000000");
-        ArrayList<RDElement> list = model.getRDElementsList();
-        assertTrue(list.get(1) instanceof DiskSegment);
+        RDElement element = factory.createFromMethod(method, 1.0, 1.5, 1.0,
+                1.5,0.5, "#000000");
+        assertTrue(element instanceof DiskSegment);
     }
 
     @Test
     void fieldToRDElementTest() {
-        factory.create(fields, 1.0, 0.5, 1.5, "#000000");
-        ArrayList<RDElement> list = model.getRDElementsList();
-        assertTrue(list.get(0) instanceof Disk);
+        RDElement element = factory.createFromField(field, 1.0, 0.5, 1.5, "#000000");
+        assertTrue(element instanceof Disk);
     }
 
     private static void createObjectsForTest() {
-        model = new Model(false, false,true);
-        factory = new RDElementsFactory(model);
+        factory = new RDElementsFactory(false, false, true);
         long typeID = connector.addNode(("CREATE (t:Type)"), "t").id();
         long methodID = connector.addNode(("CREATE (m:Method)"), "m").id();
         long fieldID = connector.addNode(("CREATE (f:Field)"), "f").id();
@@ -50,9 +45,9 @@ class RDElementFactoryTest {
                 " CREATE (t)-[:DECLARES]->(m)");
         connector.executeWrite("MATCH (t:Type), (f:Field) WHERE ID(t)= " + typeID + " AND ID(f)= " + fieldID +
                 " CREATE (t)-[:DECLARES]->(f)");
-        methods = connector.executeRead("MATCH (t:Type)-[:DECLARES]->(m:Method) WHERE ID(m)= " + methodID +
-                " RETURN m AS node, m.effectiveLineCount AS line, ID(t) AS tID");
-        fields = connector.executeRead("MATCH (t:Type)-[:DECLARES]->(f:Field) WHERE ID(f)= " + fieldID +
-                " RETURN f AS node, ID(t) AS tID");
+        method = connector.executeRead("MATCH (t:Type)-[:DECLARES]->(m:Method) WHERE ID(m)= " + methodID +
+                " RETURN m AS node, m.effectiveLineCount AS line, ID(t) AS tID").single();
+        field = connector.executeRead("MATCH (t:Type)-[:DECLARES]->(f:Field) WHERE ID(f)= " + fieldID +
+                " RETURN f AS node, ID(t) AS tID").single();
     }
 }

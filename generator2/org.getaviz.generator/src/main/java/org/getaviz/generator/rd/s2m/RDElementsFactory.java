@@ -1,75 +1,49 @@
 package org.getaviz.generator.rd.s2m;
 
 import org.getaviz.generator.database.Labels;
-import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.Record;
 
 class RDElementsFactory {
 
-    private Model model;
     private boolean methodTypeMode;
     private boolean methodDisks;
     private boolean dataDisks;
 
-    RDElementsFactory(Model model) {
-        this.model = model;
-        this.methodTypeMode = model.isMethodTypeMode();
-        this.methodDisks = model.isMethodDisks();
-        this.dataDisks = model.isDataDisks();
+    RDElementsFactory(boolean methodTypeMode, boolean methodDisks, boolean dataDisks) {
+        this.methodTypeMode = methodTypeMode;
+        this.methodDisks = methodDisks;
+        this.dataDisks = dataDisks;
     }
 
-    public void create (StatementResult results, double height, double ringWidth, double ringWidthAD,
-                        double methodTransparency, double classTransparency, double minArea, String methodColor,
-                        String classColor) {
+    RDElement createFromMethod(Record result, double height, double ringWidth, double ringWidthAD,
+                                      double transparency, double minArea, String color) {
+        long id = result.get("node").asNode().id();
+        long typeID = result.get("tID").asLong();
         if (methodTypeMode) {
-            results.forEachRemaining((result) -> {
-                if (result.get("node").asNode().hasLabel(Labels.Constructor.name())) {
-                    DiskSegment diskSegment = new DiskSegment(result.get("node").asNode().id(), result.get("tID").asLong(),
-                            height, methodTransparency, minArea, methodColor, result.get("line").asInt(0));
-                    model.setList(diskSegment);
-                } else {
-                    Disk disk = new Disk(result.get("node").asNode().id(), result.get("tID").asLong(), ringWidth, height,
-                            methodTransparency, methodColor);
-                    model.setList(disk);
-                }
-            });
+            if (result.get("node").asNode().hasLabel(Labels.Constructor.name())) {
+                return new DiskSegment(id, typeID, height, transparency, minArea, color, result.get("line").asInt(0));
+            } else {
+                return new Disk(id, typeID, ringWidth, height, transparency, color);
+            }
         } else {
             if (methodDisks) {
-                results.forEachRemaining((result) -> {
-                    Disk disk = new Disk(result.get("node").asNode().id(), result.get("tID").asLong(), ringWidthAD,
-                            height, methodTransparency, methodColor);
-                    model.setList(disk);
-                });
+                return new Disk(id, typeID, ringWidthAD, height, transparency, color);
             } else {
-                results.forEachRemaining((result) -> {
-                    DiskSegment diskSegment = new DiskSegment(result.get("node").asNode().id(), result.get("tID").asLong(), height,
-                            classTransparency, minArea, classColor, result.get("line").asInt(0));
-                    model.setList(diskSegment);
-                });
+                return new DiskSegment(id, typeID, height, transparency, minArea, color, result.get("line").asInt(0));
             }
         }
     }
 
-    public void create(StatementResult results, double ringWidthAD, double height, double dataTransparency,
-                       String dataColor) {
+    RDElement createFromField(Record result, double ringWidthAD, double height, double transparency, String color) {
+        long id = result.get("node").asNode().id();
+        long typeID = result.get("tID").asLong();
         if (methodTypeMode) {
-            results.forEachRemaining((result) -> {
-                Disk disk = new Disk(result.get("node").asNode().id(), result.get("tID").asLong(), ringWidthAD, height,
-                        dataTransparency, dataColor);
-                model.setList(disk);
-            });
+            return new Disk(id, typeID, ringWidthAD, height, transparency, color);
         } else {
             if (dataDisks) {
-                results.forEachRemaining((result) -> {
-                    Disk disk = new Disk(result.get("node").asNode().id(), result.get("tID").asLong(), ringWidthAD, height,
-                            dataTransparency, dataColor);
-                    model.setList(disk);
-                });
+                return new Disk(id, typeID, ringWidthAD, height, transparency, color);
             } else {
-                results.forEachRemaining((result) -> {
-                    DiskSegment diskSegment = new DiskSegment(result.get("node").asNode().id(), result.get("tID").asLong(),
-                            height, dataTransparency, dataColor);
-                    model.setList(diskSegment);
-                });
+                return new DiskSegment(id, typeID, height, transparency, color);
             }
         }
     }

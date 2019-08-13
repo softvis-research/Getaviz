@@ -38,4 +38,12 @@ public class JQA2RDTest {
         int numberOfDisksSegments = result.get("result").asInt();
         assertEquals(35, numberOfDisksSegments);
     }
+
+    @Test
+    void colorTest() {
+        Record result = connector
+                .executeRead("MATCH (disk:DiskSegment) WHERE ID(disk) = " + 136 + " RETURN disk.color AS color").single();
+        String color = result.get("color").asString();
+        assertEquals("#fffc19", color);
+    }
 }

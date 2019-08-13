@@ -22,8 +22,8 @@ class ModelTest {
         mockup.setupDatabase("./test/databases/ModelTest.db");
         connector = mockup.getConnector();
         createTestObjects();
-        model.setList(disk);
-        model.setList(diskSegment);
+        model.addRDElement(disk);
+        model.addRDElement(diskSegment);
         model.writeToDatabase(connector);
         modelID = model.getId();
     }
