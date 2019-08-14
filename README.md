@@ -1,5 +1,3 @@
-[![gsoc](https://developers.google.com/open-source/gsoc/resources/downloads/GSoC-logo-horizontal-800.png)](https://github.com/softvis-research/Getaviz/wiki/GSoC-Ideas-2019)
-
 [![Build Status](https://travis-ci.com/softvis-research/Getaviz.svg?branch=master)](https://travis-ci.com/softvis-research/Getaviz)
 [![Generator2](https://img.shields.io/badge/docker-generator2-blue.svg)](https://hub.docker.com/r/getaviz/generator2)
 [![UI](https://img.shields.io/badge/docker-ui-blue.svg)](https://hub.docker.com/r/getaviz/evaluationserver)
