@@ -10,25 +10,24 @@ class CircleWithInnerCircles extends Circle {
 
 	CircleWithInnerCircles(Disk disk, Boolean nesting) {
 		this.disk = disk;
-		ArrayList<DiskSegment> data = RD2RD.getDiskSegment(disk.getId(), RD2RD.getFields());
-		ArrayList<DiskSegment> method = RD2RD.getDiskSegment(disk.getId(), RD2RD.getMethods());
+		ArrayList<DiskSegment> innerSegments = disk.getInnerSegments();
+		ArrayList<DiskSegment> outerSegments = disk.getOuterSegments();
 		if (nesting) {
-			minArea = RD2RD.sum(method) + RD2RD.sum(data);
+			minArea = Disk.sum(outerSegments) + Disk.sum(innerSegments);
 		} else {
-			minArea = disk.getNetArea();
+			minArea = disk.getAreaWithoutBorder();
 		}
 		ringWidth = disk.getRingWidth();
 		serial =  disk.getVisualizedNodeID() + "";
-		netArea = disk.getNetArea();
+		areaWithoutBorder = disk.getAreaWithoutBorder();
 		radius = disk.getRadius();
-		grossArea = disk.getGrossArea();
+		areaWithBorder = disk.getAreaWithBorder();
 		ArrayList<Disk> subDisks = RD2RD.getSubDisk(disk.getId());
 		subDisks.forEach(d -> {
 			CircleWithInnerCircles circle = new CircleWithInnerCircles(d,true);
 			innerCircles.add(circle);
 		});
 	}
-
 	/**
 	 * write calculated positions into extended disk
 	 * 
@@ -39,8 +38,8 @@ class CircleWithInnerCircles extends Circle {
 			oldZPosition = disk.getPosZ();
 		}
 		disk.setRadius(radius);
-		disk.setNetArea(netArea);
-		disk.setGrossArea(grossArea);
+		disk.setAreaWithoutBorder(areaWithoutBorder);
+		disk.setAreaWithBorder(areaWithBorder);
 		disk.setPosition(centre.x, centre.y, oldZPosition);
 		for (CircleWithInnerCircles circle : innerCircles) {
 			circle.updateDiskNode();

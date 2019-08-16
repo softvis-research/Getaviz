@@ -2,7 +2,6 @@ package org.getaviz.generator.rd.s2m;
 
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
-import org.neo4j.driver.v1.types.Node;
 
 public class DiskSegment implements RDElement {
 
@@ -46,7 +45,17 @@ public class DiskSegment implements RDElement {
         this.size = size;
     }
 
-    public void JQA2RDWriteToDatabase(DatabaseConnector connector) {
+    public void writeToDatabase(DatabaseConnector connector, String source) {
+        switch (source) {
+            case "JQA2RD" :
+                JQA2RDWriteToDatabase(connector);
+                break;
+            case "RD2RD" :
+                RD2RDWriteToDatabase(connector);
+        }
+    }
+
+    private void JQA2RDWriteToDatabase(DatabaseConnector connector) {
         String label = Labels.DiskSegment.name();
         long id = connector.addNode(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
@@ -55,10 +64,19 @@ public class DiskSegment implements RDElement {
         setId(id);
     }
 
-    public void RD2RDWriteToDatabase(DatabaseConnector connector) {
+    private void RD2RDWriteToDatabase(DatabaseConnector connector) {
         connector.executeWrite("MATCH (s) WHERE ID(s) = " + id + " SET s.size = " + size + ", s.outerRadius = " +
                 outerRadius + ", s.innerRadius = " + innerRadius + ", s.angle = " + angle + ", s.anglePosition = " +
                 anglePosition + ", s.spine = " + spine + ", s.crossSection =  " + crossSection + " ");
+    }
+
+    void calculateSize(double sum) {
+        size = size / sum;
+    }
+
+    double calculateNewSize(double dataFactor) {
+        size = size * dataFactor;
+        return size;
     }
 
     public long getParentVisualizedNodeID(){
@@ -85,7 +103,7 @@ public class DiskSegment implements RDElement {
         this.parentID = newParentID;
     }
 
-    private void setId(long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

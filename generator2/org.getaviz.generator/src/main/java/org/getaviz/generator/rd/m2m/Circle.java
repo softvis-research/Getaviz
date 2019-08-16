@@ -7,13 +7,13 @@ abstract class Circle implements Comparable<Circle> {
 	protected double radius = 0;
 	Double centre = new Double(0, 0);
 	double minArea = 0;
-	double netArea;
-	double grossArea;
+	double areaWithoutBorder;
+	double areaWithBorder;
 	String serial = "";
 	double ringWidth;
 
 	public int compareTo(Circle circle) {
-		return java.lang.Double.compare(circle.getNetArea(), netArea);
+		return java.lang.Double.compare(circle.getAreaWithoutBorder(), areaWithoutBorder);
 	}
 
 	public double getRadius() {
@@ -36,20 +36,20 @@ abstract class Circle implements Comparable<Circle> {
 		return minArea;
 	}
 
-	double getNetArea() {
-		return netArea;
+	double getAreaWithoutBorder() {
+		return areaWithoutBorder;
 	}
 
-	void setNetArea(double netArea) {
-		this.netArea = netArea;
+	void setAreaWithoutBorder(double areaWithoutBorder) {
+		this.areaWithoutBorder = areaWithoutBorder;
 	}
 
-	double getGrossArea() {
-		return grossArea;
+	double getAreaWithBorder() {
+		return areaWithBorder;
 	}
 
-	void setGrossArea(double grossArea) {
-		this.grossArea = grossArea;
+	void setAreaWithBorder(double areaWithBorder) {
+		this.areaWithBorder = areaWithBorder;
 	}
 
 	double getRingWidth() {

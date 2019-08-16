@@ -41,15 +41,15 @@ class RDLayout {
 	
 	private static void updateArea(List<CircleWithInnerCircles> circleList) {
 		for (CircleWithInnerCircles circle : circleList) {
-			circle.setGrossArea(circle.getRadius() * circle.getRadius() * Math.PI);
+			circle.setAreaWithBorder(circle.getRadius() * circle.getRadius() * Math.PI);
 			if (circle.getInnerCircles().size() < 1) {
-				circle.setNetArea(circle.getGrossArea());
+				circle.setAreaWithoutBorder(circle.getAreaWithBorder());
 			} else {
 				List<CircleWithInnerCircles> innerCircles = circle.getInnerCircles();
-				circle.setNetArea(circle.getNetArea() + (2 * circle.getRadius() - circle.getRingWidth()) * circle.getRingWidth() * Math.PI);
+				circle.setAreaWithoutBorder(circle.getAreaWithoutBorder() + (2 * circle.getRadius() - circle.getRingWidth()) * circle.getRingWidth() * Math.PI);
 				
 				for (CircleWithInnerCircles c : innerCircles) {
-					circle.setNetArea(circle.getNetArea() + c.getNetArea());
+					circle.setAreaWithoutBorder(circle.getAreaWithoutBorder() + c.getAreaWithoutBorder());
 				}
 			
 			}

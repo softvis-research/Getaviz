@@ -72,7 +72,5 @@ public class Model {
         return id;
     }
 
-    private void writeNodes(RDElement p, DatabaseConnector connector) {
-        p.JQA2RDWriteToDatabase(connector);
-    }
+    private void writeNodes(RDElement p, DatabaseConnector connector) { p.writeToDatabase(connector, "JQA2RD"); }
 }
