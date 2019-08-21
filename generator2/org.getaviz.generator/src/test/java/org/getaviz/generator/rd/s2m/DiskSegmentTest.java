@@ -41,11 +41,12 @@ class DiskSegmentTest {
     @Test
     void writeToDatabaseRD2RDTest() {
         DiskSegment diskSegment = createObjectsForTest2();
+        diskSegment.setAngle(0.5);
         diskSegment.writeToDatabase(connector, true);
-        Record result = connector.executeRead("MATCH (d) WHERE ID(d) = " + diskSegment.getId() + " RETURN d.size" +
-                " AS size").single();
-        double size = result.get("size").asDouble();
-        assertEquals(1, size);
+        Record result = connector.executeRead("MATCH (d) WHERE ID(d) = " + diskSegment.getId() + " RETURN d.angle" +
+                " AS angle").single();
+        double size = result.get("angle").asDouble();
+        assertEquals(0.5, size);
     }
 
     private static DiskSegment createObjectsFotTest1() {

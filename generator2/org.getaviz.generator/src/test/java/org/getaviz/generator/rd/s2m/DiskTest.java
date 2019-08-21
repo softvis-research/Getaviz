@@ -111,12 +111,12 @@ class DiskTest {
     void WriteToDatabaseRD2RDTest() {
         Disk disk = createObjectsForTest2();
         disk.setPosition(1,2,3);
+        disk.setRadius(2.5);
         disk.writeToDatabase(connector, true);
-        Record result = connector.executeRead("MATCH (d) WHERE ID(d) = " + disk.getId() + " RETURN d.netArea " +
-                "AS areaWithoutBorder").single();
-        double DBAreaWithoutBorder = result.get("areaWithoutBorder").asDouble();
-        double DiskAreaWithoutBorder = disk.getAreaWithoutBorder();
-        assertEquals(DBAreaWithoutBorder, DiskAreaWithoutBorder);
+        Record result = connector.executeRead("MATCH (d) WHERE ID(d) = " + disk.getId() + " RETURN d.radius" +
+                " AS radius").single();
+        double radius = result.get("radius").asDouble();
+        assertEquals(2.5, radius);
     }
 
     private static Disk createObjectsForTest1() {

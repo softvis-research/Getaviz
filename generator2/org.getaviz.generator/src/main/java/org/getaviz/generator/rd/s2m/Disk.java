@@ -8,7 +8,6 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.SettingsConfiguration.OutputFormat;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,13 +16,12 @@ public class Disk implements RDElement {
     private double height;
     private double transparency;
     private double ringWidth;
+    private double areaWithBorder;
     private double areaWithoutBorder;
     private double outerSegmentsArea;
     private double innerSegmentsArea;
     private double radius;
-    private double areaWithBorder;
     private Position position;
-    private int maxLevel;
     private String color;
     private String crossSection;
     private String spine;
@@ -62,6 +60,11 @@ public class Disk implements RDElement {
         this.areaWithoutBorder = areaWithoutBorder;
     }
 
+    private String propertiesToString() {
+        return String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
+                height, transparency, color);
+    }
+
     public void writeToDatabase(DatabaseConnector connector, boolean wroteToDatabase) {
         if (wroteToDatabase) {
             RD2RDWriteToDatabase(connector);
@@ -81,9 +84,8 @@ public class Disk implements RDElement {
 
     private void RD2RDWriteToDatabase(DatabaseConnector connector) {
         String updateNode = String.format(
-                "MATCH (n) WHERE ID(n) = %d SET n.radius = %f, n.netArea = %f, n.grossArea = %f, n.methodArea = %f, " +
-                        "n.dataArea = %f, n.maxLevel = %d, n.crossSection = %s, n.spine = %s, n.color = %s ", id, radius,
-                areaWithoutBorder, areaWithBorder, outerSegmentsArea, innerSegmentsArea, maxLevel, crossSection, spine, color);
+                "MATCH (n) WHERE ID(n) = %d SET n.radius = %f, n.crossSection = %s, n.spine = %s, n.color = %s ", id,
+                radius, crossSection, spine, color);
         String createPosition = String.format("CREATE (n)-[:HAS]->(:RD:Position {x: %f, y: %f, z: %f})", position.x,
                 position.y, position.z);
         connector.executeWrite(updateNode + createPosition);
@@ -191,12 +193,9 @@ public class Disk implements RDElement {
     private void calculateAngle(ArrayList<DiskSegment> segments) {
         if (!segments.isEmpty()) {
             int length = segments.size();
-            double sizeSum = 0.0;
+
             double position = 0.0;
-            for (DiskSegment segment : segments) {
-                double size = segment.getSize();
-                sizeSum += size;
-            }
+            double sizeSum = sum(segments);
             sizeSum += sizeSum / 360 * length;
             for (DiskSegment segment : segments) {
                 double angle = (segment.getSize() / sizeSum) * 360;
@@ -240,9 +239,9 @@ public class Disk implements RDElement {
     }
 
     public void calculateAreaWithoutBorder(double dataFactor) {
-        double innerSegmentsSum = calculateDiskSegmentSizeSum(innerSegments, dataFactor);
-        double outerSegmentsSum = calculateDiskSegmentSizeSum(outerSegments, dataFactor);
-        areaWithoutBorder = innerSegmentsSum + outerSegmentsSum;
+        innerSegments.forEach(segment -> segment.calculateNewSize(dataFactor));
+        outerSegments.forEach(segment -> segment.calculateNewSize(dataFactor));
+        areaWithoutBorder = sum(innerSegments) + sum(outerSegments);
     }
 
     public void calculateRadius() {
@@ -253,20 +252,11 @@ public class Disk implements RDElement {
         return sum(list) / areaWithBorder;
     }
 
-    private void calculateDiskSegmentSum(ArrayList<DiskSegment> list) {
+    private void updateDiskSegmentSize(ArrayList<DiskSegment> list) {
         double sum = sum(list);
         for (DiskSegment segment : list) {
             segment.calculateSize(sum);
         }
-    }
-
-    private double calculateDiskSegmentSizeSum(ArrayList<DiskSegment> list, double dataFactor) {
-        double sizeSum = 0.0;
-        for (DiskSegment segment : list) {
-            double newSize = segment.calculateNewSize(dataFactor);
-            sizeSum += newSize;
-        }
-        return sizeSum;
     }
 
     public static double sum(ArrayList<DiskSegment> list) {
@@ -297,12 +287,8 @@ public class Disk implements RDElement {
         this.areaWithBorder = areaWithBorder;
     }
 
-    public void setMaxLevel(int maxLevel) {
-        this.maxLevel = maxLevel;
-    }
-
     public void setPosition(double x, double y, double z) {
-        position = new Position(x, y, z);
+        this.position = new Position(x, y, z);
     }
 
     public void setColor(String color) {
@@ -324,9 +310,8 @@ public class Disk implements RDElement {
     public void setSegmentsArea() {
         innerSegmentsArea = calculateSum(innerSegments);
         outerSegmentsArea = calculateSum(outerSegments);
-        calculateDiskSegmentSum(innerSegments);
-        calculateDiskSegmentSum(outerSegments);
-
+        updateDiskSegmentSize(innerSegments);
+        updateDiskSegmentSize(outerSegments);
     }
 
     String getCrossSection() {
@@ -396,10 +381,4 @@ public class Disk implements RDElement {
     public Position getPosition() {
         return position;
     }
-
-    private String propertiesToString() {
-        return String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
-                height, transparency, color);
-    }
-
 }

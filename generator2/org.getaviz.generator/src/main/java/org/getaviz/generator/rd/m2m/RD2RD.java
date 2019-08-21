@@ -26,7 +26,6 @@ public class RD2RD implements Step {
     private OutputFormat outputFormat;
     private double dataFactor;
     private int namespaceMaxLevel;
-    private int diskMaxLevel;
     private static ArrayList<Disk> disksList = new ArrayList<>();
     private static ArrayList<Disk> rootDisksList = new ArrayList<>();
     private static ArrayList<DiskSegment> innerSegments = new ArrayList<>();
@@ -40,7 +39,6 @@ public class RD2RD implements Step {
     public void run() {
         log.info("RD2RD started");
         calculateNamespaceMaxLevel();
-        calculateDiskMaxLevel();
         createLists();
         calculateLayoutData();
         writeToDatabase();
@@ -52,9 +50,7 @@ public class RD2RD implements Step {
     }
 
     private void calculateAreaWithoutBorder(ArrayList<Disk> list) {
-        list.forEach(disk -> {
-            disk.calculateAreaWithoutBorder(dataFactor);
-        });
+        list.forEach(disk -> disk.calculateAreaWithoutBorder(dataFactor));
     }
 
     private void calculateRadius(ArrayList<Disk> list) {
@@ -85,13 +81,6 @@ public class RD2RD implements Step {
         namespaceMaxLevel = length.single().get("length").asInt() + 1;
     }
 
-    private void calculateDiskMaxLevel() {
-        StatementResult length = connector.executeRead(
-                "MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE NOT (m)-[:CONTAINS]->(:RD:Disk) " +
-                        "RETURN max(length(p)) AS length");
-        diskMaxLevel = length.single().get("length").asInt() + 1;
-    }
-
     private void createDisksList() {
         disksList.addAll(rootDisksList);
         StatementResult result = connector.executeRead("MATCH (p:Disk)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element) "
@@ -106,7 +95,6 @@ public class RD2RD implements Step {
             double ringWidth = d.get("ringWidth").asDouble();
             double height = d.get("height").asDouble();
             Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height);
-            disk.setMaxLevel(diskMaxLevel);
             disksList.add(disk);
             addPosition(disk);
         });
@@ -125,7 +113,6 @@ public class RD2RD implements Step {
             double ringWidth = d.get("ringWidth").asDouble();
             double height = d.get("height").asDouble();
             Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height);
-            disk.setMaxLevel(diskMaxLevel);
             rootDisksList.add(disk);
             addPosition(disk);
         });

@@ -60,9 +60,20 @@ public class DiskSegment implements RDElement {
     }
 
     private void RD2RDWriteToDatabase(DatabaseConnector connector) {
-        connector.executeWrite("MATCH (s) WHERE ID(s) = " + id + " SET s.size = " + size + ", s.outerRadius = " +
+        connector.executeWrite("MATCH (s) WHERE ID(s) = " + id + " SET s.outerRadius = " +
                 outerRadius + ", s.innerRadius = " + innerRadius + ", s.angle = " + angle + ", s.anglePosition = " +
                 anglePosition + ", s.spine = " + spine + ", s.crossSection =  " + crossSection + " ");
+    }
+
+    private String propertiesToString() {
+        return String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", size, height,
+                transparency, color);
+    }
+
+    void calculateCrossSection(double width, double height) {
+        crossSection = "\'" + (-(width / 2) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", "
+                + ((width / 2) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height)) +
+                "\'";
     }
 
     void calculateSize(double sum) {
@@ -94,7 +105,7 @@ public class DiskSegment implements RDElement {
         return size;
     }
 
-    public double getOuterRadius() { return outerRadius; }
+    double getOuterRadius() { return outerRadius; }
 
     public void setParentID(long newParentID) {
         this.parentID = newParentID;
@@ -123,16 +134,5 @@ public class DiskSegment implements RDElement {
 
     void setAnglePosition(double anglePosition) {
         this.anglePosition = anglePosition;
-    }
-
-    private String propertiesToString() {
-        return String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", size, height,
-                transparency, color);
-    }
-
-    void calculateCrossSection(double width, double height) {
-        crossSection = "\'" + (-(width / 2) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", "
-                + ((width / 2) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height)) +
-                "\'";
     }
 }
