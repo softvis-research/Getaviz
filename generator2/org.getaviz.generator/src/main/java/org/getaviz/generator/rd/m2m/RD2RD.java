@@ -1,6 +1,5 @@
 package org.getaviz.generator.rd.m2m;
 
-import org.apache.commons.lang3.StringUtils;
 import org.getaviz.generator.ColorGradient;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
@@ -9,19 +8,11 @@ import org.getaviz.generator.SettingsConfiguration.OutputFormat;
 
 import java.util.ArrayList;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.util.GeometricShapeFactory;
-import com.vividsolutions.jts.geom.MultiPoint;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.algorithm.MinimumBoundingCircle;
-import com.vividsolutions.jts.geom.CoordinateList;
-import com.vividsolutions.jts.geom.Coordinate;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.rd.s2m.Disk;
 import org.getaviz.generator.rd.s2m.DiskSegment;
-import org.getaviz.generator.rd.s2m.RDElement;
 import org.neo4j.driver.v1.types.Node;
 
 import java.util.List;
@@ -80,173 +71,11 @@ public class RD2RD implements Step {
     }
 
     private void postLayout(ArrayList<Disk> list) {
-        list.forEach(Disk::calculateSum);
+        list.forEach(Disk::setSegmentsArea);
     }
 
-	private void calculateRings(ArrayList<Disk> list) {
-    	list.forEach(disk -> {
-			long id = disk.getId();
-			double ringWidth = disk.getRingWidth();
-			double height = disk.getHeight();
-			double radius = disk.getRadius();
-			double outerSegmentsAreaArea = disk.getOuterSegmentsArea();
-			double dataArea = disk.getInnerSegmentsArea();
-			double areaWithoutBorder = disk.getAreaWithoutBorder();
-			double r_data;
-			double r_methods;
-			double b_methods;
-			ArrayList<DiskSegment> outerSegments = disk.getOuterSegments();
-			ArrayList<DiskSegment> innerSegments = disk.getInnerSegments();
-			ArrayList<Disk> subDisks = getSubDisk(id);
-			if (ringWidth == 0) {
-				calculateCrossSection(disk, ringWidth, 0);
-			} else {
-				calculateCrossSection(disk, ringWidth, height);
-			}
-			calculateSpines(disk, radius - (0.5 * ringWidth));
-			if (subDisks.size() == 0) {
-				r_data = Math.sqrt(dataArea * areaWithoutBorder / Math.PI);
-				r_methods = radius - ringWidth;
-				b_methods = r_methods - r_data;
-				if (!innerSegments.isEmpty()) {
-					innerSegments.forEach(innerSegment -> calculateCrossSection(innerSegment, r_data, height));
-					calculateSpines(innerSegments, 0.5 * r_data);
-					if (outputFormat == OutputFormat.AFrame) {
-						for (DiskSegment data : innerSegments) {
-							data.setOuterAndInnerRadius(r_data, 0.0);
-						}
-					}
-				}
-			} else {
-				double outerRadius = calculateOuterRadius(disk);
-				r_data = Math.sqrt((dataArea * areaWithoutBorder / Math.PI) + (outerRadius * outerRadius));
-				double b_data = r_data - outerRadius;
-				r_methods = Math.sqrt((outerSegmentsAreaArea * areaWithoutBorder / Math.PI) + (r_data * r_data));
-				b_methods = r_methods - r_data;
-				if (!innerSegments.isEmpty()) {
-					innerSegments.forEach(innerSegment -> calculateCrossSection(innerSegment, b_data, height));
-					calculateSpines(innerSegments, r_data - 0.5 * b_data);
-					if (outputFormat == OutputFormat.AFrame) {
-						for (DiskSegment data : innerSegments) {
-							data.setOuterAndInnerRadius(r_data, (r_data - b_data));
-						}
-					}
-				}
-			}
-			if (!outerSegments.isEmpty()) {
-				outerSegments.forEach(outerSegment -> calculateCrossSection(outerSegment, b_methods, height));
-				calculateSpines(outerSegments, r_methods - 0.5 * b_methods);
-				if (outputFormat == OutputFormat.AFrame) {
-					for (DiskSegment segment : outerSegments) {
-						segment.setOuterAndInnerRadius(r_methods, r_data);
-					}
-				}
-			}
-		});
-	}
-
-    private double calculateOuterRadius(Disk disk) {
-        CoordinateList coordinates = new CoordinateList();
-        ArrayList<Disk> subDisks = getSubDisk(disk.getId());
-        subDisks.forEach(d -> {
-            double x = disk.getPosX();
-            double y = disk.getPosY();
-            coordinates.add(createCircle(x, y, disk.getRadius()).getCoordinates(), false);
-        });
-        GeometryFactory geoFactory = new GeometryFactory();
-        MultiPoint innerCircleMultiPoint = geoFactory.createMultiPoint(coordinates.toCoordinateArray());
-        MinimumBoundingCircle mbc = new MinimumBoundingCircle(innerCircleMultiPoint);
-        return mbc.getRadius();
-    }
-
-    private Geometry createCircle(double x, double y, double radius) {
-        GeometricShapeFactory shapeFactory = new GeometricShapeFactory();
-        shapeFactory.setNumPoints(64);
-        shapeFactory.setCentre(new Coordinate(x, y));
-        shapeFactory.setSize(radius * 2);
-        return shapeFactory.createCircle();
-    }
-
-    private void calculateCrossSection(RDElement element, double width, double height) {
-        String crossSection = (-(width / 2) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", "
-                + ((width / 2) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height));
-        element.setCrossSection(crossSection);
-    }
-
-    private void calculateSpines(ArrayList<DiskSegment> segments, double factor) {
-        if (outputFormat == OutputFormat.X3D) {
-            int spinePointCount;
-            if (segments.size() < 50) {
-                spinePointCount = 400;
-            } else {
-                spinePointCount = 1000;
-            }
-            List<String> completeSpine = new ArrayList<>();
-            double stepX = 2 * Math.PI / spinePointCount;
-
-            for (int i = 0; i < spinePointCount; ++i) {
-                completeSpine.add(factor * Math.cos(i * stepX) + " " + factor * Math.sin(i * stepX) + " " + 0.0);
-            }
-            completeSpine.add(completeSpine.get(0));
-            // calculate spines according to fractions
-            int start;
-            int end = 0;
-            for (DiskSegment segment : segments) {
-                double size = segment.getSize();
-                start = end;
-                end = start + (int) Math.floor(spinePointCount * size);
-                if (end > (completeSpine.size() - 1)) {
-                    end = completeSpine.size() - 1;
-                }
-                if (segment == segments.get(segments.size() - 1)) {
-                    end = completeSpine.size() - 1;
-                }
-                List<String> partSpine = new ArrayList<>();
-                for (int j = 0; j < end - start; j++) {
-                    partSpine.add(completeSpine.get(start + j));
-                }
-                String spine = " \'" + removeBrackets(partSpine) + "\'";
-                segment.setSpine(spine);
-            }
-        }
-        if (outputFormat == OutputFormat.AFrame) {
-            if (!segments.isEmpty()) {
-                int length = segments.size();
-                double sizeSum = 0.0;
-                double position = 0.0;
-                for (DiskSegment segment : segments) {
-                    double size = segment.getSize();
-                    sizeSum += size;
-                }
-                sizeSum += sizeSum / 360 * length;
-                for (DiskSegment segment : segments) {
-                    double angle = (segment.getSize() / sizeSum) * 360;
-                    segment.setAngle(angle);
-                    segment.setAnglePosition(position);
-                    position += angle + 1;
-                }
-            }
-        }
-    }
-
-    private void calculateSpines(Disk disk, double factor) {
-        int spinePointCount = 50;
-        List<String> completeSpine = new ArrayList<>();
-        double stepX = 2 * Math.PI / spinePointCount;
-        for (int i = 0; i < spinePointCount; ++i) {
-            completeSpine.add(factor * Math.cos(i * stepX) + " " + factor * Math.sin(i * stepX) + " " + 0.0);
-        }
-        completeSpine.add(completeSpine.get(0));
-        String spine = "\'" + removeBrackets(completeSpine) + "\'";
-        disk.setSpine(spine);
-    }
-
-    private static String removeBrackets(List<String> list) {
-        return removeBrackets(list.toString());
-    }
-
-    private static String removeBrackets(String string) {
-        return StringUtils.remove(StringUtils.remove(string, "["), "]");
+    private void calculateRings(ArrayList<Disk> list) {
+        list.forEach(disk -> disk.calculateRings(outputFormat));
     }
 
     private void calculateNamespaceMaxLevel() {
@@ -357,15 +186,18 @@ public class RD2RD implements Step {
                 });
     }
 
-    static ArrayList<Disk> getSubDisk(long id) {
-        ArrayList<Disk> list = new ArrayList<>();
-        disksList.forEach(d -> {
-            long parentID = d.getParentID();
-            if (id == parentID) {
-                list.add(d);
-            }
+    private static void addSubDisks() {
+        disksList.forEach(disk -> {
+            ArrayList<Disk> list = new ArrayList<>();
+            long id = disk.getId();
+            disksList.forEach(d -> {
+                long parentID = d.getParentID();
+                if (id == parentID) {
+                    list.add(d);
+                }
+            });
+            disk.setSubDisksList(list);
         });
-        return list;
     }
 
     private void addSegmentsToDisk() {
@@ -395,6 +227,7 @@ public class RD2RD implements Step {
         createRootDisksList();
         createDisksList();
         addColor();
+        addSubDisks();
         addSegmentsToDisk();
     }
 
@@ -403,13 +236,12 @@ public class RD2RD implements Step {
         calculateRadius(disksList);
         calculateLayout(rootDisksList);
         postLayout(disksList);
-		calculateRings(disksList);
+        calculateRings(disksList);
     }
 
     private void writeToDatabase() {
-        String source = "RD2RD";
-        innerSegments.forEach(segment -> segment.writeToDatabase(connector, source));
-        outerSegments.forEach(segment -> segment.writeToDatabase(connector, source));
-        disksList.forEach(disk -> disk.writeToDatabase(connector, source));
+        innerSegments.forEach(segment -> segment.writeToDatabase(connector, true));
+        outerSegments.forEach(segment -> segment.writeToDatabase(connector, true));
+        disksList.forEach(disk -> disk.writeToDatabase(connector, true));
     }
 }

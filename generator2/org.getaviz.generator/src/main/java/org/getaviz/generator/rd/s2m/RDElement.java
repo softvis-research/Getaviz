@@ -8,7 +8,6 @@ public interface RDElement {
     long getVisualizedNodeID();
     long getId();
     void setParentID(long id);
-    void setCrossSection(String crossSection);
-    void writeToDatabase(DatabaseConnector connector, String source);
+    void writeToDatabase(DatabaseConnector connector, boolean wroteToDatabase);
 
 }

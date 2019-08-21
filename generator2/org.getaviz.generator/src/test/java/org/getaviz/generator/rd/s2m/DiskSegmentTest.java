@@ -23,7 +23,7 @@ class DiskSegmentTest {
     @Test
     void writeToDatabaseJQA2RDTest() {
         DiskSegment diskSegment = createObjectsFotTest1();
-        diskSegment.writeToDatabase(connector,"JQA2RD");
+        diskSegment.writeToDatabase(connector,false);
         Record result = connector
                 .executeRead("MATCH (d:DiskSegment)-[:VISUALIZES]->(n:Field) WHERE ID(n) = " + nodeID +
                         " RETURN ID(d) AS id, d.height AS height, d.transparency AS transparency, d.color AS color")
@@ -41,7 +41,7 @@ class DiskSegmentTest {
     @Test
     void writeToDatabaseRD2RDTest() {
         DiskSegment diskSegment = createObjectsForTest2();
-        diskSegment.writeToDatabase(connector, "RD2RD");
+        diskSegment.writeToDatabase(connector, true);
         Record result = connector.executeRead("MATCH (d) WHERE ID(d) = " + diskSegment.getId() + " RETURN d.size" +
                 " AS size").single();
         double size = result.get("size").asDouble();

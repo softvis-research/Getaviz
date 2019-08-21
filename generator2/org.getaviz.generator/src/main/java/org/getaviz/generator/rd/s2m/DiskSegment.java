@@ -20,7 +20,7 @@ public class DiskSegment implements RDElement {
     private long parentID;
     private long id;
 
-    DiskSegment (long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, String color) {
+    DiskSegment(long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, String color) {
         this.visualizedNodeID = visualizedNodeID;
         this.parentVisualizedNodeID = parentVisualizedNodeID;
         this.size = 1.0;
@@ -29,8 +29,8 @@ public class DiskSegment implements RDElement {
         this.color = color;
     }
 
-    DiskSegment (long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, double minArea, String color,
-        int numberOfStatements) {
+    DiskSegment(long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, double minArea, String color,
+                int numberOfStatements) {
         this(visualizedNodeID, parentVisualizedNodeID, transparency, height, color);
 
         size = numberOfStatements;
@@ -39,20 +39,15 @@ public class DiskSegment implements RDElement {
         }
     }
 
-    public DiskSegment (long parentID, long id, double size) {
+    public DiskSegment(long parentID, long id, double size) {
         this.parentID = parentID;
         this.id = id;
         this.size = size;
     }
 
-    public void writeToDatabase(DatabaseConnector connector, String source) {
-        switch (source) {
-            case "JQA2RD" :
-                JQA2RDWriteToDatabase(connector);
-                break;
-            case "RD2RD" :
-                RD2RDWriteToDatabase(connector);
-        }
+    public void writeToDatabase(DatabaseConnector connector, boolean wroteToDatabase) {
+        if (!wroteToDatabase) JQA2RDWriteToDatabase(connector);
+        else RD2RDWriteToDatabase(connector);
     }
 
     private void JQA2RDWriteToDatabase(DatabaseConnector connector) {
@@ -79,7 +74,7 @@ public class DiskSegment implements RDElement {
         return size;
     }
 
-    public long getParentVisualizedNodeID(){
+    public long getParentVisualizedNodeID() {
         return parentVisualizedNodeID;
     }
 
@@ -99,6 +94,8 @@ public class DiskSegment implements RDElement {
         return size;
     }
 
+    public double getOuterRadius() { return outerRadius; }
+
     public void setParentID(long newParentID) {
         this.parentID = newParentID;
     }
@@ -111,29 +108,31 @@ public class DiskSegment implements RDElement {
         this.size = size;
     }
 
-    public void setCrossSection (String crossSection) {
-        this.crossSection = "\'" +  crossSection + "\'";
-    }
-
-    public void setOuterAndInnerRadius (double outerRadius, double innerRadius) {
+    void setOuterAndInnerRadius(double outerRadius, double innerRadius) {
         this.outerRadius = outerRadius;
         this.innerRadius = innerRadius;
     }
 
-    public void setSpine (String spine) {
+    void setSpine(String spine) {
         this.spine = spine;
     }
 
-    public void setAngle (double angle) {
+    void setAngle(double angle) {
         this.angle = angle;
     }
 
-    public void setAnglePosition (double anglePosition) {
+    void setAnglePosition(double anglePosition) {
         this.anglePosition = anglePosition;
     }
 
     private String propertiesToString() {
         return String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", size, height,
                 transparency, color);
+    }
+
+    void calculateCrossSection(double width, double height) {
+        crossSection = "\'" + (-(width / 2) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", "
+                + ((width / 2) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height)) +
+                "\'";
     }
 }
