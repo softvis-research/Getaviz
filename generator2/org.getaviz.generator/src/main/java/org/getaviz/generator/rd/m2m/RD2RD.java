@@ -62,10 +62,6 @@ public class RD2RD implements Step {
         list.forEach(Disk::updateDiskNode);
     }
 
-    private void calculateRings(ArrayList<Disk> list) {
-        list.forEach(disk -> disk.calculateRings(outputFormat));
-    }
-
     private void calculateNamespaceMaxLevel() {
         StatementResult length = connector.executeRead(
                 "MATCH p=(n:Package)-[:CONTAINS*]->(m:Package) WHERE NOT (m)-[:CONTAINS]->(:Package) " +
@@ -73,8 +69,8 @@ public class RD2RD implements Step {
         namespaceMaxLevel = length.single().get("length").asInt() + 1;
     }
 
-    private void createDisksList() {
-        disksList.addAll(rootDisksList);
+    private ArrayList<Disk> createDisksList() {
+        ArrayList<Disk> list = new ArrayList<>(rootDisksList);
         StatementResult result = connector.executeRead("MATCH (p:Disk)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element) "
                 + "RETURN d.grossArea AS areaWithBorder, d.netArea AS areaWithoutBorder, d.ringWidth AS ringWidth, d.height as height," +
                 " d.size AS size, ID(d) AS id, ID(p) AS parentID, ID(element) AS visualizedID ORDER BY element.hash");
@@ -88,12 +84,14 @@ public class RD2RD implements Step {
             double height = d.get("height").asDouble();
             Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height,
                     true);
-            disksList.add(disk);
-            addPosition(disk);
+            list.add(disk);
+            setPositionToPackages(disk);
         });
+        return list;
     }
 
-    private void createRootDisksList() {
+    private ArrayList<Disk> createRootDisksList() {
+        ArrayList<Disk> list = new ArrayList<>();
         StatementResult result = connector.executeRead("MATCH (n:RD:Model)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element)" +
                 " RETURN d.grossArea AS areaWithBorder,d.netArea AS areaWithoutBorder, d.ringWidth AS ringWidth, d.height AS height," +
                 " d.size AS size, ID(d) as id, ID(n) AS parentID, ID(element) AS visualizedID ORDER BY element.hash");
@@ -107,12 +105,14 @@ public class RD2RD implements Step {
             double height = d.get("height").asDouble();
             Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height,
                     false);
-            rootDisksList.add(disk);
-            addPosition(disk);
+            list.add(disk);
+            setPositionToPackages(disk);
         });
+        return list;
     }
 
-    private void createInnerSegmentsList() {
+    private ArrayList<DiskSegment> createInnerSegmentsList() {
+        ArrayList<DiskSegment> list = new ArrayList<>();
         StatementResult result = connector.executeRead(
                 "MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(field:Field) " +
                         "RETURN d.size AS size, ID(d) as id, ID(n) as parentID ORDER BY field.hash");
@@ -121,11 +121,13 @@ public class RD2RD implements Step {
             long id = f.get("id").asLong();
             double size = f.get("size").asDouble();
             DiskSegment innerSegment = new DiskSegment(parentID, id, size);
-            innerSegments.add(innerSegment);
+            list.add(innerSegment);
         });
+        return list;
     }
 
-    private void createOuterSegmentsList() {
+    private ArrayList<DiskSegment> createOuterSegmentsList() {
+        ArrayList<DiskSegment> list = new ArrayList<>();
         StatementResult result = connector.executeRead(
                 "MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(method:Method) " +
                         "RETURN d.size AS size, ID(d) as id, ID(n) as parentID ORDER BY method.hash");
@@ -134,11 +136,12 @@ public class RD2RD implements Step {
             long id = f.get("id").asLong();
             double size = f.get("size").asDouble();
             DiskSegment outerSegment = new DiskSegment(parentID, id, size);
-            outerSegments.add(outerSegment);
+            list.add(outerSegment);
         });
+        return list;
     }
 
-    private void addPosition(Disk disk) {
+    private void setPositionToPackages(Disk disk) {
         StatementResult position = connector
                 .executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + disk.getID() + " RETURN p");
         if (!position.list().isEmpty()) {
@@ -147,7 +150,7 @@ public class RD2RD implements Step {
         }
     }
 
-    private void addColor() {
+    private void setColorToDisk() {
         String NS_colorStart = "#969696";
         String NS_colorEnd = "#F0F0F0";
         NS_colors = ColorGradient.createColorGradient(NS_colorStart, NS_colorEnd, namespaceMaxLevel);
@@ -203,11 +206,11 @@ public class RD2RD implements Step {
     }
 
     private void createLists() {
-        createInnerSegmentsList();
-        createOuterSegmentsList();
-        createRootDisksList();
-        createDisksList();
-        addColor();
+        innerSegments = createInnerSegmentsList();
+        outerSegments = createOuterSegmentsList();
+        rootDisksList = createRootDisksList();
+        disksList = createDisksList();
+        setColorToDisk();
         addSubDisks();
         addSegmentsToDisk();
     }
@@ -217,7 +220,7 @@ public class RD2RD implements Step {
         calculateRadius(disksList);
         disksList.forEach(Disk::setMinArea);
         calculateLayout(rootDisksList);
-        calculateRings(disksList);
+        SegmentLayout.calculateRings(disksList, outputFormat);
     }
 
     private void writeToDatabase() {

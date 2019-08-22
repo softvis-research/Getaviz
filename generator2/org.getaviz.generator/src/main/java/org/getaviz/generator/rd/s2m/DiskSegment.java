@@ -70,12 +70,6 @@ public class DiskSegment implements RDElement {
                 transparency, color);
     }
 
-    void calculateCrossSection(double width, double height) {
-        crossSection = "\'" + (-(width / 2) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", "
-                + ((width / 2) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height)) +
-                "\'";
-    }
-
     void calculateSize(double sum) {
         size = size / sum;
     }
@@ -104,7 +98,7 @@ public class DiskSegment implements RDElement {
         return size;
     }
 
-    double getOuterRadius() { return outerRadius; }
+    public void setCrossSection(String crossSection) { this.crossSection = crossSection; }
 
     public void setParentID(long newParentID) {
         this.parentID = newParentID;
@@ -118,20 +112,20 @@ public class DiskSegment implements RDElement {
         this.size = size;
     }
 
-    void setOuterAndInnerRadius(double outerRadius, double innerRadius) {
+    public void setOuterAndInnerRadius(double outerRadius, double innerRadius) {
         this.outerRadius = outerRadius;
         this.innerRadius = innerRadius;
     }
 
-    void setSpine(String spine) {
+    public void setSpine(String spine) {
         this.spine = spine;
     }
 
-    void setAngle(double angle) {
+    public void setAngle(double angle) {
         this.angle = angle;
     }
 
-    void setAnglePosition(double anglePosition) {
+    public void setAnglePosition(double anglePosition) {
         this.anglePosition = anglePosition;
     }
 }

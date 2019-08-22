@@ -1,14 +1,8 @@
 package org.getaviz.generator.rd.s2m;
 
-import com.vividsolutions.jts.algorithm.MinimumBoundingCircle;
-import com.vividsolutions.jts.geom.*;
-import com.vividsolutions.jts.util.GeometricShapeFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.database.Labels;
-import org.getaviz.generator.SettingsConfiguration.OutputFormat;
-import org.getaviz.generator.rd.m2m.RDLayout;
+import org.getaviz.generator.database.Labels;;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -101,93 +95,7 @@ public class Disk implements RDElement, Comparable<Disk> {
         connector.executeWrite(updateNode + createPosition);
     }
 
-    public void calculateRings(OutputFormat outputFormat) {
-        double r_data;
-        double r_methods;
-        double b_methods;
-        double width;
-        double factor;
-        double innerRadius;
-        double innerSegmentsArea = calculateSum(innerSegments);
-        double outerSegmentsArea = calculateSum(outerSegments);
-        setSegmentsArea();
-        calculateSpines(radius - (0.5 * ringWidth));
-        if (subDisksList.size() == 0) {
-            r_data = Math.sqrt(innerSegmentsArea * areaWithoutBorder / Math.PI);
-            r_methods = radius - ringWidth;
-            b_methods = r_methods - r_data;
-            width = r_data;
-            factor = 0.5 * r_data;
-            innerRadius = 0.0;
-        } else {
-            double outerRadius = calculateOuterRadius();
-            r_data = Math.sqrt((innerSegmentsArea * areaWithoutBorder / Math.PI) + (outerRadius * outerRadius));
-            double b_data = r_data - outerRadius;
-            r_methods = Math.sqrt((outerSegmentsArea * areaWithoutBorder / Math.PI) + (r_data * r_data));
-            b_methods = r_methods - r_data;
-            width = b_data;
-            factor = r_data - 0.5 * b_data;
-            innerRadius = r_data - b_data;
-        }
-        if (!innerSegments.isEmpty()) {
-            updateDiskSegment(innerSegments, width, factor, outputFormat, r_data, innerRadius);
-        }
-        if (!outerSegments.isEmpty()) {
-            updateDiskSegment(outerSegments, width, r_methods - 0.5 * b_methods, outputFormat, r_methods, r_data);
-        }
-    }
-
-    private void updateDiskSegment(ArrayList<DiskSegment> list, double width, double factor, OutputFormat outputFormat,
-                                   double outer, double inner) {
-        list.forEach(segment -> segment.calculateCrossSection(width, height));
-        if (outputFormat == SettingsConfiguration.OutputFormat.X3D) {
-            calculateSpines(list, factor);
-        }
-        if (outputFormat == SettingsConfiguration.OutputFormat.AFrame) {
-            calculateAngle(list);
-            for (DiskSegment data : list) {
-                data.setOuterAndInnerRadius(outer, inner);
-            }
-        }
-    }
-
-    private void calculateSpines(ArrayList<DiskSegment> segments, double factor) {
-        int spinePointCount;
-        if (segments.size() < 50) {
-            spinePointCount = 400;
-        } else {
-            spinePointCount = 1000;
-        }
-        List<String> completeSpine = new ArrayList<>();
-        double stepX = 2 * Math.PI / spinePointCount;
-
-        for (int i = 0; i < spinePointCount; ++i) {
-            completeSpine.add(factor * Math.cos(i * stepX) + " " + factor * Math.sin(i * stepX) + " " + 0.0);
-        }
-        completeSpine.add(completeSpine.get(0));
-        // calculate spines according to fractions
-        int start;
-        int end = 0;
-        for (DiskSegment segment : segments) {
-            double size = segment.getSize();
-            start = end;
-            end = start + (int) Math.floor(spinePointCount * size);
-            if (end > (completeSpine.size() - 1)) {
-                end = completeSpine.size() - 1;
-            }
-            if (segment == segments.get(segments.size() - 1)) {
-                end = completeSpine.size() - 1;
-            }
-            List<String> partSpine = new ArrayList<>();
-            for (int j = 0; j < end - start; j++) {
-                partSpine.add(completeSpine.get(start + j));
-            }
-            String spine = " \'" + removeBrackets(partSpine) + "\'";
-            segment.setSpine(spine);
-        }
-    }
-
-    private void calculateSpines(double factor) {
+    public void calculateSpines(double factor) {
         int spinePointCount = 50;
         List<String> completeSpine = new ArrayList<>();
         double stepX = 2 * Math.PI / spinePointCount;
@@ -198,23 +106,7 @@ public class Disk implements RDElement, Comparable<Disk> {
         spine = "\'" + removeBrackets(completeSpine) + "\'";
     }
 
-    private void calculateAngle(ArrayList<DiskSegment> segments) {
-        if (!segments.isEmpty()) {
-            int length = segments.size();
-
-            double position = 0.0;
-            double sizeSum = sum(segments);
-            sizeSum += sizeSum / 360 * length;
-            for (DiskSegment segment : segments) {
-                double angle = (segment.getSize() / sizeSum) * 360;
-                segment.setAngle(angle);
-                segment.setAnglePosition(position);
-                position += angle + 1;
-            }
-        }
-    }
-
-     String calculateCrossSection() {
+     private String calculateCrossSection() {
         double crossHeight;
         if (ringWidth == 0) {
             crossHeight = 0.0;
@@ -224,18 +116,6 @@ public class Disk implements RDElement, Comparable<Disk> {
         return "\'" + (-(ringWidth / 2) + " " + (crossHeight)) + ", " + ((ringWidth / 2) + " " + (crossHeight)) + ", "
                 + ((ringWidth / 2) + " " + 0) + ", " + (-(ringWidth / 2) + " " + 0) + ", " + (-(ringWidth / 2) + " " +
                 (crossHeight)) + "\'";
-    }
-
-    private double calculateOuterRadius() {
-        CoordinateList coordinates = new CoordinateList();
-        for (Disk d : subDisksList) {
-            coordinates.add(RDLayout.createCircle(d.position.x, d.position.y, d.radius)
-                    .getCoordinates(), false);
-        }
-        GeometryFactory geoFactory = new GeometryFactory();
-        MultiPoint innerCircleMultiPoint = geoFactory.createMultiPoint(coordinates.toCoordinateArray());
-        MinimumBoundingCircle mbc = new MinimumBoundingCircle(innerCircleMultiPoint);
-        return mbc.getRadius();
     }
 
     private static String removeBrackets(List<String> list) {
@@ -267,10 +147,6 @@ public class Disk implements RDElement, Comparable<Disk> {
         radius = Math.sqrt(areaWithoutBorder / Math.PI) + ringWidth;
     }
 
-    private double calculateSum(ArrayList<DiskSegment> list) {
-        return sum(list) / areaWithBorder;
-    }
-
     private void updateDiskSegmentSize(ArrayList<DiskSegment> list) {
         double sum = sum(list);
         for (DiskSegment segment : list) {
@@ -286,7 +162,7 @@ public class Disk implements RDElement, Comparable<Disk> {
         return sum;
     }
 
-    private void setSegmentsArea() {
+    public void setSegmentsArea() {
         updateDiskSegmentSize(innerSegments);
         updateDiskSegmentSize(outerSegments);
     }
@@ -341,10 +217,6 @@ public class Disk implements RDElement, Comparable<Disk> {
 
     public void setCentre(Point2D.Double centre) {
         this.centre = centre;
-    }
-
-    String getSpine() {
-        return spine;
     }
 
     public double getMinArea() {

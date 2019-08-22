@@ -59,8 +59,8 @@ class DiskTest {
         assertEquals(2, sum);
     }
 
-    @Test
-    void calculateRingsTest() {
+    //@Test
+    /*void calculateRingsTest() {
         Disk disk = createObjectsForTest2();
         SettingsConfiguration.OutputFormat outputFormat = SettingsConfiguration.OutputFormat.AFrame;
         disk.calculateRings(outputFormat);
@@ -94,7 +94,7 @@ class DiskTest {
                 "-0.20225424859373695 0.14694631307311815 0.0, -0.2190766700109659 0.12043841852542883 0.0, " +
                 "-0.23244412147206286 0.09203113817116947 0.0, -0.2421457902821578 0.06217247179121362 0.0, " +
                 "-0.24802867532861947 0.03133330839107595 0.0, -0.25 -0.0 0.0'", spine);
-    }
+    }*/
 
     @Test
     void WriteToDatabaseRD2RDTest() {

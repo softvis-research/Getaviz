@@ -90,6 +90,14 @@ public class RDLayout {
 		outerDisk.setRadius(outerDisk.getRingWidth() + radius + calculateB(calculateD(outerDisk.getMinArea(), radius), radius));
 		normalizePositionOfInnerCircles(outerDisk, innerDisks);
 	}
+
+    public static Geometry createCircle(double x, double y, final double RADIUS) {
+        GeometricShapeFactory shapeFactory = new GeometricShapeFactory();
+        shapeFactory.setNumPoints(64);
+        shapeFactory.setCentre(new Coordinate(x, y));
+        shapeFactory.setSize(RADIUS * 2);
+        return shapeFactory.createCircle();
+    }
 	
 	private static double calculateD(double area, double radius) {
 		return Math.sqrt((2 * radius) * (2 * radius) + (area / Math.PI) * 4);
@@ -99,14 +107,6 @@ public class RDLayout {
 		return (D - (2 * radius)) / 2;
 	}
 
-	public static Geometry createCircle(double x, double y, final double RADIUS) {
-		GeometricShapeFactory shapeFactory = new GeometricShapeFactory();
-		shapeFactory.setNumPoints(64);
-		shapeFactory.setCentre(new Coordinate(x, y));
-		shapeFactory.setSize(RADIUS * 2);
-		return shapeFactory.createCircle();
-	}
-	
 	private static void normalizePositionOfInnerCircles(Disk outerDisk,
 			List<Disk> innerDisks) {
 		final double x_outer = outerDisk.getCentre().x;
