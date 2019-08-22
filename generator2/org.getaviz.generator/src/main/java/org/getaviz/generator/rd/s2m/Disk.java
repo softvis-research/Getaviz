@@ -18,12 +18,9 @@ public class Disk implements RDElement {
     private double ringWidth;
     private double areaWithBorder;
     private double areaWithoutBorder;
-    private double outerSegmentsArea;
-    private double innerSegmentsArea;
     private double radius;
     private Position position;
     private String color;
-    private String crossSection;
     private String spine;
     private long parentVisualizedNodeID;
     private long visualizedNodeID;
@@ -83,6 +80,7 @@ public class Disk implements RDElement {
     }
 
     private void RD2RDWriteToDatabase(DatabaseConnector connector) {
+        String crossSection = calculateCrossSection();
         String updateNode = String.format(
                 "MATCH (n) WHERE ID(n) = %d SET n.radius = %f, n.crossSection = %s, n.spine = %s, n.color = %s ", id,
                 radius, crossSection, spine, color);
@@ -98,11 +96,9 @@ public class Disk implements RDElement {
         double width;
         double factor;
         double innerRadius;
-        if (ringWidth == 0) {
-            calculateCrossSection(ringWidth, 0);
-        } else {
-            calculateCrossSection(ringWidth, height);
-        }
+        double innerSegmentsArea = calculateSum(innerSegments);
+        double outerSegmentsArea = calculateSum(outerSegments);
+        setSegmentsArea();
         calculateSpines(radius - (0.5 * ringWidth));
         if (subDisksList.size() == 0) {
             r_data = Math.sqrt(innerSegmentsArea * areaWithoutBorder / Math.PI);
@@ -206,10 +202,16 @@ public class Disk implements RDElement {
         }
     }
 
-    private void calculateCrossSection(double width, double height) {
-        crossSection = "\'" + (-(width / 2) + " " + (height)) + ", " + ((width / 2) + " " + (height)) + ", "
-                + ((width / 2) + " " + 0) + ", " + (-(width / 2) + " " + 0) + ", " + (-(width / 2) + " " + (height)) +
-                "\'";
+     String calculateCrossSection() {
+        double crossHeight;
+        if (ringWidth == 0) {
+            crossHeight = 0.0;
+        } else {
+            crossHeight = this.height;
+        }
+        return "\'" + (-(ringWidth / 2) + " " + (crossHeight)) + ", " + ((ringWidth / 2) + " " + (crossHeight)) + ", "
+                + ((ringWidth / 2) + " " + 0) + ", " + (-(ringWidth / 2) + " " + 0) + ", " + (-(ringWidth / 2) + " " +
+                (crossHeight)) + "\'";
     }
 
     private double calculateOuterRadius() {
@@ -267,6 +269,11 @@ public class Disk implements RDElement {
         return sum;
     }
 
+    private void setSegmentsArea() {
+        updateDiskSegmentSize(innerSegments);
+        updateDiskSegmentSize(outerSegments);
+    }
+
     public void setParentID(long id) {
         this.parentID = id;
     }
@@ -307,17 +314,6 @@ public class Disk implements RDElement {
         outerSegments.addAll(list);
     }
 
-    public void setSegmentsArea() {
-        innerSegmentsArea = calculateSum(innerSegments);
-        outerSegmentsArea = calculateSum(outerSegments);
-        updateDiskSegmentSize(innerSegments);
-        updateDiskSegmentSize(outerSegments);
-    }
-
-    String getCrossSection() {
-        return crossSection;
-    }
-
     String getSpine() {
         return spine;
     }
@@ -356,14 +352,6 @@ public class Disk implements RDElement {
 
     public double getHeight() {
         return height;
-    }
-
-    double getOuterSegmentsArea() {
-        return outerSegmentsArea;
-    }
-
-    double getInnerSegmentsArea() {
-        return innerSegmentsArea;
     }
 
     public ArrayList<DiskSegment> getInnerSegments() {

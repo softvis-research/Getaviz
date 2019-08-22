@@ -52,16 +52,6 @@ class DiskTest {
     }
 
     @Test
-    void setSegmentAreaTest() {
-        Disk disk = createObjectsForTest2();
-        disk.setSegmentsArea();
-        double sumOuterSegments = disk.getOuterSegmentsArea();
-        double sumInnerSegments = disk.getInnerSegmentsArea();
-        assertEquals(1, sumOuterSegments);
-        assertEquals(1, sumInnerSegments);
-    }
-
-    @Test
     void sumTest() {
         Disk disk = createObjectsForTest2();
         ArrayList<DiskSegment> list = disk.getOuterSegments();
@@ -73,10 +63,9 @@ class DiskTest {
     void calculateRingsTest() {
         Disk disk = createObjectsForTest2();
         SettingsConfiguration.OutputFormat outputFormat = SettingsConfiguration.OutputFormat.AFrame;
-        disk.setSegmentsArea();
         disk.calculateRings(outputFormat);
         double radius = disk.getInnerSegments().get(0).getOuterRadius();
-        String crossSection = disk.getCrossSection();
+        String crossSection = disk.calculateCrossSection();
         String spine = disk.getSpine();
         assertEquals(0.5641895835477563, radius);
         assertEquals("'-0.25 0.5, 0.25 0.5, 0.25 0, -0.25 0, -0.25 0.5'", crossSection);

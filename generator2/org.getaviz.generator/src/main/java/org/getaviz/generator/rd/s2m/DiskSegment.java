@@ -80,9 +80,8 @@ public class DiskSegment implements RDElement {
         size = size / sum;
     }
 
-    double calculateNewSize(double dataFactor) {
+    void  calculateNewSize(double dataFactor) {
         size = size * dataFactor;
-        return size;
     }
 
     public long getParentVisualizedNodeID() {

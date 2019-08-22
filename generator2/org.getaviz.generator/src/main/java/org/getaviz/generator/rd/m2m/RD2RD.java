@@ -66,10 +66,6 @@ public class RD2RD implements Step {
         }
     }
 
-    private void postLayout(ArrayList<Disk> list) {
-        list.forEach(Disk::setSegmentsArea);
-    }
-
     private void calculateRings(ArrayList<Disk> list) {
         list.forEach(disk -> disk.calculateRings(outputFormat));
     }
@@ -222,7 +218,6 @@ public class RD2RD implements Step {
         calculateAreaWithoutBorder(disksList);
         calculateRadius(disksList);
         calculateLayout(rootDisksList);
-        postLayout(disksList);
         calculateRings(disksList);
     }
 
