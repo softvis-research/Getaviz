@@ -83,11 +83,13 @@ var canvasManipulator = (function () {
         }
 
         let blinkingMaxFrequency = 3000;
-        let blinkingFrequency = blinkingMaxFrequency - (blinkingMaxFrequency * intensity);
+        let blinkingFrequency = blinkingMaxFrequency * intensity;
 
-        component.setAttribute("animation__blinking",
-            "property: components.material.material.color; type: color; from: " + entity.originalColor +
-            "; to: " + color + "; dur: " + blinkingFrequency + "; loop: true");
+        if (intensity > 0){
+            component.setAttribute("animation__blinking",
+                "property: components.material.material.color; type: color; from: " + entity.originalColor +
+                "; to: " + color + "; dur: " + blinkingFrequency + "; loop: true");
+        }
     }
 
     function stopBlinkingAnimationForEntity(entity) {
@@ -101,10 +103,23 @@ var canvasManipulator = (function () {
 
         component.setAttribute("animation__blinking",
             "property: components.material.material.color; type: color; from: " + entity.originalColor +
-            "; to: " + entity.originalColor + "; dur: 0");
+            "; to: " + entity.originalColor + "; dur: 0; loop: false");
 
-        component.removeAttribute("animation__blinking");
+        // remark:
+        // A nice way would be to remove the blinking animation attribute.
+        // But this leads to components staying in their current blinking color.
+        // Changing the color of the component back to original color does not work,
+        // because aframe thinks its still in this color.
+        // So this workaround is used: the components blink immediately back to its original color without a loop.
+        // This costs no further performance. Just the "animation__blinking" attribute is left.
+
+        //component.removeAttribute("animation__blinking");
         //component.setAttribute("color", entity.originalColor);
+
+        // component.removeAttribute("animation__blinking");
+        // component.components.material.material.color = entity.originalColor;
+        // component.removeAttribute("animation__blinking");
+        //component.setAttribute("components.material.material.color", entity.originalColor);
     }
 
     function startGrowShrinkAnimationForEntity(entity, intensity) {

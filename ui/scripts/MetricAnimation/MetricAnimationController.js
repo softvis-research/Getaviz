@@ -136,7 +136,7 @@ var metricAnimationController = (function() {
         let entitiesValue = getMetricValueOfEntity(entity, metric);
         let maxValue = getMetricMaxValue(metric);
 
-        let intensity = maxValue / entitiesValue;
+        let intensity =  entitiesValue / maxValue;
 
         return intensity;
     }
@@ -150,9 +150,6 @@ var metricAnimationController = (function() {
     }
 
     function initializeMetricMaxValues() {
-
-        // todo: hier geht was schief beim setzen der Max Values
-
         const methods = model.getEntitiesByType("Method");
         const classes = model.getEntitiesByType("Class");
 
