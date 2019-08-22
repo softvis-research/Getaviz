@@ -9,83 +9,86 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.MultiPoint;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
+import org.getaviz.generator.rd.s2m.Disk;
+
 import java.util.ArrayList;
 
-class RDLayout {
+public class RDLayout {
 	
-	static void nestedLayout(ArrayList<CircleWithInnerCircles> circleList) {
-		layout(circleList);
-		transformPositions(circleList);
+	static void nestedLayout(ArrayList<Disk> disksList) {
+		layout(disksList);
+		transformPositions(disksList);
 	}
 
-	private static void layout(List<CircleWithInnerCircles> circleList) {
-		for (CircleWithInnerCircles circle : circleList) {
-			if (circle.getInnerCircles().size() > 0) {
-				List<CircleWithInnerCircles> innerCircles = circle.getInnerCircles();
-				layout(innerCircles);
-				calculateRadiusForOuterCircles(circle,innerCircles);
+	private static void layout(List<Disk> diskList) {
+		diskList.forEach(disk->  {
+			if (disk.getSubDisksList().size() > 0) {
+				List<Disk> innerDisks = disk.getSubDisksList();
+				layout(innerDisks);
+				calculateRadiusForOuterCircles(disk, innerDisks);
 			}
-		}
-		updateArea(circleList);
-		Calculator.calculate(circleList);
+		});
+		updateArea(diskList);
+		Calculator.calculate(diskList);
 	}
 
-	private static void transformPositions(List<CircleWithInnerCircles> circleList) {
-		for (Circle circle : circleList) {
-			if (((CircleWithInnerCircles) circle).getInnerCircles() != null) {
-				transformPositionOfInnerCircles(circle,((CircleWithInnerCircles) circle).getInnerCircles());
-				transformPositions(((CircleWithInnerCircles) circle).getInnerCircles());
+	private static void transformPositions(List<Disk> disksList) {
+		for (Disk disk : disksList) {
+			if (disk.getSubDisksList() != null) {
+				transformPositionOfInnerCircles(disk,(disk.getSubDisksList()));
+				transformPositions(disk.getSubDisksList());
 			}
 		}
 	}
 	
-	private static void updateArea(List<CircleWithInnerCircles> circleList) {
-		for (CircleWithInnerCircles circle : circleList) {
-			circle.setAreaWithBorder(circle.getRadius() * circle.getRadius() * Math.PI);
-			if (circle.getInnerCircles().size() < 1) {
-				circle.setAreaWithoutBorder(circle.getAreaWithBorder());
+	private static void updateArea(List<Disk> disksList) {
+		for (Disk disk : disksList) {
+			disk.setAreaWithBorder(disk.getRadius() * disk.getRadius() * Math.PI);
+			if (disk.getSubDisksList().size() < 1) {
+				disk.setAreaWithoutBorder(disk.getAreaWithBorder());
 			} else {
-				List<CircleWithInnerCircles> innerCircles = circle.getInnerCircles();
-				circle.setAreaWithoutBorder(circle.getAreaWithoutBorder() + (2 * circle.getRadius() - circle.getRingWidth()) * circle.getRingWidth() * Math.PI);
+				List<Disk> innerDisks = disk.getSubDisksList();
+				disk.setAreaWithoutBorder(disk.getAreaWithoutBorder() + (2 * disk.getRadius() - disk.getRingWidth())
+						* disk.getRingWidth() * Math.PI);
 				
-				for (CircleWithInnerCircles c : innerCircles) {
-					circle.setAreaWithoutBorder(circle.getAreaWithoutBorder() + c.getAreaWithoutBorder());
+				for (Disk d : innerDisks) {
+					disk.setAreaWithoutBorder(disk.getAreaWithoutBorder() + d.getAreaWithoutBorder());
 				}
 			
 			}
 		}
 	}
-	private static void transformPositionOfInnerCircles(Circle outerCircle,
-			List<CircleWithInnerCircles> innerCircles) {
-		final double x_outer = outerCircle.getCentre().x;
-		final double y_outer = outerCircle.getCentre().y;
+	private static void transformPositionOfInnerCircles(Disk outerDisk,
+			List<Disk> innerDisks) {
+		final double x_outer = outerDisk.getCentre().x;
+		final double y_outer = outerDisk.getCentre().y;
 
-		for (Circle circle : innerCircles) {
-			circle.getCentre().x += x_outer;
-			circle.getCentre().y += y_outer;
+		for (Disk disk : innerDisks) {
+			disk.getCentre().x += x_outer;
+			disk.getCentre().y += y_outer;
 		}
 	}
 	
-	private static void calculateRadiusForOuterCircles(CircleWithInnerCircles outerCircle, List<CircleWithInnerCircles> innerCircles) {
+	private static void calculateRadiusForOuterCircles(Disk outerDisk, List<Disk> innerDisks) {
 
 		CoordinateList coordinates = new CoordinateList();
-		for (CircleWithInnerCircles circle : innerCircles) {
-			coordinates.add(createCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius()).getCoordinates(), false);
+		for (Disk disk : innerDisks) {
+			coordinates.add(createCircle(disk.getCentre().x, disk.getCentre().y, disk.getRadius()).getCoordinates(), false);
 		}
 		
 		GeometryFactory geoFactory = new GeometryFactory();
 		MultiPoint innerCirclemultipoint = geoFactory.createMultiPoint(coordinates.toCoordinateArray());
 		MinimumBoundingCircle mbc = new MinimumBoundingCircle(innerCirclemultipoint);
 
-//		outerCircle.setCentre(centre);
-//		outerCircle.setRadius(RING_WIDTH + radius + calculateB(calculateD(outerCircle.getMinArea(), radius), radius));
-//		normalizePositionOfInnerCircles(outerCircle, innerCircles);
+//		outerDisk.setCentre(centre);
+//		outerDisk.setRadius(RING_WIDTH + radius + calculateB(calculateD(outerDisk.getMinArea(), radius), radius));
+//		normalizePositionOfInnerCircles(outerDisk, innerDisks);
 		final double radius = mbc.getRadius();
 		final Point2D.Double centre = new Point2D.Double(mbc.getCentre().x, mbc.getCentre().y);
 		
-		outerCircle.setCentre(centre);
-		outerCircle.setRadius(outerCircle.getRingWidth() + radius + calculateB(calculateD(outerCircle.getMinArea(), radius), radius));
-		normalizePositionOfInnerCircles(outerCircle, innerCircles);
+		outerDisk.setCentre(centre);
+		outerDisk.setRadius(outerDisk.getRingWidth() + radius + calculateB(calculateD(outerDisk.getMinArea(), radius), radius));
+		normalizePositionOfInnerCircles(outerDisk, innerDisks);
 	}
 	
 	private static double calculateD(double area, double radius) {
@@ -96,7 +99,7 @@ class RDLayout {
 		return (D - (2 * radius)) / 2;
 	}
 
-	private static Geometry createCircle(double x, double y, final double RADIUS) {
+	public static Geometry createCircle(double x, double y, final double RADIUS) {
 		GeometricShapeFactory shapeFactory = new GeometricShapeFactory();
 		shapeFactory.setNumPoints(64);
 		shapeFactory.setCentre(new Coordinate(x, y));
@@ -104,15 +107,15 @@ class RDLayout {
 		return shapeFactory.createCircle();
 	}
 	
-	private static void normalizePositionOfInnerCircles(Circle outerCircle,
-			List<CircleWithInnerCircles> innerCircles) {
-		final double x_outer = outerCircle.getCentre().x;
-		final double y_outer = outerCircle.getCentre().y;
+	private static void normalizePositionOfInnerCircles(Disk outerDisk,
+			List<Disk> innerDisks) {
+		final double x_outer = outerDisk.getCentre().x;
+		final double y_outer = outerDisk.getCentre().y;
 
-		for (Circle circle : innerCircles) {
-			circle.getCentre().x -= x_outer;
-			circle.getCentre().y -= y_outer;
+		for (Disk disk : innerDisks) {
+			disk.getCentre().x -= x_outer;
+			disk.getCentre().y -= y_outer;
 		}
-		outerCircle.setCentre(new Point2D.Double(0, 0));
+		outerDisk.setCentre(new Point2D.Double(0, 0));
 	}
 }

@@ -6,7 +6,7 @@ public interface RDElement {
 
     long getParentVisualizedNodeID();
     long getVisualizedNodeID();
-    long getId();
+    long getID();
     void setParentID(long id);
     void writeToDatabase(DatabaseConnector connector, boolean wroteToDatabase);
 

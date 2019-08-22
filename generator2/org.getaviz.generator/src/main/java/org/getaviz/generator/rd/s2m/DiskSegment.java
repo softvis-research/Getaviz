@@ -56,7 +56,7 @@ public class DiskSegment implements RDElement {
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
                         "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
                 parentID, visualizedNodeID, label, propertiesToString()), "n").id();
-        setId(id);
+        setID(id);
     }
 
     private void RD2RDWriteToDatabase(DatabaseConnector connector) {
@@ -92,7 +92,7 @@ public class DiskSegment implements RDElement {
         return visualizedNodeID;
     }
 
-    public long getId() {
+    public long getID() {
         return id;
     }
 
@@ -110,7 +110,7 @@ public class DiskSegment implements RDElement {
         this.parentID = newParentID;
     }
 
-    public void setId(long id) {
+    public void setID(long id) {
         this.id = id;
     }
 

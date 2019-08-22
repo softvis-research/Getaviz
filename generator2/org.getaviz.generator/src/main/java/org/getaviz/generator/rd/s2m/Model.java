@@ -53,7 +53,7 @@ public class Model {
         while ((iterator.hasNext())) {
             RDElement disk = iterator.next();
             if (visualizedNodeID == disk.getVisualizedNodeID()) {
-                id = disk.getId();
+                id = disk.getID();
                 return id;
             }
         }

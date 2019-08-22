@@ -44,8 +44,8 @@ class ModelTest {
 
     @Test
     void parentChildRelationTest () {
-        long diskID = disk.getId();
-        long diskSegmentID = diskSegment.getId();
+        long diskID = disk.getID();
+        long diskSegmentID = diskSegment.getID();
         Record result = connector.executeRead("MATCH (n)-[r]->(m) WHERE ID(n) = " + diskID + " AND ID(m) = " +
                 diskSegmentID + " RETURN type(r) AS result").single();
         String relation = result.get("result").asString();

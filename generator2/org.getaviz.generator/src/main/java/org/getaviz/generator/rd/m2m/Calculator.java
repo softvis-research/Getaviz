@@ -1,64 +1,66 @@
 package org.getaviz.generator.rd.m2m;
 
+import org.getaviz.generator.rd.s2m.Disk;
+
 import java.awt.geom.Point2D;
 import java.util.Collections;
 import java.util.List;
 
 class Calculator {
 
-	static void calculate(final List<CircleWithInnerCircles> circleList) {
+	static void calculate(final List<Disk> disksList) {
 
-		if (circleList == null || circleList.size() == 0) {
+		if (disksList == null || disksList.size() == 0) {
 			return;
 		}
 
-		Collections.sort(circleList);
+		Collections.sort(disksList);
 		int m = 0;
 
 		// angle is the angle between m and n
 		double angle = 0;
-		// List<ICircle> circleList = new ArrayList<ICircle>();
+		// List<ICircle> disksList = new ArrayList<ICircle>();
 
 		// Instantiate the first circle
-		Circle first = circleList.get(0);
+		Disk first = disksList.get(0);
 		first.setCentre(new Point2D.Double(0, 0));
 
-		if (circleList.size() < 2) {
+		if (disksList.size() < 2) {
 			return;
 		}
 
 		// Instantiate the second circle
-		Circle second = circleList.get(1);
+		Disk second = disksList.get(1);
 
 		second.setCentre(Util.calculateCentre(first, second, angle));
 
 		// start from the third circle, because the first and the second are fix
 
-		for (int n = 2; n < circleList.size(); n++) {
+		for (int n = 2; n < disksList.size(); n++) {
 
 			// new circle
-			Circle n_circle = circleList.get(n);
+			Disk n_disk = disksList.get(n);
 
 			// previous circle
-			Circle n_minus1_circle = circleList.get(n - 1);
+			Disk n_minus1_disk = disksList.get(n - 1);
 
 			// m circle
-			Circle m_circle = circleList.get(m);
+			Disk m_disk = disksList.get(m);
 
 			// 1. calculate triangleangle. this is the angle in the triangle
 			// (m,n,n-1)
 			// so angle + triangle_angle will be the angle of the new circle
 			// at this point angle ist the angle between m and n-1
 			double triangle_angle;
-			double a = n_circle.getRadius() + n_minus1_circle.getRadius();
-			double b = m_circle.getRadius() + n_circle.getRadius();
-			double c = m_circle.getRadius() + n_minus1_circle.getRadius();
+			double a = n_disk.getRadius() + n_minus1_disk.getRadius();
+			double b = m_disk.getRadius() + n_disk.getRadius();
+			double c = m_disk.getRadius() + n_minus1_disk.getRadius();
 
 			triangle_angle = Math.toDegrees(Math.acos((a * a - b * b - c * c) / (-2 * b * c)));
 			// 2. calc centre of new circle (n)
-			n_circle.setCentre(Util.calculateCentre(circleList.get(m), n_circle, angle + triangle_angle));
+			n_disk.setCentre(Util.calculateCentre(disksList.get(m), n_disk, angle + triangle_angle));
 			// 3. check intersect of new circle (n) with circle m+1
-			if (!Util.intersect(circleList.get(m + 1), n_circle)) {
+			if (!Util.intersect(disksList.get(m + 1), n_disk)) {
 
 				// 3.1 if no intersect
 				angle += triangle_angle;
@@ -71,46 +73,46 @@ class Calculator {
 				// if the circles are not ordered, intersect must be checked for
 				// all circles that are are at the same side in the range of m
 				// to n-1
-				Circle m_plus1_cirle = circleList.get(m + 1);
+				Disk m_plus1_disk = disksList.get(m + 1);
 				double angle2;
-				a = n_circle.getRadius() + n_minus1_circle.getRadius();
-				b = Util.distance(circleList.get(m + 1), circleList.get(n - 1));
-				c = m_plus1_cirle.getRadius() + n_circle.getRadius();
+				a = n_disk.getRadius() + n_minus1_disk.getRadius();
+				b = Util.distance(disksList.get(m + 1), disksList.get(n - 1));
+				c = m_plus1_disk.getRadius() + n_disk.getRadius();
 
 				// alpha is the angle in the trangle (m,n-1,n)
 				// alpha + angle2 is the total angle between m+1 and n
 				double alpha = Math.toDegrees(Math.acos((a * a - b * b - c * c) / (-2 * b * c)));
 
-				if (Util.isLeftOf(circleList.get(n - 1), circleList.get(m + 1))) {
-					if (Util.isAboveOf(circleList.get(n - 1), circleList.get(m + 1))) {
+				if (Util.isLeftOf(disksList.get(n - 1), disksList.get(m + 1))) {
+					if (Util.isAboveOf(disksList.get(n - 1), disksList.get(m + 1))) {
 						// upper left
-						angle2 = Util.correctAngle(360 - Util.angleBetweenPoints_XasKatethe(circleList.get(m + 1),
-								circleList.get(n - 1)));
-					} else if (Util.isBelowOf(circleList.get(n - 1), circleList.get(m + 1))) {
+						angle2 = Util.correctAngle(360 - Util.angleBetweenPoints_XasKatethe(disksList.get(m + 1),
+								disksList.get(n - 1)));
+					} else if (Util.isBelowOf(disksList.get(n - 1), disksList.get(m + 1))) {
 						// bottom left
-						angle2 = Util.correctAngle(180 + Util.angleBetweenPoints_XasKatethe(circleList.get(m + 1),
-								circleList.get(n - 1)));
+						angle2 = Util.correctAngle(180 + Util.angleBetweenPoints_XasKatethe(disksList.get(m + 1),
+								disksList.get(n - 1)));
 					} else {
 						// total left
 						angle2 = 270;
 
 					}
-				} else if (Util.isRightOf(circleList.get(n - 1), circleList.get(m + 1))) {
-					if (Util.isAboveOf(circleList.get(n - 1), circleList.get(m + 1))) {
+				} else if (Util.isRightOf(disksList.get(n - 1), disksList.get(m + 1))) {
+					if (Util.isAboveOf(disksList.get(n - 1), disksList.get(m + 1))) {
 						// upper right
-						angle2 = Util.correctAngle(Util.angleBetweenPoints_XasKatethe(circleList.get(m + 1),
-								circleList.get(n - 1)));
+						angle2 = Util.correctAngle(Util.angleBetweenPoints_XasKatethe(disksList.get(m + 1),
+								disksList.get(n - 1)));
 
-					} else if (Util.isBelowOf(circleList.get(n - 1), circleList.get(m + 1))) {
+					} else if (Util.isBelowOf(disksList.get(n - 1), disksList.get(m + 1))) {
 						// bottom right
-						angle2 = Util.correctAngle(90 + Util.angleBetweenPoints_YasKatethe(circleList.get(m + 1),
-								circleList.get(n - 1)));
+						angle2 = Util.correctAngle(90 + Util.angleBetweenPoints_YasKatethe(disksList.get(m + 1),
+								disksList.get(n - 1)));
 					} else {
 						// total right
 						angle2 = 90;
 					}
 				} else {
-					if (Util.isAboveOf(circleList.get(n - 1), circleList.get(m + 1))) {
+					if (Util.isAboveOf(disksList.get(n - 1), disksList.get(m + 1))) {
 						// total above
 						angle2 = 0;
 					} else {
@@ -123,7 +125,7 @@ class Calculator {
 				angle = Util.correctAngle(angle2 + alpha);
 
 				// calculate the centre of the new circle
-				n_circle.setCentre(Util.calculateCentre(circleList.get(m + 1), n_circle, angle));
+				n_disk.setCentre(Util.calculateCentre(disksList.get(m + 1), n_disk, angle));
 
 				// increase m
 				m += 1;

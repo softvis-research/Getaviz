@@ -40,7 +40,7 @@ public class RD2RD implements Step {
         log.info("RD2RD started");
         calculateNamespaceMaxLevel();
         createLists();
-        calculateLayoutData();
+        calculateData();
         writeToDatabase();
         log.info("RD2RD finished");
     }
@@ -58,12 +58,8 @@ public class RD2RD implements Step {
     }
 
     private void calculateLayout(ArrayList<Disk> list) {
-        ArrayList<CircleWithInnerCircles> nestedCircles = new ArrayList<>();
-        list.forEach((disk) -> nestedCircles.add(new CircleWithInnerCircles(disk, false)));
-        RDLayout.nestedLayout(nestedCircles);
-        for (CircleWithInnerCircles circle : nestedCircles) {
-            circle.updateDiskNode();
-        }
+        RDLayout.nestedLayout(list);
+        list.forEach(Disk::updateDiskNode);
     }
 
     private void calculateRings(ArrayList<Disk> list) {
@@ -90,7 +86,8 @@ public class RD2RD implements Step {
             double areaWithoutBorder = d.get("areaWithoutBorder").asDouble(0.0);
             double ringWidth = d.get("ringWidth").asDouble();
             double height = d.get("height").asDouble();
-            Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height);
+            Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height,
+                    true);
             disksList.add(disk);
             addPosition(disk);
         });
@@ -108,7 +105,8 @@ public class RD2RD implements Step {
             double areaWithoutBorder = d.get("areaWithoutBorder").asDouble(0.0);
             double ringWidth = d.get("ringWidth").asDouble();
             double height = d.get("height").asDouble();
-            Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height);
+            Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height,
+                    false);
             rootDisksList.add(disk);
             addPosition(disk);
         });
@@ -142,7 +140,7 @@ public class RD2RD implements Step {
 
     private void addPosition(Disk disk) {
         StatementResult position = connector
-                .executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + disk.getId() + " RETURN p");
+                .executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + disk.getID() + " RETURN p");
         if (!position.list().isEmpty()) {
             Node node = position.single().get("p").asNode();
             disk.setPosition(node.get("x").asDouble(), node.get("y").asDouble(), node.get("z").asDouble());
@@ -160,7 +158,7 @@ public class RD2RD implements Step {
                     if (result.get("e").asNode().hasLabel(Labels.Package.name())) {
                         String color = "\'" + setNamespaceColor(result.get("length").asInt()) + "\'";
                         disksList.forEach(disk -> {
-                            long diskID = disk.getId();
+                            long diskID = disk.getID();
                             if (result.get("id").asLong() == diskID) {
                                 disk.setColor(color);
                             }
@@ -172,7 +170,7 @@ public class RD2RD implements Step {
     private static void addSubDisks() {
         disksList.forEach(disk -> {
             ArrayList<Disk> list = new ArrayList<>();
-            long id = disk.getId();
+            long id = disk.getID();
             disksList.forEach(d -> {
                 long parentID = d.getParentID();
                 if (id == parentID) {
@@ -185,7 +183,7 @@ public class RD2RD implements Step {
 
     private void addSegmentsToDisk() {
         disksList.forEach(disk -> {
-            long id = disk.getId();
+            long id = disk.getID();
             ArrayList<DiskSegment> innerSegmentsList = createDiskSegmentList(id, innerSegments);
             ArrayList<DiskSegment> outerSegmentsList = createDiskSegmentList(id, outerSegments);
             disk.setInnerSegmentsList(innerSegmentsList);
@@ -214,9 +212,10 @@ public class RD2RD implements Step {
         addSegmentsToDisk();
     }
 
-    private void calculateLayoutData() {
+    private void calculateData() {
         calculateAreaWithoutBorder(disksList);
         calculateRadius(disksList);
+        disksList.forEach(Disk::setMinArea);
         calculateLayout(rootDisksList);
         calculateRings(disksList);
     }

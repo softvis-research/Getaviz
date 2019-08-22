@@ -36,7 +36,7 @@ class DiskTest {
         double ringWidth = result.get("ringWidth").asDouble();
         double transparency = result.get("transparency").asDouble();
         String color = result.get("color").asString();
-        assertEquals(disk.getId(), diskID);
+        assertEquals(disk.getID(), diskID);
         assertEquals(1.0, height);
         assertEquals(1.5, ringWidth);
         assertEquals(0.0, transparency);
@@ -102,7 +102,7 @@ class DiskTest {
         disk.setPosition(1,2,3);
         disk.setRadius(2.5);
         disk.writeToDatabase(connector, true);
-        Record result = connector.executeRead("MATCH (d) WHERE ID(d) = " + disk.getId() + " RETURN d.radius" +
+        Record result = connector.executeRead("MATCH (d) WHERE ID(d) = " + disk.getID() + " RETURN d.radius" +
                 " AS radius").single();
         double radius = result.get("radius").asDouble();
         assertEquals(2.5, radius);
@@ -116,10 +116,10 @@ class DiskTest {
     private static Disk createObjectsForTest2() {
         ArrayList<DiskSegment> outerSegments = new ArrayList<>();
         ArrayList<DiskSegment> innerSegments = new ArrayList<>();
-        Disk disk = new Disk(0, 1, 1002, 2, 1, 0.5, 0.5);
+        Disk disk = new Disk(0, 1, 1002, 2, 1, 0.5, 0.5, false);
         Record createDisk = connector.executeRead("CREATE (d:Disk) RETURN ID(d) AS id").single();
         long newID = createDisk.get("id").asLong();
-        disk.setId(newID);
+        disk.setID(newID);
         outerSegments.add(new DiskSegment(2, 1003, 2));
         innerSegments.add(new DiskSegment(2, 1004, 2));
         disk.setOuterSegmentsList(outerSegments);

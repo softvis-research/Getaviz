@@ -32,7 +32,7 @@ class DiskSegmentTest {
         double height = result.get("height").asDouble();
         double transparency= result.get("transparency").asDouble();
         String  color = result.get("color").asString();
-        assertEquals(diskSegment.getId(), diskID);
+        assertEquals(diskSegment.getID(), diskID);
         assertEquals(1.5, height);
         assertEquals(0.5, transparency);
         assertEquals("#66000000", color);
@@ -43,7 +43,7 @@ class DiskSegmentTest {
         DiskSegment diskSegment = createObjectsForTest2();
         diskSegment.setAngle(0.5);
         diskSegment.writeToDatabase(connector, true);
-        Record result = connector.executeRead("MATCH (d) WHERE ID(d) = " + diskSegment.getId() + " RETURN d.angle" +
+        Record result = connector.executeRead("MATCH (d) WHERE ID(d) = " + diskSegment.getID() + " RETURN d.angle" +
                 " AS angle").single();
         double size = result.get("angle").asDouble();
         assertEquals(0.5, size);
@@ -58,7 +58,7 @@ class DiskSegmentTest {
         DiskSegment diskSegment = new DiskSegment(2, 5, 1);
         Record createDiskSegment = connector.executeRead("CREATE (d:DiskSegment) RETURN ID(d) AS id").single();
         long newID = createDiskSegment.get("id").asLong();
-        diskSegment.setId(newID);
+        diskSegment.setID(newID);
         return diskSegment;
     }
 }

@@ -8,17 +8,22 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.SettingsConfiguration.OutputFormat;
+import org.getaviz.generator.rd.m2m.RDLayout;
+
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Disk implements RDElement {
+public class Disk implements RDElement, Comparable<Disk> {
 
     private double height;
     private double transparency;
     private double ringWidth;
     private double areaWithBorder;
     private double areaWithoutBorder;
-    private double radius;
+    private double radius = 0;
+    private double minArea = 0;
+    private Point2D.Double centre = new Point2D.Double(0, 0);
     private Position position;
     private String color;
     private String spine;
@@ -26,6 +31,7 @@ public class Disk implements RDElement {
     private long visualizedNodeID;
     private long parentID;
     private long id;
+    private boolean nesting;
     private ArrayList<Disk> subDisksList = new ArrayList<>();
     private ArrayList<DiskSegment> innerSegments = new ArrayList<>();
     private ArrayList<DiskSegment> outerSegments = new ArrayList<>();
@@ -49,12 +55,18 @@ public class Disk implements RDElement {
     }
 
     public Disk(long visualizedNodeID, long parentID, long id, double areaWithBorder, double areaWithoutBorder, double ringWidth,
-                double height) {
+                double height, boolean nesting) {
         this(visualizedNodeID, ringWidth, height);
         this.parentID = parentID;
         this.id = id;
         this.areaWithBorder = areaWithBorder;
         this.areaWithoutBorder = areaWithoutBorder;
+        this.nesting = nesting;
+        //String serial = visualizedNodeID + "";
+    }
+
+    public int compareTo(Disk disk)  {
+        return java.lang.Double.compare(disk.getAreaWithoutBorder(), areaWithoutBorder);
     }
 
     private String propertiesToString() {
@@ -76,7 +88,7 @@ public class Disk implements RDElement {
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
                         "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
                 parentID, visualizedNodeID, label, propertiesToString()), "n").id();
-        setId(id);
+        setID(id);
     }
 
     private void RD2RDWriteToDatabase(DatabaseConnector connector) {
@@ -216,20 +228,14 @@ public class Disk implements RDElement {
 
     private double calculateOuterRadius() {
         CoordinateList coordinates = new CoordinateList();
-        subDisksList.forEach(d -> coordinates.add(createCircle(position.x, position.y, radius)
-                .getCoordinates(), false));
+        for (Disk d : subDisksList) {
+            coordinates.add(RDLayout.createCircle(d.position.x, d.position.y, d.radius)
+                    .getCoordinates(), false);
+        }
         GeometryFactory geoFactory = new GeometryFactory();
         MultiPoint innerCircleMultiPoint = geoFactory.createMultiPoint(coordinates.toCoordinateArray());
         MinimumBoundingCircle mbc = new MinimumBoundingCircle(innerCircleMultiPoint);
         return mbc.getRadius();
-    }
-
-    private Geometry createCircle(double x, double y, double radius) {
-        GeometricShapeFactory shapeFactory = new GeometricShapeFactory();
-        shapeFactory.setNumPoints(64);
-        shapeFactory.setCentre(new Coordinate(x, y));
-        shapeFactory.setSize(radius * 2);
-        return shapeFactory.createCircle();
     }
 
     private static String removeBrackets(List<String> list) {
@@ -244,6 +250,17 @@ public class Disk implements RDElement {
         innerSegments.forEach(segment -> segment.calculateNewSize(dataFactor));
         outerSegments.forEach(segment -> segment.calculateNewSize(dataFactor));
         areaWithoutBorder = sum(innerSegments) + sum(outerSegments);
+    }
+
+    public void updateDiskNode() {
+        double oldZPosition = 0.0;
+        if (position != null) {
+            oldZPosition = position.z;
+        }
+        setPosition(centre.x, centre.y, oldZPosition);
+        for (Disk disk : subDisksList) {
+            disk.updateDiskNode();
+        }
     }
 
     public void calculateRadius() {
@@ -274,11 +291,19 @@ public class Disk implements RDElement {
         updateDiskSegmentSize(outerSegments);
     }
 
+    public void setMinArea() {
+        if (nesting) {
+            minArea = Disk.sum(outerSegments) + Disk.sum(innerSegments);
+        } else {
+            minArea = areaWithoutBorder;
+        }
+    }
+
     public void setParentID(long id) {
         this.parentID = id;
     }
 
-    public void setId(long id) {
+    public void setID(long id) {
         this.id = id;
     }
 
@@ -314,8 +339,20 @@ public class Disk implements RDElement {
         outerSegments.addAll(list);
     }
 
+    public void setCentre(Point2D.Double centre) {
+        this.centre = centre;
+    }
+
     String getSpine() {
         return spine;
+    }
+
+    public double getMinArea() {
+        return minArea;
+    }
+
+    public Point2D.Double getCentre() {
+        return  centre;
     }
 
     public long getParentVisualizedNodeID() {
@@ -326,7 +363,7 @@ public class Disk implements RDElement {
         return visualizedNodeID;
     }
 
-    public long getId() {
+    public long getID() {
         return id;
     }
 

@@ -1,5 +1,7 @@
 package org.getaviz.generator.rd.m2m;
 
+import org.getaviz.generator.rd.s2m.Disk;
+
 import java.awt.geom.Point2D;
 
 class Util {
@@ -7,14 +9,14 @@ class Util {
 		return angle % 360;
 	}
 
-	static double distance(Circle firstPoint, Circle secondPoint) {
+	static double distance(Disk firstPoint, Disk secondPoint) {
 		double a = Math.abs(firstPoint.getCentre().y - secondPoint.getCentre().y);
 		double b = Math.abs(firstPoint.getCentre().x - secondPoint.getCentre().x);
 
 		return Math.sqrt(a * a + b * b);
 	}
 
-	static double angleBetweenPoints_XasKatethe(Circle firstPoint, Circle secondPoint) {
+	static double angleBetweenPoints_XasKatethe(Disk firstPoint, Disk secondPoint) {
 		double a = Math.abs(firstPoint.getCentre().y - secondPoint.getCentre().y);
 		double b = Math.abs(firstPoint.getCentre().x - secondPoint.getCentre().x);
 		double c = Math.sqrt(a * a + b * b);
@@ -22,7 +24,7 @@ class Util {
 
 	}
 
-	static double angleBetweenPoints_YasKatethe(Circle firstPoint, Circle secondPoint) {
+	static double angleBetweenPoints_YasKatethe(Disk firstPoint, Disk secondPoint) {
 		double a = Math.abs(firstPoint.getCentre().y - secondPoint.getCentre().y);
 		double b = Math.abs(firstPoint.getCentre().x - secondPoint.getCentre().x);
 		double c = Math.sqrt(a * a + b * b);
@@ -30,30 +32,30 @@ class Util {
 
 	}
 
-	static boolean intersect(Circle firstPoint, Circle secondPoint) {
+	static boolean intersect(Disk firstPoint, Disk secondPoint) {
 		double a = Math.abs(firstPoint.getCentre().y - secondPoint.getCentre().y);
 		double b = Math.abs(firstPoint.getCentre().x - secondPoint.getCentre().x);
 		// there must be a little tolerance!
 		return (Math.sqrt(a * a + b * b) <= firstPoint.getRadius() + secondPoint.getRadius() - 0.001);
 	}
 
-	static boolean isLeftOf(Circle firstPoint, Circle secondPoint) {
+	static boolean isLeftOf(Disk firstPoint, Disk secondPoint) {
 		return firstPoint.getCentre().x < secondPoint.getCentre().x;
 	}
 
-	static boolean isRightOf(Circle firstPoint, Circle secondPoint) {
+	static boolean isRightOf(Disk firstPoint, Disk secondPoint) {
 		return firstPoint.getCentre().x > secondPoint.getCentre().x;
 	}
 
-	static boolean isAboveOf(Circle firstPoint, Circle secondPoint) {
+	static boolean isAboveOf(Disk firstPoint, Disk secondPoint) {
 		return firstPoint.getCentre().y > secondPoint.getCentre().y;
 	}
 
-	static boolean isBelowOf(Circle firstPoint, Circle secondPoint) {
+	static boolean isBelowOf(Disk firstPoint, Disk secondPoint) {
 		return firstPoint.getCentre().y < secondPoint.getCentre().y ;
 	}
 
-	static Point2D.Double calculateCentre(Circle m, Circle n, double angle) {
+	static Point2D.Double calculateCentre(Disk m, Disk n, double angle) {
 		angle = Util.correctAngle(angle);
 		if (angle == 0 || angle == 360) {
 			return new Point2D.Double(m.getCentre().x, m.getCentre().y + n.getRadius() + m.getRadius());
