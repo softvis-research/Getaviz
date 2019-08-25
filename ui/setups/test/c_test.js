@@ -56,8 +56,8 @@
 			createEndpoints: true,
 		},
 
-		{ 	name: 	"relationTransparencyController",
-		},
+		//{ 	name: 	"relationTransparencyController",
+		//},
 			
 		{ 	name: 	"relationHighlightController" 
 		},

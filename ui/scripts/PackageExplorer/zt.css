@@ -39,17 +39,17 @@
 }
 
 .ztree li span.button.noline_open {
-    background-image: url("../../libs/jqwidgets/styles/images/metro-icon-down.png");
+    background-image: url("../../node_modules/jqwidgets-scripts/jqwidgets/styles/images/metro-icon-down.png");
     background-position: center;
 }
 
 .ztree li span.button.noline_close {
-    background-image: url("../../libs/jqwidgets/styles/images/metro-icon-right.png");
+    background-image: url("../../node_modules/jqwidgets-scripts/jqwidgets/styles/images/metro-icon-right.png");
     background-position: center;
 }
 
 .ztree li span.checkbox_true_full.chk.button {
-    background-image: url("../../libs/jqwidgets/styles/images/check_black.png");
+    background-image: url("../../node_modules/jqwidgets-scripts/jqwidgets/styles/images/check_black.png");
     background-position: center;
 }
 
@@ -69,7 +69,7 @@
 }
 
 .ztree li span.checkbox_true_part.chk.button {
-    background-image: url("../../libs/jqwidgets/styles/images/check_indeterminate_black.png");
+    background-image: url("../../node_modules/jqwidgets-scripts/jqwidgets/styles/images/check_indeterminate_black.png");
     background-position: center;
 }
 
@@ -79,12 +79,12 @@
 }
 
 .ztree li span.button.chk.checkbox_true_full_focus {
-    background-image: url("../../libs/jqwidgets/styles/images/check_black.png");
+    background-image: url("../../node_modules/jqwidgets-scripts/jqwidgets/styles/images/check_black.png");
     background-position: center;
 }
 
 .ztree li span.button.chk.checkbox_true_part_focus {
-    background-image: url("../../libs/jqwidgets/styles/images/check_indeterminate_black.png");
+    background-image: url("../../node_modules/jqwidgets-scripts/jqwidgets/styles/images/check_indeterminate_black.png");
     background-position: center;
 }
 

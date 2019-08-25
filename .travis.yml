@@ -1,5 +1,8 @@
 matrix:
   include:
+    - name: Docker
+      script:
+        - docker-compose -f docker-compose.test.yml run tests
     - name: Generator
       language: java
       before_install:
@@ -7,13 +10,13 @@ matrix:
         - cd org.svis.generator.releng/
       script:
         - mvn clean install -fae
-    - name: Generator2
-      language: java
-      before_install:
-        - cd generator2
-        - cd org.getaviz.parent/
-      script:
-        - mvn clean install -fae
+    #- name: Generator2
+      #language: java
+      #before_install:
+        #- cd generator2
+        #- cd org.getaviz.generator/
+      #script:
+        #- mvn clean install
     - name: Evaluation Server
       language: ruby
       before_script:
@@ -33,3 +36,7 @@ matrix:
         - cat ./config/database.yml
         - echo $RAILS_ENV
         - bundle exec rake --version
+notifications:
+  email:
+    on_success: change # options: change, never, always
+    on_failure: always # options: change, never, always

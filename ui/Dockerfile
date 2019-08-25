@@ -1,5 +1,6 @@
-FROM php:7.2-apache
+FROM getaviz/ui-base:1.2.1
 COPY . /var/www/html/ui
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+WORKDIR /var/www/html/ui
+RUN npm install
 LABEL maintainer="david.baum@uni-leipzig.de" \
       version="1.0"

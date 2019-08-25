@@ -72,10 +72,8 @@ patternExplorerController = (function () {
                                 break;
                             }
                             for (var i = 0; i < entity.antipattern.length; i++) {
-                                console.log(entity.antipattern[i])
                                 if (entity.antipattern[i].type == "stk") {
                                     var role = model.getRole(entity.id, entity.antipattern[i].id);
-                                    console.log("soso")
                                     var item = {
                                         id: entity.id,
                                         open: false,
