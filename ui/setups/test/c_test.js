@@ -41,7 +41,7 @@
 		},
         {	name: 	"sourceCodeController",
             fileType : "c"
-		},
+        },
         {	name:	"macroExplorerController",
             //should the filtered elements be "removed" or just "transparent"?
             filterMode: "transparent"

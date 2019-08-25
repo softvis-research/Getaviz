@@ -121,9 +121,15 @@ EOT;
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxnumberinput.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxform.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxvalidator.js"></script>
+    <script type="text/javascript" src="node_modules/prismjs/prism.js"></script>
+    <script type="text/javascript" src="node_modules/prismjs/components/prism-java.js"></script>
+    <script type="text/javascript" src="node_modules/prismjs/components/prism-c.js"></script>
+
 	
     <link rel="stylesheet" href="node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.base.css" type="text/css" />
     <link rel="stylesheet" href="node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.metro.css" type="text/css" />
+    
+    
     <!-- ztree -->
     <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.core.min.js"></script>
     <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.exhide.min.js"></script>
@@ -154,7 +160,7 @@ EOT;
     <script type="text/javascript" src="scripts/PatternExplorer/PatternExplorerController.js"></script>
     <script type="text/javascript" src="scripts/VersionExplorer/VersionExplorerController.js"></script>
     <script type="text/javascript" src="scripts/IssueExplorer/IssueExplorerController.js"></script>
-	<script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script
+	<script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script>
     
      <!-- filter -->
     <script type="text/javascript" src="scripts/Filter/Helpers/Constants.js"></script>
