@@ -1,8 +1,5 @@
 *.komodoproject
 */.idea
-
 \.idea/
-
 *.iml
-
 ui/data/

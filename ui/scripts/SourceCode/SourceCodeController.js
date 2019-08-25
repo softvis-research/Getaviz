@@ -35,7 +35,7 @@ var sourceCodeController = (function(){
 				cssLink = document.createElement("link");
 				cssLink.type = "text/css";
 				cssLink.rel = "stylesheet";
-                                cssLink.href = "scripts/SourceCode/prismPluginCodeController.css";
+				cssLink.href = "scripts/SourceCode/prismPluginCodeController.css";
 				document.getElementsByTagName("head")[0].appendChild(cssLink);
 				
 				//create html elements

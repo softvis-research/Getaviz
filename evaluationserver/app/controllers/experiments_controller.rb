@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+require 'csv' 
+
 class ExperimentsController < ApplicationController
 
   skip_before_action :http_basic_authenticate, :only => [:index, :start, :conduct, :finish_step, :check_answer, :already_done]

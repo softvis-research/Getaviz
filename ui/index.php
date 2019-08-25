@@ -72,17 +72,12 @@ EOT;
 EOT;
 
     }
-
-
-
 ?>
 <script type="text/javascript">
     var modelUrl		 = "<?php echo $modelUrl; ?>";
-
     var multipartX3dUrl  = "<?php echo $multipartX3dUrl; ?>";
     var multipartJsonUrl = "<?php echo $multipartJsonUrl; ?>";
     var metaDataJsonUrl  = "<?php echo $metaDataJsonUrl; ?>";
-
     var canvasId = "<?php echo $canvasId; ?>";
     var visMode = "<?php echo $visMode; ?>";
 </script>
@@ -124,11 +119,9 @@ EOT;
     <script type="text/javascript" src="node_modules/prismjs/prism.js"></script>
     <script type="text/javascript" src="node_modules/prismjs/components/prism-java.js"></script>
     <script type="text/javascript" src="node_modules/prismjs/components/prism-c.js"></script>
-
 	
     <link rel="stylesheet" href="node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.base.css" type="text/css" />
     <link rel="stylesheet" href="node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.metro.css" type="text/css" />
-    
     
     <!-- ztree -->
     <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.core.min.js"></script>
