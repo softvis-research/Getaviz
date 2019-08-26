@@ -102,7 +102,7 @@ var metricAnimationController = (function() {
 
             entities.forEach(function (entity) {
                 let intensity = getAnimationIntensity(entity, metric);
-                canvasManipulator.startBlinkingAnimationForEntity(entity, color, intensity, controllerConfig.minBlinkingFrequency);
+                canvasManipulator.startBlinkingAnimationForEntity(entity, color, intensity, controllerConfig.minBlinkingFrequency, metric);
             });
         }
         else if (animation === "size"){
@@ -119,7 +119,7 @@ var metricAnimationController = (function() {
 
         if (runningAnimation.startsWith("blinking_")){
             entities.forEach(function (entity) {
-                canvasManipulator.stopBlinkingAnimationForEntity(entity);
+                canvasManipulator.stopBlinkingAnimationForEntity(entity, metric);
             });
         }
         else if (runningAnimation === "size"){

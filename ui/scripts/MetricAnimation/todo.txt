@@ -1,0 +1,12 @@
+- scaling of blinking frequency to not only see the extreme values
+    => https://statistik-und-beratung.de/2017/08/wie-mit-ausreissern-umgehen/
+    => https://statistik-und-beratung.de/2016/04/transformationen/
+    => Logarithmus?
+- do nothing on other metric stops blinking of first metric
+- mixing colors
+    => von Farbe 1 zu Farbe 2 blinken
+    => https://github.com/AndreasSoiron/Color_mixer
+    => gemischte Farbe und durchschnittliche blinking freq aus beiden Werten
+- size change: growing and shrinking
+    => add param
+- alternative ui: lists

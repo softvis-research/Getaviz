@@ -67,7 +67,7 @@ var canvasManipulator = (function () {
         });
     }
 
-    function startBlinkingAnimationForEntity(entity, color, intensity, minFrequency) {
+    function startBlinkingAnimationForEntity(entity, color, intensity, minFrequency, metric) {
         // https://aframe.io/docs/0.9.0/components/animation.html
         // https://blog.prototypr.io/learning-a-frame-how-to-do-animations-2aac1ae461da
 
@@ -86,13 +86,13 @@ var canvasManipulator = (function () {
         let blinkingFrequency = minFrequency - (minFrequency * intensity);
 
         if (intensity > 0){
-            component.setAttribute("animation__blinking",
+            component.setAttribute("animation__blinking_" + metric,
                 "property: components.material.material.color; type: color; from: " + originalColor +
                 "; to: " + color + "; dur: " + blinkingFrequency + "; loop: true");
         }
     }
 
-    function stopBlinkingAnimationForEntity(entity) {
+    function stopBlinkingAnimationForEntity(entity, metric) {
         if (!(entity == undefined)) {
             var component = document.getElementById(entity.id);
         }
@@ -103,9 +103,22 @@ var canvasManipulator = (function () {
 
         let originalColor = component.getAttribute("color-before-blinking");
 
-        component.setAttribute("animation__blinking",
-            "property: components.material.material.color; type: color; from: " + originalColor +
-            "; to: " + originalColor + "; dur: 0; loop: false");
+        let attributeNames = component.getAttributeNames();
+        let countBlinkingAnimations = 0;
+        attributeNames.forEach(function (attributeName) {
+            if (attributeName.startsWith("animation__blinking_")){
+                countBlinkingAnimations++;
+            }
+        });
+        if (countBlinkingAnimations > 1){
+            component.removeAttribute("animation__blinking_" + metric);
+        } else {
+            component.setAttribute("animation__blinking_" + metric,
+                "property: components.material.material.color; type: color; from: " + originalColor +
+                "; to: " + originalColor + "; dur: 0; loop: false");
+        }
+
+
 
         // remark:
         // A nice way would be to remove the blinking animation attribute.
