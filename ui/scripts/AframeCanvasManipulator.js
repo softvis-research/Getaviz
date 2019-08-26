@@ -78,16 +78,17 @@ var canvasManipulator = (function () {
             events.log.error.publish({text: "CanvasManipualtor - startBlinkingAnimationForEntities - component for entityId not found"});
             return;
         }
-        if (entity.originalColor == undefined) {
-            entity.originalColor = component.getAttribute("color");
-        }
+
+        let originalColor = component.getAttribute("color");
+        component.setAttribute("color-before-blinking", originalColor);
 
         let blinkingMaxFrequency = 3000;
-        let blinkingFrequency = blinkingMaxFrequency * intensity;
+        // let components with higher intensity blink faster
+        let blinkingFrequency = blinkingMaxFrequency - (blinkingMaxFrequency * intensity);
 
         if (intensity > 0){
             component.setAttribute("animation__blinking",
-                "property: components.material.material.color; type: color; from: " + entity.originalColor +
+                "property: components.material.material.color; type: color; from: " + originalColor +
                 "; to: " + color + "; dur: " + blinkingFrequency + "; loop: true");
         }
     }
@@ -101,9 +102,11 @@ var canvasManipulator = (function () {
             return;
         }
 
+        let originalColor = component.getAttribute("color-before-blinking");
+
         component.setAttribute("animation__blinking",
-            "property: components.material.material.color; type: color; from: " + entity.originalColor +
-            "; to: " + entity.originalColor + "; dur: 0; loop: false");
+            "property: components.material.material.color; type: color; from: " + originalColor +
+            "; to: " + originalColor + "; dur: 0; loop: false");
 
         // remark:
         // A nice way would be to remove the blinking animation attribute.
@@ -112,14 +115,10 @@ var canvasManipulator = (function () {
         // because aframe thinks its still in this color.
         // So this workaround is used: the components blink immediately back to its original color without a loop.
         // This costs no further performance. Just the "animation__blinking" attribute is left.
-
-        //component.removeAttribute("animation__blinking");
-        //component.setAttribute("color", entity.originalColor);
-
+        //
         // component.removeAttribute("animation__blinking");
-        // component.components.material.material.color = entity.originalColor;
-        // component.removeAttribute("animation__blinking");
-        //component.setAttribute("components.material.material.color", entity.originalColor);
+        // let originalColor = component.getAttribute("color-before-blinking");
+        // setColor(component, originalColor);
     }
 
     function startGrowShrinkAnimationForEntity(entity, intensity) {
