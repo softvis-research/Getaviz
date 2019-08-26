@@ -67,7 +67,7 @@ var canvasManipulator = (function () {
         });
     }
 
-    function startBlinkingAnimationForEntity(entity, color, intensity) {
+    function startBlinkingAnimationForEntity(entity, color, intensity, minFrequency) {
         // https://aframe.io/docs/0.9.0/components/animation.html
         // https://blog.prototypr.io/learning-a-frame-how-to-do-animations-2aac1ae461da
 
@@ -82,9 +82,8 @@ var canvasManipulator = (function () {
         let originalColor = component.getAttribute("color");
         component.setAttribute("color-before-blinking", originalColor);
 
-        let blinkingMaxFrequency = 3000;
         // let components with higher intensity blink faster
-        let blinkingFrequency = blinkingMaxFrequency - (blinkingMaxFrequency * intensity);
+        let blinkingFrequency = minFrequency - (minFrequency * intensity);
 
         if (intensity > 0){
             component.setAttribute("animation__blinking",

@@ -57,7 +57,8 @@
 		{ 	name: 	"relationHighlightController" 
 		},
 
-        { 	name: 	"metricAnimationController"
+        { 	name: 	"metricAnimationController",
+            minBlinkingFrequency: 3000
         },
 
         {

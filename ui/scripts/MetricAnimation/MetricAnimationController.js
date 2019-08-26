@@ -4,7 +4,7 @@ var metricAnimationController = (function() {
     let activeAnimations = new Map();
 
     var controllerConfig = {
-        bla : true
+        minBlinkingFrequency: 3000      // milliseconds - min freq for blinking animation
     };
 
     function initialize(setupConfig){
@@ -102,7 +102,7 @@ var metricAnimationController = (function() {
 
             entities.forEach(function (entity) {
                 let intensity = getAnimationIntensity(entity, metric);
-                canvasManipulator.startBlinkingAnimationForEntity(entity, color, intensity);
+                canvasManipulator.startBlinkingAnimationForEntity(entity, color, intensity, controllerConfig.minBlinkingFrequency);
             });
         }
         else if (animation === "size"){
