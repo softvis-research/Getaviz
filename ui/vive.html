@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
 -->
 <script type="text/javascript">
     var modelUrl = "data/City vive/model";
-    var metaDataJsonUrl  = modelUrl + "/metaData.json";
+    var metaDataJsonUrl = modelUrl + "/metaData.json";
 
     var canvasId = "aframe-canvas";
 
@@ -15,6 +14,7 @@
 </script>
 
 <html>
+
 <head>
     <title>Getaviz-A-Frame</title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -27,7 +27,11 @@
 
     <!--A-Frame-->
     <script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
-    
+
+    <script src="data/City vive/model/metaData.js"></script>
+    <script src="vive-ui/vive-ui.js"></script>
+    <script src="vive-ui/SelectController.js"></script>
+
     <script src="vive/vive-control-rig.js"></script>
     <script src="vive/vive-control-menu.js"></script>
     <script src="vive/vive-control-fly-hand.js"></script>
@@ -65,7 +69,7 @@
     <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.core.min.js"></script>
     <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.exhide.min.js"></script>
     <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.excheck.min.js"></script>
-<!--     <link rel="stylesheet" href="node_modules/@ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css"> -->
+    <!--     <link rel="stylesheet" href="node_modules/@ztree/ztree_v3/css/zTreeStyle/zTreeStyle.css" type="text/css"> -->
     <link rel="stylesheet" href="node_modules/@ztree/ztree_v3/css/metroStyle/metroStyle.css" type="text/css">
     <link rel="stylesheet" href="scripts/PackageExplorer/zt.css" type="text/css">
 
@@ -107,16 +111,19 @@
     <script type="text/javascript" src="setups/web_a-frame/City bank.js"></script>
 
 </head>
-<body>
-<div id="canvas">
-    <script>
-        $(function(){
-            $("#canvas").load(encodeURI(modelUrl + "/model.html"));
-        });
 
-        var globalCamera;
-    </script>
-</div>
+<body>
+    <div id="canvas">
+        <script>
+
+            $(function () {
+                $("#canvas").load(encodeURI(modelUrl + "/model.html"));
+            });
+
+            var globalCamera;
+        </script>
+    </div>
 
 </body>
+
 </html>
