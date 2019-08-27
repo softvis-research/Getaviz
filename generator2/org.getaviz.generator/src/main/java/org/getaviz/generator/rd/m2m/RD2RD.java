@@ -41,25 +41,9 @@ public class RD2RD implements Step {
         calculateNamespaceMaxLevel();
         createLists();
         calculateData();
+        calculateLayouts();
         writeToDatabase();
         log.info("RD2RD finished");
-    }
-
-    private String setNamespaceColor(int level) {
-        return NS_colors.get(level - 1);
-    }
-
-    private void calculateAreaWithoutBorder(ArrayList<Disk> list) {
-        list.forEach(disk -> disk.calculateAreaWithoutBorder(dataFactor));
-    }
-
-    private void calculateRadius(ArrayList<Disk> list) {
-        list.forEach(Disk::calculateRadius);
-    }
-
-    private void calculateLayout(ArrayList<Disk> list) {
-        RDLayout.nestedLayout(list);
-        list.forEach(Disk::updateDiskNode);
     }
 
     private void calculateNamespaceMaxLevel() {
@@ -69,46 +53,26 @@ public class RD2RD implements Step {
         namespaceMaxLevel = length.single().get("length").asInt() + 1;
     }
 
-    private ArrayList<Disk> createDisksList() {
-        ArrayList<Disk> list = new ArrayList<>(rootDisksList);
-        StatementResult result = connector.executeRead("MATCH (p:Disk)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element) "
-                + "RETURN d.grossArea AS areaWithBorder, d.netArea AS areaWithoutBorder, d.ringWidth AS ringWidth, d.height as height," +
-                " d.size AS size, ID(d) AS id, ID(p) AS parentID, ID(element) AS visualizedID ORDER BY element.hash");
-        result.forEachRemaining(d -> {
-            long visualizedID = d.get("visualizedID").asLong();
-            long parentID = d.get("parentID").asLong();
-            long id = d.get("id").asLong();
-            double areaWithBorder = d.get("areaWithBorder").asDouble(0.0);
-            double areaWithoutBorder = d.get("areaWithoutBorder").asDouble(0.0);
-            double ringWidth = d.get("ringWidth").asDouble();
-            double height = d.get("height").asDouble();
-            Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height,
-                    true);
-            list.add(disk);
-            setPositionToPackages(disk);
-        });
-        return list;
+    private void createLists() {
+        innerSegments = createInnerSegmentsList();
+        outerSegments = createOuterSegmentsList();
+        rootDisksList = createRootDisksList();
+        disksList = createDisksList();
+        setColorToDisk();
+        addSubDisks();
+        addSegmentsToDisk();
     }
 
-    private ArrayList<Disk> createRootDisksList() {
-        ArrayList<Disk> list = new ArrayList<>();
-        StatementResult result = connector.executeRead("MATCH (n:RD:Model)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element)" +
-                " RETURN d.grossArea AS areaWithBorder,d.netArea AS areaWithoutBorder, d.ringWidth AS ringWidth, d.height AS height," +
-                " d.size AS size, ID(d) as id, ID(n) AS parentID, ID(element) AS visualizedID ORDER BY element.hash");
-        result.forEachRemaining(d -> {
-            long visualizedID = d.get("visualizedID").asLong();
-            long parentID = d.get("parentID").asLong();
-            long id = d.get("id").asLong();
-            double areaWithBorder = d.get("areaWithBorder").asDouble(0.0);
-            double areaWithoutBorder = d.get("areaWithoutBorder").asDouble(0.0);
-            double ringWidth = d.get("ringWidth").asDouble();
-            double height = d.get("height").asDouble();
-            Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height,
-                    false);
-            list.add(disk);
-            setPositionToPackages(disk);
-        });
-        return list;
+    private void calculateData() {
+        calculateAreaWithoutBorder(disksList);
+        calculateRadius(disksList);
+        disksList.forEach(Disk::setMinArea);
+
+    }
+
+    private void calculateLayouts() {
+        calculateDiskLayout(rootDisksList);
+        SegmentLayout.calculateRings(disksList, outputFormat);
     }
 
     private ArrayList<DiskSegment> createInnerSegmentsList() {
@@ -141,6 +105,49 @@ public class RD2RD implements Step {
         return list;
     }
 
+
+    private ArrayList<Disk> createRootDisksList() {
+        ArrayList<Disk> list = new ArrayList<>();
+        StatementResult result = connector.executeRead("MATCH (n:RD:Model)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element)" +
+                " RETURN d.grossArea AS areaWithBorder,d.netArea AS areaWithoutBorder, d.ringWidth AS ringWidth, d.height AS height," +
+                " d.size AS size, ID(d) as id, ID(n) AS parentID, ID(element) AS visualizedID ORDER BY element.hash");
+        result.forEachRemaining(d -> {
+            long visualizedID = d.get("visualizedID").asLong();
+            long parentID = d.get("parentID").asLong();
+            long id = d.get("id").asLong();
+            double areaWithBorder = d.get("areaWithBorder").asDouble(0.0);
+            double areaWithoutBorder = d.get("areaWithoutBorder").asDouble(0.0);
+            double ringWidth = d.get("ringWidth").asDouble();
+            double height = d.get("height").asDouble();
+            Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height,
+                    false);
+            list.add(disk);
+            setPositionToPackages(disk);
+        });
+        return list;
+    }
+
+    private ArrayList<Disk> createDisksList() {
+        ArrayList<Disk> list = new ArrayList<>(rootDisksList);
+        StatementResult result = connector.executeRead("MATCH (p:Disk)-[:CONTAINS]->(d:Disk)-[:VISUALIZES]->(element) "
+                + "RETURN d.grossArea AS areaWithBorder, d.netArea AS areaWithoutBorder, d.ringWidth AS ringWidth, d.height as height," +
+                " d.size AS size, ID(d) AS id, ID(p) AS parentID, ID(element) AS visualizedID ORDER BY element.hash");
+        result.forEachRemaining(d -> {
+            long visualizedID = d.get("visualizedID").asLong();
+            long parentID = d.get("parentID").asLong();
+            long id = d.get("id").asLong();
+            double areaWithBorder = d.get("areaWithBorder").asDouble(0.0);
+            double areaWithoutBorder = d.get("areaWithoutBorder").asDouble(0.0);
+            double ringWidth = d.get("ringWidth").asDouble();
+            double height = d.get("height").asDouble();
+            Disk disk = new Disk(visualizedID, parentID, id, areaWithBorder, areaWithoutBorder, ringWidth, height,
+                    true);
+            list.add(disk);
+            setPositionToPackages(disk);
+        });
+        return list;
+    }
+
     private void setPositionToPackages(Disk disk) {
         StatementResult position = connector
                 .executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + disk.getID() + " RETURN p");
@@ -168,6 +175,10 @@ public class RD2RD implements Step {
                         });
                     }
                 });
+    }
+
+    private String setNamespaceColor(int level) {
+        return NS_colors.get(level - 1);
     }
 
     private static void addSubDisks() {
@@ -205,22 +216,17 @@ public class RD2RD implements Step {
         return list;
     }
 
-    private void createLists() {
-        innerSegments = createInnerSegmentsList();
-        outerSegments = createOuterSegmentsList();
-        rootDisksList = createRootDisksList();
-        disksList = createDisksList();
-        setColorToDisk();
-        addSubDisks();
-        addSegmentsToDisk();
+    private void calculateAreaWithoutBorder(ArrayList<Disk> list) {
+        list.forEach(disk -> disk.calculateAreaWithoutBorder(dataFactor));
     }
 
-    private void calculateData() {
-        calculateAreaWithoutBorder(disksList);
-        calculateRadius(disksList);
-        disksList.forEach(Disk::setMinArea);
-        calculateLayout(rootDisksList);
-        SegmentLayout.calculateRings(disksList, outputFormat);
+    private void calculateRadius(ArrayList<Disk> list) {
+        list.forEach(Disk::calculateRadius);
+    }
+
+    private void calculateDiskLayout(ArrayList<Disk> list) {
+        RDLayout.nestedLayout(list);
+        list.forEach(Disk::updateDiskNode);
     }
 
     private void writeToDatabase() {

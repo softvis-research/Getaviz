@@ -59,13 +59,75 @@ public class Disk implements RDElement, Comparable<Disk> {
         //String serial = visualizedNodeID + "";
     }
 
-    public int compareTo(Disk disk)  {
+    public int compareTo(Disk disk) {
         return java.lang.Double.compare(disk.getAreaWithoutBorder(), areaWithoutBorder);
     }
 
-    private String propertiesToString() {
-        return String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
-                height, transparency, color);
+    public void calculateSpines(double factor) {
+        int spinePointCount = 50;
+        List<String> completeSpine = new ArrayList<>();
+        double stepX = 2 * Math.PI / spinePointCount;
+        for (int i = 0; i < spinePointCount; ++i) {
+            completeSpine.add(factor * Math.cos(i * stepX) + " " + factor * Math.sin(i * stepX) + " " + 0.0);
+        }
+        completeSpine.add(completeSpine.get(0));
+        spine = "\'" + removeBrackets(completeSpine) + "\'";
+    }
+
+    private String calculateCrossSection() {
+        double crossHeight;
+        if (ringWidth == 0) {
+            crossHeight = 0.0;
+        } else {
+            crossHeight = this.height;
+        }
+        return "\'" + (-(ringWidth / 2) + " " + (crossHeight)) + ", " + ((ringWidth / 2) + " " + (crossHeight)) + ", "
+                + ((ringWidth / 2) + " " + 0) + ", " + (-(ringWidth / 2) + " " + 0) + ", " + (-(ringWidth / 2) + " " +
+                (crossHeight)) + "\'";
+    }
+
+    public void calculateAreaWithoutBorder(double dataFactor) {
+        innerSegments.forEach(segment -> segment.calculateNewSize(dataFactor));
+        outerSegments.forEach(segment -> segment.calculateNewSize(dataFactor));
+        areaWithoutBorder = sum(innerSegments) + sum(outerSegments);
+    }
+
+    public void calculateRadius() {
+        radius = Math.sqrt(areaWithoutBorder / Math.PI) + ringWidth;
+    }
+
+    public void updateDiskNode() {
+        double oldZPosition = 0.0;
+        if (position != null) {
+            oldZPosition = position.z;
+        }
+        setPosition(centre.x, centre.y, oldZPosition);
+        for (Disk disk : subDisksList) {
+            disk.updateDiskNode();
+        }
+    }
+
+    private void updateDiskSegmentSize(ArrayList<DiskSegment> list) {
+        double sum = sum(list);
+        for (DiskSegment segment : list) {
+            segment.calculateSize(sum);
+        }
+    }
+
+    public static double sum(ArrayList<DiskSegment> list) {
+        double sum = 0.0;
+        for (DiskSegment segment : list) {
+            sum += segment.getSize();
+        }
+        return sum;
+    }
+
+    private static String removeBrackets(List<String> list) {
+        return removeBrackets(list.toString());
+    }
+
+    private static String removeBrackets(String string) {
+        return StringUtils.remove(StringUtils.remove(string, "["), "]");
     }
 
     public void writeToDatabase(DatabaseConnector connector, boolean wroteToDatabase) {
@@ -95,71 +157,9 @@ public class Disk implements RDElement, Comparable<Disk> {
         connector.executeWrite(updateNode + createPosition);
     }
 
-    public void calculateSpines(double factor) {
-        int spinePointCount = 50;
-        List<String> completeSpine = new ArrayList<>();
-        double stepX = 2 * Math.PI / spinePointCount;
-        for (int i = 0; i < spinePointCount; ++i) {
-            completeSpine.add(factor * Math.cos(i * stepX) + " " + factor * Math.sin(i * stepX) + " " + 0.0);
-        }
-        completeSpine.add(completeSpine.get(0));
-        spine = "\'" + removeBrackets(completeSpine) + "\'";
-    }
-
-     private String calculateCrossSection() {
-        double crossHeight;
-        if (ringWidth == 0) {
-            crossHeight = 0.0;
-        } else {
-            crossHeight = this.height;
-        }
-        return "\'" + (-(ringWidth / 2) + " " + (crossHeight)) + ", " + ((ringWidth / 2) + " " + (crossHeight)) + ", "
-                + ((ringWidth / 2) + " " + 0) + ", " + (-(ringWidth / 2) + " " + 0) + ", " + (-(ringWidth / 2) + " " +
-                (crossHeight)) + "\'";
-    }
-
-    private static String removeBrackets(List<String> list) {
-        return removeBrackets(list.toString());
-    }
-
-    private static String removeBrackets(String string) {
-        return StringUtils.remove(StringUtils.remove(string, "["), "]");
-    }
-
-    public void calculateAreaWithoutBorder(double dataFactor) {
-        innerSegments.forEach(segment -> segment.calculateNewSize(dataFactor));
-        outerSegments.forEach(segment -> segment.calculateNewSize(dataFactor));
-        areaWithoutBorder = sum(innerSegments) + sum(outerSegments);
-    }
-
-    public void updateDiskNode() {
-        double oldZPosition = 0.0;
-        if (position != null) {
-            oldZPosition = position.z;
-        }
-        setPosition(centre.x, centre.y, oldZPosition);
-        for (Disk disk : subDisksList) {
-            disk.updateDiskNode();
-        }
-    }
-
-    public void calculateRadius() {
-        radius = Math.sqrt(areaWithoutBorder / Math.PI) + ringWidth;
-    }
-
-    private void updateDiskSegmentSize(ArrayList<DiskSegment> list) {
-        double sum = sum(list);
-        for (DiskSegment segment : list) {
-            segment.calculateSize(sum);
-        }
-    }
-
-    public static double sum(ArrayList<DiskSegment> list) {
-        double sum = 0.0;
-        for (DiskSegment segment : list) {
-            sum += segment.getSize();
-        }
-        return sum;
+    private String propertiesToString() {
+        return String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", ringWidth,
+                height, transparency, color);
     }
 
     public void setSegmentsArea() {
@@ -179,24 +179,48 @@ public class Disk implements RDElement, Comparable<Disk> {
         this.parentID = id;
     }
 
+    public long getParentID() {
+        return parentID;
+    }
+
     public void setID(long id) {
         this.id = id;
+    }
+
+    public long getID() {
+        return id;
     }
 
     public void setAreaWithoutBorder(double areaWithoutBorder) {
         this.areaWithoutBorder = areaWithoutBorder;
     }
 
+    public double getAreaWithoutBorder() {
+        return areaWithoutBorder;
+    }
+
     public void setRadius(double radius) {
         this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 
     public void setAreaWithBorder(double areaWithBorder) {
         this.areaWithBorder = areaWithBorder;
     }
 
+    public double getAreaWithBorder() {
+        return areaWithBorder;
+    }
+
     public void setPosition(double x, double y, double z) {
         this.position = new Position(x, y, z);
+    }
+
+    public Position getPosition() {
+        return position;
     }
 
     public void setColor(String color) {
@@ -207,24 +231,36 @@ public class Disk implements RDElement, Comparable<Disk> {
         subDisksList.addAll(list);
     }
 
+    public ArrayList<Disk> getSubDisksList() {
+        return subDisksList;
+    }
+
     public void setInnerSegmentsList(ArrayList<DiskSegment> list) {
         innerSegments.addAll(list);
+    }
+
+    public ArrayList<DiskSegment> getInnerSegments() {
+        return innerSegments;
     }
 
     public void setOuterSegmentsList(ArrayList<DiskSegment> list) {
         outerSegments.addAll(list);
     }
 
+    public ArrayList<DiskSegment> getOuterSegments() {
+        return outerSegments;
+    }
+
     public void setCentre(Point2D.Double centre) {
         this.centre = centre;
     }
 
-    public double getMinArea() {
-        return minArea;
+    public Point2D.Double getCentre() {
+        return centre;
     }
 
-    public Point2D.Double getCentre() {
-        return  centre;
+    public double getMinArea() {
+        return minArea;
     }
 
     public long getParentVisualizedNodeID() {
@@ -235,47 +271,13 @@ public class Disk implements RDElement, Comparable<Disk> {
         return visualizedNodeID;
     }
 
-    public long getID() {
-        return id;
-    }
-
-    public long getParentID() {
-        return parentID;
-    }
-
-    public double getAreaWithoutBorder() {
-        return areaWithoutBorder;
-    }
-
     public double getRingWidth() {
         return ringWidth;
-    }
-
-    public double getRadius() {
-        return radius;
-    }
-
-    public double getAreaWithBorder() {
-        return areaWithBorder;
     }
 
     public double getHeight() {
         return height;
     }
 
-    public ArrayList<DiskSegment> getInnerSegments() {
-        return innerSegments;
-    }
 
-    public ArrayList<DiskSegment> getOuterSegments() {
-        return outerSegments;
-    }
-
-    public ArrayList<Disk> getSubDisksList() {
-        return subDisksList;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
 }

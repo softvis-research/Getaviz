@@ -13,7 +13,7 @@ import org.getaviz.generator.rd.s2m.Disk;
 
 import java.util.ArrayList;
 
-public class RDLayout {
+class RDLayout {
 	
 	static void nestedLayout(ArrayList<Disk> disksList) {
 		layout(disksList);

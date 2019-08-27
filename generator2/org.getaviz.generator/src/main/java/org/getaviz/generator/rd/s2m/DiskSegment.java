@@ -45,6 +45,14 @@ public class DiskSegment implements RDElement {
         this.size = size;
     }
 
+    void calculateSize(double sum) {
+        size = size / sum;
+    }
+
+    void calculateNewSize(double dataFactor) {
+        size = size * dataFactor;
+    }
+
     public void writeToDatabase(DatabaseConnector connector, boolean wroteToDatabase) {
         if (!wroteToDatabase) JQA2RDWriteToDatabase(connector);
         else RD2RDWriteToDatabase(connector);
@@ -70,47 +78,31 @@ public class DiskSegment implements RDElement {
                 transparency, color);
     }
 
-    void calculateSize(double sum) {
-        size = size / sum;
+    public void setCrossSection(String crossSection) {
+        this.crossSection = crossSection;
     }
 
-    void  calculateNewSize(double dataFactor) {
-        size = size * dataFactor;
-    }
-
-    public long getParentVisualizedNodeID() {
-        return parentVisualizedNodeID;
-    }
-
-    public long getVisualizedNodeID() {
-        return visualizedNodeID;
-    }
-
-    public long getID() {
-        return id;
+    public void setParentID(long newParentID) {
+        this.parentID = newParentID;
     }
 
     public long getParentID() {
         return parentID;
     }
 
-    public double getSize() {
-        return size;
-    }
-
-    public void setCrossSection(String crossSection) { this.crossSection = crossSection; }
-
-    public void setParentID(long newParentID) {
-        this.parentID = newParentID;
-    }
-
     public void setID(long id) {
         this.id = id;
+    }
+
+    public long getID() {
+        return id;
     }
 
     public void setSize(double size) {
         this.size = size;
     }
+
+    public double getSize() { return size; }
 
     public void setOuterAndInnerRadius(double outerRadius, double innerRadius) {
         this.outerRadius = outerRadius;
@@ -128,4 +120,13 @@ public class DiskSegment implements RDElement {
     public void setAnglePosition(double anglePosition) {
         this.anglePosition = anglePosition;
     }
+
+    public long getParentVisualizedNodeID() {
+        return parentVisualizedNodeID;
+    }
+
+    public long getVisualizedNodeID() {
+        return visualizedNodeID;
+    }
+
 }

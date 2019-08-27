@@ -12,7 +12,7 @@ import org.getaviz.generator.rd.s2m.DiskSegment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SegmentLayout {
+class SegmentLayout {
 
     static void calculateRings(ArrayList<Disk> disks, SettingsConfiguration.OutputFormat outputFormat) {
         disks.forEach(disk -> {
@@ -58,6 +58,25 @@ public class SegmentLayout {
                         r_methods, r_data);
             }
         });
+    }
+
+    private static double calculateSum(ArrayList<DiskSegment> list, double areaWithBorder) {
+        return Disk.sum(list) / areaWithBorder;
+    }
+
+    private static double calculateOuterRadius(ArrayList<Disk> subDisksList) {
+        CoordinateList coordinates = new CoordinateList();
+        for (Disk d : subDisksList) {
+            double x = d.getPosition().x;
+            double y = d.getPosition().y;
+            double radius = d.getRadius();
+            coordinates.add(RDLayout.createCircle(x, y, radius)
+                    .getCoordinates(), false);
+        }
+        GeometryFactory geoFactory = new GeometryFactory();
+        MultiPoint innerCircleMultiPoint = geoFactory.createMultiPoint(coordinates.toCoordinateArray());
+        MinimumBoundingCircle mbc = new MinimumBoundingCircle(innerCircleMultiPoint);
+        return mbc.getRadius();
     }
 
     private static void updateDiskSegment(ArrayList<DiskSegment> list, double height, double width, double factor,
@@ -141,22 +160,4 @@ public class SegmentLayout {
         return StringUtils.remove(StringUtils.remove(string, "["), "]");
     }
 
-    private static double calculateSum(ArrayList<DiskSegment> list, double areaWithBorder) {
-        return Disk.sum(list) / areaWithBorder;
-    }
-
-    private static double calculateOuterRadius(ArrayList<Disk> subDisksList) {
-        CoordinateList coordinates = new CoordinateList();
-        for (Disk d : subDisksList) {
-            double x = d.getPosition().x;
-            double y = d.getPosition().y;
-            double radius = d.getRadius();
-            coordinates.add(RDLayout.createCircle(x, y, radius)
-                    .getCoordinates(), false);
-        }
-        GeometryFactory geoFactory = new GeometryFactory();
-        MultiPoint innerCircleMultiPoint = geoFactory.createMultiPoint(coordinates.toCoordinateArray());
-        MinimumBoundingCircle mbc = new MinimumBoundingCircle(innerCircleMultiPoint);
-        return mbc.getRadius();
-    }
 }
