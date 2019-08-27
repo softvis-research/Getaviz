@@ -17,10 +17,10 @@ public class CityMetaphor implements Metaphor {
         StepFactory factory = new StepFactory(config);
         if(!config.isSkipScan()) {
             steps.add(factory.createScanStep());
+            steps.add(factory.createNotationFileStep());
             steps.add(factory.createEnhancementStep());
         }
         steps.add(factory.createSteps2m());
-
         steps.add(factory.createStepm2m());
         steps.add(factory.createStepm2t());
     }
