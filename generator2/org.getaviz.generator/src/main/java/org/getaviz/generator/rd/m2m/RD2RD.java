@@ -226,7 +226,10 @@ public class RD2RD implements Step {
 
     private void calculateDiskLayout(ArrayList<Disk> list) {
         RDLayout.nestedLayout(list);
-        list.forEach(Disk::updateDiskNode);
+        list.forEach(disk -> {
+            disk.calculateSpines();
+            disk.updateDiskNode();
+        });
     }
 
     private void writeToDatabase() {

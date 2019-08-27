@@ -63,12 +63,12 @@ public class Disk implements RDElement, Comparable<Disk> {
         return java.lang.Double.compare(disk.getAreaWithoutBorder(), areaWithoutBorder);
     }
 
-    public void calculateSpines(double factor) {
+    public void calculateSpines() {
         int spinePointCount = 50;
         List<String> completeSpine = new ArrayList<>();
         double stepX = 2 * Math.PI / spinePointCount;
         for (int i = 0; i < spinePointCount; ++i) {
-            completeSpine.add(factor * Math.cos(i * stepX) + " " + factor * Math.sin(i * stepX) + " " + 0.0);
+            completeSpine.add(radius * Math.cos(i * stepX) + " " + radius * Math.sin(i * stepX) + " " + 0.0);
         }
         completeSpine.add(completeSpine.get(0));
         spine = "\'" + removeBrackets(completeSpine) + "\'";
@@ -219,9 +219,7 @@ public class Disk implements RDElement, Comparable<Disk> {
         this.position = new Position(x, y, z);
     }
 
-    public Position getPosition() {
-        return position;
-    }
+    public Position getPosition() { return position; }
 
     public void setColor(String color) {
         this.color = color;

@@ -32,7 +32,6 @@ class SegmentLayout {
             double innerSegmentsArea = calculateSum(innerSegments, areaWithoutBorder);
             double outerSegmentsArea = calculateSum(outerSegments, areaWithoutBorder);
             disk.setSegmentsArea();
-            disk.calculateSpines(radius - (0.5 * ringWidth));
             if (subDisksList.size() == 0) {
                 r_data = Math.sqrt(innerSegmentsArea * areaWithoutBorder / Math.PI);
                 r_methods = radius - ringWidth;

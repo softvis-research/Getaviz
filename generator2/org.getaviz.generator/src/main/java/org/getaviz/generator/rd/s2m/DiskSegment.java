@@ -104,17 +104,21 @@ public class DiskSegment implements RDElement {
 
     public double getSize() { return size; }
 
+    public void setAngle(double angle) {
+        this.angle = angle;
+    }
+
+    public double getAngle() { return angle; }
+
     public void setOuterAndInnerRadius(double outerRadius, double innerRadius) {
         this.outerRadius = outerRadius;
         this.innerRadius = innerRadius;
     }
 
+    public double getInnerRadius() { return innerRadius; }
+
     public void setSpine(String spine) {
         this.spine = spine;
-    }
-
-    public void setAngle(double angle) {
-        this.angle = angle;
     }
 
     public void setAnglePosition(double anglePosition) {
