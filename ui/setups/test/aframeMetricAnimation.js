@@ -58,9 +58,14 @@
 		},
 
         { 	name: 	"metricAnimationController",
+            metricValueTransformation: "square",
             minBlinkingFrequency: 3000,
             maxBlinkingFrequency: 100,
-            metricValueTransformation: "logarithmic"
+            expandAnimationType: "frequency",
+            minExpandingFrequency: 2000,
+            maxExpandingFrequency: 100,
+            defaultExpandScale: 2,
+            maxExpandingScale: 3
         },
 
         {

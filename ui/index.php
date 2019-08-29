@@ -150,6 +150,8 @@ EOT;
 	<script type="text/javascript" src="scripts/Legend/LegendController.js"></script>
 	<script type="text/javascript" src="scripts/MetricAnimation/MetricAnimationController.js"></script>
 	<script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimation.js"></script>
+	<script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimationBlinking.js"></script>
+    <script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimationExpanding.js"></script>
     <script type="text/javascript" src="scripts/Systeminfo/SysteminfoController.js"></script>
     <script type="text/javascript" src="scripts/PatternConnector/PatternConnectorController.js"></script>
     <script type="text/javascript" src="scripts/Configuration/ConfigurationController.js"></script>

@@ -4,11 +4,19 @@ var metricAnimationController = (function() {
     let activeAnimations = new Map();   // list of metricNames of the currently active animations
 
     var controllerConfig = {
-        minBlinkingFrequency: 3000,          // milliseconds - min freq for blinking animation
-        maxBlinkingFrequency: 500,           // milliseconds - max freq for blinking animation
-        metricValueTransformation: "square"  // transform the metric value to better differentiate values at the bounds
+        minBlinkingFrequency: 3000,          // # milliseconds - min freq for blinking animation
+        maxBlinkingFrequency: 500,           // # milliseconds - max freq for blinking animation
+        metricValueTransformation: "square", // # transform the metric value to better differentiate values at the bounds
                                              // - focus on low values: 'logarithmic', 'root'
                                              // - focus on high values: 'square'
+        expandAnimationType: "frequency",    // # type of the expanding animation
+                                             // - frequency: grow and shrink to the double size - metricValue = frequency
+                                             // - size: grow and shrink to a size depending on the metric value
+        minExpandingFrequency: 3000,         // # milliseconds - min freq for expanding animation
+                                             //   AND used as frequency for expandAnimationType: size
+        maxExpandingFrequency: 100,          // # milliseconds - max freq for expanding animation
+        defaultExpandScale: 2,               // expandAnimationType: frequency => expand always to this scale
+        maxExpandingScale: 3                 // expandAnimationType: size => expands scale between 1 and maxScale
     };
 
     function initialize(setupConfig){
@@ -119,7 +127,7 @@ var metricAnimationController = (function() {
                 if (intensity > 0){
                     // if the entity has already a blinking animation, add the color, create a new one else
                     let blinkingAnimation = entity.metricAnimationBlinking;
-                    if (blinkingAnimation == undefined){
+                    if (blinkingAnimation === undefined){
                         blinkingAnimation = new MetricAnimationBlinking(controllerConfig.minBlinkingFrequency, controllerConfig.maxBlinkingFrequency);
                         blinkingAnimation.addMetric(metric, color, intensity);
                         entity.metricAnimationBlinking = blinkingAnimation;
@@ -134,13 +142,20 @@ var metricAnimationController = (function() {
         else if (animation === "size"){
             entities.forEach(function (entity) {
                 let intensity = getAnimationIntensity(entity, metric);
-                canvasManipulator.startGrowShrinkAnimationForEntity(entity, intensity);
+                if (intensity > 0){
+                    // expandingAnimation get's not stored as entity attribute, because this is not necessary by now
+                    let expandingAnimation = new MetricAnimationExpanding(controllerConfig.expandAnimationType,
+                        controllerConfig.minExpandingFrequency, controllerConfig.maxExpandingFrequency,
+                        controllerConfig.maxExpandingScale, controllerConfig.defaultExpandScale, intensity);
+
+                    canvasManipulator.startExpandingAnimationForEntity(entity, expandingAnimation);
+                }
             });
         }
         else if (animation === "nothing"){
             entities.forEach(function (entity) {
                 let blinkingAnimation = entity.metricAnimationBlinking;
-                if (blinkingAnimation != undefined){
+                if (blinkingAnimation !== undefined){
                     blinkingAnimation.removeMetric(metric);
                     if (blinkingAnimation.hasMetric()){
                         canvasManipulator.startBlinkingAnimationForEntity(entity, blinkingAnimation);
@@ -160,7 +175,7 @@ var metricAnimationController = (function() {
         }
         else if (runningAnimation === "size"){
             entities.forEach(function (entity) {
-                canvasManipulator.stopGrowShrinkAnimationForEntity(entity);
+                canvasManipulator.stopExpandingAnimationForEntity(entity);
             });
         }
 
