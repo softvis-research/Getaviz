@@ -1,10 +1,14 @@
 var metricAnimationController = (function() {
 
-    let metricMaxValues = new Map();
-    let activeAnimations = new Map();
+    let metricMaxValues = new Map();    // map: metricName - maxValue
+    let activeAnimations = new Map();   // list of metricNames of the currently active animations
 
     var controllerConfig = {
-        minBlinkingFrequency: 3000      // milliseconds - min freq for blinking animation
+        minBlinkingFrequency: 3000,          // milliseconds - min freq for blinking animation
+        maxBlinkingFrequency: 500,           // milliseconds - max freq for blinking animation
+        metricValueTransformation: "square"  // transform the metric value to better differentiate values at the bounds
+                                             // - focus on low values: 'logarithmic', 'root'
+                                             // - focus on high values: 'square'
     };
 
     function initialize(setupConfig){
@@ -12,24 +16,34 @@ var metricAnimationController = (function() {
     }
 
     function activate(rootDiv){
-        let container= document.createElement("DIV");
-        container.setAttribute("class", "grid-container");
-        container.id = "metricAnimationDiv";
+        let containerMethods= document.createElement("div");
+        containerMethods.setAttribute("class", "grid-container")
+        let containerClasses= document.createElement("div");
+        containerClasses.setAttribute("class", "grid-container");
 
-        appendMetricSelectionUiComponent(container, "CallsIn", "incoming method calls:")
-        appendMetricSelectionUiComponent(container, "CallsOut","outgoing method calls:")
-        appendMetricSelectionUiComponent(container, "NrAttributes","number of attributes:")
+        appendHeader(rootDiv,"Method Metrics:")
+        appendMetricSelectionUiComponent(containerMethods, "CallsIn", "incoming method calls:")
+        appendMetricSelectionUiComponent(containerMethods, "CallsOut","outgoing method calls:")
+        rootDiv.appendChild(containerMethods);
 
-        rootDiv.appendChild(container);
+        appendHeader(rootDiv,"Class Metrics:")
+        appendMetricSelectionUiComponent(containerClasses, "NrAttributes","number of attributes:")
+        rootDiv.appendChild(containerClasses);
 
         initializeMetricMaxValues();
+    }
+
+    function appendHeader(container, headerText) {
+        let headerElement = document.createElement("h3");
+        headerElement.textContent = headerText;
+        container.appendChild(headerElement);
     }
 
     function appendMetricSelectionUiComponent(container, metric, metricLabel) {
         let leftCell = document.createElement("div");
         let rightCell = document.createElement("div");
-        // leftCell.setAttribute("class", "grid-item-left");
-        // rightCell.setAttribute("class", "grid-item-right");
+        leftCell.setAttribute("class", "formular-grid-item-left");
+        rightCell.setAttribute("class", "formular-grid-item-right");
         let labelElement = document.createTextNode(metricLabel);
         let selectElement = document.createElement("select");
         selectElement.id = "select" + metric;
@@ -102,7 +116,19 @@ var metricAnimationController = (function() {
 
             entities.forEach(function (entity) {
                 let intensity = getAnimationIntensity(entity, metric);
-                canvasManipulator.startBlinkingAnimationForEntity(entity, color, intensity, controllerConfig.minBlinkingFrequency, metric);
+                if (intensity > 0){
+                    // if the entity has already a blinking animation, add the color, create a new one else
+                    let blinkingAnimation = entity.metricAnimationBlinking;
+                    if (blinkingAnimation == undefined){
+                        blinkingAnimation = new MetricAnimationBlinking(controllerConfig.minBlinkingFrequency, controllerConfig.maxBlinkingFrequency);
+                        blinkingAnimation.addMetric(metric, color, intensity);
+                        entity.metricAnimationBlinking = blinkingAnimation;
+                    } else {
+                        canvasManipulator.stopBlinkingAnimationForEntity(entity);   // stop the existing blinking animation before starting a new one
+                        blinkingAnimation.addMetric(metric, color, intensity);
+                    }
+                    canvasManipulator.startBlinkingAnimationForEntity(entity, blinkingAnimation);
+                }
             });
         }
         else if (animation === "size"){
@@ -111,15 +137,25 @@ var metricAnimationController = (function() {
                 canvasManipulator.startGrowShrinkAnimationForEntity(entity, intensity);
             });
         }
+        else if (animation === "nothing"){
+            entities.forEach(function (entity) {
+                let blinkingAnimation = entity.metricAnimationBlinking;
+                if (blinkingAnimation != undefined){
+                    blinkingAnimation.removeMetric(metric);
+                    if (blinkingAnimation.hasMetric()){
+                        canvasManipulator.startBlinkingAnimationForEntity(entity, blinkingAnimation);
+                    }
+                }
+            });
+        }
     }
-
 
     function stopAnimationForMetric(entities, metric) {
         let runningAnimation = activeAnimations.get(metric);
 
         if (runningAnimation.startsWith("blinking_")){
             entities.forEach(function (entity) {
-                canvasManipulator.stopBlinkingAnimationForEntity(entity, metric);
+                canvasManipulator.stopBlinkingAnimationForEntity(entity);
             });
         }
         else if (runningAnimation === "size"){
@@ -135,6 +171,21 @@ var metricAnimationController = (function() {
 
         let entitiesValue = getMetricValueOfEntity(entity, metric);
         let maxValue = getMetricMaxValue(metric);
+
+        switch (controllerConfig.metricValueTransformation) {
+            case "logarithmic":
+                entitiesValue = Math.log2(1 + entitiesValue);
+                maxValue = Math.log2(1 + maxValue);
+                break;
+            case "root":
+                entitiesValue = Math.sqrt(entitiesValue);
+                maxValue = Math.sqrt(maxValue);
+                break;
+            case "square":
+                entitiesValue = entitiesValue * entitiesValue;
+                maxValue = maxValue * maxValue;
+                break;
+        }
 
         let intensity =  entitiesValue / maxValue;
 
@@ -208,3 +259,4 @@ var metricAnimationController = (function() {
         reset: reset
     };
 })();
+

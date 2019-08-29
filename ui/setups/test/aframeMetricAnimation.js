@@ -58,7 +58,9 @@
 		},
 
         { 	name: 	"metricAnimationController",
-            minBlinkingFrequency: 3000
+            minBlinkingFrequency: 3000,
+            maxBlinkingFrequency: 100,
+            metricValueTransformation: "logarithmic"
         },
 
         {
