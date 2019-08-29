@@ -127,9 +127,12 @@ var canvasManipulator = (function () {
         });
 
         let originalColor = component.getAttribute("color-before-blinking");
-        component.setAttribute("animation__blinking_off",
-            "property: components.material.material.color; type: color; from: " + originalColor +
-            "; to: " + originalColor + "; dur: 0; loop: false");
+        if (originalColor !== null){
+            // only change the color back if there was a blinking animation before
+            component.setAttribute("animation__blinking_off",
+                "property: components.material.material.color; type: color; from: " + originalColor +
+                "; to: " + originalColor + "; dur: 0; loop: false");
+        }
 
         // remark:
         // A nice way would be to remove all of the blinking animation attributes.

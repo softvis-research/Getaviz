@@ -1,7 +1,7 @@
 var metricAnimationController = (function() {
 
-    let metricMaxValues = new Map();    // map: metricName - maxValue
-    let activeAnimations = new Map();   // list of metricNames of the currently active animations
+    let metricMaxValues = new Map();         // map: metricName - maxValue
+    let activeAnimations = new Map();        // list of metricNames of the currently active animations
 
     var controllerConfig = {
         minBlinkingFrequency: 3000,          // # milliseconds - min freq for blinking animation
@@ -116,6 +116,7 @@ var metricAnimationController = (function() {
     function startAnimationForEntities(entities, metric, animation) {
 
         if (activeAnimations.has(metric)){
+            // if there is already a animation running for this metric: stop it!
             stopAnimationForMetric(entities, metric);
         }
 
