@@ -78,31 +78,49 @@ var metricAnimationController = (function() {
     }
 
     function activateListUi(rootDiv) {
-        let container = document.createElement("div");
-        container.setAttribute("class", "grid-container");
-        let leftCell = document.createElement("div");
-        let rightCell = document.createElement("div");
-        leftCell.setAttribute("class", "formular-grid-item-left");
-        rightCell.setAttribute("class", "formular-grid-item-right");
-
         let listSize = Math.max(getAvailableMetrics().size, getAvailableAnimations().size);
 
+        let container = document.createElement("div");
+        container.setAttribute("class", "grid-container metricAnimationGrid");
+
+        let headerCellLeft = document.createElement("div");
+        headerCellLeft.setAttribute("class", "grid-item");
+        appendHeader(headerCellLeft,"Metrics:");
+        container.appendChild(headerCellLeft);
+
+        let headerCellRight = document.createElement("div");
+        headerCellRight.setAttribute("class", "grid-item");
+        appendHeader(headerCellRight,"Animations:");
+        container.appendChild(headerCellRight);
+
+        let listCellLeft = document.createElement("div");
+        listCellLeft.setAttribute("class", "grid-item select-wrapper-level1");
+
+        let metricSelectWrapper = document.createElement("div");
+        metricSelectWrapper.setAttribute("class", "select-wrapper-level2");
         let metricsList = document.createElement("select");
         metricsList.setAttribute("size", listSize);
         appendOptionsToSelectElement(metricsList, getAvailableMetrics());
         metricsList.onchange = function () {metricListSelectionChanged(metricsList, animationList); };
+        metricSelectWrapper.appendChild(metricsList);
+        listCellLeft.appendChild(metricSelectWrapper);
+        container.appendChild(listCellLeft);
 
+        let listCellRight = document.createElement("div");
+        listCellRight.setAttribute("class", "grid-item select-wrapper-level1");
+
+        let animationSelectWrapper = document.createElement("div");
+        animationSelectWrapper.setAttribute("class", "select-wrapper-level2");
         let animationList = document.createElement("select");
         animationList.setAttribute("size", listSize);
         animationList.setAttribute("multiple", "multiple");
         animationList.setAttribute("disabled", "disabled");
         appendOptionsToSelectElement(animationList, getAvailableAnimations());
         animationList.onchange = function () {animationListSelectionChanged(metricsList, animationList); };
+        animationSelectWrapper.appendChild(animationList);
+        listCellRight.appendChild(animationSelectWrapper);
+        container.appendChild(listCellRight);
 
-        leftCell.appendChild(metricsList);
-        rightCell.appendChild(animationList);
-        container.appendChild(leftCell);
-        container.appendChild(rightCell);
         rootDiv.appendChild(container);
     }
 
