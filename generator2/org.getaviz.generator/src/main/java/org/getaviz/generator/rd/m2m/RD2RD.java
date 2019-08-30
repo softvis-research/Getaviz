@@ -153,7 +153,7 @@ public class RD2RD implements Step {
                 .executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + disk.getID() + " RETURN p");
         if (!position.list().isEmpty()) {
             Node node = position.single().get("p").asNode();
-            disk.setPosition(node.get("x").asDouble(), node.get("y").asDouble(), node.get("z").asDouble());
+            disk.setPosition(new Position(node.get("x").asDouble(), node.get("y").asDouble(), node.get("z").asDouble()));
         }
     }
 
@@ -225,11 +225,8 @@ public class RD2RD implements Step {
     }
 
     private void calculateDiskLayout(ArrayList<Disk> list) {
-        RDLayout.nestedLayout(list);
-        list.forEach(disk -> {
-            disk.calculateSpines();
-            disk.updateDiskNode();
-        });
+        DiskLayout.nestedLayout(list);
+        list.forEach(Disk::calculateSpines);
     }
 
     private void writeToDatabase() {

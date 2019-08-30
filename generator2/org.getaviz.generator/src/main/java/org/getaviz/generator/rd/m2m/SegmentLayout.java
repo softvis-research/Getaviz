@@ -1,9 +1,8 @@
 package org.getaviz.generator.rd.m2m;
 
 import com.vividsolutions.jts.algorithm.MinimumBoundingCircle;
-import com.vividsolutions.jts.geom.CoordinateList;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.MultiPoint;
+import com.vividsolutions.jts.geom.*;
+import com.vividsolutions.jts.util.GeometricShapeFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.rd.s2m.Disk;
@@ -69,7 +68,7 @@ class SegmentLayout {
             double x = d.getPosition().x;
             double y = d.getPosition().y;
             double radius = d.getRadius();
-            coordinates.add(RDLayout.createCircle(x, y, radius)
+            coordinates.add(createCircle(x, y, radius)
                     .getCoordinates(), false);
         }
         GeometryFactory geoFactory = new GeometryFactory();
@@ -90,6 +89,14 @@ class SegmentLayout {
                 data.setOuterAndInnerRadius(outer, inner);
             }
         }
+    }
+
+    private static Geometry createCircle(double x, double y, final double RADIUS) {
+        GeometricShapeFactory shapeFactory = new GeometricShapeFactory();
+        shapeFactory.setNumPoints(64);
+        shapeFactory.setCentre(new Coordinate(x, y));
+        shapeFactory.setSize(RADIUS * 2);
+        return shapeFactory.createCircle();
     }
 
     private static void calculateSpines(ArrayList<DiskSegment> segments, double factor) {

@@ -1,6 +1,5 @@
 package org.getaviz.generator.rd.m2m;
 
-import java.awt.geom.Point2D;
 import java.util.List;
 import com.vividsolutions.jts.algorithm.MinimumBoundingCircle;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -13,7 +12,7 @@ import org.getaviz.generator.rd.s2m.Disk;
 
 import java.util.ArrayList;
 
-class RDLayout {
+class DiskLayout {
 	
 	static void nestedLayout(ArrayList<Disk> disksList) {
 		layout(disksList);
@@ -60,12 +59,12 @@ class RDLayout {
 	}
 	private static void transformPositionOfInnerCircles(Disk outerDisk,
 			List<Disk> innerDisks) {
-		final double x_outer = outerDisk.getCentre().x;
-		final double y_outer = outerDisk.getCentre().y;
+		final double x_outer = outerDisk.getPosition().x;
+		final double y_outer = outerDisk.getPosition().y;
 
 		for (Disk disk : innerDisks) {
-			disk.getCentre().x += x_outer;
-			disk.getCentre().y += y_outer;
+			disk.getPosition().x += x_outer;
+			disk.getPosition().y += y_outer;
 		}
 	}
 	
@@ -73,7 +72,7 @@ class RDLayout {
 
 		CoordinateList coordinates = new CoordinateList();
 		for (Disk disk : innerDisks) {
-			coordinates.add(createCircle(disk.getCentre().x, disk.getCentre().y, disk.getRadius()).getCoordinates(), false);
+			coordinates.add(createCircle(disk.getPosition().x, disk.getPosition().y, disk.getRadius()).getCoordinates(), false);
 		}
 		
 		GeometryFactory geoFactory = new GeometryFactory();
@@ -84,14 +83,15 @@ class RDLayout {
 //		outerDisk.setRadius(RING_WIDTH + radius + calculateB(calculateD(outerDisk.getMinArea(), radius), radius));
 //		normalizePositionOfInnerCircles(outerDisk, innerDisks);
 		final double radius = mbc.getRadius();
-		final Point2D.Double centre = new Point2D.Double(mbc.getCentre().x, mbc.getCentre().y);
-		
-		outerDisk.setCentre(centre);
+		final double x = mbc.getCentre().x;
+		final double y = mbc.getCentre().y;
+
+		outerDisk.setPosition(new Position(x, y, outerDisk.getPosition().z));
 		outerDisk.setRadius(outerDisk.getRingWidth() + radius + calculateB(calculateD(outerDisk.getMinArea(), radius), radius));
 		normalizePositionOfInnerCircles(outerDisk, innerDisks);
 	}
 
-    public static Geometry createCircle(double x, double y, final double RADIUS) {
+    private static Geometry createCircle(double x, double y, final double RADIUS) {
         GeometricShapeFactory shapeFactory = new GeometricShapeFactory();
         shapeFactory.setNumPoints(64);
         shapeFactory.setCentre(new Coordinate(x, y));
@@ -109,13 +109,13 @@ class RDLayout {
 
 	private static void normalizePositionOfInnerCircles(Disk outerDisk,
 			List<Disk> innerDisks) {
-		final double x_outer = outerDisk.getCentre().x;
-		final double y_outer = outerDisk.getCentre().y;
+		final double x_outer = outerDisk.getPosition().x;
+		final double y_outer = outerDisk.getPosition().y;
 
 		for (Disk disk : innerDisks) {
-			disk.getCentre().x -= x_outer;
-			disk.getCentre().y -= y_outer;
+			disk.getPosition().x -= x_outer;
+			disk.getPosition().y -= y_outer;
 		}
-		outerDisk.setCentre(new Point2D.Double(0, 0));
+		outerDisk.setPosition(new Position(0, 0, outerDisk.getPosition().z));
 	}
 }

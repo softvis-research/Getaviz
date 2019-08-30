@@ -2,9 +2,9 @@ package org.getaviz.generator.rd.s2m;
 
 import org.apache.commons.lang3.StringUtils;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.database.Labels;;
+import org.getaviz.generator.database.Labels;
+import org.getaviz.generator.rd.m2m.Position;;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +17,6 @@ public class Disk implements RDElement, Comparable<Disk> {
     private double areaWithoutBorder;
     private double radius = 0;
     private double minArea = 0;
-    private Point2D.Double centre = new Point2D.Double(0, 0);
     private Position position;
     private String color;
     private String spine;
@@ -56,6 +55,7 @@ public class Disk implements RDElement, Comparable<Disk> {
         this.areaWithBorder = areaWithBorder;
         this.areaWithoutBorder = areaWithoutBorder;
         this.nesting = nesting;
+        this.position = new Position(0, 0, 0);
         //String serial = visualizedNodeID + "";
     }
 
@@ -94,17 +94,6 @@ public class Disk implements RDElement, Comparable<Disk> {
 
     public void calculateRadius() {
         radius = Math.sqrt(areaWithoutBorder / Math.PI) + ringWidth;
-    }
-
-    public void updateDiskNode() {
-        double oldZPosition = 0.0;
-        if (position != null) {
-            oldZPosition = position.z;
-        }
-        setPosition(centre.x, centre.y, oldZPosition);
-        for (Disk disk : subDisksList) {
-            disk.updateDiskNode();
-        }
     }
 
     private void updateDiskSegmentSize(ArrayList<DiskSegment> list) {
@@ -215,11 +204,13 @@ public class Disk implements RDElement, Comparable<Disk> {
         return areaWithBorder;
     }
 
-    public void setPosition(double x, double y, double z) {
-        this.position = new Position(x, y, z);
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
-    public Position getPosition() { return position; }
+    public Position getPosition() {
+        return position;
+    }
 
     public void setColor(String color) {
         this.color = color;
@@ -249,14 +240,6 @@ public class Disk implements RDElement, Comparable<Disk> {
         return outerSegments;
     }
 
-    public void setCentre(Point2D.Double centre) {
-        this.centre = centre;
-    }
-
-    public Point2D.Double getCentre() {
-        return centre;
-    }
-
     public double getMinArea() {
         return minArea;
     }
@@ -277,5 +260,6 @@ public class Disk implements RDElement, Comparable<Disk> {
         return height;
     }
 
+    String getSpine() {return spine;}
 
 }

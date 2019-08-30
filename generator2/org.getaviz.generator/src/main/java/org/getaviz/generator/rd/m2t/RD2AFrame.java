@@ -120,7 +120,9 @@ public class RD2AFrame implements Step {
 			builder.append("</a-ring>");
 			builder.append("\n");
 		}
-		return builder.toString();
+		String properties = builder.toString();
+		connector.executeWrite("MATCH disk WHERE ID(disk) = " + disk.id() + " SET disk.RD2AFrame = " + properties);
+		return properties;
 	}
 
 	private String toSegment(List<Node> segments) {
