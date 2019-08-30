@@ -58,6 +58,7 @@
 		},
 
         { 	name: 	"metricAnimationController",
+            widgetUi: "list",
             metricValueTransformation: "square",
             minBlinkingFrequency: 3000,
             maxBlinkingFrequency: 100,

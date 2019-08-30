@@ -81,17 +81,17 @@ var canvasManipulator = (function () {
 
         let blinkingFrequency = blinkingAnimation.getAnimationFrequency();
 
-        if (blinkingAnimation.getMetricsSize() === 1){
+        if (blinkingAnimation.colors.length === 1){
             component.setAttribute("animation__blinking",
                 "property: components.material.material.color; type: color; from: " + originalColor +
                 "; to: " + blinkingAnimation.getNextToColor() + "; dur: " + blinkingFrequency + "; loop: true; dir: alternate");
         } else {
-            for (i = 1; i <= blinkingAnimation.getMetricsSize(); i++) {
+            for (i = 1; i <= blinkingAnimation.colors.length; i++) {
                 // in general each color animation starts when the predecessor ends
                 let startEvents = "animationcomplete__blinking_" + (i -1);
                 if (i === 1){
                     // the first color animation starts when the last ends
-                    startEvents = "animationcomplete__blinking_" + blinkingAnimation.getMetricsSize();
+                    startEvents = "animationcomplete__blinking_" + blinkingAnimation.colors.length;
                 } else if (i === 2){
                     // the second color animation starts after the first and after the initializer
                     startEvents = "animationcomplete__blinking_" + 1 + ", animationcomplete__blinking_" + 0;

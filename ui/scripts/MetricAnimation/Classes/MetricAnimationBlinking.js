@@ -15,20 +15,30 @@ class MetricAnimationBlinking extends MetricAnimation{
         }
     }
 
-    getMetricsSize(){
-        return this.metricColors.size;
-    }
-
-    addMetric(metric, color, intensity){
-        this.metricColors.set(metric, color);
+    addMetric(metric, colors, intensity){
+        this.metricColors.set(metric, colors);
         this.metricIntensities.set(metric, intensity);
-        this.colors = Array.from(this.metricColors.values());
+        this.resetColors();
     }
 
     removeMetric(metric){
         this.metricColors.delete(metric);
         this.metricIntensities.delete(metric);
-        this.colors = Array.from(this.metricColors.values());
+        this.resetColors();
+    }
+
+    /**
+     * Reset the color array and make sure every color appears only once.
+     */
+    resetColors(){
+        let colorSet = new Set();
+        for (let value of this.metricColors.values()) {
+            for (let color of value){
+                colorSet.add(color);
+            }
+        }
+        this.colors = Array.from(colorSet.values());
+        this.resetColorIndices();
     }
 
     getAnimationFrequency(){
@@ -51,20 +61,23 @@ class MetricAnimationBlinking extends MetricAnimation{
 
     getNextFromColor(){
         this.currentFromColorIndex++;
-        if (this.currentFromColorIndex >= this.metricColors.size){
+        if (this.currentFromColorIndex >= this.colors.length){
             this.currentFromColorIndex = 0;
         }
+        console.log("from-color: " + this.colors[this.currentFromColorIndex]);
         return this.colors[this.currentFromColorIndex];
     }
 
     getNextToColor(){
         if (this.colors.length === 1){
+            console.log("to-color: " + this.colors[0]);
             return this.colors[0];
         } else {
             this.currentToColorIndex++;
             if (this.currentToColorIndex >= this.colors.length){
                 this.currentToColorIndex = 0;
             }
+            console.log("to-color: " + this.colors[this.currentToColorIndex]);
             return this.colors[this.currentToColorIndex];
         }
     }

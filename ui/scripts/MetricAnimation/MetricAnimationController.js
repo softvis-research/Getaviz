@@ -4,6 +4,9 @@ var metricAnimationController = (function() {
     let activeAnimations = new Map();        // list of metricNames of the currently active animations
 
     var controllerConfig = {
+        widgetUi: "list",                   // # UI Type:
+                                             // - list
+                                             // - combobox
         minBlinkingFrequency: 3000,          // # milliseconds - min freq for blinking animation
         maxBlinkingFrequency: 500,           // # milliseconds - max freq for blinking animation
         metricValueTransformation: "square", // # transform the metric value to better differentiate values at the bounds
@@ -24,21 +27,232 @@ var metricAnimationController = (function() {
     }
 
     function activate(rootDiv){
+        switch (controllerConfig.widgetUi) {
+            case "list":
+                activateListUi(rootDiv);
+                break;
+            case "combobox":
+                activateComboboxUi(rootDiv);
+                break;
+            default:
+                let wrongUiTypeText = document.createTextNode("Wrong widgetUi in setup. Possible values: list, combobox");
+                rootDiv.append(wrongUiTypeText);
+                break;
+        }
+
+        initializeMetricMaxValues();
+    }
+
+    function getAvailableAnimations() {
+        let animationsMap = new Map();
+        animationsMap.set("blinking red", "blinking_red");
+        animationsMap.set("blinking green", "blinking_green");
+        animationsMap.set("blinking blue", "blinking_blue");
+        animationsMap.set("change size", "size");
+        return animationsMap;
+    }
+
+    function getAvailableAnimationsIncludingNothing() {
+        let animationsMap = new Map();
+        animationsMap.set("do nothing", "nothing");
+        getAvailableAnimations().forEach((value, key) => animationsMap.set(key, value));
+        return animationsMap;
+    }
+
+    function getAvailableMethodMetrics() {
+        let methodMetricsMap = new Map();
+        methodMetricsMap.set("incoming method calls", "CallsIn");
+        methodMetricsMap.set("outgoing method calls", "CallsOut");
+        return methodMetricsMap;
+    }
+
+    function getAvailableClassMetrics() {
+        let classMetricsMap = new Map();
+        classMetricsMap.set("number of attributes", "NrAttributes");
+        return classMetricsMap;
+    }
+
+    function getAvailableMetrics() {
+        let metricsMap = new Map([...getAvailableMethodMetrics(), ...getAvailableClassMetrics()]);
+        return metricsMap;
+    }
+
+    function activateListUi(rootDiv) {
+        let container = document.createElement("div");
+        container.setAttribute("class", "grid-container");
+        let leftCell = document.createElement("div");
+        let rightCell = document.createElement("div");
+        leftCell.setAttribute("class", "formular-grid-item-left");
+        rightCell.setAttribute("class", "formular-grid-item-right");
+
+        let listSize = Math.max(getAvailableMetrics().size, getAvailableAnimations().size);
+
+        let metricsList = document.createElement("select");
+        metricsList.setAttribute("size", listSize);
+        appendOptionsToSelectElement(metricsList, getAvailableMetrics());
+        metricsList.onchange = function () {metricListSelectionChanged(metricsList, animationList); };
+
+        let animationList = document.createElement("select");
+        animationList.setAttribute("size", listSize);
+        animationList.setAttribute("multiple", "multiple");
+        animationList.setAttribute("disabled", "disabled");
+        appendOptionsToSelectElement(animationList, getAvailableAnimations());
+        animationList.onchange = function () {animationListSelectionChanged(metricsList, animationList); };
+
+        leftCell.appendChild(metricsList);
+        rightCell.appendChild(animationList);
+        container.appendChild(leftCell);
+        container.appendChild(rightCell);
+        rootDiv.appendChild(container);
+    }
+
+    function metricListSelectionChanged(metricsList, animationList) {
+        if (metricsList.value !== undefined){
+            animationList.removeAttribute("disabled");
+            restoreAnimationsList(metricsList.value, animationList);
+        } else {
+            animationList.setAttribute("disabled", "disabled");
+        }
+    }
+
+    function animationListSelectionChanged(metricsList, animationList) {
+        let selectedAnimations = [];
+        for ( let i = 0; i < animationList.options.length; i++ )
+        {
+            let option = animationList.options[i];
+            if (option.selected){
+                selectedAnimations.push(option.value);
+            }
+        }
+        startAnimationsForMetric(metricsList.value, selectedAnimations);
+        activeAnimations.set(metricsList.value, selectedAnimations);
+    }
+
+    function restoreAnimationsList(metric, animationList) {
+        let activeMetricAnimations = activeAnimations.get(metric);
+        if (activeMetricAnimations === undefined){
+            activeMetricAnimations = [];
+        }
+        for ( let i = 0; i < animationList.options.length; i++ )
+        {
+            let option = animationList.options[i];
+            if (activeMetricAnimations.includes(option.value)){
+                option.selected = true;
+            } else {
+                option.selected = false;
+            }
+        }
+    }
+
+    function appendOptionsToSelectElement(selectElement, optionsMap) {
+        for (const [key, value] of optionsMap.entries()) {
+            let option = document.createElement("option");
+            option.setAttribute("value", value);
+            let optionLabel = document.createTextNode(key);
+            option.appendChild(optionLabel);
+            selectElement.appendChild(option);
+        }
+    }
+
+    function stopAnimationsForMetric(entities, metric) {
+        let runningAnimations = activeAnimations.get(metric);
+
+        if (runningAnimations.includes("size")){
+            entities.forEach(function (entity) {
+                canvasManipulator.stopExpandingAnimationForEntity(entity);
+            });
+        }
+        for (let i = 0; i < runningAnimations.length; i++){
+            if (runningAnimations[i].startsWith("blinking_")){
+                entities.forEach(function (entity) {
+                    canvasManipulator.stopBlinkingAnimationForEntity(entity);
+                });
+                i = runningAnimations.length;
+            }
+        }
+
+        activeAnimations.delete(metric);
+    }
+
+    function startAnimationsForMetric(metric, animations) {
+        let entities;
+        if (Array.from(getAvailableMethodMetrics().values()).includes(metric)){
+            entities = model.getEntitiesByType("Method");
+        }
+        else if (Array.from(getAvailableClassMetrics().values()).includes(metric)){
+            entities = model.getEntitiesByType("Class");
+        }
+
+        if (activeAnimations.has(metric)){
+            // if there are already running animations for this metric: stop them!
+            stopAnimationsForMetric(entities, metric);
+        }
+
+        let blinkingColors = [];
+        animations.forEach(function (animation) {
+            if (animation.startsWith("blinking_")){
+                let color = animation.substring("blinking_".length);
+                blinkingColors.push(color);
+            }
+            else if (animation === "size") {
+                entities.forEach(function (entity) {
+                    let intensity = getAnimationIntensity(entity, metric);
+                    if (intensity > 0) {
+                        // expandingAnimation get's not stored as entity attribute, because this is not necessary by now
+                        let expandingAnimation = new MetricAnimationExpanding(controllerConfig.expandAnimationType,
+                            controllerConfig.minExpandingFrequency, controllerConfig.maxExpandingFrequency,
+                            controllerConfig.maxExpandingScale, controllerConfig.defaultExpandScale, intensity);
+
+                        canvasManipulator.startExpandingAnimationForEntity(entity, expandingAnimation);
+                    }
+                });
+            }
+        });
+        if (blinkingColors.length > 0){
+            entities.forEach(function (entity) {
+                let intensity = getAnimationIntensity(entity, metric);
+                if (intensity > 0){
+                    // if the entity has already a blinking animation, add the color, create a new one else
+                    let blinkingAnimation = entity.metricAnimationBlinking;
+                    if (blinkingAnimation === undefined){
+                        blinkingAnimation = new MetricAnimationBlinking(controllerConfig.minBlinkingFrequency, controllerConfig.maxBlinkingFrequency);
+                        blinkingAnimation.addMetric(metric, blinkingColors, intensity);
+                        entity.metricAnimationBlinking = blinkingAnimation;
+                    } else {
+                        canvasManipulator.stopBlinkingAnimationForEntity(entity);   // stop the existing blinking animation before starting a new one
+                        blinkingAnimation.addMetric(metric, blinkingColors, intensity);
+                    }
+                    canvasManipulator.startBlinkingAnimationForEntity(entity, blinkingAnimation);
+                }
+            });
+        }
+        if (animations.length === 0){
+            entities.forEach(function (entity) {
+                let blinkingAnimation = entity.metricAnimationBlinking;
+                if (blinkingAnimation !== undefined){
+                    blinkingAnimation.removeMetric(metric);
+                    if (blinkingAnimation.hasMetric()){
+                        canvasManipulator.startBlinkingAnimationForEntity(entity, blinkingAnimation);
+                    }
+                }
+            });
+        }
+    }
+
+    function activateComboboxUi(rootDiv) {
         let containerMethods= document.createElement("div");
-        containerMethods.setAttribute("class", "grid-container")
+        containerMethods.setAttribute("class", "grid-container");
         let containerClasses= document.createElement("div");
         containerClasses.setAttribute("class", "grid-container");
 
-        appendHeader(rootDiv,"Method Metrics:")
-        appendMetricSelectionUiComponent(containerMethods, "CallsIn", "incoming method calls:")
-        appendMetricSelectionUiComponent(containerMethods, "CallsOut","outgoing method calls:")
+        appendHeader(rootDiv,"Method Metrics:");
+        appendMetricSelectionUiComponent(containerMethods, "CallsIn", "incoming method calls:");
+        appendMetricSelectionUiComponent(containerMethods, "CallsOut","outgoing method calls:");
         rootDiv.appendChild(containerMethods);
 
-        appendHeader(rootDiv,"Class Metrics:")
-        appendMetricSelectionUiComponent(containerClasses, "NrAttributes","number of attributes:")
+        appendHeader(rootDiv,"Class Metrics:");
+        appendMetricSelectionUiComponent(containerClasses, "NrAttributes","number of attributes:");
         rootDiv.appendChild(containerClasses);
-
-        initializeMetricMaxValues();
     }
 
     function appendHeader(container, headerText) {
@@ -54,64 +268,32 @@ var metricAnimationController = (function() {
         rightCell.setAttribute("class", "formular-grid-item-right");
         let labelElement = document.createTextNode(metricLabel);
         let selectElement = document.createElement("select");
-        selectElement.id = "select" + metric;
-        let option0 = document.createElement("option");
-        let option1 = document.createElement("option");
-        let option2 = document.createElement("option");
-        let option3 = document.createElement("option");
-        let option4 = document.createElement("option");
-        option0.setAttribute("value", "nothing");
-        option1.setAttribute("value", "blinking_red");
-        option2.setAttribute("value", "blinking_green");
-        option3.setAttribute("value", "blinking_blue");
-        option4.setAttribute("value", "size");
-        let labelOption0 = document.createTextNode("do nothing");
-        let labelOption1 = document.createTextNode("blinking red");
-        let labelOption2 = document.createTextNode("blinking green");
-        let labelOption3 = document.createTextNode("blinking blue");
-        let labelOption4 = document.createTextNode("change size");
-        option0.appendChild(labelOption0);
-        option1.appendChild(labelOption1);
-        option2.appendChild(labelOption2);
-        option3.appendChild(labelOption3);
-        option4.appendChild(labelOption4);
-        selectElement.appendChild(option0);
-        selectElement.appendChild(option1);
-        selectElement.appendChild(option2);
-        selectElement.appendChild(option3);
-        selectElement.appendChild(option4);
-        selectElement.onchange = function () {metricSelectionChanged(this); };
+        appendOptionsToSelectElement(selectElement, getAvailableAnimationsIncludingNothing());
+        selectElement.onchange = function () {metricSelectionChanged(this, metric); };
         leftCell.appendChild(labelElement);
         rightCell.appendChild(selectElement);
         container.appendChild(leftCell);
         container.appendChild(rightCell);
     }
 
-    function metricSelectionChanged(sel) {
-        let selectedMetric = sel.id.substring("select".length);
-        let selectedVisualization = sel.value;
+    function metricSelectionChanged(sel, metric) {
+        let selectedAnimation = sel.value;
 
-        const methods = model.getEntitiesByType("Method");
-        const classes = model.getEntitiesByType("Class");
-
-        switch(selectedMetric) {
-            case "CallsIn":
-                startAnimationForEntities(methods, selectedMetric, selectedVisualization);
-                break;
-            case "CallsOut":
-                startAnimationForEntities(methods, selectedMetric, selectedVisualization);
-                break;
-            case "NrAttributes":
-                startAnimationForEntities(classes, selectedMetric, selectedVisualization);
-                break;
-            default:
-                events.log.error.publish({text: "MetricAnimationController - metricSelectionChanged - unknown metric: " + selectedMetric});
-                return;
+        let entities;
+        if (Array.from(getAvailableMethodMetrics().values()).includes(metric)){
+            entities = model.getEntitiesByType("Method");
+        }
+        else if (Array.from(getAvailableClassMetrics().values()).includes(metric)){
+            entities = model.getEntitiesByType("Class");
+        }
+        else {
+            events.log.error.publish({text: "MetricAnimationController - metricSelectionChanged - unknown metric: " + metric});
+            return;
         }
 
-        activeAnimations.set(selectedMetric, selectedVisualization);
+        startAnimationForEntities(entities, metric, selectedAnimation);
+        activeAnimations.set(metric, selectedAnimation);
     }
-
 
     function startAnimationForEntities(entities, metric, animation) {
 
@@ -130,11 +312,11 @@ var metricAnimationController = (function() {
                     let blinkingAnimation = entity.metricAnimationBlinking;
                     if (blinkingAnimation === undefined){
                         blinkingAnimation = new MetricAnimationBlinking(controllerConfig.minBlinkingFrequency, controllerConfig.maxBlinkingFrequency);
-                        blinkingAnimation.addMetric(metric, color, intensity);
+                        blinkingAnimation.addMetric(metric, [color], intensity);
                         entity.metricAnimationBlinking = blinkingAnimation;
                     } else {
                         canvasManipulator.stopBlinkingAnimationForEntity(entity);   // stop the existing blinking animation before starting a new one
-                        blinkingAnimation.addMetric(metric, color, intensity);
+                        blinkingAnimation.addMetric(metric, [color], intensity);
                     }
                     canvasManipulator.startBlinkingAnimationForEntity(entity, blinkingAnimation);
                 }

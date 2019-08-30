@@ -1,4 +1,3 @@
-- alternative ui: lists
 
 
 // https://aframe.io/docs/0.9.0/components/animation.html
