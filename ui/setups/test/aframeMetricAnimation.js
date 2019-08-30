@@ -58,8 +58,9 @@
 		},
 
         { 	name: 	"metricAnimationController",
-            widgetUi: "list",
+            widgetUi: "combobox",
             metricValueTransformation: "square",
+            blinkingAnimationColors: [ "red", "green", "blue" ],
             minBlinkingFrequency: 3000,
             maxBlinkingFrequency: 100,
             expandAnimationType: "frequency",

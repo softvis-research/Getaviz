@@ -64,20 +64,17 @@ class MetricAnimationBlinking extends MetricAnimation{
         if (this.currentFromColorIndex >= this.colors.length){
             this.currentFromColorIndex = 0;
         }
-        console.log("from-color: " + this.colors[this.currentFromColorIndex]);
         return this.colors[this.currentFromColorIndex];
     }
 
     getNextToColor(){
         if (this.colors.length === 1){
-            console.log("to-color: " + this.colors[0]);
             return this.colors[0];
         } else {
             this.currentToColorIndex++;
             if (this.currentToColorIndex >= this.colors.length){
                 this.currentToColorIndex = 0;
             }
-            console.log("to-color: " + this.colors[this.currentToColorIndex]);
             return this.colors[this.currentToColorIndex];
         }
     }
