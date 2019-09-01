@@ -59,7 +59,7 @@
 
         { 	name: 	"metricAnimationController",
             widgetUi: "list",
-            metricValueTransformation: "square",
+            metricValueTransformation: "logarithmic",
             colorAnimationColors: [ "red", "green", "blue" ],
             minColorChangeFrequency: 3000,
             maxColorChangeFrequency: 100,

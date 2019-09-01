@@ -3,24 +3,7 @@ class MetricAnimationColor extends MetricAnimation{
         super(minFrequency, maxFrequency);
 
         this.metricColors = new Map();
-        this.metricIntensities = new Map();
         this.colors = [];
-    }
-
-    hasAnyMetric(){
-        if (this.metricColors.size > 0){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    hasMetric(metric){
-        if (this.metricColors.has(metric)){
-            return true;
-        } else {
-            return false;
-        }
     }
 
     addMetric(metric, colors, intensity){
@@ -47,19 +30,6 @@ class MetricAnimationColor extends MetricAnimation{
         }
         this.colors = Array.from(colorSet.values());
         this.resetColorIndices();
-    }
-
-    getAnimationFrequency(){
-        // 1. get average intensity
-        let avgIntensity = 0;
-        let intensity;
-        for (intensity of this.metricIntensities.values()){
-            avgIntensity += intensity;
-        }
-        avgIntensity = avgIntensity / this.metricIntensities.size;
-
-        // 2. linear scale between min and max value
-        return super.getAnimationFrequency(avgIntensity);
     }
 
     resetColorIndices(){

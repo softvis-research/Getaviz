@@ -225,19 +225,6 @@ var metricAnimationController = (function() {
         }
     }
 
-    function stopAnimationsForMetric(entities, metric) {
-        let runningAnimations = activeAnimations.get(metric);
-
-        if (runningAnimations.includes("expanding")){
-            entities.forEach(function (entity) {
-                canvasManipulator.stopExpandingAnimationForEntity(entity);
-            });
-        }
-        removeColorAnimationForMetricAndRestartRemaining(entities, metric);
-
-        activeAnimations.delete(metric);
-    }
-
     function startAnimationsForMetric(metric, animations) {
         let entities;
         if (Array.from(availableMethodMetrics.values()).includes(metric)){
@@ -282,12 +269,11 @@ var metricAnimationController = (function() {
                 if (colorAnimation === undefined){
                     colorAnimation = new MetricAnimationColor(controllerConfig.minColorChangeFrequency,
                         controllerConfig.maxColorChangeFrequency);
-                    colorAnimation.addMetric(metric, blinkingColors, intensity);
-                    entity.metricAnimationColor = colorAnimation;
                 } else {
                     canvasManipulator.stopColorAnimationForEntity(entity);   // stop the existing color animation before starting a new one
-                    colorAnimation.addMetric(metric, blinkingColors, intensity);
                 }
+                colorAnimation.addMetric(metric, blinkingColors, intensity);
+                entity.metricAnimationColor = colorAnimation;
                 canvasManipulator.startColorAnimationForEntity(entity, colorAnimation);
             }
         });
@@ -297,14 +283,29 @@ var metricAnimationController = (function() {
         entities.forEach(function (entity) {
             let intensity = getAnimationIntensity(entity, metric);
             if (intensity > 0) {
-                // expandingAnimation get's not stored as entity attribute, because this is not necessary by now
-                let expandingAnimation = new MetricAnimationExpanding(controllerConfig.expandAnimationType,
-                    controllerConfig.minExpandingFrequency, controllerConfig.maxExpandingFrequency,
-                    controllerConfig.maxExpandingScale, controllerConfig.defaultExpandScale, intensity);
+                let expandingAnimation = entity.metricAnimationExpanding;
+                if (expandingAnimation === undefined){
+                    expandingAnimation = new MetricAnimationExpanding(controllerConfig.expandingAnimationType,
+                        controllerConfig.minExpandingFrequency, controllerConfig.maxExpandingFrequency,
+                        controllerConfig.maxExpandingScale, controllerConfig.defaultExpandScale);
+                }
+                expandingAnimation.addMetric(metric, intensity);
+                entity.metricAnimationExpanding = expandingAnimation;
 
                 canvasManipulator.startExpandingAnimationForEntity(entity, expandingAnimation);
             }
         });
+    }
+
+    function stopAnimationsForMetric(entities, metric) {
+        let runningAnimations = activeAnimations.get(metric);
+
+        if (runningAnimations.includes("expanding")){
+            removeExpandingAnimationForMetricAndRestartRemaining(entities, metric);
+        }
+        removeColorAnimationForMetricAndRestartRemaining(entities, metric);
+
+        activeAnimations.delete(metric);
     }
 
     /**
@@ -315,14 +316,32 @@ var metricAnimationController = (function() {
         entities.forEach(function (entity) {
             let colorAnimation = entity.metricAnimationColor;
             if (colorAnimation !== undefined){
-                // stop color animation for this metric and remove it
                 if (colorAnimation.hasMetric(metric)){
+                    // stop color animation for this metric and remove it
                     colorAnimation.removeMetric(metric);
                     canvasManipulator.stopColorAnimationForEntity(entity);
+                    // is there another metric left? Restart color animation for the other metric
+                    if (colorAnimation.hasAnyMetric()){
+                        canvasManipulator.startColorAnimationForEntity(entity, colorAnimation);
+                    }
                 }
-                // is there another metric left? Restart color animation for the other metric
-                if (colorAnimation.hasAnyMetric()){
-                    canvasManipulator.startColorAnimationForEntity(entity, colorAnimation);
+            }
+        });
+    }
+
+    function removeExpandingAnimationForMetricAndRestartRemaining(entities, metric) {
+        entities.forEach(function (entity) {
+            let expandingAnimation = entity.metricAnimationExpanding;
+            if (expandingAnimation !== undefined){
+                if (expandingAnimation.hasMetric(metric)){
+                    // remove metric from animation
+                    expandingAnimation.removeMetric(metric);
+                    // is there another metric left? Restart animation for the other metric
+                    if (expandingAnimation.hasAnyMetric()){
+                        canvasManipulator.startExpandingAnimationForEntity(entity, expandingAnimation);
+                    } else {
+                        canvasManipulator.stopExpandingAnimationForEntity(entity);
+                    }
                 }
             }
         });
