@@ -233,14 +233,7 @@ var metricAnimationController = (function() {
                 canvasManipulator.stopExpandingAnimationForEntity(entity);
             });
         }
-        for (let i = 0; i < runningAnimations.length; i++){
-            if (runningAnimations[i].startsWith("color_")){
-                entities.forEach(function (entity) {
-                    canvasManipulator.stopColorAnimationForEntity(entity);
-                });
-                i = runningAnimations.length;
-            }
-        }
+        removeColorAnimationForMetricAndRestartRemaining(entities, metric);
 
         activeAnimations.delete(metric);
     }
@@ -322,8 +315,13 @@ var metricAnimationController = (function() {
         entities.forEach(function (entity) {
             let colorAnimation = entity.metricAnimationColor;
             if (colorAnimation !== undefined){
-                colorAnimation.removeMetric(metric);
-                if (colorAnimation.hasMetric()){
+                // stop color animation for this metric and remove it
+                if (colorAnimation.hasMetric(metric)){
+                    colorAnimation.removeMetric(metric);
+                    canvasManipulator.stopColorAnimationForEntity(entity);
+                }
+                // is there another metric left? Restart color animation for the other metric
+                if (colorAnimation.hasAnyMetric()){
                     canvasManipulator.startColorAnimationForEntity(entity, colorAnimation);
                 }
             }

@@ -7,8 +7,16 @@ class MetricAnimationColor extends MetricAnimation{
         this.colors = [];
     }
 
-    hasMetric(){
+    hasAnyMetric(){
         if (this.metricColors.size > 0){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    hasMetric(metric){
+        if (this.metricColors.has(metric)){
             return true;
         } else {
             return false;
