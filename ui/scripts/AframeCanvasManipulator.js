@@ -67,80 +67,80 @@ var canvasManipulator = (function () {
         });
     }
 
-    function startBlinkingAnimationForEntity(entity, blinkingAnimation) {
+    function startColorAnimationForEntity(entity, colorAnimation) {
         if (!(entity == undefined)) {
             var component = document.getElementById(entity.id);
         }
         if (component == undefined) {
-            events.log.error.publish({text: "CanvasManipualtor - startBlinkingAnimationForEntities - component for entityId not found"});
+            events.log.error.publish({text: "CanvasManipualtor - startColorAnimationForEntity - component for entityId not found"});
             return;
         }
 
         let originalColor = component.getAttribute("color");
-        component.setAttribute("color-before-blinking", originalColor);
+        component.setAttribute("color-before-animation", originalColor);
 
-        let blinkingFrequency = blinkingAnimation.getAnimationFrequency();
+        let colorAnimationFrequency = colorAnimation.getAnimationFrequency();
 
-        if (blinkingAnimation.colors.length === 1){
-            component.setAttribute("animation__blinking",
+        if (colorAnimation.colors.length === 1){
+            component.setAttribute("animation__color",
                 "property: components.material.material.color; type: color; from: " + originalColor +
-                "; to: " + blinkingAnimation.getNextToColor() + "; dur: " + blinkingFrequency + "; loop: true; dir: alternate");
+                "; to: " + colorAnimation.getNextToColor() + "; dur: " + colorAnimationFrequency + "; loop: true; dir: alternate");
         } else {
-            for (i = 1; i <= blinkingAnimation.colors.length; i++) {
+            for (i = 1; i <= colorAnimation.colors.length; i++) {
                 // in general each color animation starts when the predecessor ends
-                let startEvents = "animationcomplete__blinking_" + (i -1);
+                let startEvents = "animationcomplete__color_" + (i -1);
                 if (i === 1){
                     // the first color animation starts when the last ends
-                    startEvents = "animationcomplete__blinking_" + blinkingAnimation.colors.length;
+                    startEvents = "animationcomplete__color_" + colorAnimation.colors.length;
                 } else if (i === 2){
                     // the second color animation starts after the first and after the initializer
-                    startEvents = "animationcomplete__blinking_" + 1 + ", animationcomplete__blinking_" + 0;
+                    startEvents = "animationcomplete__color_" + 1 + ", animationcomplete__color_" + 0;
                 }
 
-                component.setAttribute("animation__blinking_" + i,
-                    "property: components.material.material.color; type: color; from: " + blinkingAnimation.getNextFromColor() +
-                    "; to: " + blinkingAnimation.getNextToColor() + "; dur: " + blinkingFrequency + "; startEvents: " + startEvents);
+                component.setAttribute("animation__color_" + i,
+                    "property: components.material.material.color; type: color; from: " + colorAnimation.getNextFromColor() +
+                    "; to: " + colorAnimation.getNextToColor() + "; dur: " + colorAnimationFrequency + "; startEvents: " + startEvents);
             }
             // the initializing color animation has no start event
-            component.setAttribute("animation__blinking_" + 0,
-                "property: components.material.material.color; type: color; from: " + blinkingAnimation.getNextFromColor() +
-                "; to: " + blinkingAnimation.getNextToColor() + "; dur: " + blinkingFrequency);
+            component.setAttribute("animation__color_" + 0,
+                "property: components.material.material.color; type: color; from: " + colorAnimation.getNextFromColor() +
+                "; to: " + colorAnimation.getNextToColor() + "; dur: " + colorAnimationFrequency);
         }
 
-        blinkingAnimation.resetColorIndices();
+        colorAnimation.resetColorIndices();
     }
 
-    function stopBlinkingAnimationForEntity(entity) {
+    function stopColorAnimationForEntity(entity) {
         if (!(entity == undefined)) {
             var component = document.getElementById(entity.id);
         }
         if (component == undefined) {
-            events.log.error.publish({text: "CanvasManipualtor - stopBlinkingAnimationForEntity - component for entityId not found"});
+            events.log.error.publish({text: "CanvasManipualtor - stopColorAnimationForEntity - component for entityId not found"});
             return;
         }
 
         let attributeNames = component.getAttributeNames();
         attributeNames.forEach(function (attributeName) {
-            if (attributeName.startsWith("animation__blinking")){
+            if (attributeName.startsWith("animation__color")){
                 component.removeAttribute(attributeName);
             }
         });
 
-        let originalColor = component.getAttribute("color-before-blinking");
+        let originalColor = component.getAttribute("color-before-animation");
         if (originalColor !== null){
-            // only change the color back if there was a blinking animation before
-            component.setAttribute("animation__blinking_off",
+            // only change the color back if there was a color animation before
+            component.setAttribute("animation__color_off",
                 "property: components.material.material.color; type: color; from: " + originalColor +
                 "; to: " + originalColor + "; dur: 0; loop: false");
         }
 
         // remark:
-        // A nice way would be to remove all of the blinking animation attributes.
-        // But this leads to components staying in their current blinking color.
+        // A nice way would be to remove all of the color animation attributes.
+        // But this leads to components staying in their current animation color.
         // Changing the color of the component back to original color does not work,
         // because aframe thinks its still in this color.
         // So this workaround is used: the components blink immediately back to its original color without a loop.
-        // This costs no further performance. Just the "animation__blinking_off" attribute is left.
+        // This costs no further performance. Just the "animation__color_off" attribute is left.
         //
         // setColor(component, originalColor);          // looks nice, does not work
     }
@@ -340,8 +340,8 @@ var canvasManipulator = (function () {
         changeTransparencyOfEntities: changeTransparencyOfEntities,
         resetTransparencyOfEntities: resetTransparencyOfEntities,
 
-        startBlinkingAnimationForEntity : startBlinkingAnimationForEntity,
-        stopBlinkingAnimationForEntity : stopBlinkingAnimationForEntity,
+        startColorAnimationForEntity : startColorAnimationForEntity,
+        stopColorAnimationForEntity : stopColorAnimationForEntity,
 
         startExpandingAnimationForEntity : startExpandingAnimationForEntity,
         stopExpandingAnimationForEntity : stopExpandingAnimationForEntity,

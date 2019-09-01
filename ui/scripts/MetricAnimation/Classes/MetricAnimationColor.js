@@ -1,4 +1,4 @@
-class MetricAnimationBlinking extends MetricAnimation{
+class MetricAnimationColor extends MetricAnimation{
     constructor(minFrequency, maxFrequency){
         super(minFrequency, maxFrequency);
 

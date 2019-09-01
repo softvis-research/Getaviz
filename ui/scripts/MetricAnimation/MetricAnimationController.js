@@ -12,14 +12,14 @@ var metricAnimationController = (function() {
         widgetUi: "list",                    // # UI Type:
                                              // - list
                                              // - combobox
-        blinkingAnimationColors:             // # available colors for blinking animation
+        colorAnimationColors:                // # available colors for color animation
             [ "red", "green", "blue" ],
-        minBlinkingFrequency: 3000,          // # milliseconds - min freq for blinking animation
-        maxBlinkingFrequency: 500,           // # milliseconds - max freq for blinking animation
+        minColorChangeFrequency: 3000,       // # milliseconds - min freq for color animation
+        maxColorChangeFrequency: 500,        // # milliseconds - max freq for color animation
         metricValueTransformation: "square", // # transform the metric value to better differentiate values at the bounds
                                              // - focus on low values: 'logarithmic', 'root'
                                              // - focus on high values: 'square'
-        expandAnimationType: "frequency",    // # type of the expanding animation
+        expandingAnimationType: "frequency", // # type of the expanding animation
                                              // - frequency: grow and shrink to the double size - metricValue = frequency
                                              // - size: grow and shrink to a size depending on the metric value
         minExpandingFrequency: 3000,         // # milliseconds - min freq for expanding animation
@@ -35,10 +35,10 @@ var metricAnimationController = (function() {
     }
 
     function initializeAvailableMetrics() {
-        for (let color of controllerConfig.blinkingAnimationColors){
-            availableAnimations.set("blinking " + color, "blinking_" + color);
+        for (let color of controllerConfig.colorAnimationColors){
+            availableAnimations.set("blinking " + color, "color_" + color);
         }
-        availableAnimations.set("change size", "size");
+        availableAnimations.set("change size", "expanding");
 
         availableAnimationsIncludingNothing.set("do nothing", "nothing");
         availableAnimations.forEach((value, key) => availableAnimationsIncludingNothing.set(key, value));
@@ -49,6 +49,18 @@ var metricAnimationController = (function() {
         availableClassMetrics.set("number of attributes", "NrAttributes");
 
         availableMetrics = new Map([...availableMethodMetrics, ...availableClassMetrics]);
+    }
+
+    function initializeMetricMaxValues() {
+        const methods = model.getEntitiesByType("Method");
+        const classes = model.getEntitiesByType("Class");
+
+        for (let [desc, methodMetric] of availableMethodMetrics) {
+            metricMaxValues.set(methodMetric, getMetricMaxValueOfCollection(methods, methodMetric));
+        }
+        for (let [desc, classMetric] of availableClassMetrics) {
+            metricMaxValues.set(classMetric, getMetricMaxValueOfCollection(classes, classMetric));
+        }
     }
 
     function activate(rootDiv){
@@ -216,15 +228,15 @@ var metricAnimationController = (function() {
     function stopAnimationsForMetric(entities, metric) {
         let runningAnimations = activeAnimations.get(metric);
 
-        if (runningAnimations.includes("size")){
+        if (runningAnimations.includes("expanding")){
             entities.forEach(function (entity) {
                 canvasManipulator.stopExpandingAnimationForEntity(entity);
             });
         }
         for (let i = 0; i < runningAnimations.length; i++){
-            if (runningAnimations[i].startsWith("blinking_")){
+            if (runningAnimations[i].startsWith("color_")){
                 entities.forEach(function (entity) {
-                    canvasManipulator.stopBlinkingAnimationForEntity(entity);
+                    canvasManipulator.stopColorAnimationForEntity(entity);
                 });
                 i = runningAnimations.length;
             }
@@ -249,61 +261,70 @@ var metricAnimationController = (function() {
 
         let blinkingColors = [];
         animations.forEach(function (animation) {
-            if (animation.startsWith("blinking_")){
-                let color = animation.substring("blinking_".length);
+            if (animation.startsWith("color_")){
+                let color = animation.substring("color_".length);
                 blinkingColors.push(color);
             }
-            else if (animation === "size") {
-                entities.forEach(function (entity) {
-                    let intensity = getAnimationIntensity(entity, metric);
-                    if (intensity > 0) {
-                        // expandingAnimation get's not stored as entity attribute, because this is not necessary by now
-                        let expandingAnimation = new MetricAnimationExpanding(controllerConfig.expandAnimationType,
-                            controllerConfig.minExpandingFrequency, controllerConfig.maxExpandingFrequency,
-                            controllerConfig.maxExpandingScale, controllerConfig.defaultExpandScale, intensity);
-
-                        canvasManipulator.startExpandingAnimationForEntity(entity, expandingAnimation);
-                    }
-                });
+            else if (animation === "expanding") {
+                startExpandingAnimation(entities, metric);
             }
             else if (animation === "nothing"){
-                removeBlinkingAnimationForMetricAndRestartRemaining(entities, metric);
+                removeColorAnimationForMetricAndRestartRemaining(entities, metric);
             }
         });
         if (blinkingColors.length > 0){
-            entities.forEach(function (entity) {
-                let intensity = getAnimationIntensity(entity, metric);
-                if (intensity > 0){
-                    // if the entity has already a blinking animation, add the color, create a new one else
-                    let blinkingAnimation = entity.metricAnimationBlinking;
-                    if (blinkingAnimation === undefined){
-                        blinkingAnimation = new MetricAnimationBlinking(controllerConfig.minBlinkingFrequency, controllerConfig.maxBlinkingFrequency);
-                        blinkingAnimation.addMetric(metric, blinkingColors, intensity);
-                        entity.metricAnimationBlinking = blinkingAnimation;
-                    } else {
-                        canvasManipulator.stopBlinkingAnimationForEntity(entity);   // stop the existing blinking animation before starting a new one
-                        blinkingAnimation.addMetric(metric, blinkingColors, intensity);
-                    }
-                    canvasManipulator.startBlinkingAnimationForEntity(entity, blinkingAnimation);
-                }
-            });
+            startColorAnimation(entities, blinkingColors, metric);
         }
         if (animations.length === 0){
-            removeBlinkingAnimationForMetricAndRestartRemaining(entities, metric);
+            removeColorAnimationForMetricAndRestartRemaining(entities, metric);
         }
     }
 
-    /**
-     * Deletes the metric from the entities blinkingAnimations.
-     * Restarts the remaining blinking animations for other metrics of the entity, if they where running.
-     */
-    function removeBlinkingAnimationForMetricAndRestartRemaining(entities, metric) {
+    function startColorAnimation(entities, blinkingColors, metric) {
         entities.forEach(function (entity) {
-            let blinkingAnimation = entity.metricAnimationBlinking;
-            if (blinkingAnimation !== undefined){
-                blinkingAnimation.removeMetric(metric);
-                if (blinkingAnimation.hasMetric()){
-                    canvasManipulator.startBlinkingAnimationForEntity(entity, blinkingAnimation);
+            let intensity = getAnimationIntensity(entity, metric);
+            if (intensity > 0){
+                // if the entity has already a color animation, add the color, create a new one else
+                let colorAnimation = entity.metricAnimationColor;
+                if (colorAnimation === undefined){
+                    colorAnimation = new MetricAnimationColor(controllerConfig.minColorChangeFrequency,
+                        controllerConfig.maxColorChangeFrequency);
+                    colorAnimation.addMetric(metric, blinkingColors, intensity);
+                    entity.metricAnimationColor = colorAnimation;
+                } else {
+                    canvasManipulator.stopColorAnimationForEntity(entity);   // stop the existing color animation before starting a new one
+                    colorAnimation.addMetric(metric, blinkingColors, intensity);
+                }
+                canvasManipulator.startColorAnimationForEntity(entity, colorAnimation);
+            }
+        });
+    }
+
+    function startExpandingAnimation(entities, metric) {
+        entities.forEach(function (entity) {
+            let intensity = getAnimationIntensity(entity, metric);
+            if (intensity > 0) {
+                // expandingAnimation get's not stored as entity attribute, because this is not necessary by now
+                let expandingAnimation = new MetricAnimationExpanding(controllerConfig.expandAnimationType,
+                    controllerConfig.minExpandingFrequency, controllerConfig.maxExpandingFrequency,
+                    controllerConfig.maxExpandingScale, controllerConfig.defaultExpandScale, intensity);
+
+                canvasManipulator.startExpandingAnimationForEntity(entity, expandingAnimation);
+            }
+        });
+    }
+
+    /**
+     * Deletes the metric from the entities colorAnimations.
+     * Restarts the remaining color animations for other metrics of the entity, if they where running.
+     */
+    function removeColorAnimationForMetricAndRestartRemaining(entities, metric) {
+        entities.forEach(function (entity) {
+            let colorAnimation = entity.metricAnimationColor;
+            if (colorAnimation !== undefined){
+                colorAnimation.removeMetric(metric);
+                if (colorAnimation.hasMetric()){
+                    canvasManipulator.startColorAnimationForEntity(entity, colorAnimation);
                 }
             }
         });
@@ -347,15 +368,6 @@ var metricAnimationController = (function() {
             events.log.error.publish({text: "MetricAnimationController - getMetricMaxValue - maxValue for metric not found"});
         }
         return maxValue;
-    }
-
-    function initializeMetricMaxValues() {
-        const methods = model.getEntitiesByType("Method");
-        const classes = model.getEntitiesByType("Class");
-
-        metricMaxValues.set("CallsIn", getMetricMaxValueOfCollection(methods, "CallsIn"));
-        metricMaxValues.set("CallsOut", getMetricMaxValueOfCollection(methods, "CallsOut"));
-        metricMaxValues.set("NrAttributes", getMetricMaxValueOfCollection(classes, "NrAttributes"));
     }
 
     function getMetricMaxValueOfCollection(entities, metric) {
