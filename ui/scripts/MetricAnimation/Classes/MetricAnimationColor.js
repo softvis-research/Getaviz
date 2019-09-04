@@ -1,3 +1,7 @@
+/**
+ * Class for color animations. Stores information about different metrics and their animation intensities
+ * for an entity.
+ */
 class MetricAnimationColor extends MetricAnimation{
     constructor(minFrequency, maxFrequency){
         super(minFrequency, maxFrequency);
@@ -6,12 +10,18 @@ class MetricAnimationColor extends MetricAnimation{
         this.colors = [];
     }
 
+    /**
+     * Adds a metric with an array of animationColors to this animation.
+     */
     addMetric(metric, colors, intensity){
         this.metricColors.set(metric, colors);
         this.metricIntensities.set(metric, intensity);
         this.resetColors();
     }
 
+    /**
+     * Removes a metric from this animation.
+     */
     removeMetric(metric){
         this.metricColors.delete(metric);
         this.metricIntensities.delete(metric);
@@ -32,11 +42,17 @@ class MetricAnimationColor extends MetricAnimation{
         this.resetColorIndices();
     }
 
+    /**
+     * Reset the color iteration indices, so the next iteration over the colors can start again from the beginning.
+     */
     resetColorIndices(){
         this.currentFromColorIndex = -1;
         this.currentToColorIndex = 0;
     }
 
+    /**
+     * Iterates to the next startColor of this animation and returns it.
+     */
     getNextFromColor(){
         this.currentFromColorIndex++;
         if (this.currentFromColorIndex >= this.colors.length){
@@ -45,6 +61,9 @@ class MetricAnimationColor extends MetricAnimation{
         return this.colors[this.currentFromColorIndex];
     }
 
+    /**
+     * Iterates to the next targetColor of this animation and returns it.
+     */
     getNextToColor(){
         if (this.colors.length === 1){
             return this.colors[0];

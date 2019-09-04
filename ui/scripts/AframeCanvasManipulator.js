@@ -67,6 +67,9 @@ var canvasManipulator = (function () {
         });
     }
 
+    /**
+     * Starts the metric dependent color animation for the entity.
+     */
     function startColorAnimationForEntity(entity, colorAnimation) {
         if (!(entity == undefined)) {
             var component = document.getElementById(entity.id);
@@ -82,10 +85,12 @@ var canvasManipulator = (function () {
         let colorAnimationFrequency = colorAnimation.getAnimationFrequency();
 
         if (colorAnimation.colors.length === 1){
+            // if there is only one color: just start a normal animation loop between the original color and the specified one
             component.setAttribute("animation__color",
                 "property: components.material.material.color; type: color; from: " + originalColor +
                 "; to: " + colorAnimation.getNextToColor() + "; dur: " + colorAnimationFrequency + "; loop: true; dir: alternate");
         } else {
+            // if there are multiple colors: loop through the color animations triggered by events
             for (i = 1; i <= colorAnimation.colors.length; i++) {
                 // in general each color animation starts when the predecessor ends
                 let startEvents = "animationcomplete__color_" + (i -1);
@@ -110,6 +115,9 @@ var canvasManipulator = (function () {
         colorAnimation.resetColorIndices();
     }
 
+    /**
+     * Stops the metric animated color animation for the entity and resets its color to the value before the animation started.
+     */
     function stopColorAnimationForEntity(entity) {
         if (!(entity == undefined)) {
             var component = document.getElementById(entity.id);
@@ -145,6 +153,9 @@ var canvasManipulator = (function () {
         // setColor(component, originalColor);          // looks nice, does not work
     }
 
+    /**
+     * Starts the metric dependent expanding animation for the entity.
+     */
     function startExpandingAnimationForEntity(entity, expandingAnimation) {
         if (!(entity == undefined)) {
             var component = document.getElementById(entity.id);
@@ -163,6 +174,10 @@ var canvasManipulator = (function () {
 
     }
 
+    /**
+     * Stops the metric dependent expanding animation for the entity.
+     * Resets the entities scale back to its original value.
+     */
     function stopExpandingAnimationForEntity(entity) {
         if (!(entity == undefined)) {
             var component = document.getElementById(entity.id);

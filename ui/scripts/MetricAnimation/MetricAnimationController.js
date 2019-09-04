@@ -15,6 +15,10 @@ var metricAnimationController = (function() {
     let availableClassMetrics = new Map();   // all metrics for class entities + description
     let availableMetrics = new Map();        // availableMethodMetrics + availableClassMetrics
 
+    /**
+     * Configuration of the MetricAnimationController.
+     * @type {{widgetUi: string, metricValueTransformation: string, minColorChangeFrequency: number, expandingAnimationType: string, colorAnimationColors: string[], defaultExpandScale: number, maxColorChangeFrequency: number, minExpandingFrequency: number, maxExpandingScale: number, maxExpandingFrequency: number}}
+     */
     var controllerConfig = {
         widgetUi: "list",                    // # UI Type:
                                              // - list
@@ -37,11 +41,18 @@ var metricAnimationController = (function() {
         maxExpandingScale: 3                 // expandAnimationType: size => expands scale between 1 and maxScale
     };
 
+    /**
+     * Initializes the MetricAnimationController with the current setup configuration.
+     */
     function initialize(setupConfig){
         application.transferConfigParams(setupConfig, controllerConfig);
         initializeAvailableMetrics();
     }
 
+    /**
+     * Initializes the available metrics with differentiation of method metrics and class metrics.
+     * The created maps can be used to create UI elements with description and to iterate through all the metrics.
+     */
     function initializeAvailableMetrics() {
         for (let color of controllerConfig.colorAnimationColors){
             availableAnimations.set("blinking " + color, "color_" + color);
@@ -59,6 +70,10 @@ var metricAnimationController = (function() {
         availableMetrics = new Map([...availableMethodMetrics, ...availableClassMetrics]);
     }
 
+    /**
+     * Initialize the maximal values for all the metrics, so the intensity of a metric value can be calculated
+     * dependent on its max value.
+     */
     function initializeMetricMaxValues() {
         for (let [desc, metric] of availableMetrics) {
             let entities = getEntitiesForMetric(metric);
@@ -66,6 +81,10 @@ var metricAnimationController = (function() {
         }
     }
 
+    /**
+     * Get all entities that are relevant for a specific metric. There are metrics that are only relevant
+     * for class-entities and others that are only relevant for method-entities.
+     */
     function getEntitiesForMetric(metric) {
         let entities;
         if (Array.from(availableMethodMetrics.values()).includes(metric)){
@@ -77,6 +96,9 @@ var metricAnimationController = (function() {
         return entities;
     }
 
+    /**
+     * Activate the widget and generate the UI elements dependent on the current widgetUi.
+     */
     function activate(rootDiv){
         switch (controllerConfig.widgetUi) {
             case "list":
@@ -93,7 +115,6 @@ var metricAnimationController = (function() {
 
         initializeMetricMaxValues();
     }
-
 
     /**
      * Adds the ui components to the widget for controllerConfig.widgetUi=list
@@ -169,12 +190,19 @@ var metricAnimationController = (function() {
         rootDiv.appendChild(containerClasses);
     }
 
+    /**
+     * Append a h3 header to the container.
+     */
     function appendHeader(container, headerText) {
         let headerElement = document.createElement("h3");
         headerElement.textContent = headerText;
         container.appendChild(headerElement);
     }
 
+    /**
+     * Append a animation-selection component for the specified metric to the container.
+     * Used for controllerConfig.widgetUi=combobox.
+     */
     function appendMetricSelectionUiComponent(container, metric, metricLabel) {
         let leftCell = document.createElement("div");
         let rightCell = document.createElement("div");
@@ -191,6 +219,9 @@ var metricAnimationController = (function() {
         container.appendChild(rightCell);
     }
 
+    /**
+     * Appends all options from optionsMap[description, optionValue] to the select Element.
+     */
     function appendOptionsToSelectElement(selectElement, optionsMap) {
         for (const [key, value] of optionsMap.entries()) {
             let option = document.createElement("option");
@@ -201,6 +232,10 @@ var metricAnimationController = (function() {
         }
     }
 
+    /**
+     * When the selected element in metricList changes, activate the animationList and select the currently
+     * active animations of the selected metric.
+     */
     function metricListSelectionChanged(metricsList, animationList) {
         if (metricsList.value !== undefined){
             animationList.removeAttribute("disabled");
@@ -210,6 +245,10 @@ var metricAnimationController = (function() {
         }
     }
 
+    /**
+     * When the selection in the animationList changes, start all selected animations for the selected metric and
+     * remember them so they can be reselected when the metric selection changes.
+     */
     function animationListSelectionChanged(metricsList, animationList) {
         let selectedAnimations = [];
         for ( let i = 0; i < animationList.options.length; i++ )
@@ -221,6 +260,16 @@ var metricAnimationController = (function() {
         }
         startAnimationsForMetric(metricsList.value, selectedAnimations);
         activeAnimations.set(metricsList.value, selectedAnimations);
+    }
+
+    /**
+     * In the widgetUi=combobox was a new animation for a metric selected. Start that animation.
+     */
+    function metricSelectionChanged(sel, metric) {
+        let selectedAnimation = sel.value;
+
+        startAnimationsForMetric(metric, [selectedAnimation]);
+        activeAnimations.set(metric, [selectedAnimation]);
     }
 
     /**
@@ -242,6 +291,11 @@ var metricAnimationController = (function() {
         }
     }
 
+    /**
+     * Starts the selected animations for the current metric.
+     * If there was already an animation running for that metric: it gets stopped and maybe restarted if there are
+     * other metrics activated for that animation on the same entitites.
+     */
     function startAnimationsForMetric(metric, animations) {
         let entities = getEntitiesForMetric(metric);
 
@@ -259,18 +313,16 @@ var metricAnimationController = (function() {
             else if (animation === "expanding") {
                 startExpandingAnimation(entities, metric);
             }
-            else if (animation === "nothing"){
-                removeColorAnimationForMetricAndRestartRemaining(entities, metric);
-            }
         });
         if (blinkingColors.length > 0){
             startColorAnimation(entities, blinkingColors, metric);
         }
-        if (animations.length === 0){
-            removeColorAnimationForMetricAndRestartRemaining(entities, metric);
-        }
     }
 
+    /**
+     * Start the color animation on the canvas for each entity dependent on its metric value.
+     * Stores the color animation in the entity property "entity.metricAnimationColor".
+     */
     function startColorAnimation(entities, blinkingColors, metric) {
         entities.forEach(function (entity) {
             let intensity = getAnimationIntensity(entity, metric);
@@ -290,6 +342,10 @@ var metricAnimationController = (function() {
         });
     }
 
+    /**
+     * Start the expanding animation on the canvas for each entity dependent on its metric value.
+     * Stores the expanding animation in the entity property "entity.metricAnimationExpanding".
+     */
     function startExpandingAnimation(entities, metric) {
         entities.forEach(function (entity) {
             let intensity = getAnimationIntensity(entity, metric);
@@ -308,15 +364,35 @@ var metricAnimationController = (function() {
         });
     }
 
+    /**
+     * Checks which animations are active for the specified metric and stops them.
+     */
     function stopAnimationsForMetric(entities, metric) {
         let runningAnimations = activeAnimations.get(metric);
 
         if (runningAnimations.includes("expanding")){
             removeExpandingAnimationForMetricAndRestartRemaining(entities, metric);
         }
-        removeColorAnimationForMetricAndRestartRemaining(entities, metric);
+        if (isColorAnimationActiveForMetric(metric)){
+            removeColorAnimationForMetricAndRestartRemaining(entities, metric);
+        }
 
         activeAnimations.delete(metric);
+    }
+
+    /**
+     * Check if there is a color animation active for the specified metric.
+     */
+    function isColorAnimationActiveForMetric(metric) {
+        let runningAnimations = activeAnimations.get(metric);
+
+        let colorAnimationForMetricIsActive = false;
+        for (let animation of runningAnimations) {
+            if (animation.startsWith("color_")) {
+                colorAnimationForMetricIsActive = true;
+            }
+        }
+        return colorAnimationForMetricIsActive;
     }
 
     /**
@@ -340,6 +416,10 @@ var metricAnimationController = (function() {
         });
     }
 
+    /**
+     * Deletes the metric from the entities expandingAnimations.
+     * Restarts the remaining expanding animations for other metrics of the entity, if they where running.
+     */
     function removeExpandingAnimationForMetricAndRestartRemaining(entities, metric) {
         entities.forEach(function (entity) {
             let expandingAnimation = entity.metricAnimationExpanding;
@@ -358,13 +438,11 @@ var metricAnimationController = (function() {
         });
     }
 
-    function metricSelectionChanged(sel, metric) {
-        let selectedAnimation = sel.value;
-
-        startAnimationsForMetric(metric, [selectedAnimation]);
-        activeAnimations.set(metric, [selectedAnimation]);
-    }
-
+    /**
+     * Get the intensity of the entities metric value dependent on the maxValue of that metric.
+     * The values can be transformed to better see differences between the lowest or the highest values.
+     * The transformation can be configured at "controllerConfig.metricValueTransformation".
+     */
     function getAnimationIntensity(entity, metric) {
 
         let entitiesValue = getMetricValueOfEntity(entity, metric);
@@ -390,6 +468,9 @@ var metricAnimationController = (function() {
         return intensity;
     }
 
+    /**
+     * Get the predetermined max value of the specified metric.
+     */
     function getMetricMaxValue(metric){
         let maxValue = metricMaxValues.get(metric);
         if(maxValue === undefined) {
@@ -398,6 +479,9 @@ var metricAnimationController = (function() {
         return maxValue;
     }
 
+    /**
+     * Determine the max value for a specified metric for all entities of the collection.
+     */
     function getMetricMaxValueOfCollection(entities, metric) {
         let maxValue = -1;
         entities.forEach(function (entity) {
@@ -408,7 +492,10 @@ var metricAnimationController = (function() {
         });
         return maxValue;
     }
-    
+
+    /**
+     * Get the entities value for the specified metric.
+     */
     function getMetricValueOfEntity(entity, metric) {
         let result = -1;
         switch(metric) {
@@ -433,6 +520,9 @@ var metricAnimationController = (function() {
         return result;
     }
 
+    /**
+     * Reset the UI. Deselect all select elements and stop all active animations.
+     */
     function reset(){
         switch (controllerConfig.widgetUi) {
             case "list":
