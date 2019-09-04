@@ -1,7 +1,14 @@
 var metricAnimationController = (function() {
 
+    let metricsListID = "metricAnimation-metricsList";
+    let jQmetricsListID = "#" + metricsListID;
+    let animationsListID = "metricAnimation-animationsList";
+    let jQanimationsListID = "#" + animationsListID;
+    let comboboxIdPrefix = "metricAnimation-combo-";
+    let jQcomboboxIdPrefix = "#" + comboboxIdPrefix;
+
     let metricMaxValues = new Map();         // map: metricName - maxValue
-    let activeAnimations = new Map();        // list of metricNames of the currently active animations
+    let activeAnimations = new Map();        // map: metricName - list of the currently active animations
     let availableAnimations = new Map();     // all animations with description
     let availableAnimationsIncludingNothing = new Map();    // availableAnimations + nothing => used for combobox ui
     let availableMethodMetrics = new Map();  // all metrics for method entities + description
@@ -19,6 +26,7 @@ var metricAnimationController = (function() {
         metricValueTransformation: "square", // # transform the metric value to better differentiate values at the bounds
                                              // - focus on low values: 'logarithmic', 'root'
                                              // - focus on high values: 'square'
+                                             // - 'none' (or everything else) => no scale
         expandingAnimationType: "frequency", // # type of the expanding animation
                                              // - frequency: grow and shrink to the double size - metricValue = frequency
                                              // - size: grow and shrink to a size depending on the metric value
@@ -52,15 +60,21 @@ var metricAnimationController = (function() {
     }
 
     function initializeMetricMaxValues() {
-        const methods = model.getEntitiesByType("Method");
-        const classes = model.getEntitiesByType("Class");
+        for (let [desc, metric] of availableMetrics) {
+            let entities = getEntitiesForMetric(metric);
+            metricMaxValues.set(metric, getMetricMaxValueOfCollection(entities, metric));
+        }
+    }
 
-        for (let [desc, methodMetric] of availableMethodMetrics) {
-            metricMaxValues.set(methodMetric, getMetricMaxValueOfCollection(methods, methodMetric));
+    function getEntitiesForMetric(metric) {
+        let entities;
+        if (Array.from(availableMethodMetrics.values()).includes(metric)){
+            entities = model.getEntitiesByType("Method");
         }
-        for (let [desc, classMetric] of availableClassMetrics) {
-            metricMaxValues.set(classMetric, getMetricMaxValueOfCollection(classes, classMetric));
+        else if (Array.from(availableClassMetrics.values()).includes(metric)){
+            entities = model.getEntitiesByType("Class");
         }
+        return entities;
     }
 
     function activate(rootDiv){
@@ -106,6 +120,7 @@ var metricAnimationController = (function() {
         let metricSelectWrapper = document.createElement("div");
         metricSelectWrapper.setAttribute("class", "select-wrapper-level2");
         let metricsList = document.createElement("select");
+        metricsList.id = metricsListID;
         metricsList.setAttribute("size", listSize);
         appendOptionsToSelectElement(metricsList, availableMetrics);
         metricsList.onchange = function () {metricListSelectionChanged(metricsList, animationList); };
@@ -119,6 +134,7 @@ var metricAnimationController = (function() {
         let animationSelectWrapper = document.createElement("div");
         animationSelectWrapper.setAttribute("class", "select-wrapper-level2");
         let animationList = document.createElement("select");
+        animationList.id = animationsListID;
         animationList.setAttribute("size", listSize);
         animationList.setAttribute("multiple", "multiple");
         animationList.setAttribute("disabled", "disabled");
@@ -166,6 +182,7 @@ var metricAnimationController = (function() {
         rightCell.setAttribute("class", "formular-grid-item-right");
         let labelElement = document.createTextNode(metricLabel);
         let selectElement = document.createElement("select");
+        selectElement.id = comboboxIdPrefix + metric;
         appendOptionsToSelectElement(selectElement, availableAnimationsIncludingNothing);
         selectElement.onchange = function () {metricSelectionChanged(this, metric); };
         leftCell.appendChild(labelElement);
@@ -226,13 +243,7 @@ var metricAnimationController = (function() {
     }
 
     function startAnimationsForMetric(metric, animations) {
-        let entities;
-        if (Array.from(availableMethodMetrics.values()).includes(metric)){
-            entities = model.getEntitiesByType("Method");
-        }
-        else if (Array.from(availableClassMetrics.values()).includes(metric)){
-            entities = model.getEntitiesByType("Class");
-        }
+        let entities = getEntitiesForMetric(metric);
 
         if (activeAnimations.has(metric)){
             // if there are already running animations for this metric: stop them!
@@ -423,17 +434,28 @@ var metricAnimationController = (function() {
     }
 
     function reset(){
-
-    }
-
-    function deactivate(){
-        reset();
+        switch (controllerConfig.widgetUi) {
+            case "list":
+                $(jQmetricsListID)[0].selectedIndex = -1;
+                $(jQanimationsListID)[0].selectedIndex = -1;
+                $(jQanimationsListID)[0].setAttribute("disabled", "disabled");
+                break;
+            case "combobox":
+                for (let [desc, metric] of availableMetrics) {
+                    let selectID = jQcomboboxIdPrefix + metric;
+                    $(selectID)[0].selectedIndex = 0;
+                }
+                break;
+        }
+        for (let [metric, metricAnimations] of activeAnimations){
+            let entities = getEntitiesForMetric(metric);
+            stopAnimationsForMetric(entities, metric);
+        }
     }
 
     return {
         initialize: initialize,
         activate: activate,
-        deactivate:	deactivate,
         reset: reset
     };
 })();
