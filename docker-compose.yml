@@ -1,29 +1,29 @@
 version: "3"
 services:
-#    db:
-#        image: mysql:5.7
-#        environment:
-#            MYSQL_ROOT_PASSWORD: dbpassword_for_user
-#            MYSQL_DATABASE: eval_server_development
-#            MYSQL_USER: db_username
-#            MYSQL_PASSWORD: dbpassword_for_user
-#        restart: always
-#    eval:
-#        build: evaluationserver
-#        restart: always
-#        env_file: evaluationserver/env
-#        command: "./bin/wait-for-it.sh db:3306 -s -t 30 -- ./bin/docker_start"
-#        #volumes:
-#        #- ./evaluationserver:/usr/src/app
-#        ports:
-#            - "8081:8081"
-#        depends_on:
-#            - db
+    db:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD: dbpassword_for_user
+            MYSQL_DATABASE: eval_server_development
+            MYSQL_USER: db_username
+            MYSQL_PASSWORD: dbpassword_for_user
+        restart: always
+    eval:
+        build: evaluationserver
+        restart: always
+        env_file: evaluationserver/env
+        command: "./bin/wait-for-it.sh db:3306 -s -t 30 -- ./bin/docker_start"
+        #volumes:
+        #- ./evaluationserver:/usr/src/app
+        ports:
+            - "8081:8081"
+        depends_on:
+            - db
     frontend:
         build: ui/
         restart: always
         volumes:
-            - ./ui:/var/www/html/ui # uncomment only for ui development
+            #- ./ui:/var/www/html/ui # uncomment only for ui development
             - data-gen:/var/www/html/ui/data-gen
         ports:
             - "8082:80"
