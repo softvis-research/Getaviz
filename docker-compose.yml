@@ -60,7 +60,7 @@ services:
     volumes-provisioner:
         image: hasnat/volumes-provisioner
         environment:
-            PROVISION_DIRECTORIES: "100:101:0755:/var/data"
+            PROVISION_DIRECTORIES: "100:101:0755:/var/data /var/data/data-gen/"
         volumes:
             - data-gen:/var/data
 volumes:
