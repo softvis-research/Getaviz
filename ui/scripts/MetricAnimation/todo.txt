@@ -1,4 +1,0 @@
-
-
-// https://aframe.io/docs/0.9.0/components/animation.html
-// https://blog.prototypr.io/learning-a-frame-how-to-do-animations-2aac1ae461da
