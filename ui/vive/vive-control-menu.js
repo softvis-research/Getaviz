@@ -18,6 +18,11 @@ AFRAME.registerComponent('vive-control-menu', {
     controller.addEventListener('triggerdown', function(evt) {
       changeControlText(self);
     })
+
+    controller.addEventListener('menudown', (evt) => {
+      viveLegendController.toggleVisibility();
+    })
+
   }
 });
 

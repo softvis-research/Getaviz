@@ -18,6 +18,10 @@ AFRAME.registerComponent('vive-control-fly-hand', {
     this.el.addEventListener('trackpadup', function(evt) { trackpadUp(self); });
     this.el.addEventListener('gripup', function(evt) { gripUp(self); });
     this.el.addEventListener('gripdown', function(evt) { gripDown(self); });
+
+    this.el.addEventListener('menudown', (evt) => {
+      console.log(this)
+    })
   },
 
   tick: function() {
@@ -74,3 +78,11 @@ function trackpadDown(self) {
 function trackpadUp(self) {
   self.trackpadDown = false;
 };
+
+function menuDown(self) {
+  self.menuDown = true
+}
+
+function menuUp(self) {
+  self.menuDown = false
+}
