@@ -8,9 +8,11 @@
     var modelUrl = "data/City vive/model";
     var metaDataJsonUrl = modelUrl + "/metaData.json";
 
-    var canvasId = "aframe-canvas";
+    var canvasId = "canvas";
 
     var visMode = "aframe";
+
+    var visType = "vive"
 </script>
 
 <html>
@@ -28,10 +30,10 @@
     <!--A-Frame-->
     <script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
 
-    <script src="data/City vive/model/metaData.js"></script>
     <script src="vive-ui/vive-ui.js"></script>
-    <script src="vive-ui/ViveSelectController.js"></script>
+    <script src="vive-ui/vive-init.js"></script>
     <script src="vive-ui/ViveLegendController.js"></script>
+    <script src="vive-ui/ViveTooltipController.js"></script>
 
     <script src="vive/vive-control-rig.js"></script>
     <script src="vive/vive-control-menu.js"></script>
