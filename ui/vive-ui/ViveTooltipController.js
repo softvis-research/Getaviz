@@ -5,9 +5,9 @@ var viveTooltipController = (function(){
      * @param {String} id of the focused entity
      */
     function showTooltip(id) {
-        var itemString = getItemStringFromID(id)
+        var entityString = getItemStringFromID(id)
         document.getElementById('vive-tooltip').innerHTML = 
-            `<a-entity text="value: ${itemString}; align: center;" position="0 0 0"></a-entity>`
+            `<a-entity text="value: ${entityString}; align: center;" position="0 0 0"></a-entity>`
         document.getElementById('vive-tooltip').object3D.visible = true
     }
 
@@ -21,7 +21,7 @@ var viveTooltipController = (function(){
     /**
      * Looks for item for specific id and returns a string for the tooltip
      * 
-     * @param {String} id id of the selected Element
+     * @param {String} id id of the entity
      */
     function getItemStringFromID(id) {
         var object = model.getEntityById(id)

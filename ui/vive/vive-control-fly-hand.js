@@ -20,7 +20,22 @@ AFRAME.registerComponent('vive-control-fly-hand', {
     this.el.addEventListener('gripdown', function(evt) { gripDown(self); });
 
     this.el.addEventListener('menudown', (evt) => {
-      console.log(this)
+      var hoverCount = 0
+      events.hovered.getEntities().forEach(entity => {
+        hoverCount = hoverCount+1
+        var applicationEvent = {
+          sender		: canvasManipulator,
+          entities	: [entity]
+        };
+        events.selected.on.publish(applicationEvent)
+        if (entity.type === "Namespace") {
+          viveSourcecodeController.hideSourcecode()
+        }
+      });
+      if (hoverCount===0) {
+        application.reset()
+        viveSourcecodeController.hideSourcecode()
+      }
     })
   },
 

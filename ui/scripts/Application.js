@@ -386,9 +386,6 @@ var application = (function() {
 	function activateController(){
 		newActiveControllers.forEach(function(controllerObject){
 			if(controllerObject.activate){
-				console.log("active Controller");
-				console.log(controllerObject);
-				
 				var controllerDiv = activeControllers.get(controllerObject);
 
 				controllerObject.activate(controllerDiv);

@@ -23,6 +23,10 @@ AFRAME.registerComponent('vive-control-menu', {
       viveLegendController.toggleVisibility();
     })
 
+    controller.addEventListener('gripdown', (evt) => {
+      viveSourcecodeController.scrollCode()
+    })
+
   }
 });
 

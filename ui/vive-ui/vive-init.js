@@ -8,6 +8,7 @@
  *  The Events do also work for the vive-laser-controls
  */
 (function(){
+    viveUI.init()
     setTimeout(() => {
         var boxes = document.querySelectorAll('a-box')
 
@@ -32,13 +33,13 @@
                 viveTooltipController.hideTooltip()
             })
 
-            box.addEventListener('click', (evt)=> {
-                var selectEvent = {
-                    sender: canvasManipulator,
-                    entities: [entity]
-                }
-                events.selected.on.publish(selectEvent)
-            })
+            // box.addEventListener('click', (evt)=> {
+            //     var selectEvent = {
+            //         sender: canvasManipulator,
+            //         entities: [entity]
+            //     }
+            //     events.selected.on.publish(selectEvent)
+            // })
         })
         
     }, 2000);
