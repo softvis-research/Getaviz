@@ -22,12 +22,15 @@
         },
 
         {	name: 	"canvasHoverController",
+            hoverColor: "orange"
 		},	
 
 		{	name: 	"canvasMarkController",
+            markingColor: "red"
 		},	
 		
-		{	name: 	"canvasSelectController" 
+		{	name: 	"canvasSelectController",
+            color: "orange"
 		},
 		{ 	name: 	"canvasFlyToController" 
 		},
@@ -59,7 +62,8 @@
 		//{ 	name: 	"relationTransparencyController",
 		//},
 			
-		{ 	name: 	"relationHighlightController" 
+		{ 	name: 	"relationHighlightController",
+           color: "#000066"
 		},
         {
             name:   "systeminfoController",
@@ -194,6 +198,9 @@
                 name: "Variable/Enum constant",
                 icon: "yellowCircle",
             }, {
+                name: "Feature Location",
+                icon: "redCircle"
+            }, {
                 name: "Navigation",
                 icon: "navigation",
                 entries: [
@@ -269,7 +276,7 @@
                                     expanders: [
                                         {
                                             name: "macroExplorer",
-                                            title: "Macro Explorer",
+                                            title: "Feature Explorer",
                                             controllers: [
                                                 {name: "macroExplorerController"}
                                             ],
