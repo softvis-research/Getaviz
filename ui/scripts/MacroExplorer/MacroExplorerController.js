@@ -4,6 +4,8 @@ var macroExplorerController = (function() {
 	let jMacroExplorer = "#macroExplorerUL";
 	let macroExplorerTreeId = "macroExplorerUL";
 	let allTreeNodesById = new Map();
+	let selectedMethods =[];
+	let selectedFeature;
 
 	let controllerConfig = {
 		elementsSelectable: true,
@@ -82,7 +84,8 @@ var macroExplorerController = (function() {
                 }
             },
             callback: {
-                onCheck: macroOnCheck
+                onCheck: macroOnCheck,
+				onClick: macroOnClick
             },
             view:{
                 showLine: false,
@@ -104,21 +107,54 @@ var macroExplorerController = (function() {
 
 		var changedNodes = tree.getChangeCheckedNodes();
 		var entities = [];
-		changedNodes.forEach(function(node){
-			node.checkedOld = node.checked;	
+		changedNodes.forEach(function (node) {
+			node.checkedOld = node.checked;
 			entities.push(node.id);
 		});
-								
-		var applicationEvent = {			
-			sender: 	macroExplorerController,
-			entities:	entities,
+
+		var applicationEvent = {
+			sender: macroExplorerController,
+			entities: entities,
 			allTreeNodesById: allTreeNodesById,
 			filterMode: controllerConfig.filterMode
 		};
-		
-		if (treeNode !== undefined){
+
+		if (treeNode !== undefined) {
 			events.macroChanged.on.publish(applicationEvent);
-		} 
+		}
+	}
+
+	function macroOnClick(event, treeId, treeNode) {
+		const unMarkEvent = {
+			sender: macroExplorerController,
+			entities: selectedMethods
+		};
+
+		events.marked.off.publish(unMarkEvent);
+
+		if(selectedFeature !== treeNode) {
+			let relatedEntities = [];
+
+			const methods = model.getEntitiesByType("Function");
+			const maxRandomValue = methods.length;
+
+			for (let i = 0; i < 50; ++i) {
+				const randomNumber = Math.floor(Math.random() * maxRandomValue);
+				relatedEntities = relatedEntities.concat((methods[randomNumber]));
+			}
+
+			const applicationEvent = {
+				sender: macroExplorerController,
+				entities: relatedEntities,
+			};
+
+			events.marked.on.publish(applicationEvent);
+			selectedMethods = relatedEntities;
+			selectedFeature = treeNode;
+		} else {
+			selectedFeature = null;
+			selectedMethods = null;
+		}
 	}
 
 	function sendInitialEvent(){
