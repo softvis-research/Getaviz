@@ -19,23 +19,7 @@ AFRAME.registerComponent("vive-control-rig", {
       console.log(`x: ${cameraRig.object3D.position.x} y: ${cameraRig.object3D.position.y} z: ${cameraRig.object3D.position.z}`)
     });
     document.querySelector("#cameraRig").setAttribute("position", "20 10 60");
-    document.addEventListener('keyup', (evt)=>{
-      if (evt.code === 'KeyP') {
-        const element = document.getElementById('vive-package-explorer')
-        if (element.object3D.visible === true) {
-          element.object3D.visible = false
-        } else {
-          element.object3D.visible = true
-        }
-      } else if (evt.code === 'KeyL') {
-        const element = document.getElementById('vive-legend')
-        if (element.object3D.visible === true) {
-          element.object3D.visible = false
-        } else {
-          element.object3D.visible = true
-        }
-      }
-    })
+    
   }
 });
 

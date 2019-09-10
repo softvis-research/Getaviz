@@ -14,22 +14,13 @@
 
         <!-- uncomment cursor for developing ui without vive-device -->
         <!-- <a-cursor></a-cursor> -->
-        <a-entity id="vive-legend" vive-legend 
-                  geometry="primitive: plane; height: 0.5; width: 0.4"
-                  position="-0.4 -0.4 -1.5" 
-                  material="color: gray; opacity: 0.5"></a-entity>
+        <a-entity id="vive-legend" vive-legend geometry="primitive: plane; height: 1.2; width: 1" position="0 0 -1.5"
+          visible="false" material="color: gray; opacity: 0.5"></a-entity>
 
-        <a-entity id="vive-tooltip" vive-tooltip 
-                  geometry="primitive: plane; height: 0.1; width: 0.6" 
-                  position="0 0.3 -1"
-                  visible="false" 
-                  material="color: gray; opacity: 0.5"></a-entity>
+        <a-entity id="vive-tooltip" vive-tooltip geometry="primitive: plane; height: 0.1; width: 0.6"
+          position="0 0.3 -1" visible="false" material="color: gray; opacity: 0.5"></a-entity>
 
-        <a-entity id="vive-sourcecode" vive-sourcecode
-                  geometry="primitive: plane; height: auto; width: auto;"
-                  position="0 -0.3 -1"
-                  visible="true"
-                  material="color: gray; opacity: 0.75"></a-entity>
+        <a-entity id="vive-sourcecode" vive-sourcecode visible="false"></a-entity>
 
       </a-camera>
     </a-entity>
@@ -68,8 +59,26 @@
     </a-box>
 
     <a-assets>
-      <img id="legend-package" src="http://localhost:8082/ui/scripts/Legend/images/circle_gray.png">
-      <img id="legend-type" src="http://localhost:8082/ui/scripts/Legend/images/circle_purple.png">
+      <img id="legend-package" src="http://localhost:8082/ui/scripts/Legend/images/circle_gray.png"
+        crossorigin="anonymous">
+      <img id="legend-type" src="http://localhost:8082/ui/scripts/Legend/images/circle_purple.png"
+        crossorigin="anonymous">
+      <img id="legend-control-left-menu" src="http://localhost:8082/ui/vive-ui/images/vive-left-menu.svg"
+        crossorigin="anonymous">
+      <img id="legend-control-left-trackpad" src="http://localhost:8082/ui/vive-ui/images/vive-left-trackpad.svg"
+        crossorigin="anonymous">
+      <img id="legend-control-left-trigger" src="http://localhost:8082/ui/vive-ui/images/vive-side-left-trigger.svg"
+        crossorigin="anonymous">
+      <img id="legend-control-left-grip" src="http://localhost:8082/ui/vive-ui/images/vive-side-left-grip.svg"
+        crossorigin="anonymous">
+      <img id="legend-control-right-menu" src="http://localhost:8082/ui/vive-ui/images/vive-right-menu.svg"
+        crossorigin="anonymous">
+      <img id="legend-control-right-trackpad" src="http://localhost:8082/ui/vive-ui/images/vive-right-trackpad.svg"
+        crossorigin="anonymous">
+      <img id="legend-control-right-trigger" src="http://localhost:8082/ui/vive-ui/images/vive-side-right-trigger.svg"
+        crossorigin="anonymous">
+      <img id="legend-control-right-grip" src="http://localhost:8082/ui/vive-ui/images/vive-side-right-grip.svg"
+        crossorigin="anonymous">
     </a-assets>
   </a-scene>
 

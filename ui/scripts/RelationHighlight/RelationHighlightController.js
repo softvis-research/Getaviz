@@ -11,7 +11,10 @@ var relationHighlightController = function(){
 	function initialize(setupConfig){
         application.transferConfigParams(setupConfig, controllerConfig);
 
-        events.selected.on.subscribe(onRelationsChanged);
+		events.selected.on.subscribe(onRelationsChanged);
+		if (visType === "vive") {
+			controllerConfig.color = "white"
+		}
 	}
 	
 	function activate(){	

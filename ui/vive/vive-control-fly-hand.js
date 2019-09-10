@@ -32,7 +32,7 @@ AFRAME.registerComponent('vive-control-fly-hand', {
           viveSourcecodeController.hideSourcecode()
         }
       });
-      if (hoverCount===0) {
+      if (hoverCount === 0) {
         application.reset()
         viveSourcecodeController.hideSourcecode()
       }

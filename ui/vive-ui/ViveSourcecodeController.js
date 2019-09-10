@@ -33,7 +33,8 @@ var viveSourcecodeController = (function(){
             init(code)
         }
         document.getElementById('vive-sourcecode').innerHTML = 
-            `<a-text position="0 0 -7" value="${sourcecode.substring(beginSection, endSection)}"></a-text>`
+            `<a-text position="0 0 -7" value="${sourcecode.substring(beginSection, endSection)}" align=left anchor=center geometry="primitive:plane; height: auto; width: auto;" material="color: gray; opacity: 0.5">></a-text>`+
+            `<a-text position="0 -3.5 -7" value="[${sectionPart}/${sectionsCount}]" align=center geometry="primitive:plane; height:auto;width:auto;" material="color: gray; opacity: 0.5"></a-text>`
         document.getElementById('vive-sourcecode').object3D.visible = true
     }
 
