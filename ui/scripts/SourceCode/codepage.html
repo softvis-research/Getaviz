@@ -3,8 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <script src="../../node_modules/prismjs/prism.js" ></script>
-        <script src="../../node_modules/prismjs/components/prism-java.js" ></script>
-        <script src="../../node_modules/prismjs/components/prism-c.js" ></script>
+        <script src="../../node_modules/prismjs/components/prism-java.min.js" ></script>
+        <script src="../../node_modules/prismjs/components/prism-c.min.js" ></script>
         <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
         <script src="CodeHelperFunctions.js"></script>   
         <link href="../../node_modules/prismjs/themes/prism.css" rel="stylesheet" />
@@ -15,8 +15,7 @@
         <div style="width:100%; height:100%;">
             <pre id="codepage"><code id="codeTag"></code></pre>
         </div>
-        <script>            
-            
+        <script>
 
             function displayCode(file, classEntity, entity, filetype){
                 let preElement = document.getElementById('codepage');

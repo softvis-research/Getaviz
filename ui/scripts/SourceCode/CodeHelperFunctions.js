@@ -19,29 +19,26 @@ var codeHelperFunction =(function(){
 		const xhttp = new XMLHttpRequest();
 		
 
-        xhttp.onreadystatechange = function(){			
+        xhttp.onreadystatechange = function(){
 			if (xhttp.readyState === 4 && xhttp.status === 200) {
                             
 
 				codeTag.textContent = xhttp.responseText;
 
 				Prism.highlightElement(codeTag, false, function(){
+                    if(fileType === "java") {
+                        // alle einfachen Textnodes werden mit einem
+                        // span-Tag umgeben, dadurch Selektierung moeglich
+                        textNodesToSpan();
 
-                    // alle einfachen Textnodes werden mit einem
-                    // span-Tag umgeben, dadurch Selektierung moeglich
-                    textNodesToSpan();
+                        // alle Vorkommen des selektierten Elements
+                        // im QUellcode hervorheben
+                        highlightSelectedElement(entity);
 
-                    // alle Vorkommen des selektierten Elements
-                    // im QUellcode hervorheben
-                    highlightSelectedElement(entity);        
-
-                    // versieht Definitionen der Attribute und
-                    // Methoden mit einem Klickereignis  
-                    console.log("-ype:" + fileType);
-                    if(fileType == "java") {
+                        // versieht Definitionen der Attribute und
+                        // Methoden mit einem Klickereignis
                         addInteraction(classEntity, callBackFunction);
                     }
-
                 });     
 			} else if (xhttp.readyState === 4 && xhttp.status === 404){
 				codeTag.textContent = "Error: " + file + ", file not found!";

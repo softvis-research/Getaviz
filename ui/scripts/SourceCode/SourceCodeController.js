@@ -121,7 +121,7 @@ var sourceCodeController = (function(){
 		
         const entity = applicationEvent.entities[0];
 
-        if(controllerConfig.fileType == "java"){
+        if(controllerConfig.fileType === "java"){
             if (entity.type === "Namespace"){
                 // Package 
                 resetSourceCode();
@@ -138,7 +138,7 @@ var sourceCodeController = (function(){
             const javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;
     
             displayCode(javaCodeFile, classEntity, entity);
-        } else if(controllerConfig.fileType == "c"){
+        } else if(controllerConfig.fileType === "c"){
             const cCodeFile = entity.filename;
             displayCode(cCodeFile);
         }
