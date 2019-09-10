@@ -168,10 +168,6 @@ var relationConnectorController = function(){
 			
 			relation.source = sourceEntity;
 			relation.target = relatedEntity;
-
-			console.log("relationcreator---------------");
-			console.log(sourceEntity.name);
-			console.log(relatedEntity.name);
 			
 			relations.push(relation);
 			
@@ -203,18 +199,6 @@ var relationConnectorController = function(){
 		if( targetPosition === null ){
 			return;
 		}
-
-		// if (visType === "vive") {
-		// 	sourcePosition.x = sourcePosition.x * 1000
-		// 	sourcePosition.y = sourcePosition.y * 1000
-		// 	sourcePosition.z = sourcePosition.z * 1000
-		// 	targetPosition.x = targetPosition.x * 1000
-		// 	targetPosition.y = targetPosition.y * 1000
-		// 	targetPosition.z = targetPosition.z * 1000
-
-		// 	console.log(sourcePosition);
-		// 	console.log(targetPosition);
-		// }
 
         if(controllerConfig.sourceStartAtParentBorder){
         	let sourceParent = entity.belongsTo;
