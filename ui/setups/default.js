@@ -16,6 +16,9 @@
 			
 			createHeadSection: false
 		},	
+		
+		{	name:	"generationFormController",
+		},
 
 		{	name: 	"canvasHoverController",			
 		},	
@@ -116,27 +119,16 @@
 						{
 							title: 	"City Original",
 							link: 	true,
-							url:	"index.php?setup=web/City freemind&model=City%20original%20freemind"
-						},
-						{
-							title: 	"City Bricks",
-							link: 	true,
-							url:	"index.php?setup=web/City freemind&model=City%20bricks%20freemind"
-						},						
-						{
-							title: 	"City Floors",
-							link: 	true,
-							url:	"index.php?setup=web/City freemind&model=City%20floor%20freemind"
+							url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
 						},
 						{
 							title: 	"Recursive Disk",
 							link: 	true,
-							url:	"index.php?setup=web/RD freemind&model=RD%20freemind"
+							url:	"index.php?setup=web/RD bank&model=RD%20bank"
 						},
                         {
-                            title: 	"Recursive Disk 3D",
-                            link: 	true,
-                            url:	"index.php?setup=web/RD reek&model=RD%203D%20reek"
+                            title: 	"New Visualization",
+                            event:	"generationFormController.openSettingsPopUp"
                         },
 					]
 				},
@@ -173,41 +165,41 @@
                             title: 	"Privacy Policy",
                             link: 	true,
                             url:	"http://home.uni-leipzig.de/svis/privacy-policy/"
-                        }
+                    }
 					]
-				},				
+				},					
 			]
 		},
         {
             name: "legendController",
             entries: [{
                 name: "Package",
-                icon: "setups/web/package.png"
+                icon: "grayCircle"
             }, {
                 name: "Type",
-                icon: "setups/web/type.png",
+                icon: "purpleCircle",
             }, {
                 name: "Method",
-                icon: "setups/web/method.png",
+                icon: "lightBlueCircle",
             }, {
                 name: "Field",
-                icon: "setups/web/field.png",
+                icon: "yellowCircle",
             }, {
                 name: "Navigation",
-                icon: "setups/web/navigation.png",
+                icon: "navigation",
                 entries: [
                     {
                         name: "Rotate",
-                        icon: "setups/web/left.png"
+                        icon: "leftMouseButton"
                     }, {
                         name: "Center",
-                        icon: "setups/web/double.png"
+                        icon: "doubleClick"
                     }, {
                         name: "Move",
-                        icon: "setups/web/middle.png"
+                        icon: "midMouseButton"
                     }, {
                         name: "Zoom",
-                        icon: "setups/web/zoom.png"
+                        icon: "scrolling"
                     }]
             }
             ],
@@ -246,6 +238,7 @@
                         {name: "menuController"},
                         {name: "searchController"},
                         {name: "emailController"},
+                        {name: "generationFormController"},
                     ],
                 },
                 second: {

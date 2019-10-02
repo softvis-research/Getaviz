@@ -1,2 +1,4 @@
 *.komodoproject
 */.idea
+
+\.idea/

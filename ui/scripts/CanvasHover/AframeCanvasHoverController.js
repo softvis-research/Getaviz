@@ -8,7 +8,7 @@ var canvasHoverController = (function() {
 		cssLink.type = "text/css";
 		cssLink.rel = "stylesheet";
 		cssLink.href = "scripts/CanvasHover/ho.css";
-		document.getElementsByTagName("head")[0].appendChild(cssLink);
+		document.getElementsByTagName("head")[0].appendChild(cssLink);	
     }
 	
 	//config parameters	
@@ -20,10 +20,14 @@ var canvasHoverController = (function() {
 	};
 	
 	function activate(){
-		//createTooltipContainer();
+
+		actionController.actions.mouse.hover.subscribe(handleOnMouseEnter);
+		actionController.actions.mouse.unhover.subscribe(handleOnMouseLeave);
+				
+		createTooltipContainer();		
 			
 		events.hovered.on.subscribe(onEntityHover);
-		events.hovered.off.subscribe(onEntityUnhover); 
+		events.hovered.off.subscribe(onEntityUnhover);
 	}
 	
 	function reset(){
@@ -89,34 +93,31 @@ var canvasHoverController = (function() {
 		isInNavigation = false;
 	}
 
-	function handleOnMouseEnter(multipartEvent) {
+	function handleOnMouseEnter(eventObject) {
 		if(isInNavigation){
 			return;
 		}        
 
-		var entity = model.getEntityById(multipartEvent.partID); 
+		var entity = model.getEntityById(eventObject.target.id);
 		if(entity === undefined){
-			entity = multipartEvent.target.id;
-			console.log("entity: " + entity);
-			events.log.error.publish({ text: "Entity of partID " + multipartEvent.partID + " not in model data."});
+			entity = eventObject.target.id;
+			events.log.error.publish({ text: "Entity of partID " + eventObject.target.id + " not in model data."});
 			return;
 		}
 		
 		var applicationEvent = {
 			sender		: canvasHoverController,
 			entities	: [entity],
-			posX		: multipartEvent.layerX,
-			posY		: multipartEvent.layerY
+			posX		: eventObject.layerX,
+			posY		: eventObject.layerY
 		};
-		
 		events.hovered.on.publish(applicationEvent);		
 	}
 
-	function handleOnMouseLeave(multipartEvent) {
-		
-		var entity = model.getEntityById(multipartEvent.partID); 
+	function handleOnMouseLeave(eventObject) {
+		var entity = model.getEntityById(eventObject.target.id);
 		if(entity === undefined){
-			events.log.error.publish({ text: "Entity of partID " + multipartEvent.partID + " not in model data."});
+			events.log.error.publish({ text: "Entity of partID " + eventObject.target.id + " not in model data."});
 			return;
 		}
 
@@ -129,7 +130,6 @@ var canvasHoverController = (function() {
 	}
 
 	function onEntityHover(applicationEvent) {
-		console.debug("onEntityHover()");
 		var entity = applicationEvent.entities[0];
 
         if(entity === undefined){

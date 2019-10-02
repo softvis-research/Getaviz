@@ -1,0 +1,26 @@
+[[packages:Default]]
+[role=group,includesConstraints="package:Steps, package:Metaphors"]
+== Generation Step Rules
+
+[[package:Steps]]
+[source,cypher,role=constraint]
+.Generation steps must be independent from each other
+----
+MATCH (p:Package)-[:CONTAINS*]->(t:Type),
+(t)-[:DEPENDS_ON]->(t2:Type)<-[:CONTAINS*]-(p2:Package)
+WHERE p.name = "s2m" AND (p2.name = "m2m" OR p2.name = "m2t")
+OR p.name = "m2m" AND (p2.name = "s2m" OR p2.name = "m2t")
+OR p.name = "m2t" AND (p2.name = "s2m" OR p2.name = "m2m")
+RETURN t,t2
+----
+
+[[package:Metaphors]]
+[source,cypher,role=constraint]
+.Metaphors must be independent from each other
+----
+MATCH (p:Package)-[:CONTAINS*]->(t:Type),
+(t)-[:DEPENDS_ON]->(t2:Type)<-[:CONTAINS*]-(p2:Package)
+WHERE p.name = "rd" AND p2.name = "city"
+OR p.name = "city" AND p2.name = "rd"
+RETURN t,t2
+----

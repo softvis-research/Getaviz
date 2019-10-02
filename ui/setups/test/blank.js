@@ -12,6 +12,12 @@ var setup = {
             showProgressBar: true,
         },
         {
+            name: "canvasSelectController"
+        },
+        {
+            name: "canvasFilterController"
+        },
+        {
             name: "searchController"
         }
     ],
@@ -40,6 +46,8 @@ var setup = {
 
                     controllers: [
                         { name: "canvasMarkController" },
+                        { name: "canvasSelectController"},
+                        { name: "canvasFilterController"},
                         { name: "defaultLogger" }
                     ],
                 }

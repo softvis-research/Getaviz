@@ -1,18 +1,42 @@
-before_script:
-- cp evaluationserver/config/database.travis.yml evaluationserver/config/database.yml
-- mysql -e 'create database eval_server_test;'
-- cd evaluationserver/
-- bundle install
-env:
-  secure: Nyq2gajx/TWjeIZtGZSkHREgpE0BhuQg6VOscDKKrenN/CPZ/8wT/h3DYrXOTq+Pz4yOGBgDbptXdT4szu88H5lCNcCfzTnyp/Y+NE/t12nheNFrzlm2L4ryF5IvpAHEXJLYkoJRHXvD4FWTsp/SI3RPLMu9ah2J7gheGSHomZKoApYTLp1NjVSRAgrWGjodMHIYC7d40pNoMyMa/i3EDUHLQ3kNc1U3GGmzaj3Et1Ak6UMQeRE5ph9bfYOZy83Cit9DedeEdbdrnvLa23z/UVp/dmpEchd/844MOKoeX8HPpYW1x/1CovYn3/dshf/bhAkMvngTtJCgyrEpWgy9bb5bwnvjOz2FxBFB8eb/7hfK//6fynCCe5XmPahnIddp7kSNmHwaT4zwUSlFIFegaeZyr6uC5JYFue9i1rICSbAKqOc4EmrL9nKY9Mh6CvW232qiSTvNN02CiSZsAKdA61ou3H7X9UK7WeEAIC43WHkuM5Rn9leB6QC5nwp0UUqY6jbGknoDtvq87t2tVIiAy5aPmpKnrf0C4uUmaz6zZWz4vvjHok6Kuh6ut2LucwVvisCJ7wTRSXB43ubCsuOMSDkd7u4JJUPJPlzc57rQoXSBm68bnuy7SQ2l/epQbl/O9lrxkQLA52JxNF8zdMT7ZKfoGQkQZjXF1YNhp4VHmfA=
-language: ruby
-rvm:
-- 2.5.0
-script:
-- bundle exec rails db:migrate RAILS_ENV=test
-- bundle exec rspec
-after_failure:
-- mysql -e 'show databases;'
-- cat ./config/database.yml
-- echo $RAILS_ENV
-- bundle exec rake --version
+matrix:
+  include:
+    - name: Docker
+      script:
+        - docker-compose -f docker-compose.test.yml run tests
+    - name: Generator
+      language: java
+      before_install:
+        - cd generator
+        - cd org.svis.generator.releng/
+      script:
+        - mvn clean install -fae
+    #- name: Generator2
+      #language: java
+      #before_install:
+        #- cd generator2
+        #- cd org.getaviz.generator/
+      #script:
+        #- mvn clean install
+    - name: Evaluation Server
+      language: ruby
+      before_script:
+        - cp evaluationserver/config/database.travis.yml evaluationserver/config/database.yml
+        - mysql -e 'create database eval_server_test;'
+        - cd evaluationserver/
+        - bundle install
+      env:
+        secure: Nyq2gajx/TWjeIZtGZSkHREgpE0BhuQg6VOscDKKrenN/CPZ/8wT/h3DYrXOTq+Pz4yOGBgDbptXdT4szu88H5lCNcCfzTnyp/Y+NE/t12nheNFrzlm2L4ryF5IvpAHEXJLYkoJRHXvD4FWTsp/SI3RPLMu9ah2J7gheGSHomZKoApYTLp1NjVSRAgrWGjodMHIYC7d40pNoMyMa/i3EDUHLQ3kNc1U3GGmzaj3Et1Ak6UMQeRE5ph9bfYOZy83Cit9DedeEdbdrnvLa23z/UVp/dmpEchd/844MOKoeX8HPpYW1x/1CovYn3/dshf/bhAkMvngTtJCgyrEpWgy9bb5bwnvjOz2FxBFB8eb/7hfK//6fynCCe5XmPahnIddp7kSNmHwaT4zwUSlFIFegaeZyr6uC5JYFue9i1rICSbAKqOc4EmrL9nKY9Mh6CvW232qiSTvNN02CiSZsAKdA61ou3H7X9UK7WeEAIC43WHkuM5Rn9leB6QC5nwp0UUqY6jbGknoDtvq87t2tVIiAy5aPmpKnrf0C4uUmaz6zZWz4vvjHok6Kuh6ut2LucwVvisCJ7wTRSXB43ubCsuOMSDkd7u4JJUPJPlzc57rQoXSBm68bnuy7SQ2l/epQbl/O9lrxkQLA52JxNF8zdMT7ZKfoGQkQZjXF1YNhp4VHmfA=
+      rvm:
+        - 2.5.0
+      script:
+        - bundle exec rails db:migrate RAILS_ENV=test
+        - bundle exec rspec
+      after_failure:
+        - mysql -e 'show databases;'
+        - cat ./config/database.yml
+        - echo $RAILS_ENV
+        - bundle exec rake --version
+notifications:
+  email:
+    on_success: change # options: change, never, always
+    on_failure: always # options: change, never, always

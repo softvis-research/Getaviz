@@ -1,7 +1,4 @@
 var relationTransparencyController = (function() {
-
-		
-	var noFadeValue = 0;
 	
 	var relatedEntities = new Array();
 	var parents = new Array();
@@ -14,8 +11,8 @@ var relationTransparencyController = (function() {
 		fullFadeValue : 0.85,
 		halfFadeValue : 0.55,
 		noFadeValue : 0,
-		startFaded: false,
-	}
+		startFaded: false
+	};
 		
 		
 		
@@ -82,7 +79,7 @@ var relationTransparencyController = (function() {
 		}
 
 
-		//get new related entites
+		//get new related entities
 		var entity = applicationEvent.entities[0];	
 		
 		relatedEntities = new Array();

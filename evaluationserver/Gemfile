@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails'
+gem 'rails', '~> 5.2.1'
 
 # Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
@@ -73,7 +73,7 @@ end
 gem "font-awesome-rails"
 gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
-gem 'bootstrap-sass', '~> 3.2.0'
+gem 'bootstrap-sass', '~> 3.3.5.1'
 gem "paperclip"
 gem "nokogiri"
 gem "rubyzip"
