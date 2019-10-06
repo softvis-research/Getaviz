@@ -14,10 +14,6 @@ AFRAME.registerComponent("vive-control-rig", {
     });
     
     var cameraRig = document.querySelector('#cameraRig')
-    cameraRig.addEventListener("componentchanged", ()=> {
-      // TODO Muss noch weg
-      console.log(`x: ${cameraRig.object3D.position.x} y: ${cameraRig.object3D.position.y} z: ${cameraRig.object3D.position.z}`)
-    });
     document.querySelector("#cameraRig").setAttribute("position", "20 10 60");
     
   }
