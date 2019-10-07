@@ -51,10 +51,10 @@ EOT;
         	<!--x3dom-->
         <script type="text/javascript" src="node_modules/x3dom/x3dom.js"></script>
         <link rel="stylesheet" href="node_modules/x3dom/x3dom.css" type="text/css"/>
-        <script type="text/javascript" src="scripts/CanvasManipulator.js"></script>
-        <script type="text/javascript" src="scripts/ActionController.js"></script>
-	    <script type="text/javascript" src="scripts/RelationConnector/RelationConnectorController.js"></script>
-	    <script type="text/javascript" src="scripts/CanvasHover/CanvasHoverController.js"></script>
+        <script type="text/javascript" src="scripts/X3DomCanvasManipulator.js"></script>
+        <script type="text/javascript" src="scripts/X3DomActionController.js"></script>
+	    <script type="text/javascript" src="scripts/RelationConnector/X3DomRelationConnectorController.js"></script>
+	    <script type="text/javascript" src="scripts/CanvasHover/X3DomCanvasHoverController.js"></script>
 EOT;
         $canvasId = "x3dom-x3dElement-canvas";
         $visMode = "x3dom";
@@ -164,7 +164,7 @@ EOT;
     <script type="text/javascript" src="scripts/Filter/Classes/Filter.js"></script>
     <script type="text/javascript" src="scripts/Filter/Classes/Container.js"></script>
     <script type="text/javascript" src="scripts/Filter/Classes/Layer.js"></script>
-    <script type="text/javascript" src="scripts/Filter/FilterController.js"></script>
+    <script type="text/javascript" src="scripts/Filter/X3DomFilterController.js"></script>
 
     <!--user interface-->
 	<script type="text/javascript" src="scripts/DefaultLogger.js"></script>
