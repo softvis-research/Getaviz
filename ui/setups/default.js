@@ -124,7 +124,8 @@
 						{
 							title: 	"Recursive Disk",
 							link: 	true,
-							url:	"index.php?setup=web/RD bank&model=RD%20bank"
+							//url:	"index.php?setup=web/RD bank&model=RD%20bank"
+                            url:	"index.php?setup=web/RD bank&model=RD%20bank&aframe=false"
 						},
                         {
                             title: 	"New Visualization",

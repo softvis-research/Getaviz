@@ -16,14 +16,14 @@
 		$setupUrl = "setups/" . $_GET["setup"] . ".js";
 	}
 
-	$modelUrl = "data/RD bank/model";
+    $modelUrl = "data/City bank aframe/model";
 	if (isset($_GET["model"])) {
 		$modelUrl = $srcDir . "/" . $_GET["model"] ."/model";
 	}
 
     $metaDataJsonUrl = $modelUrl . "/metaData.json";
-
-    if (isset($_GET["aframe"]) && $_GET["aframe"] == 'true') {
+    //if (!isset($_GET["aframe"]) ) {
+    if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true')or(!isset($_GET["aframe"]) ) ) {
         $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v0.9.1.min.js\"></script>";
         $loadVisualizationSpecificScripts = <<<'EOT'
         <script src="node_modules/aframe/dist/aframe-v0.9.1.min.js"></script>

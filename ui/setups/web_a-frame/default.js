@@ -117,11 +117,13 @@
 							title: 	"City Original",
 							link: 	true,
 							url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
+                            //url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe"
 						},
 						{
 							title: 	"Recursive Disk",
 							link: 	true,
-							url:	"index.php?setup=web/RD bank&model=RD%20bank"
+							//url:	"index.php?setup=web/RD bank&model=RD%20bank"
+                            url:	"index.php?setup=web/RD bank&model=RD%20bank&aframe=false"
 						},
                         {
                             title: 	"New Visualization",
