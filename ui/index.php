@@ -22,7 +22,6 @@
 	}
 
     $metaDataJsonUrl = $modelUrl . "/metaData.json";
-    //if (!isset($_GET["aframe"]) ) {
     if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true')or(!isset($_GET["aframe"]) ) ) {
         $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v0.9.1.min.js\"></script>";
         $loadVisualizationSpecificScripts = <<<'EOT'
