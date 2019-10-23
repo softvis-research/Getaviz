@@ -10,7 +10,7 @@
     "d3": "4.13.0",
     "prismjs": "1.16.0",
     "@ztree/ztree_v3": "3.5.40",
-    "jquery": "1.11.1",
+    "jquery": "3.4.0",
     "typeahead.js": "0.10.5",
     "handlebars": "2.0.0",
     "x3dom": "1.7.0"
