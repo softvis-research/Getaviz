@@ -9,9 +9,7 @@ With Getaviz you can solve software engineering problems visually by exploring s
 
 ## Installation, Usage, and Development
 
-Clone this repository and have a look at our [Wiki](../../wiki) which contains many additional information. There you will find guides for installation, usage, and setting up your local environment for development.
-
-Please open an issue if you have any questions or experience problems during setup or usage. Already answered questions can be found [here](https://github.com/softvis-research/Getaviz/labels/question).
+Clone this repository and have a look at our [Wiki](../../wiki) which contains many additional information. There you will find guides for installation, usage, and setting up your local environment for development. Please open an issue if you have any questions or experience any problems. Already answered questions can be found [here](https://github.com/softvis-research/Getaviz/labels/question).
 
 ## Development Team
 
