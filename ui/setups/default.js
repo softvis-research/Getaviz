@@ -41,7 +41,9 @@
 		{	name: 	"packageExplorerController",
 		},
 		{	name: 	"sourceCodeController",
-            url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
+            url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/",
+            codeWindowButtonShow : false,
+            codeValueDivShow : false
 		},
 		
 		{ 	name: 	"relationConnectorController",		

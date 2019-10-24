@@ -12,6 +12,10 @@ var sourceCodeController = (function(){
 	let controllerConfig = {
 		fileType : "java",
         url: "",
+        codeWindowButtonShow:false,
+        codeWindowButtonShow:true,
+        codeValueDivShow:false,
+        codeValueDivShow:true,
 	};
     
 	function initialize(setupConfig){
@@ -41,38 +45,45 @@ var sourceCodeController = (function(){
 				//create html elements
 				let codeViewDiv = document.createElement("DIV");
 				codeViewDiv.id = "codeViewDiv";
-
-                //button                                
-                let codeWindowButton = document.createElement("BUTTON");
-                codeWindowButton.type = "button";
-                codeWindowButton.style = "width: 98%;height: 25px;margin: 2px 0px -2px 2px;";
-                codeWindowButton.addEventListener("click", openWindow, false);
-
-                let fullScreenImage = document.createElement("IMG");
-                fullScreenImage.src = "scripts/SourceCode/images/fullscreen.png";
-                fullScreenImage.style = "width: 25px; height: 20px;";
                 
-                codeWindowButton.appendChild(fullScreenImage);
-                codeViewDiv.appendChild(codeWindowButton);
+                if(controllerConfig.codeWindowButtonShow===true || controllerConfig.codeValueDivShow===false) {
 
-
-                //codeField
-                let codeValueDiv = document.createElement("DIV");
-                codeValueDiv.id = "codeValueDiv";
+                    //button 
+                    let codeWindowButton = document.createElement("BUTTON");
+                    codeWindowButton.type = "button";
+                    codeWindowButton.style = "width: 98%;height: 25px;margin: 2px 0px -2px 2px;";
+                    codeWindowButton.addEventListener("click", openWindow, false);
+                    
+                    let fullScreenImage = document.createElement("IMG");
+                    fullScreenImage.src = "scripts/SourceCode/images/fullscreen.png";
+                    fullScreenImage.style = "width: 25px; height: 20px;";
+                    
+                    codeWindowButton.appendChild(fullScreenImage);
+                    codeViewDiv.appendChild(codeWindowButton);                    
+                };
+               
+                if(controllerConfig.codeWindowButtonShow===false || controllerConfig.codeValueDivShow===true) {
                 
-                let codePre = document.createElement("PRE");
-                codePre.className = "line-numbers language-java";
-                codePre.id = "codePre";
-                codePre.style = "overflow:auto;";
+                    //codeField
+                    let codeValueDiv = document.createElement("DIV");
+                    codeValueDiv.id = "codeValueDiv";
+                    
+                    let codePre = document.createElement("PRE");
+                    codePre.className = "line-numbers language-java";
+                    codePre.id = "codePre";
+                    codePre.style = "overflow:auto;";
 
-                let codeTag = document.createElement("CODE");
-                codeTag.id = "codeTag";
+                    let codeTag = document.createElement("CODE");
+                    codeTag.id = "codeTag";
+                    
+                    codePre.appendChild(codeTag);
+                    codeValueDiv.appendChild(codePre);
+                    codeViewDiv.appendChild(codeValueDiv);
+                };
                 
-                codePre.appendChild(codeTag);
-                codeValueDiv.appendChild(codePre);
-                codeViewDiv.appendChild(codeValueDiv);
+ 
 
-				rootDiv.appendChild(codeViewDiv);
+                rootDiv.appendChild(codeViewDiv);
             });
 		});
 
@@ -132,7 +143,7 @@ var sourceCodeController = (function(){
 		// ersetze . durch / und fuege .java an -> file
         const javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;
 
-        displayCode(javaCodeFile, classEntity, entity);          
+        displayCode(javaCodeFile, classEntity, entity);    
     }
 
     function displayCode(file, classEntity, entity){
@@ -149,7 +160,7 @@ var sourceCodeController = (function(){
        displayCodeChild();
 
        codeHelperFunction.displayCode(file, classEntity, entity, publishOnEntitySelected);                
-    }     
+    }  
 
     function publishOnEntitySelected(entityId){
         const applicationEvent = {
