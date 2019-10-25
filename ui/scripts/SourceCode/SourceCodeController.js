@@ -12,10 +12,8 @@ var sourceCodeController = (function(){
 	let controllerConfig = {
 		fileType : "java",
         url: "",
-        codeWindowButtonShow:false,
-        codeWindowButtonShow:true,
-        codeValueDivShow:false,
-        codeValueDivShow:true,
+        showCodeWindowButton:true,
+        showCode:true,
 	};
     
 	function initialize(setupConfig){
@@ -46,7 +44,7 @@ var sourceCodeController = (function(){
 				let codeViewDiv = document.createElement("DIV");
 				codeViewDiv.id = "codeViewDiv";
                 
-                if(controllerConfig.codeWindowButtonShow===true || controllerConfig.codeValueDivShow===false) {
+                if(controllerConfig.showCodeWindowButton===true) {
 
                     //button 
                     let codeWindowButton = document.createElement("BUTTON");
@@ -62,7 +60,7 @@ var sourceCodeController = (function(){
                     codeViewDiv.appendChild(codeWindowButton);                    
                 };
                
-                if(controllerConfig.codeWindowButtonShow===false || controllerConfig.codeValueDivShow===true) {
+                if(controllerConfig.showCode===true) {
                 
                     //codeField
                     let codeValueDiv = document.createElement("DIV");
@@ -80,9 +78,6 @@ var sourceCodeController = (function(){
                     codeValueDiv.appendChild(codePre);
                     codeViewDiv.appendChild(codeValueDiv);
                 };
-                
- 
-
                 rootDiv.appendChild(codeViewDiv);
             });
 		});

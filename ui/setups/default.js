@@ -42,8 +42,8 @@
 		},
 		{	name: 	"sourceCodeController",
             url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/",
-            codeWindowButtonShow : false,
-            codeValueDivShow : false
+            showCodeWindowButton : true,
+            showCode : true
 		},
 		
 		{ 	name: 	"relationConnectorController",		

@@ -46,7 +46,9 @@ var setup = {
 		{	name: 	"packageExplorerController",
 		},
 		{	name: 	"sourceCodeController",
-            url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
+            url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/",
+            showCodeWindowButton: true,
+            showCode : true
 		},
 		
 		{ 	name: 	"relationConnectorController",		
