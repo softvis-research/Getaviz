@@ -31,6 +31,9 @@
 
 		{	name: 	"canvasFilterController" 
 		},
+        
+        {	name: 	"urlParameterController" 
+        },
 
 		{ 	name: 	"canvasFlyToController" 
 		},
@@ -324,6 +327,7 @@
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
                                         {name: "canvasFlyToController"},
+                                        {name: "urlParameterController"},
                                         {name: "relationConnectorController"},
                                         {name: "relationTransparencyController"},
                                         {name: "relationHighlightController"},

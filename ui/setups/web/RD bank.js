@@ -23,6 +23,10 @@ var setup = {
         {
             name: 'canvasFilterController'
         },
+        
+        {	name: 	"urlParameterController" 
+        },
+
 
         {	name: 	"canvasHoverController",
 		},	
@@ -82,7 +86,7 @@ var setup = {
 					items:		[
 						{
 							title: 		"FlyTo",
-							toggle: 	true,	
+							toggle: 	false,	
 							eventOn: 	"canvasFlyToController.activate",
 							eventOff: 	"canvasFlyToController.deactivate",									
 						},
@@ -340,10 +344,11 @@ var setup = {
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
-                                        {name: "canvasFlyToController"},
+                                        {name: "urlParameterController"},
+                                        /*{name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},
                                         {name: "relationTransparencyController"},
-                                        {name: "relationHighlightController"},
+                                        {name: "relationHighlightController"},*/
                                     ],
                                 },
                                 second: {

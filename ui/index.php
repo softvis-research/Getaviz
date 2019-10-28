@@ -21,7 +21,31 @@
 		$modelUrl = $srcDir . "/" . $_GET["model"] ."/model";
 	}
 
+	//stateUrl
+	$stateUrl = "data/City bank aframe/model";
+	if (isset($_GET["state"])) {
+		$stateUrl = "". $_GET["state"] ."";
+	}
+	$idVariable = "data/City bank aframe/model";
+	if (isset($_GET["id"])) {
+		$idVariable = "". $_GET["id"] ."";
+	}
+	$idListe = array("data/City bank aframe/model");
+	if (isset($_GET["marked"])) {
+		$idListe = explode(",", $_GET["marked"]);
+	}
+	
+	
     $metaDataJsonUrl = $modelUrl . "/metaData.json";
+    
+    //stateUrl
+    if (isset($_GET["state"])) {
+		$metaStateJsonUrl = "state.php?hash=" . $_GET["state"];
+	} else {
+		$metaStateJsonUrl = "state.php?hash=";
+	}
+	
+	
     if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true')or(!isset($_GET["aframe"]) ) ) {
         $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v0.9.1.min.js\"></script>";
         $loadVisualizationSpecificScripts = <<<'EOT'
@@ -77,10 +101,18 @@ EOT;
 ?>
 <script type="text/javascript">
     var modelUrl		 = "<?php echo $modelUrl; ?>";
-
+    //stateUrl
+    var stateUrl		 = "<?php echo $stateUrl; ?>"; 
+	var idVariable	     = "<?php echo $idVariable; ?>";
+	var idListe	         = ["<?php echo join('", "', $idListe); ?>"];
+	
+	
     var multipartX3dUrl  = "<?php echo $multipartX3dUrl; ?>";
     var multipartJsonUrl = "<?php echo $multipartJsonUrl; ?>";
     var metaDataJsonUrl  = "<?php echo $metaDataJsonUrl; ?>";
+    //metaStateJsonUrl
+    var metaStateJsonUrl  = "<?php echo $metaStateJsonUrl; ?>"; 
+
 
     var canvasId = "<?php echo $canvasId; ?>";
     var visMode = "<?php echo $visMode; ?>";
@@ -131,6 +163,7 @@ EOT;
     <link rel="stylesheet" href="scripts/PackageExplorer/zt.css" type="text/css">
 	
 	<script type="text/javascript" src="scripts/CanvasFilter/CanvasFilterController.js"></script>
+	<script type="text/javascript" src="scripts/URLParameter/URLParameterController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasMark/CanvasMarkController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasFlyTo/CanvasFlyToController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasSelect/CanvasSelectController.js"></script>
