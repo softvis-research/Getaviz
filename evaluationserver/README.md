@@ -16,6 +16,7 @@ The evaluation server is a rails application capable to support the evaluation o
 * install docker-compose
 * docker-compose build
 * docker-compose up
+* the server is reachable under http://localhost:3000
 * Admin-access without master.key-File is admin/admin 
 
 
