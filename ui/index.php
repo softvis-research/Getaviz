@@ -21,33 +21,15 @@
 		$modelUrl = $srcDir . "/" . $_GET["model"] ."/model";
 	}
 
-	//stateUrl
-	$stateUrl = "data/City bank aframe/model";
-	//$stateUrl = "";
-	if (isset($_GET["state"])) {
-		$stateUrl = "". $_GET["state"] ."";
-	}
-	$idVariable = "data/City bank aframe/model";
-	//$idVariable = "";
-	if (isset($_GET["id"])) {
-		$idVariable = "". $_GET["id"] ."";
-	}
-	$idListe = array("data/City bank aframe/model");
-	//$idListe = array("");
-	if (isset($_GET["marked"])) {
-		$idListe = explode(",", $_GET["marked"]);
-	}
-	
-	
     $metaDataJsonUrl = $modelUrl . "/metaData.json";
     
-    //stateUrl
+	$stateHashcode = "";
     if (isset($_GET["state"])) {
-		$metaStateJsonUrl = "state.php?hash=" . $_GET["state"];
+        $stateHashcode = $_GET["state"];
+		$metaStateJsonUrl = "state.php?hash=" . $stateHashcode;
 	} else {
 		$metaStateJsonUrl = "state.php?hash=";
 	}
-	
 	
     if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true')or(!isset($_GET["aframe"]) ) ) {
         $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v0.9.1.min.js\"></script>";
@@ -104,16 +86,11 @@ EOT;
 ?>
 <script type="text/javascript">
     var modelUrl		 = "<?php echo $modelUrl; ?>";
-    //stateUrl
-    var stateUrl		 = "<?php echo $stateUrl; ?>"; 
-	var idVariable	     = "<?php echo $idVariable; ?>";
-	var idListe	         = ["<?php echo join('", "', $idListe); ?>"];
-	
-	
+    var stateHashcode		 = "<?php echo $stateHashcode; ?>"; 
+    
     var multipartX3dUrl  = "<?php echo $multipartX3dUrl; ?>";
     var multipartJsonUrl = "<?php echo $multipartJsonUrl; ?>";
     var metaDataJsonUrl  = "<?php echo $metaDataJsonUrl; ?>";
-    //metaStateJsonUrl
     var metaStateJsonUrl  = "<?php echo $metaStateJsonUrl; ?>"; 
 
 

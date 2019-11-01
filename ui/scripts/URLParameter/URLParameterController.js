@@ -153,13 +153,18 @@ var urlParameterController = (function() {
             state.rotation = rotation;
         };
         
-		var myString=JSON.stringify(state,null,'\t');
-        var myHashwert=JSON.stringify(state).hashCode();
-		console.log("myHashwert: "+myHashwert);
+		var jsonString = JSON.stringify(state,null,'\t');
+        var stateHashcode = JSON.stringify(state).hashCode();
 
 		var url = window.location.toString().split("&state=")[0];
-		url ="<strong>StateID:</strong>"+ myHashwert +"<br /><br /><strong>URL:</strong> <input id='copyField' style='width:80%' readonly value='" + url + "&state=" + myHashwert
-		+"'> <a onclick='copyInput()' href='javascript:void(0);'><strong>share link</strong></a><br /><br /><strong>Famix:</strong> <pre style='margin:0'>"+myString+"</pre>";
+        var url_StateID_URL= "<strong>StateID:</strong>"+ stateHashcode +"<br /><br /><strong>URL:</strong> <input id='copyField' style='width:80%' readonly value='";
+        var url_copyFeield_jsonString= + stateHashcode
+            +"'> <a onclick='copyInput()' href='javascript:void(0);'><strong>share link</strong></a><br /><br /><strong>Famix:</strong> <pre style='margin:0'>"+jsonString+"</pre>";
+        if (url.includes( "?")) {
+            url = url_StateID_URL + url + "&state=" + url_copyFeield_jsonString;  
+        } else{
+            url = url_StateID_URL + url + "?state=" + url_copyFeield_jsonString;
+        };
 
 		$("#DisplayWindow").remove();
 		var loadPopup = application.createPopup("url",  
@@ -184,8 +189,8 @@ var urlParameterController = (function() {
 	        }
         }; 
         xhr.send(JSON.stringify({
-	        hash: myHashwert,
-			state: myString,
+	        stateHashcode: stateHashcode,
+			jsonString: jsonString,
 		}));
 	}
 
