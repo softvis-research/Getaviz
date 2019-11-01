@@ -30,7 +30,6 @@ var urlParameterController = (function() {
 				var entity = model.getEntityById(element);
 				if (entity) {
 					entities.push(entity);
-					
 				}
 			});
 			
@@ -54,27 +53,36 @@ var urlParameterController = (function() {
 			};
 			events.filtered.on.publish(applicationEvent);
 
+            if (visMode.includes( "x3dom")) {
+               //get reference of x3dom objects
+                var x3domRuntime = document.getElementById('x3dElement').runtime;
+                var viewarea = x3domRuntime.canvas.doc._viewarea;
+                var viewpoint = viewarea._scene.getViewpoint();
 
-			//get reference of x3dom objects
-			var x3domRuntime = document.getElementById('x3dElement').runtime;
-			var viewarea = x3domRuntime.canvas.doc._viewarea;
-			var viewpoint = viewarea._scene.getViewpoint();
+                if (metaStateJson.viewMatrix) {
+                    Object.setPrototypeOf(metaStateJson.viewMatrix, x3dom.fields.SFMatrix4f.prototype);
+                    viewpoint.setView(metaStateJson.viewMatrix);
+                    viewarea._needNavigationMatrixUpdate = true;
+                }
+                if (metaStateJson.centerRotation) {
+                    Object.setPrototypeOf(metaStateJson.viewMatrix, x3dom.fields.SFVec4f.prototype);
+                    viewpoint.setCenterOfRotation(metaStateJson.centerRotation);
+                }
+           } else {
+                //get reference of aframe
+                var cameraEl = document.querySelector('#camera');
 
-			if (metaStateJson.viewMatrix) {
-				Object.setPrototypeOf(metaStateJson.viewMatrix, x3dom.fields.SFMatrix4f.prototype);
-				viewpoint.setView(metaStateJson.viewMatrix);
-				viewarea._needNavigationMatrixUpdate = true;
-			}
-			if (metaStateJson.centerRotation) {
-				Object.setPrototypeOf(metaStateJson.viewMatrix, x3dom.fields.SFVec4f.prototype);
-				viewpoint.setCenterOfRotation(metaStateJson.centerRotation);
-			}
+                if (metaStateJson.position) {
+                    cameraEl.setAttribute('position', metaStateJson.position)
+                }
+                if (metaStateJson.rotation) {
+                    cameraEl.setAttribute('rotation', metaStateJson.rotation)
+                }
+           }
 		}
     }
 	
 	function activate(){
-		console.log("idVariable: "+ idVariable);
-        
 		//URL-button                            
 		var codeWindowButton2 = document.createElement("BUTTON");
 		codeWindowButton2.type = "button";
@@ -87,10 +95,7 @@ var urlParameterController = (function() {
 						
 		codeWindowButton2.appendChild(fullScreenImage2);
 		$("ul.jqx-menu-ul")[0].appendChild(codeWindowButton2);
-
-
 	}
-
 
 	String.prototype.hashCode = function() {
 		var hash = 0, i, chr;
@@ -106,10 +111,7 @@ var urlParameterController = (function() {
 			return Math.abs(hash * 10) + 1;	
 	};
 	
-
-	
 	function openWindow2(){
-		
 		var state = {
 			"selected": []
 			,
@@ -117,7 +119,6 @@ var urlParameterController = (function() {
 			,
 			"filtered": []
 		};
-		
 		var selectedEntities = events.selected.getEntities();
 		state.selected = new Array();
 		selectedEntities.forEach(function(element){
@@ -133,22 +134,30 @@ var urlParameterController = (function() {
 		filteredEntities.forEach(function(element){
 			state.filtered.push(element.id);
 		});
-		
-		//get reference of x3dom objects
-		var x3domRuntime = document.getElementById('x3dElement').runtime;
-		var viewarea = x3domRuntime.canvas.doc._viewarea;
-		var viewpoint = viewarea._scene.getViewpoint();
-		
-		state.viewMatrix = viewarea.getViewMatrix();
-		state.centerRotation = viewpoint.getCenterOfRotation();
+        
+        if (visMode.includes( "x3dom")) {
+            //get reference of x3dom objects
+            var x3domRuntime = document.getElementById('x3dElement').runtime;
+            var viewarea = x3domRuntime.canvas.doc._viewarea;
+            var viewpoint = viewarea._scene.getViewpoint();
+            
+            state.viewMatrix = viewarea.getViewMatrix();
+            state.centerRotation = viewpoint.getCenterOfRotation();
+        }else{
+            //get reference of aframe
+            var cameraEl = document.querySelector('#camera');
+            var position = cameraEl.getAttribute('position');
+            var rotation = cameraEl.getAttribute('rotation');
 
+            state.position = position;
+            state.rotation = rotation;
+        };
+        
 		var myString=JSON.stringify(state,null,'\t');
         var myHashwert=JSON.stringify(state).hashCode();
 		console.log("myHashwert: "+myHashwert);
 
-
 		var url = window.location.toString().split("&state=")[0];
-
 		url ="<strong>StateID:</strong>"+ myHashwert +"<br /><br /><strong>URL:</strong> <input id='copyField' style='width:80%' readonly value='" + url + "&state=" + myHashwert
 		+"'> <a onclick='copyInput()' href='javascript:void(0);'><strong>share link</strong></a><br /><br /><strong>Famix:</strong> <pre style='margin:0'>"+myString+"</pre>";
 
@@ -171,9 +180,7 @@ var urlParameterController = (function() {
         xhr.setRequestHeader("Content-Type", "application/json"); 
         xhr.onreadystatechange = function () {
 	        if (xhr.readyState === 4 && xhr.status === 200) {
- 
-			  console.log("successfull");
-			 
+			  console.log("successfull");			 
 	        }
         }; 
         xhr.send(JSON.stringify({

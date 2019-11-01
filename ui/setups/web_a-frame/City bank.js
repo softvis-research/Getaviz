@@ -77,7 +77,7 @@
 					items:		[
 						{
 							title: 		"FlyTo",
-							toggle: 	true,	
+							toggle: 	false,	
 							eventOn: 	"canvasFlyToController.activate",
 							eventOff: 	"canvasFlyToController.deactivate",									
 						},
@@ -326,8 +326,8 @@
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
-                                        {name: "canvasFlyToController"},
                                         {name: "urlParameterController"},
+                                        //{name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},
                                         {name: "relationTransparencyController"},
                                         {name: "relationHighlightController"},

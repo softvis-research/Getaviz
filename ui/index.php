@@ -23,14 +23,17 @@
 
 	//stateUrl
 	$stateUrl = "data/City bank aframe/model";
+	//$stateUrl = "";
 	if (isset($_GET["state"])) {
 		$stateUrl = "". $_GET["state"] ."";
 	}
 	$idVariable = "data/City bank aframe/model";
+	//$idVariable = "";
 	if (isset($_GET["id"])) {
 		$idVariable = "". $_GET["id"] ."";
 	}
 	$idListe = array("data/City bank aframe/model");
+	//$idListe = array("");
 	if (isset($_GET["marked"])) {
 		$idListe = explode(",", $_GET["marked"]);
 	}
