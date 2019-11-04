@@ -1,6 +1,15 @@
 var urlParameterController = (function() {
     
-    function initialize(){
+    //config parameters	
+	let controllerConfig = {
+        showDebugOutput: false,
+	};
+
+    
+    function initialize(setupConfig){   
+        
+        application.transferConfigParams(setupConfig, controllerConfig);
+        
 		$(document).ready(function () {
 			$.getJSON( metaStateJsonUrl, initializeApplicationTimeout);
 		});
@@ -158,31 +167,43 @@ var urlParameterController = (function() {
         var jsonString = JSON.stringify(state,null,'\t');
         
         var url = window.location.toString().split("&state=")[0].split("?state=")[0];
-        var url_StateID_URL= "<strong>StateID:</strong>" + stateHashcode + "<br /><br /><strong>URL:</strong> <input id='copyField' style='width:80%' readonly value='";
-        var url_copyFeield_jsonString= + stateHashcode
-            +"'> <a onclick='copyInput()' href='javascript:void(0);'><strong>share link</strong></a><br /><br /><strong>Famix:</strong> <pre style='margin:0'>"+jsonString+"</pre>";
         if (url.includes( "?")) {
-            url = url_StateID_URL + url + "&state=" + url_copyFeield_jsonString;  
+                var state_N= "&state=";
+                //url = url_StateID + url_URL + url_copyFeield_0 +"&state=" + url_copyFeield_1 + url_shareLink + url_jsonString;  
+            } else{
+                var state_N= "?state=";
+                //url = url_StateID + url_URL + url_copyFeield_0 +"?state=" + url_copyFeield_1 + url_shareLink + url_jsonString;
+            };
+        var stateID= "<strong>StateID:</strong>" + stateHashcode + "<br /><br />";
+        var urlStr= "<strong>URL:</strong>";
+        var copyField= "<input id='copyField' style='width:80%' readonly value='" + url + state_N + stateHashcode
+                +"'> <a onclick='copyInput()' href='javascript:void(0);'>";
+        var shareLink= "<strong>share link</strong></a><br /><br />";
+        var jsonHtml= "<strong>JSON:</strong> <pre style='margin:0'>"+jsonString+"</pre>";
+        var popup;
+  
+        if(controllerConfig.showDebugOutput===true) {
+            popup = stateID + urlStr + copyField + shareLink + jsonHtml;
         } else{
-            url = url_StateID_URL + url + "?state=" + url_copyFeield_jsonString;
-        };
+            popup = urlStr + copyField + shareLink;           
+        }; 
 
 		$("#DisplayWindow").remove();
-		var loadPopup = application.createPopup("url",  
-		url, "DisplayWindow");
+		var loadPopup = application.createPopup("popup",  
+		popup, "DisplayWindow");
 		document.body.appendChild(loadPopup);
 		$("#DisplayWindow").css("display", "block").jqxWindow({
 				theme: "metro",
 				width: 700,
-				height: 600,
+				//height: 600,
 				isModal: true,
 				autoOpen: true,
 				resizable: false
 		});
 
         var xhr = new XMLHttpRequest();
-        var url = "state.php";
-        xhr.open("POST", url, true);
+        var jsonFamix = "state.php";
+        xhr.open("POST", jsonFamix, true);
         xhr.setRequestHeader("Content-Type", "application/json"); 
         xhr.onreadystatechange = function () {
 	        if (xhr.readyState === 4 && xhr.status === 200) {

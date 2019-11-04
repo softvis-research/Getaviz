@@ -32,7 +32,8 @@
 		{	name: 	"canvasFilterController" 
 		},
         
-        {	name: 	"urlParameterController" 
+        {	name: 	"urlParameterController",
+            showDebugOutput: false
         },
 
 		{ 	name: 	"canvasFlyToController" 

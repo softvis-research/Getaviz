@@ -29,7 +29,8 @@
 		{	name: 	"canvasSelectController" 
 		},	
 
-        {	name: 	"urlParameterController" 
+        {	name: 	"urlParameterController",
+            showDebugOutput: false
         },
 
 		{	name: 	"canvasFilterController" 
