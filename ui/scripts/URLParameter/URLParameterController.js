@@ -153,11 +153,12 @@ var urlParameterController = (function() {
             state.rotation = rotation;
         };
         
-		var jsonString = JSON.stringify(state,null,'\t');
+		
         var stateHashcode = JSON.stringify(state).hashCode();
-
-		var url = window.location.toString().split("&state=")[0];
-        var url_StateID_URL= "<strong>StateID:</strong>"+ stateHashcode +"<br /><br /><strong>URL:</strong> <input id='copyField' style='width:80%' readonly value='";
+        var jsonString = JSON.stringify(state,null,'\t');
+        
+        var url = window.location.toString().split("&state=")[0].split("?state=")[0];
+        var url_StateID_URL= "<strong>StateID:</strong>" + stateHashcode + "<br /><br /><strong>URL:</strong> <input id='copyField' style='width:80%' readonly value='";
         var url_copyFeield_jsonString= + stateHashcode
             +"'> <a onclick='copyInput()' href='javascript:void(0);'><strong>share link</strong></a><br /><br /><strong>Famix:</strong> <pre style='margin:0'>"+jsonString+"</pre>";
         if (url.includes( "?")) {
