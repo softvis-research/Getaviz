@@ -153,7 +153,7 @@ var urlParameterController = (function() {
             state.rotation = rotation;
         };
         
-		
+
         var stateHashcode = JSON.stringify(state).hashCode();
         var jsonString = JSON.stringify(state,null,'\t');
         
