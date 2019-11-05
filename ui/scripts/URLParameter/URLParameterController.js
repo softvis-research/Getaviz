@@ -169,10 +169,8 @@ var urlParameterController = (function() {
         var url = window.location.toString().split("&state=")[0].split("?state=")[0];
         if (url.includes( "?")) {
                 var state_N= "&state=";
-                //url = url_StateID + url_URL + url_copyFeield_0 +"&state=" + url_copyFeield_1 + url_shareLink + url_jsonString;  
             } else{
                 var state_N= "?state=";
-                //url = url_StateID + url_URL + url_copyFeield_0 +"?state=" + url_copyFeield_1 + url_shareLink + url_jsonString;
             };
         var stateID= "<strong>StateID:</strong>" + stateHashcode + "<br /><br />";
         var urlStr= "<strong>URL:</strong>";
@@ -202,8 +200,8 @@ var urlParameterController = (function() {
 		});
 
         var xhr = new XMLHttpRequest();
-        var jsonFamix = "state.php";
-        xhr.open("POST", jsonFamix, true);
+        var jsonData = "state.php";
+        xhr.open("POST", jsonData, true);
         xhr.setRequestHeader("Content-Type", "application/json"); 
         xhr.onreadystatechange = function () {
 	        if (xhr.readyState === 4 && xhr.status === 200) {
