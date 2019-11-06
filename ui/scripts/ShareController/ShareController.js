@@ -179,7 +179,7 @@ var shareController = (function() {
             }; 
 
             $("#DisplayWindow").remove();
-            var loadPopup = application.createPopup("popup",  
+            var loadPopup = application.createPopup("Share Visualization",  
             popup, "DisplayWindow");
             document.body.appendChild(loadPopup);
             $("#DisplayWindow").css("display", "block").jqxWindow({
