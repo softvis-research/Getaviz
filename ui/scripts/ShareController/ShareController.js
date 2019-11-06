@@ -165,6 +165,7 @@ var shareController = (function() {
                     var state_N= "?state=";
                 };
             var stateID= "<strong>StateID:</strong>" + stateHashcode + "<br /><br />";
+            var descriptionText = "Use this URL to share the current state of the visualization."+ "<br /><br />";
             var urlStr= "<strong>URL:</strong>";
             var copyField= "<input id='copyField' style='width:80%' readonly value='" + url + state_N + stateHashcode
                     +"'> <a onclick='copyInput()' href='javascript:void(0);'>";
@@ -173,9 +174,9 @@ var shareController = (function() {
             var popup;
     
             if(controllerConfig.showDebugOutput===true) {
-                popup = stateID + urlStr + copyField + shareLink + jsonHtml;
+                popup = stateID + descriptionText + urlStr + copyField + shareLink + jsonHtml;
             } else{
-                popup = urlStr + copyField + shareLink;           
+                popup = descriptionText + urlStr + copyField + shareLink;           
             }; 
 
             $("#DisplayWindow").remove();
