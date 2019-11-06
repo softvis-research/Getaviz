@@ -92,18 +92,119 @@ var urlParameterController = (function() {
     }
 	
 	function activate(){
-		//URL-button                            
-		var codeWindowButton2 = document.createElement("BUTTON");
-		codeWindowButton2.type = "button";
-		codeWindowButton2.style = "width: 10%;height: 25px;margin: 2px 0px -2px 2px;";
-		codeWindowButton2.addEventListener("click", openWindow2, false);
-		
-		var fullScreenImage2 = document.createElement("IMG");
-		fullScreenImage2.src = "scripts/URLParameter/images/idlink.png";
-		fullScreenImage2.style = "width: 25px; height: 20px;";
-						
-		codeWindowButton2.appendChild(fullScreenImage2);
-		$("ul.jqx-menu-ul")[0].appendChild(codeWindowButton2);
+    
+        var id = "jqxTextImageButton";
+        var buttonType = "button";
+        var jqxTextImageButton = document.createElement("BUTTON");
+		jqxTextImageButton.type = buttonType;
+        jqxTextImageButton.id = id;
+        var text = document.createTextNode("share");
+        jqxTextImageButton.appendChild(text);
+        $("ul.jqx-menu-ul")[0].appendChild(jqxTextImageButton);
+        
+        $("#jqxTextImageButton").jqxButton({ 
+            theme: "metro",
+            width: 80, 
+            height: 25, 
+            textImageRelation: "imageBeforeText", 
+            textPosition: "left", 
+            imgSrc: "scripts/URLParameter/images/icon_share.png" 
+        });
+        
+        $("#jqxTextImageButton").on('click', function (){
+        
+            var state = {
+                "selected": []
+                ,
+                "marked": []
+                ,
+                "filtered": []
+            };
+            var selectedEntities = events.selected.getEntities();
+            state.selected = new Array();
+            selectedEntities.forEach(function(element){
+                state.selected.push(element.id);
+            });
+            var markedEntities = events.marked.getEntities();
+            state.marked = new Array();
+            markedEntities.forEach(function(element){
+                state.marked.push(element.id);
+            });
+            var filteredEntities = events.filtered.getEntities();
+            state.filtered = new Array();
+            filteredEntities.forEach(function(element){
+                state.filtered.push(element.id);
+            });
+            
+            if (visMode.includes( "x3dom")) {
+                //get reference of x3dom objects
+                var x3domRuntime = document.getElementById('x3dElement').runtime;
+                var viewarea = x3domRuntime.canvas.doc._viewarea;
+                var viewpoint = viewarea._scene.getViewpoint();
+                
+                state.viewMatrix = viewarea.getViewMatrix();
+                state.centerRotation = viewpoint.getCenterOfRotation();
+            }else{
+                //get reference of aframe
+                var cameraEl = document.querySelector('#camera');
+                var position = cameraEl.getAttribute('position');
+                var rotation = cameraEl.getAttribute('rotation');
+
+                state.position = position;
+                state.rotation = rotation;
+            };
+            
+
+            var stateHashcode = JSON.stringify(state).hashCode();
+            var jsonString = JSON.stringify(state,null,'\t');
+            
+            var url = window.location.toString().split("&state=")[0].split("?state=")[0];
+            if (url.includes( "?")) {
+                    var state_N= "&state=";
+                } else{
+                    var state_N= "?state=";
+                };
+            var stateID= "<strong>StateID:</strong>" + stateHashcode + "<br /><br />";
+            var urlStr= "<strong>URL:</strong>";
+            var copyField= "<input id='copyField' style='width:80%' readonly value='" + url + state_N + stateHashcode
+                    +"'> <a onclick='copyInput()' href='javascript:void(0);'>";
+            var shareLink= "<strong>share link</strong></a><br /><br />";
+            var jsonHtml= "<strong>JSON:</strong> <pre style='margin:0'>"+jsonString+"</pre>";
+            var popup;
+    
+            if(controllerConfig.showDebugOutput===true) {
+                popup = stateID + urlStr + copyField + shareLink + jsonHtml;
+            } else{
+                popup = urlStr + copyField + shareLink;           
+            }; 
+
+            $("#DisplayWindow").remove();
+            var loadPopup = application.createPopup("popup",  
+            popup, "DisplayWindow");
+            document.body.appendChild(loadPopup);
+            $("#DisplayWindow").css("display", "block").jqxWindow({
+                    theme: "metro",
+                    width: 700,
+                    //height: 600,
+                    isModal: true,
+                    autoOpen: true,
+                    resizable: false
+            });
+
+            var xhr = new XMLHttpRequest();
+            var jsonData = "state.php";
+            xhr.open("POST", jsonData, true);
+            xhr.setRequestHeader("Content-Type", "application/json"); 
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("successfull");			 
+                }
+            }; 
+            xhr.send(JSON.stringify({
+                stateHashcode: stateHashcode,
+                jsonString: jsonString,
+            }));
+        });
 	}
 
 	String.prototype.hashCode = function() {
@@ -118,101 +219,7 @@ var urlParameterController = (function() {
 			return Math.abs(hash * 10);
 		else
 			return Math.abs(hash * 10) + 1;	
-	};
-	
-	function openWindow2(){
-		var state = {
-			"selected": []
-			,
-			"marked": []
-			,
-			"filtered": []
-		};
-		var selectedEntities = events.selected.getEntities();
-		state.selected = new Array();
-		selectedEntities.forEach(function(element){
-			state.selected.push(element.id);
-		});
-		var markedEntities = events.marked.getEntities();
-		state.marked = new Array();
-		markedEntities.forEach(function(element){
-			state.marked.push(element.id);
-		});
-		var filteredEntities = events.filtered.getEntities();
-		state.filtered = new Array();
-		filteredEntities.forEach(function(element){
-			state.filtered.push(element.id);
-		});
-        
-        if (visMode.includes( "x3dom")) {
-            //get reference of x3dom objects
-            var x3domRuntime = document.getElementById('x3dElement').runtime;
-            var viewarea = x3domRuntime.canvas.doc._viewarea;
-            var viewpoint = viewarea._scene.getViewpoint();
-            
-            state.viewMatrix = viewarea.getViewMatrix();
-            state.centerRotation = viewpoint.getCenterOfRotation();
-        }else{
-            //get reference of aframe
-            var cameraEl = document.querySelector('#camera');
-            var position = cameraEl.getAttribute('position');
-            var rotation = cameraEl.getAttribute('rotation');
-
-            state.position = position;
-            state.rotation = rotation;
-        };
-        
-
-        var stateHashcode = JSON.stringify(state).hashCode();
-        var jsonString = JSON.stringify(state,null,'\t');
-        
-        var url = window.location.toString().split("&state=")[0].split("?state=")[0];
-        if (url.includes( "?")) {
-                var state_N= "&state=";
-            } else{
-                var state_N= "?state=";
-            };
-        var stateID= "<strong>StateID:</strong>" + stateHashcode + "<br /><br />";
-        var urlStr= "<strong>URL:</strong>";
-        var copyField= "<input id='copyField' style='width:80%' readonly value='" + url + state_N + stateHashcode
-                +"'> <a onclick='copyInput()' href='javascript:void(0);'>";
-        var shareLink= "<strong>share link</strong></a><br /><br />";
-        var jsonHtml= "<strong>JSON:</strong> <pre style='margin:0'>"+jsonString+"</pre>";
-        var popup;
-  
-        if(controllerConfig.showDebugOutput===true) {
-            popup = stateID + urlStr + copyField + shareLink + jsonHtml;
-        } else{
-            popup = urlStr + copyField + shareLink;           
-        }; 
-
-		$("#DisplayWindow").remove();
-		var loadPopup = application.createPopup("popup",  
-		popup, "DisplayWindow");
-		document.body.appendChild(loadPopup);
-		$("#DisplayWindow").css("display", "block").jqxWindow({
-				theme: "metro",
-				width: 700,
-				//height: 600,
-				isModal: true,
-				autoOpen: true,
-				resizable: false
-		});
-
-        var xhr = new XMLHttpRequest();
-        var jsonData = "state.php";
-        xhr.open("POST", jsonData, true);
-        xhr.setRequestHeader("Content-Type", "application/json"); 
-        xhr.onreadystatechange = function () {
-	        if (xhr.readyState === 4 && xhr.status === 200) {
-			  console.log("successfull");			 
-	        }
-        }; 
-        xhr.send(JSON.stringify({
-	        stateHashcode: stateHashcode,
-			jsonString: jsonString,
-		}));
-	}
+    };
 
     return {
         initialize: initialize,
