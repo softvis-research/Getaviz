@@ -32,7 +32,7 @@
 		{	name: 	"canvasFilterController" 
 		},
         
-        {	name: 	"urlParameterController",
+        {	name: 	"shareController",
             showDebugOutput: false
         },
 
@@ -318,7 +318,7 @@
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
                                         //{name: "canvasFlyToController"},
-                                        {name: "urlParameterController"},
+                                        {name: "shareController"},
                                         {name: "relationConnectorController"},
                                         {name: "relationTransparencyController"},
                                         {name: "relationHighlightController"},

@@ -143,7 +143,7 @@ EOT;
     <link rel="stylesheet" href="scripts/PackageExplorer/zt.css" type="text/css">
 	
 	<script type="text/javascript" src="scripts/CanvasFilter/CanvasFilterController.js"></script>
-	<script type="text/javascript" src="scripts/URLParameter/URLParameterController.js"></script>
+	<script type="text/javascript" src="scripts/ShareController/ShareController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasMark/CanvasMarkController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasFlyTo/CanvasFlyToController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasSelect/CanvasSelectController.js"></script>

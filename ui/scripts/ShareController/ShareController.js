@@ -1,4 +1,4 @@
-var urlParameterController = (function() {
+var shareController = (function() {
     
     //config parameters	
 	let controllerConfig = {
@@ -28,7 +28,7 @@ var urlParameterController = (function() {
 			}); 
 		
 			var applicationEvent = {			
-				sender: urlParameterController,
+				sender: shareController,
 				entities: entities
 			};
 			events.selected.on.publish(applicationEvent);
@@ -43,7 +43,7 @@ var urlParameterController = (function() {
 			});
 			
 			var applicationEvent = {			
-				sender: urlParameterController,
+				sender: shareController,
 				entities: entities
 			};
 			events.marked.on.publish(applicationEvent);
@@ -57,7 +57,7 @@ var urlParameterController = (function() {
 			});
 			
 			var applicationEvent = {			
-				sender: urlParameterController,
+				sender: shareController,
 				entities: entities
 			};
 			events.filtered.on.publish(applicationEvent);
@@ -108,7 +108,7 @@ var urlParameterController = (function() {
             height: 25, 
             textImageRelation: "imageBeforeText", 
             textPosition: "left", 
-            imgSrc: "scripts/URLParameter/images/icon_share.png" 
+            imgSrc: "scripts/ShareController/images/icon_share.png" 
         });
         
         $("#jqxTextImageButton").on('click', function (){

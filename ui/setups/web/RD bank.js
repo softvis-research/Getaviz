@@ -24,7 +24,7 @@ var setup = {
             name: 'canvasFilterController'
         },
         
-        {	name: 	"urlParameterController", 
+        {	name: 	"shareController", 
             showDebugOutput: false
         },
 
@@ -345,7 +345,7 @@ var setup = {
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
-                                        {name: "urlParameterController"},
+                                        {name: "shareController"},
                                         /*{name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},
                                         {name: "relationTransparencyController"},
