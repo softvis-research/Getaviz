@@ -98,7 +98,7 @@ var shareController = (function() {
         var jqxTextImageButton = document.createElement("BUTTON");
 		jqxTextImageButton.type = buttonType;
         jqxTextImageButton.id = id;
-        var text = document.createTextNode("share");
+        var text = document.createTextNode("Share");
         jqxTextImageButton.appendChild(text);
        $("ul.jqx-menu-ul")[0].appendChild(jqxTextImageButton);
         
@@ -167,7 +167,7 @@ var shareController = (function() {
                 
             var stateID= "<strong>StateID:</strong>" + stateHashcode + "<br /><br />";
             var descriptionText = "Use this URL to share the current state of the visualization."+ "<br />";
-            var shareLinkDiv= "<div id='shareLinkDiv'><input id='copyField' style='width:80%' readonly value='" + url + state_N + stateHashcode
+            var shareLinkDiv= "<div id='shareLinkDiv'><input id='copyField' style='width:85%; float:left' readonly value='" + url + state_N + stateHashcode
                     +"'></div> ";
             var jsonHtml= "<strong>JSON:</strong> <pre style='margin:0'>"+jsonString+"</pre>";
             var popup;
@@ -185,11 +185,10 @@ var shareController = (function() {
             $("#DisplayWindow").css("display", "block").jqxWindow({
                     theme: "metro",
                     width: 700,
-                    height: 90,
+                    height: 80,
                     isModal: true,
                     autoOpen: true,
                     resizable: false
-                     //overflow: hidden
             });
             
             var shareLinkid = "jqxshareLinkButton";
@@ -197,22 +196,17 @@ var shareController = (function() {
             var jqxshareLinkButton = document.createElement("BUTTON");
             jqxshareLinkButton.type = shareLinkbuttonType;
             jqxshareLinkButton.id = shareLinkid;
-            var shareLinktext = document.createTextNode("shareLink");
-            jqxshareLinkButton.appendChild(shareLinktext);
 
             document.getElementById('shareLinkDiv').appendChild(jqxshareLinkButton);
 
             $("#jqxshareLinkButton").jqxButton({ 
                 theme: "metro",
-                width: 80, 
-                height: 25, 
-                
+                imgSrc: "scripts/ShareController/images/copy_icon.png"
             });
             
            $("#jqxshareLinkButton").on('click', function (){
                 document.getElementById('copyField').select();
                 document.execCommand("copy");
-            
             });
            
             var xhr = new XMLHttpRequest();
