@@ -185,10 +185,11 @@ var shareController = (function() {
             $("#DisplayWindow").css("display", "block").jqxWindow({
                     theme: "metro",
                     width: 700,
-                    //height: 600,
+                    height: 90,
                     isModal: true,
                     autoOpen: true,
                     resizable: false
+                     //overflow: hidden
             });
             
             var shareLinkid = "jqxshareLinkButton";
