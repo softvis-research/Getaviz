@@ -13,6 +13,7 @@
     "jquery": "1.11.1",
     "typeahead.js": "0.10.5",
     "handlebars": "2.0.0",
-    "x3dom": "1.7.0"
+    "x3dom": "1.7.0",
+    "material-components-web":"4.0.0"
   }
 }

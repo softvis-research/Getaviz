@@ -100,7 +100,7 @@ var shareController = (function() {
         jqxTextImageButton.id = id;
         var text = document.createTextNode("share");
         jqxTextImageButton.appendChild(text);
-        $("ul.jqx-menu-ul")[0].appendChild(jqxTextImageButton);
+       $("ul.jqx-menu-ul")[0].appendChild(jqxTextImageButton);
         
         $("#jqxTextImageButton").jqxButton({ 
             theme: "metro",
@@ -164,19 +164,18 @@ var shareController = (function() {
                 } else{
                     var state_N= "?state=";
                 };
+                
             var stateID= "<strong>StateID:</strong>" + stateHashcode + "<br /><br />";
-            var descriptionText = "Use this URL to share the current state of the visualization."+ "<br /><br />";
-            var urlStr= "<strong>URL:</strong>";
-            var copyField= "<input id='copyField' style='width:80%' readonly value='" + url + state_N + stateHashcode
-                    +"'> <a onclick='copyInput()' href='javascript:void(0);'>";
-            var shareLink= "<strong>share link</strong></a><br /><br />";
+            var descriptionText = "Use this URL to share the current state of the visualization."+ "<br />";
+            var shareLinkDiv= "<div id='shareLinkDiv'><input id='copyField' style='width:80%' readonly value='" + url + state_N + stateHashcode
+                    +"'></div> ";
             var jsonHtml= "<strong>JSON:</strong> <pre style='margin:0'>"+jsonString+"</pre>";
             var popup;
     
             if(controllerConfig.showDebugOutput===true) {
-                popup = stateID + descriptionText + urlStr + copyField + shareLink + jsonHtml;
+                popup = stateID + descriptionText + shareLinkDiv + jsonHtml;
             } else{
-                popup = descriptionText + urlStr + copyField + shareLink;           
+                popup = descriptionText + shareLinkDiv;
             }; 
 
             $("#DisplayWindow").remove();
@@ -191,7 +190,30 @@ var shareController = (function() {
                     autoOpen: true,
                     resizable: false
             });
+            
+            var shareLinkid = "jqxshareLinkButton";
+            var shareLinkbuttonType = "button";
+            var jqxshareLinkButton = document.createElement("BUTTON");
+            jqxshareLinkButton.type = shareLinkbuttonType;
+            jqxshareLinkButton.id = shareLinkid;
+            var shareLinktext = document.createTextNode("shareLink");
+            jqxshareLinkButton.appendChild(shareLinktext);
 
+            document.getElementById('shareLinkDiv').appendChild(jqxshareLinkButton);
+
+            $("#jqxshareLinkButton").jqxButton({ 
+                theme: "metro",
+                width: 80, 
+                height: 25, 
+                
+            });
+            
+           $("#jqxshareLinkButton").on('click', function (){
+                document.getElementById('copyField').select();
+                document.execCommand("copy");
+            
+            });
+           
             var xhr = new XMLHttpRequest();
             var jsonData = "state.php";
             xhr.open("POST", jsonData, true);
@@ -227,8 +249,3 @@ var shareController = (function() {
 		activate: activate
 	};    
 })();
-
-var copyInput = (function() {
-	document.getElementById('copyField').select();
-	document.execCommand("copy");
-});
