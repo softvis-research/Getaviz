@@ -1,6 +1,8 @@
-package org.getaviz.generator.rd.s2m;
+package org.getaviz.generator.rd;
 
 import org.getaviz.generator.database.DatabaseConnector;
+
+import javax.xml.crypto.Data;
 
 public interface RDElement {
 
@@ -8,6 +10,7 @@ public interface RDElement {
     long getVisualizedNodeID();
     long getID();
     void setParentID(long id);
-    void writeToDatabase(DatabaseConnector connector, boolean wroteToDatabase);
+    void updateNode(DatabaseConnector connector);
+    void createNode(DatabaseConnector connector);
 
 }

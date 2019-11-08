@@ -1,6 +1,6 @@
 package org.getaviz.generator.rd.m2m;
 
-import org.getaviz.generator.rd.s2m.Disk;
+import org.getaviz.generator.rd.Disk;
 
 public class Position {
     public Double x;

@@ -5,6 +5,7 @@ import org.getaviz.generator.Step;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.rd.*;
 import org.neo4j.driver.v1.StatementResult;
 
 public class JQA2RD implements Step {
@@ -12,7 +13,7 @@ public class JQA2RD implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
 	private Model model;
-	private  RDElementsFactory factory;
+	private RDElementsFactory factory;
 	private boolean methodTypeMode;
 	private boolean methodDisks;
 	private boolean dataDisks;
@@ -59,7 +60,7 @@ public class JQA2RD implements Step {
 		StatementResult packagesNoRoot = connector.executeRead(
 				"MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN ID(n) AS id");
 		packagesNoRoot.forEachRemaining((node) -> {
-		    Disk disk = new Disk(node.get("id").asLong(), -1, ringWidth, height,
+		    MainDisk disk = new MainDisk(node.get("id").asLong(), -1, ringWidth, height,
                     namespaceTransparency);
 		    model.addRDElement(disk);
             });
@@ -69,7 +70,7 @@ public class JQA2RD implements Step {
 		StatementResult packagesRoot = connector.executeRead(
 				"MATCH (n)-[:CONTAINS]->(p:Package) WHERE EXISTS (p.hash) RETURN ID(p) AS pID, ID(n) AS nID");
 		packagesRoot.forEachRemaining(node -> {
-		    Disk disk =  new Disk(node.get("pID").asLong(), node.get("nID").asLong(),
+		    MainDisk disk =  new MainDisk(node.get("pID").asLong(), node.get("nID").asLong(),
                     ringWidth, height, namespaceTransparency);
 		    model.addRDElement(disk);
         });
@@ -80,7 +81,7 @@ public class JQA2RD implements Step {
 				"MATCH (n)-[:CONTAINS]->(t:Type) WHERE EXISTS(t.hash) AND (t:Class OR t:Interface " +
 						"OR t:Annotation OR t:Enum) AND NOT t:Inner RETURN ID(t) AS tID, ID(n) AS nID");
 		result.forEachRemaining(node -> {
-		    Disk disk = new Disk(node.get("tID").asLong(), node.get("nID").asLong(),
+		    SubDisk disk = new SubDisk(node.get("tID").asLong(), node.get("nID").asLong(),
                     ringWidth, height, classTransparency, classColor);
 		    model.addRDElement(disk);
         });

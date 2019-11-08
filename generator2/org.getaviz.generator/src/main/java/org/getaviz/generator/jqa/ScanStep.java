@@ -15,7 +15,7 @@ public class ScanStep implements Step {
     private String inputFiles;
     private String pathJqassisent;
 
-    public ScanStep(SettingsConfiguration config, String pathJqassisent) {
+    ScanStep(SettingsConfiguration config, String pathJqassisent) {
         this.inputFiles = config.getInputFiles();
         this.pathJqassisent = pathJqassisent;
     }
@@ -38,7 +38,7 @@ public class ScanStep implements Step {
         log.info("jQA scan ended.");
     }
 
-    public void setPathJqassisent (String path) {
+    void setPathJqassisent (String path) {
         this.pathJqassisent = path;
     }
 }

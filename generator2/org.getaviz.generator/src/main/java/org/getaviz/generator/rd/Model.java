@@ -1,4 +1,4 @@
-package org.getaviz.generator.rd.s2m;
+package org.getaviz.generator.rd;
 
 import org.getaviz.generator.database.DatabaseConnector;
 
@@ -15,7 +15,7 @@ public class Model {
     private long id;
     private ArrayList<RDElement> RDElementsList = new ArrayList<>();
 
-    Model(boolean methodTypeMode, boolean methodDisks, boolean dataDisks) {
+    public Model(boolean methodTypeMode, boolean methodDisks, boolean dataDisks) {
         this.time = new GregorianCalendar().getTime().toString();
         this.methodTypeMode = methodTypeMode;
         this.methodDisks = methodDisks;
@@ -32,7 +32,7 @@ public class Model {
         setID(id);
     }
 
-    void writeToDatabase(DatabaseConnector connector) {
+    public void writeToDatabase(DatabaseConnector connector) {
         createModel(connector);
         RDElementsList.forEach(p -> {
             if (p.getParentVisualizedNodeID() == -1) {
@@ -60,7 +60,7 @@ public class Model {
         return id;
     }
 
-    void addRDElement(RDElement element) {
+    public void addRDElement(RDElement element) {
         RDElementsList.add(element);
     }
 
@@ -72,5 +72,5 @@ public class Model {
         return id;
     }
 
-    private void writeNodes(RDElement p, DatabaseConnector connector) { p.writeToDatabase(connector, false); }
+    private void writeNodes(RDElement p, DatabaseConnector connector) { p.createNode(connector); }
 }

@@ -1,4 +1,4 @@
-package org.getaviz.generator.rd.s2m;
+package org.getaviz.generator.rd;
 
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
@@ -20,7 +20,7 @@ public class DiskSegment implements RDElement {
     private long parentID;
     private long id;
 
-    DiskSegment(long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, String color) {
+    public DiskSegment(long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, String color) {
         this.visualizedNodeID = visualizedNodeID;
         this.parentVisualizedNodeID = parentVisualizedNodeID;
         this.size = 1.0;
@@ -29,7 +29,7 @@ public class DiskSegment implements RDElement {
         this.color = color;
     }
 
-    DiskSegment(long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, double minArea, String color,
+    public DiskSegment(long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, double minArea, String color,
                 int numberOfStatements) {
         this(visualizedNodeID, parentVisualizedNodeID, transparency, height, color);
 
@@ -39,26 +39,17 @@ public class DiskSegment implements RDElement {
         }
     }
 
-    public DiskSegment(long parentID, long id, double size) {
+    public DiskSegment(long parentID, long id, double size, double dataFactor) {
         this.parentID = parentID;
         this.id = id;
-        this.size = size;
+        this.size = size * dataFactor;
     }
 
     void calculateSize(double sum) {
         size = size / sum;
     }
 
-    void calculateNewSize(double dataFactor) {
-        size = size * dataFactor;
-    }
-
-    public void writeToDatabase(DatabaseConnector connector, boolean wroteToDatabase) {
-        if (!wroteToDatabase) JQA2RDWriteToDatabase(connector);
-        else RD2RDWriteToDatabase(connector);
-    }
-
-    private void JQA2RDWriteToDatabase(DatabaseConnector connector) {
+    public void createNode(DatabaseConnector connector) {
         String label = Labels.DiskSegment.name();
         long id = connector.addNode(String.format(
                 "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
@@ -67,7 +58,7 @@ public class DiskSegment implements RDElement {
         setID(id);
     }
 
-    private void RD2RDWriteToDatabase(DatabaseConnector connector) {
+    public void updateNode(DatabaseConnector connector) {
         connector.executeWrite("MATCH (s) WHERE ID(s) = " + id + " SET s.outerRadius = " +
                 outerRadius + ", s.innerRadius = " + innerRadius + ", s.angle = " + angle + ", s.anglePosition = " +
                 anglePosition + ", s.spine = " + spine + ", s.crossSection =  " + crossSection + " ");
@@ -98,10 +89,6 @@ public class DiskSegment implements RDElement {
         return id;
     }
 
-    public void setSize(double size) {
-        this.size = size;
-    }
-
     public double getSize() { return size; }
 
     public void setAngle(double angle) {
@@ -110,12 +97,17 @@ public class DiskSegment implements RDElement {
 
     public double getAngle() { return angle; }
 
-    public void setOuterAndInnerRadius(double outerRadius, double innerRadius) {
+    public void setOuterRadius(double outerRadius) {
         this.outerRadius = outerRadius;
+    }
+
+    public void setInnerRadius(double innerRadius) {
         this.innerRadius = innerRadius;
     }
 
-    public double getInnerRadius() { return innerRadius; }
+    public double getInnerRadius() {
+        return innerRadius;
+    }
 
     public void setSpine(String spine) {
         this.spine = spine;
@@ -132,5 +124,4 @@ public class DiskSegment implements RDElement {
     public long getVisualizedNodeID() {
         return visualizedNodeID;
     }
-
 }
