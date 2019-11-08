@@ -21,7 +21,7 @@ public class ScanStep implements Step {
     }
 
     public ScanStep(SettingsConfiguration config) {
-        this(config,"/opt/jqassistant/bin/jqassisant.sh");
+        this(config,"/opt/jqassistant/bin/jqassistant.sh");
     }
 
     public void run() {
