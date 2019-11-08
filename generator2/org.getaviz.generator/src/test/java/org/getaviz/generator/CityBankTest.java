@@ -26,10 +26,10 @@ class CityBankTest {
 		StepFactory factory = new StepFactory(config);
 		Step s2m = factory.createSteps2m();
 		Step m2m = factory.createStepm2m();
-		//Step m2t = factory.createStepm2t();
+		Step m2t = factory.createStepm2t();
 		s2m.run();
 		m2m.run();
-		//m2t.run();
+		m2t.run();
 	}
 	
 	@AfterAll
@@ -98,5 +98,16 @@ class CityBankTest {
 		assertEquals(4.0, height);
 		assertEquals(3.0, length);
 		assertEquals(3.0, width);
+	}
+
+	@Test
+	void districtColor() {
+		String hash = "ID_4481fcdc97864a546f67c76536e0308a3058f75d";
+		Record result = connector.executeRead(
+				"MATCH (:Package {hash: '" + hash + "'})<-[:VISUALIZES]-(d:District)"
+						+ "RETURN d.color as color")
+				.single();
+		String color = result.get("color").asString();
+		assertEquals("#f0f0f0", color);
 	}
 }

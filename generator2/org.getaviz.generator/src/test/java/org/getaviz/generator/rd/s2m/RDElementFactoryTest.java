@@ -2,6 +2,11 @@ package org.getaviz.generator.rd.s2m;
 
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
+import org.getaviz.generator.rd.Disk;
+import org.getaviz.generator.rd.DiskSegment;
+import org.getaviz.generator.rd.RDElement;
+import org.getaviz.generator.rd.RDElementsFactory;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
@@ -21,6 +26,11 @@ class RDElementFactoryTest {
         mockup.setupDatabase("./test/databases/RDElementFactoryTest.db");
         connector = mockup.getConnector();
         createObjectsForTest();
+    }
+
+    @AfterAll
+    static void close() {
+        mockup.close();
     }
 
     @Test

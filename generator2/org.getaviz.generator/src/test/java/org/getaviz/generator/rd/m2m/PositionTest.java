@@ -1,6 +1,8 @@
 package org.getaviz.generator.rd.m2m;
 
-import org.getaviz.generator.rd.s2m.Disk;
+import org.getaviz.generator.rd.Disk;
+import org.getaviz.generator.rd.MainDisk;
+import org.getaviz.generator.rd.SubDisk;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -65,10 +67,10 @@ class PositionTest {
     }
 
     private static void createObjectsForTests() {
-        disk1 = new Disk(1,2,3,2.5,2.0, 1.5,
-                3.0, false);
-        disk2 = new Disk(4, 5, 6, 2.0, 1.0, 2.5,
-                1.0, true);
+        disk1 = new MainDisk(1,2,3,1.5,
+                3.0);
+        disk2 = new SubDisk(4, 5, 6, 2.5,
+                1.0);
         Position position1 = new Position(2, 5, 0);
         Position position2 = new Position(1, 4, 0);
         disk1.setPosition(position1);

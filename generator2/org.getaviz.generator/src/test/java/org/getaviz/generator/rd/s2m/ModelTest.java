@@ -2,6 +2,11 @@ package org.getaviz.generator.rd.s2m;
 
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
+import org.getaviz.generator.rd.Disk;
+import org.getaviz.generator.rd.DiskSegment;
+import org.getaviz.generator.rd.Model;
+import org.getaviz.generator.rd.SubDisk;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
@@ -26,6 +31,11 @@ class ModelTest {
         model.addRDElement(diskSegment);
         model.writeToDatabase(connector);
         modelID = model.getId();
+    }
+
+    @AfterAll
+    static void close() {
+        mockup.close();
     }
 
     @Test
@@ -56,7 +66,7 @@ class ModelTest {
         model = new Model(false,false,false);
         long nodeID4Disk = connector.addNode(("CREATE (n:Package)"), "n").id();
         long nodeID4DiskSegment = connector.addNode(("CREATE (n:Field)"), "n").id();
-        disk = new Disk(nodeID4Disk, -1, 1.5,1.0, 0.0, "#000000");
+        disk = new SubDisk(nodeID4Disk, -1, 1.5,1.0, 0.0, "#000000");
         diskSegment = new DiskSegment(nodeID4DiskSegment, nodeID4Disk, 1.5, 0.5, "#66000000");
     }
 }

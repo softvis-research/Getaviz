@@ -1,67 +1,25 @@
 package org.getaviz.generator.rd.s2m;
 
-import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.mockups.Bank;
-import org.getaviz.generator.rd.m2m.Position;
-import org.junit.jupiter.api.BeforeAll;
+import org.getaviz.generator.rd.Disk;
+import org.getaviz.generator.rd.DiskSegment;
+import org.getaviz.generator.rd.SubDisk;
 import org.junit.jupiter.api.Test;
-import org.neo4j.driver.v1.Record;
-
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DiskTest {
 
-    private static DatabaseConnector connector;
-    private static Bank mockup = new Bank();
-    private static long nodeID;
-
-    @BeforeAll
-    static void setup() {
-        mockup.setupDatabase("./test/databases/DiskTest.db");
-        connector = mockup.getConnector();
-    }
-
-    @Test
-    void writeToDiskForJQA2RDTest() {
-        Disk disk = createObjectsForTest1();
-        disk.writeToDatabase(connector, false);
-        Record result = connector
-                .executeRead("MATCH (d:Disk)-[:VISUALIZES]->(n:Package) WHERE ID(n) = " + nodeID +
-                        " RETURN ID(d) AS id, d.height AS height, d.ringWidth AS ringWidth, " +
-                        "d.transparency AS transparency, d.color AS color").single();
-        long diskID = result.get("id").asLong();
-        double height = result.get("height").asDouble();
-        double ringWidth = result.get("ringWidth").asDouble();
-        double transparency = result.get("transparency").asDouble();
-        String color = result.get("color").asString();
-        assertEquals(disk.getID(), diskID);
-        assertEquals(1.0, height);
-        assertEquals(1.5, ringWidth);
-        assertEquals(0.0, transparency);
-        assertEquals("#000000", color);
-    }
-
     @Test
     void calculateAreaWithoutBorderAreaTest() {
-        Disk disk = createObjectsForTest2();
-        disk.calculateAreaWithoutBorder(4);
+        SubDisk disk = createSubDisk();
+        disk.calculateAreaWithoutBorder();
         double result = disk.getAreaWithoutBorder();
         assertEquals(16, result);
     }
 
     @Test
-    void sumTest() {
-        Disk disk = createObjectsForTest2();
-        ArrayList<DiskSegment> list = disk.getOuterSegments();
-        double sum = Disk.sum(list);
-        assertEquals(2, sum);
-    }
-
-    @Test
     void calculateSpinesTest() {
-        Disk disk = createObjectsForTest2();
+        Disk disk = createSubDisk();
         disk.setRadius(3.5);
         disk.calculateSpines();
         String spine = disk.getSpine();
@@ -93,41 +51,21 @@ class DiskTest {
 
     @Test
     void calculateRadiusAndAreaWithoutBorderTest() {
-        Disk disk = createObjectsForTest2();
-        disk.calculateAreaWithoutBorder(4);
-        disk.calculateRadius();
+        SubDisk disk = createSubDisk();
+        disk.calculateAreaWithoutBorder();
+       // disk.calculateRadius();
         double radius = disk.getRadius();
         double area = disk.getAreaWithoutBorder();
         assertEquals(16, area);
         assertEquals(2.756758334191025, radius);
     }
 
-    @Test
-    void WriteToDatabaseRD2RDTest() {
-        Disk disk = createObjectsForTest2();
-        disk.setPosition(new Position(1,2,3));
-        disk.setRadius(2.5);
-        disk.writeToDatabase(connector, true);
-        Record result = connector.executeRead("MATCH (d) WHERE ID(d) = " + disk.getID() + " RETURN d.radius" +
-                " AS radius").single();
-        double radius = result.get("radius").asDouble();
-        assertEquals(2.5, radius);
-    }
-
-    private static Disk createObjectsForTest1() {
-        nodeID = connector.addNode(("CREATE (n:Package)"), "n").id();
-        return new Disk(nodeID, -1, 1.5, 1.0, 0.0, "#000000");
-    }
-
-    private static Disk createObjectsForTest2() {
+    private static SubDisk createSubDisk() {
         ArrayList<DiskSegment> outerSegments = new ArrayList<>();
         ArrayList<DiskSegment> innerSegments = new ArrayList<>();
-        Disk disk = new Disk(0, 1, 1002, 2, 1, 0.5, 0.5, false);
-        Record createDisk = connector.executeRead("CREATE (d:Disk) RETURN ID(d) AS id").single();
-        long newID = createDisk.get("id").asLong();
-        disk.setID(newID);
-        outerSegments.add(new DiskSegment(2, 1003, 2));
-        innerSegments.add(new DiskSegment(2, 1004, 2));
+        SubDisk disk = new SubDisk(0, 1, 1002, 0.5, 0.5);
+        outerSegments.add(new DiskSegment(2, 1003, 2, 4));
+        innerSegments.add(new DiskSegment(2, 1004, 2, 4));
         disk.setOuterSegmentsList(outerSegments);
         disk.setInnerSegmentsList(innerSegments);
         return disk;

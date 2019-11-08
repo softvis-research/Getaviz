@@ -3,6 +3,7 @@ package org.getaviz.generator.jqa;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.jqa.Java2JQA;
 import org.getaviz.generator.mockups.Bank;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
@@ -21,6 +22,11 @@ public class Java2JQATest {
         connector = mockup.getConnector();
         Java2JQA java2JQA = new Java2JQA();
         java2JQA.run();
+    }
+
+    @AfterAll
+    static void teardown() {
+        mockup.close();
     }
 
     @Test
