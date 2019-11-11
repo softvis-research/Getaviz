@@ -63,7 +63,7 @@ var sourceCodeController = (function(){
                         textImageRelation: "imageBeforeText", 
                         imgPosition:"left",
                         textPosition: "left", 
-                        imgSrc: "scripts/SourceCode/images/fullscreen.png" 
+                        imgSrc: "scripts/SourceCode/images/open_in_new.png" 
                       });
                       
                      $("#jqxCodeWindowButton").on('click', function (){
