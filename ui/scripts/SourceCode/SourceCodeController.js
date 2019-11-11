@@ -43,21 +43,36 @@ var sourceCodeController = (function(){
 				//create html elements
 				let codeViewDiv = document.createElement("DIV");
 				codeViewDiv.id = "codeViewDiv";
+                rootDiv.appendChild(codeViewDiv);
                 
                 if(controllerConfig.showCodeWindowButton===true) {
-
-                    //button 
-                    let codeWindowButton = document.createElement("BUTTON");
-                    codeWindowButton.type = "button";
-                    codeWindowButton.style = "width: 98%;height: 25px;margin: 2px 0px -2px 2px;";
-                    codeWindowButton.addEventListener("click", openWindow, false);
-                    
-                    let fullScreenImage = document.createElement("IMG");
-                    fullScreenImage.src = "scripts/SourceCode/images/fullscreen.png";
-                    fullScreenImage.style = "width: 25px; height: 20px;";
-                    
-                    codeWindowButton.appendChild(fullScreenImage);
-                    codeViewDiv.appendChild(codeWindowButton);                    
+                    //button
+                     var codeWindowId = "jqxCodeWindowButton";
+                     var codeWindowButtonType = "button";
+                     var jqxCodeWindowButton = document.createElement("BUTTON");
+                     jqxCodeWindowButton.type = codeWindowButtonType;
+                     jqxCodeWindowButton.id = codeWindowId;
+                     var codeWindowtext = document.createTextNode("Showcode");
+                     jqxCodeWindowButton.appendChild(codeWindowtext);
+                     codeViewDiv.appendChild(jqxCodeWindowButton);
+                     
+                     $("#jqxCodeWindowButton").jqxButton({ 
+                        theme: "metro",
+                        width: "98%",
+                        height: "24px",
+                        textImageRelation: "imageBeforeText", 
+                        imgPosition:"left",
+                        textPosition: "left", 
+                        imgSrc: "scripts/SourceCode/images/fullscreen.png" 
+                      });
+                      
+                     $("#jqxCodeWindowButton").on('click', function (){
+                     codeWindow = window.open("scripts/SourceCode/codepage.html", "CodePage", "width=500,"+
+                            "height=500, menubar=no, status=no, titlebar=no,"+
+                            "toolbar=no, scrollbars");
+                        // lade Quellcode, des zuletzt betrachteten Objekts
+                     codeWindow.addEventListener('load', displayCodeChild, true);
+                     });
                 };
                
                 if(controllerConfig.showCode===true) {
@@ -78,7 +93,6 @@ var sourceCodeController = (function(){
                     codeValueDiv.appendChild(codePre);
                     codeViewDiv.appendChild(codeValueDiv);
                 };
-                rootDiv.appendChild(codeViewDiv);
             });
 		});
 
@@ -105,13 +119,6 @@ var sourceCodeController = (function(){
         }
     }
 
-    function openWindow(){
-        codeWindow = window.open("scripts/SourceCode/codepage.html", "CodePage", "width=500,"+
-                "height=500, menubar=no, status=no, titlebar=no,"+
-                "toolbar=no, scrollbars");
-        // lade Quellcode, des zuletzt betrachteten Objekts
-        codeWindow.addEventListener('load', displayCodeChild, true);
-    }
 
     function displayCodeChild(){        
         if(codeWindow) {
@@ -172,6 +179,5 @@ var sourceCodeController = (function(){
         initialize          : initialize,
         activate            : activate,
         reset               : reset,
-        openWindow          : openWindow,
     };
 })();
