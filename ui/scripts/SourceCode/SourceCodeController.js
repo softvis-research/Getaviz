@@ -52,7 +52,7 @@ var sourceCodeController = (function(){
                      var jqxCodeWindowButton = document.createElement("BUTTON");
                      jqxCodeWindowButton.type = codeWindowButtonType;
                      jqxCodeWindowButton.id = codeWindowId;
-                     var codeWindowtext = document.createTextNode("Showcode");
+                     var codeWindowtext = document.createTextNode("Show Code");
                      jqxCodeWindowButton.appendChild(codeWindowtext);
                      codeViewDiv.appendChild(jqxCodeWindowButton);
                      
