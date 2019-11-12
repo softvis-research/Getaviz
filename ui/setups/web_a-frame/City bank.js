@@ -32,17 +32,22 @@
 		{	name: 	"canvasFilterController" 
 		},
         
+        {	name: 	"legendButtonController" 
+		},
+
         {	name: 	"shareController",
             showDebugOutput: false
         },
-
+        
 		{ 	name: 	"canvasFlyToController" 
 		},
+        
 		{	name: 	"searchController" 
 		},
 
 		{	name: 	"packageExplorerController",
 		},
+        
 		{	name: 	"sourceCodeController",
             url:    "https://raw.githubusercontent.com/softvis-research/Bank/master/src/",
             showCodeWindowButton : true,
@@ -327,6 +332,7 @@
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
+                                        {name: "legendButtonController"},
                                         {name: "shareController"},
                                         //{name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},

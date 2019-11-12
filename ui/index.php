@@ -148,7 +148,8 @@ EOT;
 	<script type="text/javascript" src="scripts/CanvasFlyTo/CanvasFlyToController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasSelect/CanvasSelectController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasResetView/CanvasResetViewController.js"></script>	
-	<script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>	
+	<script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>
+	<script type="text/javascript" src="scripts/LegendButtonController/LegendButtonController.js"></script>
 	<script type="text/javascript" src="scripts/RelationTransparency/RelationTransparencyController.js"></script>
 	<script type="text/javascript" src="scripts/RelationHighlight/RelationHighlightController.js"></script>	
 	<script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>	

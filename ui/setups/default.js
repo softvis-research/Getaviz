@@ -32,10 +32,13 @@
 		{	name: 	"canvasFilterController" 
 		},
         
+        {	name: 	"legendButtonController" 
+		},
+        
         {	name: 	"shareController",
             showDebugOutput: false
         },
-
+        
 		{ 	name: 	"canvasFlyToController" 
 		},
 	
@@ -318,6 +321,7 @@
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
                                         //{name: "canvasFlyToController"},
+                                        {name: "legendButtonController"},
                                         {name: "shareController"},
                                         {name: "relationConnectorController"},
                                         {name: "relationTransparencyController"},

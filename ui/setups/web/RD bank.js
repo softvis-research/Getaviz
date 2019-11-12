@@ -20,15 +20,15 @@ var setup = {
 		{	name:	"generationFormController",
 		},
         
-        {
-            name: 'canvasFilterController'
+        {   name: 'canvasFilterController'
         },
         
+        {   name: 'legendButtonController'
+        },
+
         {	name: 	"shareController", 
             showDebugOutput: false
         },
-
-
         {	name: 	"canvasHoverController",
 		},	
 
@@ -345,6 +345,7 @@ var setup = {
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
+                                        {name: "legendButtonController"},
                                         {name: "shareController"},
                                         /*{name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},
