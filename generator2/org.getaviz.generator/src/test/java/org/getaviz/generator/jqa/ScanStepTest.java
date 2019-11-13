@@ -30,9 +30,9 @@ class ScanStepTest {
         loadProperties("ScanStepTest.properties");
         graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(directory))
                 .setConfig(bolt.type, "BOLT").setConfig(bolt.enabled, "true")
-                .setConfig(bolt.listen_address, "localhost:7687").newGraphDatabase();
+                .setConfig(bolt.listen_address, "localhost:7689").newGraphDatabase();
         registerShutdownHook(graphDb);
-        connector = DatabaseConnector.getInstance("bolt://localhost:7687");
+        connector = DatabaseConnector.getInstance("bolt://localhost:7689");
         SettingsConfiguration config = SettingsConfiguration.getInstance();
         ScanStep scanStep = new ScanStep(config);
         scanStep.setPathJqassisent(pathJqassistant);
