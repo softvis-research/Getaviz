@@ -44,7 +44,7 @@ public class RDIT {
 	@Test
     void numberOfVisualizedPackages() {
 		Record result = connector.executeRead(
-			"MATCH (disk:Disk)-[:VISUALIZES]->(:Package) " + 
+			"MATCH (disk:MainDisk)-[:VISUALIZES]->(:Package) " + 
 			"RETURN count(disk) AS result"
 		).single();
 		int numberOfVisualizedPackages = result.get("result").asInt();
@@ -54,7 +54,7 @@ public class RDIT {
 	@Test
     void numberOfVisualizedTypes() {
 		Record result = connector.executeRead(
-			"MATCH (disk:Disk)-[:VISUALIZES]->(:Type) " + 
+			"MATCH (disk:SubDisk)-[:VISUALIZES]->(:Type) " + 
 			"RETURN count(disk) AS result"
 		).single();
 		int numberOfVisualizedTypes = result.get("result").asInt();
@@ -84,7 +84,7 @@ public class RDIT {
 	@Test
 	void layoutAlgorithmPackage() {
 		Record result = connector.executeRead(
-			"MATCH (:Package {hash: 'ID_52a6b74381719655ffacf4d2c8c38a22d5581078'})<-[:VISUALIZES]-(:Disk)-[:HAS]->(position:Position) " + 
+			"MATCH (:Package {hash: 'ID_52a6b74381719655ffacf4d2c8c38a22d5581078'})<-[:VISUALIZES]-(:MainDisk)-[:HAS]->(position:Position) " + 
 			"RETURN position.x as x, position.y as y, position.z as z").single();
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
