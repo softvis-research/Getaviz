@@ -97,7 +97,7 @@ public class RDIT {
 	@Test
 	void layoutAlgorithmClass() {
 		Record result = connector.executeRead(
-	 		"MATCH (:Type {hash: 'ID_0d6283470c75fbfeae1b0199ae41f732db8dc820'})<-[:VISUALIZES]-(:Disk)-[:HAS]->(position:Position) " + 
+	 		"MATCH (:Type {hash: 'ID_0d6283470c75fbfeae1b0199ae41f732db8dc820'})<-[:VISUALIZES]-(:SubDisk)-[:HAS]->(position:Position) " + 
 	 		"RETURN position.x as x, position.y as y, position.z as z"
 	 	).single();
 	    double x = result.get("x").asDouble();
