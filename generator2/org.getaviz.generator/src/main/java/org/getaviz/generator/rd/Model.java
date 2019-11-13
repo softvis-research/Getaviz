@@ -1,5 +1,7 @@
 package org.getaviz.generator.rd;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
 
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.Iterator;
 
 public class Model {
 
+    private Log log = LogFactory.getLog(this.getClass());
     private String time;
     private boolean methodTypeMode;
     private boolean methodDisks;
@@ -34,26 +37,30 @@ public class Model {
 
     public void writeToDatabase(DatabaseConnector connector) {
         createModel(connector);
-        RDElementsList.forEach(p -> {
+        for (RDElement p : RDElementsList) {
             if (p.getParentVisualizedNodeID() == -1) {
                 p.setParentID(this.id);
                 writeNodes(p, connector);
+                p.createParentRelationship(connector);
             } else {
+                p.createNode(connector);
+            }
+        }
+        for(RDElement p : RDElementsList) {
+            if (p.getParentVisualizedNodeID() != -1) {
                 long visualizedNodeID = p.getParentVisualizedNodeID();
                 long parentID = searchForParentID(visualizedNodeID);
                 p.setParentID(parentID);
-                writeNodes(p, connector);
+                p.createParentRelationship(connector);
             }
-        });
+        }
     }
 
     private long searchForParentID(long visualizedNodeID) {
-        Iterator<RDElement> iterator = RDElementsList.iterator();
         long id = 0;
-        while ((iterator.hasNext())) {
-            RDElement disk = iterator.next();
-            if (visualizedNodeID == disk.getVisualizedNodeID()) {
-                id = disk.getID();
+        for (RDElement element : RDElementsList) {
+            if (visualizedNodeID == element.getVisualizedNodeID()) {
+                id = element.getID();
                 return id;
             }
         }

@@ -45,6 +45,12 @@ public class DiskSegment implements RDElement {
         this.size = size * dataFactor;
     }
 
+    public void createParentRelationship(DatabaseConnector connector) {
+        connector.executeWrite(
+                "MATCH (parent), (s) WHERE ID(parent) = " + parentID + " AND ID(s) = " + id + " CREATE (parent)-[:CONTAINS]->(s)");
+    }
+
+
     void calculateSize(double sum) {
         size = size / sum;
     }
@@ -52,9 +58,8 @@ public class DiskSegment implements RDElement {
     public void createNode(DatabaseConnector connector) {
         String label = Labels.DiskSegment.name();
         long id = connector.addNode(String.format(
-                "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
-                        "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
-                parentID, visualizedNodeID, label, propertiesToString()), "n").id();
+                "MATCH(s) WHERE ID(s) = %d CREATE (n:RD:%s {%s})-[:VISUALIZES]->(s)",
+                visualizedNodeID, label, propertiesToString()), "n").id();
         setID(id);
     }
 

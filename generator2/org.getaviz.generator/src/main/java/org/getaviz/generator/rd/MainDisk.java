@@ -1,10 +1,14 @@
 package org.getaviz.generator.rd;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.rd.m2m.Position;
 
 public class MainDisk extends Disk {
+
+    private Log log = LogFactory.getLog(this.getClass());
 
     public MainDisk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency) {
         super(visualizedNodeId, parentVisualizedNodeID, ringWidth, height, transparency);
@@ -26,11 +30,14 @@ public class MainDisk extends Disk {
 
     public void createNode(DatabaseConnector connector) {
         String label = Labels.MainDisk.name();
-        long id = connector.addNode(String.format(
-                "MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->" +
-                        "(n:RD:%s {%s})-[:VISUALIZES]->(s)",
-                parentID, visualizedNodeID, label, propertiesToString()), "n").id();
-        setID(id);
+        try {
+            long id = connector.addNode(String.format(
+                    "MATCH(s) WHERE ID(s) = %d CREATE (n:RD:%s {%s})-[:VISUALIZES]->(s)",
+                    visualizedNodeID, label, propertiesToString()), "n").id();
+            setID(id);
+        } catch (Exception e) {
+            log.error(e);
+        }
     }
 
     public void updateNode(DatabaseConnector connector) {

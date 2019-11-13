@@ -48,7 +48,7 @@ public class JQA2RD implements Step {
 
 	public void run() {
 		log.info("JQA2RD started");
-		connector.executeWrite("MATCH (n:RD) DETACH DELETE n");
+		deleteOldNodes();
 		model = new Model(methodTypeMode, methodDisks, dataDisks);
 		factory = new RDElementsFactory(methodTypeMode, methodDisks, dataDisks);
 		queriesToRDElementList();
@@ -56,55 +56,79 @@ public class JQA2RD implements Step {
 		log.info("JQA2RD finished");
 	}
 
+	private void deleteOldNodes() {
+		connector.executeWrite("MATCH (n:RD) DETACH DELETE n");
+	}
+
 	private void addPackagesNoRoot() {
-		StatementResult packagesNoRoot = connector.executeRead(
-				"MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN ID(n) AS id");
-		packagesNoRoot.forEachRemaining((node) -> {
-		    MainDisk disk = new MainDisk(node.get("id").asLong(), -1, ringWidth, height,
-                    namespaceTransparency);
-		    model.addRDElement(disk);
-            });
+		try {
+			StatementResult packagesNoRoot = connector.executeRead(
+					"MATCH (n:Package) WHERE NOT (n)<-[:CONTAINS]-(:Package) RETURN ID(n) AS id");
+			packagesNoRoot.forEachRemaining((node) -> {
+				MainDisk disk = new MainDisk(node.get("id").asLong(), -1, ringWidth, height,
+						namespaceTransparency);
+				model.addRDElement(disk);
+			});
+		} catch (Exception e) {
+			log.error(e);
+		}
 	}
 
 	private void addPackagesWithRoot() {
-		StatementResult packagesRoot = connector.executeRead(
-				"MATCH (n)-[:CONTAINS]->(p:Package) WHERE EXISTS (p.hash) RETURN ID(p) AS pID, ID(n) AS nID");
-		packagesRoot.forEachRemaining(node -> {
-		    MainDisk disk =  new MainDisk(node.get("pID").asLong(), node.get("nID").asLong(),
-                    ringWidth, height, namespaceTransparency);
-		    model.addRDElement(disk);
-        });
+		try {
+			StatementResult packagesRoot = connector.executeRead(
+					"MATCH (n:Package)-[:CONTAINS]->(p:Package) WHERE EXISTS (p.hash) RETURN ID(p) AS pID, ID(n) AS nID");
+			packagesRoot.forEachRemaining(node -> {
+				MainDisk disk = new MainDisk(node.get("pID").asLong(), node.get("nID").asLong(),
+						ringWidth, height, namespaceTransparency);
+				model.addRDElement(disk);
+			});
+		} catch (Exception e) {
+			log.error(e);
+		}
 	}
 
 	private void addTypes() {
-		StatementResult result = connector.executeRead(
-				"MATCH (n)-[:CONTAINS]->(t:Type) WHERE EXISTS(t.hash) AND (t:Class OR t:Interface " +
-						"OR t:Annotation OR t:Enum) AND NOT t:Inner RETURN ID(t) AS tID, ID(n) AS nID");
-		result.forEachRemaining(node -> {
-		    SubDisk disk = new SubDisk(node.get("tID").asLong(), node.get("nID").asLong(),
-                    ringWidth, height, classTransparency, classColor);
-		    model.addRDElement(disk);
-        });
+		try {
+			StatementResult result = connector.executeRead(
+					"MATCH (n:Package)-[:CONTAINS]->(t:Type) WHERE EXISTS(t.hash) AND (t:Class OR t:Interface " +
+							"OR t:Annotation OR t:Enum) AND NOT t:Inner RETURN ID(t) AS tID, ID(n) AS nID");
+			result.forEachRemaining(node -> {
+				SubDisk disk = new SubDisk(node.get("tID").asLong(), node.get("nID").asLong(),
+						ringWidth, height, classTransparency, classColor);
+				model.addRDElement(disk);
+			});
+		} catch (Exception e) {
+			log.error(e);
+		}
 	}
 
 	private void addMethods() {
-		StatementResult methods = connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type)-[:DECLARES]->(m:Method)" +
-				" WHERE EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) AND NOT t:Inner AND EXISTS(m.hash)" +
-				" RETURN m AS node, m.effectiveLineCount AS line, ID(t) AS tID");
-		methods.forEachRemaining(result -> {
-			RDElement element = factory.createFromMethod(result, height, ringWidth, ringWidthAD, methodTransparency, minArea, methodColor);
-			model.addRDElement(element);
-		});
+		try {
+			StatementResult methods = connector.executeRead("MATCH (n:Package)-[:CONTAINS]->(t:Type)-[:DECLARES]->(m:Method)" +
+					" WHERE EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) AND NOT t:Inner AND EXISTS(m.hash)" +
+					" RETURN m AS node, m.effectiveLineCount AS line, ID(t) AS tID");
+			methods.forEachRemaining(result -> {
+				RDElement element = factory.createFromMethod(result, height, ringWidth, ringWidthAD, methodTransparency, minArea, methodColor);
+				model.addRDElement(element);
+			});
+		} catch (Exception e) {
+			log.error(e);
+		}
 	}
 
 	private void addFields() {
-		StatementResult fields = connector.executeRead("MATCH (n)-[:CONTAINS]->(t:Type)-[:DECLARES]->(f:Field)" +
-				" WHERE EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) AND NOT t:Inner AND EXISTS(f.hash)" +
-				" RETURN f AS node, ID(t) AS tID");
-		fields.forEachRemaining(result -> {
-			RDElement element = factory.createFromField(result, ringWidthAD, height, dataTransparency, dataColor);
-			model.addRDElement(element);
-		});
+		try {
+			StatementResult fields = connector.executeRead("MATCH (n:Package)-[:CONTAINS]->(t:Type)-[:DECLARES]->(f:Field)" +
+					" WHERE EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) AND NOT t:Inner AND EXISTS(f.hash)" +
+					" RETURN f AS node, ID(t) AS tID");
+			fields.forEachRemaining(result -> {
+				RDElement element = factory.createFromField(result, ringWidthAD, height, dataTransparency, dataColor);
+				model.addRDElement(element);
+			});
+		} catch (Exception e) {
+			log.error(e);
+		}
 	}
 
 	private void queriesToRDElementList() {

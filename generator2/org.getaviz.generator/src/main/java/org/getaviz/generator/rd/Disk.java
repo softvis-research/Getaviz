@@ -2,8 +2,8 @@ package org.getaviz.generator.rd;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
+import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.rd.m2m.Position;
-;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,8 +73,10 @@ public abstract class Disk implements RDElement, Comparable<Disk> {
                 (crossHeight)) + "\'";
     }
 
-  //  abstract void updateNode(DatabaseConnector connector);
-  //  abstract void createNode(DatabaseConnector connector);
+    public void createParentRelationship(DatabaseConnector connector) {
+        connector.executeWrite(
+                "MATCH (parent), (s) WHERE ID(parent) = " + parentID + " AND ID(s) = " + id + " CREATE (parent)-[:CONTAINS]->(s)");
+    }
 
 
     String propertiesToString() {
