@@ -10,7 +10,7 @@ import org.neo4j.driver.v1.Record;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Java2JQATest {
+class Java2JQATest {
 
     private static DatabaseConnector connector;
     private static Bank mockup = new Bank();
