@@ -41,7 +41,9 @@ class ScanStepTest {
 
     @AfterAll
     static void teardown() {
-        graphDb.shutdown();
+        if(graphDb != null) {
+            graphDb.shutdown();
+        }
     }
 
     private static void registerShutdownHook(final GraphDatabaseService graphDb) {
