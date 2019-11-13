@@ -32,7 +32,8 @@
 		{	name: 	"canvasFilterController" 
 		},
         
-        {	name: 	"legendButtonController" 
+        {	name: 	"legendButtonController",
+            showCityLegend: true
 		},
 
         {	name: 	"shareController",

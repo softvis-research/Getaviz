@@ -28,7 +28,8 @@
 		
 		{	name: 	"canvasSelectController" 
 		},
-        {	name: 	"legendButtonController" 
+        {	name: 	"legendButtonController",
+            showCityLegend: false
 		},
         {	name: 	"shareController",
             showDebugOutput: false

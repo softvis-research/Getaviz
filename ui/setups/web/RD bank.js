@@ -23,7 +23,8 @@ var setup = {
         {   name: 'canvasFilterController'
         },
         
-        {   name: 'legendButtonController'
+        {   name: 'legendButtonController',
+            showCityLegend: false
         },
 
         {	name: 	"shareController", 
