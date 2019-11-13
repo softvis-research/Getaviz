@@ -29,7 +29,7 @@ public class StepFactory {
     }
 
     public Step createNotationFileStep() {
-        return new JQA2JSON();
+        return new JQA2JSON(config);
     }
 
     public Step createScanStep() {

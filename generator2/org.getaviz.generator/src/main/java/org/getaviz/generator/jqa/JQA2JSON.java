@@ -18,14 +18,18 @@ import org.neo4j.driver.v1.types.Node;
 import java.util.Collections;
 
 public class JQA2JSON implements Step {
-	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+	private SettingsConfiguration config;
 	private Log log = LogFactory.getLog(this.getClass());
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
+
+	public JQA2JSON(SettingsConfiguration config) {
+		this.config = config;
+	}
 
 	public void run() {
 		log.info("JQA2JSON has started.");
 		ArrayList<Node> elements = new ArrayList<>();
-		connector.executeRead("MATCH (n)<-[:VISUALIZES]-() RETURN n ORDER BY n.hash").forEachRemaining((result) -> {
+		connector.executeRead("MATCH (n)<-[:VISUALIZES]-() RETURN n ORDER BY n.hash").forEachRemaining(result -> {
 			elements.add(result.get("n").asNode());
 		});
 		Writer fw = null;
