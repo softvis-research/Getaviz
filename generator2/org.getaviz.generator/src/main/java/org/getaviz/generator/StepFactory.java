@@ -28,7 +28,7 @@ public class StepFactory {
         return new Java2JQA();
     }
 
-    public Step createNotationFileStep() {
+    public Step createMetadataFileStep() {
         return new JQA2JSON(config);
     }
 
