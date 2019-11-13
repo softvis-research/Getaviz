@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 class ScanStepTest {
 
     private static DatabaseConnector connector;
-    private static String pathJqassistant = "/bin/jqassistant";
+    private static String pathJqassistant = "";
     private static GraphDatabaseService graphDb;
 
     @BeforeAll
