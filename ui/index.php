@@ -111,6 +111,7 @@ EOT;
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxcore.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxdata.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxtabs.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxmenu.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxsplitter.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxscrollbar.js"></script>
@@ -149,7 +150,7 @@ EOT;
 	<script type="text/javascript" src="scripts/CanvasSelect/CanvasSelectController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasResetView/CanvasResetViewController.js"></script>	
 	<script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>
-	<script type="text/javascript" src="scripts/LegendButtonController/LegendButtonController.js"></script>
+	<script type="text/javascript" src="scripts/HelpController/HelpController.js"></script>
 	<script type="text/javascript" src="scripts/RelationTransparency/RelationTransparencyController.js"></script>
 	<script type="text/javascript" src="scripts/RelationHighlight/RelationHighlightController.js"></script>	
 	<script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>	

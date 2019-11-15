@@ -32,8 +32,8 @@
 		{	name: 	"canvasFilterController" 
 		},
         
-        {	name: 	"legendButtonController",
-            showCityLegend: true
+        {	name: 	"helpController",
+            showCityLegend: "city"
 		},
 
         {	name: 	"shareController",
@@ -333,7 +333,7 @@
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
-                                        {name: "legendButtonController"},
+                                        {name: "helpController"},
                                         {name: "shareController"},
                                         //{name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},

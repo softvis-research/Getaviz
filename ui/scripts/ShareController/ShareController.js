@@ -110,6 +110,7 @@ var shareController = (function() {
             textPosition: "left", 
             imgSrc: "scripts/ShareController/images/share_icon.png" 
         });
+
         
         $("#jqxTextImageButton").on('click', function (){
         

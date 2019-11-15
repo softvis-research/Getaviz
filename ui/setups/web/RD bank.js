@@ -23,8 +23,8 @@ var setup = {
         {   name: 'canvasFilterController'
         },
         
-        {   name: 'legendButtonController',
-            showCityLegend: false
+        {   name: 'helpController',
+            showCityLegend: "RD"
         },
 
         {	name: 	"shareController", 
@@ -346,7 +346,7 @@ var setup = {
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
-                                        {name: "legendButtonController"},
+                                        {name: "helpController"},
                                         {name: "shareController"},
                                         /*{name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},
