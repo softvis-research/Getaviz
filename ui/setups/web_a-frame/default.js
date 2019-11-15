@@ -29,7 +29,7 @@
 		{	name: 	"canvasSelectController" 
 		},
         {	name: 	"helpController",
-            showCityLegend: "city"
+            Metaphor: "city"
 		},
         {	name: 	"shareController",
             showDebugOutput: false

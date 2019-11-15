@@ -24,7 +24,7 @@ var setup = {
         },
         
         {   name: 'helpController',
-            showCityLegend: "RD"
+            Metaphor: "RD"
         },
 
         {	name: 	"shareController", 
