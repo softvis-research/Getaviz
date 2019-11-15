@@ -33,15 +33,17 @@ var helpController = (function() {
             
             var legendDiv = "<div id='legendDiv'></div>";
     
-            var legendTabsUl = "<ul style='font-size: 15px;'><li style='margin-left: 45px;'><img src='scripts/HelpController/images/category.png' width='25px' height= '25px' style='margin-right:10px;'>Legend</li><li><img src='scripts/HelpController/images/mouse.png' width='25px' height= '25px' style='margin-right:10px;'>Navigation</li></ul>";
-            
-            var legendPopupUl_City_Div = "<div id='legendPopupUl_City_Div'><ul id='legendPopupUl' style='list-style-type: none;font-size: 15px;'><li style='padding:10px;'><img src='scripts/HelpController/images/package_city.png' style='margin-right:10px;' width='25px' height= '30px' >Package</li><li style='padding:10px;'><img src='scripts/HelpController/images/type_city.png' style='margin-right:10px;' width='25px' height= '30px'>Type</li></ul></div>";
-            
-            var legendPopupUl_Mouse_City_Div = "<div id='legendPopupUl_Mouse_City_Div'><ul id='legendPopupUl_Mouse_City'  style='list-style-type: none; font-size: 15px;' ><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/left.png' width='17px' height= '30px' style='margin-right:10px;'>Rotate</li><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/middle.png' width='17px' height= '30px' style='margin-right:10px;'>Move</li><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/scrolling.png' width='17px' height= '30px' style='margin-right:10px;'>Zoom</li></ul></div>";
+            var legendTabsUl = "<ul style='font-size: 15px;'><li ><img src='scripts/HelpController/images/category.png' width='25px' height= '25px' style='margin-right:10px;'>Legend</li><li><img src='scripts/HelpController/images/mouse.png' width='25px' height= '25px' style='margin-right:10px;'>Navigation</li></ul>";
+
+            var legendPopupUl_Mouse_City_Div = "<div id='legendPopupUl_Mouse_City_Div'><ul id='legendPopupUl_Mouse_City' class='Ul_Navigation' style='list-style-type: none;font-size: 15px;'><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/left.png' class='navigation_Img' width='17px' height= '30px' style='margin-right:10px;'>Rotate</li><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/middle.png' class='navigation_Img' width='17px' height= '30px' style='margin-right:10px;'>Move</li><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/scrolling.png' class='navigation_Img' width='17px' height= '30px' style='margin-right:10px;'>Zoom</li></ul></div>";
         
-            var legendPopupUl_Div = "<div id='legendPopupUl_Div'><ul id='legendPopupUl' style='list-style-type: none;font-size: 15px;'><li style='padding:10px;'><img src='scripts/Legend/images/circle_gray.png' style='margin-right:10px;'>Package</li><li style='padding:10px;'><img src='scripts/Legend/images/circle_black.png' style='margin-right:10px;'>Type</li><li style='padding:10px;'><img src='scripts/Legend/images/circle_blue_light.png' style='margin-right:10px;'>Method</li><li style='padding:10px;'><img src='scripts/Legend/images/circle_yellow.png' style='margin-right:10px;'>Field</li></ul></div>";
+            var legendPopupUl_Mouse_Div = "<div id='legendPopupUl_Mouse_Div'><ul id='legendPopupUl_Mouse' class='Ul_Navigation' style='list-style-type: none;font-size: 15px;' ><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/left.png' class='navigation_Img' width='17px' height= '30px' style='margin-right:10px;'>Rotate</li><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/double.png' class='navigation_Img' width='17px' height= '30px'style='margin-right:10px;'>Center</li><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/middle.png' class='navigation_Img' width='17px' height= '30px' style='margin-right:10px;'>Move</li><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/scrolling.png' class='navigation_Img' width='17px' height= '30px' style='margin-right:10px;'>Zoom</li></ul></div>";
             
-            var legendPopupUl_Mouse_Div = "<div id='legendPopupUl_Mouse_Div'><ul id='legendPopupUl_Mouse'  style='list-style-type: none; font-size: 15px;' ><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/left.png' width='17px' height= '30px' style='margin-right:10px;'>Rotate</li><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/double.png' width='17px' height= '30px'style='margin-right:10px;'>Center</li><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/middle.png' width='17px' height= '30px' style='margin-right:10px;'>Move</li><li class='legendPopupli' style='padding:10px;'><img src='scripts/Legend/images/scrolling.png' width='17px' height= '30px' style='margin-right:10px;'>Zoom</li></ul></div>";
+            var legendPopupUl_City_Div = "<div id='legendPopupUl_City_Div'><p style='padding: 10px; text-align: justify;'>The city metaphor is a 3 dimensional real-world metaphor, aimed at creating a better understanding of the visualized system through a natural environment. The packages of an analysed system are represented by districts, its classes by Buildings. Methods and Attributes as well as different metrics of this metaphor differ depending on the chosen version which can either be original, panels, bricks or floors.</p><br/><img src='scripts/HelpController/images/city_legend.PNG' style='padding: 50px;'></div>";
+            var legendPopupUl_Div = "<div id='legendPopupUl_Div'><p style='padding: 10px; text-align: justify;'>The Recursive Disk (RD) metaphor is a glyph-based approach for software visualization. In this case a glyph is a graphical entity with components, each of which has geometric and appearance attributes. Due to the simple visual appearance of this metaphor it is easy for stakeholders to get a good understanding of the different metaphor entities. Packages are represented by grey disks, which can contain inner packages as well. Classes are visualized by purple disks and can contain methods and attributes. Depending on the chosen variant these attributes and methods can be represented by disks or disk segments. Though they are distinguishable by their color, methods are blue and attributes a yellow.</p><br/><img src='scripts/HelpController/images/RD_legend.PNG' style='margin-top=30px;'></div>";
+            
+            var x = document.getElementsByClassName('Ul_Navigation');
+            x.Style="list-style-type: none; font-size: 15px;";
             
             var helpPopup_Navigation;
             var helpPopup_Legend;
@@ -57,7 +59,7 @@ var helpController = (function() {
                 helpPopup_Legend = legendPopupUl_City_Div ;
             }; 
             if(controllerConfig.showCityLegend=="RD") {
-                helpPopup_Legend  = legendPopupUl_Div ; 
+                helpPopup_Legend = legendPopupUl_Div ; 
             }; 
             
             legendPopup = "<div id='legendTabs'>" + legendTabsUl + helpPopup_Legend + helpPopup_Navigation + "</div>";
@@ -68,8 +70,8 @@ var helpController = (function() {
             document.body.appendChild(loadPopup);
             $("#DisplayWindow").css("display", "block").jqxWindow({
                     theme: "metro",
-                    width: 363,
-                    height: 350,
+                    width: 545,
+                    height: 650,
                     isModal: true,
                     autoOpen: true,
                     resizable: false
@@ -77,8 +79,8 @@ var helpController = (function() {
 
             $("#legendTabs").jqxTabs({ 
                 theme:'metro',
-                width:350,
-                height: 300,
+                width: 530,
+                height: 600,
                 position:'top'
             });
         });
