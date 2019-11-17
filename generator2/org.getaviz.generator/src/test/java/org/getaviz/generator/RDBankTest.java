@@ -93,6 +93,6 @@ class RDBankTest {
 		Record result = connector.executeRead("MATCH (segment:DiskSegment)-[:VISUALIZES]->(:Method {hash: '" + hash
 				+ "'}) RETURN segment.anglePosition as anglePosition").single();
 		double anglePosition = result.get("anglePosition").asDouble();
-		assertEquals(270.03296703296706, anglePosition);
+		assertEquals(360.03296703296706, anglePosition);
 	}
 }

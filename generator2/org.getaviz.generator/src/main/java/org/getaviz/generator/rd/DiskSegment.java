@@ -19,6 +19,7 @@ public class DiskSegment implements RDElement {
     private long parentVisualizedNodeID;
     private long parentID;
     private long id;
+    private String fqn;
 
     public DiskSegment(long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, String color) {
         this.visualizedNodeID = visualizedNodeID;
@@ -129,4 +130,13 @@ public class DiskSegment implements RDElement {
     public long getVisualizedNodeID() {
         return visualizedNodeID;
     }
+
+    public void setFqn(String fqn) {
+        this.fqn = fqn;
+    }
+
+    public String getFqn() {
+        return  fqn;
+    }
+
 }

@@ -2,8 +2,8 @@ package org.getaviz.generator.rd.m2m;
 
 import org.getaviz.generator.rd.DiskSegment;
 import org.getaviz.generator.rd.SubDisk;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 class AFrameSegmentLayout {
 
@@ -21,6 +21,7 @@ class AFrameSegmentLayout {
             double ringWidth = disk.getBorderWidth();
             ArrayList<DiskSegment> outerSegments = disk.getOuterSegments();
             double outerSegmentsArea  = disk.getOuterSegmentsArea();
+            sortSegmentsBySize(outerSegments);
             if (disk.hasInnerDisks()) {
                 r_methods = Math.sqrt((outerSegmentsArea / Math.PI) + (r_data * r_data));
             } else {
@@ -36,6 +37,7 @@ class AFrameSegmentLayout {
         disks.forEach(disk -> {
             double innerRadius = disk.getInnerRadius();
             ArrayList<DiskSegment> innerSegments = disk.getInnerSegments();
+            sortSegmentsByFQN(innerSegments);
             double innerSegmentsArea = disk.getInnerSegmentsArea();
             double r_data = Math.sqrt((innerSegmentsArea/ Math.PI) + (innerRadius * innerRadius));
             disk.setInnerSegmentsRadius(r_data);
@@ -48,7 +50,7 @@ class AFrameSegmentLayout {
     private void calculateAngle(ArrayList<DiskSegment> segments, double sizeSum, double outer, double inner) {
         if (!segments.isEmpty()) {
             int length = segments.size();
-            double position = 0.0;
+            double position = 90.0;
             sizeSum += sizeSum / 360 * length;
             for (DiskSegment segment : segments) {
                 double angle = (segment.getSize() / sizeSum) * 360;
@@ -59,5 +61,14 @@ class AFrameSegmentLayout {
                 segment.setInnerRadius(inner);
             }
         }
+    }
+
+    private void sortSegmentsByFQN(ArrayList<DiskSegment> innerSegments) {
+        innerSegments.sort(Comparator.comparing(DiskSegment::getFqn));
+        Collections.reverse(innerSegments);
+    }
+
+    private void sortSegmentsBySize(ArrayList<DiskSegment> outerSegments) {
+        outerSegments.sort(Comparator.comparing(DiskSegment::getSize));
     }
 }
