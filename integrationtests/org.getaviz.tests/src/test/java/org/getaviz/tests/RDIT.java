@@ -115,7 +115,7 @@ public class RDIT {
 			"RETURN segment.anglePosition as anglePosition"
 		).single();
 		double anglePosition = result.get("anglePosition").asDouble();
-		assertEquals(264.43999999999994, anglePosition);
+		assertEquals(354.44000000000005, anglePosition);
 	}
 	
 	@Test
@@ -125,6 +125,6 @@ public class RDIT {
 			"RETURN segment.angle as angle, segment.anglePosition as anglePosition"
 		).single();
 		double anglePosition = result.get("anglePosition").asDouble();
-		assertEquals(120.0327868852459, anglePosition);
+		assertEquals(150.01639344262296, anglePosition);
 	}
 }
