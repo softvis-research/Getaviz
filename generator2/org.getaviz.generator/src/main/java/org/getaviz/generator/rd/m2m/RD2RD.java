@@ -35,6 +35,7 @@ public class RD2RD implements Step {
         log.info("RD2RD started");
         int namespaceMaxLevel = calculateNamespaceMaxLevel();
         createLists(namespaceMaxLevel);
+
         calculateData();
         calculateLayouts();
         writeToDatabase();
@@ -75,42 +76,43 @@ public class RD2RD implements Step {
     }
 
     private ArrayList<DiskSegment> createInnerSegmentsList() {
-        ArrayList<DiskSegment> list = new ArrayList<>();
         StatementResult result = connector.executeRead(
                 "MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(field:Field) " +
-                        "RETURN d.size AS size, ID(d) as id, ID(n) as parentID ORDER BY field.hash");
-        return getDiskSegments(list, result);
+                        "RETURN d.size AS size, ID(d) as id, ID(n) as parentID, field.name as name ORDER BY field.hash");
+        return getDiskSegments(result);
     }
 
-    private ArrayList<DiskSegment> getDiskSegments(ArrayList<DiskSegment> list, StatementResult result) {
+    private ArrayList<DiskSegment> getDiskSegments(StatementResult result) {
+        ArrayList<DiskSegment> list = new ArrayList<>();
         result.forEachRemaining(f -> {
             long parentID = f.get("parentID").asLong();
             long id = f.get("id").asLong();
             double size = f.get("size").asDouble();
+            String name = f.get("name").asString();
             DiskSegment innerSegment = new DiskSegment(parentID, id, size, dataFactor);
+            innerSegment.setFqn(name);
             list.add(innerSegment);
         });
         return list;
     }
 
     private ArrayList<DiskSegment> createOuterSegmentsList() {
-        ArrayList<DiskSegment> list = new ArrayList<>();
         StatementResult result = connector.executeRead(
                 "MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(method:Method) " +
                         "RETURN d.size AS size, ID(d) as id, ID(n) as parentID ORDER BY method.hash");
-        return getDiskSegments(list, result);
+        return getDiskSegments(result);
     }
 
 
     private ArrayList<MainDisk> createRootDisksList() {
-        ArrayList<MainDisk> list = new ArrayList<>();
         StatementResult result = connector.executeRead("MATCH (n:RD:Model)-[:CONTAINS]->(d:MainDisk)-[:VISUALIZES]->(element)" +
                 " RETURN d.ringWidth AS ringWidth, d.height AS height," +
                 " d.size AS size, ID(d) as id, ID(n) AS parentID, ID(element) AS visualizedID ORDER BY element.hash");
-        return getMainDisks(list, result);
+        return getMainDisks(result);
     }
 
-    private ArrayList<MainDisk> getMainDisks(ArrayList<MainDisk> list, StatementResult result) {
+    private ArrayList<MainDisk> getMainDisks(StatementResult result) {
+        ArrayList<MainDisk> list = new ArrayList<>();
         result.forEachRemaining(d -> {
             long visualizedID = d.get("visualizedID").asLong();
             long parentID = d.get("parentID").asLong();
@@ -147,7 +149,9 @@ public class RD2RD implements Step {
         StatementResult result = connector.executeRead("MATCH (p:MainDisk)-[:CONTAINS]->(d:MainDisk)-[:VISUALIZES]->(element) "
                 + "RETURN d.grossArea AS areaWithBorder, d.ringWidth AS ringWidth, d.height as height," +
                 " d.size AS size, ID(d) AS id, ID(p) AS parentID, ID(element) AS visualizedID ORDER BY element.hash");
-        return getMainDisks(list, result);
+        ArrayList<MainDisk> list2 = getMainDisks(result);
+        list.addAll(list2);
+        return list;
     }
 
     private void setPositionToPackages(Disk disk) {
