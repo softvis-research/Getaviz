@@ -49,7 +49,12 @@ public class RD2AFrame implements Step {
 	private String toX3DOMRD() {
 		StringBuilder elements = new StringBuilder();
 		connector.executeRead(
-				"MATCH (element)<-[:VISUALIZES]-(d:Disk)-[:HAS]->(p:Position) RETURN d,p, element.hash ORDER BY element.hash")
+				"MATCH (element)<-[:VISUALIZES]-(d:MainDisk)-[:HAS]->(p:Position) RETURN d,p, element.hash ORDER BY element.hash")
+				.forEachRemaining((result) -> {
+					elements.append(toDisk(result.get("d").asNode(), result.get("p").asNode()));
+				});
+		connector.executeRead(
+				"MATCH (element)<-[:VISUALIZES]-(d:SubDisk)-[:HAS]->(p:Position) RETURN d,p, element.hash ORDER BY element.hash")
 				.forEachRemaining((result) -> {
 					elements.append(toDisk(result.get("d").asNode(), result.get("p").asNode()));
 				});
@@ -120,7 +125,8 @@ public class RD2AFrame implements Step {
 			builder.append("</a-ring>");
 			builder.append("\n");
 		}
-		return builder.toString();
+		String properties = builder.toString();
+		return properties;
 	}
 
 	private String toSegment(List<Node> segments) {

@@ -107,6 +107,8 @@ public class RD2X3D implements Step {
 		builder.append("\n");
 		builder.append("</Transform>");
 		builder.append("\n");
+		String properties = builder.toString();
+		connector.executeWrite("MATCH disk WHERE ID(disk) = " + disk.id() + " SET disk.RD2X3D = " + properties);
 		return builder.toString();
 	}
 

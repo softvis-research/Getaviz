@@ -21,6 +21,7 @@ public class RDMetaphor implements Metaphor {
             steps.add(factory.createEnhancementStep());
         }
         steps.add(factory.createSteps2m());
+        steps.add(factory.createMetadataFileStep());
         steps.add(factory.createStepm2m());
         steps.add(factory.createStepm2t());
     }

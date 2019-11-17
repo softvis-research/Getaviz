@@ -4,6 +4,7 @@ import org.getaviz.generator.city.m2m.City2City;
 import org.getaviz.generator.city.m2t.City2AFrame;
 import org.getaviz.generator.city.m2t.City2X3D;
 import org.getaviz.generator.city.s2m.JQA2City;
+import org.getaviz.generator.jqa.JQA2JSON;
 import org.getaviz.generator.jqa.Java2JQA;
 import org.getaviz.generator.jqa.ScanStep;
 import org.getaviz.generator.rd.m2m.RD2RD;
@@ -25,6 +26,10 @@ public class StepFactory {
 
     public Step createEnhancementStep() {
         return new Java2JQA();
+    }
+
+    public Step createMetadataFileStep() {
+        return new JQA2JSON(config);
     }
 
     public Step createScanStep() {

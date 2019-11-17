@@ -1,12 +1,9 @@
-package org.getaviz.generator.tests;
+package org.getaviz.generator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
-import org.getaviz.generator.StepFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -38,14 +35,14 @@ class RDBankTest {
 	@Test
 	void numberOfVisualizedPackages() {
 		Record result = connector
-				.executeRead("MATCH (disk:Disk)-[:VISUALIZES]->(:Package) RETURN count(disk) AS result").single();
+				.executeRead("MATCH (disk:MainDisk)-[:VISUALIZES]->(:Package) RETURN count(disk) AS result").single();
 		int numberOfVisualizedPackages = result.get("result").asInt();
 		assertEquals(3, numberOfVisualizedPackages);
 	}
 
 	@Test
 	void numberOfVisualizedTypes() {
-		Record result = connector.executeRead("MATCH (disk:Disk)-[:VISUALIZES]->(:Type) RETURN count(disk) AS result")
+		Record result = connector.executeRead("MATCH (disk:SubDisk)-[:VISUALIZES]->(:Type) RETURN count(disk) AS result")
 				.single();
 		int numberOfVisualizedTypes = result.get("result").asInt();
 		assertEquals(7, numberOfVisualizedTypes);
@@ -64,7 +61,7 @@ class RDBankTest {
 	void layoutAlgorithmPackage() {
 		String hash = "ID_4481fcdc97864a546f67c76536e0308a3058f75d";
 		Record result = connector.executeRead(
-				"MATCH (:Package {hash: '" + hash + "'})<-[:VISUALIZES]-(:Disk)-[:HAS]->(position:Position) "
+				"MATCH (:Package {hash: '" + hash + "'})<-[:VISUALIZES]-(:MainDisk)-[:HAS]->(position:Position) "
 						+ "RETURN position.x as x, position.y as y, position.z as z")
 				.single();
 		double x = result.get("x").asDouble();
@@ -79,7 +76,7 @@ class RDBankTest {
 	void layoutAlgorithmClass() {
 		String hash = "ID_26f25e4da4c82dc2370f3bde0201e612dd88c04c";
 		Record result = connector
-				.executeRead("MATCH (:Type {hash: '" + hash + "'})<-[:VISUALIZES]-(:Disk)-[:HAS]->(position:Position) "
+				.executeRead("MATCH (:Type {hash: '" + hash + "'})<-[:VISUALIZES]-(:SubDisk)-[:HAS]->(position:Position) "
 						+ "RETURN position.x as x, position.y as y, position.z as z")
 				.single();
 		double x = result.get("x").asDouble();
@@ -96,6 +93,6 @@ class RDBankTest {
 		Record result = connector.executeRead("MATCH (segment:DiskSegment)-[:VISUALIZES]->(:Method {hash: '" + hash
 				+ "'}) RETURN segment.anglePosition as anglePosition").single();
 		double anglePosition = result.get("anglePosition").asDouble();
-		assertEquals(270.03296703296706, anglePosition);
+		assertEquals(360.03296703296706, anglePosition);
 	}
 }

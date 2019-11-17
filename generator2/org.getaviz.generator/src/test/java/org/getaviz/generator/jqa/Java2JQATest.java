@@ -1,15 +1,16 @@
-package org.getaviz.generator.tests;
+package org.getaviz.generator.jqa;
 
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.jqa.Java2JQA;
 import org.getaviz.generator.mockups.Bank;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Java2JQATest {
+class Java2JQATest {
 
     private static DatabaseConnector connector;
     private static Bank mockup = new Bank();
@@ -21,6 +22,11 @@ public class Java2JQATest {
         connector = mockup.getConnector();
         Java2JQA java2JQA = new Java2JQA();
         java2JQA.run();
+    }
+
+    @AfterAll
+    static void teardown() {
+        mockup.close();
     }
 
     @Test
