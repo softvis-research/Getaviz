@@ -1,28 +1,38 @@
 package org.getaviz.generator.rd.m2t;
 
-import org.getaviz.generator.SettingsConfiguration;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.OutputFormatHelper;
 import java.io.FileWriter;
 import java.io.IOException;
-import org.neo4j.driver.v1.types.Node;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.Step;
+import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.output.AFrame;
+import org.neo4j.driver.v1.types.Node;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RD2AFrame {
-	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+public class RD2AFrame implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
+	private double ringWidth;
+	private String outputPath;
+	private AFrame outputFormat;
 
-	public RD2AFrame() {
+	public RD2AFrame(SettingsConfiguration config) {
+		this.ringWidth = config.getRDRingWidth();
+		this.outputPath = config.getOutputPath();
+		this.outputFormat = new AFrame();
+	}
+
+	public void run() {
 		log.info("RD2AFrame has started");
 		FileWriter fw = null;
 		String fileName = "model.html";
 		try {
-			fw = new FileWriter(config.getOutputPath() + fileName);
-			fw.write(OutputFormatHelper.AFrameHead() + toX3DOMRD() + OutputFormatHelper.AFrameTail());
+			fw = new FileWriter(outputPath+ fileName);
+			fw.write(outputFormat.head() + toX3DOMRD() + outputFormat.tail());
 		} catch (IOException e) {
 			log.error("Could not create file");
 		} finally {
@@ -39,7 +49,12 @@ public class RD2AFrame {
 	private String toX3DOMRD() {
 		StringBuilder elements = new StringBuilder();
 		connector.executeRead(
-				"MATCH (element)<-[:VISUALIZES]-(d:Disk)-[:HAS]->(p:Position) RETURN d,p, element.hash ORDER BY element.hash")
+				"MATCH (element)<-[:VISUALIZES]-(d:MainDisk)-[:HAS]->(p:Position) RETURN d,p, element.hash ORDER BY element.hash")
+				.forEachRemaining((result) -> {
+					elements.append(toDisk(result.get("d").asNode(), result.get("p").asNode()));
+				});
+		connector.executeRead(
+				"MATCH (element)<-[:VISUALIZES]-(d:SubDisk)-[:HAS]->(p:Position) RETURN d,p, element.hash ORDER BY element.hash")
 				.forEachRemaining((result) -> {
 					elements.append(toDisk(result.get("d").asNode(), result.get("p").asNode()));
 				});
@@ -55,7 +70,7 @@ public class RD2AFrame {
 					segments.add(result.get("ds").asNode());
 				});
 		StringBuilder builder = new StringBuilder();
-		if (radius - config.getRDRingWidth() == 0) {
+		if (radius - ringWidth == 0) {
 			builder.append("<a-circle id=\"" + entity.get("hash").asString() + "\" ");
 			builder.append("\n");
 			builder.append("\t position=\"" + position.get("x") + " ");
@@ -87,7 +102,7 @@ public class RD2AFrame {
 			builder.append(position.get("y") + " ");
 			builder.append(position.get("z") + "\"");
 			builder.append("\n");
-			builder.append("\t radius-inner=\"" + (radius - config.getRDRingWidth()) + "\"");
+			builder.append("\t radius-inner=\"" + (radius - ringWidth) + "\"");
 			builder.append("\n");
 			builder.append("\t radius-outer=\"" + radius + "\" ");
 			builder.append("\n");
@@ -110,7 +125,8 @@ public class RD2AFrame {
 			builder.append("</a-ring>");
 			builder.append("\n");
 		}
-		return builder.toString();
+		String properties = builder.toString();
+		return properties;
 	}
 
 	private String toSegment(List<Node> segments) {

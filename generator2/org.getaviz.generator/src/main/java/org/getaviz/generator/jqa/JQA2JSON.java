@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.SettingsConfiguration;
 import org.apache.commons.logging.Log;
@@ -16,15 +17,19 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 import java.util.Collections;
 
-public class JQA2JSON {
-	SettingsConfiguration config = SettingsConfiguration.getInstance();
-	Log log = LogFactory.getLog(this.getClass());
-	DatabaseConnector connector = DatabaseConnector.getInstance();
+public class JQA2JSON implements Step {
+	private SettingsConfiguration config;
+	private Log log = LogFactory.getLog(this.getClass());
+	private DatabaseConnector connector = DatabaseConnector.getInstance();
 
-	public JQA2JSON() {
+	public JQA2JSON(SettingsConfiguration config) {
+		this.config = config;
+	}
+
+	public void run() {
 		log.info("JQA2JSON has started.");
 		ArrayList<Node> elements = new ArrayList<>();
-		connector.executeRead("MATCH (n)<-[:VISUALIZES]-() RETURN n ORDER BY n.hash").forEachRemaining((result) -> {
+		connector.executeRead("MATCH (n)<-[:VISUALIZES]-() RETURN n ORDER BY n.hash").forEachRemaining(result -> {
 			elements.add(result.get("n").asNode());
 		});
 		Writer fw = null;
@@ -389,15 +394,11 @@ public class JQA2JSON {
 		return removeBrackets(parameterList);
 	}
 
-	public String removeBrackets(String[] array) {
-		return removeBrackets(array.toString());
-	}
-	
-	public String removeBrackets(List<String> list) {
+	private String removeBrackets(List<String> list) {
 		return removeBrackets(list.toString());
 	}
 
-	public String removeBrackets(String string) {
+	private String removeBrackets(String string) {
 		return StringUtils.remove(StringUtils.remove(string, "["), "]");
 	}
 }

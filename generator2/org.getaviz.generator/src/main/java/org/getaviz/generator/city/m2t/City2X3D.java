@@ -1,42 +1,58 @@
 package org.getaviz.generator.city.m2t;
 
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.SettingsConfiguration.BuildingType;
-import org.getaviz.generator.database.Labels;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.Step;
+import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.SettingsConfiguration.BuildingType;
+import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.database.Labels;
 import java.io.FileWriter;
 import java.io.IOException;
-import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.output.X3D;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.types.Node;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.getaviz.generator.OutputFormatHelper;
-
-public class City2X3D {
-	private SettingsConfiguration config = SettingsConfiguration.getInstance();
-	private DatabaseConnector connector = DatabaseConnector.getInstance();
+public class City2X3D implements Step {
+	private BuildingType buildingType;
+	private String outputPath;
+	private String buildingTypeAsString;
+	private boolean showAttributesAsCylinders;
+	private double panelSeparatorHeight;
+	private String colorAsPercentage;
 	private Log log = LogFactory.getLog(this.getClass());
+	private X3D outputFormat;
+	private DatabaseConnector connector = DatabaseConnector.getInstance();
 
-	public City2X3D() {
+	public City2X3D(SettingsConfiguration config) {
+		this.buildingType = config.getBuildingType();
+		this.outputPath = config.getOutputPath();
+		this.buildingTypeAsString = config.getBuildingTypeAsString();
+		this.showAttributesAsCylinders = config.isShowAttributesAsCylinders();
+		this.panelSeparatorHeight = config.getPanelSeparatorHeight();
+		this.colorAsPercentage = config.getCityColor("black").toString();
+		this.outputFormat = new X3D(config);
+	}
+
+	public void run() {
 		log.info("CityOutput started");
 		FileWriter fw = null;
-		String head = OutputFormatHelper.X3DHead();
-		String body = OutputFormatHelper.viewports() + toX3DModel();
-		String tail = OutputFormatHelper.X3DTail();
+		String head = outputFormat.head();
+		String body = outputFormat.viewports() + toX3DModel();
+		String tail = outputFormat.tail();
 		String fileName = "model.x3d";
 		try {
-			fw = new FileWriter(config.getOutputPath() + fileName);
-			switch (config.getBuildingType()) {
-			case CITY_ORIGINAL:
-				fw.write(head + body + tail);
-				break;
-			case CITY_PANELS:
-			case CITY_FLOOR:
-			case CITY_BRICKS:
-				fw.write(head + OutputFormatHelper.settingsInfo() + body + tail);
+			fw = new FileWriter(outputPath + fileName);
+			switch (buildingType) {
+				case CITY_ORIGINAL:
+					fw.write(head + body + tail);
+					break;
+				case CITY_PANELS:
+				case CITY_FLOOR:
+				case CITY_BRICKS:
+					fw.write(head + outputFormat.settingsInfo() + body + tail);
 			}
 		} catch (IOException e) {
 			log.error(e);
@@ -57,17 +73,17 @@ public class City2X3D {
 		StringBuilder buildings = new StringBuilder();
 		StringBuilder segments = new StringBuilder();
 		connector.executeRead("MATCH (n:Model)-[:CONTAINS*]->(d:District)-[:VISUALIZES]->(e) WHERE n.building_type = \'"
-				+ config.getBuildingTypeAsString() + "\' RETURN d,e").forEachRemaining((result) -> {
+				+ buildingTypeAsString + "\' RETURN d,e").forEachRemaining((result) -> {
 					districts.append(toDistrict(result.get("d").asNode(), result.get("e").asNode()));
 				});
 		connector.executeRead("MATCH (n:Model)-[:CONTAINS*]->(b:Building)-[:VISUALIZES]->(e) WHERE n.building_type = \'"
-				+ config.getBuildingTypeAsString() + "\' RETURN b,e").forEachRemaining((result) -> {
+				+  buildingTypeAsString + "\' RETURN b,e").forEachRemaining((result) -> {
 					buildings.append(toBuilding(result.get("b").asNode(), result.get("e").asNode()));
 				});
-		if (!(config.getBuildingType() == BuildingType.CITY_ORIGINAL)) {
+		if (!(buildingType == BuildingType.CITY_ORIGINAL)) {
 			connector.executeRead(
 					"MATCH (n:Model)-[:CONTAINS*]->(bs:BuildingSegment)-[:VISUALIZES]->(e) WHERE n.building_type = \'"
-							+ config.getBuildingTypeAsString() + "\' RETURN bs, e")
+							+ buildingTypeAsString + "\' RETURN bs, e")
 					.forEachRemaining((result) -> {
 						Node segment = result.get("bs").asNode();
 						if (segment.hasLabel(Labels.Floor.name())) {
@@ -159,8 +175,8 @@ public class City2X3D {
 		builder.append("\n");
 		builder.append("\t\t <Shape>");
 		builder.append("\n");
-		if (config.getBuildingType() == BuildingType.CITY_PANELS && entity.hasLabel(Labels.Field.name())
-				&& config.isShowAttributesAsCylinders()) {
+		if (buildingType == BuildingType.CITY_PANELS && entity.hasLabel(Labels.Field.name())
+				&& showAttributesAsCylinders) {
 			builder.append("\t\t <Cylinder radius=\'" + width / 2);
 			builder.append("\' height=\'" + height + "\'></Cylinder>");
 			builder.append("\n");
@@ -196,13 +212,13 @@ public class City2X3D {
 				builder.append("\n");
 			} else {
 				builder.append("\t\t <Box size=\'" + separator.get("width").asDouble() + " "
-						+ config.getPanelSeparatorHeight() + " " + separator.get("length").asDouble() + "\'></Box>");
+						+ panelSeparatorHeight + " " + separator.get("length").asDouble() + "\'></Box>");
 				builder.append("\n");
 			}
 			builder.append("\t\t\t <Appearance>");
 			builder.append("\n");
 			builder.append(
-					"\t\t\t\t <Material diffuseColor=\'" + config.getCityColorAsPercentage("black") + "\'></Material>");
+					"\t\t\t\t <Material diffuseColor=\'" + colorAsPercentage + "\'></Material>");
 			builder.append("\n");
 			builder.append("\t\t\t </Appearance>");
 			builder.append("\n");
