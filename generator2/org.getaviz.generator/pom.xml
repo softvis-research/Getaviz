@@ -137,6 +137,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.neo4j</groupId>
+			<artifactId>neo4j-bolt</artifactId>
+			<version>3.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j-graphdb-api</artifactId>
 			<version>3.5.3</version>
 			<scope>compile</scope>

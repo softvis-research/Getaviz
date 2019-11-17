@@ -41,10 +41,7 @@ public class RD2RD {
 				"MATCH p=(n:RD:Model)-[:CONTAINS*]->(m:RD:Disk) WHERE NOT (m)-[:CONTAINS]->(:RD:Disk) RETURN max(length(p)) AS length");
 		int diskMaxLevel = length.single().get("length").asInt(0) + 1;
 
-
-
 		NS_colors = createColorGradiant(NS_colorStart, NS_colorEnd, diskMaxLevel);
-
 
 		connector.executeRead(
 				"MATCH p = (n:Model:RD)-[:CONTAINS*]->(d:Disk)-[:VISUALIZES]->(e) RETURN d,e,length(p)-1 AS length")

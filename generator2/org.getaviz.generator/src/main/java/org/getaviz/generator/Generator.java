@@ -17,7 +17,6 @@ import org.getaviz.generator.city.s2m.JQA2City;
 import org.getaviz.generator.rd.s2m.C2RD;
 import org.getaviz.generator.rd.s2m.JQA2RD;
 import org.neo4j.driver.v1.StatementResult;
-
 import javax.xml.crypto.Data;
 
 public class Generator {
