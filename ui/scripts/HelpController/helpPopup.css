@@ -1,0 +1,47 @@
+.helpPopupUl{
+    font-size: 15px;
+}
+
+.helpPopupUl li img{
+    width: 25px; 
+    height:25px;
+    margin-right:10px; 
+    float: left;
+}
+
+.helpPopup_Ul_div{   
+    float: left;
+    margin-top: 5px;
+}
+
+.Ul_Navigation{  
+    list-style-type: none;
+    font-size: 15px;
+}
+
+.navigationLi{   
+    padding:10px;
+}
+
+.navigationLi img{ 
+    width:17px;
+    height:30px;
+    margin-right:10px;
+}
+
+.legend_Div_P{ 
+    padding: 10px; 
+    text-align: justify;
+}
+
+.legend_City_Div img{ 
+    padding: 50px;
+}
+
+.legend_Div img{ 
+    margin-top:30px;
+}
+
+.relationships_City_Div img{ 
+    margin-top:40px;
+}
