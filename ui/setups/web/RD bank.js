@@ -59,12 +59,13 @@ var setup = {
 		
 		{ 	name: 	"relationConnectorController",		
 						
-			fixPositionZ : 1,
+			fixPositionY : false,
 			showInnerRelations : true,
-			elementShape : "circle",					
-			sourceStartAtParentBorder : true,
-			targetEndAtParentBorder : false,
-			createEndpoints: true,
+            sourceStartAtParentBorder : true,
+            targetEndAtParentBorder : true,
+            sourceStartAtBorder:false,
+            targetEndAtBorder : false,
+			createEndpoints: false
 		},
 
 		{ 	name: 	"relationTransparencyController",
@@ -348,10 +349,10 @@ var setup = {
                                         {name: "canvasFilterController"},
                                         {name: "helpController"},
                                         {name: "shareController"},
-                                        /*{name: "canvasFlyToController"},
+                                        //{name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},
                                         {name: "relationTransparencyController"},
-                                        {name: "relationHighlightController"},*/
+                                        {name: "relationHighlightController"},
                                     ],
                                 },
                                 second: {
