@@ -1,4 +1,4 @@
 *.komodoproject
 */.idea
-
+*.iml
 \.idea/
