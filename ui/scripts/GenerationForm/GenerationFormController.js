@@ -1081,9 +1081,9 @@ var generationFormController = (function() {
 				const btn_submit = settingsForm.jqxForm('getComponentByName', 'submitButton');
 				btn_submit.on('click', function () {
 					settingsForm.jqxValidator('validate');
-					let currentPage = window.location.href;
-					let currentPath = currentPage.replace(/[^\/]*$/, '');
-					settingsForm.jqxForm('submit', currentPath + "generator-connector.php", "_self", 'POST');
+                                        const currentPage = location.protocol + '//' + location.host + location.pathname
+					const currentPath = currentPage.replace(/[^\/]*$/, '');
+					settingsForm.jqxForm('submit', currentPath + "/generator-connector.php", "_self", 'POST');
 				});
 				
 				// Cancel Form Data 
