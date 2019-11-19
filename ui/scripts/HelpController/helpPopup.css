@@ -29,19 +29,43 @@
     margin-right:10px;
 }
 
-.legend_Div_P{ 
+.legend_City_Div{ 
     padding: 10px; 
     text-align: justify;
 }
 
 .legend_City_Div img{ 
-    padding: 50px;
+    display: block;
+    margin: 0 auto;
 }
 
+.legend_Div{ 
+    padding: 10px; 
+    text-align: justify;
+}
 .legend_Div img{ 
-    margin-top:30px;
+    display: block;
+    margin: 0 auto;
+}
+
+.relationships_City_Div{ 
+    margin-top:40px;
 }
 
 .relationships_City_Div img{ 
-    margin-top:40px;
+    display: block;
+    margin: 0 auto;
+}
+
+.relationships_Div img{ 
+    padding:20px;
+     
+}
+
+.relationships_RD_Div {
+    padding:10px;
+}
+.relationships_RD_Div img{
+    display: block;
+    margin: 0 auto;
 }
