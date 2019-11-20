@@ -1083,7 +1083,7 @@ var generationFormController = (function() {
 					settingsForm.jqxValidator('validate');
                                         const currentPage = location.protocol + '//' + location.host + location.pathname
 					const currentPath = currentPage.replace(/[^\/]*$/, '');
-					settingsForm.jqxForm('submit', currentPath + "/generator-connector.php", "_self", 'POST');
+					settingsForm.jqxForm('submit', currentPath + "generator-connector.php", "_self", 'POST');
 				});
 				
 				// Cancel Form Data 
