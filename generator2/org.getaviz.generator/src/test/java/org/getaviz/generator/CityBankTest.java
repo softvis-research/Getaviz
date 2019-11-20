@@ -108,6 +108,6 @@ class CityBankTest {
 						+ "RETURN d.color as color")
 				.single();
 		String color = result.get("color").asString();
-		assertEquals("#f0f0f0", color);
+		assertEquals("#b1b1b1", color);
 	}
 }
