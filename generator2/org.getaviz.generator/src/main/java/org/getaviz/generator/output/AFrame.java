@@ -22,8 +22,6 @@ public class AFrame implements OutputFormat {
         builder.append("\n");
         builder.append("\t\t <a-scene id=\"aframe-canvas\"");
         builder.append("\n");
-        builder.append("\t    \t light=\"defaultLightsEnabled: false\"");
-        builder.append("\n");
         builder.append("\t    \t cursor=\"rayOrigin: mouse\"");
         builder.append("\n");
         builder.append("\t    \t embedded=\"true\"");
