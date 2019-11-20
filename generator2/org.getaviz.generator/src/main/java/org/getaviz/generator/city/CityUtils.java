@@ -41,6 +41,7 @@ public class CityUtils {
 				} else {
 					color =  config.getCityColor("blue");
 				}
+				break;
 			default:
 				color = config.getCityColor("blue");
 			}
