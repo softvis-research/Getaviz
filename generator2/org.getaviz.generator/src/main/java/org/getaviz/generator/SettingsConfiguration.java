@@ -319,7 +319,7 @@ public class SettingsConfiguration {
 	}
 
 	public String getPackageColorEnd() {
-		return config.getString("city.package.color_end", "#f0f0f0");
+		return config.getString("city.package.color_end", "#b1b1b1");
 	}
 
 	public String getClassColorStart() {
