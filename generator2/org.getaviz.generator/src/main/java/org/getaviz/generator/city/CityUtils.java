@@ -3,7 +3,6 @@ package org.getaviz.generator.city;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 import org.getaviz.generator.SettingsConfiguration;
@@ -24,14 +23,14 @@ public class CityUtils {
 			switch (config.getScheme()) {
 			case VISIBILITY:
 				if (visibility.equals("public")) {
-					color = config.getCityColor("dark_green").toString();
+					color = config.getCityColor("dark_green");
 				} else if (visibility.equals("protected")) {
-					color = config.getCityColor("yellow").toString();
+					color = config.getCityColor("yellow");
 				} else if (visibility.equals("private")) {
-					color = config.getCityColor("red").toString();
+					color = config.getCityColor("red");
 				} else {
 					// Package visibility or default
-					color = config.getCityColor("blue").toString();
+					color = config.getCityColor("blue");
 				}
 				break;
 			case TYPES:
@@ -40,23 +39,23 @@ public class CityUtils {
 				} else if(relatedEntity.hasLabel(Labels.Method.name())) {
 					color = setMethodColor(relatedEntity);
 				} else {
-					color =  config.getCityColor("blue").toString();
+					color =  config.getCityColor("blue");
 				}
 			default:
-				color = config.getCityColor("blue").toString();
+				color = config.getCityColor("blue");
 			}
 		} else {
 			switch (config.getScheme()) {
 			case VISIBILITY:
 				if (visibility.equals("public")) {
-					color = config.getCityColor("dark_green").toString();
+					color = config.getCityColor("dark_green");
 				} else if (visibility.equals("protected")) {
-					color = config.getCityColor("yellow").toString();
+					color = config.getCityColor("yellow");
 				} else if (visibility.equals("private")) {
-					color = config.getCityColor("red").toString();
+					color = config.getCityColor("red");
 				} else {
 					// Package visibility or default
-					color = config.getCityColor("blue").toString();
+					color = config.getCityColor("blue");
 				}
 				break;
 			case TYPES:
@@ -65,11 +64,11 @@ public class CityUtils {
 				} else if(relatedEntity.hasLabel(Labels.Method.name())) {
 					color = setMethodColor(relatedEntity);
 				} else {
-					color = config.getCityColor("blue").toString();
+					color = config.getCityColor("blue");
 				}
 				break;
 			default:
-				color = config.getCityColor("blue").toString();
+				color = config.getCityColor("blue");
 			}
 		}
 		return color;

@@ -142,12 +142,10 @@ public class SettingsConfiguration {
 
 	public Schemes getScheme() {
 		String value = config.getString("city.scheme", "types");
-		switch (value) {
-		case "visibility":
+		if ("visibility".equals(value)) {
 			return Schemes.VISIBILITY;
-		default:
-			return Schemes.TYPES;
 		}
+		return Schemes.TYPES;
 	}
 
 	public ClassElementsModes getClassElementsMode() {
