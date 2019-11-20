@@ -165,7 +165,7 @@ public class RD2RD implements Step {
 
     private void setColorToDisk(int namespaceMaxLevel) {
         String NS_colorStart = "#969696";
-        String NS_colorEnd = "#F0F0F0";
+        String NS_colorEnd = "#B1B1B1";
         System.out.println(namespaceMaxLevel);
         NS_colors = ColorGradient.createColorGradient(NS_colorStart, NS_colorEnd, namespaceMaxLevel);
                 connector.executeRead(

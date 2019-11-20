@@ -81,11 +81,7 @@ public class RD2AFrame implements Step {
 			builder.append("\n");
 			builder.append("\t color=\"" + disk.get("color").asString() + "\"");
 			builder.append("\n");
-			builder.append("\t shader=\"flat\"");
-			builder.append("\n");
 			builder.append("\t buffer=\"true\"");
-			builder.append("\n");
-			builder.append("\t flat-shading=\"true\"");
 			builder.append("\n");
 			builder.append("\t depth-test=\"false\"");
 			builder.append("\n");
@@ -108,11 +104,7 @@ public class RD2AFrame implements Step {
 			builder.append("\n");
 			builder.append("\t color=\"" + disk.get("color").asString() + "\"");
 			builder.append("\n");
-			builder.append("\t shader=\"flat\"");
-			builder.append("\n");
 			builder.append("\t buffer=\"true\"");
-			builder.append("\n");
-			builder.append("\t flat-shading=\"true\"");
 			builder.append("\n");
 			builder.append("\t depth-test=\"false\"");
 			builder.append("\n");
@@ -144,11 +136,7 @@ public class RD2AFrame implements Step {
 				builder.append("\n");
 				builder.append("\t theta-length=\"" + segment.get("angle") + "\"");
 				builder.append("\n");
-				builder.append("\t shader=\"flat\"");
-				builder.append("\n");
 				builder.append("\t buffer=\"true\"");
-				builder.append("\n");
-				builder.append("\t flat-shading=\"true\"");
 				builder.append("\n");
 				builder.append("\t depth-test=\"false\"");
 				builder.append("\n");
@@ -165,11 +153,7 @@ public class RD2AFrame implements Step {
 				builder.append("\n");
 				builder.append("\t color=\"" + segment.get("color").asString() + "\"");
 				builder.append("\n");
-				builder.append("\t shader=\"flat\"");
-				builder.append("\n");
 				builder.append("\t buffer=\"true\"");
-				builder.append("\n");
-				builder.append("\t flat-shading=\"true\"");
 				builder.append("\n");
 				builder.append("\t depth-test=\"false\"");
 				builder.append("\n");
