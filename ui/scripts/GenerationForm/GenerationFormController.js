@@ -908,7 +908,7 @@ var generationFormController = (function() {
 					city_building_horizontal_gap: 3.0,
 					city_building_vertical_margin: 1.0,
 					city_package_color_start: '#969696',
-					city_package_color_end: '#F0F0F0',
+					city_package_color_end: '#B1B1B1',
 					city_class_color_start: '#131615',
 					city_class_color_end: '#00FF00',
 					city_class_color: '#353559',
@@ -1083,7 +1083,7 @@ var generationFormController = (function() {
 					settingsForm.jqxValidator('validate');
                                         const currentPage = location.protocol + '//' + location.host + location.pathname
 					const currentPath = currentPage.replace(/[^\/]*$/, '');
-					settingsForm.jqxForm('submit', currentPath + "/generator-connector.php", "_self", 'POST');
+					settingsForm.jqxForm('submit', currentPath + "generator-connector.php", "_self", 'POST');
 				});
 				
 				// Cancel Form Data 
