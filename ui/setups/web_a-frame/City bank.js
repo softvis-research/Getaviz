@@ -33,7 +33,7 @@
 		},
         
         {	name: 	"helpController",
-            Metaphor: "city"
+            metaphor: "City original"
 		},
 
         {	name: 	"shareController",

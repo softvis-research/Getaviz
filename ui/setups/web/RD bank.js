@@ -24,7 +24,7 @@ var setup = {
         },
         
         {   name: 'helpController',
-            Metaphor: "RD"
+            metaphor: "RD"
         },
 
         {	name: 	"shareController", 

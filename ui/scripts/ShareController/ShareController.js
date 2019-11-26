@@ -187,6 +187,7 @@ var shareController = (function() {
                     theme: "metro",
                     width: 700,
                     height: 80,
+                    //height: 600,
                     isModal: true,
                     autoOpen: true,
                     resizable: false

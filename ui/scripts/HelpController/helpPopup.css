@@ -14,58 +14,72 @@
     margin-top: 5px;
 }
 
-.Ul_Navigation{  
-    list-style-type: none;
-    font-size: 15px;
+.City_Legend h2{ 
+    margin-left:10px;
 }
 
-.navigationLi{   
-    padding:10px;
+.City_Legend img{ 
+    width:52px;
+    height:60px;
+    float:left;
+    margin-left:10px;
 }
 
-.navigationLi img{ 
-    width:17px;
-    height:30px;
-    margin-right:10px;
-}
-
-.legend_City_Div{ 
-    padding: 10px; 
+.City_Legend p{ 
+    height:60px;
+    margin-left:70px;
+    margin-top:25px;
     text-align: justify;
 }
 
-.legend_City_Div img{ 
-    display: block;
-    margin: 0 auto;
+.Cityori_Legend img{ 
+    width:52px;
+    height:60px;
+    float:left;
+    margin-left:10px;
+}
+.Cityori_Legend p{ 
+    height:60px;
+    margin-left:70px;
+    margin-top:25px;
+    text-align: justify;
 }
 
 .legend_Div{ 
     padding: 10px; 
     text-align: justify;
 }
+
 .legend_Div img{ 
     display: block;
     margin: 0 auto;
 }
 
-.relationships_City_Div{ 
-    margin-top:40px;
-}
-
-.relationships_City_Div img{ 
-    display: block;
-    margin: 0 auto;
-}
-
-.relationships_Div img{ 
-    padding:20px;
-     
-}
-
-.relationships_RD_Div {
+.City_Relationships{
     padding:10px;
 }
-.relationships_RD_Div img{
+
+.City_Relationships img{
     display: block;
     margin: 0 auto;
+    border:2px solid black;
+    width:328px; 
+}
+
+.city_Navigation{ 
+    padding:10px;
+}
+
+.city_Navigation img{ 
+   width:17px;
+    height:30px;
+    float:left;
+    margin-left:10px;
+}
+
+.city_Navigation p{ 
+    height:30px;
+    margin-left:45px;
+    margin-top:5px;
+    text-align: justify;
 }
