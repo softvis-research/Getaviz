@@ -1,65 +1,64 @@
-.helpPopupUl{
+.helpController.helpPopupUl{
     font-size: 15px;
 }
 
-.helpPopupUl li img{
+.helpController.helpPopupUl li img{
     width: 25px; 
     height:25px;
     margin-right:10px; 
     float: left;
 }
 
-.helpPopup_Ul_div{   
+.helpController.helpPopup_Ul_div{   
     float: left;
     margin-top: 5px;
 }
 
-.City_Legend h2{ 
-    margin-left:10px;
-}
 
-.City_Legend img{ 
+
+.helpController.legend_Describe img{ 
     width:52px;
     height:60px;
     float:left;
     margin-left:10px;
 }
 
-.City_Legend p{ 
+.helpController.legend_Describe p{ 
     height:60px;
     margin-left:70px;
     margin-top:25px;
     text-align: justify;
 }
 
-.Cityori_Legend img{ 
+.helpController.Cityori_Legend img{ 
     width:52px;
     height:60px;
     float:left;
     margin-left:10px;
 }
-.Cityori_Legend p{ 
+.helpController.Cityori_Legend p{ 
     height:60px;
     margin-left:70px;
     margin-top:25px;
     text-align: justify;
 }
 
-.legend_Div{ 
+.helpController.legend_Div{ 
     padding: 10px; 
     text-align: justify;
 }
 
-.legend_Div img{ 
+.helpController.legend_Div img{ 
     display: block;
     margin: 0 auto;
 }
 
-.City_Relationships{
+
+.helpController.relationships_Div{
     padding:10px;
 }
 
-.City_Relationships img{
+.helpController.relationships_Div img{
     display: block;
     margin: 0 auto;
     border:2px solid black;
@@ -67,18 +66,18 @@
     margin-bottom: 30px;
 }
 
-.city_Navigation{ 
+.helpController.navigation_Div{ 
     padding:10px;
 }
 
-.city_Navigation img{ 
+.helpController.navigation_Describe img{ 
    width:17px;
     height:30px;
     float:left;
     margin-left:10px;
 }
 
-.city_Navigation p{ 
+.helpController.navigation_Describe p{ 
     height:30px;
     margin-left:45px;
     margin-top:5px;
