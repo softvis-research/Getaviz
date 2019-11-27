@@ -168,7 +168,7 @@ var shareController = (function() {
                 
             var stateID= "<strong>StateID:</strong>" + stateHashcode + "<br /><br />";
             var descriptionText = "Use this URL to share the current state of the visualization."+ "<br />";
-            var shareLinkDiv= "<div id='shareLinkDiv'><input id='copyField' style='width:85%; float:left' readonly value='" + url + state_N + stateHashcode
+            var shareLinkDiv= "<div id='shareLinkDiv'><input id='copyField' style='width:92%; float:left' readonly value='" + url + state_N + stateHashcode
                     +"'></div> ";
             var jsonHtml= "<strong>JSON:</strong> <pre style='margin:0'>"+jsonString+"</pre>";
             var popup;
@@ -185,8 +185,8 @@ var shareController = (function() {
             document.body.appendChild(loadPopup);
             $("#DisplayWindow").css("display", "block").jqxWindow({
                     theme: "metro",
-                    width: 700,
-                    height: 80,
+                    width: 400,
+                    height: 78,
                     //height: 600,
                     isModal: true,
                     autoOpen: true,
