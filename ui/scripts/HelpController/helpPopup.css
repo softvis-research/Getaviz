@@ -53,6 +53,9 @@
     margin: 0 auto;
 }
 
+.helpController.legend_Represent{ 
+    font-weight: bold;
+} 
 
 .helpController.relationships_Div{
     padding:10px;
