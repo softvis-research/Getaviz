@@ -14,7 +14,18 @@
     margin-top: 5px;
 }
 
+.helpController.jqxTabs_Div{ 
+    padding:10px;
+}
 
+.helpController.legend_Div{ 
+    text-align: justify;
+}
+
+.helpController.legend_Div img{ 
+    display: block;
+    margin: 0 auto;
+}
 
 .helpController.legend_Describe img{ 
     width:52px;
@@ -30,36 +41,9 @@
     text-align: justify;
 }
 
-.helpController.Cityori_Legend img{ 
-    width:52px;
-    height:60px;
-    float:left;
-    margin-left:10px;
-}
-.helpController.Cityori_Legend p{ 
-    height:60px;
-    margin-left:70px;
-    margin-top:25px;
-    text-align: justify;
-}
-
-.helpController.legend_Div{ 
-    padding: 10px; 
-    text-align: justify;
-}
-
-.helpController.legend_Div img{ 
-    display: block;
-    margin: 0 auto;
-}
-
 .helpController.legend_Represent{ 
     font-weight: bold;
 } 
-
-.helpController.relationships_Div{
-    padding:10px;
-}
 
 .helpController.relationships_Div img{
     display: block;
@@ -67,10 +51,6 @@
     border:2px solid black;
     width:328px; 
     margin-bottom: 30px;
-}
-
-.helpController.navigation_Div{ 
-    padding:10px;
 }
 
 .helpController.navigation_Describe img{ 
