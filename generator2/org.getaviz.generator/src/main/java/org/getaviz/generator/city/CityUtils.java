@@ -6,7 +6,6 @@ import java.util.List;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.SettingsConfiguration.OutputFormat;
 import org.getaviz.generator.city.m2m.BuildingSegmentComparator;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
@@ -19,8 +18,7 @@ public class CityUtils {
 	public static String setBuildingSegmentColor(Node relatedEntity) {
 		String color = "";
 		String visibility = relatedEntity.get("visibility").asString("");
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			switch (config.getScheme()) {
+		switch (config.getScheme()) {
 			case VISIBILITY:
 				if (visibility.equals("public")) {
 					color = config.getCityColor("dark_green");
@@ -44,34 +42,8 @@ public class CityUtils {
 				break;
 			default:
 				color = config.getCityColor("blue");
-			}
-		} else {
-			switch (config.getScheme()) {
-			case VISIBILITY:
-				if (visibility.equals("public")) {
-					color = config.getCityColor("dark_green");
-				} else if (visibility.equals("protected")) {
-					color = config.getCityColor("yellow");
-				} else if (visibility.equals("private")) {
-					color = config.getCityColor("red");
-				} else {
-					// Package visibility or default
-					color = config.getCityColor("blue");
-				}
-				break;
-			case TYPES:
-				if(relatedEntity.hasLabel(Labels.Field.name())) {
-					color = setAttributeColor(relatedEntity.id());
-				} else if(relatedEntity.hasLabel(Labels.Method.name())) {
-					color = setMethodColor(relatedEntity);
-				} else {
-					color = config.getCityColor("blue");
-				}
-				break;
-			default:
-				color = config.getCityColor("blue");
-			}
 		}
+
 		return color;
 	}	
 
@@ -82,18 +54,10 @@ public class CityUtils {
 		if(result.hasNext()) {
 			isPrimitive = true;
 		}
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			if (isPrimitive) {
-				color = config.getCityColor("pink").toString();
-			} else { // complex type
-				color = config.getCityColor("aqua").toString();
-			}
-		} else {
-			if (isPrimitive) {
-				color = config.getCityColor("pink").toString();
-			} else { // complex type
-				color = config.getCityColor("aqua").toString();
-			}
+		if (isPrimitive) {
+			color = config.getCityColor("pink");
+		} else { // complex type
+			color = config.getCityColor("aqua");
 		}
 		return color;
 	}
@@ -103,38 +67,19 @@ public class CityUtils {
 		boolean isStatic = relatedEntity.get("static").asBoolean(false);
 		boolean isAbstract = relatedEntity.get("abstract").asBoolean(false);
 	
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			// if (bs.getMethodKind().equals("constructor")) {
-			if (relatedEntity.hasLabel(Labels.Constructor.name())) {
-				color = config.getCityColor("red").toString();
-			} else if (relatedEntity.hasLabel(Labels.Getter.name())) {
-				color = config.getCityColor("light_green").toString();
-			} else if (relatedEntity.hasLabel(Labels.Setter.name())) {
-				color = config.getCityColor("dark_green").toString();
-			} else if (isStatic) {
-				color = config.getCityColor("yellow").toString();
-			} else if (isAbstract) {
-				color = config.getCityColor("orange").toString();
-			} else {
-				// Default
-				color = config.getCityColor("violet").toString();
-			}
+		if (relatedEntity.hasLabel(Labels.Constructor.name())) {
+			color = config.getCityColor("red");
+		} else if (relatedEntity.hasLabel(Labels.Getter.name())) {
+			color = config.getCityColor("light_green");
+		} else if (relatedEntity.hasLabel(Labels.Setter.name())) {
+			color = config.getCityColor("dark_green");
+		} else if (isStatic) {
+			color = config.getCityColor("yellow");
+		} else if (isAbstract) {
+			color = config.getCityColor("orange");
 		} else {
-			// if (bs.getMethodKind().equals("constructor")) {
-			if (relatedEntity.hasLabel(Labels.Constructor.name())) {
-				color = config.getCityColor("red").toString();
-			} else if (relatedEntity.hasLabel(Labels.Getter.name())) {
-				color = config.getCityColor("light_green").toString();
-			} else if (relatedEntity.hasLabel(Labels.Setter.name())) {
-				color = config.getCityColor("dark_green").toString();
-			} else if (isStatic) {
-				color = config.getCityColor("yellow").toString();
-			} else if (isAbstract) {
-				color = config.getCityColor("orange").toString();
-			} else {
-				// Default
-				color = config.getCityColor("violet").toString();
-			}
+			// Default
+			color = config.getCityColor("violet");
 		}
 		return color;
 	}
