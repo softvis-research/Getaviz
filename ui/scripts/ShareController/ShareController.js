@@ -113,7 +113,13 @@ var shareController = (function() {
 
         
         $("#jqxTextImageButton").on('click', function (){
-        
+            
+            var cssLink = document.createElement("link");
+            cssLink.type = "text/css";
+            cssLink.rel = "stylesheet";
+            cssLink.href = "scripts/ShareController/sharePopup.css";
+            
+            document.getElementsByTagName("head")[0].appendChild(cssLink);
             var state = {
                 "selected": []
                 ,
@@ -166,11 +172,11 @@ var shareController = (function() {
                     var state_N= "?state=";
                 };
                 
-            var stateID= "<strong>StateID:</strong>" + stateHashcode + "<br /><br />";
+            var stateID= "<span class='shareController titleSpan'>StateID:</span>" + stateHashcode + "<br /><br />";
             var descriptionText = "Use this URL to share the current state of the visualization."+ "<br />";
-            var shareLinkDiv= "<div id='shareLinkDiv'><input id='copyField' style='width:92%; float:left' readonly value='" + url + state_N + stateHashcode
+            var shareLinkDiv= "<div id='shareLinkDiv' class='shareController'><input id='copyField' class='shareController' readonly value='" + url + state_N + stateHashcode
                     +"'></div> ";
-            var jsonHtml= "<strong>JSON:</strong> <pre style='margin:0'>"+jsonString+"</pre>";
+            var jsonHtml= "<span class='shareController titleSpan'>JSON:</span> <pre class='shareController jsonHtmlPre'>"+jsonString+"</pre>";
             var popup;
     
             if(controllerConfig.showDebugOutput===true) {
@@ -186,8 +192,7 @@ var shareController = (function() {
             $("#DisplayWindow").css("display", "block").jqxWindow({
                     theme: "metro",
                     width: 400,
-                    //height: 80,
-                    height: 600,
+                    height: 80,
                     isModal: true,
                     autoOpen: true,
                     resizable: false
