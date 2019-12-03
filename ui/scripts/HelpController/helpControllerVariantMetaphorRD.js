@@ -121,22 +121,10 @@ var helpControllerVariantMetaphorRD =(function(){
              return helpPopup_Navigation; 
         }
 
-        /*var navigationSkript = document.createElement('script');
-        navigationSkript.type = 'text/javascript';
-        navigationSkript.src = 'helpControllerVariantMetaphorRD.js';
-        // Navigation starten sobald Skript geladen
-        navigationSkript.onload = helpControllerNavigation;
-        // in den <head> Bereich einfügen
-        document.getElementsByTagName('head')[0].appendChild(navigationSkript); */ 
-
-
-   
      return {
         helpControllerNavigation:helpControllerNavigation,
         helpControllerVariantrelationships_RD: helpControllerVariantrelationships_RD,
  		helpControllerVariantlegend_RD: helpControllerVariantlegend_RD,
  		helpControllerVarianthelpPopupUl:helpControllerVarianthelpPopupUl
-//         helpControllerVariantnavigation_Aframe:helpControllerVariantnavigation_Aframe,
-//  		helpControllerVariantnavigation_x3dom: helpControllerVariantnavigation_x3dom
  	};
 })();
