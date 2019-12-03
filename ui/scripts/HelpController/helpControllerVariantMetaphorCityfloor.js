@@ -25,56 +25,9 @@ var helpControllerVariantMetaphorCityfloor =(function(){
          return helpPopupUl;     
     }; 
     
-    function helpControllerVariantnavigation_x3dom(){
-              var navigation_x3dom = `
-            <div class='jqxTabs_Div helpController'>
-                <div class='navigation_Describe helpController'>
-                    <h2>Rotate</h2>
-                    <img src='scripts/Legend/images/left.png'>
-                    <p>Hold down the left mouse button and move the mouse to rotate the visualization.</p>
-                </div>
-                <div class='navigation_Describe helpController'>
-                    <h2>Center</h2>
-                    <img src='scripts/Legend/images/double.png'>
-                    <p>Double-click on any location to center it.</p>
-                </div>
-                <div class='navigation_Describe helpController'>
-                    <h2>Move</h2>
-                    <img src='scripts/Legend/images/middle.png' >
-                    <p>Hold down the middle mouse button and move the mouse to move the visualization.</p>
-                </div>
-                <div class='navigation_Describe helpController'>
-                    <h2>Zoom</h2>
-                    <img src='scripts/Legend/images/scrolling.png'>
-                    <p>Use the scroll wheel to zoom in and out.</p>
-                </div>
-            </div>`;
-            return navigation_x3dom;  
-    }; 
+ 
             
-    function helpControllerVariantnavigation_Aframe(){   
-            var navigation_Aframe = `
-             <div class='jqxTabs_Div helpController'>
-                 <div class='navigation_Describe helpController'>
-                     <h2>Rotate</h2>
-                     <img src='scripts/Legend/images/left.png'>
-                     <p>Hold down the left mouse button and move the mouse to rotate the visualization.</p>
-                 </div>
-                 <div class='navigation_Describe helpController'>
-                     <h2>Move</h2>
-                     <img src='scripts/Legend/images/middle.png' >
-                     <p>Hold down the middle mouse button and move the mouse to move the visualization.</p>
-                 </div>
-                 <div class='navigation_Describe helpController'>
-                     <h2>Zoom</h2>
-                     <img src='scripts/Legend/images/scrolling.png'>
-                     <p>Use the scroll wheel to zoom in and out.</p>
-                 </div>
-             </div>`;
-               return navigation_Aframe;  
-       }; 
-            
-       function helpControllerVariantlegend_Cityfloor(){       
+    function helpControllerVariantlegend_Cityfloor(){       
              var legend_Cityfloor = `
              <div class='legend_Div jqxTabs_Div helpController'>
                 <p>The city metaphor is a 3 dimensional real-world metaphor, aimed at creating a better understanding of the visualized system through a natural environment. The city consists of districts and buildings. The buildings are arranged so that the district area is as small and square as possible.</p>
@@ -116,12 +69,61 @@ var helpControllerVariantMetaphorCityfloor =(function(){
             </div>`;
             return relationships_Cityfloor; 
     }; 
+   function helpControllerNavigation() {
+            var navigation_x3dom = `
+            <div class='jqxTabs_Div helpController'>
+                <div class='navigation_Describe helpController'>
+                    <h2>Rotate</h2>
+                    <img src='scripts/Legend/images/left.png'>
+                    <p>Hold down the left mouse button and move the mouse to rotate the visualization.</p>
+                </div>
+                <div class='navigation_Describe helpController'>
+                    <h2>Center</h2>
+                    <img src='scripts/Legend/images/double.png'>
+                    <p>Double-click on any location to center it.</p>
+                </div>
+                <div class='navigation_Describe helpController'>
+                    <h2>Move</h2>
+                    <img src='scripts/Legend/images/middle.png' >
+                    <p>Hold down the middle mouse button and move the mouse to move the visualization.</p>
+                </div>
+                <div class='navigation_Describe helpController'>
+                    <h2>Zoom</h2>
+                    <img src='scripts/Legend/images/scrolling.png'>
+                    <p>Use the scroll wheel to zoom in and out.</p>
+                </div>
+            </div>`;
+             var navigation_Aframe = `
+             <div class='jqxTabs_Div helpController'>
+                 <div class='navigation_Describe helpController'>
+                     <h2>Rotate</h2>
+                     <img src='scripts/Legend/images/left.png'>
+                     <p>Hold down the left mouse button and move the mouse to rotate the visualization.</p>
+                 </div>
+                 <div class='navigation_Describe helpController'>
+                     <h2>Move</h2>
+                     <img src='scripts/Legend/images/middle.png' >
+                     <p>Hold down the middle mouse button and move the mouse to move the visualization.</p>
+                 </div>
+                 <div class='navigation_Describe helpController'>
+                     <h2>Zoom</h2>
+                     <img src='scripts/Legend/images/scrolling.png'>
+                     <p>Use the scroll wheel to zoom in and out.</p>
+                 </div>
+             </div>`;
+             var helpPopup_Navigation;
+             if (visMode.includes( "x3dom")) {
+                 helpPopup_Navigation = navigation_x3dom;
+             } else{
+                 helpPopup_Navigation = navigation_Aframe;
+             };
+             return helpPopup_Navigation; 
+    }
 
     return {
+        helpControllerNavigation:helpControllerNavigation,
  		helpControllerVariantrelationships_Cityfloor:helpControllerVariantrelationships_Cityfloor,
  		helpControllerVariantlegend_Cityfloor: helpControllerVariantlegend_Cityfloor,
- 		helpControllerVariantnavigation_Aframe:helpControllerVariantnavigation_Aframe,
- 		helpControllerVarianthelpPopupUl:helpControllerVarianthelpPopupUl,
- 		helpControllerVariantnavigation_x3dom: helpControllerVariantnavigation_x3dom
+ 		helpControllerVarianthelpPopupUl:helpControllerVarianthelpPopupUl
  	};
 })();

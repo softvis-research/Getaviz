@@ -24,56 +24,8 @@ var helpControllerVariantMetaphorRD =(function(){
              </ul>`;
          return helpPopupUl;     
     };        
-   function helpControllerVariantnavigation_x3dom(){
-              var navigation_x3dom = `
-            <div class='jqxTabs_Div helpController'>
-                <div class='navigation_Describe helpController'>
-                    <h2>Rotate</h2>
-                    <img src='scripts/Legend/images/left.png'>
-                    <p>Hold down the left mouse button and move the mouse to rotate the visualization.</p>
-                </div>
-                <div class='navigation_Describe helpController'>
-                    <h2>Center</h2>
-                    <img src='scripts/Legend/images/double.png'>
-                    <p>Double-click on any location to center it.</p>
-                </div>
-                <div class='navigation_Describe helpController'>
-                    <h2>Move</h2>
-                    <img src='scripts/Legend/images/middle.png' >
-                    <p>Hold down the middle mouse button and move the mouse to move the visualization.</p>
-                </div>
-                <div class='navigation_Describe helpController'>
-                    <h2>Zoom</h2>
-                    <img src='scripts/Legend/images/scrolling.png'>
-                    <p>Use the scroll wheel to zoom in and out.</p>
-                </div>
-            </div>`;
-            return navigation_x3dom;  
-            }; 
-            
-    function helpControllerVariantnavigation_Aframe(){   
-            var navigation_Aframe = `
-             <div class='jqxTabs_Div helpController'>
-                 <div class='navigation_Describe helpController'>
-                     <h2>Rotate</h2>
-                     <img src='scripts/Legend/images/left.png'>
-                     <p>Hold down the left mouse button and move the mouse to rotate the visualization.</p>
-                 </div>
-                 <div class='navigation_Describe helpController'>
-                     <h2>Move</h2>
-                     <img src='scripts/Legend/images/middle.png' >
-                     <p>Hold down the middle mouse button and move the mouse to move the visualization.</p>
-                 </div>
-                 <div class='navigation_Describe helpController'>
-                     <h2>Zoom</h2>
-                     <img src='scripts/Legend/images/scrolling.png'>
-                     <p>Use the scroll wheel to zoom in and out.</p>
-                 </div>
-             </div>`;
-               return navigation_Aframe;  
-             }; 
-             
-       function helpControllerVariantlegend_RD(){     
+    
+    function helpControllerVariantlegend_RD(){     
             var legend_RD = `
             <div class='legend_Div jqxTabs_Div helpController'>
                 <p>The Recursive Disk (RD) metaphor is designed to visualize the structure of imperative programming languages, with an emphasis on object-oriented languages. As the name indicates, an RD visualization consists of nested disks, where each disk represents a package or a class. All disks are ordered by size and then placed spiral-shaped clockwise around the largest disk. Although at first glance it seems chaotic, the emerging visual patterns and empty spaces give each disk a unique appearance and help the user to recognize specific disks.</p>
@@ -116,16 +68,75 @@ var helpControllerVariantMetaphorRD =(function(){
            </div>`;
              
            return relationships_RD; 
-      };      
-           
+       };      
+       
+       function helpControllerNavigation() {
+            var navigation_x3dom = `
+            <div class='jqxTabs_Div helpController'>
+                <div class='navigation_Describe helpController'>
+                    <h2>Rotate</h2>
+                    <img src='scripts/Legend/images/left.png'>
+                    <p>Hold down the left mouse button and move the mouse to rotate the visualization.</p>
+                </div>
+                <div class='navigation_Describe helpController'>
+                    <h2>Center</h2>
+                    <img src='scripts/Legend/images/double.png'>
+                    <p>Double-click on any location to center it.</p>
+                </div>
+                <div class='navigation_Describe helpController'>
+                    <h2>Move</h2>
+                    <img src='scripts/Legend/images/middle.png' >
+                    <p>Hold down the middle mouse button and move the mouse to move the visualization.</p>
+                </div>
+                <div class='navigation_Describe helpController'>
+                    <h2>Zoom</h2>
+                    <img src='scripts/Legend/images/scrolling.png'>
+                    <p>Use the scroll wheel to zoom in and out.</p>
+                </div>
+            </div>`;
+             var navigation_Aframe = `
+             <div class='jqxTabs_Div helpController'>
+                 <div class='navigation_Describe helpController'>
+                     <h2>Rotate</h2>
+                     <img src='scripts/Legend/images/left.png'>
+                     <p>Hold down the left mouse button and move the mouse to rotate the visualization.</p>
+                 </div>
+                 <div class='navigation_Describe helpController'>
+                     <h2>Move</h2>
+                     <img src='scripts/Legend/images/middle.png' >
+                     <p>Hold down the middle mouse button and move the mouse to move the visualization.</p>
+                 </div>
+                 <div class='navigation_Describe helpController'>
+                     <h2>Zoom</h2>
+                     <img src='scripts/Legend/images/scrolling.png'>
+                     <p>Use the scroll wheel to zoom in and out.</p>
+                 </div>
+             </div>`;
+             var helpPopup_Navigation;
+             if (visMode.includes( "x3dom")) {
+                 helpPopup_Navigation = navigation_x3dom;
+             } else{
+                 helpPopup_Navigation = navigation_Aframe;
+             };
+             return helpPopup_Navigation; 
+        }
+
+        /*var navigationSkript = document.createElement('script');
+        navigationSkript.type = 'text/javascript';
+        navigationSkript.src = 'helpControllerVariantMetaphorRD.js';
+        // Navigation starten sobald Skript geladen
+        navigationSkript.onload = helpControllerNavigation;
+        // in den <head> Bereich einfügen
+        document.getElementsByTagName('head')[0].appendChild(navigationSkript); */ 
 
 
    
      return {
+        helpControllerNavigation:helpControllerNavigation,
         helpControllerVariantrelationships_RD: helpControllerVariantrelationships_RD,
  		helpControllerVariantlegend_RD: helpControllerVariantlegend_RD,
- 		helpControllerVarianthelpPopupUl:helpControllerVarianthelpPopupUl,
-        helpControllerVariantnavigation_Aframe:helpControllerVariantnavigation_Aframe,
- 		helpControllerVariantnavigation_x3dom: helpControllerVariantnavigation_x3dom
+ 		helpControllerVarianthelpPopupUl:helpControllerVarianthelpPopupUl
+//         helpControllerVariantnavigation_Aframe:helpControllerVariantnavigation_Aframe,
+//  		helpControllerVariantnavigation_x3dom: helpControllerVariantnavigation_x3dom
  	};
 })();
