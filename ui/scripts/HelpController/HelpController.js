@@ -144,11 +144,6 @@ var helpController = (function() {
       });
     }
     
-
-//     function createPopupTabs(){
-//         console.log(activate()); 
-//         
-//     };
     return {
         initialize: initialize,
 		activate: activate
