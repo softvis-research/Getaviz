@@ -1,30 +1,5 @@
-var variantMetaphorCityoriginal =(function(){
+var variantMetaphor =(function(){
 
-    function tabsUl(){
-            var helpPopupUl = `
-             <ul class='helpPopupUl helpController'>
-                 <li>
-                    <div>
-                        <img src='scripts/HelpController/images/category.png'>
-                         <div class='helpPopup_Ul_div helpController'>Legend</div>
-                     </div>
-                 </li>
-                <li>
-                     <div>
-                         <img src='scripts/HelpController/images/group_work.png'>
-                         <div class='helpPopup_Ul_div helpController'>Relationships</div>
-                     </div>
-                 </li>
-                 <li>
-                     <div>
-                         <img src='scripts/HelpController/images/mouse.png'>
-                         <div class='helpPopup_Ul_div helpController'>Navigation</div>
-                     </div>
-                 </li>
-             </ul>`;
-         return helpPopupUl;     
-   }; 
-   
     function legend(){
              var legend_Cityoriginal = `
             <div class='legend_Div jqxTabs_Div helpController'>
@@ -107,7 +82,7 @@ var variantMetaphorCityoriginal =(function(){
      return {
         navigation:navigation,
  		relationships:relationships,
- 		legend:legend,
- 		tabsUl:tabsUl
+ 		legend:legend
+ 		
  	};
 })();
