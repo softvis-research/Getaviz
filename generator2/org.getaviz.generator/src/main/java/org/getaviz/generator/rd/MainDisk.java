@@ -3,7 +3,6 @@ package org.getaviz.generator.rd;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.rd.m2m.Position;
 
 public class MainDisk extends Disk {
@@ -29,11 +28,10 @@ public class MainDisk extends Disk {
     }
 
     public void createNode(DatabaseConnector connector) {
-        String label = Labels.MainDisk.name();
         try {
             long id = connector.addNode(String.format(
-                    "MATCH(s) WHERE ID(s) = %d CREATE (n:RD:%s {%s})-[:VISUALIZES]->(s)",
-                    visualizedNodeID, label, propertiesToString()), "n").id();
+                    "MATCH(s) WHERE ID(s) = %d CREATE (n:RD:MainDisk {%s})-[:VISUALIZES]->(s)",
+                    visualizedNodeID, propertiesToString()), "n").id();
             setID(id);
         } catch (Exception e) {
             log.error(e);

@@ -63,11 +63,10 @@ public class SubDisk extends Disk {
     }
 
     public void createNode(DatabaseConnector connector) {
-        String label = Labels.SubDisk.name();
         try {
             long id = connector.addNode(String.format(
-                    "MATCH(s) WHERE ID(s) = %d CREATE (n:RD:%s {%s})-[:VISUALIZES]->(s)",
-                    visualizedNodeID, label, propertiesToString()), "n").id();
+                    "MATCH(s) WHERE ID(s) = %d CREATE (n:RD:SubDisk {%s})-[:VISUALIZES]->(s)",
+                    visualizedNodeID, propertiesToString()), "n").id();
             setID(id);
         } catch (Exception e) {
             log.error(e);

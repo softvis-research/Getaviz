@@ -1,7 +1,6 @@
 package org.getaviz.generator.rd;
 
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.database.Labels;
 
 public class DiskSegment implements RDElement {
 
@@ -57,10 +56,9 @@ public class DiskSegment implements RDElement {
     }
 
     public void createNode(DatabaseConnector connector) {
-        String label = Labels.DiskSegment.name();
         long id = connector.addNode(String.format(
-                "MATCH(s) WHERE ID(s) = %d CREATE (n:RD:%s {%s})-[:VISUALIZES]->(s)",
-                visualizedNodeID, label, propertiesToString()), "n").id();
+                "MATCH(s) WHERE ID(s) = %d CREATE (n:RD:DiskSegment {%s})-[:VISUALIZES]->(s)",
+                visualizedNodeID, propertiesToString()), "n").id();
         setID(id);
     }
 
