@@ -1,6 +1,6 @@
-var helpControllerVariantMetaphorCityoriginal =(function(){
+var variantMetaphorCityoriginal =(function(){
 
-    function helpControllerVarianthelpPopupUl(){
+    function tabsUl(){
             var helpPopupUl = `
              <ul class='helpPopupUl helpController'>
                  <li>
@@ -25,7 +25,7 @@ var helpControllerVariantMetaphorCityoriginal =(function(){
          return helpPopupUl;     
    }; 
    
-    function helpControllerVariantlegend_Cityoriginal(){
+    function legend(){
              var legend_Cityoriginal = `
             <div class='legend_Div jqxTabs_Div helpController'>
                 <p>The city metaphor is a 3 dimensional real-world metaphor, aimed at creating a better understanding of the visualized system through a natural environment. The city consists of districts and buildings. The buildings are arranged so that the district area is as small and square as possible.</p>
@@ -44,7 +44,7 @@ var helpControllerVariantMetaphorCityoriginal =(function(){
             return legend_Cityoriginal; 
     }; 
             
-    function helpControllerVariantrelationships_Cityoriginal(){
+    function relationships(){
             var relationships_Cityoriginal= `
             <div class='relationships_Div jqxTabs_Div helpController'>
                 <h2>Inheritance</h2>
@@ -53,7 +53,7 @@ var helpControllerVariantMetaphorCityoriginal =(function(){
             </div>`;
             return relationships_Cityoriginal; 
     }; 
-    function helpControllerNavigation() {
+    function navigation() {
             var navigation_x3dom = `
             <div class='jqxTabs_Div helpController'>
                 <div class='navigation_Describe helpController'>
@@ -105,10 +105,9 @@ var helpControllerVariantMetaphorCityoriginal =(function(){
     }  
     
      return {
-        helpControllerNavigation:helpControllerNavigation,
- 		helpControllerVariantrelationships_Cityoriginal:helpControllerVariantrelationships_Cityoriginal,
- 		helpControllerVariantlegend_Cityoriginal:helpControllerVariantlegend_Cityoriginal,
- 		helpControllerVarianthelpPopupUl:helpControllerVarianthelpPopupUl,
- 		
+        navigation:navigation,
+ 		relationships:relationships,
+ 		legend:legend,
+ 		tabsUl:tabsUl
  	};
 })();

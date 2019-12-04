@@ -1,6 +1,6 @@
-var helpControllerVariantMetaphorCitybricks =(function(){
+var variantMetaphorCitybricks =(function(){
 
-    function helpControllerVarianthelpPopupUl(){
+    function tabsUl(){
             var helpPopupUl = `
              <ul class='helpPopupUl helpController'>
                  <li>
@@ -25,7 +25,7 @@ var helpControllerVariantMetaphorCitybricks =(function(){
          return helpPopupUl;     
     };        
  
-    function helpControllerVariantlegend_Citybricks(){            
+    function legend(){            
             var legend_Citybricks = `
             <div class='legend_Div jqxTabs_Div helpController'>
                 <p>
@@ -80,7 +80,7 @@ var helpControllerVariantMetaphorCitybricks =(function(){
             return legend_Citybricks; 
     }; 
             
-    function helpControllerVariantrelationships_Citybricks(){         
+    function relationships(){         
             var relationships_Citybricks= `
             <div class='relationships_Citybricks_Div relationships_Div helpController'>
                 <h2>Field accesses</h2>
@@ -93,7 +93,7 @@ var helpControllerVariantMetaphorCitybricks =(function(){
             </div>`;
             return relationships_Citybricks; 
     }; 
-   function helpControllerNavigation() {
+   function navigation() {
             var navigation_x3dom = `
             <div class='jqxTabs_Div helpController'>
                 <div class='navigation_Describe helpController'>
@@ -135,20 +135,20 @@ var helpControllerVariantMetaphorCitybricks =(function(){
                      <p>Use the scroll wheel to zoom in and out.</p>
                  </div>
              </div>`;
-             var helpPopup_Navigation;
+             var  helpPopup_Navigation;
              if (visMode.includes( "x3dom")) {
                  helpPopup_Navigation = navigation_x3dom;
              } else{
                  helpPopup_Navigation = navigation_Aframe;
              };
-             return helpPopup_Navigation; 
+             return  helpPopup_Navigation; 
         }
         
     return {
-        helpControllerNavigation:helpControllerNavigation,
- 		helpControllerVariantrelationships_Citybricks:helpControllerVariantrelationships_Citybricks,
- 		helpControllerVariantlegend_Citybricks: helpControllerVariantlegend_Citybricks,
- 		helpControllerVarianthelpPopupUl:helpControllerVarianthelpPopupUl
+        navigation:navigation,
+ 		relationships:relationships,
+ 		legend: legend,
+ 		tabsUl:tabsUl
  		
  	};
 })();

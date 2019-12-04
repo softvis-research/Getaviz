@@ -9,10 +9,10 @@ var helpController = (function() {
     }
     
     function createPopup(){
-        var helpPopup= "<div id='helpPopupTabs'></div>";
+        var helpPopupDiv= "<div id='helpPopupTabs'></div>";
         $("#DisplayWindow").remove();
         var loadPopup = application.createPopup("Help",  
-                        helpPopup, "DisplayWindow");
+                        helpPopupDiv, "DisplayWindow");
                         document.body.appendChild(loadPopup);
         $("#DisplayWindow").css("display", "block").jqxWindow({
                                 theme: "metro",
@@ -31,7 +31,7 @@ var helpController = (function() {
                     width: 550,
                     height: 600,
                     position:'top'
-                });
+        });
     };
     
 	function activate(){
@@ -55,7 +55,7 @@ var helpController = (function() {
             imgSrc: "scripts/HelpController/images/help_outline.png"
         });
 
-        $("#jqxHelpButton").on('click', function (){
+       $("#jqxHelpButton").on('click', function (){
             
             var cssLink = document.createElement("link");
             cssLink.type = "text/css";
@@ -63,76 +63,136 @@ var helpController = (function() {
             cssLink.href = "scripts/HelpController/helpPopup.css";
             document.getElementsByTagName("head")[0].appendChild(cssLink);
             
-           
-  
-        if(controllerConfig.metaphor=="City original") {
-            $.getScript("scripts/HelpController/helpControllerVariantMetaphorCityoriginal.js", function(){   
-                
-                var helpPopupUl = helpControllerVariantMetaphorCityoriginal.helpControllerVarianthelpPopupUl();
-                var legend_Cityoriginal = helpControllerVariantMetaphorCityoriginal.helpControllerVariantlegend_Cityoriginal();
-                var relationships_Cityoriginal = helpControllerVariantMetaphorCityoriginal.helpControllerVariantrelationships_Cityoriginal();
-                var helpPopup_Navigation = helpControllerVariantMetaphorCityoriginal.helpControllerNavigation();
-                var helpPopup = "<div id='legendTabs'>" + helpPopupUl + legend_Cityoriginal + relationships_Cityoriginal + helpPopup_Navigation + "</div>";
+        /*if(controllerConfig.metaphor=="City original") {
+            $.getScript("scripts/HelpController/variantMetaphorCityoriginal.js", function(){   
+                var tabsUl = variantMetaphorCityoriginal.tabsUl();
+                var legend_Cityoriginal = variantMetaphorCityoriginal.legend();
+                var relationships_Cityoriginal = variantMetaphorCityoriginal.relationships();
+                var helpPopup_Navigation = variantMetaphorCityoriginal.navigation();
+                var helpPopup = "<div id='legendTabs'>" + tabsUl + legend_Cityoriginal + relationships_Cityoriginal + helpPopup_Navigation + "</div>";
                 createPopup();
                 document.getElementById('helpPopupTabs').innerHTML= helpPopup;
                 createTabs(); 
             });
-            
-        };
-            
-         
-                
+         };
+    
         if(controllerConfig.metaphor=="City bricks") {
-                    
-           $.getScript("scripts/HelpController/helpControllerVariantMetaphorCitybricks.js", function(){  
-           
-                var helpPopupUl = helpControllerVariantMetaphorCitybricks.helpControllerVarianthelpPopupUl();
-                var legend_Citybricks = helpControllerVariantMetaphorCitybricks.helpControllerVariantlegend_Citybricks();
-                var relationships_Citybricks = helpControllerVariantMetaphorCitybricks.helpControllerVariantrelationships_Citybricks();
-                var helpPopup_Navigation = helpControllerVariantMetaphorCitybricks.helpControllerNavigation();
-                var helpPopup = "<div id='legendTabs'>" + helpPopupUl + legend_Citybricks + relationships_Citybricks + helpPopup_Navigation + "</div>";
+           $.getScript("scripts/HelpController/variantMetaphorCitybricks.js", function(){  
+                var tabsUl = variantMetaphorCitybricks.tabsUl();
+                var legend_Citybricks = variantMetaphorCitybricks.legend();
+                var relationships_Citybricks = variantMetaphorCitybricks.relationships();
+                var helpPopup_Navigation = variantMetaphorCitybricks.navigation();
+                var helpPopup = "<div id='legendTabs'>" + tabsUl + legend_Citybricks + relationships_Citybricks + helpPopup_Navigation + "</div>";
                 createPopup();
                 document.getElementById('helpPopupTabs').innerHTML= helpPopup;
                 createTabs(); 
             }); 
-            
         };
-           
-        
         
         if(controllerConfig.metaphor=="City floor") {
-            
-            $.getScript("scripts/HelpController/helpControllerVariantMetaphorCityfloor.js", function(){  
-            
-                var helpPopupUl = helpControllerVariantMetaphorCityfloor.helpControllerVarianthelpPopupUl();
-                var legend_Cityfloor = helpControllerVariantMetaphorCityfloor.helpControllerVariantlegend_Cityfloor();
-                var relationships_Cityfloor = helpControllerVariantMetaphorCityfloor.helpControllerVariantrelationships_Cityfloor();
-                var helpPopup_Navigation = helpControllerVariantMetaphorCityfloor.helpControllerNavigation();
-     
-                var helpPopup = "<div id='legendTabs'>" + helpPopupUl + legend_Cityfloor + relationships_Cityfloor + helpPopup_Navigation + "</div>";
+            $.getScript("scripts/HelpController/variantMetaphorCityfloor.js", function(){  
+                var tabsUl = variantMetaphorCityfloor.tabsUl();
+                var legend_Cityfloor = variantMetaphorCityfloor.legend();
+                var relationships_Cityfloor = variantMetaphorCityfloor.relationships();
+                var navigation = variantMetaphorCityfloor.navigation();
+                var helpPopup = "<div id='legendTabs'>" + tabsUl + legend_Cityfloor + relationships_Cityfloor +  navigation + "</div>";
                 createPopup();
                 document.getElementById('helpPopupTabs').innerHTML= helpPopup;
                 createTabs(); 
             }); 
-        
         };
-
-                
+        
         if(controllerConfig.metaphor=="RD") {
-                    
-            $.getScript("scripts/HelpController/helpControllerVariantMetaphorRD.js", function(){
-            
-                var helpPopupUl = helpControllerVariantMetaphorRD.helpControllerVarianthelpPopupUl();  
-                var legend_RD = helpControllerVariantMetaphorRD.helpControllerVariantlegend_RD();
-                var relationships_RD = helpControllerVariantMetaphorRD.helpControllerVariantrelationships_RD();
-                var helpPopup_Navigation = helpControllerVariantMetaphorRD.helpControllerNavigation();
-                //helpControllerVariantMetaphorRD();
-                var helpPopup = "<div id='legendTabs'>" + helpPopupUl + legend_RD + relationships_RD + helpPopup_Navigation + "</div>";
+            $.getScript("scripts/HelpController/variantMetaphorRD.js", function(){
+                var tabsUl = variantMetaphorRD.tabsUl();  
+                var legend_RD = variantMetaphorRD.legend();
+                var relationships_RD = variantMetaphorRD.relationships();
+                var navigation = variantMetaphorRD.navigation();
+    
+                var helpPopup = "<div id='legendTabs'>" + tabsUl + legend_RD + relationships_RD +  navigation + "</div>";
                 createPopup();
                 document.getElementById('helpPopupTabs').innerHTML= helpPopup;
                 createTabs(); 
-         });
+           });
+        };*/
+        
+        if(controllerConfig.metaphor=="City original") {
+            $.getScript("scripts/HelpController/variantMetaphorCityoriginal.js", function(){   
+                var helpPopup = "<div id='legendTabs'>" + variantMetaphorCityoriginal.tabsUl() + variantMetaphorCityoriginal.legend() + variantMetaphorCityoriginal.relationships() + variantMetaphorCityoriginal.navigation() + "</div>";
+                
+                createPopup();
+                document.getElementById('helpPopupTabs').innerHTML= helpPopup;
+                createTabs(); 
+            });
         };
+        
+        if(controllerConfig.metaphor=="City bricks") {
+           $.getScript("scripts/HelpController/variantMetaphorCitybricks.js", function(){  
+                var helpPopup = "<div id='legendTabs'>" + variantMetaphorCitybricks.tabsUl() + variantMetaphorCitybricks.legend() + variantMetaphorCitybricks.relationships() + variantMetaphorCitybricks.navigation() + "</div>";
+                
+                createPopup();
+                document.getElementById('helpPopupTabs').innerHTML= helpPopup;
+                createTabs(); 
+            }); 
+        };
+        
+        if(controllerConfig.metaphor=="City floor") {
+            $.getScript("scripts/HelpController/variantMetaphorCityfloor.js", function(){  
+                var helpPopup = "<div id='legendTabs'>" + variantMetaphorCityfloor.tabsUl() + variantMetaphorCityfloor.legend() + variantMetaphorCityfloor.relationships() + variantMetaphorCityfloor.navigation() + "</div>";
+                
+                createPopup();
+                document.getElementById('helpPopupTabs').innerHTML= helpPopup;
+                createTabs(); 
+            }); 
+        };
+
+        if(controllerConfig.metaphor=="RD") {
+            $.getScript("scripts/HelpController/variantMetaphorRD.js", function(){
+                var helpPopup = "<div id='legendTabs'>" + variantMetaphorRD.tabsUl() + variantMetaphorRD.legend() + variantMetaphorRD.relationships() + variantMetaphorRD.navigation() + "</div>";
+                
+                //console.log(helpControllerVarianthelpPopupUl);
+                
+                createPopup();
+                document.getElementById('helpPopupTabs').innerHTML= helpPopup;
+                createTabs(); 
+           });
+        };
+        
+        
+      
+        /*$.getScript("scripts/HelpController/variantFunction.js", function(){	 // 
+    
+            var helpPopupUl = variantFunction.helpPopupUl();
+            var legend_Cityoriginal = variantFunction.legend_Cityoriginal();
+            var relationships_Cityoriginal = variantFunction.relationships_Cityoriginal();
+            var legend_Citybricks = variantFunction.legend_Citybricks();
+            var relationships_Citybricks = variantFunction.relationships_Citybricks();
+            var legend_Cityfloor = variantFunction.legend_Cityfloor();
+            var relationships_Cityfloor = variantFunction.relationships_Cityfloor();
+            var relationships_RD = variantFunction.relationships_RD();
+            var legend_RD = variantFunction.legend_RD();
+            var helpPopup_Navigation = variantFunction.navigation();
+            
+            if(controllerConfig.metaphor=="City original") {
+                var helpPopup = "<div id='legendTabs'>" + helpPopupUl + legend_Cityoriginal + relationships_Cityoriginal + helpPopup_Navigation + "</div>";
+            };
+            
+            if(controllerConfig.metaphor=="City bricks") {
+                var helpPopup = "<div id='legendTabs'>" + helpPopupUl + legend_Citybricks + relationships_Citybricks + helpPopup_Navigation + "</div>";
+            }; 
+                
+            if(controllerConfig.metaphor=="City floor") {
+                var helpPopup = "<div id='legendTabs'>" + helpPopupUl + legend_Cityfloor + relationships_Cityfloor + helpPopup_Navigation + "</div>";
+            };
+            
+            if(controllerConfig.metaphor=="RD") {
+                var helpPopup = "<div id='legendTabs'>" + helpPopupUl + legend_RD + relationships_RD + helpPopup_Navigation + "</div>";
+            }; 
+            
+            createPopup();
+            document.getElementById('helpPopupTabs').innerHTML= helpPopup;
+            createTabs();
+        });*/
         
       });
     }
