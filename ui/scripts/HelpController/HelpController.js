@@ -51,17 +51,8 @@ var helpController = (function() {
         return loadPopup; 
     };
     
-    /*function popupConment(a,b){
-        var helpPopup = "<div id='legendTabs'>" + a + b + "</div>";
-        return helpPopup;
-    };
-    function divContent(){
-         var content= variantMetaphor.legend() + variantMetaphor.relationships() + variantMetaphor.navigation();
-         return content;
-     };*/
-    
     function popupConment(){
-        var helpPopup = "<div id='legendTabs'>" + tabsUl() + variantMetaphor.legend() + variantMetaphor.relationships() + variantMetaphor.navigation() + "</div>";
+        var helpPopup = "<div id='legendTabs'>" + tabsUl() + variantMetaphor.legend() + variantMetaphor.relationships() + variantNavigation.navigation() + "</div>";
         return helpPopup;
     };
     
@@ -114,30 +105,34 @@ var helpController = (function() {
         
             if(controllerConfig.metaphor=="City original") {
                 $.getScript("scripts/HelpController/variantMetaphorCityoriginal.js", function(){   
-                     //var content = divContent();
-                     createPopupTabs(popupConment());
+                     $.getScript("scripts/HelpController/variantNavigation.js", function(){
+                       createPopupTabs(popupConment());
+                    });
                 });
             };
             
             if(controllerConfig.metaphor=="City bricks") {
                 $.getScript("scripts/HelpController/variantMetaphorCitybricks.js", function(){  
-                    //var content = divContent();
-                    createPopupTabs(popupConment());
+                    $.getScript("scripts/HelpController/variantNavigation.js", function(){
+                       createPopupTabs(popupConment());
+                    });
                 }); 
             };
             
             if(controllerConfig.metaphor=="City floor") {
                 $.getScript("scripts/HelpController/variantMetaphorCityfloor.js", function(){  
-                    //var content = divContent();
-                    createPopupTabs(popupConment());
+                   $.getScript("scripts/HelpController/variantNavigation.js", function(){
+                       createPopupTabs(popupConment());
+                    });
                     
                 }); 
             };
 
             if(controllerConfig.metaphor=="RD") {
                 $.getScript("scripts/HelpController/variantMetaphorRD.js", function(){
-                    //var content = divContent();
-                    createPopupTabs(popupConment());
+                    $.getScript("scripts/HelpController/variantNavigation.js", function(){
+                       createPopupTabs(popupConment());
+                    });
                 });
             };
         
