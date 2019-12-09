@@ -33,14 +33,6 @@ var helpController = (function() {
          return helpPopupUl;     
     }; 
     
-     function divContent(){
-         legend =  variantMetaphor.legend();
-         relationships = variantMetaphor.relationships();
-         navigation = variantMetaphor.navigation();
-         var content= legend + relationships + navigation;
-         return content;
-     };
-     
     function createPopup(){
 
         var helpPopupDiv= "<div id='helpPopupTabs'></div>";
@@ -59,8 +51,17 @@ var helpController = (function() {
         return loadPopup; 
     };
     
-    function popupConment(a,b){
+    /*function popupConment(a,b){
         var helpPopup = "<div id='legendTabs'>" + a + b + "</div>";
+        return helpPopup;
+    };
+    function divContent(){
+         var content= variantMetaphor.legend() + variantMetaphor.relationships() + variantMetaphor.navigation();
+         return content;
+     };*/
+    
+    function popupConment(){
+        var helpPopup = "<div id='legendTabs'>" + tabsUl() + variantMetaphor.legend() + variantMetaphor.relationships() + variantMetaphor.navigation() + "</div>";
         return helpPopup;
     };
     
@@ -74,8 +75,7 @@ var helpController = (function() {
         });
     };
 
-    
-     function createPopupTabs(helpPopup){
+    function createPopupTabs(helpPopup){
          
           createPopup();
           document.getElementById('helpPopupTabs').innerHTML= helpPopup;
@@ -114,30 +114,30 @@ var helpController = (function() {
         
             if(controllerConfig.metaphor=="City original") {
                 $.getScript("scripts/HelpController/variantMetaphorCityoriginal.js", function(){   
-                     var content = divContent();
-                     createPopupTabs(popupConment(tabsUl(), content));
+                     //var content = divContent();
+                     createPopupTabs(popupConment());
                 });
             };
             
             if(controllerConfig.metaphor=="City bricks") {
                 $.getScript("scripts/HelpController/variantMetaphorCitybricks.js", function(){  
-                    var content = divContent();
-                    createPopupTabs(popupConment(tabsUl(), content));
+                    //var content = divContent();
+                    createPopupTabs(popupConment());
                 }); 
             };
             
             if(controllerConfig.metaphor=="City floor") {
                 $.getScript("scripts/HelpController/variantMetaphorCityfloor.js", function(){  
-                    var content = divContent();
-                    createPopupTabs(popupConment(tabsUl(), content));
+                    //var content = divContent();
+                    createPopupTabs(popupConment());
                     
                 }); 
             };
 
             if(controllerConfig.metaphor=="RD") {
                 $.getScript("scripts/HelpController/variantMetaphorRD.js", function(){
-                    var content = divContent();
-                    createPopupTabs(popupConment(tabsUl(), content));
+                    //var content = divContent();
+                    createPopupTabs(popupConment());
                 });
             };
         

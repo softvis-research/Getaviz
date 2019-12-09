@@ -18,38 +18,38 @@ var variantMetaphor =(function(){
                     <img src='scripts/HelpController/images/bricks_Buildingbase.png' >
                     <p>Buildings consists of a building base and bricks. The building base represents <span class='legend_Represent helpController'>types</span>, bricks the corresponding methods and fields.</p>
                 </div>
-                <div class='legend_Describe helpController'>
+                <div class='bricks_Describe helpController'>
                     <h2>Brick</h2>
-                    <img src='scripts/HelpController/images/bricks_Purple.png' >
-                    <p>The city metaphor is a 3 dimensional real-world metaphor, aimed at creating a better understanding of the visualized system through a natural environment.</p>
+                    <img src='scripts/HelpController/images/bricks_Red.png' >
+                    <p>Red bricks represent <span class='legend_Represent helpController'>constructors</span>.</p>
                 </div>
-                <div class='legend_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Voilet.png' >
-                    <p>The city metaphor is a 3 dimensional real-world metaphor, aimed at creating a better understanding of the visualized system through a natural environment.</p>
+                <div class='bricks_Describe helpController'>
+                    <img src='scripts/HelpController/images/bricks_Lightgreen.png' >
+                    <p>Light green bricks represent <span class='legend_Represent helpController'>getter methods</span>.</p>
                 </div>
-                <div class='legend_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Mint.png' >
-                    <p>The city metaphor is a 3 dimensional real-world metaphor, aimed at creating a better understanding of the visualized system through a natural environment.</p>
+                <div class='bricks_Describe helpController'>
+                    <img src='scripts/HelpController/images/bricks_Darkgreen.png' >
+                    <p>Dark green bricks represent <span class='legend_Represent helpController'>setter methods</span>.</p>
                 </div>
-                <div class='legend_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Sunyellow.png' >
-                    <p>The city metaphor is a 3 dimensional real-world metaphor, aimed at creating a better understanding of the visualized system through a natural environment.</p>
+                <div class='bricks_Describe helpController'>
+                    <img src='scripts/HelpController/images/bricks_Orange.png' >
+                    <p>Orange bricks represent <span class='legend_Represent helpController'>abstract methods</span>.</p>
                 </div>
-                <div class='legend_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Pink.png' >
-                    <p>The city metaphor is a 3 dimensional real-world metaphor, aimed at creating a better understanding of the visualized system through a natural environment.</p>
-                </div>
-                <div class='legend_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Lightblue.png' >
-                    <p>The city metaphor is a 3 dimensional real-world metaphor, aimed at creating a better understanding of the visualized system through a natural environment.</p>
-                </div>
-                <div class='legend_Describe helpController'>
+                <div class='bricks_Describe helpController'>
                     <img src='scripts/HelpController/images/bricks_Yellow.png' >
-                    <p>The city metaphor is a 3 dimensional real-world metaphor, aimed at creating a better understanding of the visualized system through a natural environment.</p>
+                    <p>Yellow bricks represent <span class='legend_Represent helpController'>static methods</span>.</p>
                 </div>
-                <div class='legend_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Lime.png' >
-                    <p>The city metaphor is a 3 dimensional real-world metaphor, aimed at creating a better understanding of the visualized system through a natural environment.</p>
+                <div class='bricks_Describe helpController'>
+                    <img src='scripts/HelpController/images/bricks_Purple.png' >
+                    <p>Purple bricks represent all other <span class='legend_Represent helpController'>methods</span>.</p>
+                </div>
+                <div class='bricks_Describe helpController'>
+                    <img src='scripts/HelpController/images/bricks_Pink.png' >
+                    <p>Pink bricks represent <span class='legend_Represent helpController'>fields with primitive types</span>.</p>
+                </div>
+                <div class='bricks_Describe helpController'>
+                    <img src='scripts/HelpController/images/bricks_Blue.png' >
+                    <p>Blue bricks represent <span class='legend_Represent helpController'>fields with complex types</span>.</p>
                 </div>
             </div>`;
             
