@@ -16,6 +16,7 @@ var variantMetaphor =(function(){
                     <p>Buildings represent <span class='legend_Represent helpController'>types</span>. The height of the buildings corresponds to the number of methods of the corresponding type. The floor areas of the buildings are square. The width corresponds to the number of fields.</p>
                 </div>
             </div>`;
+            
             return legend_Cityoriginal; 
     }; 
             
@@ -26,6 +27,7 @@ var variantMetaphor =(function(){
                 <p>Click on a type to show connections to sub and super types.</p>
                 <img src='scripts/HelpController/images/cityoriginal_inheritance.png' >
             </div>`;
+            
             return relationships_Cityoriginal; 
     }; 
 

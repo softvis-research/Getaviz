@@ -24,6 +24,8 @@ var variantNavigation =(function(){
                     <p>Use the scroll wheel to zoom in and out.</p>
                 </div>
             </div>`;
+            
+            
              var navigation_Aframe = `
              <div class='jqxTabs_Div helpController'>
                  <div class='navigation_Describe helpController'>

@@ -1,15 +1,19 @@
-.helpController.helpPopupUl{
+.helpController.tabsUl{
     font-size: 15px;
 }
 
-.helpController.helpPopupUl li img{
+.helpController.tabsUl li{
+   text-align: center;
+}
+
+.helpController.tabsUl li img{
     width: 25px; 
     height:25px;
     margin-right:10px; 
     float: left;
 }
 
-.helpController.helpPopup_Ul_div{   
+.helpController.tabsUl_div{   
     float: left;
     margin-top: 5px;
 }
