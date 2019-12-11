@@ -24,14 +24,31 @@ var helpController = (function() {
                      </div>
                  </li>
                  <li>
-                     <div>
+                     <div >
                          <img src='scripts/HelpController/images/mouse.png'>
-                         <div class='helpPopup_Ul_div helpController'>Navigation</div>
+                         <div id='li_Navigation_div' class='helpPopup_Ul_div helpController'>Navigation</div>
                      </div>
                  </li>
              </ul>`;
+            
          return helpPopupUl;     
     }; 
+    
+//     function addItem(){
+//         var addNewItem = `
+//                 <div style='margin-top: 10px;'>
+//                         <input type="button" id='jqxaddItemButton' value="Add new first item item" />
+//                 </div>`;
+//         return addNewItem; 
+//     };
+    
+    function addLegendTab(){
+        var addNewItem = document.createElement("div");
+        var text = document.createTextNode('Text');
+        addNewItem.appendChild(text);
+        
+        return addNewItem; 
+    };
     
     function createPopup(){
 
@@ -43,7 +60,7 @@ var helpController = (function() {
         $("#DisplayWindow").css("display", "block").jqxWindow({
                                 theme: "metro",
                                 width: 565,
-                                height: 650,
+                                height: 750,
                                 isModal: true,
                                 autoOpen: true,
                                 resizable: false
@@ -53,9 +70,15 @@ var helpController = (function() {
     
     function popupConment(){
         var helpPopup = "<div id='legendTabs'>" + tabsUl() + variantMetaphor.legend() + variantMetaphor.relationships() + variantNavigation.navigation() + "</div>";
+        
+        console.log(tabsUl());
+        console.log(variantMetaphor.legend());
+        console.log(variantMetaphor.relationships());
+        console.log(variantNavigation.navigation());
+        
         return helpPopup;
     };
-    
+            
     function createTabs(){
         
          $("#legendTabs").jqxTabs({ 
@@ -64,6 +87,16 @@ var helpController = (function() {
                     height: 600,
                     position:'top'
         });
+//         $('#jqxaddItemButton').jqxButton({
+//             width: '200px',
+//             height: 30,
+//             theme: 'energyblue'
+       // });
+        //$('#jqxaddItemButton').click(function () {
+            $('#legendTabs').jqxTabs('addFirst', 'Legend', variantMetaphor.legend());
+      //  });
+        
+
     };
 
     function createPopupTabs(helpPopup){
@@ -102,11 +135,12 @@ var helpController = (function() {
             cssLink.rel = "stylesheet";
             cssLink.href = "scripts/HelpController/helpPopup.css";
             document.getElementsByTagName("head")[0].appendChild(cssLink);
-        
+            
             if(controllerConfig.metaphor=="City original") {
                 $.getScript("scripts/HelpController/variantMetaphorCityoriginal.js", function(){   
                      $.getScript("scripts/HelpController/variantNavigation.js", function(){
                        createPopupTabs(popupConment());
+                       
                     });
                 });
             };
@@ -135,7 +169,7 @@ var helpController = (function() {
                     });
                 });
             };
-        
+           
       });
     }
     
