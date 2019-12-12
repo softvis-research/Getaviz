@@ -22,6 +22,9 @@ var setup = {
         
         {   name: 'canvasFilterController'
         },
+
+        {   name: 'infoController'
+        },
         
         {   name: 'helpController',
             metaphor: "RD"
@@ -347,6 +350,7 @@ var setup = {
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
+                                        {name: "infoController"},
                                         {name: "helpController"},
                                         {name: "shareController"},
                                         //{name: "canvasFlyToController"},

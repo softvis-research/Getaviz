@@ -28,6 +28,10 @@
 		
 		{	name: 	"canvasSelectController" 
 		},
+        
+        {   name: 'infoController'
+        },
+        
         {	name: 	"helpController",
             metaphor: "City original"
 		},
@@ -330,6 +334,7 @@
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
                                         {name: "canvasFlyToController"},
+                                        {name: "infoController"},
                                         {name: "helpController"},
                                         {name: "shareController"},
                                         {name: "relationConnectorController"},

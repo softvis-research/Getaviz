@@ -151,6 +151,7 @@ EOT;
 	<script type="text/javascript" src="scripts/CanvasResetView/CanvasResetViewController.js"></script>	
 	<script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>
 	<script type="text/javascript" src="scripts/HelpController/HelpController.js"></script>
+	<script type="text/javascript" src="scripts/InfoController/InfoController.js"></script>
 	<script type="text/javascript" src="scripts/RelationTransparency/RelationTransparencyController.js"></script>
 	<script type="text/javascript" src="scripts/RelationHighlight/RelationHighlightController.js"></script>	
 	<script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>	
