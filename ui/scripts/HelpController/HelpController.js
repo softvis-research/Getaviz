@@ -40,6 +40,7 @@ var helpController = (function() {
     }
 
     function createPopup(){
+        $("#DisplayWindow").remove();
         var popup = application.createPopup("Help",  createJqxTabsHTML(), "DisplayWindow");
         document.body.appendChild(popup);
         $("#DisplayWindow").css("display", "block").jqxWindow({
