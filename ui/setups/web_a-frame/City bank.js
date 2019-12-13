@@ -32,7 +32,11 @@
 		{	name: 	"canvasFilterController" 
 		},
         
-        {   name: 'infoController'
+        {   name: 'infoController',
+            system: "Bank",
+            link: "https://github.com/softvis-research/Bank",
+            noc: true,
+            loc: 192
         },
         
         {	name: 	"helpController",
@@ -71,8 +75,7 @@
 			
 		{ 	name: 	"relationHighlightController" 
 		},
-        {
-            name:   "systeminfoController",
+        {   name:   "systeminfoController",
             system: "Bank",
             link: "https://github.com/softvis-research/Bank",
             noc: true,
