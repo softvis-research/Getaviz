@@ -45,15 +45,15 @@ var infoController = (function() {
             document.body.appendChild(popup);
             $("#DisplayWindow").css("display", "block").jqxWindow({
                     theme: "metro",
-                    width: 470,
-                    height: 270,
+                    width: 435,
+                    height: 210,
                     isModal: true,
                     autoOpen: true,
                     resizable: false
             });
             
             if(controllerConfig.system !== "") {
-                var system = "<div id ='divContent0'>System</div>";
+                var system = "<div>System</div>";
                 var systemContent = "<div class = 'grid-right infoController';>" + controllerConfig.system + "<div>";
                 document.getElementById('tdContent0-left').innerHTML= system;
                 document.getElementById('tdContent0-right').innerHTML= systemContent;
@@ -62,7 +62,7 @@ var infoController = (function() {
             }
 
             if(controllerConfig.link !== "") {
-                var webPage = "<div id ='divContent1'>Web page</div>";
+                var webPage = "<div>Web page</div>";
                 var webPageContent = "<div class = 'grid-right infoController';>" + "<a href=" + controllerConfig.link + " target='_blank'>" + controllerConfig.link + "</a><div>";
                 document.getElementById('tdContent1-left').innerHTML= webPage;
                 document.getElementById('tdContent1-right').innerHTML= webPageContent;
@@ -71,7 +71,7 @@ var infoController = (function() {
             }
 
             if(controllerConfig.noc) {
-                var classes = "<div id ='divContent2'>Classes</div>";
+                var classes = "<div>Classes</div>";
                 var classesContent = "<div class = 'grid-right infoController';>" + model.getEntitiesByType('Class').length + "<div>";
                 document.getElementById('tdContent2-left').innerHTML= classes;
                 document.getElementById('tdContent2-right').innerHTML= classesContent;
@@ -80,7 +80,7 @@ var infoController = (function() {
             }
 
             if(controllerConfig.loc > 0) {
-                var loc = "<div id ='divContent3'>LOC</div>";
+                var loc = "<div>LOC</div>";
                 var locContent = "<div class = 'grid-right infoController';>" + controllerConfig.loc.toString().length + "<div>";
                 document.getElementById('tdContent3-left').innerHTML= loc;
                 document.getElementById('tdContent3-right').innerHTML= locContent;
