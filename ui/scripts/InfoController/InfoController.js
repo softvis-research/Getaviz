@@ -38,31 +38,8 @@ var infoController = (function() {
             cssLink.href = "scripts/InfoController/infoPopup.css";
             document.getElementsByTagName("head")[0].appendChild(cssLink);
              
-            if(controllerConfig.system !== "") {
-                var system = "<div>System</div>";
-                var systemContent = "<div class = 'grid-right infocontroller';>" + controllerConfig.system + "<div>";
-            }
+            var infoTableHTML = "<table id='infoTable'><tr id ='trContent0'><td id ='tdContent0-left' class= 'td-grid-left infoController'></td><td id ='tdContent0-right'></td></tr><tr id ='trContent1'><td id ='tdContent1-left' class= 'td-grid-left infoController'></td><td id ='tdContent1-right'></td></tr><tr id ='trContent2'><td id ='tdContent2-left' class= 'td-grid-left infoController'></td><td id ='tdContent2-right'></td></tr><tr id ='trContent3'><td id ='tdContent3-left' class= 'td-grid-left infoController'></td><td id ='tdContent3-right'></td></tr></table>";
 
-            if(controllerConfig.link !== "") {
-                var webPage = "<div>Web page</div>";
-                var webPageContent = "<div class = 'grid-right infocontroller';>" + "<a href=" + controllerConfig.link + " target='_blank'>" + controllerConfig.link + "</a><div>";
-            }
-
-            if(controllerConfig.noc) {
-                var classes = "<div>Classes</div>";
-                var classesContent = "<div class = 'grid-right infocontroller';>" + model.getEntitiesByType('Class').length + "<div>";
-            }
-
-            if(controllerConfig.loc > 0) {
-                var loc = "<div>LOC</div>";
-                var locContent = "<div class = 'grid-right infocontroller';>" + controllerConfig.loc.toString().length + "<div>";
-            }
-           
-            //var infoTableHTML = "<table ><tr><td class= 'td-grid-left infocontroller'>" + system + "</td><td>" + systemContent + "</td></tr><tr><td class= 'td-grid-left infocontroller'>" + webPage +"</td><td>" + webPageContent + "</td></tr><tr><td class= 'td-grid-left infocontroller'>" + classes + "</td><td>" + classesContent + "</td></tr><tr><td class= 'td-grid-left infocontroller'>" + loc + "</td><td>" + locContent + "</td></tr></table>";
-            
-            var infoTableHTML = "<table><tr><td class= 'td-grid-left infocontroller'>System</td><td>" + systemContent + "</td></tr><tr><td class= 'td-grid-left infocontroller'>Web page</td><td>" + webPageContent + "</td></tr><tr><td class= 'td-grid-left infocontroller'> Classes</td><td>" + classesContent + "</td></tr><tr><td class= 'td-grid-left infocontroller'>LOC</td><td>" + locContent + "</td></tr></table>";
-
-       
             $("#DisplayWindow").remove();
             var popup = application.createPopup("Info", infoTableHTML, "DisplayWindow");
             document.body.appendChild(popup);
@@ -74,11 +51,48 @@ var infoController = (function() {
                     autoOpen: true,
                     resizable: false
             });
+            
+            if(controllerConfig.system !== "") {
+                var system = "<div id ='divContent0'>System</div>";
+                var systemContent = "<div class = 'grid-right infoController';>" + controllerConfig.system + "<div>";
+                document.getElementById('tdContent0-left').innerHTML= system;
+                document.getElementById('tdContent0-right').innerHTML= systemContent;
+            } else{
+                document.getElementById("trContent0").remove();
+            }
+
+            if(controllerConfig.link !== "") {
+                var webPage = "<div id ='divContent1'>Web page</div>";
+                var webPageContent = "<div class = 'grid-right infoController';>" + "<a href=" + controllerConfig.link + " target='_blank'>" + controllerConfig.link + "</a><div>";
+                document.getElementById('tdContent1-left').innerHTML= webPage;
+                document.getElementById('tdContent1-right').innerHTML= webPageContent;
+            } else{
+                document.getElementById("trContent1").remove();
+            }
+
+            if(controllerConfig.noc) {
+                var classes = "<div id ='divContent2'>Classes</div>";
+                var classesContent = "<div class = 'grid-right infoController';>" + model.getEntitiesByType('Class').length + "<div>";
+                document.getElementById('tdContent2-left').innerHTML= classes;
+                document.getElementById('tdContent2-right').innerHTML= classesContent;
+            } else{
+                document.getElementById("trContent2").remove();
+            }
+
+            if(controllerConfig.loc > 0) {
+                var loc = "<div id ='divContent3'>LOC</div>";
+                var locContent = "<div class = 'grid-right infoController';>" + controllerConfig.loc.toString().length + "<div>";
+                document.getElementById('tdContent3-left').innerHTML= loc;
+                document.getElementById('tdContent3-right').innerHTML= locContent;
+            } else{
+                document.getElementById("trContent3").remove();
+            }
+
         });
     }
     
-	function reset(){
-	}
+ 	function reset(){
+ 	}
 	
     return {
         initialize: initialize,
