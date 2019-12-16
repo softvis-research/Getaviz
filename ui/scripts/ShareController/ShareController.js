@@ -98,6 +98,7 @@ var shareController = (function() {
         var jqxTextImageButton = document.createElement("BUTTON");
 		jqxTextImageButton.type = buttonType;
         jqxTextImageButton.id = id;
+        jqxTextImageButton.style = "float:right;";
         var text = document.createTextNode("Share");
         jqxTextImageButton.appendChild(text);
        $("ul.jqx-menu-ul")[0].appendChild(jqxTextImageButton);

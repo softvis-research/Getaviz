@@ -16,7 +16,7 @@ var infoController = (function() {
         var jqxInfoButton = document.createElement("BUTTON");
 		jqxInfoButton.type = jqxInfoButtonType;
         jqxInfoButton.id = id;
-        jqxInfoButton.style = "float:left;";
+        jqxInfoButton.style = "float:right;";
         var text = document.createTextNode("Info");
         jqxInfoButton.appendChild(text);
         $("ul.jqx-menu-ul")[0].appendChild(jqxInfoButton);

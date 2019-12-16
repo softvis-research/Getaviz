@@ -13,7 +13,7 @@ var helpController = (function() {
         var jqxHelpButton = document.createElement("BUTTON");
 		jqxHelpButton.type = jqxHelpButtonType;
         jqxHelpButton.id = id;
-        jqxHelpButton.style = "float:left;";
+        jqxHelpButton.style = "float:right;";
         var text = document.createTextNode("Help");
         jqxHelpButton.appendChild(text);
         $("ul.jqx-menu-ul")[0].appendChild(jqxHelpButton);
