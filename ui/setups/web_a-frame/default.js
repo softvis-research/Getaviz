@@ -29,6 +29,10 @@
 		{	name: 	"canvasSelectController" 
 		},
         
+        {	name: 	"helpController",
+            metaphor: "City original"
+		},
+        
         {   name: 'infoController',
             system: "Bank",
             link: "https://github.com/softvis-research/Bank",
@@ -36,9 +40,6 @@
             loc: 192
         },
         
-        {	name: 	"helpController",
-            metaphor: "City original"
-		},
         {	name: 	"shareController",
             showDebugOutput: false
         },
@@ -337,8 +338,8 @@
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
                                         {name: "canvasFlyToController"},
-                                        {name: "infoController"},
                                         {name: "helpController"},
+                                        {name: "infoController"},
                                         {name: "shareController"},
                                         {name: "relationConnectorController"},
                                         {name: "relationTransparencyController"},
