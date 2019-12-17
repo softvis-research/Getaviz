@@ -38,8 +38,10 @@ var infoController = (function() {
             cssLink.href = "scripts/InfoController/infoPopup.css";
             document.getElementsByTagName("head")[0].appendChild(cssLink);
              
-            var infoTableHTML = "<table id='infoTable'><tr id ='trContent0'><td id ='tdContent0-left' class= 'td-grid-left infoController'></td><td id ='tdContent0-right'></td></tr><tr id ='trContent1'><td id ='tdContent1-left' class= 'td-grid-left infoController'></td><td id ='tdContent1-right'></td></tr><tr id ='trContent2'><td id ='tdContent2-left' class= 'td-grid-left infoController'></td><td id ='tdContent2-right'></td></tr><tr id ='trContent3'><td id ='tdContent3-left' class= 'td-grid-left infoController'></td><td id ='tdContent3-right'></td></tr></table>";
-
+            //var infoTableHTML = "<table id='infoTable'><tr id ='trContent0'><td id ='tdContent0-left' class= 'td-grid-left infoController'></td><td id ='tdContent0-right'></td></tr><tr id ='trContent1'><td id ='tdContent1-left' class= 'td-grid-left infoController'></td><td id ='tdContent1-right'></td></tr><tr id ='trContent2'><td id ='tdContent2-left' class= 'td-grid-left infoController'></td><td id ='tdContent2-right'></td></tr><tr id ='trContent3'><td id ='tdContent3-left' class= 'td-grid-left infoController'></td><td id ='tdContent3-right'></td></tr></table>";
+            
+            var infoTableHTML = "<table id='infoTable'></table>";
+            
             $("#DisplayWindow").remove();
             var popup = application.createPopup("Info", infoTableHTML, "DisplayWindow");
             document.body.appendChild(popup);
@@ -52,7 +54,7 @@ var infoController = (function() {
                     resizable: false
             });
             
-            if(controllerConfig.system !== "") {
+            /*if(controllerConfig.system !== "") {
                 var system = "<div>System</div>";
                 var systemContent = "<div class = 'grid-right infoController';>" + controllerConfig.system + "<div>";
                 document.getElementById('tdContent0-left').innerHTML= system;
@@ -86,8 +88,99 @@ var infoController = (function() {
                 document.getElementById('tdContent3-right').innerHTML= locContent;
             } else{
                 document.getElementById("trContent3").remove();
-            }
+            }*/
+            
+            if(controllerConfig.system !== "") {
+                var tr_System = document.createElement("tr");
+                var td_System_Left = document.createElement("td");
+                td_System_Left.setAttribute("class", "td-grid-left infoController");
+                var td_System_Right = document.createElement("td");
+                
+                var system = document.createElement("div");
+                var text_System = document.createTextNode("System");
+                system.appendChild(text_System);
+                
+                var systemContentDiv = document.createElement("div");
+                systemContentDiv.setAttribute("class", "grid-right infoController");
+                var systemContent = controllerConfig.system;
+                systemContentDiv.innerHTML = systemContent;
+                
+                td_System_Left.appendChild(system);
+                td_System_Right.appendChild(systemContentDiv);
+                tr_System.appendChild(td_System_Left);
+                tr_System.appendChild(td_System_Right);
+                
+                document.getElementById("infoTable").appendChild(tr_System);
+            } 
 
+            if(controllerConfig.link !== "") {
+                var tr_WebPage = document.createElement("tr");
+                var td_WebPage_Left = document.createElement("td");
+                td_WebPage_Left.setAttribute("class", "td-grid-left infoController");
+                var td_WebPage_Right = document.createElement("td");
+                
+                var webPage = document.createElement("div");
+                var text_WebPage = document.createTextNode("WebPage");
+                webPage.appendChild(text_WebPage);
+                
+                var webPageContentDiv = document.createElement("div");
+                webPageContentDiv.setAttribute("class", "grid-right infoController");
+                var webPageContent = controllerConfig.link;
+                webPageContentDiv.innerHTML = webPageContent;
+                
+                td_WebPage_Left.appendChild(webPage);
+                td_WebPage_Right.appendChild(webPageContentDiv);
+                tr_WebPage.appendChild(td_WebPage_Left);
+                tr_WebPage.appendChild(td_WebPage_Right);
+                
+                document.getElementById("infoTable").appendChild(tr_WebPage); 
+            } 
+
+            if(controllerConfig.noc) {
+                var tr_Classes = document.createElement("tr");
+                var td_Classes_Left = document.createElement("td");
+                td_Classes_Left.setAttribute("class", "td-grid-left infoController");
+                var td_Classes_Right = document.createElement("td");
+                
+                var classes = document.createElement("div");
+                var text_Classes = document.createTextNode("Classes");
+                classes.appendChild(text_Classes);
+                
+                var classesContentDiv = document.createElement("div");
+                classesContentDiv.setAttribute("class", "grid-right infoController");
+                var classesContent = model.getEntitiesByType('Class').length;
+                classesContentDiv.innerHTML = classesContent;
+                
+                td_Classes_Left.appendChild(classes);
+                td_Classes_Right.appendChild(classesContentDiv);
+                tr_Classes.appendChild(td_Classes_Left);
+                tr_Classes.appendChild(td_Classes_Right);
+                
+                document.getElementById("infoTable").appendChild(tr_Classes); 
+            } 
+
+            if(controllerConfig.loc > 0) {
+                var tr_LOC = document.createElement("tr");
+                var td_LOC_Left = document.createElement("td");
+                td_LOC_Left.setAttribute("class", "td-grid-left infoController");
+                var td_LOC_Right = document.createElement("td");
+                
+                var loc = document.createElement("div");
+                var text_LOC = document.createTextNode("LOC");
+                loc.appendChild(text_LOC);
+                
+                var locContentDiv = document.createElement("div");
+                locContentDiv.setAttribute("class", "grid-right infoController");
+                var locContent = controllerConfig.loc.toString().length
+                locContentDiv.innerHTML = locContent;
+                
+                td_LOC_Left.appendChild(loc);
+                td_LOC_Right.appendChild(locContentDiv);
+                tr_LOC.appendChild(td_LOC_Left);
+                tr_LOC.appendChild(td_LOC_Right);
+                
+                document.getElementById("infoTable").appendChild(tr_LOC); 
+            }
         });
     }
     
