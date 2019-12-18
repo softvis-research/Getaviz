@@ -38,7 +38,6 @@ var infoController = (function() {
  	
     function createInfoPopup(){
         $("#jqxInfoButton").on('click', function (){
-
             var cssLink = document.createElement("link");
             cssLink.type = "text/css";
             cssLink.rel = "stylesheet";
@@ -50,12 +49,12 @@ var infoController = (function() {
             var popup = application.createPopup("Info", infoTableHTML, "DisplayWindow");
             document.body.appendChild(popup);
             $("#DisplayWindow").css("display", "block").jqxWindow({
-                    theme: "metro",
-                    width: 435,
-                    height: 210,
-                    isModal: true,
-                    autoOpen: true,
-                    resizable: false
+                theme: "metro",
+                width: 435,
+                height: 210,
+                isModal: true,
+                autoOpen: true,
+                resizable: false
             });
             
             if(controllerConfig.system !== "") {
