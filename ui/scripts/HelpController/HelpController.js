@@ -8,6 +8,11 @@ var helpController = (function() {
     }
 
 	function activate(){
+        createHelpButton();
+        createHelpPopup();
+    }
+    
+    function createHelpButton(){
         var id = "jqxHelpButton";
         var jqxHelpButtonType = "button";
         var jqxHelpButton = document.createElement("BUTTON");
@@ -26,32 +31,31 @@ var helpController = (function() {
             textPosition: "left", 
             imgSrc: "scripts/HelpController/images/help_outline.png"
         });
+    }
 
-       $("#jqxHelpButton").on('click', function (){
+    function createHelpPopup(){
+        $("#jqxHelpButton").on('click', function (){
             var cssLink = document.createElement("link");
             cssLink.type = "text/css";
             cssLink.rel = "stylesheet";
-            cssLink.href = "scripts/HelpController/helpPopup.css";
+            cssLink.href = "scripts/HelpController/style.css";
             document.getElementsByTagName("head")[0].appendChild(cssLink);
+                
+            $("#DisplayWindow").remove();
+            var popup = application.createPopup("Help",  createJqxTabsHTML(), "DisplayWindow");
+            document.body.appendChild(popup);
+            $("#DisplayWindow").css("display", "block").jqxWindow({
+                theme: "metro",
+                width: 565,
+                height: 645,
+                isModal: true,
+                autoOpen: true,
+                resizable: false
+            });
             
-            createPopup();
             createTabs();
        });
     }
-
-    function createPopup(){
-        $("#DisplayWindow").remove();
-        var popup = application.createPopup("Help",  createJqxTabsHTML(), "DisplayWindow");
-        document.body.appendChild(popup);
-        $("#DisplayWindow").css("display", "block").jqxWindow({
-            theme: "metro",
-            width: 565,
-            height: 645,
-            isModal: true,
-            autoOpen: true,
-            resizable: false
-        });
-    };
     
     function createTabs(){
         $('#helpPopupTabs').jqxTabs({ 
@@ -84,7 +88,7 @@ var helpController = (function() {
                 createPopupContent()
             }); 
         };
-    };
+    }
     
     function createPopupContent(){
         $('#helpPopupTabs').jqxTabs('setContentAt', 0, variantMetaphor.legend());
@@ -92,7 +96,7 @@ var helpController = (function() {
         $.getScript("scripts/HelpController/navigationContent.js", function(){ 
             $('#helpPopupTabs').jqxTabs('setContentAt', 2, variantNavigation.navigation());   
         });
-    };
+    }
 
     function createJqxTabsHTML(){
         return `
@@ -121,7 +125,7 @@ var helpController = (function() {
                 <div></div>
                 <div></div>
             </div>`;
-    };
+    }
     
     return {
         initialize: initialize,
