@@ -33,20 +33,80 @@ var shareController = (function() {
 
     function createSharePopup(){
         $("#jqxShareButton").on('click', function (){
+            createCSSLink();
             createPopup();
-            createCopyLinkButton();
-            createStatePHP();
         });
-        
     }
-    
-    function createStateContent(){
+
+    function createCSSLink(){
         var cssLink = document.createElement("link");
         cssLink.type = "text/css";
         cssLink.rel = "stylesheet";
         cssLink.href = "scripts/ShareController/style.css";
-        document.getElementsByTagName("head")[0].appendChild(cssLink);
+        document.getElementsByTagName("head")[0].appendChild(cssLink);        
+    }  
+    
+    function createPopup(){
+        $("#DisplayWindow").remove();
+        var popup = application.createPopup("Share Visualization", createPopupContent(), "DisplayWindow");
+        document.body.appendChild(popup);
+        createCopyLinkButton();
+        $("#DisplayWindow").css("display", "block").jqxWindow({
+            theme: "metro",
+            width: 400,
+            height: 80,
+            isModal: true,
+            autoOpen: true,
+            resizable: false
+        });
+    }
+
+    function createPopupContent(){
+        var state = createState();
+        var stateHashcode = JSON.stringify(state).hashCode();
+        var jsonString = JSON.stringify(state,null,'\t');
             
+        var url = window.location.toString().split("&state=")[0].split("?state=")[0];
+        if (url.includes( "?")) {
+            var stateKeyword= "&state=";
+        } else{
+            var stateKeyword= "?state=";
+        };
+                
+        var descriptionText = "Use this URL to share the current state of the visualization."+ "<br />";
+        var shareLinkDiv= "<div id='shareLinkDiv' class='shareController'><input id='copyField' class='shareController' readonly value='" + url + stateKeyword + stateHashcode + "'></div> ";
+    
+        if(controllerConfig.showDebugOutput===true) {
+            var stateID= "<span class='shareController titleSpan'>StateID:</span>" + stateHashcode + "<br /><br />";
+            var jsonHtml= "<br /><span class='shareController titleSpan'>JSON:</span> <pre class='shareController jsonHtmlPre'>"+jsonString+"</pre>";
+            var popup = stateID + descriptionText + shareLinkDiv + jsonHtml;
+        } else{
+            var popup = descriptionText + shareLinkDiv;
+        }; 
+        
+        return popup;
+    }
+
+    function createState(){
+        var state = calculateState();
+        var xhr = new XMLHttpRequest();
+        var jsonData = "state.php";
+        xhr.open("POST", jsonData, true);
+        xhr.setRequestHeader("Content-Type", "application/json"); 
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                console.log("successfull");			 
+            }
+        }; 
+        xhr.send(JSON.stringify({
+            stateHashcode: JSON.stringify(state).hashCode(),
+            jsonString: JSON.stringify(state,null,'\t'),
+        }));
+        
+        return state;
+    }
+
+    function calculateState(){
         var state = {
             "selected": [],
             "marked": [],
@@ -56,7 +116,8 @@ var shareController = (function() {
         state.selected = new Array();
         selectedEntities.forEach(function(element){
             state.selected.push(element.id);
-        });
+        });    
+        
         var markedEntities = events.marked.getEntities();
         state.marked = new Array();
         markedEntities.forEach(function(element){
@@ -85,32 +146,8 @@ var shareController = (function() {
         };
         
         return state;
-    }  
-    
-    function createPopupContent(){
-        var stateHashcode = JSON.stringify(createStateContent()).hashCode();
-        var jsonString = JSON.stringify(createStateContent(),null,'\t');
-            
-        var url = window.location.toString().split("&state=")[0].split("?state=")[0];
-        if (url.includes( "?")) {
-            var state_Describe= "&state=";
-        } else{
-            var state_Describe= "?state=";
-        };
-                
-        var stateID= "<span class='shareController titleSpan'>StateID:</span>" + stateHashcode + "<br /><br />";
-        var descriptionText = "Use this URL to share the current state of the visualization."+ "<br />";
-        var shareLinkDiv= "<div id='shareLinkDiv' class='shareController'><input id='copyField' class='shareController' readonly value='" + url + state_Describe + stateHashcode +"'></div> ";
-        var jsonHtml= "<br /><span class='shareController titleSpan'>JSON:</span> <pre class='shareController jsonHtmlPre'>"+jsonString+"</pre>";
-            
-        if(controllerConfig.showDebugOutput===true) {
-            var popup = stateID + descriptionText + shareLinkDiv + jsonHtml;
-        } else{
-            var popup = descriptionText + shareLinkDiv;
-        }; 
-        return popup;
-    }
-    
+    } 
+
     function createCopyLinkButton(){
         var shareLinkid = "jqxshareLinkButton";
         var shareLinkbuttonType = "button";
@@ -131,39 +168,6 @@ var shareController = (function() {
         });
     }
     
-    function createPopup(){
-        $("#DisplayWindow").remove();
-        var loadPopup = application.createPopup("Share Visualization",  
-        createPopupContent(), "DisplayWindow");
-        document.body.appendChild(loadPopup);
-        $("#DisplayWindow").css("display", "block").jqxWindow({
-            theme: "metro",
-            //width: 400,
-            width: 600,
-            //height: 80,
-            height: 600,
-            isModal: true,
-            autoOpen: true,
-            resizable: false
-        });
-    }
-
-    function createStatePHP(){
-            var xhr = new XMLHttpRequest();
-            var jsonData = "state.php";
-            xhr.open("POST", jsonData, true);
-            xhr.setRequestHeader("Content-Type", "application/json"); 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    console.log("successfull");			 
-                }
-            }; 
-            xhr.send(JSON.stringify({
-                stateHashcode: JSON.stringify(createStateContent()).hashCode(),
-                jsonString: JSON.stringify(createStateContent(),null,'\t'),
-            }));
-    }   
- 
 	String.prototype.hashCode = function() {
 		var hash = 0, i, chr;
 		if (this.length === 0) return hash;

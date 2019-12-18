@@ -35,12 +35,8 @@ var helpController = (function() {
 
     function createHelpPopup(){
         $("#jqxHelpButton").on('click', function (){
-            var cssLink = document.createElement("link");
-            cssLink.type = "text/css";
-            cssLink.rel = "stylesheet";
-            cssLink.href = "scripts/HelpController/style.css";
-            document.getElementsByTagName("head")[0].appendChild(cssLink);
-                
+            createCSSLink();
+
             $("#DisplayWindow").remove();
             var popup = application.createPopup("Help",  createJqxTabsHTML(), "DisplayWindow");
             document.body.appendChild(popup);
@@ -55,6 +51,14 @@ var helpController = (function() {
             
             createTabs();
        });
+    }
+
+    function createCSSLink(){
+        var cssLink = document.createElement("link");
+        cssLink.type = "text/css";
+        cssLink.rel = "stylesheet";
+        cssLink.href = "scripts/HelpController/style.css";
+        document.getElementsByTagName("head")[0].appendChild(cssLink);        
     }
     
     function createTabs(){

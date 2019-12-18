@@ -38,11 +38,7 @@ var infoController = (function() {
  	
     function createInfoPopup(){
         $("#jqxInfoButton").on('click', function (){
-            var cssLink = document.createElement("link");
-            cssLink.type = "text/css";
-            cssLink.rel = "stylesheet";
-            cssLink.href = "scripts/InfoController/style.css";
-            document.getElementsByTagName("head")[0].appendChild(cssLink);
+            createCSSLink();
             
             var infoTableHTML = "<table id='infoTable'></table>";
             $("#DisplayWindow").remove();
@@ -74,7 +70,15 @@ var infoController = (function() {
             }
         });
  	}
- 	
+
+    function createCSSLink(){
+        var cssLink = document.createElement("link");
+        cssLink.type = "text/css";
+        cssLink.rel = "stylesheet";
+        cssLink.href = "scripts/InfoController/style.css";
+        document.getElementsByTagName("head")[0].appendChild(cssLink);        
+    }
+    
     function createSystemRow(){
         var tr_System = document.createElement("tr");
         var td_System_Name = document.createElement("td");
