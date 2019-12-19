@@ -1,4 +1,4 @@
-var variantMetaphor =(function(){
+var metaphor =(function(){
 
     function legend(){     
             var legend_RD = `

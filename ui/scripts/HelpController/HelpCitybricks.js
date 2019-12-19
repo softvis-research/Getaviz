@@ -1,4 +1,4 @@
-var variantMetaphor =(function(){
+var metaphor =(function(){
     
     function legend(){            
             var legend_Citybricks = `
@@ -14,40 +14,40 @@ var variantMetaphor =(function(){
                 </div>
                 <div class='legend_Describe helpController'>
                     <h2>Building base</h2>
-                    <img src='scripts/HelpController/images/bricks_Buildingbase.png'>
+                    <img src='scripts/HelpController/images/bricks_buildingbase.png'>
                     <p>Buildings consists of a building base and bricks. The building base represents <span class='legend_Represent helpController'>types</span>, bricks the corresponding methods and fields.</p>
                 </div>
                 <div class='bricks_Describe helpController'>
                     <h2>Brick</h2>
-                    <img src='scripts/HelpController/images/bricks_Red.png' >
+                    <img src='scripts/HelpController/images/bricks_red.png' >
                     <p>Red bricks represent <span class='legend_Represent helpController'>fields with primitive types</span>.</p>
                 </div>
                 <div class='bricks_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Lightgreen.png'>
+                    <img src='scripts/HelpController/images/bricks_lightgreen.png'>
                     <p>Light green bricks represent <span class='legend_Represent helpController'>getter methods</span>.</p>
                 </div>
                 <div class='bricks_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Darkgreen.png'>
+                    <img src='scripts/HelpController/images/bricks_darkgreen.png'>
                     <p>Dark green bricks represent <span class='legend_Represent helpController'>setter methods</span>.</p>
                 </div>
                 <div class='bricks_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Orange.png'>
+                    <img src='scripts/HelpController/images/bricks_orange.png'>
                     <p>Orange bricks represent <span class='legend_Represent helpController'>abstract methods</span>.</p>
                 </div>
                 <div class='bricks_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Yellow.png'>
+                    <img src='scripts/HelpController/images/bricks_yellow.png'>
                     <p>Yellow bricks represent <span class='legend_Represent helpController'>static methods</span>.</p>
                 </div>
                 <div class='bricks_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Purple.png'>
+                    <img src='scripts/HelpController/images/bricks_purple.png'>
                     <p>Purple bricks represent all other <span class='legend_Represent helpController'>methods</span>.</p>
                 </div>
                 <div class='bricks_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Pink.png'>
+                    <img src='scripts/HelpController/images/bricks_pink.png'>
                     <p>Pink bricks represent <span class='legend_Represent helpController'>constructors</span>.</p>
                 </div>
                 <div class='bricks_Describe helpController'>
-                    <img src='scripts/HelpController/images/bricks_Blue.png'>
+                    <img src='scripts/HelpController/images/bricks_blue.png'>
                     <p>Blue bricks represent <span class='legend_Represent helpController'>fields with complex types</span>.</p>
                 </div>
             </div>`;

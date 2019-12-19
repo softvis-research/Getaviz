@@ -70,35 +70,35 @@ var helpController = (function() {
         });
 
         if(controllerConfig.metaphor=="City original") {
-            $.getScript("scripts/HelpController/metaphorCityoriginal.js", function(){   
+            $.getScript("scripts/HelpController/HelpCityoriginal.js", function(){   
                 createPopupContent()
             });
         };
             
         if(controllerConfig.metaphor=="City bricks") {
-            $.getScript("scripts/HelpController/metaphorCitybricks.js", function(){  
+            $.getScript("scripts/HelpController/HelpCitybricks.js", function(){  
                 createPopupContent()
             });
         };
             
         if(controllerConfig.metaphor=="City floor") {
-            $.getScript("scripts/HelpController/metaphorCityfloor.js", function(){  
+            $.getScript("scripts/HelpController/HelpCityfloor.js", function(){  
                 createPopupContent()
             });
         };
 
         if(controllerConfig.metaphor=="RD") {
-            $.getScript("scripts/HelpController/metaphorRD.js", function(){  
+            $.getScript("scripts/HelpController/HelpRD.js", function(){  
                 createPopupContent()
             }); 
         };
     }
     
     function createPopupContent(){
-        $('#helpPopupTabs').jqxTabs('setContentAt', 0, variantMetaphor.legend());
-        $('#helpPopupTabs').jqxTabs('setContentAt', 1, variantMetaphor.relationships());
-        $.getScript("scripts/HelpController/navigationContent.js", function(){ 
-            $('#helpPopupTabs').jqxTabs('setContentAt', 2, variantNavigation.navigation());   
+        $('#helpPopupTabs').jqxTabs('setContentAt', 0, metaphor.legend());
+        $('#helpPopupTabs').jqxTabs('setContentAt', 1, metaphor.relationships());
+        $.getScript("scripts/HelpController/HelpNavigation.js", function(){ 
+            $('#helpPopupTabs').jqxTabs('setContentAt', 2, navigation.navigation());   
         });
     }
 
