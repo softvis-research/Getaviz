@@ -33,7 +33,7 @@
 		},
         
         {	name: 	"helpController",
-            metaphor: "City floor"
+            metaphor: "City original"
 		},
         
         {	name: 	"infoController",
