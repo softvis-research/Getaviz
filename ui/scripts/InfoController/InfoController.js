@@ -46,7 +46,7 @@ var infoController = (function() {
             document.body.appendChild(popup);
             $("#DisplayWindow").css("display", "block").jqxWindow({
                 theme: "metro",
-                width: 435,
+                width: 480,
                 height: 210,
                 isModal: true,
                 autoOpen: true,

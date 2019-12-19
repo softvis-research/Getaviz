@@ -53,8 +53,8 @@ var shareController = (function() {
         createCopyLinkButton();
         $("#DisplayWindow").css("display", "block").jqxWindow({
             theme: "metro",
-            width: 400,
-            height: 80,
+            width: 600,
+            height: 87,
             isModal: true,
             autoOpen: true,
             resizable: false
