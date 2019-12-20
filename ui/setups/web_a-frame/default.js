@@ -130,9 +130,19 @@
                                         subMenu: "true",
 					items:		[
 						{
-							title: 	"City Original",
+							title: 	"City",
 							link: 	true,
-							url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
+							url:	"index.php?setup=web_a-frame/City bank&model=City&aframe=true"
+						},
+                        {
+							title: 	"City bricks",
+							link: 	true,
+							url:	"index.php?setup=web_a-frame/City bank&model=City%20bricks&aframe=true"
+						},
+                        {
+							title: 	"City floor",
+							link: 	true,
+							url:	"index.php?setup=web_a-frame/City bank&model=City%20floor&aframe=true"
 						},
 						{
 							title: 	"Recursive Disk",
