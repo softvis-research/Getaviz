@@ -16,7 +16,7 @@
 		$setupUrl = "setups/" . $_GET["setup"] . ".js";
 	}
 
-    $modelUrl = "data/City bank aframe/model";
+    $modelUrl = "data/City/model";
 	if (isset($_GET["model"])) {
 		$modelUrl = $srcDir . "/" . $_GET["model"] ."/model";
 	}
