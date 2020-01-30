@@ -1,9 +1,7 @@
-package org.getaviz.generator.tests;
+package org.getaviz.generator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.getaviz.generator.city.m2m.City2City;
-import org.getaviz.generator.city.s2m.JQA2City;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
 import org.junit.jupiter.api.AfterAll;
@@ -11,19 +9,26 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
-public class CityBankTest {
+import java.util.Collections;
 
-	static DatabaseConnector connector;
-	static Bank mockup = new Bank();
+class CityBankTest {
+
+	private static DatabaseConnector connector;
+	private static Bank mockup = new Bank();
 
 	@BeforeAll
 	static void setup() {
 		mockup.setupDatabase("./test/databases/CityBankTest.db");
 		mockup.loadProperties("CityBankTest.properties");
 		connector = mockup.getConnector();
-
-		new JQA2City();
-		new City2City();
+		SettingsConfiguration config = SettingsConfiguration.getInstance();
+		StepFactory factory = new StepFactory(config, Collections.singletonList(ProgrammingLanguage.JAVA));
+		Step s2m = factory.createSteps2m();
+		Step m2m = factory.createStepm2m();
+		Step m2t = factory.createStepm2t();
+		s2m.run();
+		m2m.run();
+		m2t.run();
 	}
 	
 	@AfterAll
@@ -46,7 +51,7 @@ public class CityBankTest {
 				.executeRead("MATCH (building:Building)-[:VISUALIZES]->(:Type) RETURN count(building) AS result")
 				.single();
 		int numberOfVisualizedTypes = result.get("result").asInt();
-		assertEquals(4, numberOfVisualizedTypes);
+		assertEquals(7, numberOfVisualizedTypes);
 	}
 
 	@Test
@@ -59,9 +64,9 @@ public class CityBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(9.5, x);
+		assertEquals(11.0, x);
 		assertEquals(2.5, y);
-		assertEquals(11.5, z);
+		assertEquals(14.0, z);
 	}
 
 	@Test
@@ -74,9 +79,9 @@ public class CityBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(9.5, x);
-		assertEquals(4, y);
-		assertEquals(13.5, z);
+		assertEquals(10.5, x);
+		assertEquals(5, y);
+		assertEquals(17.5, z);
 	}
 
 	@Test
@@ -89,8 +94,19 @@ public class CityBankTest {
 		double height = result.get("height").asDouble();
 		double length = result.get("length").asDouble();
 		double width = result.get("width").asDouble();
-		assertEquals(2.0, height);
-		assertEquals(1.0, length);
-		assertEquals(1.0, width);
+		assertEquals(4.0, height);
+		assertEquals(3.0, length);
+		assertEquals(3.0, width);
+	}
+
+	@Test
+	void districtColor() {
+		String hash = "ID_4481fcdc97864a546f67c76536e0308a3058f75d";
+		Record result = connector.executeRead(
+				"MATCH (:Package {hash: '" + hash + "'})<-[:VISUALIZES]-(d:District)"
+						+ "RETURN d.color as color")
+				.single();
+		String color = result.get("color").asString();
+		assertEquals("#b1b1b1", color);
 	}
 }
