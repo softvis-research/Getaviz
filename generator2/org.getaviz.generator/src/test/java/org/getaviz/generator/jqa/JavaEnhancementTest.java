@@ -1,11 +1,15 @@
 package org.getaviz.generator.jqa;
 
+import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,15 +21,10 @@ class JavaEnhancementTest {
     @BeforeAll
     static void setup() {
         mockup.setupDatabase("./test/databases/Java2JQATest.db");
-        mockup.loadProperties("Java2JQATest.properties");
         connector = mockup.getConnector();
-        JavaEnhancement javaEnhancement = new JavaEnhancement();
+        List<ProgrammingLanguage> languages = Collections.singletonList(ProgrammingLanguage.JAVA);
+        JavaEnhancement javaEnhancement = new JavaEnhancement(false, languages);
         javaEnhancement.run();
-    }
-
-    @AfterAll
-    static void teardown() {
-        mockup.close();
     }
 
     @Test
@@ -73,5 +72,10 @@ class JavaEnhancementTest {
                 " AS result").single();
         int numberOfAnonymousType = result.get("result").asInt();
         assertEquals(0, numberOfAnonymousType);
+    }
+
+    @AfterAll
+    static void teardown() {
+        mockup.close();
     }
 }

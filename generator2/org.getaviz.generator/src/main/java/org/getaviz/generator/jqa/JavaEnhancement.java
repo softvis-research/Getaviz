@@ -3,6 +3,7 @@ package org.getaviz.generator.jqa;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
@@ -10,28 +11,33 @@ import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
+import java.util.List;
+
 public class JavaEnhancement implements Step {
 	private Log log = LogFactory.getLog(this.getClass());
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private boolean skipScan = false;
+	private List<ProgrammingLanguage> languages;
 
-	public JavaEnhancement(SettingsConfiguration config) {
-		this.skipScan = config.isSkipScan();
-	}
 
-	public JavaEnhancement(){
+	public JavaEnhancement(boolean skipScan, List<ProgrammingLanguage> languages) {
+		this.skipScan = skipScan;
+		this.languages = languages;
 	}
 
 	public boolean checkRequirements() {
+		if(!languages.contains(ProgrammingLanguage.JAVA)) return false;
 		return !skipScan;
 	}
 
 	public void run() {
-		log.info("jQA enhancement started.");
-		connector.executeWrite(labelGetter(), labelSetter(), labelPrimitives(), labelInnerTypes());
-		connector.executeWrite(labelAnonymousInnerTypes());
-		addHashes();
-		log.info("jQA enhancement finished");
+		if(checkRequirements()) {
+			log.info("jQA enhancement started.");
+			connector.executeWrite(labelGetter(), labelSetter(), labelPrimitives(), labelInnerTypes());
+			connector.executeWrite(labelAnonymousInnerTypes());
+			addHashes();
+			log.info("jQA enhancement finished");
+		}
 	}
 
 	private void addHashes() {

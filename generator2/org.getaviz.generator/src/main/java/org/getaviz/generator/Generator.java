@@ -20,7 +20,7 @@ public class Generator {
 
 	public void run() {
 		log.info("Generator started");
-		JavaEnhancement java = new JavaEnhancement(config);
+		JavaEnhancement java = new JavaEnhancement(config.isSkipScan(), languages);
 		java.run();
 		CEnhancement c = new CEnhancement(config,languages);
 		c.run();
