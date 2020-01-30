@@ -1,39 +1,39 @@
 package org.getaviz.generator;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.extract.Importer;
 
-public class GeneratorServlet extends HttpServlet {
+public class Servlet extends HttpServlet {
 	private static final long serialVersionUID = -5343549433924172589L;
-	private static Log log = LogFactory.getLog(GeneratorServlet.class);
-
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		log.info("GET request generator");
-		Generator.run();
-		writeGetResponse(response);
-	}
+	private static final Log log = LogFactory.getLog(Servlet.class);
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) {
 		log.info("POST request generator");
 		SettingsConfiguration config = SettingsConfiguration.getInstance(request);
-		Generator.run();
+		List<ProgrammingLanguage> languages = importData(config);
+		generateVisualization(config, languages);
 		writePostResponse(response);
+		log.info("POST request finished.");
+	}
+
+	private List<ProgrammingLanguage> importData(SettingsConfiguration config) {
+		Importer importer = new Importer(config);
+		importer.run();
+		return importer.getImportedProgrammingLanguages();
+	}
+
+	private void generateVisualization(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
+		Generator generator = new Generator(config, languages);
+		generator.run();
 	}
 	
 	private void writePostResponse(HttpServletResponse response) {
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-	}
-
-	private void writeGetResponse(HttpServletResponse response) throws IOException {
-		PrintWriter out = response.getWriter();
-		response.setContentType("text/html");
-		out.println("<h1>Getaviz</h1>");
-		out.println("<h3>Visualization has been generated to the output directory.</h3>");
 	}
 }
