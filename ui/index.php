@@ -24,9 +24,9 @@
     $metaDataJsonUrl = $modelUrl . "/metaData.json";
 
     if (isset($_GET["aframe"]) && $_GET["aframe"] == 'true') {
-        $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v0.9.1.min.js\"></script>";
+        $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v1.0.0.min.js\"></script>";
         $loadVisualizationSpecificScripts = <<<'EOT'
-        <script src="node_modules/aframe/dist/aframe-v0.9.1.min.js"></script>
+        <script src="node_modules/aframe/dist/aframe-v1.0.0.min.js"></script>
         <script type="text/javascript" src="scripts/AframeCanvasManipulator.js"></script>
         <script type="text/javascript" src="scripts/AframeActionController.js"></script>
 	    <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
