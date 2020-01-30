@@ -18,6 +18,10 @@ public class Importer {
         this.scanStep = new ScanStep(config.getInputFiles(), config.isSkipScan());
     }
 
+    public Importer(String inputFiles) {
+        this.scanStep = new ScanStep (inputFiles, false);
+    }
+
     public void run() {
         log.info("Import started");
         scanStep.run();

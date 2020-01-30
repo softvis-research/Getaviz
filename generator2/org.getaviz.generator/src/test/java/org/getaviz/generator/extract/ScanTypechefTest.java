@@ -1,5 +1,6 @@
 package org.getaviz.generator.extract;
 
+import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,6 +10,9 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.kernel.configuration.BoltConnector;
 import java.io.File;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
@@ -73,6 +77,13 @@ class ScanTypechefTest {
         Record result = connector.executeRead("MATCH (function:Function) RETURN count(function) AS result").single();
         int numberOfFunctions = result.get("result").asInt();
         assertEquals(3, numberOfFunctions);
+    }
+
+    @Test
+    void detectC() {
+        Importer importer = new Importer("");
+        List<ProgrammingLanguage> languages = importer.getImportedProgrammingLanguages();
+        assertTrue(languages.contains(ProgrammingLanguage.C));
     }
 
     @AfterAll
