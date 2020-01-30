@@ -51,8 +51,8 @@
             targetEndAtBorder: true,
             createEndpoints : true
         },
-		{ 	name: 	"relationTransparencyController",
-		},
+		//{ 	name: 	"relationTransparencyController",
+		//},
 			
 		{ 	name: 	"relationHighlightController" 
 		},
@@ -323,7 +323,7 @@
                                         {name: "canvasFilterController"},
                                         {name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},
-                                        {name: "relationTransparencyController"},
+                                       // {name: "relationTransparencyController"},
                                         {name: "relationHighlightController"},
                                     ],
                                 },
