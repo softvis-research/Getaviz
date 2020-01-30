@@ -26,10 +26,8 @@ public class C2JSON implements Step {
 	private List<ProgrammingLanguage> languages;
 
 	public C2JSON(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
-		log.info("C2JSON has started.");
 		this.config = config;
 		this.languages = languages;
-		log.info("C2JSON has finished.");
 	}
 
 	public boolean checkRequirements() {
@@ -37,26 +35,32 @@ public class C2JSON implements Step {
 	}
 
 	public void run() {
-		ArrayList<Node> elements = new ArrayList<>();
-		connector.executeRead("MATCH (n:Condition) RETURN n").forEachRemaining((result) -> { elements.add(result.get("n").asNode());});
+		if(checkRequirements()) {
+			log.info("C2JSON has started.");
+			ArrayList<Node> elements = new ArrayList<>();
+			connector.executeRead("MATCH (n:Condition) RETURN n").forEachRemaining((result) -> {
+				elements.add(result.get("n").asNode());
+			});
 
-		connector.executeRead("MATCH (n)<-[:VISUALIZES]-() WHERE EXISTS(n.hash) RETURN n ORDER BY n.hash").forEachRemaining((result) -> {
-			elements.add(result.get("n").asNode());
-		});
-		Writer fw = null;
-		try {
-			String path = config.getOutputPath() + "metaData.json";
-			fw = new FileWriter(path);
-			fw.write(toJSON(elements));
-		} catch (IOException e) {
-			System.err.println(e);
-		} finally {
-			if (fw != null)
-				try {
-					fw.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			connector.executeRead("MATCH (n)<-[:VISUALIZES]-() WHERE EXISTS(n.hash) RETURN n ORDER BY n.hash").forEachRemaining((result) -> {
+				elements.add(result.get("n").asNode());
+			});
+			Writer fw = null;
+			try {
+				String path = config.getOutputPath() + "metaData.json";
+				fw = new FileWriter(path);
+				fw.write(toJSON(elements));
+			} catch (IOException e) {
+				System.err.println(e);
+			} finally {
+				if (fw != null)
+					try {
+						fw.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+			}
+			log.info("C2JSON has finished.");
 		}
 	}
 
