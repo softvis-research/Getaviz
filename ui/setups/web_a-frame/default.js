@@ -45,11 +45,11 @@
         { 	name: 	"relationConnectorController",
             fixPositionY : false,
             showInnerRelations : true,
-            sourceStartAtParentBorder : false,
-            targetEndAtParentBorder : false,
-            sourceStartAtBorder: true,
-            targetEndAtBorder: true,
-            createEndpoints : true
+            sourceStartAtParentBorder : true,
+            targetEndAtParentBorder : true,
+            sourceStartAtBorder: false,
+            targetEndAtBorder: false,
+            createEndpoints : false
         },
 		//{ 	name: 	"relationTransparencyController",
 		//},
