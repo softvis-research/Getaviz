@@ -4,7 +4,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.ProgrammingLanguage;
-import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.Record;
@@ -16,7 +15,7 @@ import java.util.List;
 public class JavaEnhancement implements Step {
 	private Log log = LogFactory.getLog(this.getClass());
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
-	private boolean skipScan = false;
+	private boolean skipScan;
 	private List<ProgrammingLanguage> languages;
 
 
@@ -32,11 +31,11 @@ public class JavaEnhancement implements Step {
 
 	public void run() {
 		if(checkRequirements()) {
-			log.info("jQA enhancement started.");
+			log.info("Java enhancement started.");
 			connector.executeWrite(labelGetter(), labelSetter(), labelPrimitives(), labelInnerTypes());
 			connector.executeWrite(labelAnonymousInnerTypes());
 			addHashes();
-			log.info("jQA enhancement finished");
+			log.info("Java enhancement finished");
 		}
 	}
 
@@ -125,9 +124,11 @@ public class JavaEnhancement implements Step {
 				fqn = containerFqn + "." + name;
 			}
 			connector.executeWrite(
-				"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.name = \'" + name + "\', n.fqn = \'" + fqn + "\'");
+ 	"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.name = '" + name + "', n.fqn = '" + fqn + "'");
 		}
-		connector.executeWrite("MATCH (n) WHERE ID(n) = " + node.id() + " SET n.hash = \'" + createHash(fqn) + "\'");
+		connector.executeWrite(
+	"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.hash = '" + createHash(fqn) + "'"
+		);
 	}
 
 }
