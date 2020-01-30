@@ -1,133 +1,148 @@
 package org.getaviz.generator.rd.s2m;
 
-import java.util.GregorianCalendar;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.database.Labels;
+import org.getaviz.generator.rd.*;
 import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.types.Node;
 
-public class C2RD {
+import java.util.List;
 
-	private final SettingsConfiguration config = SettingsConfiguration.getInstance();
+public class C2RD implements Step {
 	private final DatabaseConnector connector = DatabaseConnector.getInstance();
 	private final Log log = LogFactory.getLog(C2RD.class);
-	
-	public C2RD() {
+	private boolean methodTypeMode;
+	private boolean methodDisks;
+	private boolean dataDisks;
+	private double height;
+	private double namespaceTransparency;
+	private double ringWidth;
+	private double classTransparency;
+	private double minArea;
+	private String classColor;
+	private String methodColor;
+	private double methodTransparency;
+	private String dataColor;
+	private  double ringWidthAD;
+	private double dataTransparency;
+	private Model model;
+	private RDElementsFactory factory;
+	private List<ProgrammingLanguage> languages;
+
+	public C2RD(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
+		methodTypeMode = config.isMethodTypeMode();
+		methodDisks = config.isMethodDisks();
+		dataDisks = config.isDataDisks();
+		height = config.getRDHeight();
+		namespaceTransparency = config.getRDNamespaceTransparency();
+		minArea = config.getRDMinArea();
+		methodTransparency = config.getRDMethodTransparency();
+		dataColor = config.getRDDataColor();
+		dataTransparency = config.getRDDataTransparency();
+		ringWidthAD = config.getRDRingWidthAD();
+		methodColor = config.getRDMethodColor();
+		ringWidth = config.getRDRingWidth();
+		classTransparency = config.getRDClassTransparency();
+		classColor = config.getRDClassColor();
+		this.languages = languages;
+	}
+
+	public void run() {
 		log.info("C2RD started");
-			StatementResult translationUnits = connector.executeRead("MATCH (n:TranslationUnit) RETURN n");
-			long modelId = createModelNode();
-			while(translationUnits.hasNext()) {
-				Node unit = translationUnits.next().get("n").asNode();
-				translationUnitToDisk(unit.id(), modelId);
-			}
+		deleteOldNodes();
+		model = new Model(methodTypeMode, methodDisks, dataDisks);
+		factory = new RDElementsFactory(methodTypeMode, methodDisks, dataDisks);
+		queriesToRDElementList();
+		writeToDatabase();
 		log.info("C2RD finished");
 	}
 
-	private long createModelNode() {
-		return connector.addNode(
-				String.format(
-						"CREATE (m:Model:RD {date: \'%s\'})-[:USED]->(c:Configuration:RD {method_type_mode: \'%s\', method_disks: \'%s\', data_disks:\'%s\'})",
-						new GregorianCalendar().getTime().toString(), config.isMethodTypeMode(), config.isMethodDisks(), config.isDataDisks()),
-				"m").id();
-	}
-	
-	private void translationUnitToDisk(Long translationUnit, Long modelId) {
-		String properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", config.getRDRingWidth(),
-				config.getRDHeight(), config.getRDNamespaceTransparency(), config.getRDNamespaceColorHex());
-		long disk = connector.addNode(cypherCreateNode(modelId, translationUnit, Labels.Disk.name(), properties), "n").id();
-
-		connector.executeRead("MATCH (n)-[:DECLARES]->(f:Function) WHERE ID(n) = " + translationUnit +
-				" AND EXISTS(f.hash) RETURN f").
-				forEachRemaining((result) -> {
-					Node element = result.get("f").asNode();
-					if (config.isMethodDisks()) {
-						functionToDisk(element.id(), disk);
-					} else {
-						functionToDiskSegment(element, disk);
-					}
-				});
-		connector.executeRead("MATCH (n)-[:DECLARES]->(v:Variable) WHERE ID(n) = " + translationUnit +
-				" AND EXISTS(v.hash) RETURN v").
-				forEachRemaining((result) -> {
-					Node element = result.get("v").asNode();
-					if (config.isDataDisks()) {
-						variableToDisk(element.id(), disk);
-					} else {
-						variableToDiskSegment(element.id(), disk);
-					}
-				});
-		connector.executeRead("MATCH (n)-[:DECLARES]->(t) WHERE ID(n) = " + translationUnit +
-				" AND EXISTS(t.hash) AND (t:Union OR t:Struct OR t:Enum)  RETURN t").
-				forEachRemaining((result) -> {
-					Node element = result.get("t").asNode();
-					unionStructEnumToDisk(element, disk);
-				});
+	@Override
+	public boolean checkRequirements() {
+		return languages.contains(ProgrammingLanguage.C);
 	}
 
-	private void functionToDisk(Long function, Long parent) {
-		String properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: %s", config.getRDRingWidth(),
-				config.getRDHeight(), config.getRDNamespaceTransparency(), config.getRDMethodColorHex());
-		connector.executeWrite(cypherCreateNode(parent, function, Labels.Disk.name(), properties));
+	private void deleteOldNodes() {
+		connector.executeWrite("MATCH (n:RD) DETACH DELETE n");
 	}
 
-	private void functionToDiskSegment(Node function, Long parent) {
-		double height = config.getRDHeight();
-		double size ;
-		Integer numberOfStatements = function.get("lineCount").asInt(0);
-		if (numberOfStatements <= config.getRDMinArea()) {
-			size = config.getRDMinArea();
-		} else {
-			size = numberOfStatements;
+	private void queriesToRDElementList() {
+		addFiles();
+		addTranslationUnits();
+		addFunctions();
+		addVariables();
+		addStructs();
+	}
+
+	private void addFiles() {
+		try {
+			StatementResult translationUnits = connector.executeRead("MATCH (n:File) RETURN ID(n) as id");
+			translationUnits.forEachRemaining((node) -> {
+				MainDisk disk = new MainDisk(node.get("id").asLong(), -1, ringWidth, height, namespaceTransparency);
+				model.addRDElement(disk);
+			});
+		} catch (Exception e) {
+			log.error(e);
 		}
-		String properties = String.format(
-				"height: %f, transparency: %f, size: %f, color: \'%s\'", height, config.getRDMethodTransparency(), size, config.getRDMethodColorHex()
-		);
-
-		connector.executeWrite(cypherCreateNode(parent, function.id(), Labels.DiskSegment.name(), properties));
 	}
 
-	private void variableToDisk(Long variable, Long parent) {
-		String properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", config.getRDRingWidthAD(),
-				config.getRDHeight(), config.getRDDataTransparency(), config.getRDDataColorHex());
-
-		connector.executeWrite(cypherCreateNode(parent, variable, Labels.Disk.name(), properties));
+	private void addTranslationUnits() {
+	//	MainDisk root = new MainDisk(-1, -1, ringWidth, height, namespaceTransparency);
+	//	model.addRDElement(root);
+		try {
+			StatementResult translationUnits = connector.executeRead("MATCH (f:File)-[:CONTAINS]->(n:TranslationUnit) RETURN ID(n) as id, ID(f) as pId");
+			translationUnits.forEachRemaining((node) -> {
+				SubDisk disk = new SubDisk(node.get("id").asLong(), node.get("pId").asLong(), ringWidth, height, classTransparency, classColor);
+				model.addRDElement(disk);
+			});
+		} catch (Exception e) {
+			log.error(e);
+		}
 	}
 
-	private void variableToDiskSegment(Long variable, Long parent) {
-		String properties = String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", 1.0, config.getRDHeight(),
-				config.getRDDataTransparency(), config.getRDDataColorHex());
-		connector.executeWrite(cypherCreateNode(parent, variable, Labels.DiskSegment.name(), properties));
-	}
-	
-	private void unionStructEnumToDisk(Node element, Long parent) {
-		String properties = String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", config.getRDRingWidth(),
-				config.getRDHeight(), config.getRDClassTransparency(), config.getRDClassColorHex());
-		connector.executeWrite(cypherCreateNode(parent, element.id(), Labels.Disk.name(), properties));
-
-		connector.executeRead("MATCH (n)-[:DECLARES]->(v:Variable) WHERE ID(n) = " + element.id() +
-				" AND EXISTS(v.hash) RETURN v").
-				forEachRemaining((result) -> {
-					Node subElement = result.get("v").asNode();
-					if (config.isDataDisks()) {
-						variableToDisk(subElement.id(), element.id());
-					} else {
-						variableToDiskSegment(subElement.id(), element.id());
-					}
-				});
-		connector.executeRead("MATCH (n)-[:DECLARES]->(t) WHERE ID(n) = " + element.id() +
-				" AND EXISTS(t.hash) AND (t:Union OR t:Struct OR t:Enum)  RETURN t").
-				forEachRemaining((result) -> {
-					Node subElement = result.get("t").asNode();
-					unionStructEnumToDisk(subElement, element.id());
-				});
+	private void addFunctions() {
+		try {
+			String query = "MATCH (t:TranslationUnit)-[:DECLARES]->(f:Function) WHERE EXISTS(f.hash) RETURN f as node, ID(t) as tID";
+			StatementResult translationUnits = connector.executeRead(query);
+			translationUnits.forEachRemaining((result) -> {
+				RDElement element = factory.createFromFunction(result, height, ringWidthAD, methodTransparency, minArea, methodColor);
+				model.addRDElement(element);
+			});
+		} catch (Exception e) {
+			log.error(e);
+		}
 	}
 
-	private String cypherCreateNode(Long parent, Long visualizedNode, String label, String properties) {
-		return String.format(
-				"MATCH(parent),(s) WHERE ID(parent) = %d AND ID(s) = %d CREATE (parent)-[:CONTAINS]->(n:RD:%s {%s})-[:VISUALIZES]->(s)",
-				parent, visualizedNode, label, properties);
+	private void addVariables() {
+		try {
+			String query = "MATCH (t:TranslationUnit)-[:DECLARES]->(v:Variable) WHERE EXISTS(v.hash) RETURN v as node, ID(t) as tID";
+			StatementResult translationUnits = connector.executeRead(query);
+			translationUnits.forEachRemaining((result) -> {
+				RDElement element = factory.createFromVariable(result, height, ringWidthAD, dataTransparency, dataColor);
+				model.addRDElement(element);
+			});
+		} catch (Exception e) {
+			log.error(e);
+		}
 	}
+
+	private void addStructs() {
+		try {
+			String query = "MATCH (p)-[:DECLARES]->(el) WHERE EXISTS(el.hash) " +
+					"AND (el:Union OR el:Struct OR el:Enum) RETURN el as node, ID(p) as tID";
+			StatementResult translationUnits = connector.executeRead(query);
+			translationUnits.forEachRemaining((result) -> {
+				RDElement element = factory.createFromVariable(result, height, ringWidthAD, dataTransparency, dataColor);
+				model.addRDElement(element);
+			});
+		} catch (Exception e) {
+			log.error(e);
+		}
+	}
+
+	private void writeToDatabase() { model.writeToDatabase(connector); }
+
 }

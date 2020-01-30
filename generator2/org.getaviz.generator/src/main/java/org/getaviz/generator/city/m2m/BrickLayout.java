@@ -8,11 +8,11 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.city.CityUtils;
 import org.getaviz.generator.database.DatabaseConnector;
 
-public class BrickLayout {
+class BrickLayout {
 	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 	private static DatabaseConnector connector = DatabaseConnector.getInstance();
 
-	public static void brickLayout(Long model) {
+	static void brickLayout(Long model) {
 		StatementResult buildings = connector
 				.executeRead("MATCH (n:City:Model)-[:CONTAINS*]->(b:Building) WHERE ID(n) = " + model + " RETURN b");
 		while (buildings.hasNext()) {
@@ -35,7 +35,7 @@ public class BrickLayout {
 				bsPosIndex_X, bsPosIndex_Y, bsPosIndex_Z;
 		double b_lowerLeftX, b_upperY, b_lowerLeftZ;
 		sideCapacity = building.get("sideCapacity").asInt();
-		List<Node> classElements = null;
+		List<Node> classElements;
 		switch (config.getClassElementsMode()) {
 		case ATTRIBUTES_ONLY:
 			classElements = CityUtils.getData(building.id());

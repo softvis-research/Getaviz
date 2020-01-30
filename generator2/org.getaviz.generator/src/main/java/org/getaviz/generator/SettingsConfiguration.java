@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
-
 import javax.servlet.http.HttpServletRequest;
-
-import java.awt.Color;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
@@ -16,6 +13,8 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
+import org.getaviz.generator.database.DatabaseConnector;
+import org.neo4j.driver.v1.StatementResult;
 
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
@@ -70,7 +69,7 @@ public class SettingsConfiguration {
 	public boolean isSkipScan() {
 		return config.getBoolean("input.skip_scan", false);
 	}
-
+	
 	public String getInputFiles() {
 		String[] fileArray = config.getStringArray("input.files");
 		if(fileArray.length == 0) {
@@ -97,6 +96,16 @@ public class SettingsConfiguration {
 		}
 		return files;
 	}
+
+	public ProgrammingLanguage getProgrammingLanguage() {
+		DatabaseConnector connector = DatabaseConnector.getInstance();
+		StatementResult result = connector.executeRead("MATCH (n:C) RETURN n LIMIT 2");
+		if(result.hasNext()) {
+			return ProgrammingLanguage.C;
+		} else {
+			return ProgrammingLanguage.JAVA;
+		}
+	}
 	
 	public Metaphor getMetaphor() {
 		String metaphor = config.getString("metaphor", "rd");
@@ -114,14 +123,6 @@ public class SettingsConfiguration {
 	
 	public String getOutputPath() {
 		return config.getString("output.path", "/var/lib/jetty/data-gen/") + getName() + "/model/";
-	}
-	
-	public String getRepositoryName() {
-		return config.getString("history.repository_name", "");
-	}
-
-	public String getRepositoryOwner() {
-		return config.getString("history.repository_owner", "");
 	}
 
 	public OutputFormat getOutputFormat() {
@@ -153,12 +154,10 @@ public class SettingsConfiguration {
 
 	public Schemes getScheme() {
 		String value = config.getString("city.scheme", "types");
-		switch (value) {
-		case "visibility":
+		if ("visibility".equals(value)) {
 			return Schemes.VISIBILITY;
-		default:
-			return Schemes.TYPES;
 		}
+		return Schemes.TYPES;
 	}
 
 	public ClassElementsModes getClassElementsMode() {
@@ -325,74 +324,66 @@ public class SettingsConfiguration {
 		return config.getDouble("city.building.vertical_margin", 1.0);
 	}
 
-	public String getPackageColorHex() {
+	public String getPackageColorStart() {
 		return config.getString("city.package.color_start", "#969696");
 	}
 
-	public Color getPackageColorStart() {
-		return getColor(config.getString("city.package.color_start", "#969696"));
+	public String getPackageColorEnd() {
+		return config.getString("city.package.color_end", "#b1b1b1");
 	}
 
-	public Color getPackageColorEnd() {
-		return getColor(config.getString("city.package.color_end", "#f0f0f0"));
+	public String getClassColorStart() {
+		return config.getString("city.class.color_start", "#131615");
 	}
 
-	public String getClassColorHex() {
+	public String getClassColorEnd() {
+		return config.getString("city.class.color_end", "#00ff00");
+	}
+
+	public String getClassColor() {
 		return config.getString("city.class.color", "#353559");
 	}
 
-	public Color getClassColorStart() {
-		return getColor(config.getString("city.class.color_start", "#131615"));
-	}
-
-	public Color getClassColorEnd() {
-		return getColor(config.getString("city.class.color_end", "#00ff00"));
-	}
-
-	public Color getClassColor() {
-		return getColor(config.getString("city.class.color", "#353559"));
-	}
-
-	public Color getCityColor(String name) {
-		return getColor(getCityColorHex(name));
-	}
-
-	public String getCityColorHex(String name) {
-		String color = name.toLowerCase();
+	public String getCityColor(String name) {
+		String colorName = name.toLowerCase();
 		String defaultColor = "";
-		switch (name) {
-		case "aqua":
-			defaultColor = "#99CCFF"; break;
-		case "blue":
-			defaultColor = "#99FFCC"; break;
-		case "light_green":
-			defaultColor = "#CCFF99"; break;
-		case "dark_green":
-			defaultColor = "#99FF99"; break;
-		case "yellow":
-			defaultColor = "#FFFF99"; break;
-		case "orange":
-			defaultColor = "#FFCC99"; break;
-		case "red":
-			defaultColor = "#FF9999"; break;
-		case "pink":
-			defaultColor = "#FF99FF"; break;
-		case "violet":
-			defaultColor = "#9999FF"; break;
-		case "light_grey":
-			defaultColor = "#CCCCCC"; break;
-		case "dark_grey":
-			defaultColor = "#999999"; break;
-		case "white":
-			defaultColor = "#FFFFFF"; break;
-		case "black":
-			defaultColor = "#000000"; break;
+		switch (colorName) {
+			case "aqua":
+				defaultColor = "#99CCFF"; break;
+			case "blue":
+				defaultColor = "#99FFCC"; break;
+			case "light_green":
+				defaultColor = "#CCFF99"; break;
+			case "dark_green":
+				defaultColor = "#99FF99"; break;
+			case "yellow":
+				defaultColor = "#FFFF99"; break;
+			case "orange":
+				defaultColor = "#FFCC99"; break;
+			case "red":
+				defaultColor = "#FF9999"; break;
+			case "pink":
+				defaultColor = "#FF99FF"; break;
+			case "violet":
+				defaultColor = "#9999FF"; break;
+			case "light_grey":
+				defaultColor = "#CCCCCC"; break;
+			case "dark_grey":
+				defaultColor = "#999999"; break;
+			case "white":
+				defaultColor = "#FFFFFF"; break;
+			case "black":
+				defaultColor = "#000000"; break;
 		}
-		return config.getString("city.color." + color, defaultColor);
+		return config.getString("city.color." + colorName, defaultColor);
 	}
 
-	public String getCityColorAsPercentage(String name) {
-		return getColorFormatted(getCityColor(name));
+	public String getCityFloorColor() {
+		return config.getString("city.floor.color", "#1485CC");
+	}
+
+	public String getCityChimneyColor() {
+		return config.getString("city.floor.chimney.color", "#FFFC19");
 	}
 	
 	public double getRDDataFactor() {
@@ -431,48 +422,16 @@ public class SettingsConfiguration {
 		return config.getDouble("rd.data_transparency", 0);
 	}
 
-	public Color getRDClassColor() {
-		return getColor(getRDClassColorHex());
-	}
-
-	public String getRDClassColorHex() {
+	public String getRDClassColor() {
 		return config.getString("rd.color.class", "#353559");
 	}
 
-	public String getRDClassColorAsPercentage() {
-		return getColorFormatted(getRDClassColor());
-	}
-
-	public Color getRDDataColor() {
-		return getColor(getRDDataColorHex());
-	}
-
-	public String getRDDataColorHex() {
+	public String getRDDataColor() {
 		return config.getString("rd.color.data", "#fffc19");
 	}
 
-	public String getRDDataColorAsPercentage() {
-		return getColorFormatted(getRDDataColor());
-	}
-
-	public Color getRDMethodColor() {
-		return getColor(getRDMethodColorHex());
-	}
-
-	public String getRDMethodColorHex() {
+	public String getRDMethodColor() {
 		return config.getString("rd.color.method", "#1485cc");
-	}
-
-	public String getRDMethodColorAsPercentage() {
-		return getColorFormatted(getRDMethodColor());
-	}
-
-	public Color getRDNamespaceColor() {
-		return getColor(getRDNamespaceColorHex());
-	}
-
-	public String getRDNamespaceColorHex() {
-		return config.getString("rd.color.namespace", "#969696");
 	}
 
 	public boolean isMethodDisks() {
@@ -487,19 +446,8 @@ public class SettingsConfiguration {
 		return config.getBoolean("rd.method_type_mode", false);
 	}
 
-	private String getColorFormatted(Color color) {
-		double r = color.getRed() / 255.0;
-		double g = color.getGreen() / 255.0;
-		double b = color.getBlue() / 255.0;
-		return r + " " + g + " " + b;
-	}
-
-	private Color getColor(String hex) {
-		return Color.decode(hex);
-	}
-
-	public static enum OutputFormat {
-		X3D, AFrame;
+	public enum OutputFormat {
+		X3D, AFrame
 	}
 	
 	/**
@@ -508,21 +456,19 @@ public class SettingsConfiguration {
 	 * it can either be in a static or dynamic way 
 	 */
 	
-	public static enum BuildingType{
-		CITY_ORIGINAL, CITY_PANELS, CITY_BRICKS, CITY_FLOOR; 
+	public static enum BuildingType {
+		CITY_ORIGINAL, CITY_PANELS, CITY_BRICKS, CITY_FLOOR;
 	}
 	
 	/**
 	 * Defines how the methods and attributes are sorted and colored in the city
 	 * model.
-	 * 
-	 * @see CitySettings#SET_SCHEME SET_SCHEME
 	 */
-	public static enum Schemes {
+	public enum Schemes {
 		/**
 		 * The class elements are sorted and colored corresponding to there
 		 * visibility modifiers.
-		 * 
+		 *
 		 * @see SortPriorities_Visibility
 		 */
 		VISIBILITY,
@@ -530,42 +476,36 @@ public class SettingsConfiguration {
 		/**
 		 * The class elements are sorted and colored associated to
 		 * type/functionality of the method.
-		 * 
+		 *
 		 * @see Methods.SortPriorities_Types
 		 * @see Attributes.SortPriorities_Types
 		 */
-		TYPES;
-	};
+		TYPES
+	}
 	
 	/**
 	 * Defines which elements of a class are to show.
-	 * 
-	 * @see CitySettings#SET_CLASS_ELEMENTS_MODE SET_CLASS_ELEMENTS_MODE
 	 */
-	public static enum ClassElementsModes {
+	public enum ClassElementsModes {
 		METHODS_ONLY, ATTRIBUTES_ONLY, METHODS_AND_ATTRIBUTES;
 	}
 	
 	/**
 	 * Defines which how the elements of a class are sorted.
-	 * 
-	 * @see CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_COARSE
-	 *      SET_CLASS_ELEMENTS_SORT_MODE_COARSE
 	 */
-	public static enum ClassElementsSortModesCoarse {
-		UNSORTED, ATTRIBUTES_FIRST, METHODS_FIRST;
+	public enum ClassElementsSortModesCoarse {
+		UNSORTED, ATTRIBUTES_FIRST, METHODS_FIRST
 	}
 
 	/**
 	 * A list of types of a method with the associated priority value.<br>
 	 * Highest priority/smallest number is placed on the bottom, lowest on top.
 	 * 
-	 * @see #SET_CLASS_ELEMENTS_SORT_MODE_FINE SET_CLASS_ELEMENTS_SORT_MODE_FINE
 	 * @see SortPriorities_Visibility
 	 * @see Methods.SortPriorities_Types
 	 * @see Attributes.SortPriorities_Types
 	 */
-	public static enum ClassElementsSortModesFine {
+	public enum ClassElementsSortModesFine {
 		/** Class elements won't be sorted. */
 		UNSORTED,
 
@@ -574,13 +514,12 @@ public class SettingsConfiguration {
 
 		/**
 		 * Methods will be sorted according to the active
-		 * {@link CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_FINE
 		 * SET_CLASS_ELEMENTS_SORT_MODE_FINE}.
 		 */
 		SCHEME,
 
 		/** Methods will be sorted according to there number of statements. */
-		NOS;
+		NOS
 	}
 
 	/**
@@ -588,26 +527,23 @@ public class SettingsConfiguration {
 	 * value.<br>
 	 * Highest priority/smallest number is placed on the bottom, lowest on top.
 	 * 
-	 * @see #SET_CLASS_ELEMENTS_SORT_MODE_FINE SET_CLASS_ELEMENTS_SORT_MODE_FINE
 	 * @see ClassElementsSortModesFine
 	 * 
 	 */
-	public static enum SortPriorities_Visibility {;
+	public enum SortPriorities_Visibility {;
 		public static int PRIVATE = 1;
 		public static int PROTECTED = 2;
 		public static int PACKAGE = 3;
 		public static int PUBLIC = 4;
 	}
 
-	public static enum Methods {;
+	public enum Methods {;
 
 		/**
 		 * A list of types of a method with the associated priority value.<br>
 		 * Highest priority/smallest number is placed on the bottom, lowest on
 		 * top.
-		 * 
-		 * @see CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_FINE
-		 *      SET_CLASS_ELEMENTS_SORT_MODE_FINE
+		 *
 		 * @see ClassElementsSortModesFine
 		 * @see SortPriorities_Visibility
 		 */
@@ -647,15 +583,12 @@ public class SettingsConfiguration {
 
 	}
 
-	public static enum Attributes {;
+	public enum Attributes {;
 
 		/**
 		 * A list of types of a method with the associated priority value.<br>
 		 * Highest priority/smallest number is placed on the bottom, lowest on
 		 * top.
-		 * 
-		 * @see CitySettings#SET_CLASS_ELEMENTS_SORT_MODE_FINE
-		 *      SET_CLASS_ELEMENTS_SORT_MODE_FINE
 		 * @see ClassElementsSortModesFine
 		 */
 		public static enum SortPriorities_Types {;
@@ -670,15 +603,13 @@ public class SettingsConfiguration {
 
 	}
 
-	public static enum Bricks {;
+	public enum Bricks {;
 
 		/**
 		 * Defines the layout for the BuildingSegments of the city model, which
 		 * represents the methods and/or attributes of a class.
-		 * 
-		 * @see CitySettings#SET_BRICK_LAYOUT SET_BRICK_LAYOUT
 		 */
-		public static enum Layout {
+		public enum Layout {
 
 			/**
 			 * One-dimensional bricks layout, where the segments simply are
@@ -688,16 +619,14 @@ public class SettingsConfiguration {
 
 			/**
 			 * Three-dimensional brick layout, where the base area is computed
-			 * depending on the {@link CitySettings#SET_CLASS_ELEMENTS_MODE
-			 * SET_CLASS_ELEMENTS_MODE}.<br>
+			 * depending on the {@link ClassElementsModes}.<br>
 			 * If only methods are shown, the base area is computed by the
 			 * number of attributes and vice versa.<br>
 			 * In case of methods and attributes are shown, the base area is
 			 * computed by the sum of the numbers of attributes and methods
 			 * inside the class.
 			 * <p>
-			 * When {@link CitySettings#SET_CLASS_ELEMENTS_MODE
-			 * SET_CLASS_ELEMENTS_MODE} is set to
+			 * When {@link ClassElementsModes} is set to
 			 * {@code METHODS_AND_ATTRIBUTES}, the {@code BALANCED} layout and
 			 * {@link Layout#PROGRESSIVE PROGRESSIVE} layout are identical.
 			 */
@@ -705,14 +634,12 @@ public class SettingsConfiguration {
 
 			/**
 			 * Three-dimensional brick layout, where the base area is computed
-			 * depending on the {@link CitySettings#SET_CLASS_ELEMENTS_MODE
-			 * SET_CLASS_ELEMENTS_MODE}.<br>
+			 * depending on the {@link ClassElementsModes}.<br>
 			 * If only methods are shown, the base area is computed by the
 			 * number of methods and vice versa. So the aspect lies on only one
 			 * type of element of a class and is visualized.
 			 * <p>
-			 * When {@link CitySettings#SET_CLASS_ELEMENTS_MODE
-			 * SET_CLASS_ELEMENTS_MODE} is set to
+			 * When {@link ClassElementsModes} is set to
 			 * {@code METHODS_AND_ATTRIBUTES}, the {@link Layout#BALANCED
 			 * PROGRESSIVE} layout and {@code PROGRESSIVE} layout are identical.
 			 */
@@ -728,8 +655,6 @@ public class SettingsConfiguration {
 		 * Defines the the space between the panels.<br>
 		 * The panels can either touch each other without a gap, leave a gap
 		 * between them, or fill the space with a separator of a defined color.
-		 * 
-		 * @see CitySettings#SET_PANEL_SEPARATOR_MODE SET_PANEL_SEPARATOR_MODE
 		 */
 		public static enum SeparatorModes {
 
@@ -742,31 +667,27 @@ public class SettingsConfiguration {
 			/**
 			 * The panels have a free space between them and don't touch each
 			 * other.
-			 * 
-			 * @see Panels#PANEL_VERTICAL_GAP PANEL_VERTICAL_GAP
 			 */
 			GAP,
 
 			/**
 			 * Between the panels separators are placed with a fix height and
 			 * color.
-			 * 
-			 * @see Panels#SEPARATOR_HEIGHT SEPARATOR_HEIGHT
 			 */
 			SEPARATOR;
 
 		}
 	}
 	
-	public static enum Original {
+	public enum Original {
 		;
-		public static enum BuildingMetric {
+		public enum BuildingMetric {
 			NONE,
 			NOS;
 		}
 	}
 	
-	public static enum Metaphor {
+	public enum Metaphor {
 		RD, CITY
 	}
 }

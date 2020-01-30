@@ -3,7 +3,9 @@ package org.getaviz.generator.jqa;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
 import org.neo4j.driver.v1.StatementResult;
@@ -17,13 +19,24 @@ import java.util.List;
 
 import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 
-public class C2JSON {
-	SettingsConfiguration config = SettingsConfiguration.getInstance();
-	Log log = LogFactory.getLog(this.getClass());
-	DatabaseConnector connector = DatabaseConnector.getInstance();
+public class C2JSON implements Step {
+	private Log log = LogFactory.getLog(this.getClass());
+	private DatabaseConnector connector = DatabaseConnector.getInstance();
+	private SettingsConfiguration config;
+	private List<ProgrammingLanguage> languages;
 
-	public C2JSON() {
+	public C2JSON(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
 		log.info("C2JSON has started.");
+		this.config = config;
+		this.languages = languages;
+		log.info("C2JSON has finished.");
+	}
+
+	public boolean checkRequirements() {
+		return languages.contains(ProgrammingLanguage.C);
+	}
+
+	public void run() {
 		ArrayList<Node> elements = new ArrayList<>();
 		connector.executeRead("MATCH (n:Condition) RETURN n").forEachRemaining((result) -> { elements.add(result.get("n").asNode());});
 
@@ -45,7 +58,6 @@ public class C2JSON {
 					e.printStackTrace();
 				}
 		}
-		log.info("C2JSON has finished.");
 	}
 
 	private String toJSON(List<Node> list) {
