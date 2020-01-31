@@ -70,6 +70,7 @@ group :development, :test do
   gem 'capybara-screenshot', :group => :test
 end
 
+
 gem "font-awesome-rails"
 gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
@@ -89,3 +90,8 @@ gem 'rails_serve_static_assets'
 gem "cocoon"
 gem 'multi-select-rails'
 gem "puma"
+
+
+group :development do
+  gem 'seed_dump'
+end

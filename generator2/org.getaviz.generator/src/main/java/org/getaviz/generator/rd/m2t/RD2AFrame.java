@@ -70,6 +70,11 @@ public class RD2AFrame implements Step {
 				.forEachRemaining((result) -> {
 					elements.append(toDisk(result.get("d").asNode(), result.get("p").asNode()));
 				});
+		connector.executeRead(
+				"MATCH (element)<-[:VISUALIZES]-(d:SubDisk)-[:HAS]->(p:Position) RETURN d,p, element.hash ORDER BY element.hash")
+				.forEachRemaining((result) -> {
+					elements.append(toDisk(result.get("d").asNode(), result.get("p").asNode()));
+				});
 		return elements.toString();
 	}
 

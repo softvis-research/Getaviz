@@ -1,0 +1,22 @@
+apiVersion: v1
+data:
+  DEVELOPMENT_MYSQL_DB_NAME: eval_server_development
+  DEVELOPMENT_MYSQL_DB_PASSWORD: dbpassword_for_user
+  DEVELOPMENT_MYSQL_DB_USERNAME: db_username
+  MYSQL_DATABASE: $DEVELOPMENT_MYSQL_DB_NAME
+  MYSQL_PASSWORD: $DEVELOPMENT_MYSQL_DB_PASSWORD
+  MYSQL_ROOT_PASSWORD: $DEVELOPMENT_MYSQL_DB_PASSWORD
+  MYSQL_USER: $DEVELOPMENT_MYSQL_DB_USERNAME
+  PRODUCTION_MYSQL_DB_NAME: eval_server_development
+  PRODUCTION_MYSQL_DB_PASSWORD: dbpassword_for_user
+  PRODUCTION_MYSQL_DB_USERNAME: db_username
+  SECRET_KEY_BASE: e7a9e73c4c3759a867ae7e2de32c5348f84ab3bcee7826c5ae091bc68709979db0f4b6f5e807e585750996e6cafda4dbaff45ce382b0ef80c4e3d2470e09f554
+  TEST_MYSQL_DB_NAME: eval_server_development
+  TEST_MYSQL_DB_PASSWORD: dbpassword_for_user
+  TEST_MYSQL_DB_USERNAME: db_username
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: web-env
+  name: web-env
