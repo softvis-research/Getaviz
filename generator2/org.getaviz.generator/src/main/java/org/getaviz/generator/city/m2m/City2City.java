@@ -89,6 +89,11 @@ public class City2City implements Step {
 		this.showAttributesAsCylinders = config.isShowAttributesAsCylinders();
 	}
 
+	@Override
+	public boolean checkRequirements() {
+		return true;
+	}
+
 	public void run() {
 		log.info("City2City started");
 		Node model = connector.executeRead("MATCH (n:Model {building_type: \'" + buildingTypeAsString +

@@ -2,10 +2,9 @@ package org.getaviz.generator.city;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.Metaphor;
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.Step;
-import org.getaviz.generator.StepFactory;
+import org.getaviz.generator.ProgrammingLanguage;
+import org.getaviz.generator.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,12 +12,12 @@ public class CityMetaphor implements Metaphor {
     private Log log = LogFactory.getLog(this.getClass());
     private List<Step> steps = new ArrayList<>();
 
-    public CityMetaphor(SettingsConfiguration config) {
-        StepFactory factory = new StepFactory(config);
-        if(!config.isSkipScan()) {
+    public CityMetaphor(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
+        StepFactory factory = new StepFactory(config, languages);
+        /*if(!config.isSkipScan()) {
             steps.add(factory.createScanStep());
             steps.add(factory.createEnhancementStep());
-        }
+        }*/
         steps.add(factory.createSteps2m());
         steps.add(factory.createMetadataFileStep());
         steps.add(factory.createStepm2m());

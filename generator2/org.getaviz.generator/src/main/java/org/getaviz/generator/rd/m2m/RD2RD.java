@@ -31,33 +31,39 @@ public class RD2RD implements Step {
         this.dataFactor = config.getRDDataFactor();
     }
 
+    @Override
+    public boolean checkRequirements() {
+        return true;
+    }
+
     public void run() {
         log.info("RD2RD started");
-        int namespaceMaxLevel = calculateNamespaceMaxLevel();
-        createLists(namespaceMaxLevel);
-
+        createLists();
         calculateData();
         calculateLayouts();
         writeToDatabase();
         log.info("RD2RD finished");
     }
 
-    private int calculateNamespaceMaxLevel() {
-        StatementResult length = connector.executeRead(
-                "MATCH p=(n:Package)-[:CONTAINS*]->(m:Package) WHERE NOT (m)-[:CONTAINS]->(:Package) " +
-                        "RETURN max(length(p)) AS length");
-        return length.single().get("length").asInt() + 1;
-    }
-
-    private void createLists(int namespaceMaxLevel) {
+    private void createLists() {
         innerSegments = createInnerSegmentsList();
         outerSegments = createOuterSegmentsList();
         rootDisks = createRootDisksList();
         subDisks = createSubDisksList();
         mainDisks = createMainDisksList();
-        setColorToDisk(namespaceMaxLevel);
+        setColorToDisk();
         addSubDisks();
         addSegmentsToDisk();
+
+        log.info("length:" + innerSegments.size());
+        log.info("length2:" + outerSegments.size());
+    }
+
+    private int calculateNamespaceMaxLevel() {
+        StatementResult length = connector.executeRead(
+                "MATCH p=(n:MainDisk)-[:CONTAINS*]->(m:MainDisk) WHERE NOT (m)-[:CONTAINS]->(:MainDisk) " +
+                        "RETURN max(length(p)) AS length");
+        return length.single().get("length").asInt(0) + 1;
     }
 
     private void calculateData() {
@@ -77,8 +83,9 @@ public class RD2RD implements Step {
 
     private ArrayList<DiskSegment> createInnerSegmentsList() {
         StatementResult result = connector.executeRead(
-                "MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(field:Field) " +
-                        "RETURN d.size AS size, ID(d) as id, ID(n) as parentID, field.name as name ORDER BY field.hash");
+                "MATCH (n)-[:CONTAINS]->(d:DiskSegment)-[:VISUALIZES]->(f) " +
+                        "WHERE (f:Field) OR (f:Function) " +
+                        "RETURN d.size AS size, ID(d) as id, ID(n) as parentID, f.name as name ORDER BY f.hash");
         return getDiskSegments(result);
     }
 
@@ -163,24 +170,21 @@ public class RD2RD implements Step {
         }
     }
 
-    private void setColorToDisk(int namespaceMaxLevel) {
+    private void setColorToDisk() {
         String NS_colorStart = "#969696";
         String NS_colorEnd = "#B1B1B1";
-        System.out.println(namespaceMaxLevel);
+        int namespaceMaxLevel = calculateNamespaceMaxLevel();
         NS_colors = ColorGradient.createColorGradient(NS_colorStart, NS_colorEnd, namespaceMaxLevel);
-                connector.executeRead(
-                "MATCH p = (n:Model:RD)-[:CONTAINS*]->(d:MainDisk)-[:VISUALIZES]->(e) RETURN e, d, length(p)-1 AS length," +
-                        " ID(d) AS id")
+        connector.executeRead(
+    "MATCH p = (n:Model:RD)-[:CONTAINS*]->(d:MainDisk)-[:VISUALIZES]->(e) RETURN e, d, length(p)-1 AS length, ID(d) AS id")
                 .forEachRemaining((result) -> {
-                    if (result.get("e").asNode().hasLabel(Labels.Package.name())) {
-                        String color = "\'" + setNamespaceColor(result.get("length").asInt()) + "\'";
-                        mainDisks.forEach(disk -> {
-                            long diskID = disk.getID();
-                            if (result.get("id").asLong() == diskID) {
-                                disk.setColor(color);
-                            }
-                        });
-                    }
+                    String color = "'" + setNamespaceColor(result.get("length").asInt()) + "'";
+                    mainDisks.forEach(disk -> {
+                        long diskID = disk.getID();
+                        if (result.get("id").asLong() == diskID) {
+                            disk.setColor(color);
+                        }
+                    });
                 });
     }
 

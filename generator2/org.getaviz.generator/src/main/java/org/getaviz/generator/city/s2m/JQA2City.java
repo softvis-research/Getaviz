@@ -1,5 +1,6 @@
 package org.getaviz.generator.city.s2m;
 
+import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
@@ -8,6 +9,8 @@ import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 
 import java.util.GregorianCalendar;
+import java.util.List;
+
 import org.getaviz.generator.SettingsConfiguration.BuildingType;
 import org.getaviz.generator.SettingsConfiguration.ClassElementsModes;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
@@ -22,12 +25,19 @@ public class JQA2City implements Step {
 	private String buildingTypeAsString;
 	private BuildingType buildingType;
 	private BuildingMetric originalBuildingMetric;
+	private List<ProgrammingLanguage> languages;
 
-	public JQA2City(SettingsConfiguration config) {
+	public JQA2City(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
 		this.classElementsMode = config.getClassElementsMode();
 		this.buildingTypeAsString = config.getBuildingTypeAsString();
 		this.buildingType = config.getBuildingType();
 		this.originalBuildingMetric = config.getOriginalBuildingMetric();
+		this.languages = languages;
+	}
+
+	@Override
+	public boolean checkRequirements() {
+		return languages.contains(ProgrammingLanguage.JAVA);
 	}
 
 	public void run() {

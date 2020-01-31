@@ -143,12 +143,12 @@ var setup = {
 					subMenu:	true,
 					items:		[
 						{
-							title: 	"University Leipzig",
+							title: 	"Research Group",
 							link: 	true,
-							url:	"https://www.wifa.uni-leipzig.de/en/information-systems-institute/se/research/softwarevisualization-in-3d-and-vr.html"							
+							url:	"http://home.uni-leipzig.de/svis/"							
 						},
 						{
-							title: 		"Feedback!",
+							title: 		"Feedback",
 							event: 		"emailController.openMailPopUp",
 						},
 						{

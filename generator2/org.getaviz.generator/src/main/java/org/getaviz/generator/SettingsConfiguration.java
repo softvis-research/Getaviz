@@ -13,6 +13,8 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
+import org.getaviz.generator.database.DatabaseConnector;
+import org.neo4j.driver.v1.StatementResult;
 
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
+import java.util.Collections;
+
 class RDBankTest {
 
 	private static DatabaseConnector connector;
@@ -20,7 +22,7 @@ class RDBankTest {
 		mockup.loadProperties("RDBankTest.properties");
 		connector = mockup.getConnector();
 		SettingsConfiguration config = SettingsConfiguration.getInstance();
-		StepFactory factory = new StepFactory(config);
+		StepFactory factory = new StepFactory(config, Collections.singletonList(ProgrammingLanguage.JAVA));
 		Step s2m = factory.createSteps2m();
 		Step m2m = factory.createStepm2m();
 		s2m.run();

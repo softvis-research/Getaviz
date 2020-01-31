@@ -15,10 +15,12 @@ public class RD2X3D implements Step {
 	private Log log = LogFactory.getLog(this.getClass());
 	private String outputPath;
 	private X3D outputFormat;
+	private SettingsConfiguration.OutputFormat format;
 
 	public RD2X3D(SettingsConfiguration config) {
 		this.outputPath = config.getOutputPath();
 		this.outputFormat = new X3D(config);
+		this.format = config.getOutputFormat();
 	}
 
 	public void run() {
@@ -41,6 +43,10 @@ public class RD2X3D implements Step {
 		log.info("RD2X3D has finished");
 	}
 
+	@Override
+	public boolean checkRequirements() {
+		return format.equals(SettingsConfiguration.OutputFormat.X3D);
+	}
 
 	private String toRD() {
 		StringBuilder disks = new StringBuilder();

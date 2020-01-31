@@ -28,13 +28,23 @@ public class MainDisk extends Disk {
     }
 
     public void createNode(DatabaseConnector connector) {
-        try {
-            long id = connector.addNode(String.format(
-                    "MATCH(s) WHERE ID(s) = %d CREATE (n:RD:MainDisk {%s})-[:VISUALIZES]->(s)",
-                    visualizedNodeID, propertiesToString()), "n").id();
-            setID(id);
-        } catch (Exception e) {
-            log.error(e);
+        if(visualizedNodeID != -1) {
+            try {
+                long id = connector.addNode(String.format(
+                        "MATCH(s) WHERE ID(s) = %d CREATE (n:RD:MainDisk {%s})-[:VISUALIZES]->(s)",
+                        visualizedNodeID, propertiesToString()), "n").id();
+                setID(id);
+            } catch (Exception e) {
+                log.error(e);
+            }
+        } else {
+            try {
+                long id = connector.addNode(String.format(
+                        "CREATE (n:RD:MainDisk {%s})", propertiesToString()), "n").id();
+                setID(id);
+            } catch (Exception e) {
+                log.error(e);
+            }
         }
     }
 

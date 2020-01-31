@@ -4,43 +4,46 @@ import org.getaviz.generator.city.m2m.City2City;
 import org.getaviz.generator.city.m2t.City2AFrame;
 import org.getaviz.generator.city.m2t.City2X3D;
 import org.getaviz.generator.city.s2m.JQA2City;
-import org.getaviz.generator.jqa.JQA2JSON;
-import org.getaviz.generator.jqa.Java2JQA;
-import org.getaviz.generator.jqa.ScanStep;
+import org.getaviz.generator.jqa.*;
 import org.getaviz.generator.rd.m2m.RD2RD;
 import org.getaviz.generator.rd.m2t.RD2AFrame;
 import org.getaviz.generator.rd.m2t.RD2X3D;
+import org.getaviz.generator.rd.s2m.C2RD;
 import org.getaviz.generator.rd.s2m.JQA2RD;
+
+import java.util.List;
 
 public class StepFactory {
 
     private SettingsConfiguration.OutputFormat outputFormat;
     private SettingsConfiguration.Metaphor metaphor;
     private SettingsConfiguration config;
+    private List<ProgrammingLanguage> languages;
 
-    public StepFactory(SettingsConfiguration config) {
+    public StepFactory(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
         this.outputFormat = config.getOutputFormat();
         this.metaphor = config.getMetaphor();
         this.config = config;
-    }
-
-    public Step createEnhancementStep() {
-        return new Java2JQA();
+        this.languages = languages;
     }
 
     public Step createMetadataFileStep() {
-        return new JQA2JSON(config);
-    }
-
-    public Step createScanStep() {
-        return new ScanStep(config);
+        if(languages.contains(ProgrammingLanguage.JAVA)) {
+            return new JQA2JSON(config, languages);
+        } else {
+            return new C2JSON(config, languages);
+        }
     }
 
     public Step createSteps2m() {
         if(metaphor == SettingsConfiguration.Metaphor.RD) {
-            return new JQA2RD(config);
+            if(languages.contains(ProgrammingLanguage.JAVA)) {
+                return new JQA2RD(config, languages);
+            } else {
+                return new C2RD(config, languages);
+            }
         } else {
-            return new JQA2City(config);
+            return new JQA2City(config, languages);
         }
     }
 

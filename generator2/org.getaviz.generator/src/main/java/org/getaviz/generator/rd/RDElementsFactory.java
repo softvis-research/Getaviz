@@ -47,4 +47,25 @@ public class RDElementsFactory {
             }
         }
     }
+
+    public RDElement createFromFunction(Record result, double height, double ringWidthAD,
+                                        double transparency, double minArea, String color) {
+        long id = result.get("node").asNode().id();
+        long typeID = result.get("tID").asLong();
+        if(methodDisks) {
+            return new SubDisk(id, typeID, ringWidthAD, height, transparency, color);
+        } else {
+            return new DiskSegment(id, typeID, height, transparency, minArea, color, result.get("lineCount").asInt(0));
+        }
+    }
+
+    public RDElement createFromVariable(Record result, double height, double ringWidthAD, double transparency, String color) {
+        long id = result.get("node").asNode().id();
+        long typeID = result.get("tID").asLong();
+        if (dataDisks) {
+            return new SubDisk(id, typeID, ringWidthAD, height, transparency, color);
+        } else {
+            return new DiskSegment(id, typeID, height, transparency, color);
+        }
+    }
 }

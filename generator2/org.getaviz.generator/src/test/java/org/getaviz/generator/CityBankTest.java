@@ -2,15 +2,14 @@ package org.getaviz.generator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.Step;
-import org.getaviz.generator.StepFactory;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
+
+import java.util.Collections;
 
 class CityBankTest {
 
@@ -23,7 +22,7 @@ class CityBankTest {
 		mockup.loadProperties("CityBankTest.properties");
 		connector = mockup.getConnector();
 		SettingsConfiguration config = SettingsConfiguration.getInstance();
-		StepFactory factory = new StepFactory(config);
+		StepFactory factory = new StepFactory(config, Collections.singletonList(ProgrammingLanguage.JAVA));
 		Step s2m = factory.createSteps2m();
 		Step m2m = factory.createStepm2m();
 		Step m2t = factory.createStepm2t();

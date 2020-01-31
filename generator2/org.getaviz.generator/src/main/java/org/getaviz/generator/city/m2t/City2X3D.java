@@ -25,6 +25,8 @@ public class City2X3D implements Step {
 	private Log log = LogFactory.getLog(this.getClass());
 	private X3D outputFormat;
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
+	private SettingsConfiguration.OutputFormat format;
+
 
 	public City2X3D(SettingsConfiguration config) {
 		this.buildingType = config.getBuildingType();
@@ -34,6 +36,8 @@ public class City2X3D implements Step {
 		this.panelSeparatorHeight = config.getPanelSeparatorHeight();
 		this.colorAsPercentage = config.getCityColor("black").toString();
 		this.outputFormat = new X3D(config);
+		this.format = config.getOutputFormat();
+
 	}
 
 	public void run() {
@@ -66,6 +70,11 @@ public class City2X3D implements Step {
 				}
 		}
 		log.info("CityOutput finished");
+	}
+
+	@Override
+	public boolean checkRequirements() {
+		return format.equals(SettingsConfiguration.OutputFormat.X3D);
 	}
 
 	private String toX3DModel() {

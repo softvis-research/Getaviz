@@ -44,13 +44,7 @@ function initializeApplication(metaDataJson){
 	}
 }
 
-
-
-
-
-
 var application = (function() {
-	
 
 	var controllerFileFolder = "scripts/";
 	
@@ -140,7 +134,8 @@ var application = (function() {
 		} catch(err) {
 			events.log.error.publish({ text: err.message });
 		}
-		
+
+		macroExplorerController.sendInitialEvent();
 	}
 		
 	

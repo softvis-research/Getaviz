@@ -19,11 +19,18 @@ public class RD2AFrame implements Step {
 	private double ringWidth;
 	private String outputPath;
 	private AFrame outputFormat;
+	private SettingsConfiguration.OutputFormat format;
 
 	public RD2AFrame(SettingsConfiguration config) {
 		this.ringWidth = config.getRDRingWidth();
 		this.outputPath = config.getOutputPath();
 		this.outputFormat = new AFrame();
+		this.format = config.getOutputFormat();
+	}
+
+	@Override
+	public boolean checkRequirements() {
+		return format.equals(SettingsConfiguration.OutputFormat.AFrame);
 	}
 
 	public void run() {
@@ -32,7 +39,7 @@ public class RD2AFrame implements Step {
 		String fileName = "model.html";
 		try {
 			fw = new FileWriter(outputPath+ fileName);
-			fw.write(outputFormat.head() + toX3DOMRD() + outputFormat.tail());
+			fw.write(outputFormat.head() + body() + outputFormat.tail());
 		} catch (IOException e) {
 			log.error("Could not create file");
 		} finally {
@@ -46,10 +53,20 @@ public class RD2AFrame implements Step {
 		log.info("RD2AFrame has finished");
 	}
 
-	private String toX3DOMRD() {
+	private String body() {
 		StringBuilder elements = new StringBuilder();
+		try {
+			connector.executeRead(
+					"MATCH (element)<-[:VISUALIZES]-(d:MainDisk)-[:HAS]->(p:Position) RETURN d,p, element.hash ORDER BY element.hash")
+					.forEachRemaining((result) -> {
+						log.info("oho");
+						elements.append(toDisk(result.get("d").asNode(), result.get("p").asNode()));
+					});
+		} catch (Exception e) {
+			log.error(e);
+		}
 		connector.executeRead(
-				"MATCH (element)<-[:VISUALIZES]-(d:MainDisk)-[:HAS]->(p:Position) RETURN d,p, element.hash ORDER BY element.hash")
+				"MATCH (element)<-[:VISUALIZES]-(d:SubDisk)-[:HAS]->(p:Position) RETURN d,p, element.hash ORDER BY element.hash")
 				.forEachRemaining((result) -> {
 					elements.append(toDisk(result.get("d").asNode(), result.get("p").asNode()));
 				});
@@ -62,8 +79,10 @@ public class RD2AFrame implements Step {
 	}
 
 	private String toDisk(Node disk, Node position) {
-		double radius = disk.get("radius").asDouble();
+		double radius = disk.get("radius").asDouble(0);
+		log.info("abc");
 		Node entity = connector.getVisualizedEntity(disk.id());
+		log.info("def");
 		ArrayList<Node> segments = new ArrayList<>();
 		connector.executeRead("MATCH (n)-[:CONTAINS]->(ds:DiskSegment)-[:VISUALIZES]->(element) WHERE ID(n) = "
 				+ disk.id() + " RETURN ds, element.hash ORDER BY element.hash").forEachRemaining((result) -> {
@@ -92,7 +111,7 @@ public class RD2AFrame implements Step {
 			builder.append("</a-circle>");
 			builder.append("\n");
 		} else {
-			builder.append("<a-ring id=\"" + entity.get("hash").asString() + "\"");
+			builder.append("<a-ring id=\"" + entity.get("hash").asString("NOHASH") + "\"");
 			builder.append("\n");
 			builder.append("\t position=\"" + position.get("x") + " ");
 			builder.append(position.get("y") + " ");
@@ -126,7 +145,7 @@ public class RD2AFrame implements Step {
 		for (final Node segment : segments) {
 			Node entity = connector.getVisualizedEntity(segment.id());
 			if (segment.get("innerRadius").asDouble() == 0) {
-				builder.append("<a-circle id=\"" + entity.get("hash").asString() + "\"");
+				builder.append("<a-circle id=\"" + entity.get("hash").asString("NOHAHS") + "\"");
 				builder.append("\n");
 				builder.append("\t radius=\"" + segment.get("outerRadius") + "\" ");
 				builder.append("\n");
@@ -145,7 +164,7 @@ public class RD2AFrame implements Step {
 				builder.append("</a-circle>");
 				builder.append("\n");
 			} else {
-				builder.append("<a-ring id=\"" + entity.get("hash").asString() + "\"");
+				builder.append("<a-ring id=\"" + entity.get("hash").asString("NOHASH") + "\"");
 				builder.append("\n");
 				builder.append("\t radius-inner=\"" + segment.get("innerRadius") + "\"");
 				builder.append("\n");

@@ -1,8 +1,7 @@
-package org.getaviz.generator.jqa;
+package org.getaviz.generator.extract;
 
-import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.jqa.ScanStep;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -11,39 +10,37 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.kernel.configuration.BoltConnector;
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
-class ScanStepTest {
+class ScanJarTest {
 
     private static DatabaseConnector connector;
-    private static String pathJqassistant = "";
     private static GraphDatabaseService graphDb;
+    private static String pathJQAssistant = ""; // replace with local path to jQAssistant
 
     @BeforeAll
     static void setup() {
-        assumeFalse(pathJqassistant.equals(""), "Correct path to jQAssistant needed");
-        String directory = "./test/databases/ScanStepTest.db";
+        checkRequirements();
+        initializeDatabase();
+        scanArtifact();
+    }
+
+    private static void checkRequirements() {
+        assumeFalse(pathJQAssistant.equals(""), "Correct path to jQAssistant needed");
+    }
+
+    private static void initializeDatabase() {
+        String directory = "./test/databases/ScanJarTest.db";
         BoltConnector bolt = new BoltConnector("0");
-        loadProperties("ScanStepTest.properties");
         graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(directory))
                 .setConfig(bolt.type, "BOLT").setConfig(bolt.enabled, "true")
                 .setConfig(bolt.listen_address, "localhost:7689").newGraphDatabase();
         registerShutdownHook(graphDb);
         connector = DatabaseConnector.getInstance("bolt://localhost:7689");
-        SettingsConfiguration config = SettingsConfiguration.getInstance();
-        ScanStep scanStep = new ScanStep(config);
-        scanStep.setPathJqassisent(pathJqassistant);
-        scanStep.run();
-    }
-
-    @AfterAll
-    static void teardown() {
-        if(graphDb != null) {
-            graphDb.shutdown();
-        }
     }
 
     private static void registerShutdownHook(final GraphDatabaseService graphDb) {
@@ -53,15 +50,11 @@ class ScanStepTest {
         Runtime.getRuntime().addShutdownHook(new Thread(graphDb::shutdown));
     }
 
-    private static void loadProperties(String resourcePath) {
-        ClassLoader classLoader = ScanStepTest.class.getClassLoader();
-        String path = classLoader.getResource(resourcePath).getPath();
-        try {
-            path = URLDecoder.decode(path, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        SettingsConfiguration.getInstance(path);
+    private static void scanArtifact() {
+        String inputFiles = "https://github.com/softvis-research/Bank/releases/download/test/bank-1.0.0-SNAPSHOT.jar";
+        ScanStep scanStep = new ScanStep(inputFiles, false);
+        scanStep.setPathJQAssistant(pathJQAssistant);
+        scanStep.run();
     }
 
     @Test
@@ -84,5 +77,19 @@ class ScanStepTest {
         Record result = connector.executeRead("MATCH (method:Method) RETURN count(method) AS result").single();
         int numberOfMethods = result.get("result").asInt();
         assertEquals(42, numberOfMethods);
+    }
+
+    @Test
+    void detectC() {
+        Importer importer = new Importer("");
+        List<ProgrammingLanguage> languages = importer.getImportedProgrammingLanguages();
+        assertTrue(languages.contains(ProgrammingLanguage.JAVA));
+    }
+
+    @AfterAll
+    static void teardown() {
+        if(graphDb != null) {
+            graphDb.shutdown();
+        }
     }
 }

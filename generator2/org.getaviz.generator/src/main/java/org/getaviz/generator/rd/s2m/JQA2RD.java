@@ -1,5 +1,6 @@
 package org.getaviz.generator.rd.s2m;
 
+import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 import org.apache.commons.logging.Log;
@@ -7,6 +8,8 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.rd.*;
 import org.neo4j.driver.v1.StatementResult;
+
+import java.util.List;
 
 public class JQA2RD implements Step {
 
@@ -28,8 +31,9 @@ public class JQA2RD implements Step {
 	private String classColor;
 	private String methodColor;
 	private String dataColor;
+	private List<ProgrammingLanguage> languages;
 
-	public JQA2RD(SettingsConfiguration config) {
+	public JQA2RD(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
 		this.methodTypeMode = config.isMethodTypeMode();
 		this.methodDisks = config.isMethodDisks();
 		this.dataDisks = config.isDataDisks();
@@ -44,6 +48,12 @@ public class JQA2RD implements Step {
 		this.classColor = config.getClassColor();
 		this.methodColor = config.getRDMethodColor();
 		this.dataColor = config.getRDDataColor();
+		this.languages = languages;
+	}
+
+	@Override
+	public boolean checkRequirements() {
+		return languages.contains(ProgrammingLanguage.JAVA);
 	}
 
 	public void run() {

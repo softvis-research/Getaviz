@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
+import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.Step;
 import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.SettingsConfiguration;
@@ -21,9 +22,11 @@ public class JQA2JSON implements Step {
 	private SettingsConfiguration config;
 	private Log log = LogFactory.getLog(this.getClass());
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
+	private List<ProgrammingLanguage> languages;
 
-	public JQA2JSON(SettingsConfiguration config) {
+	public JQA2JSON(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
 		this.config = config;
+		this.languages = languages;
 	}
 
 	public void run() {
@@ -48,6 +51,11 @@ public class JQA2JSON implements Step {
 				}
 		}
 		log.info("JQA2JSON has finished.");
+	}
+
+	@Override
+	public boolean checkRequirements() {
+		return languages.contains(ProgrammingLanguage.JAVA);
 	}
 
 	private String toJSON(List<Node> list) {

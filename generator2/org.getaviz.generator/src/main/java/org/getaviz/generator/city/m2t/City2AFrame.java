@@ -25,6 +25,8 @@ public class City2AFrame implements Step {
 	private String color;
 	private boolean showBuildingBase;
 	private AFrame outputFormat;
+	private SettingsConfiguration.OutputFormat format;
+
 
 	public City2AFrame(SettingsConfiguration config) {
 		this.buildingType = config.getBuildingType();
@@ -35,6 +37,7 @@ public class City2AFrame implements Step {
 		this.color = config.getCityColor("black");
 		this.showBuildingBase = config.isShowBuildingBase();
 		this.outputFormat = new AFrame();
+		this.format = config.getOutputFormat();
 	}
 
 	public void run() {
@@ -56,6 +59,11 @@ public class City2AFrame implements Step {
 				}
 		}
 		log.info("City2AFrame has finished");
+	}
+
+	@Override
+	public boolean checkRequirements() {
+		return format.equals(SettingsConfiguration.OutputFormat.AFrame);
 	}
 
 	private String toAFrameModel() {

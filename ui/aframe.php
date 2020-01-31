@@ -11,22 +11,22 @@
         $srcDir = $_GET["srcDir"];
     }
 
-	$setupUrl = "setups/default.js";
+	$setupUrl = "setups/web/c.js";
 	if (isset($_GET["setup"])) {
 		$setupUrl = "setups/" . $_GET["setup"] . ".js";
 	}
 
-	$modelUrl = "data/RD bank/model";
+	$modelUrl = "data/busybox/model";
 	if (isset($_GET["model"])) {
 		$modelUrl = $srcDir . "/" . $_GET["model"] ."/model";
 	}
 
     $metaDataJsonUrl = $modelUrl . "/metaData.json";
 
-    if (isset($_GET["aframe"]) && $_GET["aframe"] == 'true') {
-        $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v1.0.0.min.js\"></script>";
+
+        $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v0.9.1.min.js\"></script>";
         $loadVisualizationSpecificScripts = <<<'EOT'
-        <script src="node_modules/aframe/dist/aframe-v1.0.0.min.js"></script>
+        <script src="node_modules/aframe/dist/aframe-v0.9.1.min.js"></script>
         <script type="text/javascript" src="scripts/AframeCanvasManipulator.js"></script>
         <script type="text/javascript" src="scripts/AframeActionController.js"></script>
 	    <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
@@ -44,42 +44,20 @@ EOT;
        </script>
 EOT;
 
-    } else {
-        $multipartX3dUrl = $modelUrl . "/multiPart.x3d";
-        $multipartJsonUrl = $modelUrl . "/multiPart.json";
-        $loadVisualizationSpecificScripts = <<<'EOT'
-        	<!--x3dom-->
-        <script type="text/javascript" src="node_modules/x3dom/x3dom.js"></script>
-        <link rel="stylesheet" href="node_modules/x3dom/x3dom.css" type="text/css"/>
-        <script type="text/javascript" src="scripts/CanvasManipulator.js"></script>
-        <script type="text/javascript" src="scripts/ActionController.js"></script>
-	    <script type="text/javascript" src="scripts/RelationConnector/RelationConnectorController.js"></script>
-	    <script type="text/javascript" src="scripts/CanvasHover/CanvasHoverController.js"></script>
-EOT;
-        $canvasId = "x3dom-x3dElement-canvas";
-        $visMode = "x3dom";
 
-        $canvas = <<<EOT
-        <x3d id="x3dElement" showConsole="true">
-			<scene id="scene">
-								
-				<Transform id="addedElements"></Transform>
-				
-				<MultiPart id="multiPart" mapDEFToID="true" url="$multipartX3dUrl" urlIDMap="$multipartJsonUrl"></MultiPart>							
 
-			</scene>
-		</x3d>
-EOT;
 
-    }
 ?>
 <script type="text/javascript">
     var modelUrl		 = "<?php echo $modelUrl; ?>";
+
     var multipartX3dUrl  = "<?php echo $multipartX3dUrl; ?>";
     var multipartJsonUrl = "<?php echo $multipartJsonUrl; ?>";
     var metaDataJsonUrl  = "<?php echo $metaDataJsonUrl; ?>";
+
     var canvasId = "<?php echo $canvasId; ?>";
     var visMode = "<?php echo $visMode; ?>";
+    const BACKEND = "<?php $backend = gethostbyname(backend ); echo $backend; ?>";
 </script>
 <html>
 	<title>Getaviz</title>
@@ -116,13 +94,9 @@ EOT;
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxnumberinput.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxform.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxvalidator.js"></script>
-    <script type="text/javascript" src="node_modules/prismjs/prism.js"></script>
-    <script type="text/javascript" src="node_modules/prismjs/components/prism-java.js"></script>
-    <script type="text/javascript" src="node_modules/prismjs/components/prism-c.js"></script>
 	
     <link rel="stylesheet" href="node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.base.css" type="text/css" />
     <link rel="stylesheet" href="node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.metro.css" type="text/css" />
-    
     <!-- ztree -->
     <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.core.min.js"></script>
     <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.exhide.min.js"></script>
@@ -144,7 +118,6 @@ EOT;
 	<script type="text/javascript" src="scripts/SourceCode/SourceCodeController.js"></script>
 	<script type="text/javascript" src="scripts/InteractionLogger/InteractionLogger.js"></script>
 	<script type="text/javascript" src="scripts/Email/EmailController.js"></script>
-    <script type="text/javascript" src="scripts/GenerationForm/GenerationFormController.js"></script>
 	<script type="text/javascript" src="scripts/Menu/MenuController.js"></script>
 	<script type="text/javascript" src="scripts/Legend/LegendController.js"></script>
     <script type="text/javascript" src="scripts/Systeminfo/SysteminfoController.js"></script>
@@ -153,7 +126,8 @@ EOT;
     <script type="text/javascript" src="scripts/PatternExplorer/PatternExplorerController.js"></script>
     <script type="text/javascript" src="scripts/VersionExplorer/VersionExplorerController.js"></script>
     <script type="text/javascript" src="scripts/IssueExplorer/IssueExplorerController.js"></script>
-	<script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script>
+        <script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script>
+
     
      <!-- filter -->
     <script type="text/javascript" src="scripts/Filter/Helpers/Constants.js"></script>

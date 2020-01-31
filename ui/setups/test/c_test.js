@@ -10,58 +10,63 @@
 			logInfoConsole		: false,
 			logActionConsole	: false,
 			logEventConsole		: false
-		},	
+		},		
 		
-		{	name:	"emailController",
-		
+		{	name: 	"emailController",
+			
 			createHeadSection: false
-		},	
-		
-		{	name:	"generationFormController",
 		},
+        
+        {
+            name: 'canvasFilterController'
+        },
 
-		{	name: 	"canvasHoverController",			
+        {	name: 	"canvasHoverController",
+            hoverColor: "orange"
 		},	
 
 		{	name: 	"canvasMarkController",
+            markingColor: "red"
 		},	
 		
-		{	name: 	"canvasSelectController" 
-		},	
-
-		{	name: 	"canvasFilterController" 
+		{	name: 	"canvasSelectController",
+            color: "orange"
 		},
-
 		{ 	name: 	"canvasFlyToController" 
 		},
+	
 		{	name: 	"searchController" 
 		},
 
-		{	name: 	"packageExplorerController",
+        {	name: 	"packageExplorerController",
+        
+            elementsSelectable: false
 		},
-		{	name: 	"sourceCodeController",
-            url:    "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
-		},
-        { 	name: 	"relationConnectorController",
-            fixPositionY : false,
-            showInnerRelations : true,
-            sourceStartAtParentBorder : true,
-            targetEndAtParentBorder : true,
-            sourceStartAtBorder: false,
-            targetEndAtBorder: false,
-            createEndpoints : false
+        {	name: 	"sourceCodeController",
+            fileType : "c"
         },
+        {	name:	"macroExplorerController",
+            //should the filtered elements be "removed" or just "transparent"?
+            filterMode: "transparent"
+		},
+		{ 	name: 	"relationConnectorController",		
+						
+			fixPositionZ : 1,
+			showInnerRelations : true,
+			elementShape : "circle",					
+			sourceStartAtParentBorder : true,
+			targetEndAtParentBorder : false,
+			createEndpoints: true,
+		},
+
 		//{ 	name: 	"relationTransparencyController",
 		//},
 			
-		{ 	name: 	"relationHighlightController" 
+		{ 	name: 	"relationHighlightController",
+           color: "#000066"
 		},
         {
             name:   "systeminfoController",
-            system: "Bank",
-            link: "https://github.com/softvis-research/Bank",
-            noc: true,
-            loc: 192
         },
 		{	name: 	"menuController",
 			menuMapping: [
@@ -111,21 +116,32 @@
 
 				{	
 					title:		"Visualizations",
-                                        subMenu: "true",
+					subMenu:	true,
 					items:		[
 						{
 							title: 	"City Original",
 							link: 	true,
-							url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
+							url:	"index.php?setup=web/City freemind&model=City%20original%20freemind"
+						},
+						{
+							title: 	"City Bricks",
+							link: 	true,
+							url:	"index.php?setup=web/City freemind&model=City%20bricks%20freemind"
+						},						
+						{
+							title: 	"City Floors",
+							link: 	true,
+							url:	"index.php?setup=web/City freemind&model=City%20floor%20freemind"
 						},
 						{
 							title: 	"Recursive Disk",
 							link: 	true,
-							url:	"index.php?setup=web/RD bank&model=RD%20bank"
+							url:	"index.php?setup=web/RD freemind&model=RD%20freemind"
 						},
                         {
-                            title: 	"New Visualization",
-                            event:	"generationFormController.openSettingsPopUp"
+                            title: 	"Recursive Disk 3D",
+                            link: 	true,
+                            url:	"index.php?setup=web/RD reek&model=RD%203D%20reek"
                         },
 					]
 				},
@@ -135,12 +151,12 @@
 					subMenu:	true,
 					items:		[
 						{
-							title: 	"Research Group",
+							title: 	"University Leipzig",
 							link: 	true,
-							url:	"http://home.uni-leipzig.de/svis/"							
+							url:	"https://www.wifa.uni-leipzig.de/en/information-systems-institute/se/research/softwarevisualization-in-3d-and-vr.html"							
 						},
 						{
-							title: 		"Feedback",
+							title: 		"Feedback!",
 							event: 		"emailController.openMailPopUp",
 						},
 						{
@@ -164,17 +180,26 @@
                             url:	"http://home.uni-leipzig.de/svis/privacy-policy/"
                         }
 					]
-				},			
+				},				
 			]
 		},
         {
             name: "legendController",
             entries: [{
-                name: "Package",
+                name: "Translation unit",
                 icon: "grayCircle"
             }, {
-                name: "Type",
+                name: "Struct/Union/Enum",
                 icon: "purpleCircle",
+            }, {
+                name: "Function",
+                icon: "lightBlueCircle",
+            }, {
+                name: "Variable/Enum constant",
+                icon: "yellowCircle",
+            }, {
+                name: "Feature Location",
+                icon: "redCircle"
             }, {
                 name: "Navigation",
                 icon: "navigation",
@@ -182,6 +207,9 @@
                     {
                         name: "Rotate",
                         icon: "leftMouseButton"
+                    }, {
+                        name: "Center",
+                        icon: "doubleClick"
                     }, {
                         name: "Move",
                         icon: "midMouseButton"
@@ -226,7 +254,6 @@
                         {name: "menuController"},
                         //{name: "searchController"},
                         {name: "emailController"},
-						{name: "generationFormController"}	
                     ],
                 },
                 second: {
@@ -248,10 +275,10 @@
                                     size: "33%",
                                     expanders: [
                                         {
-                                           name: "filterExplorer",
-                                            title: "Filter",
+                                            name: "macroExplorer",
+                                            title: "Feature Explorer",
                                             controllers: [
-                                               // {name: "filterController"}
+                                                {name: "macroExplorerController"}
                                             ],
                                         }
                                     ]
@@ -323,7 +350,7 @@
                                         {name: "canvasFilterController"},
                                         {name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},
-                                       // {name: "relationTransparencyController"},
+                                        {name: "relationTransparencyController"},
                                         {name: "relationHighlightController"},
                                     ],
                                 },
@@ -369,5 +396,5 @@
                 }
             }
         }
-    ]
+	]
 };

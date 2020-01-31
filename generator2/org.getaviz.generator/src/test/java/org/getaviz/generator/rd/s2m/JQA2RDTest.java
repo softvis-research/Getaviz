@@ -1,5 +1,6 @@
 package org.getaviz.generator.rd.s2m;
 
+import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
@@ -7,6 +8,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
+
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -20,7 +23,7 @@ class JQA2RDTest {
         mockup.setupDatabase("./test/databases/JQA2RDTest.db");
         connector = mockup.getConnector();
         SettingsConfiguration config = SettingsConfiguration.getInstance();
-        JQA2RD testInstance = new JQA2RD(config);
+        JQA2RD testInstance = new JQA2RD(config,  Collections.singletonList(ProgrammingLanguage.JAVA));
         testInstance.run();
     }
 
