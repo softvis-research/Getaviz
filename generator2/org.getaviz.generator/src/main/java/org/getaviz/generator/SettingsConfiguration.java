@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
+import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
@@ -75,13 +76,13 @@ public class SettingsConfiguration {
 		if(fileArray.length == 0) {
 			throw new RuntimeException("There is no specified uri to a jar or war file. Check if in the settings.properties file the field input.files is set to one or more existing uris.");
 		}
-		String files = "";
+		StringBuilder files = new StringBuilder();
 		
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		for(int i = 0; i < fileArray.length; i++) {
 			String path = fileArray[i];
-			if(!path.startsWith("http")) {
-				path = "file:" + classLoader.getResource(path).getPath();
+			if(!path.startsWith("http") && !path.startsWith("https")) {
+				path = "file:" + Objects.requireNonNull(classLoader.getResource(path)).getPath();
 				try {
 					path = URLDecoder.decode(path, "UTF-8");
 				} catch (UnsupportedEncodingException e) {
@@ -89,12 +90,12 @@ public class SettingsConfiguration {
 				}
 				//path = path.replace(" ", "\\ ");
 			}
-			files += path;
+			files.append(path);
 			if(i < fileArray.length - 1) {
-				files += ",";
+				files.append(",");
 			}
 		}
-		return files;
+		return files.toString();
 	}
 	
 	public Metaphor getMetaphor() {
