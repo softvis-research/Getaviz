@@ -26,7 +26,7 @@ public class CityIT {
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("POST");
 		Map<String, String> parameters = new HashMap<>();
-		parameters.put("input.files", "http://central.maven.org/maven2/com/android/tools/build/gradle/0.1/gradle-0.1.jar");
+		parameters.put("input.files", "https://repo1.maven.org/maven2/com/android/tools/build/gradle/0.1/gradle-0.1.jar");
 		parameters.put("metaphor", "city");
 		 
 		con.setDoOutput(true);
