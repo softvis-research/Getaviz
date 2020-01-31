@@ -13,7 +13,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
-
  
 public class CityIT {
 	
@@ -38,7 +37,7 @@ public class CityIT {
 	}
 	
 	@AfterAll
-	static void close() throws Exception {
+	static void close() {
 		connector.close();
 	}
 

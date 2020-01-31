@@ -1,11 +1,12 @@
 package org.getaviz.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.getaviz.tests.helper.DatabaseTestConnector;
 import org.getaviz.tests.helper.ParameterStringBuilder;
 import org.junit.jupiter.api.AfterAll;
