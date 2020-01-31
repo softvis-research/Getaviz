@@ -96,16 +96,6 @@ public class SettingsConfiguration {
 		}
 		return files;
 	}
-
-	public ProgrammingLanguage getProgrammingLanguage() {
-		DatabaseConnector connector = DatabaseConnector.getInstance();
-		StatementResult result = connector.executeRead("MATCH (n:C) RETURN n LIMIT 2");
-		if(result.hasNext()) {
-			return ProgrammingLanguage.C;
-		} else {
-			return ProgrammingLanguage.JAVA;
-		}
-	}
 	
 	public Metaphor getMetaphor() {
 		String metaphor = config.getString("metaphor", "rd");
