@@ -18,7 +18,9 @@
 
             createHeadSection: false
         },
-
+        {
+            name:	"generationFormController",
+        },
         {
             name: 'canvasFilterController'
         },
@@ -122,7 +124,26 @@
                         },
                     ]
                 },
-
+{	
+					title:		"Visualizations",
+					subMenu:	true,
+					items:		[
+						{
+							title: 	"City Original",
+							link: 	true,
+							url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
+						},
+						{
+							title: 	"Recursive Disk",
+							link: 	true,
+							url:	"index.php?setup=web/RD bank&model=RD%20bank"
+						},
+                        {
+                            title: 	"New Visualization",
+                            event:	"generationFormController.openSettingsPopUp"
+                        },
+					]
+				},
 
                 {
                     title: "About",
@@ -343,7 +364,7 @@
                                                 {name: "canvasFlyToController"},
                                                 {name: "relationConnectorController"},
 //                                         {name: "relationTransparencyController"},
-                                                {name: "relationHighlightController"},
+                                                {name: "relationHighlightController"},                                                                                                        {name: "generationFormController"}
                                             ],
                                         },
                                         second: {
