@@ -23,7 +23,7 @@ services:
         build: ui/
         restart: always
         volumes:
-            - ./ui:/var/www/html/ui # uncomment only for ui development
+            #- ./ui:/var/www/html/ui # uncomment only for ui development
             - data-gen:/var/www/html/ui/data-gen
         ports:
             - "8082:80"
