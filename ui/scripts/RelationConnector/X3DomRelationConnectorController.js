@@ -136,6 +136,7 @@ var relationConnectorController = function(){
 				relatedEntities = sourceEntity.accessedBy;
 				break;
 			case "Method":
+			case "Function":
 				relatedEntities = sourceEntity.accesses;
 				relatedEntities = relatedEntities.concat( sourceEntity.calls );
 				relatedEntities = relatedEntities.concat( sourceEntity.calledBy );			

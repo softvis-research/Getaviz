@@ -80,9 +80,8 @@ var sourceCodeController = (function(){
                     //codeField
                     let codeValueDiv = document.createElement("DIV");
                     codeValueDiv.id = "codeValueDiv";
-                    
                     let codePre = document.createElement("PRE");
-                    codePre.className = "line-numbers language-java";
+                    codePre.className = "line-numbers language-"+controllerConfig.fileType;
                     codePre.id = "codePre";
                     codePre.style = "overflow:auto;";
 
@@ -122,7 +121,11 @@ var sourceCodeController = (function(){
 
     function displayCodeChild(){        
         if(codeWindow) {
-            codeWindow.displayCode(lastObject.file, lastObject.classEntity, lastObject.entity);
+            let file = lastObject.file;
+             if(!file.startsWith("http")) {
+                    file = "../" + file;
+                }
+            codeWindow.displayCode(file, lastObject.classEntity, lastObject.entity, controllerConfig.fileType);
         }
     }
 
@@ -130,39 +133,46 @@ var sourceCodeController = (function(){
 		
         const entity = applicationEvent.entities[0];
 
-       	if (entity.type === "Namespace"){
-			// Package 
-			resetSourceCode();
-			return;
-		}
-		// classEntity = Klasse, in der sich das selektierte Element befindet
-		// inner Klassen werden auf Hauptklasse aufgeloest
-		let classEntity = entity;
-		while( classEntity.type !== "Class" ){
-			classEntity = classEntity.belongsTo;
-		}		
-		
-		// ersetze . durch / und fuege .java an -> file
-        const javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;
-
-        displayCode(javaCodeFile, classEntity, entity);    
+        if(controllerConfig.fileType === "java"){
+            if (entity.type === "Namespace"){
+                // Package 
+                resetSourceCode();
+                return;
+            }
+            // classEntity = Klasse, in der sich das selektierte Element befindet
+            // inner Klassen werden auf Hauptklasse aufgeloest
+            let classEntity = entity;
+            while( classEntity.type !== "Class" ){
+                classEntity = classEntity.belongsTo;
+            }		
+            
+            // ersetze . durch / und fuege .java an -> file
+            const javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;
+    
+            displayCode(javaCodeFile, classEntity, entity);
+        } else if(controllerConfig.fileType === "c"){
+            const cCodeFile = entity.filename;
+            displayCode(cCodeFile);
+        }
+       	          
     }
 
     function displayCode(file, classEntity, entity){
         if (controllerConfig.url === "") {
-            file = "../../" + modelUrl + "/src/" + file;
+            file = "../../ui/" + modelUrl + "/src/" + file;
         } else {
             file = controllerConfig.url + file;
         }
        
        // fuer das Extrafenster
-       lastObject.file = file;       
+       lastObject.file = file;
+       lastObject.relativeFile = modelUrl + "/src"
        lastObject.classEntity = classEntity;
        lastObject.entity = entity;
        displayCodeChild();
 
-       codeHelperFunction.displayCode(file, classEntity, entity, publishOnEntitySelected);                
-    }  
+       codeHelperFunction.displayCode(file, classEntity, entity, publishOnEntitySelected, controllerConfig.fileType);                
+    }     
 
     function publishOnEntitySelected(entityId){
         const applicationEvent = {

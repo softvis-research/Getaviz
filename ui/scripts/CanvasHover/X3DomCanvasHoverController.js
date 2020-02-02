@@ -212,13 +212,21 @@ var canvasHoverController = (function() {
     }
 	
 	function getTooltipName(entity) {
-        if(entity.type === "Method") {
+        if(entity.type === "Method" || entity.type === "Function") {
 			return entity.type + ": " + entity.signature;
         }
         
 		if (entity.type === "Namespace") {
             return "Package: " + entity.name;
         }
+		
+		if(entity.type === "Variable"){
+			return entity.type + ": " + entity.displayText;
+		}
+		
+		if(entity.type === "TranslationUnit"){
+			return "Translation unit: " + entity.name;
+		}
         
         return entity.type + ": " + entity.name;        
     }

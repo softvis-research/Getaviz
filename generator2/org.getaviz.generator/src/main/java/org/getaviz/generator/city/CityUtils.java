@@ -3,13 +3,10 @@ package org.getaviz.generator.city;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.SettingsConfiguration.OutputFormat;
 import org.getaviz.generator.city.m2m.BuildingSegmentComparator;
-import org.getaviz.generator.city.m2m.RGBColor;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
 
@@ -17,62 +14,21 @@ public class CityUtils {
 
 	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 	private static DatabaseConnector connector = DatabaseConnector.getInstance();
-	public static String getFamixClassString(final String className) {
-		String s = className.substring(0, 5) + "." + className.substring(5, className.length());
-		if (className.endsWith("Impl"))
-			s = s.substring(0, s.length() - 4);
-		return s;
-	}
-
-	/**
-	 * Creates the color gradient for the packages depending on your hierarchy
-	 * level.
-	 *
-	 * @param start
-	 *            RGBColor
-	 * @param end
-	 *            RGBColor
-	 * @param maxLevel
-	 *            int
-	 * @return color range
-	 */
-	public static RGBColor[] createPackageColorGradient(final RGBColor start, final RGBColor end, final int maxLevel) {
-		int steps = maxLevel - 1;
-		if (maxLevel == 1) {
-			steps++;
-		}
-		double r_step = (end.r() - start.r()) / steps;
-		double g_step = (end.g() - start.g()) / steps;
-		double b_step = (end.b() - start.b()) / steps;
-
-		RGBColor[] colorRange = new RGBColor[maxLevel];
-		double newR, newG, newB;
-		for (int i = 0; i < maxLevel; ++i) {
-			newR = start.r() + i * r_step;
-			newG = start.g() + i * g_step;
-			newB = start.b() + i * b_step;
-
-			colorRange[i] = new RGBColor(newR, newG, newB);
-		}
-
-		return colorRange;
-	}
 
 	public static String setBuildingSegmentColor(Node relatedEntity) {
 		String color = "";
 		String visibility = relatedEntity.get("visibility").asString("");
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			switch (config.getScheme()) {
+		switch (config.getScheme()) {
 			case VISIBILITY:
 				if (visibility.equals("public")) {
-					color = config.getCityColorHex("dark_green");
+					color = config.getCityColor("dark_green");
 				} else if (visibility.equals("protected")) {
-					color = config.getCityColorHex("yellow");
+					color = config.getCityColor("yellow");
 				} else if (visibility.equals("private")) {
-					color = config.getCityColorHex("red");
+					color = config.getCityColor("red");
 				} else {
 					// Package visibility or default
-					color = config.getCityColorHex("blue");
+					color = config.getCityColor("blue");
 				}
 				break;
 			case TYPES:
@@ -81,38 +37,13 @@ public class CityUtils {
 				} else if(relatedEntity.hasLabel(Labels.Method.name())) {
 					color = setMethodColor(relatedEntity);
 				} else {
-					color =  config.getCityColorHex("blue");
-				}
-			default:
-				color = config.getCityColorHex("blue");
-			}
-		} else {
-			switch (config.getScheme()) {
-			case VISIBILITY:
-				if (visibility.equals("public")) {
-					color = config.getCityColorAsPercentage("dark_green");
-				} else if (visibility.equals("protected")) {
-					color = config.getCityColorAsPercentage("yellow");
-				} else if (visibility.equals("private")) {
-					color = config.getCityColorAsPercentage("red");
-				} else {
-					// Package visibility or default
-					color = config.getCityColorAsPercentage("blue");
-				}
-				break;
-			case TYPES:
-				if(relatedEntity.hasLabel(Labels.Field.name())) {
-					color = setAttributeColor(relatedEntity.id());
-				} else if(relatedEntity.hasLabel(Labels.Method.name())) {
-					color = setMethodColor(relatedEntity);
-				} else {
-					color = config.getCityColorAsPercentage("blue");
+					color =  config.getCityColor("blue");
 				}
 				break;
 			default:
-				color = config.getCityColorAsPercentage("blue");
-			}
+				color = config.getCityColor("blue");
 		}
+
 		return color;
 	}	
 
@@ -123,18 +54,10 @@ public class CityUtils {
 		if(result.hasNext()) {
 			isPrimitive = true;
 		}
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			if (isPrimitive) {
-				color = config.getCityColorHex("pink");
-			} else { // complex type
-				color = config.getCityColorHex("aqua");
-			}
-		} else {
-			if (isPrimitive) {
-				color = config.getCityColorAsPercentage("pink");
-			} else { // complex type
-				color = config.getCityColorAsPercentage("aqua");
-			}
+		if (isPrimitive) {
+			color = config.getCityColor("pink");
+		} else { // complex type
+			color = config.getCityColor("aqua");
 		}
 		return color;
 	}
@@ -144,49 +67,28 @@ public class CityUtils {
 		boolean isStatic = relatedEntity.get("static").asBoolean(false);
 		boolean isAbstract = relatedEntity.get("abstract").asBoolean(false);
 	
-		if (config.getOutputFormat() == OutputFormat.AFrame) {
-			// if (bs.getMethodKind().equals("constructor")) {
-			if (relatedEntity.hasLabel(Labels.Constructor.name())) {
-				color = config.getCityColorHex("red");
-			} else if (relatedEntity.hasLabel(Labels.Getter.name())) {
-				color = config.getCityColorHex("light_green");
-			} else if (relatedEntity.hasLabel(Labels.Setter.name())) {
-				color = config.getCityColorHex("dark_green");
-			} else if (isStatic) {
-				color = config.getCityColorHex("yellow");
-			} else if (isAbstract) {
-				color = config.getCityColorHex("orange");
-			} else {
-				// Default
-				color = config.getCityColorHex("violet");
-			}
+		if (relatedEntity.hasLabel(Labels.Constructor.name())) {
+			color = config.getCityColor("red");
+		} else if (relatedEntity.hasLabel(Labels.Getter.name())) {
+			color = config.getCityColor("light_green");
+		} else if (relatedEntity.hasLabel(Labels.Setter.name())) {
+			color = config.getCityColor("dark_green");
+		} else if (isStatic) {
+			color = config.getCityColor("yellow");
+		} else if (isAbstract) {
+			color = config.getCityColor("orange");
 		} else {
-			// if (bs.getMethodKind().equals("constructor")) {
-			if (relatedEntity.hasLabel(Labels.Constructor.name())) {
-				color = config.getCityColorAsPercentage("red");
-			} else if (relatedEntity.hasLabel(Labels.Getter.name())) {
-				color = config.getCityColorAsPercentage("light_green");
-			} else if (relatedEntity.hasLabel(Labels.Setter.name())) {
-				color = config.getCityColorAsPercentage("dark_green");
-			} else if (isStatic) {
-				color = config.getCityColorAsPercentage("yellow");
-			} else if (isAbstract) {
-				color = config.getCityColorAsPercentage("orange");
-			} else {
-				// Default
-				color = config.getCityColorAsPercentage("violet");
-			}
+			// Default
+			color = config.getCityColor("violet");
 		}
 		return color;
 	}
 
 	/**
-	 * Sorting the {@link BuildingSegment}s with help of
-	 * {@link BuildingSegmentComparator} based on sorting settings in
-	 * {@link CitySettings}.
+	 * Sorting the BuildingSegments with help of
+	 * {@link BuildingSegmentComparator} based on sorting settings
 	 * 
-	 * @param bsList
-	 *            BuildingSegments which are to be sorted.
+	 * @param segments BuildingSegments which are to be sorted.
 	 *
 	 */
 	

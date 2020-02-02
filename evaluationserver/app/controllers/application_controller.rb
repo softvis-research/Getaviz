@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   CREDENTIALS = {
     :name => 'admin',
-    :password => Rails.application.credentials.admin_password
+    :password => Rails.application.credentials.admin_password || 'admin'
 
   }
 

@@ -1,32 +1,53 @@
 package org.getaviz.generator.city.m2t;
 
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.database.Labels;
-import org.getaviz.generator.SettingsConfiguration.BuildingType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.Step;
+import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.database.Labels;
+import org.getaviz.generator.SettingsConfiguration.BuildingType;
 import java.io.IOException;
 import java.io.FileWriter;
-import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.output.AFrame;
 import org.neo4j.driver.v1.types.Node;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.getaviz.generator.OutputFormatHelper;
-
-public class City2AFrame {
-	private SettingsConfiguration config = SettingsConfiguration.getInstance();
+public class City2AFrame implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
 	private Log log = LogFactory.getLog(this.getClass());
+	private BuildingType buildingType;
+	private String outputPath;
+	private String buildingTypeAsString;
+	private boolean showAttributesAsCylinders;
+	private double panelSeparatorHeight;
+	private String color;
+	private boolean showBuildingBase;
+	private AFrame outputFormat;
+	private SettingsConfiguration.OutputFormat format;
 
-	public City2AFrame() {
+
+	public City2AFrame(SettingsConfiguration config) {
+		this.buildingType = config.getBuildingType();
+		this.outputPath = config.getOutputPath();
+		this.buildingTypeAsString = config.getBuildingTypeAsString();
+		this.showAttributesAsCylinders = config.isShowAttributesAsCylinders();
+		this.panelSeparatorHeight = config.getPanelSeparatorHeight();
+		this.color = config.getCityColor("black");
+		this.showBuildingBase = config.isShowBuildingBase();
+		this.outputFormat = new AFrame();
+		this.format = config.getOutputFormat();
+	}
+
+	public void run() {
 		log.info("City2AFrame has started");
 		FileWriter fw = null;
 		String fileName = "model.html";
 
 		try {
-			fw = new FileWriter(config.getOutputPath() + fileName);
-			fw.write(OutputFormatHelper.AFrameHead() + toAFrameModel() + OutputFormatHelper.AFrameTail());
+			fw = new FileWriter(outputPath + fileName);
+			fw.write(outputFormat.head() + toAFrameModel() + outputFormat.tail());
 		} catch (IOException e) {
 			log.error("Could not create file");
 		} finally {
@@ -40,29 +61,34 @@ public class City2AFrame {
 		log.info("City2AFrame has finished");
 	}
 
+	@Override
+	public boolean checkRequirements() {
+		return format.equals(SettingsConfiguration.OutputFormat.AFrame);
+	}
+
 	private String toAFrameModel() {
 		StringBuilder districts = new StringBuilder();
 		StringBuilder buildings = new StringBuilder();
 		StringBuilder segments = new StringBuilder();
 		connector.executeRead(
 				"MATCH (n:Model)-[:CONTAINS*]->(d:District)-[:HAS]->(p:Position) WHERE n.building_type = \'"
-						+ config.getBuildingTypeAsString() + "\' RETURN d,p")
+						+ buildingTypeAsString + "\' RETURN d,p")
 				.forEachRemaining((record) -> {
 					districts.append(toDistrict(record.get("d").asNode(), record.get("p").asNode()));
 				});
-		if (config.getBuildingType() == BuildingType.CITY_ORIGINAL || config.isShowBuildingBase()) {
+		if (buildingType == BuildingType.CITY_ORIGINAL || showBuildingBase) {
 			connector.executeRead(
 					"MATCH (n:Model)-[:CONTAINS*]->(b:Building)-[:HAS]->(p:Position) WHERE n.building_type = \'"
-							+ config.getBuildingTypeAsString() + "\' RETURN b,p")
+							+ buildingTypeAsString + "\' RETURN b,p")
 					.forEachRemaining((record) -> {
 						buildings.append(toBuilding(record.get("b").asNode(), record.get("p").asNode()));
 					});
 		}
 
-		if (!(config.getBuildingType() == BuildingType.CITY_ORIGINAL)) {
+		if (!(buildingType == BuildingType.CITY_ORIGINAL)) {
 			connector.executeRead(
 					"MATCH (n:Model)-[:CONTAINS*]->(bs:BuildingSegment)-[:HAS]->(p:Position) WHERE n.building_type = \'"
-							+ config.getBuildingTypeAsString() + "\' RETURN bs,p")
+							+ buildingTypeAsString + "\' RETURN bs,p")
 					.forEachRemaining((record) -> {
 						Node segment = record.get("bs").asNode();
 						if (segment.hasLabel(Labels.Floor.name())) {
@@ -90,11 +116,7 @@ public class City2AFrame {
 		builder.append("\n");
 		builder.append("\t depth=\"" + district.get("length") + "\"");
 		builder.append("\n");
-		builder.append("\t color=\"" + district.get("color").asString() + "\"");
-		builder.append("\n");
-		builder.append("\t shader=\"flat\"");
-		builder.append("\n");
-		builder.append("\t flat-shading=\"true\">");
+		builder.append("\t color=\"" + district.get("color").asString() + "\">");
 		builder.append("\n");
 		builder.append("</a-box>");
 		builder.append("\n");
@@ -114,11 +136,7 @@ public class City2AFrame {
 		builder.append("\n");
 		builder.append("\t\t depth=\"" + building.get("length") + "\"");
 		builder.append("\n");
-		builder.append("\t\t color=\"" + building.get("color").asString() + "\"");
-		builder.append("\n");
-		builder.append("\t\t shader=\"flat\"");
-		builder.append("\n");
-		builder.append("\t\t flat-shading=\"true\">");
+		builder.append("\t\t color=\"" + building.get("color").asString() + "\">");
 		builder.append("\n");
 		builder.append("</a-box>");
 		builder.append("\n");
@@ -143,8 +161,8 @@ public class City2AFrame {
 		double height = segment.get("height").asDouble();
 		double length = segment.get("length").asDouble();
 		StringBuilder builder = new StringBuilder();
-		if (config.getBuildingType() == BuildingType.CITY_PANELS && entity.hasLabel(Labels.Field.name())
-				&& config.isShowAttributesAsCylinders()) {
+		if (buildingType == BuildingType.CITY_PANELS && entity.hasLabel(Labels.Field.name())
+				&& showAttributesAsCylinders) {
 			builder.append("<a-cylinder id=\"" + entity.get("hash").asString() + "\"");
 			builder.append("\n");
 			builder.append(buildPosition(position));
@@ -154,10 +172,6 @@ public class City2AFrame {
 			builder.append("\t height=\"" + "\" ");
 			builder.append("\n");
 			builder.append("\t color=\"" + segment.get("color").asString() + "\"");
-			builder.append("\n");
-			builder.append("\t shader=\"flat\"");
-			builder.append("\n");
-			builder.append("\t flat-shading=\"true\"");
 			builder.append("\n");
 			builder.append("\t segments-height=\"2\"");
 			builder.append("\n");
@@ -176,11 +190,7 @@ public class City2AFrame {
 			builder.append("\n");
 			builder.append("\t depth=\"" + length + "\"");
 			builder.append("\n");
-			builder.append(buildColor(segment));
-			builder.append("\n");
-			builder.append("\t shader=\"flat\"");
-			builder.append("\n");
-			builder.append("\t flat-shading=\"true\">");
+			builder.append(buildColor(segment) + ">");
 			builder.append("\n");
 			builder.append("</a-box>");
 			builder.append("\n");
@@ -195,13 +205,9 @@ public class City2AFrame {
 				builder.append("\n");
 				builder.append("\t radius=\"" + separator.get("radius") + "\" ");
 				builder.append("\n");
-				builder.append("\t height=\"" + config.getPanelSeparatorHeight() + "\" ");
+				builder.append("\t height=\"" + panelSeparatorHeight + "\" ");
 				builder.append("\n");
-				builder.append("\t color=\"" + config.getCityColorHex("black") + "\"");
-				builder.append("\n");
-				builder.append("\t shader=\"flat\"");
-				builder.append("\n");
-				builder.append("\t flat-shading=\"true\"");
+				builder.append("\t color=\"" + color + "\"");
 				builder.append("\n");
 				builder.append("\t segments-height=\"2\"");
 				builder.append("\n");
@@ -216,15 +222,11 @@ public class City2AFrame {
 				builder.append("\n");
 				builder.append("\t width=\"" + separator.get("width") + "\"");
 				builder.append("\n");
-				builder.append("\t height=\"" + config.getPanelSeparatorHeight() + "\"");
+				builder.append("\t height=\"" + panelSeparatorHeight + "\"");
 				builder.append("\n");
 				builder.append("\t depth=\"" + separator.get("length") + "\"");
 				builder.append("\n");
-				builder.append("\t color=\"" + config.getCityColorHex("black") + "\"");
-				builder.append("\n");
-				builder.append("\t shader=\"flat\"");
-				builder.append("\n");
-				builder.append("\t flat-shading=\"true\">");
+				builder.append("\t color=\"" + color + "\">");
 				builder.append("\n");
 				builder.append("</a-box>");
 				builder.append("\n");
@@ -246,11 +248,7 @@ public class City2AFrame {
 		builder.append("\n");
 		builder.append("\t depth=\"" + floor.get("length") + "\"");
 		builder.append("\n");
-		builder.append("\t color=\"" + floor.get("color").asString() + "\"");
-		builder.append("\n");
-		builder.append("\t shader=\"flat\"");
-		builder.append("\n");
-		builder.append("\t flat-shading=\"true\">");
+		builder.append("\t color=\"" + floor.get("color").asString() + "\">");
 		builder.append("\n");
 		builder.append("</a-box>");
 		builder.append("\n");
@@ -270,11 +268,7 @@ public class City2AFrame {
 	    builder.append("\n");
 	    builder.append("\t depth=\"" + chimney.get("length") + "\"");
 	    builder.append("\n");
-	    builder.append("\t color=\"" + chimney.get("color").asString() + "\"");
-	    builder.append("\n");
-	    builder.append("\t shader=\"flat\"");
-	    builder.append("\n");
-	    builder.append("\t flat-shading=\"true\">");
+	    builder.append("\t color=\"" + chimney.get("color").asString() + "\">");
 	    builder.append("\n");
 	    builder.append("</a-box>");
 	    builder.append("\n");

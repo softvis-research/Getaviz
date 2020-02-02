@@ -22,19 +22,17 @@
 	}
 
     $metaDataJsonUrl = $modelUrl . "/metaData.json";
-    
-	$stateHashcode = "";
-    if (isset($_GET["state"])) {
-        $stateHashcode = $_GET["state"];
-		$metaStateJsonUrl = "state.php?hash=" . $stateHashcode;
-	} else {
-		$metaStateJsonUrl = "state.php?hash=";
 	}
-	
+		$metaStateJsonUrl = "state.php?hash=";
+	} else {
+		$metaStateJsonUrl = "state.php?hash=" . $stateHashcode;
+        $stateHashcode = $_GET["state"];
+    if (isset($_GET["state"])) {
+	$stateHashcode = "";
     if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true')or(!isset($_GET["aframe"]) ) ) {
-        $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v0.9.1.min.js\"></script>";
+        $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v1.0.0.min.js\"></script>";
         $loadVisualizationSpecificScripts = <<<'EOT'
-        <script src="node_modules/aframe/dist/aframe-v0.9.1.min.js"></script>
+        <script src="node_modules/aframe/dist/aframe-v1.0.0.min.js"></script>
         <script type="text/javascript" src="scripts/AframeCanvasManipulator.js"></script>
         <script type="text/javascript" src="scripts/AframeActionController.js"></script>
 	    <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
@@ -80,20 +78,14 @@ EOT;
 EOT;
 
     }
-
-
-
 ?>
 <script type="text/javascript">
     var modelUrl		 = "<?php echo $modelUrl; ?>";
     var stateHashcode		 = "<?php echo $stateHashcode; ?>"; 
-    
     var multipartX3dUrl  = "<?php echo $multipartX3dUrl; ?>";
     var multipartJsonUrl = "<?php echo $multipartJsonUrl; ?>";
     var metaDataJsonUrl  = "<?php echo $metaDataJsonUrl; ?>";
     var metaStateJsonUrl  = "<?php echo $metaStateJsonUrl; ?>"; 
-
-
     var canvasId = "<?php echo $canvasId; ?>";
     var visMode = "<?php echo $visMode; ?>";
 </script>
@@ -133,9 +125,13 @@ EOT;
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxnumberinput.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxform.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxvalidator.js"></script>
+    <script type="text/javascript" src="node_modules/prismjs/prism.js"></script>
+    <script type="text/javascript" src="node_modules/prismjs/components/prism-java.js"></script>
+    <script type="text/javascript" src="node_modules/prismjs/components/prism-c.js"></script>
 	
     <link rel="stylesheet" href="node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.base.css" type="text/css" />
     <link rel="stylesheet" href="node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.metro.css" type="text/css" />
+    
     <!-- ztree -->
     <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.core.min.js"></script>
     <script type="text/javascript" src="node_modules/@ztree/ztree_v3/js/jquery.ztree.exhide.min.js"></script>
@@ -169,6 +165,7 @@ EOT;
     <script type="text/javascript" src="scripts/PatternExplorer/PatternExplorerController.js"></script>
     <script type="text/javascript" src="scripts/VersionExplorer/VersionExplorerController.js"></script>
     <script type="text/javascript" src="scripts/IssueExplorer/IssueExplorerController.js"></script>
+	<script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script>
     
      <!-- filter -->
     <script type="text/javascript" src="scripts/Filter/Helpers/Constants.js"></script>

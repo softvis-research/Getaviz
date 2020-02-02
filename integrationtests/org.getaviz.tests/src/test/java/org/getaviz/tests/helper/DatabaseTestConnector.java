@@ -15,13 +15,12 @@ public class DatabaseTestConnector implements AutoCloseable {
 	
 	public StatementResult executeRead(String statement) {
 		try (Session session = driver.session(AccessMode.READ)) {
-			StatementResult result = session.run(statement);
-			return result;
+			return session.run(statement);
 		}
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close() {
 		driver.close();
 	}
 }
