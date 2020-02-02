@@ -31,9 +31,11 @@ public class Importer {
     public List<ProgrammingLanguage> getImportedProgrammingLanguages() {
         if(isJava()) {
             languages.add(ProgrammingLanguage.JAVA);
+            log.info("Found imported Java artifacts");
         }
         if(isC()){
             languages.add(ProgrammingLanguage.C);
+            log.info("Found imported C artifacts");
         }
         return languages;
     }
