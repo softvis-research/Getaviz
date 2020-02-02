@@ -11,7 +11,7 @@ if (isset($_GET["srcDir"])) {
     $srcDir = $_GET["srcDir"];
 }
 
-$setupUrl = "setups/default.js";
+$setupUrl = "setups/web/default.js";
 if (isset($_GET["setup"])) {
     $setupUrl = "setups/" . $_GET["setup"] . ".js";
 }
@@ -19,6 +19,10 @@ if (isset($_GET["setup"])) {
 $modelUrl = "data/City/model";
 if (isset($_GET["model"])) {
     $modelUrl = $srcDir . "/" . $_GET["model"] . "/model";
+} else {
+    if (!isset($_GET["setup"])) {
+        $setupUrl = "setups/web/City bank.js";
+    }
 }
 
 $metaDataJsonUrl = $modelUrl . "/metaData.json";
@@ -30,7 +34,7 @@ if (isset($_GET["state"])) {
 } else {
     $metaStateJsonUrl = "state.php?hash=";
 }
-	
+
 if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true') or (!isset($_GET["aframe"]))) {
     $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v1.0.0.min.js\"></script>";
     $loadVisualizationSpecificScripts = <<<'EOT'

@@ -46,10 +46,10 @@
 
         {
             name: "infoController",
-            system: "Unknown system",
-            //link: "",
-            noc: false,
-            //loc: 19
+            system: "Bank",
+            link: "https://github.com/softvis-research/Bank",
+            noc: true,
+            loc: 192
         },
 
         {
@@ -68,6 +68,7 @@
         {
             name: "packageExplorerController",
         },
+
         {
             name: "sourceCodeController",
             url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/",
@@ -77,15 +78,14 @@
 
         {
             name: "relationConnectorController",
-
-            fixPositionZ: 1,
+            fixPositionY: false,
             showInnerRelations: true,
-            elementShape: "circle",
-            sourceStartAtParentBorder: true,
+            sourceStartAtParentBorder: false,
             targetEndAtParentBorder: false,
-            createEndpoints: true,
+            sourceStartAtBorder: true,
+            targetEndAtBorder: true,
+            createEndpoints: true
         },
-
         {
             name: "relationTransparencyController",
         },
@@ -140,7 +140,7 @@
                     ]
                 },
 
-                {
+                 {
                     title: "Visualizations",
                     subMenu: true,
                     items: [
@@ -222,7 +222,8 @@
                 type: "turntable",
 
                 //turntable last 2 values - accepted values are between 0 and PI - 0.0 - 1,5 at Y-axis
-                typeParams: "0.0 0.0 1.57 3.1",
+//                typeParams: "0.0 0.0 1.57 3.1",
+ typeParams: "0.0 0.0 0.001 1.5",
 
                 //speed: 10
             },
@@ -259,18 +260,18 @@
                                 name: "packagePanel",
                                 first: {
                                     collapsible: false,
-                                    size: "100%",
-                                    expanders: [
-                                        {
-                                            name: "packageExplorer",
-                                            title: "Package Explorer",
-                                            controllers: [
-                                                {name: "packageExplorerController"}
-                                            ],
+                                            size: "100%",
+                                            expanders: [
+                                                {
+                                                    name: "packageExplorer",
+                                                    title: "Package Explorer",
+                                                    controllers: [
+                                                        {name: "packageExplorerController"}
+                                                    ],
                                         }
-                                    ]
-                                },
-                                second: {},
+                                            ]
+                                        },
+                                        second: {},
                             },
                         },
                         second: {
@@ -290,27 +291,27 @@
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
-                                        //{name: "canvasFlyToController"},
                                         {name: "helpController"},
                                         {name: "infoController"},
                                         {name: "shareController"},
+                                        {name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},
                                         {name: "relationTransparencyController"},
                                         {name: "relationHighlightController"},
                                     ],
                                 },
                                 second: {
-                                    collapsible: false,
-                                    name: "rightPael",
-                                    expanders: [
-                                        {
-                                            name: "CodeViewer",
-                                            title: "CodeViewer",
-                                            controllers: [
-                                                {name: "sourceCodeController"}
+                                        collapsible: false,
+                                        name: "rightPael",
+                                            expanders: [
+                                                {
+                                                    name: "CodeViewer",
+                                                    title: "CodeViewer",
+                                                    controllers: [
+                                                        {name: "sourceCodeController"}
+                                                    ],
+                                                },
                                             ],
-                                        },
-                                    ],
                                 }
                             }
                         }
