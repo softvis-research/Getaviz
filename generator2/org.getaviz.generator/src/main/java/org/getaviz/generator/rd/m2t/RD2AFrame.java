@@ -59,7 +59,6 @@ public class RD2AFrame implements Step {
 			connector.executeRead(
 					"MATCH (element)<-[:VISUALIZES]-(d:MainDisk)-[:HAS]->(p:Position) RETURN d,p, element.hash ORDER BY element.hash")
 					.forEachRemaining((result) -> {
-						log.info("oho");
 						elements.append(toDisk(result.get("d").asNode(), result.get("p").asNode()));
 					});
 		} catch (Exception e) {
@@ -80,9 +79,7 @@ public class RD2AFrame implements Step {
 
 	private String toDisk(Node disk, Node position) {
 		double radius = disk.get("radius").asDouble(0);
-		log.info("abc");
 		Node entity = connector.getVisualizedEntity(disk.id());
-		log.info("def");
 		ArrayList<Node> segments = new ArrayList<>();
 		connector.executeRead("MATCH (n)-[:CONTAINS]->(ds:DiskSegment)-[:VISUALIZES]->(element) WHERE ID(n) = "
 				+ disk.id() + " RETURN ds, element.hash ORDER BY element.hash").forEachRemaining((result) -> {
