@@ -13,8 +13,8 @@ services:
     restart: always
     env_file: evaluationserver/env
     command: "./bin/wait-for-it.sh db:3306 -s -t 30 -- ./bin/docker_start"
-    volumes:
-      - ./evaluationserver:/usr/src/app
+    #volumes:
+      #- ./evaluationserver:/usr/src/app
     ports:
       - "8081:8081" 
     depends_on:
