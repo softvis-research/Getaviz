@@ -1,71 +1,68 @@
-version: "3"
+version: '3'
 services:
-    db:
-        image: mysql:5.7
-        environment:
-            MYSQL_ROOT_PASSWORD: dbpassword_for_user
-            MYSQL_DATABASE: eval_server_development
-           MYSQL_USER: db_username
-           MYSQL_PASSWORD: dbpassword_for_user
-       restart: always
-   eval:
-       build: evaluationserver
-       restart: always
-       env_file: evaluationserver/env
-       command: "./bin/wait-for-it.sh db:3306 -s -t 30 -- ./bin/docker_start"
-        volumes:
-        - ./evaluationserver:/usr/src/app
-       ports:
-           - "8081:8081" 
-       depends_on:
-           - db
-    frontend:
-        build: ui/
-        restart: always
-        volumes:
-            #- ./ui:/var/www/html/ui # uncomment only for ui development
-            - data-gen:/var/www/html/ui/data-gen
-        ports:
-            - "8082:80"
-        networks:
-            - default
-        depends_on:
-            - backend
-    backend:
-        build: generator2/org.getaviz.generator/
-        restart: always
-        volumes: 
-            - data-gen:/var/lib/jetty/data-gen
-            #- ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # uncomment only for generator development
-            #- ./generator2/org.getaviz.generator/settings.properties:/opt/config/settings.properties # uncomment only for generator development
-            #- ./generator2/output:/var/lib/jetty/output/ # uncomment only for generator development
-            #- ./generator2/logs:/var/lib/jetty/logs # uncomment only for generator development
-        ports:
-            - "8083:8080"
-        networks:
-            - default
-        depends_on:
-            - neo4j
-            - volumes-provisioner
-    neo4j:
-        image: neo4j:3.5.1
-        restart: always
-        ports:
-            - "7474:7474"
-            - "7687:7687"
-        environment:
-            NEO4J_AUTH: "none"
-        networks:
-            - default
-    volumes-provisioner:
-        image: hasnat/volumes-provisioner
-        environment:
-            PROVISION_DIRECTORIES: "100:101:0755:/var/data /var/data/data-gen/"
-        volumes:
-            - data-gen:/var/data
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: dbpassword_for_user
+      MYSQL_DATABASE: eval_server_development
+      MYSQL_USER: db_username
+      MYSQL_PASSWORD: dbpassword_for_user
+    restart: always
+  eval:
+    build: evaluationserver
+    restart: always
+    env_file: evaluationserver/env
+    command: "./bin/wait-for-it.sh db:3306 -s -t 30 -- ./bin/docker_start"
+    volumes:
+      - ./evaluationserver:/usr/src/app
+    ports:
+      - "8081:8081" 
+    depends_on:
+      - db
+  frontend:
+    build: ui/
+    restart: always
+    volumes:
+      #- ./ui:/var/www/html/ui # uncomment only for ui development
+      - data-gen:/var/www/html/ui/data-gen
+    ports:
+      - "8082:80"
+    networks:
+      - default
+    depends_on:
+      - backend
+  backend:
+    build: generator2/org.getaviz.generator/
+    restart: always
+    volumes: 
+      - data-gen:/var/lib/jetty/data-gen
+     #- ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # uncomment only for generator development
+    ports:
+      - "8083:8080"
+    networks:
+      - default
+    depends_on:
+      - neo4j
+      - volumes-provisioner
+  neo4j:
+    image: neo4j:3.5.1
+    restart: always
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: "none"
+    networks:
+      - default
+  volumes-provisioner:
+    image: hasnat/volumes-provisioner
+    environment:
+      PROVISION_DIRECTORIES: "100:101:0755:/var/data /var/data/data-gen/"
+    volumes:
+      - data-gen:/var/data
 volumes:
   data-gen:
     
 networks:
-    default:
-        driver: bridge
+  default:
+    driver: bridge
