@@ -9,12 +9,11 @@ import org.neo4j.driver.v1.Transaction;
 import org.neo4j.driver.v1.types.Node;
 
 public class DatabaseConnector implements AutoCloseable {
-	private static String URL;
+	private static String URL = "bolt://neo4j:7687";
 	private final Driver driver;
 	private static DatabaseConnector instance = null;
 
 	private DatabaseConnector() {
-		URL = "bolt://neo4j:7687";
 		driver = GraphDatabase.driver(URL);
 	}
 	
