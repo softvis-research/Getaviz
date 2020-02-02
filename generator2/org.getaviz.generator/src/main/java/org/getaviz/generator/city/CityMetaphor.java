@@ -14,10 +14,6 @@ public class CityMetaphor implements Metaphor {
 
     public CityMetaphor(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
         StepFactory factory = new StepFactory(config, languages);
-        /*if(!config.isSkipScan()) {
-            steps.add(factory.createScanStep());
-            steps.add(factory.createEnhancementStep());
-        }*/
         steps.add(factory.createSteps2m());
         steps.add(factory.createMetadataFileStep());
         steps.add(factory.createStepm2m());
