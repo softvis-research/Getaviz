@@ -16,14 +16,20 @@
 		$setupUrl = "setups/" . $_GET["setup"] . ".js";
 	}
 
-	$modelUrl = "data/RD bank/model";
+    $modelUrl = "data/City/model";
 	if (isset($_GET["model"])) {
 		$modelUrl = $srcDir . "/" . $_GET["model"] ."/model";
 	}
 
     $metaDataJsonUrl = $modelUrl . "/metaData.json";
-
-    if (isset($_GET["aframe"]) && $_GET["aframe"] == 'true') {
+	}
+		$metaStateJsonUrl = "state.php?hash=";
+	} else {
+		$metaStateJsonUrl = "state.php?hash=" . $stateHashcode;
+        $stateHashcode = $_GET["state"];
+    if (isset($_GET["state"])) {
+	$stateHashcode = "";
+    if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true')or(!isset($_GET["aframe"]) ) ) {
         $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v1.0.0.min.js\"></script>";
         $loadVisualizationSpecificScripts = <<<'EOT'
         <script src="node_modules/aframe/dist/aframe-v1.0.0.min.js"></script>
@@ -51,10 +57,10 @@ EOT;
         	<!--x3dom-->
         <script type="text/javascript" src="node_modules/x3dom/x3dom.js"></script>
         <link rel="stylesheet" href="node_modules/x3dom/x3dom.css" type="text/css"/>
-        <script type="text/javascript" src="scripts/CanvasManipulator.js"></script>
-        <script type="text/javascript" src="scripts/ActionController.js"></script>
-	    <script type="text/javascript" src="scripts/RelationConnector/RelationConnectorController.js"></script>
-	    <script type="text/javascript" src="scripts/CanvasHover/CanvasHoverController.js"></script>
+        <script type="text/javascript" src="scripts/X3DomCanvasManipulator.js"></script>
+        <script type="text/javascript" src="scripts/X3DomActionController.js"></script>
+	    <script type="text/javascript" src="scripts/RelationConnector/X3DomRelationConnectorController.js"></script>
+	    <script type="text/javascript" src="scripts/CanvasHover/X3DomCanvasHoverController.js"></script>
 EOT;
         $canvasId = "x3dom-x3dElement-canvas";
         $visMode = "x3dom";
@@ -75,9 +81,11 @@ EOT;
 ?>
 <script type="text/javascript">
     var modelUrl		 = "<?php echo $modelUrl; ?>";
+    var stateHashcode		 = "<?php echo $stateHashcode; ?>"; 
     var multipartX3dUrl  = "<?php echo $multipartX3dUrl; ?>";
     var multipartJsonUrl = "<?php echo $multipartJsonUrl; ?>";
     var metaDataJsonUrl  = "<?php echo $metaDataJsonUrl; ?>";
+    var metaStateJsonUrl  = "<?php echo $metaStateJsonUrl; ?>"; 
     var canvasId = "<?php echo $canvasId; ?>";
     var visMode = "<?php echo $visMode; ?>";
 </script>
@@ -95,6 +103,7 @@ EOT;
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxcore.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxdata.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxtabs.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxmenu.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxsplitter.js"></script>
     <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxscrollbar.js"></script>
@@ -131,11 +140,14 @@ EOT;
     <link rel="stylesheet" href="scripts/PackageExplorer/zt.css" type="text/css">
 	
 	<script type="text/javascript" src="scripts/CanvasFilter/CanvasFilterController.js"></script>
+	<script type="text/javascript" src="scripts/ShareController/ShareController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasMark/CanvasMarkController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasFlyTo/CanvasFlyToController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasSelect/CanvasSelectController.js"></script>
 	<script type="text/javascript" src="scripts/CanvasResetView/CanvasResetViewController.js"></script>	
-	<script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>	
+	<script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>
+	<script type="text/javascript" src="scripts/HelpController/HelpController.js"></script>
+	<script type="text/javascript" src="scripts/InfoController/InfoController.js"></script>
 	<script type="text/javascript" src="scripts/RelationTransparency/RelationTransparencyController.js"></script>
 	<script type="text/javascript" src="scripts/RelationHighlight/RelationHighlightController.js"></script>	
 	<script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>	
@@ -164,7 +176,7 @@ EOT;
     <script type="text/javascript" src="scripts/Filter/Classes/Filter.js"></script>
     <script type="text/javascript" src="scripts/Filter/Classes/Container.js"></script>
     <script type="text/javascript" src="scripts/Filter/Classes/Layer.js"></script>
-    <script type="text/javascript" src="scripts/Filter/FilterController.js"></script>
+    <script type="text/javascript" src="scripts/Filter/X3DomFilterController.js"></script>
 
     <!--user interface-->
 	<script type="text/javascript" src="scripts/DefaultLogger.js"></script>

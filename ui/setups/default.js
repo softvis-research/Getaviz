@@ -31,7 +31,22 @@
 
 		{	name: 	"canvasFilterController" 
 		},
-
+        
+        {	name: 	"helpController",
+            metaphor: "City original"
+		},
+        
+        {	name: 	"infoController",
+            system: "Bank",
+            link: "https://github.com/softvis-research/Bank",
+            noc: true,
+            loc: 192
+		},
+        
+        {	name: 	"shareController",
+            showDebugOutput: false
+        },
+        
 		{ 	name: 	"canvasFlyToController" 
 		},
 	
@@ -41,7 +56,9 @@
 		{	name: 	"packageExplorerController",
 		},
 		{	name: 	"sourceCodeController",
-            url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
+            url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/",
+            showCodeWindowButton : true,
+            showCode : true
 		},
 		
 		{ 	name: 	"relationConnectorController",		
@@ -75,7 +92,7 @@
 					items:		[
 						{
 							title: 		"FlyTo",
-							toggle: 	true,	
+							toggle: 	false,	
 							eventOn: 	"canvasFlyToController.activate",
 							eventOff: 	"canvasFlyToController.deactivate",									
 						},
@@ -117,14 +134,24 @@
 					subMenu:	true,
 					items:		[
 						{
-							title: 	"City Original",
+							title: 	"City",
 							link: 	true,
-							url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
+							url:	"index.php?setup=web_a-frame/City bank&model=City&aframe=true"
+						},
+                        {
+							title: 	"City bricks",
+							link: 	true,
+							url:	"index.php?setup=web_a-frame/City bank&model=City%20bricks&aframe=true"
+						},
+                        {
+							title: 	"City floor",
+							link: 	true,
+							url:	"index.php?setup=web_a-frame/City bank&model=City%20floor&aframe=true"
 						},
 						{
 							title: 	"Recursive Disk",
 							link: 	true,
-							url:	"index.php?setup=web/RD bank&model=RD%20bank"
+                            url:	"index.php?setup=web/RD bank&model=RD%20bank&aframe=false"
 						},
                         {
                             title: 	"New Visualization",
@@ -311,7 +338,10 @@
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
-                                        {name: "canvasFlyToController"},
+                                        //{name: "canvasFlyToController"},
+                                        {name: "helpController"},
+                                        {name: "infoController"},
+                                        {name: "shareController"},
                                         {name: "relationConnectorController"},
                                         {name: "relationTransparencyController"},
                                         {name: "relationHighlightController"},

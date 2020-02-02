@@ -27,7 +27,22 @@
 		},	
 		
 		{	name: 	"canvasSelectController" 
-		},	
+		},
+        
+        {	name: 	"helpController",
+            metaphor: "City original"
+		},
+        
+        {   name: 'infoController',
+            system: "Bank",
+            link: "https://github.com/softvis-research/Bank",
+            noc: true,
+            loc: 192
+        },
+        
+        {	name: 	"shareController",
+            showDebugOutput: false
+        },
 
 		{	name: 	"canvasFilterController" 
 		},
@@ -40,7 +55,9 @@
 		{	name: 	"packageExplorerController",
 		},
 		{	name: 	"sourceCodeController",
-            url:    "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
+            url:    "https://raw.githubusercontent.com/softvis-research/Bank/master/src/",
+            codeWindowButtonShow : false,
+            codeValueDivShow : false
 		},
         { 	name: 	"relationConnectorController",
             fixPositionY : false,
@@ -56,8 +73,7 @@
 			
 		{ 	name: 	"relationHighlightController" 
 		},
-        {
-            name:   "systeminfoController",
+        {   name:   "systeminfoController",
             system: "Bank",
             link: "https://github.com/softvis-research/Bank",
             noc: true,
@@ -114,14 +130,24 @@
                                         subMenu: "true",
 					items:		[
 						{
-							title: 	"City Original",
+							title: 	"City",
 							link: 	true,
-							url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
+							url:	"index.php?setup=web_a-frame/City bank&model=City&aframe=true"
+						},
+                        {
+							title: 	"City bricks",
+							link: 	true,
+							url:	"index.php?setup=web_a-frame/City bank&model=City%20bricks&aframe=true"
+						},
+                        {
+							title: 	"City floor",
+							link: 	true,
+							url:	"index.php?setup=web_a-frame/City bank&model=City%20floor&aframe=true"
 						},
 						{
 							title: 	"Recursive Disk",
 							link: 	true,
-							url:	"index.php?setup=web/RD bank&model=RD%20bank"
+                            url:	"index.php?setup=web/RD bank&model=RD%20bank&aframe=false"
 						},
                         {
                             title: 	"New Visualization",
@@ -322,6 +348,9 @@
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
                                         {name: "canvasFlyToController"},
+                                        {name: "helpController"},
+                                        {name: "infoController"},
+                                        {name: "shareController"},
                                         {name: "relationConnectorController"},
                                        // {name: "relationTransparencyController"},
                                         {name: "relationHighlightController"},

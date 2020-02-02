@@ -5,20 +5,23 @@ var canvasMarkController = (function() {
 		UP 			: "UP",
 		DOWN 		: "DOWN",
 		DURATION	: "DURATION"
-	};
+	}
 	
+    var markingColor = "0 1 0";
+    
 	//config parameters	
 	var controllerConfig = {
 		setCenterOfRotation : false,
-        markingColor: "green",
+        //markingColor: "green",
     	selectionMouseKey: 2,
 		selectionMode: SELECTION_MODES.UP,
 		selectionDurationSeconds: 0.5,
 		selectionMoveAllowed: false,
 		showProgressBar: false,
-	};
+	}
 
-	let downActionEventObject;
+	//let downActionEventObject;
+	var downActionEventObject;
     
 	function initialize(setupConfig){	
 
@@ -32,19 +35,49 @@ var canvasMarkController = (function() {
 		actionController.actions.mouse.key[controllerConfig.selectionMouseKey].up.subscribe(upAction);
 		actionController.actions.mouse.key[controllerConfig.selectionMouseKey].during.subscribe(duringAction);
 		actionController.actions.mouse.move.subscribe(mouseMove);	
+        
+        //DUMMY
+        actionController.actions.keyboard.key[87].down.subscribe(getViewPoint); "W"
+		actionController.actions.keyboard.key[83].down.subscribe(setViewPoint); "S"
+		//DUMMY
 
 		events.marked.on.subscribe(onEntityMarked);
 		events.marked.off.subscribe(onEntityUnmarked); 
     }
 		
 	function reset(){
-		let markedEntities = events.marked.getEntities();
+		//let markedEntities = events.marked.getEntities();
+        var markedEntities = events.marked.getEntities();
 		
 		canvasManipulator.resetColorOfEntities(markedEntities);	
 	}
 
+	//DUMMY
+	var myViewMatrix;
+	var myCenterRotation;
+	function getViewPoint(){
 
+		//get reference of x3dom objects
+		var x3domRuntime = document.getElementById('x3dElement').runtime;		
+		var viewarea = x3domRuntime.canvas.doc._viewarea;	
+		var viewpoint = viewarea._scene.getViewpoint();
 
+		myViewMatrix = viewarea.getViewMatrix();
+		console.log(myViewMatrix);
+		myCenterRotation = viewpoint.getCenterOfRotation();
+		console.log(myCenterRotation);
+	}
+	function setViewPoint(){	
+		//get reference of x3dom objects
+		var x3domRuntime = document.getElementById('x3dElement').runtime;		
+		var viewarea = x3domRuntime.canvas.doc._viewarea;	
+		var viewpoint = viewarea._scene.getViewpoint();
+		
+		viewpoint.setView(myViewMatrix)		
+		viewarea._needNavigationMatrixUpdate = true;
+		viewpoint.setCenterOfRotation(myCenterRotation);				
+	}
+	//DUMMY
 
 	function downAction(eventObject, timestamp){
 
@@ -96,6 +129,7 @@ var canvasMarkController = (function() {
 			hideProgressBar();
 			handleOnClick(downActionEventObject);
 			downActionEventObject = null;
+            return;
 		}
 	}
 
@@ -113,7 +147,8 @@ var canvasMarkController = (function() {
 
 	function handleOnClick(eventObject) {            
 				
-		let applicationEvent = {
+		//let applicationEvent = {
+        var applicationEvent = { 
 			sender: canvasMarkController,
 			entities: [eventObject.entity]
 		};
@@ -184,13 +219,15 @@ var canvasMarkController = (function() {
 
 	function hideProgressBar(){		
 		
-		let progressBarDivElement = document.getElementById("progressBarDiv");
+		//let progressBarDivElement = document.getElementById("progressBarDiv");
+        var progressBarDivElement = document.getElementById("progressBarDiv");
 
 		if(!progressBarDivElement){
 			return;
 		}	
 
-		let canvas = document.getElementById("canvas");
+		//let canvas = document.getElementById("canvas");
+        var canvas = document.getElementById("canvas");
 		canvas.removeChild(progressBarDivElement);
 	}
 		
