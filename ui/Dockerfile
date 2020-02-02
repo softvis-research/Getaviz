@@ -1,4 +1,4 @@
-FROM getaviz/ui-base:1.3.1
+FROM getaviz/ui-base:1.3.2
 COPY . /var/www/html/ui
 WORKDIR /var/www/html/ui
 RUN npm install

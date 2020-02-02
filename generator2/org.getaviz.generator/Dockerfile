@@ -4,7 +4,7 @@ COPY . /tmp/generator2/
 WORKDIR /tmp/generator2/
 RUN mvn package
 
-FROM getaviz/generator2-base:1.3.1
+FROM getaviz/generator2-base:1.3.2
 COPY --from=MAVEN_TOOL_CHAIN /tmp/generator2/target/org.getaviz.generator*.war /var/lib/jetty/webapps/root.war
 COPY settings.properties /opt/config/settings.properties
 USER root
