@@ -160,7 +160,7 @@ var infoController = (function() {
                 
         var locContentDiv = document.createElement("div");
         locContentDiv.setAttribute("class", "grid-right infoController");
-        var locContent = controllerConfig.loc.toString().length
+        var locContent = controllerConfig.loc
         locContentDiv.innerHTML = locContent;
                 
         td_LOC_Name.appendChild(loc);
