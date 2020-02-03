@@ -43,7 +43,7 @@ if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true') or (!isset($_GET["afra
         <script type="text/javascript" src="scripts/AframeActionController.js"></script>
 	    <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
 	    <script type="text/javascript" src="scripts/CanvasHover/AframeCanvasHoverController.js"></script>
-        <script type="text/javascript" src="scripts/camera-beta.js"></script>
+        <script type="text/javascript" src="node_modules/aframe-orbit-camera-component/aframe-orbit-camera-component.js"></script>
 EOT;
     $canvasId = "aframe-canvas";
     $visMode = "aframe";
