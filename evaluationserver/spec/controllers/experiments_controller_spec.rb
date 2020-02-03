@@ -6,7 +6,7 @@ RSpec.describe ExperimentsController, type: :controller do
     it "Raises controlled error on wrong experiment" do
       @experiment = create(:experiment_with_static_text)
       get 'conduct', :params => {:id_hash => @experiment.id_hash} ## this is the wrong type of hash
-      expect(response).to have_http_status(:error)
+      expect(response).to have_http_status(:not_found)
     end
   end
 

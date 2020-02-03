@@ -83,7 +83,7 @@ class ExperimentsController < ApplicationController
 
   def conduct
     if @participant_experiment_step.nil?
-      render :layout => 'blank', :status => :error, :text => 'No such step'
+      render :layout => 'blank', :status => :not_found, :text => 'No such step'
       return
     end
 

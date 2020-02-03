@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :experiment do
-    title {Faker::StarTrek.character}
-    description {Faker::TheFreshPrinceOfBelAir.quote}
+    title {Faker::TvShows::StarTrek.character}
+    description {Faker::TvShows::TheFreshPrinceOfBelAir.quote}
 
     factory :experiment_with_static_text do
 

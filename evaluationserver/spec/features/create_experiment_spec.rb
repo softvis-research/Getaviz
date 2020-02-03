@@ -15,7 +15,7 @@ RSpec.feature "create experiment", type: :feature do
     
     #### Create experiment
     title = Faker::Name.last_name
-    description = Faker::TheFreshPrinceOfBelAir.quote
+    description = Faker::TvShows::TheFreshPrinceOfBelAir.quote
     fill_in 'experiment_title', with: title 
     fill_in 'experiment_description', with: description
     find('input[name="commit"]').click
@@ -37,9 +37,9 @@ RSpec.feature "create experiment", type: :feature do
     expect(page).to have_content(t('scenes.mapping'))
     
     scene_name = Faker::Name.last_name
-    scene_description = Faker::TheFreshPrinceOfBelAir.quote
-    scene_remarks = Faker::TheFreshPrinceOfBelAir.quote
-    scene_mapping = Faker::TheFreshPrinceOfBelAir.quote
+    scene_description = Faker::TvShows::TheFreshPrinceOfBelAir.quote
+    scene_remarks = Faker::TvShows::TheFreshPrinceOfBelAir.quote
+    scene_mapping = Faker::TvShows::TheFreshPrinceOfBelAir.quote
     scene_url = "http://www.example.com"
 
     fill_in 'scene_name', :with => scene_name
