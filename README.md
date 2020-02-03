@@ -24,6 +24,6 @@ Many thanks to all the contributors who have improved Getaviz by implementing ne
 ## Publications
 * David Baum, Christina Sixtus, Lisa Vogelsberg, Ulrich Eisenecker: [Understanding Conditional Compilation Through Integrated Representation of Variability and Source Code](https://arxiv.org/pdf/1908.08375), SPLC, 2019.
 * David Baum, Jens Dietrich, Craig Anslow, Richard Müller: [Visualizing Design Erosion: How Big Balls of Mud are Made](https://arxiv.org/abs/1807.06136), IEEE VISSOFT, 2018.
-* David Baum. Jan Schilbach, Pascal Kovacs, Ulrich Eisenecker, Richard Müller: [GETAVIZ: Generating Structural, Behavioral, and Evolutionary Views of Software Systems for Empirical Evaluation](https://www.researchgate.net/publication/320083290_GETAVIZ_Generating_Structural_Behavioral_and_Evolutionary_Views_of_Software_Systems_for_Empirical_Evaluation), IEEE VISSOFT, 2017.
+* David Baum, Jan Schilbach, Pascal Kovacs, Ulrich Eisenecker, Richard Müller: [GETAVIZ: Generating Structural, Behavioral, and Evolutionary Views of Software Systems for Empirical Evaluation](https://www.researchgate.net/publication/320083290_GETAVIZ_Generating_Structural_Behavioral_and_Evolutionary_Views_of_Software_Systems_for_Empirical_Evaluation), IEEE VISSOFT, 2017.
 
 A full list of publications you can find on [our website](http://home.uni-leipzig.de/svis/Publications/).
