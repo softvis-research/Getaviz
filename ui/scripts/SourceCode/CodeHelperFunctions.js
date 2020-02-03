@@ -22,7 +22,11 @@ var codeHelperFunction =(function(){
         xhttp.onreadystatechange = function(){			
 			if (xhttp.readyState === 4 && xhttp.status === 200) {
 
-				codeTag.textContent = xhttp.responseText;
+                codeTag.textContent = xhttp.responseText;
+                
+                if (visType === "vive") {
+                    viveSourcecodeController.showSourcecode(codeTag.textContent)
+                }
 
 				Prism.highlightElement(codeTag, false, function(){
 

@@ -195,6 +195,7 @@ var relationConnectorController = function(){
 		}
 		
 		var targetPosition = canvasManipulator.getCenterOfEntity(relatedEntity);
+		
 		if( targetPosition === null ){
 			return;
 		}
@@ -233,6 +234,16 @@ var relationConnectorController = function(){
 		if( controllerConfig.targetEndAtBorder ) {
             // getCenterOfEntity again in-case it got overwritten for targetEndAtParentBorder
 			targetPosition = calculateBorderPosition(sourcePosition, canvasManipulator.getCenterOfEntity(relatedEntity), relatedEntity);
+		}
+
+		/* Workaround for Vive (the coordinates are smaller than in aframe.html of an unknown reason) */
+		if (visType === "vive") {
+			sourcePosition.x = sourcePosition.x * 1000
+			sourcePosition.y = sourcePosition.y * 1000
+			sourcePosition.z = sourcePosition.z * 1000
+			targetPosition.x = targetPosition.x * 1000
+			targetPosition.y = targetPosition.y * 1000
+			targetPosition.z = targetPosition.z * 1000
 		}
 
 		var connectorSize = 0.05;

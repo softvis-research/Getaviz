@@ -18,6 +18,25 @@ AFRAME.registerComponent('vive-control-fly-hand', {
     this.el.addEventListener('trackpadup', function(evt) { trackpadUp(self); });
     this.el.addEventListener('gripup', function(evt) { gripUp(self); });
     this.el.addEventListener('gripdown', function(evt) { gripDown(self); });
+
+    this.el.addEventListener('menudown', (evt) => {
+      var hoverCount = 0
+      events.hovered.getEntities().forEach(entity => {
+        hoverCount = hoverCount+1
+        var applicationEvent = {
+          sender		: canvasManipulator,
+          entities	: [entity]
+        };
+        events.selected.on.publish(applicationEvent)
+        if (entity.type === "Namespace") {
+          viveSourcecodeController.hideSourcecode()
+        }
+      });
+      if (hoverCount === 0) {
+        application.reset()
+        viveSourcecodeController.hideSourcecode()
+      }
+    })
   },
 
   tick: function() {
@@ -74,3 +93,11 @@ function trackpadDown(self) {
 function trackpadUp(self) {
   self.trackpadDown = false;
 };
+
+function menuDown(self) {
+  self.menuDown = true
+}
+
+function menuUp(self) {
+  self.menuDown = false
+}
