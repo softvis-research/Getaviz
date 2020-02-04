@@ -28,12 +28,11 @@ public class SettingsConfiguration {
 		return instance;
 	}
 
-	public static SettingsConfiguration getInstance(String path) {
+	public static void getInstance(String path) {
 		if (instance == null) {
 			instance = new SettingsConfiguration();
 		}
 		loadConfig(path);
-		return instance;
 	}
 	
 	public static SettingsConfiguration getInstance(HttpServletRequest request) {

@@ -7,7 +7,7 @@ import java.util.*;
 
 class AFrameSegmentLayout {
 
-    private List<SubDisk> disks;
+    private final List<SubDisk> disks;
 
     AFrameSegmentLayout(List<SubDisk> disks) {
         this.disks = disks;

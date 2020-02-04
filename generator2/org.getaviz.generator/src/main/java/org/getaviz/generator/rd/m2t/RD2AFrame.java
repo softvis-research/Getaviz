@@ -87,15 +87,15 @@ public class RD2AFrame implements Step {
 				});
 		StringBuilder builder = new StringBuilder();
 		if (radius - ringWidth == 0) {
-			builder.append("<a-circle id=\"" + entity.get("hash").asString() + "\" ");
+			builder.append("<a-circle id=\"").append(entity.get("hash").asString()).append("\" ");
 			builder.append("\n");
-			builder.append("\t position=\"" + position.get("x") + " ");
-			builder.append(position.get("y") + " ");
-			builder.append(position.get("z") + "\"");
+			builder.append("\t position=\"").append(position.get("x")).append(" ");
+			builder.append(position.get("y")).append(" ");
+			builder.append(position.get("z")).append("\"");
 			builder.append("\n");
-			builder.append("\t radius=\"" + radius + "\" ");
+			builder.append("\t radius=\"").append(radius).append("\" ");
 			builder.append("\n");
-			builder.append("\t color=\"" + disk.get("color").asString() + "\"");
+			builder.append("\t color=\"").append(disk.get("color").asString()).append("\"");
 			builder.append("\n");
 			builder.append("\t buffer=\"true\"");
 			builder.append("\n");
@@ -103,22 +103,22 @@ public class RD2AFrame implements Step {
 			builder.append("\n");
 			builder.append("\t depth-write=\"false\">");
 			builder.append("\n");
-			builder.append("\t" + toSegment(segments));
+			builder.append("\t").append(toSegment(segments));
 			builder.append("\n");
 			builder.append("</a-circle>");
 			builder.append("\n");
 		} else {
-			builder.append("<a-ring id=\"" + entity.get("hash").asString("NOHASH") + "\"");
+			builder.append("<a-ring id=\"").append(entity.get("hash").asString("NOHASH")).append("\"");
 			builder.append("\n");
-			builder.append("\t position=\"" + position.get("x") + " ");
-			builder.append(position.get("y") + " ");
-			builder.append(position.get("z") + "\"");
+			builder.append("\t position=\"").append(position.get("x")).append(" ");
+			builder.append(position.get("y")).append(" ");
+			builder.append(position.get("z")).append("\"");
 			builder.append("\n");
-			builder.append("\t radius-inner=\"" + (radius - ringWidth) + "\"");
+			builder.append("\t radius-inner=\"").append(radius - ringWidth).append("\"");
 			builder.append("\n");
-			builder.append("\t radius-outer=\"" + radius + "\" ");
+			builder.append("\t radius-outer=\"").append(radius).append("\" ");
 			builder.append("\n");
-			builder.append("\t color=\"" + disk.get("color").asString() + "\"");
+			builder.append("\t color=\"").append(disk.get("color").asString()).append("\"");
 			builder.append("\n");
 			builder.append("\t buffer=\"true\"");
 			builder.append("\n");
@@ -128,7 +128,7 @@ public class RD2AFrame implements Step {
 			builder.append("\n");
 			builder.append("\t segments-phi=\"1\">");
 			builder.append("\n");
-			builder.append("\t" + toSegment(segments));
+			builder.append("\t").append(toSegment(segments));
 			builder.append("\n");
 			builder.append("</a-ring>");
 			builder.append("\n");
@@ -141,15 +141,15 @@ public class RD2AFrame implements Step {
 		for (final Node segment : segments) {
 			Node entity = connector.getVisualizedEntity(segment.id());
 			if (segment.get("innerRadius").asDouble() == 0) {
-				builder.append("<a-circle id=\"" + entity.get("hash").asString("NOHAHS") + "\"");
+				builder.append("<a-circle id=\"").append(entity.get("hash").asString("NOHAHS")).append("\"");
 				builder.append("\n");
-				builder.append("\t radius=\"" + segment.get("outerRadius") + "\" ");
+				builder.append("\t radius=\"").append(segment.get("outerRadius")).append("\" ");
 				builder.append("\n");
-				builder.append("\t color=\"" + segment.get("color").asString() + "\"");
+				builder.append("\t color=\"").append(segment.get("color").asString()).append("\"");
 				builder.append("\n");
-				builder.append("\t theta-start=\"" + segment.get("anglePosition") + "\"");
+				builder.append("\t theta-start=\"").append(segment.get("anglePosition")).append("\"");
 				builder.append("\n");
-				builder.append("\t theta-length=\"" + segment.get("angle") + "\"");
+				builder.append("\t theta-length=\"").append(segment.get("angle")).append("\"");
 				builder.append("\n");
 				builder.append("\t buffer=\"true\"");
 				builder.append("\n");
@@ -160,13 +160,13 @@ public class RD2AFrame implements Step {
 				builder.append("</a-circle>");
 				builder.append("\n");
 			} else {
-				builder.append("<a-ring id=\"" + entity.get("hash").asString("NOHASH") + "\"");
+				builder.append("<a-ring id=\"").append(entity.get("hash").asString("NOHASH")).append("\"");
 				builder.append("\n");
-				builder.append("\t radius-inner=\"" + segment.get("innerRadius") + "\"");
+				builder.append("\t radius-inner=\"").append(segment.get("innerRadius")).append("\"");
 				builder.append("\n");
-				builder.append("\t radius-outer=\"" + segment.get("outerRadius") + "\" ");
+				builder.append("\t radius-outer=\"").append(segment.get("outerRadius")).append("\" ");
 				builder.append("\n");
-				builder.append("\t color=\"" + segment.get("color").asString() + "\"");
+				builder.append("\t color=\"").append(segment.get("color").asString()).append("\"");
 				builder.append("\n");
 				builder.append("\t buffer=\"true\"");
 				builder.append("\n");
@@ -174,9 +174,9 @@ public class RD2AFrame implements Step {
 				builder.append("\n");
 				builder.append("\t depth-write=\"false\"");
 				builder.append("\n");
-				builder.append("\t theta-start=\"" + segment.get("anglePosition") + "\"");
+				builder.append("\t theta-start=\"").append(segment.get("anglePosition")).append("\"");
 				builder.append("\n");
-				builder.append("\t theta-length=\"" + segment.get("angle") + "\"");
+				builder.append("\t theta-length=\"").append(segment.get("angle")).append("\"");
 				builder.append("\n");
 				builder.append("\t segments-phi=\"1\">");
 				builder.append("\n");

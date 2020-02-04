@@ -110,18 +110,16 @@ public class JQA2JSON implements Step {
 		if (parentHash.hasNext()) {
 			belongsTo = parentHash.single().get("parent.hash").asString();
 		}
-		StringBuilder builder = new StringBuilder();
-		builder.append("\"id\":            \"" + namespace.get("hash").asString() + "\",");
-		builder.append("\n");
-		builder.append("\"qualifiedName\": \"" + namespace.get("fqn").asString() + "\",");
-		builder.append("\n");
-		builder.append("\"name\":          \"" + namespace.get("name").asString() + "\",");
-		builder.append("\n");
-		builder.append("\"type\":          \"FAMIX.Namespace\",");
-		builder.append("\n");
-		builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-		builder.append("\n");
-		return builder.toString();
+		return "\"id\":            \"" + namespace.get("hash").asString() + "\"," +
+				"\n" +
+				"\"qualifiedName\": \"" + namespace.get("fqn").asString() + "\"," +
+				"\n" +
+				"\"name\":          \"" + namespace.get("name").asString() + "\"," +
+				"\n" +
+				"\"type\":          \"FAMIX.Namespace\"," +
+				"\n" +
+				"\"belongsTo\":     \"" + belongsTo + "\"" +
+				"\n";
 	}
 
 	private String toMetaDataClass(Node c) {
@@ -135,24 +133,22 @@ public class JQA2JSON implements Step {
 					"MATCH (parent:Package)-[:CONTAINS]->(class) WHERE ID(class) = " + c.id() + " RETURN parent");
 			belongsTo = parent.single().get("parent").asNode().get("hash").asString("YYY");
 		}
-		StringBuilder builder = new StringBuilder();
-		builder.append("\"id\":            \"" + c.get("hash").asString() + "\",");
-		builder.append("\n");
-		builder.append("\"qualifiedName\": \"" + c.get("fqn").asString() + "\",");
-		builder.append("\n");
-		builder.append("\"name\":          \"" + c.get("name").asString() + "\",");
-		builder.append("\n");
-		builder.append("\"type\":          \"FAMIX.Class\",");
-		builder.append("\n");
-		builder.append("\"modifiers\":     \"" + getModifiers(c) + "\",");
-		builder.append("\n");
-		builder.append("\"subClassOf\":    \"" + getSuperClasses(c) + "\",");
-		builder.append("\n");
-		builder.append("\"superClassOf\":  \"" + getSubClasses(c) + "\",");
-		builder.append("\n");
-		builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-		builder.append("\n");
-		return builder.toString();
+		return "\"id\":            \"" + c.get("hash").asString() + "\"," +
+				"\n" +
+				"\"qualifiedName\": \"" + c.get("fqn").asString() + "\"," +
+				"\n" +
+				"\"name\":          \"" + c.get("name").asString() + "\"," +
+				"\n" +
+				"\"type\":          \"FAMIX.Class\"," +
+				"\n" +
+				"\"modifiers\":     \"" + getModifiers(c) + "\"," +
+				"\n" +
+				"\"subClassOf\":    \"" + getSuperClasses(c) + "\"," +
+				"\n" +
+				"\"superClassOf\":  \"" + getSubClasses(c) + "\"," +
+				"\n" +
+				"\"belongsTo\":     \"" + belongsTo + "\"" +
+				"\n";
 	}
 
 	private String toMetaDataAttribute(Node attribute) {
@@ -170,24 +166,22 @@ public class JQA2JSON implements Step {
 		if (type != null) {
 			declaredType = type.get("name").asString();
 		}
-		StringBuilder builder = new StringBuilder();
-		builder.append("\"id\":            \"" + attribute.get("hash").asString() + "\",");
-		builder.append("\n");
-		builder.append("\"qualifiedName\": \"" + attribute.get("fqn").asString() + "\",");
-		builder.append("\n");
-		builder.append("\"name\":          \"" + attribute.get("name").asString() + "\",");
-		builder.append("\n");
-		builder.append("\"type\":          \"FAMIX.Attribute\",");
-		builder.append("\n");
-		builder.append("\"modifiers\":     \"" + getModifiers(attribute) + "\",");
-		builder.append("\n");
-		builder.append("\"declaredType\":  \"" + declaredType + "\",");
-		builder.append("\n");
-		builder.append("\"accessedBy\":\t \"" + getAccessedBy(attribute) + "\",");
-		builder.append("\n");
-		builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-		builder.append("\n");
-		return builder.toString();
+		return "\"id\":            \"" + attribute.get("hash").asString() + "\"," +
+				"\n" +
+				"\"qualifiedName\": \"" + attribute.get("fqn").asString() + "\"," +
+				"\n" +
+				"\"name\":          \"" + attribute.get("name").asString() + "\"," +
+				"\n" +
+				"\"type\":          \"FAMIX.Attribute\"," +
+				"\n" +
+				"\"modifiers\":     \"" + getModifiers(attribute) + "\"," +
+				"\n" +
+				"\"declaredType\":  \"" + declaredType + "\"," +
+				"\n" +
+				"\"accessedBy\":\t \"" + getAccessedBy(attribute) + "\"," +
+				"\n" +
+				"\"belongsTo\":     \"" + belongsTo + "\"" +
+				"\n";
 	}
 
 	private String toMetaDataMethod(Node method) {
@@ -202,28 +196,26 @@ public class JQA2JSON implements Step {
 			int lBraceIndex = signature.indexOf("(");
 			signature = signature.substring(0, lBraceIndex + 1) + getParameters(method) + ")";
 		}
-		StringBuilder builder = new StringBuilder();
-		builder.append("\"id\":            \"" + method.get("hash").asString() + "\",");
-		builder.append("\n");
-		builder.append("\"qualifiedName\": \"" + StringEscapeUtils.escapeHtml4(method.get("fqn").asString()) + "\",");
-		builder.append("\n");
-		builder.append("\"name\":          \"" + method.get("name").asString() + "\",");
-		builder.append("\n");
-		builder.append("\"type\":          \"FAMIX.Method\",");
-		builder.append("\n");
-		builder.append("\"modifiers\":     \"" + getModifiers(method) + "\",");
-		builder.append("\n");
-		builder.append("\"signature\":  \t \"" + signature + "\",");
-		builder.append("\n");
-		builder.append("\"calls\":\t\t \"" + getCalls(method) + "\",");
-		builder.append("\n");
-		builder.append("\"calledBy\":\t\t \"" + getCalledBy(method) + "\",");
-		builder.append("\n");
-		builder.append("\"accesses\":\t \t \"" + getAccesses(method) + "\",");
-		builder.append("\n");
-		builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-		builder.append("\n");
-		return builder.toString();
+		return "\"id\":            \"" + method.get("hash").asString() + "\"," +
+				"\n" +
+				"\"qualifiedName\": \"" + StringEscapeUtils.escapeHtml4(method.get("fqn").asString()) + "\"," +
+				"\n" +
+				"\"name\":          \"" + method.get("name").asString() + "\"," +
+				"\n" +
+				"\"type\":          \"FAMIX.Method\"," +
+				"\n" +
+				"\"modifiers\":     \"" + getModifiers(method) + "\"," +
+				"\n" +
+				"\"signature\":  \t \"" + signature + "\"," +
+				"\n" +
+				"\"calls\":\t\t \"" + getCalls(method) + "\"," +
+				"\n" +
+				"\"calledBy\":\t\t \"" + getCalledBy(method) + "\"," +
+				"\n" +
+				"\"accesses\":\t \t \"" + getAccesses(method) + "\"," +
+				"\n" +
+				"\"belongsTo\":     \"" + belongsTo + "\"" +
+				"\n";
 	}
 
 	private String toMetaDataEnum(Node e) {
@@ -232,21 +224,19 @@ public class JQA2JSON implements Step {
 			+ " RETURN parent.hash");
 		if(parent.hasNext()) {
 			belongsTo = parent.single().get("parent.hash").asString();
-		}		
-		StringBuilder builder = new StringBuilder();
-	    builder.append("\"id\":            \"" + e.get("hash").asString() + "\",");
-	    builder.append("\n");
-	    builder.append("\"qualifiedName\": \"" +  e.get("fqn").asString() + "\",");
-	    builder.append("\n");
-	    builder.append("\"name\":          \"" + e.get("name").asString() + "\",");
-	    builder.append("\n");
-	    builder.append("\"type\":          \"FAMIX.Enum\",");
-	    builder.append("\n");
-	    builder.append("\"modifiers\":     \"" + getModifiers(e) + "\",");
-	    builder.append("\n");
-	    builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-	    builder.append("\n");
-	    return builder.toString();
+		}
+		return "\"id\":            \"" + e.get("hash").asString() + "\"," +
+				"\n" +
+				"\"qualifiedName\": \"" + e.get("fqn").asString() + "\"," +
+				"\n" +
+				"\"name\":          \"" + e.get("name").asString() + "\"," +
+				"\n" +
+				"\"type\":          \"FAMIX.Enum\"," +
+				"\n" +
+				"\"modifiers\":     \"" + getModifiers(e) + "\"," +
+				"\n" +
+				"\"belongsTo\":     \"" + belongsTo + "\"" +
+				"\n";
 	}
 
 	private String toMetaDataEnumValue(Node ev) {
@@ -256,18 +246,16 @@ public class JQA2JSON implements Step {
 		if(parent.hasNext()) {
 			belongsTo = parent.single().get("parent.hash").asString();
 		}
-		StringBuilder builder = new StringBuilder();
-	    builder.append("\"id\":            \"" + ev.get("hash").asString() + "\",");
-	    builder.append("\n");
-	    builder.append("\"qualifiedName\": \"" + ev.get("fqn").asString() + "\",");
-	    builder.append("\n");
-	    builder.append("\"name\":          \"" + ev.get("name").asString() + "\",");
-	    builder.append("\n");
-	    builder.append("\"type\":          \"FAMIX.EnumValue\",");
-	    builder.append("\n");
-	    builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-	    builder.append("\n");
-	    return builder.toString();
+		return "\"id\":            \"" + ev.get("hash").asString() + "\"," +
+				"\n" +
+				"\"qualifiedName\": \"" + ev.get("fqn").asString() + "\"," +
+				"\n" +
+				"\"name\":          \"" + ev.get("name").asString() + "\"," +
+				"\n" +
+				"\"type\":          \"FAMIX.EnumValue\"," +
+				"\n" +
+				"\"belongsTo\":     \"" + belongsTo + "\"" +
+				"\n";
 	}
 
 	private String toMetaDataAnnotation(Node annotation) {
@@ -276,25 +264,23 @@ public class JQA2JSON implements Step {
 			+ " RETURN parent.hash");
 		if(parent.hasNext()) {
 			belongsTo = parent.single().get("parent.hash").asString();
-		}		
-		StringBuilder builder = new StringBuilder();
-	    builder.append("\"id\":            \"" + annotation.get("hash").asString() + "\",");
-	    builder.append("\n");
-	    builder.append("\"qualifiedName\": \"" + annotation.get("fqn").asString() + "\",");
-	    builder.append("\n");
-	    builder.append("\"name\":          \"" + annotation.get("name").asString() + "\",");
-	    builder.append("\n");
-	    builder.append("\"type\":          \"FAMIX.AnnotationType\",");
-	    builder.append("\n");
-	    builder.append("\"modifiers\":     \"" + getModifiers(annotation) + "\",");
-	    builder.append("\n");
-	    builder.append("\"subClassOf\":    \"\",");
-	    builder.append("\n");
-	    builder.append("\"superClassOf\":  \"\",");
-	    builder.append("\n");
-	    builder.append("\"belongsTo\":     \"" + belongsTo + "\"");
-	    builder.append("\n");
-	    return builder.toString();
+		}
+		return "\"id\":            \"" + annotation.get("hash").asString() + "\"," +
+				"\n" +
+				"\"qualifiedName\": \"" + annotation.get("fqn").asString() + "\"," +
+				"\n" +
+				"\"name\":          \"" + annotation.get("name").asString() + "\"," +
+				"\n" +
+				"\"type\":          \"FAMIX.AnnotationType\"," +
+				"\n" +
+				"\"modifiers\":     \"" + getModifiers(annotation) + "\"," +
+				"\n" +
+				"\"subClassOf\":    \"\"," +
+				"\n" +
+				"\"superClassOf\":  \"\"," +
+				"\n" +
+				"\"belongsTo\":     \"" + belongsTo + "\"" +
+				"\n";
 	}
 
 	private String getSuperClasses(Node element) {

@@ -14,7 +14,7 @@ import java.util.List;
 public class C2RD implements Step {
 	private final DatabaseConnector connector = DatabaseConnector.getInstance();
 	private final Log log = LogFactory.getLog(C2RD.class);
-	private boolean methodTypeMode;
+	private final boolean methodTypeMode;
 	private boolean methodDisks;
 	private boolean dataDisks;
 	private double height;

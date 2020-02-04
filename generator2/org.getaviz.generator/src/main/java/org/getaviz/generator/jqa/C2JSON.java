@@ -20,10 +20,10 @@ import java.util.List;
 import static org.apache.commons.text.StringEscapeUtils.escapeHtml4;
 
 public class C2JSON implements Step {
-	private Log log = LogFactory.getLog(this.getClass());
-	private DatabaseConnector connector = DatabaseConnector.getInstance();
-	private SettingsConfiguration config;
-	private List<ProgrammingLanguage> languages;
+	private final Log log = LogFactory.getLog(this.getClass());
+	private final DatabaseConnector connector = DatabaseConnector.getInstance();
+	private final SettingsConfiguration config;
+	private final List<ProgrammingLanguage> languages;
 
 	public C2JSON(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
 		this.config = config;
@@ -142,11 +142,10 @@ public class C2JSON implements Step {
 		if(parent.hasNext()) {
 			belongsTo = parent.single().get("parent.hash").asString();
 		}
-		String dependent = "";
 		StatementResult dependentList = connector.executeRead(
 				"MATCH (function:Function)-[:DEPENDS_ON]->(el) WHERE ID(function) = " + function.id() + " RETURN el");
 		if(dependentList.hasNext()) {
-			dependent = dependentList.single().get("el.hash").asString();
+			dependsOn = dependentList.single().get("el.hash").asString();
 		}
 
 		return formatLine("id", function.get("hash").asString()) +
@@ -363,34 +362,34 @@ public class C2JSON implements Step {
 	}
 
 	private String getFunctionParameters(Iterable<Node> parameterList){
-		String parameters = "";
+		StringBuilder parameters = new StringBuilder();
 		int counter = 0;
 		for(Node parameter: parameterList){
 			//add comma after parameter
 			if(counter != 0){
-				parameters += ", ";
+				parameters.append(", ");
 			}
-			String parameterTypeString = "";
+			StringBuilder parameterTypeString = new StringBuilder();
 			StatementResult parameterTypeList =  connector.executeRead(
 					"MATCH (parameter:Parameter)-[:OF_TYPE]->(type:Type) WHERE ID(parameter) = " + parameter.id() + " RETURN type");
 			while(parameterTypeList.hasNext()) {
-				parameterTypeString += parameterTypeList.next().get("type").asNode().get("name").asString();
+				parameterTypeString.append(parameterTypeList.next().get("type").asNode().get("name").asString());
 			}
 
 			//put [] after the parameter name
-			if(parameterTypeString.endsWith("]")){
-				String[] parts = parameterTypeString.split("\\[", 2);
+			if(parameterTypeString.toString().endsWith("]")){
+				String[] parts = parameterTypeString.toString().split("\\[", 2);
 				log.info("string");
 				log.info("parameterTypeString");
 				log.info(parts[0]);
-				parameters += parts[0] + parameter.get("name").asString() + "[" + parts[1];
+				parameters.append(parts[0]).append(parameter.get("name").asString()).append("[").append(parts[1]);
 			} else {
-				parameters += parameterTypeString + " " + parameter.get("name").asString();
+				parameters.append(parameterTypeString).append(" ").append(parameter.get("name").asString());
 			}
 			counter++;
 		}
 
-		return parameters;
+		return parameters.toString();
 	}
 
 	private String getCalls(Node element) {

@@ -1,16 +1,15 @@
 package org.getaviz.generator.mockups;
 
+import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.database.DatabaseConnector;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.kernel.configuration.BoltConnector;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.database.DatabaseConnector;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.kernel.configuration.BoltConnector;
 
 public class Mockup {
 	
