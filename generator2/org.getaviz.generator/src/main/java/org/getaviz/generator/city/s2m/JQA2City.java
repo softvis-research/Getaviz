@@ -1,8 +1,14 @@
 package org.getaviz.generator.city.s2m;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.SettingsConfiguration.BuildingType;
+import org.getaviz.generator.SettingsConfiguration.ClassElementsModes;
+import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.Step;
+import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
@@ -10,13 +16,6 @@ import org.neo4j.driver.v1.types.Node;
 
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import org.getaviz.generator.SettingsConfiguration.BuildingType;
-import org.getaviz.generator.SettingsConfiguration.ClassElementsModes;
-import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.database.DatabaseConnector;
 
 public class JQA2City implements Step {
 	private Log log = LogFactory.getLog(this.getClass());
@@ -44,7 +43,7 @@ public class JQA2City implements Step {
 		log.info("JQA2City started");
 		connector.executeWrite("MATCH (n:City) DETACH DELETE n");
 		long model = connector.addNode(
-				String.format("CREATE (n:Model:City {date: \'%s\', building_type: \'%s\'})",
+				String.format("CREATE (n:Model:City {date: '%s', building_type: '%s'})",
 						new GregorianCalendar().getTime().toString(), buildingTypeAsString),"n").id();
 		connector.executeRead(
 				"MATCH (n:Package) " +

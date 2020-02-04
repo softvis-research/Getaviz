@@ -23,7 +23,7 @@ public abstract class Disk implements RDElement, Comparable<Disk> {
     long parentID;
     protected long id;
     private ArrayList<Disk> innerDisks = new ArrayList<>();
-    private static GeometricShapeFactory shapeFactory = null;
+    private static GeometricShapeFactory shapeFactory;
     private double innerSegmentsRadius;
     private double innerRadius = 0;
     boolean wroteToDatabase = false;
@@ -58,7 +58,7 @@ public abstract class Disk implements RDElement, Comparable<Disk> {
             completeSpine.add(radius * Math.cos(i * stepX) + " " + radius * Math.sin(i * stepX) + " " + 0.0);
         }
         completeSpine.add(completeSpine.get(0));
-        spine = "\'" + String.join(", ", completeSpine) + "\'";
+        spine = "'" + String.join(", ", completeSpine) + "'";
     }
     //TODO: move somewhere else
     String calculateCrossSection() {
@@ -68,9 +68,9 @@ public abstract class Disk implements RDElement, Comparable<Disk> {
         } else {
             crossHeight = this.height;
         }
-        return "\'" + (-(borderWidth / 2) + " " + (crossHeight)) + ", " + ((borderWidth / 2) + " " + (crossHeight)) + ", "
+        return "'" + (-(borderWidth / 2) + " " + (crossHeight)) + ", " + ((borderWidth / 2) + " " + (crossHeight)) + ", "
                 + ((borderWidth / 2) + " " + 0) + ", " + (-(borderWidth / 2) + " " + 0) + ", " + (-(borderWidth / 2) + " " +
-                (crossHeight)) + "\'";
+                (crossHeight)) + "'";
     }
 
     public void createParentRelationship(DatabaseConnector connector) {
@@ -80,7 +80,7 @@ public abstract class Disk implements RDElement, Comparable<Disk> {
 
 
     String propertiesToString() {
-        return String.format("ringWidth: %f, height: %f, transparency: %f, color: \'%s\'", borderWidth,
+        return String.format("ringWidth: %f, height: %f, transparency: %f, color: '%s'", borderWidth,
                 height, transparency, color);
     }
 

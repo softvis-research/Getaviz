@@ -69,7 +69,7 @@ public class DiskSegment implements RDElement {
     }
 
     private String propertiesToString() {
-        return String.format("size: %f, height: %f, transparency: %f, color: \'%s\'", size, height,
+        return String.format("size: %f, height: %f, transparency: %f, color: '%s'", size, height,
                 transparency, color);
     }
 

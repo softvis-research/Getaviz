@@ -26,8 +26,8 @@ public class Model {
     private void createModel(DatabaseConnector connector) {
         long id = connector.addNode(
                 String.format(
-                        "CREATE (m:Model:RD {date: \'%s\'})-[:USED]->(c:Configuration:RD {method_type_mode: \'%s\', " +
-                                "method_disks: \'%s\', data_disks:\'%s\'})",
+                        "CREATE (m:Model:RD {date: '%s'})-[:USED]->(c:Configuration:RD {method_type_mode: '%s', " +
+                                "method_disks: '%s', data_disks:'%s'})",
                         time, methodTypeMode, methodDisks, dataDisks),
                 "m").id();
         setID(id);

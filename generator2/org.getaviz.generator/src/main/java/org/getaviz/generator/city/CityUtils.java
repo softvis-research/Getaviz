@@ -1,14 +1,15 @@
 package org.getaviz.generator.city;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.types.Node;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.city.m2m.BuildingSegmentComparator;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
+import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.types.Node;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CityUtils {
 
@@ -16,19 +17,24 @@ public class CityUtils {
 	private static DatabaseConnector connector = DatabaseConnector.getInstance();
 
 	public static String setBuildingSegmentColor(Node relatedEntity) {
-		String color = "";
+		String color;
 		String visibility = relatedEntity.get("visibility").asString("");
 		switch (config.getScheme()) {
 			case VISIBILITY:
-				if (visibility.equals("public")) {
-					color = config.getCityColor("dark_green");
-				} else if (visibility.equals("protected")) {
-					color = config.getCityColor("yellow");
-				} else if (visibility.equals("private")) {
-					color = config.getCityColor("red");
-				} else {
-					// Package visibility or default
-					color = config.getCityColor("blue");
+				switch (visibility) {
+					case "public":
+						color = config.getCityColor("dark_green");
+						break;
+					case "protected":
+						color = config.getCityColor("yellow");
+						break;
+					case "private":
+						color = config.getCityColor("red");
+						break;
+					default:
+						// Package visibility or default
+						color = config.getCityColor("blue");
+						break;
 				}
 				break;
 			case TYPES:
@@ -48,7 +54,7 @@ public class CityUtils {
 	}	
 
 	private static String setAttributeColor(Long relatedEntity) {
-		String color = "";
+		String color;
 		boolean isPrimitive = false;
 		StatementResult result = connector.executeRead("MATCH (n)-[OF_TYPE]->(t:Primitive) WHERE ID(n) = " + relatedEntity + " RETURN t");
 		if(result.hasNext()) {
@@ -63,7 +69,7 @@ public class CityUtils {
 	}
 	
 	private static String setMethodColor(Node relatedEntity) {
-		String color = "";
+		String color;
 		boolean isStatic = relatedEntity.get("static").asBoolean(false);
 		boolean isAbstract = relatedEntity.get("abstract").asBoolean(false);
 	

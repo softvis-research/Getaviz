@@ -1,15 +1,15 @@
 package org.getaviz.generator.rd.m2t;
 
-import java.io.FileWriter;
-import java.io.IOException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.Step;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.output.AFrame;
 import org.neo4j.driver.v1.types.Node;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,7 +106,6 @@ public class RD2AFrame implements Step {
 			builder.append("\t").append(toSegment(segments));
 			builder.append("\n");
 			builder.append("</a-circle>");
-			builder.append("\n");
 		} else {
 			builder.append("<a-ring id=\"").append(entity.get("hash").asString("NOHASH")).append("\"");
 			builder.append("\n");
@@ -131,8 +130,8 @@ public class RD2AFrame implements Step {
 			builder.append("\t").append(toSegment(segments));
 			builder.append("\n");
 			builder.append("</a-ring>");
-			builder.append("\n");
 		}
+		builder.append("\n");
 		return builder.toString();
 	}
 

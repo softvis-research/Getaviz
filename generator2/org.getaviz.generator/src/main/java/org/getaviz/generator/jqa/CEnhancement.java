@@ -57,7 +57,7 @@ public class CEnhancement implements Step {
 
 		this.fileNameTranslationUnit = fileName;
 		connector.executeWrite(
-				"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.name = \'" + fileName + "\', n.fqn = \'" + fileName + "\', n.hash = \'" + createHash(fileName) +  "\'"
+				"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.name = '" + fileName + "', n.fqn = '" + fileName + "', n.hash = '" + createHash(fileName) + "'"
 		);
 
 	}
@@ -83,10 +83,10 @@ public class CEnhancement implements Step {
 		if (node.get("hash").isNull()) {
 			String hash = createHash(node.get("fqn").toString());
 			connector.executeWrite(
-					"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.hash = \'" + hash + "\', n.fqn = \'" + fqn + "\'");
+					"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.hash = '" + hash + "', n.fqn = '" + fqn + "'");
 		} else {
 			connector.executeWrite(
-					"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.fqn = \'" + fqn + "\'");
+					"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.fqn = '" + fqn + "'");
 		}
 	}
 
@@ -95,7 +95,7 @@ public class CEnhancement implements Step {
 		if(node.get("hash").isNull()){
 			String hash = createHash(Long.toString(node.id()));
 			connector.executeWrite(
-					"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.hash = \'" + hash + "\'"
+					"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.hash = '" + hash + "'"
 			);
 		}
 	}

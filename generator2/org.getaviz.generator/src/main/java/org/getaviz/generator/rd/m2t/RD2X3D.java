@@ -1,14 +1,15 @@
 package org.getaviz.generator.rd.m2t;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.Step;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.output.X3D;
 import org.neo4j.driver.v1.types.Node;
+
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class RD2X3D implements Step {
 	private DatabaseConnector connector = DatabaseConnector.getInstance();
@@ -68,40 +69,40 @@ public class RD2X3D implements Step {
 	private String toDisk(Node disk, Node position) {
 		Node entity = connector.getVisualizedEntity(disk.id());
 		StringBuilder builder = new StringBuilder();
-		builder.append("<Transform translation=\'" + position.get("x") + " " + position.get("y") + " "
-				+ position.get("z") + "\' ");
+		builder.append("<Transform translation='" + position.get("x") + " " + position.get("y") + " "
+				+ position.get("z") + "' ");
 		builder.append("\n");
-		builder.append("\t rotation=\'0 0 1 1.57\'");
+		builder.append("\t rotation='0 0 1 1.57'");
 		builder.append("\n");
-		builder.append("\t scale=\'1 1 " + disk.get("height") + "\'>");
+		builder.append("\t scale='1 1 " + disk.get("height") + "'>");
 		builder.append("\n");
-		builder.append("\t <Transform DEF=\'" + entity.get("hash").asString() + "\'>");
+		builder.append("\t <Transform DEF='" + entity.get("hash").asString() + "'>");
 		builder.append("\n");
 		builder.append("\t\t <Shape>");
 		builder.append("\n");
 		builder.append("\t\t\t <Extrusion");
 		builder.append("\n");
-		builder.append("\t\t\t\t convex=\'true\'");
+		builder.append("\t\t\t\t convex='true'");
 		builder.append("\n");
-		builder.append("\t\t\t\t solid=\'true\'");
+		builder.append("\t\t\t\t solid='true'");
 		builder.append("\n");
-		builder.append("\t\t\t\t crossSection=\'" + disk.get("crossSection").asString() + "\'");
+		builder.append("\t\t\t\t crossSection='" + disk.get("crossSection").asString() + "'");
 		builder.append("\n");
-		builder.append("\t\t\t\t spine=\'" + disk.get("spine").asString() + "\'");
+		builder.append("\t\t\t\t spine='" + disk.get("spine").asString() + "'");
 		builder.append("\n");
-		builder.append("\t\t\t\t creaseAngle=\'1\'");
+		builder.append("\t\t\t\t creaseAngle='1'");
 		builder.append("\n");
-		builder.append("\t\t\t\t beginCap=\'true\'");
+		builder.append("\t\t\t\t beginCap='true'");
 		builder.append("\n");
-		builder.append("\t\t\t\t endCap=\'true\'></Extrusion>");
+		builder.append("\t\t\t\t endCap='true'></Extrusion>");
 		builder.append("\n");
 		builder.append("\t\t\t <Appearance>");
 		builder.append("\n");
 		builder.append("\t\t\t\t\t <Material");
 		builder.append("\n");
-		builder.append("\t\t\t\t\t\t diffuseColor=\'" + outputFormat.printColor(disk.get("color").asString()) + "\'");
+		builder.append("\t\t\t\t\t\t diffuseColor='" + outputFormat.printColor(disk.get("color").asString()) + "'");
 		builder.append("\n");
-		builder.append("\t\t\t\t\t\t transparency=\'" + disk.get("transparency") + "\'");
+		builder.append("\t\t\t\t\t\t transparency='" + disk.get("transparency") + "'");
 		builder.append("\n");
 		builder.append("\t\t\t\t\t ></Material>");
 		builder.append("\n");
@@ -124,36 +125,36 @@ public class RD2X3D implements Step {
 				.single().get("p").asNode();
 		Node entity = connector.getVisualizedEntity(segment.id());
 		StringBuilder builder = new StringBuilder();
-		builder.append("<Transform  translation=\'" + position.get("x") + " " + position.get("y") + " "
-				+ position.get("z") + "\' rotation=\'0 0 1 1.57\'>");
+		builder.append("<Transform  translation='" + position.get("x") + " " + position.get("y") + " "
+				+ position.get("z") + "' rotation='0 0 1 1.57'>");
 		builder.append("\n");
-		builder.append("\t <Transform DEF=\'" + entity.get("hash").asString() + "\'>");
+		builder.append("\t <Transform DEF='" + entity.get("hash").asString() + "'>");
 		builder.append("\n");
 		builder.append("\t\t <Shape>");
 		builder.append("\n");
 		builder.append("\t\t\t <Extrusion");
 		builder.append("\n");
-		builder.append("\t\t\t\t convex=\'true\'");
+		builder.append("\t\t\t\t convex='true'");
 		builder.append("\n");
-		builder.append("\t\t\t\t solid=\'true\'");
+		builder.append("\t\t\t\t solid='true'");
 		builder.append("\n");
-		builder.append("\t\t\t\t crossSection=\'" + segment.get("crossSection").asString() + "\'");
+		builder.append("\t\t\t\t crossSection='" + segment.get("crossSection").asString() + "'");
 		builder.append("\n");
-		builder.append("\t\t\t\t spine=\'" + segment.get("spine").asString() + "\'");
+		builder.append("\t\t\t\t spine='" + segment.get("spine").asString() + "'");
 		builder.append("\n");
-		builder.append("\t\t\t\t creaseAngle=\'1\'");
+		builder.append("\t\t\t\t creaseAngle='1'");
 		builder.append("\n");
-		builder.append("\t\t\t\t beginCap=\'true\'");
+		builder.append("\t\t\t\t beginCap='true'");
 		builder.append("\n");
-		builder.append("\t\t\t\t endCap=\'true\'></Extrusion>");
+		builder.append("\t\t\t\t endCap='true'></Extrusion>");
 		builder.append("\n");
 		builder.append("\t\t\t <Appearance>");
 		builder.append("\n");
 		builder.append("\t\t\t\t\t <Material");
 		builder.append("\n");
-		builder.append("\t\t\t\t\t\t diffuseColor=\'" + outputFormat.printColor(segment.get("color").asString()) + "\'");
+		builder.append("\t\t\t\t\t\t diffuseColor='" + outputFormat.printColor(segment.get("color").asString()) + "'");
 		builder.append("\n");
-		builder.append("\t\t\t\t\t\t transparency=\'" + segment.get("transparency") + "\'");
+		builder.append("\t\t\t\t\t\t transparency='" + segment.get("transparency") + "'");
 		builder.append("\n");
 		builder.append("\t\t\t\t\t ></Material>");
 		builder.append("\n");

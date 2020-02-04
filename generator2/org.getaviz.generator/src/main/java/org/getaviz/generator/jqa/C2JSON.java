@@ -38,13 +38,9 @@ public class C2JSON implements Step {
 		if(checkRequirements()) {
 			log.info("C2JSON has started.");
 			ArrayList<Node> elements = new ArrayList<>();
-			connector.executeRead("MATCH (n:Condition) RETURN n").forEachRemaining((result) -> {
-				elements.add(result.get("n").asNode());
-			});
+			connector.executeRead("MATCH (n:Condition) RETURN n").forEachRemaining((result) -> elements.add(result.get("n").asNode()));
 
-			connector.executeRead("MATCH (n)<-[:VISUALIZES]-() WHERE EXISTS(n.hash) RETURN n ORDER BY n.hash").forEachRemaining((result) -> {
-				elements.add(result.get("n").asNode());
-			});
+			connector.executeRead("MATCH (n)<-[:VISUALIZES]-() WHERE EXISTS(n.hash) RETURN n ORDER BY n.hash").forEachRemaining((result) -> elements.add(result.get("n").asNode()));
 			Writer fw = null;
 			try {
 				String path = config.getOutputPath() + "metaData.json";
@@ -201,7 +197,6 @@ public class C2JSON implements Step {
 
 	private String toMetaDataNegation(Node negation) {
 		String negated = "";
-		Node negatedNode;
 		try {
 			StatementResult negations =  connector.executeRead(
 					"MATCH (negation:Negation)-[:NEGATES]->(condition) WHERE ID(negation) = " + negation.id() + " RETURN condition.hash");
@@ -221,9 +216,7 @@ public class C2JSON implements Step {
 		ArrayList<String> connectedConditions = new ArrayList<>();
 		StatementResult connections = connector.executeRead(
 				"MATCH (andNode:And)-[:CONNECTS]->(condition) WHERE ID(andNode) = " + andNode.id() + " RETURN condition.hash");
-		connections.forEachRemaining(condition -> {
-			connectedConditions.add(condition.get("hash").asString());
-		});
+		connections.forEachRemaining(condition -> connectedConditions.add(condition.get("hash").asString()));
 
 		return formatLine("id", andNode.get("hash").asString()) +
 				formatLine("type", "And") +
@@ -234,9 +227,7 @@ public class C2JSON implements Step {
 		ArrayList<String> connectedConditions = new ArrayList<>();
 		StatementResult connections = connector.executeRead(
 				"MATCH (orNode:And)-[:CONNECTS]->(condition) WHERE ID(orNode) = " + orNode.id() + " RETURN condition.hash");
-		connections.forEachRemaining(condition -> {
-			connectedConditions.add(condition.get("hash").asString());
-		});
+		connections.forEachRemaining(condition -> connectedConditions.add(condition.get("hash").asString()));
 
 		return formatLine("id", orNode.get("hash").asString()) +
 				formatLine("type", "Or") +
@@ -336,7 +327,7 @@ public class C2JSON implements Step {
 	}
 
 	 private String getFunctionSignature(Node function){
-		String signature = "";
+		String signature;
 		String returnType = "";
 		StatementResult returnTypeNodes =  connector.executeRead(
 				 "MATCH (function:Function)-[:RETURNS]->(node) WHERE ID(function) = " + function.id() + " RETURN node");

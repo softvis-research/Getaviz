@@ -2,15 +2,16 @@ package org.getaviz.generator.city.m2t;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.Step;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.SettingsConfiguration.BuildingType;
+import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.database.Labels;
-import org.getaviz.generator.SettingsConfiguration.BuildingType;
-import java.io.IOException;
-import java.io.FileWriter;
 import org.getaviz.generator.output.AFrame;
 import org.neo4j.driver.v1.types.Node;
+
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +120,7 @@ public class City2AFrame implements Step {
 
 	private String toBuilding(Node building, Node position) {
 		Node entity = connector.getVisualizedEntity(building.id());
-		String builder = "<a-box id=\"" + entity.get("hash").asString() + "\"" +
+		return "<a-box id=\"" + entity.get("hash").asString() + "\"" +
 				"\t\t position=\"" + position.get("x") + " " + position.get("y") + " " + position.get("z") + "\"" +
 				"\n" +
 				"\t\t width=\"" + building.get("width") + "\"" +
@@ -132,7 +133,6 @@ public class City2AFrame implements Step {
 				"\n" +
 				"</a-box>" +
 				"\n";
-		return builder;
 	}
 
 	private String buildPosition(Node position) {
@@ -227,7 +227,7 @@ public class City2AFrame implements Step {
 
 	private String toFloor(Node floor, Node position) {
 		Node entity = connector.getVisualizedEntity(floor.id());
-		String builder = "<a-box id=\"" + entity.get("hash").asString() + "\"" +
+		return "<a-box id=\"" + entity.get("hash").asString() + "\"" +
 				"\n" +
 				buildPosition(position) +
 				"\n" +
@@ -241,12 +241,11 @@ public class City2AFrame implements Step {
 				"\n" +
 				"</a-box>" +
 				"\n";
-		return builder;
 	}
 
 	private String toChimney(Node chimney, Node position) {
 		Node entity = connector.getVisualizedEntity(chimney.id());
-		String builder = "<a-box id=\"" + entity.get("hash").asString() + "\"" +
+		return "<a-box id=\"" + entity.get("hash").asString() + "\"" +
 				"\n" +
 				buildPosition(position) +
 				"\n" +
@@ -260,6 +259,5 @@ public class City2AFrame implements Step {
 				"\n" +
 				"</a-box>" +
 				"\n";
-		return builder;
 	}
 }

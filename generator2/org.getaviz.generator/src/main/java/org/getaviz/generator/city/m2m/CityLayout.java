@@ -1,19 +1,14 @@
 package org.getaviz.generator.city.m2m;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.database.Labels;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.database.Labels;
-import org.getaviz.generator.database.DatabaseConnector;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class CityLayout {
 	private static boolean DEBUG = false;
@@ -51,8 +46,8 @@ public class CityLayout {
 																									// ordered by
 																									// inserting-order
 			Map<CityKDTreeNode, Double> expanders = new LinkedHashMap<>();
-			CityKDTreeNode targetNode = new CityKDTreeNode();
-			CityKDTreeNode fitNode = new CityKDTreeNode();
+			CityKDTreeNode targetNode;
+			CityKDTreeNode fitNode;
 
 			// check all empty leaves: either they extend COVREC (->expanders) or it doesn't
 			// change (->preservers)
@@ -126,8 +121,8 @@ public class CityLayout {
 																									// ordered by
 																									// inserting-order
 			Map<CityKDTreeNode, Double> expanders = new LinkedHashMap<>();
-			CityKDTreeNode targetNode = new CityKDTreeNode();
-			CityKDTreeNode fitNode = new CityKDTreeNode();
+			CityKDTreeNode targetNode;
+			CityKDTreeNode fitNode;
 
 			// check all empty leaves: either they extend COVREC (->expanders) or it doesn't
 			// change (->preservers)
@@ -223,10 +218,8 @@ public class CityLayout {
 				System.out.println("\t\t" + info + "Node is preserver. waste=" + waste);
 			}
 		} else {
-			double ratio = ((nodeNewBottomRightX > covrec.getBottomRightX() ? nodeNewBottomRightX
-					: covrec.getBottomRightX())
-					/ (nodeNewBottomRightY > covrec.getBottomRightY() ? nodeNewBottomRightY
-							: covrec.getBottomRightY()));
+			double ratio = ((Math.max(nodeNewBottomRightX, covrec.getBottomRightX()))
+					/ (Math.max(nodeNewBottomRightY, covrec.getBottomRightY())));
 			expanders.put(pnode, ratio);
 			if (DEBUG_Part2) {
 				System.out.println(
@@ -360,17 +353,13 @@ public class CityLayout {
 		double y = node.get("height").asDouble() / 2;
 		double z = fitNode.getRectangle().getCenterY() - config.getBuildingHorizontalGap() / 2;
 		connector.executeWrite(String.format(
-				"MATCH (n) WHERE ID(n) = %d CREATE (n)-[:HAS]->(p:Position:City {name: \'position\', x: %f, y: %f, z: %f})",
+				"MATCH (n) WHERE ID(n) = %d CREATE (n)-[:HAS]->(p:Position:City {name: 'position', x: %f, y: %f, z: %f})",
 				node.id(), x, y, z));
 	}
 
 	private static void updateCovrec(CityKDTreeNode fitNode, Rectangle covrec) {
-		double newX = (fitNode.getRectangle().getBottomRightX() > covrec.getBottomRightX()
-				? fitNode.getRectangle().getBottomRightX()
-				: covrec.getBottomRightX());
-		double newY = (fitNode.getRectangle().getBottomRightY() > covrec.getBottomRightY()
-				? fitNode.getRectangle().getBottomRightY()
-				: covrec.getBottomRightY());
+		double newX = (Math.max(fitNode.getRectangle().getBottomRightX(), covrec.getBottomRightX()));
+		double newY = (Math.max(fitNode.getRectangle().getBottomRightY(), covrec.getBottomRightY()));
 		covrec.changeRectangle(0, 0, newX, newY);
 		if (DEBUG) {
 			System.out.println(

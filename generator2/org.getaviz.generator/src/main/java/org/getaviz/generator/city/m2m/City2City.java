@@ -1,25 +1,26 @@
 package org.getaviz.generator.city.m2m;
 
-import org.getaviz.generator.ColorGradient;
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.Step;
-import org.getaviz.generator.database.Labels;
-import org.getaviz.generator.SettingsConfiguration.BuildingType;
-import org.getaviz.generator.city.CityUtils;
-import org.getaviz.generator.SettingsConfiguration.ClassElementsModes;
-import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.ArrayList;
-import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.ColorGradient;
+import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.SettingsConfiguration.BuildingType;
+import org.getaviz.generator.SettingsConfiguration.ClassElementsModes;
+import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
+import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
+import org.getaviz.generator.Step;
+import org.getaviz.generator.city.CityUtils;
 import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.database.Labels;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 import org.neo4j.driver.v1.types.Path;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class City2City implements Step {
 	private Log log = LogFactory.getLog(this.getClass());
@@ -96,7 +97,7 @@ public class City2City implements Step {
 
 	public void run() {
 		log.info("City2City started");
-		Node model = connector.executeRead("MATCH (n:Model {building_type: \'" + buildingTypeAsString +
+		Node model = connector.executeRead("MATCH (n:Model {building_type: '" + buildingTypeAsString +
 				"\'}) RETURN n").next().get("n").asNode();
 		if (buildingType == BuildingType.CITY_BRICKS || buildingType == BuildingType.CITY_PANELS) {
 			connector.executeRead("MATCH (n:Model:City)-[:CONTAINS*]->(m:BuildingSegment) RETURN m").forEachRemaining((result) -> setBuildingSegmentAttributes(result.get("m").asNode().id()));
@@ -151,7 +152,7 @@ public class City2City implements Step {
 	private void setDistrictAttributes(Path districtPath) {
 		String color = PCKG_colors.get(districtPath.length() - 1);
 		connector.executeWrite(
-			String.format("MATCH (n) WHERE ID(n) = %d SET n.height = %f, n.color = \'%s\'", districtPath.end().id(),
+			String.format("MATCH (n) WHERE ID(n) = %d SET n.height = %f, n.color = '%s'", districtPath.end().id(),
 				heightMin, color));
 	}
 
@@ -556,7 +557,7 @@ public class City2City implements Step {
 	private String cypherSetBuildingSegmentAttributes(Long segment, double width, double length, double height,
 		String color) {
 		return String.format(
-			"MATCH (n) WHERE ID(n) = %d SET n.width = %f, n.length = %f, n.height = %f, n.color = \'%s\'", segment,
+				"MATCH (n) WHERE ID(n) = %d SET n.width = %f, n.length = %f, n.height = %f, n.color = '%s'", segment,
 			width, length, height, color);
 	}
 

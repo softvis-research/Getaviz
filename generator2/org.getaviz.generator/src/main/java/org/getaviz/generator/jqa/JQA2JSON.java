@@ -1,22 +1,23 @@
 package org.getaviz.generator.jqa;
 
-import java.io.Writer;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.getaviz.generator.ProgrammingLanguage;
-import org.getaviz.generator.Step;
-import org.getaviz.generator.database.Labels;
-import org.getaviz.generator.SettingsConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.text.StringEscapeUtils;
+import org.getaviz.generator.ProgrammingLanguage;
+import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.database.Labels;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class JQA2JSON implements Step {
 	private SettingsConfiguration config;
@@ -123,7 +124,7 @@ public class JQA2JSON implements Step {
 	}
 
 	private String toMetaDataClass(Node c) {
-		String belongsTo = "";
+		String belongsTo;
 		StatementResult parent = connector
 				.executeRead("MATCH (parent:Type)-[:DECLARES]->(class) WHERE ID(class) = " + c.id() + " RETURN parent");
 		if (parent.hasNext()) {
