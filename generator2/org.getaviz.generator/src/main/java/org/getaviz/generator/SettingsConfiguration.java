@@ -14,8 +14,6 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
-import org.getaviz.generator.database.DatabaseConnector;
-import org.neo4j.driver.v1.StatementResult;
 
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
@@ -100,12 +98,10 @@ public class SettingsConfiguration {
 	
 	public Metaphor getMetaphor() {
 		String metaphor = config.getString("metaphor", "rd");
-		switch (metaphor) {
-			case "city":
-				return Metaphor.CITY;
-			default:
-				return Metaphor.RD;
+		if ("city".equals(metaphor)) {
+			return Metaphor.CITY;
 		}
+		return Metaphor.RD;
 	}
 	
 	public String getName() {
@@ -117,12 +113,10 @@ public class SettingsConfiguration {
 	}
 
 	public OutputFormat getOutputFormat() {
-		switch (config.getString("output.format", "aframe")) {
-		case "x3d":
+		if ("x3d".equals(config.getString("output.format", "aframe"))) {
 			return OutputFormat.X3D;
-		default:
-			return OutputFormat.AFrame;
 		}
+		return OutputFormat.AFrame;
 	}
 	
 	public String getBuildingTypeAsString() {
@@ -287,12 +281,10 @@ public class SettingsConfiguration {
 
 	public BuildingMetric getOriginalBuildingMetric() {
 		String value = config.getString("city.original_building_metric", "none");
-		switch (value) {
-		case "nos":
+		if ("nos".equals(value)) {
 			return BuildingMetric.NOS;
-		default:
-			return BuildingMetric.NONE;
 		}
+		return BuildingMetric.NONE;
 	}
 
 	public double getWidthMin() {
@@ -447,8 +439,8 @@ public class SettingsConfiguration {
 	 * it can either be in a static or dynamic way 
 	 */
 	
-	public static enum BuildingType {
-		CITY_ORIGINAL, CITY_PANELS, CITY_BRICKS, CITY_FLOOR;
+	public enum BuildingType {
+		CITY_ORIGINAL, CITY_PANELS, CITY_BRICKS, CITY_FLOOR
 	}
 	
 	/**
@@ -478,7 +470,7 @@ public class SettingsConfiguration {
 	 * Defines which elements of a class are to show.
 	 */
 	public enum ClassElementsModes {
-		METHODS_ONLY, ATTRIBUTES_ONLY, METHODS_AND_ATTRIBUTES;
+		METHODS_ONLY, ATTRIBUTES_ONLY, METHODS_AND_ATTRIBUTES
 	}
 	
 	/**
@@ -538,7 +530,7 @@ public class SettingsConfiguration {
 		 * @see ClassElementsSortModesFine
 		 * @see SortPriorities_Visibility
 		 */
-		public static enum SortPriorities_Types {;
+		public enum SortPriorities_Types {;
 
 			/**
 			 * Method is a constructor.
@@ -582,7 +574,7 @@ public class SettingsConfiguration {
 		 * top.
 		 * @see ClassElementsSortModesFine
 		 */
-		public static enum SortPriorities_Types {;
+		public enum SortPriorities_Types {;
 
 			/** Type is a primitive like {@code boolean}, {@code int}. */
 			public static int PRIMITVE = 1;
@@ -634,7 +626,7 @@ public class SettingsConfiguration {
 			 * {@code METHODS_AND_ATTRIBUTES}, the {@link Layout#BALANCED
 			 * PROGRESSIVE} layout and {@code PROGRESSIVE} layout are identical.
 			 */
-			PROGRESSIVE;
+			PROGRESSIVE
 
 		}
 	}
@@ -647,7 +639,7 @@ public class SettingsConfiguration {
 		 * The panels can either touch each other without a gap, leave a gap
 		 * between them, or fill the space with a separator of a defined color.
 		 */
-		public static enum SeparatorModes {
+		public enum SeparatorModes {
 
 			/**
 			 * No space between the panels and they are placed on top of each
@@ -665,7 +657,7 @@ public class SettingsConfiguration {
 			 * Between the panels separators are placed with a fix height and
 			 * color.
 			 */
-			SEPARATOR;
+			SEPARATOR
 
 		}
 	}
@@ -674,7 +666,7 @@ public class SettingsConfiguration {
 		;
 		public enum BuildingMetric {
 			NONE,
-			NOS;
+			NOS
 		}
 	}
 	

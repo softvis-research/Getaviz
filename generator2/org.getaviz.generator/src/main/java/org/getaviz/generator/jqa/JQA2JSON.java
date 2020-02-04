@@ -41,7 +41,7 @@ public class JQA2JSON implements Step {
 			fw = new FileWriter(path);
 			fw.write(toJSON(elements));
 		} catch (IOException e) {
-			System.err.println(e);
+			log.error(e);
 		} finally {
 			if (fw != null)
 				try {

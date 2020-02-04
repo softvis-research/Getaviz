@@ -13,7 +13,7 @@ class CityKDTree{
 	private CityKDTreeNode root;
 
 	List<CityKDTreeNode> getFittingNodes(Rectangle r){
-		List<CityKDTreeNode> fittingNodes = new ArrayList<CityKDTreeNode>();
+		List<CityKDTreeNode> fittingNodes = new ArrayList<>();
 		this.root.isEmptyLeaf(r, fittingNodes);
 		return fittingNodes;
 	}

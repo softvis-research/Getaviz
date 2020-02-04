@@ -2,7 +2,6 @@ package org.getaviz.generator.rd;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.ProgrammingLanguage;
 import org.getaviz.generator.*;
 
 import java.util.ArrayList;

@@ -130,12 +130,7 @@ public class Rectangle implements Comparable<Rectangle> {
 	public int compareTo(Rectangle second) {
 		int firstComparison = Double.compare(this.area, second.getArea());
 		if (firstComparison == 0) {
-			int secondComparison = Double.compare(this.width, second.getWidth());
-			if (secondComparison == 0) {
-				return 0;
-			} else {
-				return secondComparison;
-			}
+			return Double.compare(this.width, second.getWidth());
 		} else {
 			return firstComparison;
 		}

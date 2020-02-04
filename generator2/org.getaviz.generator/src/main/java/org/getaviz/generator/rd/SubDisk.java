@@ -3,7 +3,6 @@ package org.getaviz.generator.rd;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.rd.m2m.Position;
 import java.util.ArrayList;
 

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.database.Labels;
 import org.getaviz.generator.rd.Disk;
 import org.getaviz.generator.rd.DiskSegment;
 import org.getaviz.generator.rd.MainDisk;

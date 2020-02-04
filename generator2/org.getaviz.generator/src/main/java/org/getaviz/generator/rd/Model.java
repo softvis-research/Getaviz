@@ -3,10 +3,8 @@ package org.getaviz.generator.rd;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
-
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 
 public class Model {
 

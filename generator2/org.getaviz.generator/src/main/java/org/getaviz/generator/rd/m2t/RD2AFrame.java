@@ -133,8 +133,7 @@ public class RD2AFrame implements Step {
 			builder.append("</a-ring>");
 			builder.append("\n");
 		}
-		String properties = builder.toString();
-		return properties;
+		return builder.toString();
 	}
 
 	private String toSegment(List<Node> segments) {

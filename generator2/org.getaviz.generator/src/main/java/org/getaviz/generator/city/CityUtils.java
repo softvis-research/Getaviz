@@ -93,7 +93,7 @@ public class CityUtils {
 	 */
 	
 	public static void sortBuildingSegments(final List<Node> segments) {
-		final List<BuildingSegmentComparator> sortedList = new ArrayList<BuildingSegmentComparator>(segments.size());
+		final List<BuildingSegmentComparator> sortedList = new ArrayList<>(segments.size());
 		for (Node segment : segments)
 			sortedList.add(new BuildingSegmentComparator(segment));
 		Collections.sort(sortedList);
@@ -103,7 +103,7 @@ public class CityUtils {
 	}
 		
 	public static List<Node> getChildren(Long parent) {
-		ArrayList<Node> children = new ArrayList<Node>();
+		ArrayList<Node> children = new ArrayList<>();
 		StatementResult childs = connector.executeRead("MATCH (n)-[:CONTAINS]->(child) WHERE ID(n) = " + parent + " RETURN child");
 		while(childs.hasNext()) {
 			children.add(childs.next().get("child").asNode());
@@ -113,7 +113,7 @@ public class CityUtils {
 
 	public static List<Node> getMethods(Long building) {
 		StatementResult result = connector.executeRead("MATCH (n)-[:CONTAINS]->(bs:BuildingSegment)-[:VISUALIZES]->(m:Method) WHERE ID(n) = " + building + " RETURN bs");
-		ArrayList<Node> methods = new ArrayList<Node>();
+		ArrayList<Node> methods = new ArrayList<>();
 		while(result.hasNext()) {
 			methods.add(result.next().get("bs").asNode());
 		}
@@ -122,7 +122,7 @@ public class CityUtils {
 
 	public static List<Node> getData(Long building) {
 		StatementResult result = connector.executeRead("MATCH (n)-[:CONTAINS]->(bs:BuildingSegment)-[:VISUALIZES]->(f:Field) WHERE ID(n) = " + building + " RETURN bs");
-		ArrayList<Node> data = new ArrayList<Node>();
+		ArrayList<Node> data = new ArrayList<>();
 		while(result.hasNext()) {
 			data.add(result.next().get("bs").asNode());
 		}
