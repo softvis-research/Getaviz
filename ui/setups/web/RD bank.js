@@ -102,7 +102,7 @@ var setup = {
                     items: [
                         {
                             title: "FlyTo",
-                            toggle: false,
+                            toggle: true,
                             eventOn: "canvasFlyToController.activate",
                             eventOff: "canvasFlyToController.deactivate",
                         },
