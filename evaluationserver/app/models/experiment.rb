@@ -1,7 +1,7 @@
 # coding: utf-8
 class Experiment < ApplicationRecord
   has_many :participants
-  has_many :experiment_steps, ->{ where(:is_inner_step => false).order('experiment_steps.position, experiment_steps.id') }
+  has_many :experiment_steps, ->{ where(:is_inner_step => [false,nil]).order('experiment_steps.position, experiment_steps.id') }
   has_many :steps, :through => :experiment_steps
   
   before_save :default_values

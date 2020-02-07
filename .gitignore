@@ -1,4 +1,8 @@
 *.komodoproject
 */.idea
+*.iml
+ui/data/
 
-\.idea/
+generator2/org.getaviz.generator/.idea/
+
+.idea/

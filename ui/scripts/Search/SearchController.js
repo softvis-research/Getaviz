@@ -64,7 +64,7 @@ var searchController = (function() {
 	}
     
     function initializeSearch() {
-        
+
         suggestions = new Bloodhound({
             datumTokenizer: function(entity) {
 				const tokenizerQN = Bloodhound.tokenizers.whitespace(entity.qualifiedName);
@@ -82,10 +82,9 @@ var searchController = (function() {
 				return tokenizerQN;
 			},						
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            local: Array.from(model.getAllEntities().values()),
+            local: Array.from(model.getCodeEntities().values()),
             limit: 20
         });
-        
 		suggestions.initialize();
 		
         $(jQsearchInputID).typeahead(

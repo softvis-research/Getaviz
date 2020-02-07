@@ -1,20 +1,14 @@
 package org.getaviz.generator.city.m2m;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.database.Labels;
 import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.city.m2m.Rectangle;
-import org.getaviz.generator.database.Labels;
-import org.getaviz.generator.database.DatabaseConnector;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class CityLayout {
 	private static boolean DEBUG = false;
@@ -27,7 +21,7 @@ public class CityLayout {
 	// database object before transaction can save them
 	private static Map<Long, double[]> properties;
 
-	public static void cityLayout(Long model, Map<Long, double[]> testMap) {
+	static void cityLayout(Long model, Map<Long, double[]> testMap) {
 		properties = testMap;
 			arrangeChildrenRoot(model);
 			adjustPositions(getChildren(model), 0, 0, 0);
@@ -46,14 +40,14 @@ public class CityLayout {
 		// algorithm
 		for (Rectangle el : elements) {
 			List<CityKDTreeNode> pnodes = ptree.getFittingNodes(el);
-			Map<CityKDTreeNode, Double> preservers = new LinkedHashMap<CityKDTreeNode, Double>(); // LinkedHashMap
+			Map<CityKDTreeNode, Double> preservers = new LinkedHashMap<>(); // LinkedHashMap
 																									// necessary, so
 																									// elements are
 																									// ordered by
 																									// inserting-order
-			Map<CityKDTreeNode, Double> expanders = new LinkedHashMap<CityKDTreeNode, Double>();
-			CityKDTreeNode targetNode = new CityKDTreeNode();
-			CityKDTreeNode fitNode = new CityKDTreeNode();
+			Map<CityKDTreeNode, Double> expanders = new LinkedHashMap<>();
+			CityKDTreeNode targetNode;
+			CityKDTreeNode fitNode;
 
 			// check all empty leaves: either they extend COVREC (->expanders) or it doesn't
 			// change (->preservers)
@@ -62,7 +56,7 @@ public class CityLayout {
 			}
 
 			// choose best-fitting pnode
-			if (preservers.isEmpty() != true) {
+			if (!preservers.isEmpty()) {
 				targetNode = bestFitIsPreserver(preservers.entrySet());
 			} else {
 				targetNode = bestFitIsExpander(expanders.entrySet());
@@ -79,7 +73,7 @@ public class CityLayout {
 			}
 
 			// set fitNode as occupied
-			fitNode.setOccupied(true);
+			fitNode.setOccupied();
 
 			// give Entity it's Position
 			setNewPositionFromNode(el, fitNode);
@@ -121,14 +115,14 @@ public class CityLayout {
 		// start algorithm
 		for (Rectangle el : elements) {
 			List<CityKDTreeNode> pnodes = ptree.getFittingNodes(el);
-			Map<CityKDTreeNode, Double> preservers = new LinkedHashMap<CityKDTreeNode, Double>(); // LinkedHashMap
+			Map<CityKDTreeNode, Double> preservers = new LinkedHashMap<>(); // LinkedHashMap
 																									// necessary, so
 																									// elements are
 																									// ordered by
 																									// inserting-order
-			Map<CityKDTreeNode, Double> expanders = new LinkedHashMap<CityKDTreeNode, Double>();
-			CityKDTreeNode targetNode = new CityKDTreeNode();
-			CityKDTreeNode fitNode = new CityKDTreeNode();
+			Map<CityKDTreeNode, Double> expanders = new LinkedHashMap<>();
+			CityKDTreeNode targetNode;
+			CityKDTreeNode fitNode;
 
 			// check all empty leaves: either they extend COVREC (->expanders) or it doesn't
 			// change (->preservers)
@@ -137,7 +131,7 @@ public class CityLayout {
 			}
 
 			// choose best-fitting pnode
-			if (preservers.isEmpty() != true) {
+			if (!preservers.isEmpty()) {
 				targetNode = bestFitIsPreserver(preservers.entrySet());
 			} else {
 				targetNode = bestFitIsExpander(expanders.entrySet());
@@ -154,7 +148,7 @@ public class CityLayout {
 			}
 
 			// set fitNode as occupied
-			fitNode.setOccupied(true);
+			fitNode.setOccupied();
 
 			// give Entity it's Position
 			setNewPositionFromNode(el, fitNode);
@@ -189,7 +183,7 @@ public class CityLayout {
 
 	/* functions for algorithm */
 	private static List<Rectangle> sortChildrenAsRectangles(List<Node> children) {
-		List<Rectangle> elements = new ArrayList<Rectangle>();
+		List<Rectangle> elements = new ArrayList<>();
 		// copy all child-elements into a List<Rectangle> (for easier sort) with links
 		// to former entities
 		for (Node child : children) {
@@ -224,10 +218,8 @@ public class CityLayout {
 				System.out.println("\t\t" + info + "Node is preserver. waste=" + waste);
 			}
 		} else {
-			double ratio = ((nodeNewBottomRightX > covrec.getBottomRightX() ? nodeNewBottomRightX
-					: covrec.getBottomRightX())
-					/ (nodeNewBottomRightY > covrec.getBottomRightY() ? nodeNewBottomRightY
-							: covrec.getBottomRightY()));
+			double ratio = ((Math.max(nodeNewBottomRightX, covrec.getBottomRightX()))
+					/ (Math.max(nodeNewBottomRightY, covrec.getBottomRightY())));
 			expanders.put(pnode, ratio);
 			if (DEBUG_Part2) {
 				System.out.println(
@@ -294,7 +286,7 @@ public class CityLayout {
 			node.setRightChild(new CityKDTreeNode(new Rectangle(nodeUpperLeftX, (nodeUpperLeftY + r.getLength()),
 					nodeBottomRightX, nodeBottomRightY)));
 			// set node as occupied (only leaves can contain elements)
-			node.setOccupied(true);
+			node.setOccupied();
 
 			if (DEBUG_Part2) {
 				System.out.println("\t\t\t" + info + "horizontal");
@@ -322,7 +314,7 @@ public class CityLayout {
 			node.setRightChild(new CityKDTreeNode(new Rectangle((nodeUpperLeftX + r.getWidth()), nodeUpperLeftY,
 					nodeBottomRightX, nodeBottomRightY)));
 			// set node as occupied (only leaves can contain elements)
-			node.setOccupied(true);
+			node.setOccupied();
 
 			if (DEBUG_Part2) {
 				System.out.println("\t\t\t" + info + "vertical");
@@ -361,17 +353,13 @@ public class CityLayout {
 		double y = node.get("height").asDouble() / 2;
 		double z = fitNode.getRectangle().getCenterY() - config.getBuildingHorizontalGap() / 2;
 		connector.executeWrite(String.format(
-				"MATCH (n) WHERE ID(n) = %d CREATE (n)-[:HAS]->(p:Position:City {name: \'position\', x: %f, y: %f, z: %f})",
+				"MATCH (n) WHERE ID(n) = %d CREATE (n)-[:HAS]->(p:Position:City {name: 'position', x: %f, y: %f, z: %f})",
 				node.id(), x, y, z));
 	}
 
 	private static void updateCovrec(CityKDTreeNode fitNode, Rectangle covrec) {
-		double newX = (fitNode.getRectangle().getBottomRightX() > covrec.getBottomRightX()
-				? fitNode.getRectangle().getBottomRightX()
-				: covrec.getBottomRightX());
-		double newY = (fitNode.getRectangle().getBottomRightY() > covrec.getBottomRightY()
-				? fitNode.getRectangle().getBottomRightY()
-				: covrec.getBottomRightY());
+		double newX = (Math.max(fitNode.getRectangle().getBottomRightX(), covrec.getBottomRightX()));
+		double newY = (Math.max(fitNode.getRectangle().getBottomRightY(), covrec.getBottomRightY()));
 		covrec.changeRectangle(0, 0, newX, newY);
 		if (DEBUG) {
 			System.out.println(
@@ -409,7 +397,7 @@ public class CityLayout {
 	}
 
 	private static List<Node> getChildren(Long entity) {
-		List<Node> children = new ArrayList<Node>();
+		List<Node> children = new ArrayList<>();
 		StatementResult childs = connector.executeRead(
 				"MATCH (n)-[:CONTAINS]->(c)-[:VISUALIZES]->(element) WHERE (c:District OR c:Building) AND ID(n) = " + entity + " RETURN c, element.hash as hash ORDER BY element.hash");
 		while (childs.hasNext()) {

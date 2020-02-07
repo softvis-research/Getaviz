@@ -1,4 +1,5 @@
 <div class="page-header">
+    <p><%= @experiment.errors.full_messages %></p>
   <h1><%= t(:new, scope: :experiments) %></h1>
 </div>
 <%= render :partial => 'form' %>

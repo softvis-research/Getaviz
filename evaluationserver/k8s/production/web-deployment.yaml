@@ -1,0 +1,115 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.7.0 (767ab4b)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: web
+  name: web
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: web
+    spec:
+      containers:
+      - args:
+        - ./bin/wait-for-it.sh
+        - db:3306
+        - -s
+        - -t
+        - "30"
+        - --
+        - ./bin/docker_start
+        env:
+        - name: DEVELOPMENT_MYSQL_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: DEVELOPMENT_MYSQL_DB_NAME
+              name: web-env
+        - name: DEVELOPMENT_MYSQL_DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: DEVELOPMENT_MYSQL_DB_PASSWORD
+              name: web-env
+        - name: DEVELOPMENT_MYSQL_DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              key: DEVELOPMENT_MYSQL_DB_USERNAME
+              name: web-env
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_DATABASE
+              name: web-env
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_PASSWORD
+              name: web-env
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_ROOT_PASSWORD
+              name: web-env
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_USER
+              name: web-env
+        - name: PRODUCTION_MYSQL_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: PRODUCTION_MYSQL_DB_NAME
+              name: web-env
+        - name: PRODUCTION_MYSQL_DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: PRODUCTION_MYSQL_DB_PASSWORD
+              name: web-env
+        - name: PRODUCTION_MYSQL_DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              key: PRODUCTION_MYSQL_DB_USERNAME
+              name: web-env
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            configMapKeyRef:
+              key: SECRET_KEY_BASE
+              name: web-env
+        - name: TEST_MYSQL_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: TEST_MYSQL_DB_NAME
+              name: web-env
+        - name: TEST_MYSQL_DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              key: TEST_MYSQL_DB_PASSWORD
+              name: web-env
+        - name: TEST_MYSQL_DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              key: TEST_MYSQL_DB_USERNAME
+              name: web-env
+        image: web
+        name: web
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8081
+        resources: {}
+        volumeMounts:
+        - mountPath: /usr/src/app
+          name: web-claim0
+      restartPolicy: Always
+      volumes:
+      - name: web-claim0
+        persistentVolumeClaim:
+          claimName: web-claim0
+status: {}

@@ -1,18 +1,18 @@
 package org.getaviz.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.getaviz.tests.helper.DatabaseTestConnector;
 import org.getaviz.tests.helper.ParameterStringBuilder;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
-
  
 public class RDIT {
 
@@ -25,7 +25,7 @@ public class RDIT {
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("POST");
 		Map<String, String> parameters = new HashMap<>();
-		parameters.put("input.files", "http://central.maven.org/maven2/com/android/tools/build/gradle/0.1/gradle-0.1.jar");
+		parameters.put("input.files", "https://repo1.maven.org/maven2/com/android/tools/build/gradle/0.1/gradle-0.1.jar");
 		parameters.put("metaphor", "rd");
 		 
 		con.setDoOutput(true);
@@ -44,7 +44,7 @@ public class RDIT {
 	@Test
     void numberOfVisualizedPackages() {
 		Record result = connector.executeRead(
-			"MATCH (disk:Disk)-[:VISUALIZES]->(:Package) " + 
+			"MATCH (disk:MainDisk)-[:VISUALIZES]->(:Package) " + 
 			"RETURN count(disk) AS result"
 		).single();
 		int numberOfVisualizedPackages = result.get("result").asInt();
@@ -54,7 +54,7 @@ public class RDIT {
 	@Test
     void numberOfVisualizedTypes() {
 		Record result = connector.executeRead(
-			"MATCH (disk:Disk)-[:VISUALIZES]->(:Type) " + 
+			"MATCH (disk:SubDisk)-[:VISUALIZES]->(:Type) " + 
 			"RETURN count(disk) AS result"
 		).single();
 		int numberOfVisualizedTypes = result.get("result").asInt();
@@ -84,7 +84,7 @@ public class RDIT {
 	@Test
 	void layoutAlgorithmPackage() {
 		Record result = connector.executeRead(
-			"MATCH (:Package {hash: 'ID_52a6b74381719655ffacf4d2c8c38a22d5581078'})<-[:VISUALIZES]-(:Disk)-[:HAS]->(position:Position) " + 
+			"MATCH (:Package {hash: 'ID_52a6b74381719655ffacf4d2c8c38a22d5581078'})<-[:VISUALIZES]-(:MainDisk)-[:HAS]->(position:Position) " + 
 			"RETURN position.x as x, position.y as y, position.z as z").single();
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
@@ -97,7 +97,7 @@ public class RDIT {
 	@Test
 	void layoutAlgorithmClass() {
 		Record result = connector.executeRead(
-	 		"MATCH (:Type {hash: 'ID_0d6283470c75fbfeae1b0199ae41f732db8dc820'})<-[:VISUALIZES]-(:Disk)-[:HAS]->(position:Position) " + 
+	 		"MATCH (:Type {hash: 'ID_0d6283470c75fbfeae1b0199ae41f732db8dc820'})<-[:VISUALIZES]-(:SubDisk)-[:HAS]->(position:Position) " + 
 	 		"RETURN position.x as x, position.y as y, position.z as z"
 	 	).single();
 	    double x = result.get("x").asDouble();
@@ -115,7 +115,7 @@ public class RDIT {
 			"RETURN segment.anglePosition as anglePosition"
 		).single();
 		double anglePosition = result.get("anglePosition").asDouble();
-		assertEquals(264.43999999999994, anglePosition);
+		assertEquals(354.44000000000005, anglePosition);
 	}
 	
 	@Test
@@ -125,6 +125,6 @@ public class RDIT {
 			"RETURN segment.angle as angle, segment.anglePosition as anglePosition"
 		).single();
 		double anglePosition = result.get("anglePosition").asDouble();
-		assertEquals(120.0327868852459, anglePosition);
+		assertEquals(150.01639344262296, anglePosition);
 	}
 }

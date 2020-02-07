@@ -1,7 +1,7 @@
 package org.getaviz.generator.database;
 
 public enum Labels {
-	Anonymous, Inner, Dummy, Primitive, Parameterized, Package, Member, Type, Method, Constructor, Getter, Setter, Parameter, Field, Class, Interface, Enum, Annotation, 
-	Model, RD, Disk, DiskSegment, City, District, Building, BuildingSegment, Floor, Chimney, Configuration, Position, PanelSeparator, 
-	Cylinder, Box, TRANSFORMED
+	Package, Type, Method, Constructor, Getter, Setter, Field, Class, Interface, Enum, Annotation,
+	District, Building, BuildingSegment, Floor, Chimney, Position, Cylinder, Variable, EnumConstant, Struct, Union,
+	TranslationUnit, Function, SingleCondition, Not, And, Or
 }

@@ -14,30 +14,31 @@ var codeHelperFunction =(function(){
     });
 
     // display and highlight Code    
-    function displayCode(file, classEntity, entity, callBackFunction){
+    function displayCode(file, classEntity, entity, callBackFunction, fileType){
 		const codeTag = $("#codeTag").get(0);
 		const xhttp = new XMLHttpRequest();
 		
 
-        xhttp.onreadystatechange = function(){			
+        xhttp.onreadystatechange = function(){
 			if (xhttp.readyState === 4 && xhttp.status === 200) {
+                            
 
 				codeTag.textContent = xhttp.responseText;
 
 				Prism.highlightElement(codeTag, false, function(){
+                    if(fileType === "java") {
+                        // alle einfachen Textnodes werden mit einem
+                        // span-Tag umgeben, dadurch Selektierung moeglich
+                        textNodesToSpan();
 
-                    // alle einfachen Textnodes werden mit einem
-                    // span-Tag umgeben, dadurch Selektierung moeglich
-                    textNodesToSpan();
+                        // alle Vorkommen des selektierten Elements
+                        // im QUellcode hervorheben
+                        highlightSelectedElement(entity);
 
-                    // alle Vorkommen des selektierten Elements
-                    // im QUellcode hervorheben
-                    highlightSelectedElement(entity);        
-
-                    // versieht Definitionen der Attribute und
-                    // Methoden mit einem Klickereignis                    
-                    addInteraction(classEntity, callBackFunction);
-
+                        // versieht Definitionen der Attribute und
+                        // Methoden mit einem Klickereignis
+                        addInteraction(classEntity, callBackFunction);
+                    }
                 });     
 			} else if (xhttp.readyState === 4 && xhttp.status === 404){
 				codeTag.textContent = "Error: " + file + ", file not found!";
@@ -54,7 +55,7 @@ var codeHelperFunction =(function(){
     function textNodesToSpan(){
         const codeTag = $("#codeTag").get(0);
         const codeTagChilds = codeTag.childNodes;
-        for (const i=0; i<codeTagChilds.length; i++){
+        for (let i=0; i<codeTagChilds.length; i++){
             if (codeTagChilds[i].nodeName === "#text" &&
                 codeTagChilds[i].textContent.trim().length>0){                                                    
                     const span = document.createElement("span");
@@ -66,7 +67,11 @@ var codeHelperFunction =(function(){
     }
 
     // hebt alle Vorkommen des selektierten Elements besonders hervor 
-    function highlightSelectedElement(entity){            
+    function highlightSelectedElement(entity){   
+        if(typeof entity === "undefined") {
+            return;
+        }
+        console.log(entity);        
         if ( entity.type === "Attribute" ){                    
             var codeTag = $("#codeTag").get(0);
             var codeTagChilds = codeTag.childNodes;
@@ -147,6 +152,10 @@ var codeHelperFunction =(function(){
         var attributes = [];
         var methods = [];
 		var classes = [];
+                
+        if(typeof classEntity === "undefined") {
+            return;
+        }
         
         classEntity.children.forEach(function(child){
             if (child.type == "Attribute" ){
