@@ -83,6 +83,17 @@
             name: "relationHighlightController"
         },
         {
+            name: 'infoController',
+            system: "Busybox",
+            noc: false,
+            not: true,
+            loc: 192000
+        },
+        {
+            name: 'helpController',
+            metaphor: "RD C"
+        },
+        {
             name: "menuController",
             menuMapping: [
 
@@ -190,36 +201,16 @@
                 resizable: false,
                 collapsible: false,
                 first: {
-                    size: "25px",
+                    size: "75px",
                       resizable: false,
                 collapsible: false,
                     controllers: [
                         {name: "menuController"},
-//                         {name: "searchController"},
+                         {name: "searchController"},
                         {name: "emailController"},
                     ],
                 },
                 second: {
-                    size: "100%",
-                      resizable: false,
-                collapsible: false,
-                    area: {
-                        orientation: "horizontal",
-                        name: "searchPanel",
-                        size: "35px",
-                        collapsible: false,
-                        resizable: false,
-                        first: {
-                            size: "35px",
-                            collapsible: false,
-                        resizable: false,
-                            controllers: [
-//                                                 {name: "menuController"},
-                                {name: "searchController"}
-//                                                 {name: "emailController"},
-                            ],
-                        },
-                        second: {
                             size: "80%",
                               resizable: false,
                 collapsible: false,
@@ -298,6 +289,7 @@
                                                 {name: "canvasHoverController"},
                                                 {name: "canvasFilterController"},
                                                 {name: "canvasFlyToController"},
+                                                {name: "infoController"},                                                                                                {name: "helpController"},
                                                 {name: "relationConnectorController"},
 //                                         {name: "relationTransparencyController"},
                                                 {name: "relationHighlightController"},                                                                                                        {name: "generationFormController"}
@@ -335,8 +327,6 @@
                                     }
                                 }
                             }
-                        }
-                    }
                 }
             }
         }
