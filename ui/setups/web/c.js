@@ -83,14 +83,6 @@
             name: "relationHighlightController"
         },
         {
-            name: "systeminfoController",
-            system: "BusyBox",
-            version: "1.18.5",
-            not: true,
-            noc: false,
-            loc: 192000
-        },
-        {
             name: "menuController",
             menuMapping: [
 
@@ -182,41 +174,6 @@
                 },
             ]
         },
-        {
-            name: "legendController",
-            entries: [{
-                name: "Translation unit",
-                icon: "grayCircle"
-            }, {
-                name: "Struct/Union/Enum",
-                icon: "purpleCircle",
-            }, {
-                name: "Function",
-                icon: "lightBlueCircle",
-            }, {
-                name: "Variable/Enum constant",
-                icon: "yellowCircle",
-            }, {
-                name: "Selection",
-                icon: "orangeCircle",
-            },
-            {
-                name: "Navigation",
-                icon: "navigation",
-                entries: [
-                    {
-                        name: "Rotate",
-                        icon: "leftMouseButton"
-                    }, {
-                        name: "Move",
-                        icon: "midMouseButton"
-                    }, {
-                        name: "Zoom",
-                        icon: "scrolling"
-                    }]
-            }
-            ],
-        }
     ],
 
 
@@ -304,7 +261,7 @@
                                                 size: "50%",
                                                 collapsible: false,
                                                 first: {
-                                                    size: "55%",
+                                                    size: "100%",
                                                     expanders: [
                                                         {
                                                             name: "packageExplorer",
@@ -316,27 +273,6 @@
                                                     ]
                                                 },
                                                 second: {
-                                                    size: "45%",
-                                                    area: {
-                                                        orientation: "horizontal",
-                                                        name: "legendPanel2",
-                                                        size: "100%",
-                                                        collapsible: false,
-                                                        first: {
-                                                            size: "100%",
-                                                            expanders: [
-                                                                {
-                                                                    name: "legend",
-                                                                    title: "Legend",
-
-                                                                    controllers: [
-                                                                        {name: "legendController"}
-                                                                    ],
-                                                                },
-                                                            ]
-                                                        },
-                                                        second: {}
-                                                    },
                                                 },
                                             }
                                         },
@@ -377,7 +313,7 @@
                                                 name: "rightPael",
                                                 size: "80%",
                                                 first: {
-                                                    size: "85%",
+                                                    size: "100%",
                                                     min: "200",
                                                      collapsible: false,
 //                         resizable: false,
@@ -393,20 +329,6 @@
                                                     ],
                                                 },
                                                 second: {
-                                                    size: "15%",
-//                                                     collapsible: false,
-//                         resizable: false,
-//                                             min: "200",
-                                                    oriontation: "horizontal",
-                                                    expanders: [
-                                                        {
-                                                            name: "systeminfo",
-                                                            title: "Info",
-                                                            controllers: [
-                                                                {name: "systeminfoController"}
-                                                            ],
-                                                        },
-                                                    ],
                                                 }
                                             }
                                         }
