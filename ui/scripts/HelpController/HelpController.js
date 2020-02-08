@@ -92,6 +92,12 @@ var helpController = (function() {
                 createPopupContent()
             }); 
         };
+        
+        if(controllerConfig.metaphor=="RD C") {
+            $.getScript("scripts/HelpController/HelpRDC.js", function(){  
+                createPopupContent()
+            }); 
+        };
     }
     
     function createPopupContent(){

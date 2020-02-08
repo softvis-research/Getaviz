@@ -83,12 +83,15 @@
             name: "relationHighlightController"
         },
         {
-            name: "systeminfoController",
-            system: "BusyBox",
-            version: "1.18.5",
-            not: true,
+            name: 'infoController',
+            system: "Busybox",
             noc: false,
+            not: true,
             loc: 192000
+        },
+        {
+            name: 'helpController',
+            metaphor: "RD C"
         },
         {
             name: "menuController",
@@ -182,41 +185,6 @@
                 },
             ]
         },
-        {
-            name: "legendController",
-            entries: [{
-                name: "Translation unit",
-                icon: "grayCircle"
-            }, {
-                name: "Struct/Union/Enum",
-                icon: "purpleCircle",
-            }, {
-                name: "Function",
-                icon: "lightBlueCircle",
-            }, {
-                name: "Variable/Enum constant",
-                icon: "yellowCircle",
-            }, {
-                name: "Selection",
-                icon: "orangeCircle",
-            },
-            {
-                name: "Navigation",
-                icon: "navigation",
-                entries: [
-                    {
-                        name: "Rotate",
-                        icon: "leftMouseButton"
-                    }, {
-                        name: "Move",
-                        icon: "midMouseButton"
-                    }, {
-                        name: "Zoom",
-                        icon: "scrolling"
-                    }]
-            }
-            ],
-        }
     ],
 
 
@@ -233,36 +201,16 @@
                 resizable: false,
                 collapsible: false,
                 first: {
-                    size: "25px",
+                    size: "75px",
                       resizable: false,
                 collapsible: false,
                     controllers: [
                         {name: "menuController"},
-//                         {name: "searchController"},
+                         {name: "searchController"},
                         {name: "emailController"},
                     ],
                 },
                 second: {
-                    size: "100%",
-                      resizable: false,
-                collapsible: false,
-                    area: {
-                        orientation: "horizontal",
-                        name: "searchPanel",
-                        size: "35px",
-                        collapsible: false,
-                        resizable: false,
-                        first: {
-                            size: "35px",
-                            collapsible: false,
-                        resizable: false,
-                            controllers: [
-//                                                 {name: "menuController"},
-                                {name: "searchController"}
-//                                                 {name: "emailController"},
-                            ],
-                        },
-                        second: {
                             size: "80%",
                               resizable: false,
                 collapsible: false,
@@ -304,7 +252,7 @@
                                                 size: "50%",
                                                 collapsible: false,
                                                 first: {
-                                                    size: "55%",
+                                                    size: "100%",
                                                     expanders: [
                                                         {
                                                             name: "packageExplorer",
@@ -316,27 +264,6 @@
                                                     ]
                                                 },
                                                 second: {
-                                                    size: "45%",
-                                                    area: {
-                                                        orientation: "horizontal",
-                                                        name: "legendPanel2",
-                                                        size: "100%",
-                                                        collapsible: false,
-                                                        first: {
-                                                            size: "100%",
-                                                            expanders: [
-                                                                {
-                                                                    name: "legend",
-                                                                    title: "Legend",
-
-                                                                    controllers: [
-                                                                        {name: "legendController"}
-                                                                    ],
-                                                                },
-                                                            ]
-                                                        },
-                                                        second: {}
-                                                    },
                                                 },
                                             }
                                         },
@@ -362,6 +289,7 @@
                                                 {name: "canvasHoverController"},
                                                 {name: "canvasFilterController"},
                                                 {name: "canvasFlyToController"},
+                                                {name: "infoController"},                                                                                                {name: "helpController"},
                                                 {name: "relationConnectorController"},
 //                                         {name: "relationTransparencyController"},
                                                 {name: "relationHighlightController"},                                                                                                        {name: "generationFormController"}
@@ -377,7 +305,7 @@
                                                 name: "rightPael",
                                                 size: "80%",
                                                 first: {
-                                                    size: "85%",
+                                                    size: "100%",
                                                     min: "200",
                                                      collapsible: false,
 //                         resizable: false,
@@ -393,28 +321,12 @@
                                                     ],
                                                 },
                                                 second: {
-                                                    size: "15%",
-//                                                     collapsible: false,
-//                         resizable: false,
-//                                             min: "200",
-                                                    oriontation: "horizontal",
-                                                    expanders: [
-                                                        {
-                                                            name: "systeminfo",
-                                                            title: "Info",
-                                                            controllers: [
-                                                                {name: "systeminfoController"}
-                                                            ],
-                                                        },
-                                                    ],
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
-                    }
                 }
             }
         }
