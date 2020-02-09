@@ -76,7 +76,7 @@ curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($payload));
 $return = curl_exec($curl);
 curl_close ($curl);
 if ($return == "OK") {
-  header("Location: ../../index.php?aframe=true&model=$model&setup=web_a-frame/default&srcDir=data-gen");
+  header("Location: ../../index.php?aframe=true&model=$model&setup=default&srcDir=data-gen");
   die();
 }
 
