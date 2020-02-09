@@ -47,6 +47,8 @@ services:
   neo4j:
     image: neo4j:3.5.1
     restart: always
+    volumes:
+      - 'getaviz-db:/data'
     ports:
       - "7474:7474"
       - "7687:7687"
@@ -62,6 +64,7 @@ services:
       - data-gen:/var/data
 volumes:
   data-gen:
+  getaviz-db:
     
 networks:
   default:
