@@ -158,6 +158,7 @@ var macroExplorerController = (function() {
 	}
 
 	function sendInitialEvent(){
+                if(tree == undefined) return;
 		var allNodes = tree.getNodes();
 		for (var i = 0; i < allNodes.length; i++) {
 			var currentNode = allNodes[i];
