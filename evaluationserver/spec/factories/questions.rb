@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :question do
     factory :number_question do
-      question_text "Welche Nummer wird gesucht?"
+      question_text {"Welche Nummer wird gesucht?"}
 
       factory :number_question_with_one_answer_possibility do
         after(:create) do |number_question_with_one_answer_possibility, evaluator|
@@ -14,7 +14,7 @@ FactoryBot.define do
     end
 
     factory :text_question do
-      question_text "Welcher Text wird gesucht?"
+      question_text {"Welcher Text wird gesucht?"}
       
     end
     

@@ -1,7 +1,7 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
     <servlet>
         <servlet-name>Getaviz Generator</servlet-name>
-        <servlet-class>org.getaviz.generator.GeneratorServlet</servlet-class>
+        <servlet-class>org.getaviz.generator.Servlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Getaviz Generator</servlet-name>

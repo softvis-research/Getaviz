@@ -3,13 +3,13 @@ matrix:
     - name: Docker
       script:
         - docker-compose -f docker-compose.test.yml run tests
-    - name: Generator
-      language: java
-      before_install:
-        - cd generator
-        - cd org.svis.generator.releng/
-      script:
-        - mvn clean install -fae
+    #- name: Generator
+      #language: java
+      #before_install:
+        #- cd generator
+        #- cd org.svis.generator.releng/
+      #script:
+        #- mvn clean install -fae
     #- name: Generator2
       #language: java
       #before_install:

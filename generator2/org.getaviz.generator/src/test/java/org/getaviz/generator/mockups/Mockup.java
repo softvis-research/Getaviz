@@ -1,16 +1,16 @@
 package org.getaviz.generator.mockups;
 
+import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.database.DatabaseConnector;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.kernel.configuration.BoltConnector;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.database.DatabaseConnector;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.kernel.configuration.BoltConnector;
+import java.util.Objects;
 
 public class Mockup {
 	
@@ -22,17 +22,12 @@ public class Mockup {
 		// Registers a shutdown hook for the Neo4j instance so that it
 		// shuts down nicely when the VM exits (even if you "Ctrl-C" the
 		// running application).
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				graphDb.shutdown();
-			}
-		});
+		Runtime.getRuntime().addShutdownHook(new Thread(graphDb::shutdown));
 	}
 	
 	public void loadProperties(String resourcePath) {
 		ClassLoader classLoader = this.getClass().getClassLoader();
-		String path = classLoader.getResource(resourcePath).getPath();
+		String path = Objects.requireNonNull(classLoader.getResource(resourcePath)).getPath();
 		try {
 			path = URLDecoder.decode(path, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -47,7 +42,7 @@ public class Mockup {
 	
 	protected void runCypherScript (String resource) {
 		ClassLoader classLoader = this.getClass().getClassLoader();
-		String filePath = classLoader.getResource(resource).getFile();
+		String filePath = Objects.requireNonNull(classLoader.getResource(resource)).getFile();
 		File file = new File(filePath);
 		String path = file.getAbsolutePath();
 		try {
