@@ -25,7 +25,9 @@ $(document).ready(function () {
 function initializeApplication(metaDataJson){
 	
     //wait for canvas to be loaded full here...     || is here the <a-scene>-tag meant?!
-	var canvas = document.getElementsByTagName("a-scene");
+//	var canvas = document.getElementsByTagName("a-scene");
+	var canvas = document.getElementById(canvasId);
+
 	if(!canvas){
 		setTimeout(function(){initializeApplication(metaDataJson);}, 100);
 		return;
