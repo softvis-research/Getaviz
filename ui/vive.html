@@ -8,7 +8,7 @@
     var modelUrl = "data/City vive/model";
     var metaDataJsonUrl = modelUrl + "/metaData.json";
 
-    var canvasId = "canvas";
+    var canvasId = "aframe-canvas";
 
     var visMode = "aframe";
 
@@ -28,7 +28,7 @@
     <script type="text/javascript" src="node_modules/handlebars/dist/handlebars.min.js"></script>
 
     <!--A-Frame-->
-    <script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
+    <script src="node_modules/aframe/dist/aframe-v1.0.0.min.js"></script>
 
     <script src="vive-ui/vive-ui.js"></script>
     <script src="vive-ui/vive-init.js"></script>
@@ -95,8 +95,8 @@
     <script type="text/javascript" src="scripts/Email/EmailController.js"></script>
     <script type="text/javascript" src="scripts/GenerationForm/GenerationFormController.js"></script>
     <script type="text/javascript" src="scripts/Menu/MenuController.js"></script>
-    <script type="text/javascript" src="scripts/Legend/LegendController.js"></script>
-    <script type="text/javascript" src="scripts/Systeminfo/SysteminfoController.js"></script>
+    <!--<script type="text/javascript" src="scripts/Legend/LegendController.js"></script>
+    <script type="text/javascript" src="scripts/Systeminfo/SysteminfoController.js"></script>-->
 
     <!--user interface-->
     <script type="text/javascript" src="scripts/DefaultLogger.js"></script>
@@ -106,13 +106,15 @@
     <script type="text/javascript" src="scripts/Application.js"></script>
     <script type="text/javascript" src="scripts/AframeActionController.js"></script>
     <!--<script type="text/javascript" src="scripts/aframe-orbit-camera-component.js"></script>-->
-    <script type="text/javascript" src="scripts/camera-beta.js"></script>
+    <!--<script type="text/javascript" src="scripts/camera-beta.js"></script>-->
+    <script type="text/javascript" src="node_modules/aframe-orbit-camera-component/aframe-orbit-camera-component.js"></script>
+
 
 
     <link rel="stylesheet" href="Style.css" type="text/css" />
 
     <!--setup-->
-    <script type="text/javascript" src="setups/web_a-frame/City bank.js"></script>
+    <script type="text/javascript" src="setups/web/City bank.js"></script>
 
 </head>
 
