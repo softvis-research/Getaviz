@@ -212,7 +212,7 @@ var actionController = (function () {
                     return false;
                 });
                 //keydown
-                this.el.addEventListener("onkeydown", function (eventObject) {
+                this.el.addEventListener("keydown", function (eventObject) {
 
                     downAction(actions.keyboard.key[eventObject.which], eventObject);
 
@@ -225,7 +225,7 @@ var actionController = (function () {
                     return false;
                 });
                 //keyup
-                this.el.addEventListener("onkeyup", function (eventObject) {
+                this.el.addEventListener("keyup", function (eventObject) {
 
                     upAction(actions.keyboard.key[eventObject.which], eventObject);
 
