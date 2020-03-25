@@ -44,6 +44,7 @@ if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true') or (!isset($_GET["afra
 	    <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
 	    <script type="text/javascript" src="scripts/CanvasHover/AframeCanvasHoverController.js"></script>
         <script type="text/javascript" src="node_modules/aframe-orbit-camera-component/aframe-orbit-camera-component.js"></script>
+        <script type="text/javascript" src="scripts/MagGlass/MagGlassController.js"></script>
 EOT;
     $canvasId = "aframe-canvas";
     $visMode = "aframe";
@@ -67,6 +68,7 @@ EOT;
         <script type="text/javascript" src="scripts/X3DomActionController.js"></script>
 	    <script type="text/javascript" src="scripts/RelationConnector/X3DomRelationConnectorController.js"></script>
 	    <script type="text/javascript" src="scripts/CanvasHover/X3DomCanvasHoverController.js"></script>
+        <script type="text/javascript" src="scripts/MagGlass/MagGlassController.js"></script>
 EOT;
     $canvasId = "x3dom-x3dElement-canvas";
     $visMode = "x3dom";
