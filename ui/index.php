@@ -172,6 +172,10 @@ EOT;
 <script type="text/javascript" src="scripts/VersionExplorer/VersionExplorerController.js"></script>
 <script type="text/javascript" src="scripts/IssueExplorer/IssueExplorerController.js"></script>
 <script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script>
+<script type="text/javascript" src="scripts/MetricAnimation/MetricAnimationController.js"></script>
+<script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimation.js"></script>
+<script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimationColor.js"></script>
+<script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimationExpanding.js"></script>
 
 <!-- filter -->
 <script type="text/javascript" src="scripts/Filter/Helpers/Constants.js"></script>

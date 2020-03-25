@@ -38,6 +38,44 @@ a {
     line-height: 20px;
 }
 
+.formular-grid-item-left {
+    text-align: right;
+    line-height: 24px;
+    width: 130px;
+}
+
+.formular-grid-item-right {
+    text-align: left;
+    font-size: 20px;
+    padding-left: 10px;
+    line-height: 20px;
+    margin-right: 5px;
+}
+
+.formular-grid-item-right select {
+    width: 100%;
+}
+
+.metricAnimationGrid {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.select-wrapper-level1{
+    border: 1px solid rgba(0, 0, 0, 0.8);
+}
+
+.select-wrapper-level2 {
+    display: inline-block;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.select-wrapper-level2 select {
+    padding: 10px;
+    margin: -5px -20px -5px -5px;
+}
+
 .jqx-expander-content
 {
     height: 100% !important;
