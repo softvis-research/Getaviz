@@ -36,6 +36,7 @@ services:
     restart: always
     volumes: 
       - data-gen:/var/lib/jetty/data-gen
+      - ./input:/var/lib/jetty/input
      #- ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # uncomment only for generator development
     ports:
       - "8083:8080"
