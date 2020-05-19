@@ -20,7 +20,7 @@ class ScanTypechefTest {
 
     private static DatabaseConnector connector;
     private static GraphDatabaseService graphDb;
-    private static String pathJQAssistant = ""; // replace with local path to jQAssistant
+    private static String pathJQAssistant = ""; // replace with local path to jQAssistant 1.7
 
     @BeforeAll
     static void setup() {
