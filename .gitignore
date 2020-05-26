@@ -6,3 +6,5 @@ ui/data/
 generator2/org.getaviz.generator/.idea/
 
 .idea/
+
+.project
