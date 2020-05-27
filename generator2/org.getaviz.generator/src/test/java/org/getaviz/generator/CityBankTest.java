@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 import java.util.Collections;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,6 +18,7 @@ class CityBankTest {
 
 	@BeforeAll
 	static void setup() {
+		Locale.setDefault(Locale.US);
 		mockup.setupDatabase("./test/databases/CityBankTest.db");
 		mockup.loadProperties("CityBankTest.properties");
 		connector = mockup.getConnector();
