@@ -161,11 +161,14 @@ public class JQA2JSON implements Step {
 		if (parent.hasNext()) {
 			belongsTo = parent.single().get("parent.hash").asString();
 		}
-		Node type = connector
-				.executeRead("MATCH (attribute)-[:OF_TYPE]->(t) WHERE ID(attribute) = " + attribute.id() + " RETURN t")
-				.next().get("t").asNode();
-		if (type != null) {
-			declaredType = type.get("name").asString();
+		try {
+			Node type = connector
+					.executeRead("MATCH (attribute)-[:OF_TYPE]->(t) WHERE ID(attribute) = " + attribute.id() + " RETURN t")
+					.next().get("t").asNode();
+			if (type != null) {
+				declaredType = type.get("name").asString();
+			}
+		} catch (Exception e) {
 		}
 		return "\"id\":            \"" + attribute.get("hash").asString() + "\"," +
 				"\n" +
