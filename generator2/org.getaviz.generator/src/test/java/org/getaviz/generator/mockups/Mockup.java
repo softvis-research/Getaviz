@@ -40,7 +40,7 @@ public class Mockup {
 		connector.executeWrite("MATCH (n) DETACH DELETE n; ");
 	}
 	
-	protected void runCypherScript (String resource) {
+	public void runCypherScript (String resource) {
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		String filePath = Objects.requireNonNull(classLoader.getResource(resource)).getFile();
 		File file = new File(filePath);

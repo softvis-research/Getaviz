@@ -1,0 +1,1 @@
+MATCH (a:Elements), (b:Elements) WHERE a.element_id = b.uses_id CREATE (a)-[r:USES]->(b)

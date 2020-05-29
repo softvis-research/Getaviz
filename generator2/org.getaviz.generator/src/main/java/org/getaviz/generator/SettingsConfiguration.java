@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
+import org.getaviz.generator.abap.city.repository.ACityElement;
 
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
@@ -672,4 +673,382 @@ public class SettingsConfiguration {
 	public enum Metaphor {
 		RD, CITY
 	}
+
+
+
+	/*
+		ACity specific config values
+	 */
+
+	public String getACityDistrictColorHex(String type) {
+		switch (type) {
+			case "packageDistrict":
+				return config.getString("city.abap.color.packageDistrict", "#95A5A6");
+			case "classDistrict":
+				return config.getString("city.abap.color.classDistrict", "#C5CEA9");
+			case "reportDistrict":
+				return config.getString("city.abap.color.reportDistrict", "#C5CEA9");
+			case "functionGroupDistrict":
+				return config.getString("city.abap.color.functionGroupDistrict", "#C5CEA9");
+			case "tableDistrict":
+				return config.getString("city.abap.color.tableDistrict", "#C5CEA9");
+			case "dataDictionaryDistrict":
+				return config.getString("city.abap.color.dataDictionaryDistrict", "#C5CEA9");
+			default:
+				return config.getString("#FFFFFF");
+		}
+	}
+
+	public String getACityBuildingColorHex(String type) {
+		switch (type) {
+			case "classBuilding":
+				return config.getString("city.abap.color.classBuilding", "#C5CEA9");
+			case "interfaceBuilding":
+				return config.getString("city.abap.color.interfaceBuilding", "#C5CEA9");
+			case "reportBuilding":
+				return config.getString("city.abap.color.reportBuilding", "#C5CEA9");
+			case "functionGroupBuilding":
+				return config.getString("city.abap.color.functionGroupBuilding", "#C5CEA9");
+			case "tableBuilding":
+				return config.getString("city.abap.color.tableBuilding", "#C5CEA9");
+			case "dataElementBuilding":
+				return config.getString("city.abap.color.dataElementBuilding", "#C5CEA9");
+			case "domainBuilding":
+				return config.getString("city.abap.color.domainBuilding", "#C5CEA9");
+			case "structureBuilding":
+				return config.getString("city.abap.color.structureBuilding", "#C5CEA9");
+			case "tableTypeBuilding":
+				return config.getString("city.abap.color.tableTypeBuilding", "#C5CEA9");
+			default:
+				return config.getString("#FFFFFF");
+		}
+	}
+
+	public String getACityFloorColorHex(String type) {
+		switch (type) {
+			case "methodFloor":
+				return config.getString("city.abap.color.methodFloor", "#C5CEA9");
+			case "formRoutineFloor":
+				return config.getString("city.abap.color.formRoutineFloor", "#C5CEA9");
+			case "functionModuleFloor":
+				return config.getString("city.abap.color.functionModuleFloor", "#C5CEA9");
+			case "tableElementFloor":
+				return config.getString("city.abap.color.tableElementFloor", "#C5CEA9");
+			case "structureElementFloor":
+				return config.getString("city.abap.color.structureElementFloor", "#C5CEA9");
+			case "dataElementFloor":
+				return config.getString("city.abap.color.dataElementFloor", "#C5CEA9");
+			default:
+				return config.getString("#FFFFFF");
+		}
+	}
+
+	public String getACityChimneyColorHex(String type) {
+		switch (type) {
+			case "attributeColor":
+				return config.getString("city.abap.color.attribute", "#C5CEA9");
+			default:
+				return config.getString("#FFFFFF");
+		}
+	}
+
+	public ACityElement.ACityShape getACityBuildingShape(String type) {
+		switch (type) {
+			case "classBuilding":
+				String value = config.getString("city.abap.shape.classBuilding", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "interfaceBuilding":
+				value = config.getString("city.abap.shape.interfaceBuilding", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "reportBuilding":
+				value = config.getString("city.abap.shape.reportBuilding", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "functionGroupBuilding":
+				value = config.getString("city.abap.shape.functionGroupBuilding", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "tableBuilding":
+				value = config.getString("city.abap.shape.tableBuilding", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "dataElementBuilding":
+				value = config.getString("city.abap.shape.dataElementBuilding", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "domainBuilding":
+				value = config.getString("city.abap.shape.domainBuilding", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "structureBuilding":
+				value = config.getString("city.abap.shape.structureBuilding", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "tableTypeBuilding":
+				value = config.getString("city.abap.shape.tableTypeBuilding", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			default:
+				return ACityElement.ACityShape.Box;
+		}
+	}
+
+	public ACityElement.ACityShape getACityFloorShape(String type) {
+		switch (type) {
+			case "methodFloor":
+				String value = config.getString("city.abap.shape.methodFloor", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "formroutineFloor":
+				value = config.getString("city.abap.shape.formRoutineFloor", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "functionModuleFloor":
+				value = config.getString("city.abap.shape.functionModuleFloor", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "tableElementFloor":
+				value = config.getString("city.abap.shape.tableElementFloor", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "structureElementFloor":
+				value = config.getString("city.abap.shape.structureElementFloor", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "dataElementFloor":
+				value = config.getString("city.abap.shape.dataElementFloor", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			default:
+				return ACityElement.ACityShape.Cone;
+		}
+	}
+
+	public ACityElement.ACityShape getACityChimneyShape(String type) {
+		switch (type) {
+			case "attributeChimney":
+				String value = config.getString("city.abap.shape.attributeChimney", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cylinder;
+				}
+			default:
+				return ACityElement.ACityShape.Cylinder;
+		}
+	}
+
+	public ACityElement.ACityShape getACityDistrictShape() {
+		String value = config.getString("city.abap.shape.district", "box");
+		switch (value) {
+			case "box":
+				return ACityElement.ACityShape.Box;
+			case "cone":
+				return ACityElement.ACityShape.Cone;
+			case "cylinder":
+				return ACityElement.ACityShape.Cylinder;
+			default:
+				return ACityElement.ACityShape.Cylinder;
+		}
+	}
+
+	public double getACityBuildingWidth(String type) {
+		switch (type) {
+			case "tableTypeBuilding":
+				return config.getDouble("city.abap.width.tableTypeBuilding", 0.1);
+			case "structureBuilding":
+				return config.getDouble("city.abap.width.structureBuilding", 0.1);
+			case "classBuilding":
+				return config.getDouble("city.abap.width.classBuilding", 0.1);
+			default:
+				return 0.1;
+		}
+	}
+
+	public double getACityBuildingLength(String type) {
+		switch (type) {
+			case "tableTypeBuilding":
+				return config.getDouble("city.abap.length.tableTypeBuilding", 0.1);
+			case "structureBuilding":
+				return config.getDouble("city.abap.length.structureBuilding", 0.1);
+			default:
+				return 0.1;
+		}
+	}
+
+	public double getACityTableTypeBuildingHeight(String type) {
+		switch (type) {
+			case "tableTypeBuilding_structure":
+				return config.getDouble("city.abap.height.tableTypeBuilding_structure", 0.1);
+			case "tableTypeBuilding_class":
+			case "tableTypeBuilding_interface":
+				return config.getDouble("city.abap.height.tableTypeBuilding_class", 0.1);
+			case "tableTypeBuilding_tabletype":
+			case "tableTypeBuilding_table":
+				return config.getDouble("city.abap.height.tableTypeBuilding_table", 0.1);
+			case "tableTypeBuilding_dataElement":
+				return config.getDouble("city.abap.height.tableTypeBuilding_dataElement", 0.1);
+			default:
+				return 0.1;
+		}
+	}
+
+	public double getACityDistrictHeight() {return config.getDouble("city.abap.height.district", 0.2); }
+	public double adjustACityDistrictYPosition() {return config.getDouble("city.abap.adjust.district.yPosition", 0.1); }
+
+	public double getACityBuildingHorizontalMargin() { return config.getDouble("city.abap.building.horizontal_margin", 0.0); }
+	public double getACityBuildingVerticalMargin() { return config.getDouble("city.abap.building.vertical_margin", 0.0); }
+	public double adjustACityBuildingWidth() {return config.getDouble("city.abap.adjust.building.width", 0.1); }
+	public double adjustACityBuildingLength() {return config.getDouble("city.abap.adjust.building.length", 0.1); }
+
+	public double getACityChimneyWidth(){
+		return config.getDouble("city.abap.width.chimney", 0.3);
+	}
+	public double getACityChimneyHeight(){
+		return config.getDouble("city.abap.height.chimney", 0.3);
+	}
+	public double getACityChimneyLength(){
+		return config.getDouble("city.abap.length.chimney", 0.3);
+	}
+	public double getACityChimneyGap() { return config.getDouble("city.abap.gap.chimney", 0.0); }
+	public double getACityGroundAreaByChimneyAmount() { return config.getDouble("city.abap.groundArea_cimney", 2.0); }
+
+	public double getACityFloorHeight(){
+		return config.getDouble("city.abap.height.floor", 1);
+	}
+	public double getACityFloorGap(){
+		return config.getDouble("city.abap.gap.floor", 0.5);
+	}
+	public double getFloorHeightSum() {return config.getDouble("city.abap.floorHeightSum", 1.0); }
+	public double adjustACityFloorYPosition() {return config.getDouble("city.abap.adjust.floor.yPosition", 0.1); }
+	public double adjustACityFloorWidth() {return config.getDouble("city.abap.adjust.floor.width", 0.1); }
+	public double adjustACityFloorLength() {return config.getDouble("city.abap.adjust.floor.length", 0.1); }
+
 }
