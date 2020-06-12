@@ -1,4 +1,4 @@
-package org.getaviz.generator.abap.city.steps;
+package org.getaviz.generator.abap.metropolis.steps;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ACityDesigner {
+public class MetropolisDesigner {
 
     private Log log = LogFactory.getLog(this.getClass());
     private SettingsConfiguration config;
@@ -23,28 +23,29 @@ public class ACityDesigner {
     private SourceNodeRepository nodeRepository;
     private ACityRepository repository;
 
-    public ACityDesigner(ACityRepository aCityRepository, SourceNodeRepository sourceNodeRepository, SettingsConfiguration config) {
+    public MetropolisDesigner(ACityRepository aCityRepository, SourceNodeRepository sourceNodeRepository, SettingsConfiguration config) {
         this.config = config;
 
         repository = aCityRepository;
         nodeRepository = sourceNodeRepository;
 
+        log.info("*****************************************************************************************************************************************");
         log.info("created");
     }
 
 
     public void designRepository(){
 
-        designACityElementsByType(ACityElement.ACityType.District);
+        designMetropolisElementsByType(ACityElement.ACityType.District);
 
-        designACityElementsByType(ACityElement.ACityType.Building);
+        designMetropolisElementsByType(ACityElement.ACityType.Building);
 
-        designACityElementsByType(ACityElement.ACityType.Floor);
+        designMetropolisElementsByType(ACityElement.ACityType.Floor);
 
-        designACityElementsByType(ACityElement.ACityType.Chimney);
+        designMetropolisElementsByType(ACityElement.ACityType.Chimney);
     }
 
-    private void designACityElementsByType(ACityElement.ACityType aCityType){
+    private void designMetropolisElementsByType(ACityElement.ACityType aCityType){
         log.info("Design " + aCityType.name());
 
         Map<String, AtomicInteger> counterMap = new HashMap<>();
@@ -99,17 +100,19 @@ public class ACityDesigner {
 
         if (district.getSourceNode() != null){
             //namespace district
-            district.setColor(config.getACityDistrictColorHex("packageDistrict"));
+            district.setColor(config.getMetropolisDistrictColorHex("packageDistrict"));
         } else {
             //type district
             switch (district.getSubType()){
-                case Class:         district.setColor(config.getACityDistrictColorHex("classDistrict"));break;
-                case Report:        district.setColor(config.getACityDistrictColorHex("reportDistrict")); break;
-                case FunctionGroup: district.setColor(config.getACityDistrictColorHex("functionGroupDistrict")); break;
-                case Table:         district.setColor(config.getACityDistrictColorHex("tableDistrict")); break;
-                case DDIC:          district.setColor(config.getACityDistrictColorHex("dataDictionaryDistrict")); break;
-                default:            district.setColor(config.getACityDistrictColorHex("defaultValue"));
-                                    log.error(district.getSubType().name() + " is not a valid type for \"district\""); break;
+                case Class:         district.setColor(config.getMetropolisDistrictColorHex("classDistrict")); break;
+                case Interface:     district.setColor(config.getMetropolisDistrictColorHex("interfaceDistrict")); break;
+                case Report:        district.setColor(config.getMetropolisDistrictColorHex("reportDistrict")); break;
+                case FunctionGroup: district.setColor(config.getMetropolisDistrictColorHex("functionGroupDistrict")); break;
+                case Table:         district.setColor(config.getMetropolisDistrictColorHex("tableDistrict")); break;
+                case Structure:     district.setColor(config.getMetropolisDistrictColorHex("structureDistrict")); break;
+                case DataElement:   district.setColor(config.getMetropolisDistrictColorHex("dataElementDistrict")); break;
+                default:            district.setColor(config.getMetropolisDistrictColorHex("defaultValue"));
+                    log.error(district.getSubType().name() + " is not a valid type for \"district\""); break;
             }
         }
     }
@@ -120,62 +123,80 @@ public class ACityDesigner {
         switch (SAPNodeTypes.valueOf(propertyTypeName)) {
 
             case Class:
-                building.setColor(config.getACityBuildingColorHex("classBuilding"));
-                building.setShape(config.getACityBuildingShape("classBuilding"));
+                building.setColor(config.getMetropolisBuildingColorHex("classBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("classBuilding"));
                 building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                 building.setLength(building.getLength() - config.adjustACityBuildingLength());
                 break;
             case Interface:
-                building.setColor(config.getACityBuildingColorHex("interfaceBuilding"));
-                building.setShape(config.getACityBuildingShape("interfaceBuilding"));
+                building.setColor(config.getMetropolisBuildingColorHex("interfaceBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("interfaceBuilding"));
+                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                break;
+            case Method:
+                building.setColor(config.getMetropolisBuildingColorHex("methodBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("methodBuilding"));
                 building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                 building.setLength(building.getLength() - config.adjustACityBuildingLength());
                 break;
             case Report:
-                building.setColor(config.getACityBuildingColorHex("reportBuilding"));
-                building.setShape(config.getACityBuildingShape("reportBuilding"));
+                building.setColor(config.getMetropolisBuildingColorHex("reportBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("reportBuilding"));
+                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                break;
+            case FormRoutine:
+                building.setColor(config.getMetropolisBuildingColorHex("formRoutineBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("formRoutineBuilding"));
                 building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                 building.setLength(building.getLength() - config.adjustACityBuildingLength());
                 break;
             case FunctionGroup:
-                building.setColor(config.getACityBuildingColorHex("functionGroupBuilding"));
-                building.setShape(config.getACityBuildingShape("functionGroupBuilding"));
+                building.setColor(config.getMetropolisBuildingColorHex("functionGroupBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("functionGroupBuilding"));
+                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                break;
+            case FunctionModule:
+                building.setColor(config.getMetropolisBuildingColorHex("functionModuleBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("functionModuleBuilding"));
                 building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                 building.setLength(building.getLength() - config.adjustACityBuildingLength());
                 break;
             case Table:
-                building.setColor(config.getACityBuildingColorHex("tableBuilding"));
-                building.setShape(config.getACityBuildingShape("tableBuilding"));
+                building.setColor(config.getMetropolisBuildingColorHex("tableBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("tableBuilding"));
                 building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                 building.setLength(building.getLength() - config.adjustACityBuildingLength());
                 break;
             case DataElement:
-                building.setColor(config.getACityBuildingColorHex("dataElementBuilding"));
-                building.setShape(config.getACityBuildingShape("dataElementBuilding"));
+                building.setColor(config.getMetropolisBuildingColorHex("dataElementBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("dataElementBuilding"));
                 building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                 building.setLength(building.getLength() - config.adjustACityBuildingLength());
                 break;
             case Domain:
-                building.setColor(config.getACityBuildingColorHex("domainBuilding"));
-                building.setShape(config.getACityBuildingShape("domainBuilding"));
+                building.setColor(config.getMetropolisBuildingColorHex("domainBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("domainBuilding"));
                 building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                 building.setLength(building.getLength() - config.adjustACityBuildingLength());
                 break;
             case Structure:
-                building.setColor(config.getACityBuildingColorHex("structureBuilding"));
-                building.setShape(config.getACityBuildingShape("structureBuilding"));
+                building.setColor(config.getMetropolisBuildingColorHex("structureBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("structureBuilding"));
                 building.setWidth(config.getACityBuildingWidth("structureBuilding"));
                 building.setLength(config.getACityBuildingLength("structureBuilding"));
                 break;
             case TableType:
-                building.setColor(config.getACityBuildingColorHex("tableTypeBuilding"));
-                building.setShape(config.getACityBuildingShape("tableTypeBuilding"));
+                building.setColor(config.getMetropolisBuildingColorHex("tableTypeBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("tableTypeBuilding"));
                 building.setWidth(config.getACityBuildingWidth("tableTypeBuilding"));
                 building.setLength(config.getACityBuildingLength("tableTypeBuilding"));
                 break;
             default:
-                building.setColor(config.getACityDistrictColorHex("defaultValue"));
-                building.setShape(config.getACityBuildingShape("defaultValue"));
+                building.setColor(config.getMetropolisDistrictColorHex("defaultValue"));
+                building.setShape(config.getMetropolisBuildingShape("defaultValue"));
                 building.setWidth(config.getACityBuildingWidth("defaultValue"));
                 building.setLength(config.getACityBuildingLength("defaultValue"));
                 log.error(propertyTypeName + " is not a valid type for \"building\"");
@@ -196,7 +217,7 @@ public class ACityDesigner {
         String propertyTypeName = floor.getSourceNodeProperty(SAPNodeProperties.type_name);
 
         switch (SAPNodeTypes.valueOf(propertyTypeName)) {
-            case Method:
+            /*case Method:
                 floor.setColor(config.getACityFloorColorHex("methodFloor"));
                 floor.setShape(config.getACityFloorShape("methodFloor"));
                 floor.setYPosition(floor.getYPosition() - config.adjustACityFloorYPosition());
@@ -211,6 +232,7 @@ public class ACityDesigner {
                 floor.setShape(config.getACityFloorShape("functionModuleFloor"));
                 floor.setYPosition(floor.getYPosition() - config.adjustACityFloorYPosition());
                 break;
+             */
             case TableElement:
                 floor.setColor(config.getACityFloorColorHex("tableElementFloor"));
                 floor.setShape(config.getACityFloorShape("tableElementFloor"));
@@ -238,4 +260,6 @@ public class ACityDesigner {
                 break;
         }
     }
+
+
 }

@@ -1,4 +1,4 @@
-package org.getaviz.generator.abap.city.layouts.kdtree;
+package org.getaviz.generator.abap.layouts.kdtree;
 
 import org.neo4j.driver.v1.types.Node;
 

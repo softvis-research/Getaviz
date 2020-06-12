@@ -1,10 +1,10 @@
 package org.getaviz.generator.acity;
 
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.enums.SAPNodeProperties;
-import org.getaviz.generator.abap.city.enums.SAPNodeTypes;
-import org.getaviz.generator.abap.city.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.city.repository.SourceNodeRepository;
+import org.getaviz.generator.abap.enums.SAPNodeProperties;
+import org.getaviz.generator.abap.enums.SAPNodeTypes;
+import org.getaviz.generator.abap.enums.SAPRelationLabels;
+import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.ABAPmock;
 import org.junit.jupiter.api.AfterAll;

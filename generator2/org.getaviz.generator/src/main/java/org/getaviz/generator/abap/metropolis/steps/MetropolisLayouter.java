@@ -1,4 +1,4 @@
-package org.getaviz.generator.abap.city.steps;
+package org.getaviz.generator.abap.metropolis.steps;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,12 +11,14 @@ import org.getaviz.generator.abap.layouts.ACityDistrictLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ACityLayouter {
+public class MetropolisLayouter {
 
     private Log log = LogFactory.getLog(this.getClass());
     private SettingsConfiguration config;
@@ -25,21 +27,19 @@ public class ACityLayouter {
     private SourceNodeRepository nodeRepository;
     private ACityRepository repository;
 
-    public ACityLayouter(ACityRepository aCityRepository, SourceNodeRepository sourceNodeRepository, SettingsConfiguration config) {
+    public MetropolisLayouter(ACityRepository aCityRepository, SourceNodeRepository sourceNodeRepository, SettingsConfiguration config) {
         this.config = config;
 
         repository = aCityRepository;
         nodeRepository = sourceNodeRepository;
 
+        log.info("*****************************************************************************************************************************************");
         log.info("created");
 
     }
 
 
     public void layoutRepository(){
-
-        AtomicInteger counter = new AtomicInteger(0);
-        Map<String, AtomicInteger> counterMap = new HashMap<>();
 
         Collection<ACityElement> buildings = repository.getElementsByType(ACityElement.ACityType.Building);
         log.info(buildings.size() + " buildings loaded");
@@ -52,23 +52,19 @@ public class ACityLayouter {
                 SAPNodeTypes buildingSourceType = getTableTypeTypeOfType(building);
 
                 if(buildingSourceType != null){
-                    counter.addAndGet(1);
                     layoutTableTypeBuilding(building, buildingSourceType);
+
+                    log.info(building.getSourceNodeProperty(SAPNodeProperties.type_name) + " \""
+                            + building.getSourceNodeProperty(SAPNodeProperties.object_name) + "\""
+                            + " with rowType " + "\"" + building.getSourceNodeProperty(SAPNodeProperties.rowtype) + "\""
+                            + " layouted");
                 }
-                countTableTypsByRowtype(counterMap, building);
             } else {
                 layoutBuilding(building);
             }
         }
 
-        log.info(counter + " \"TableTypes\" exists ");
-        counterMap.forEach( (propertyRowtype, rowtypeCounter) -> {
-            log.info(rowtypeCounter + " " + SAPNodeTypes.TableType.name() + "s with rowtype \"" + propertyRowtype + "\" layouted" );
-        });
-
         layoutParentDistricts(buildings);
-
-
 
     }
 
@@ -88,9 +84,15 @@ public class ACityLayouter {
             return null;
         }
 
-        String typeOfNodeTypeProperty = building.getSourceNodeProperty(SAPNodeProperties.type_name);
+        //TODO gebraucht vom typeofnode nicht vom building
+        for (Node typeOfNode: typeOfNodes) {
+            Value propertyValue = typeOfNode.get(SAPNodeProperties.type_name.name());
+            String typeOfNodeTypeProperty = propertyValue.asString();
 
-        return SAPNodeTypes.valueOf(typeOfNodeTypeProperty);
+            return SAPNodeTypes.valueOf(typeOfNodeTypeProperty);
+        }
+
+        return null;
     }
 
     private void layoutTableTypeBuilding(ACityElement building, SAPNodeTypes typeOfType) {
@@ -125,23 +127,12 @@ public class ACityLayouter {
         building.setZPosition(0.0);
     }
 
-    private void countTableTypsByRowtype(Map<String, AtomicInteger> counterMap, ACityElement aCityElement){
-
-        String propertyRowtype = getRowtype(aCityElement);
-
-        if(!counterMap.containsKey(propertyRowtype)){
-            counterMap.put(propertyRowtype, new AtomicInteger(0));
-        }
-        AtomicInteger counterValue = counterMap.get(propertyRowtype);
-        counterValue.addAndGet(1);
-    }
-
     private String getRowtype(ACityElement aCityElement){
 
-            if (aCityElement.getSourceNodeProperty(SAPNodeProperties.type_name) == SAPNodeTypes.TableType.name()){
-                if (aCityElement.getSourceNodeProperty(SAPNodeProperties.rowtype) == null) {
-                    return "TableType doesn't have a rowType";
-                }
+        if (aCityElement.getSourceNodeProperty(SAPNodeProperties.type_name) == SAPNodeTypes.TableType.name()){
+            if (aCityElement.getSourceNodeProperty(SAPNodeProperties.rowtype) == null) {
+                return "TableType doesn't have a rowType";
+            }
 
         }
         return aCityElement.getSourceNodeProperty(SAPNodeProperties.rowtype);
@@ -150,10 +141,11 @@ public class ACityLayouter {
     private void layoutParentDistricts(Collection<ACityElement> districtElements) {
 
         Collection<ACityElement> parentDistricts = getParentDistricts(districtElements);
+
         log.info(parentDistricts.size() + " parentDistrict loaded"); // first for buildings, then for typedistricts
 
         if (parentDistricts.isEmpty()){
-            layoutVirtualRootDistrict(districtElements);
+            layoutVirtualRootDistrict();
             return;
         }
 
@@ -184,13 +176,11 @@ public class ACityLayouter {
 
     private void layoutBuilding(ACityElement building) {
         Collection<ACityElement> floors = building.getSubElementsOfType(ACityElement.ACityType.Floor);
-
         Collection<ACityElement> chimneys = building.getSubElementsOfType(ACityElement.ACityType.Chimney);
 
         ACityBuildingLayout buildingLayout = new ACityBuildingLayout(building, floors, chimneys, config);
         buildingLayout.calculate();
 
-        //TODO too much?
         if (floors.size() != 0) {
             log.info(building.getSourceNodeType() + " " + "\"" + building.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + " with " + floors.size() + " floors");
         }
@@ -200,28 +190,35 @@ public class ACityLayouter {
     }
 
     private void layoutDistrict(ACityElement district) {
-        Collection<ACityElement> subElements = district.getSubElements();
 
-        ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(district,  subElements, config);
-        aCityDistrictLayout.calculate();
+        if (district.getType() == ACityElement.ACityType.District) {
 
-        if ( district.getSubType() != null) {
-            log.info("\"" + district.getSubType() + "\"" + "-Distritct with " + subElements.size() + " buildings layouted");
-        } else {
-            log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-Package with " + subElements.size() + " typeDistricts layouted");
+            Collection<ACityElement> subElements = district.getSubElements();
+
+            ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(district, subElements, config);
+            aCityDistrictLayout.calculate();
+
+            if (district.getSubType() != null) {
+                log.info("\"" + district.getSubType() + "\"" + "-Distritct with " + subElements.size() + " buildings layouted");
+            } else {
+                log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-Package with " + subElements.size() + " typeDistricts layouted");
+            }
         }
     }
 
-    private void layoutVirtualRootDistrict(Collection<ACityElement> districts){
-        AtomicInteger virtualRootDistrictCounter = new AtomicInteger(0);
+    private void layoutVirtualRootDistrict(){
+        Collection<ACityElement> districtsWithoutParents = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, "Namespace");
 
-        ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
+        for (ACityElement districtsWithoutParent : districtsWithoutParents) {
 
-        virtualRootDistrictCounter.addAndGet(1);
-        log.info(virtualRootDistrictCounter + " virtual root districts loaded");
+            if (districtsWithoutParent.getParentElement() == null) {
 
-        ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict,  districts, config);
-        aCityDistrictLayout.calculate();
+                ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
+
+                ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtsWithoutParents, config);
+                aCityDistrictLayout.calculate();
+            }
+        }
     }
 
 }

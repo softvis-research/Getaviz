@@ -1,11 +1,11 @@
-package org.getaviz.generator.abap.city.repository;
+package org.getaviz.generator.abap.repository;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.enums.SAPNodeLabels;
-import org.getaviz.generator.abap.city.enums.SAPNodeProperties;
-import org.getaviz.generator.abap.city.enums.SAPRelationLabels;
+import org.getaviz.generator.abap.enums.SAPNodeLabels;
+import org.getaviz.generator.abap.enums.SAPNodeProperties;
+import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Value;

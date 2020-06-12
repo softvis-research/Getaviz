@@ -1,4 +1,4 @@
-package org.getaviz.generator.abap.city.enums;
+package org.getaviz.generator.abap.enums;
 
 //Unused so far
 public enum SAPNodeLabels {
