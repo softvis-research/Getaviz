@@ -23,7 +23,7 @@ public class acity_AFrame implements ABAP_OutputFormat {
                 "\n" +
                 "\t\t <a-scene>" +
                 "\n" +
-                "\t\t\t <a-camera position=\"-10 10 0\"></a-camera>" +
+                "\t\t\t <a-entity camera look-controls wasd-controls=\"acceleration: 5000\" position=\"-10 10 0\"></a-entity>" +
                 "\n";
 
     }

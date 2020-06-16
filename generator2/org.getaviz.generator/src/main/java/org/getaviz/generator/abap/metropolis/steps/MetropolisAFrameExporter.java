@@ -46,8 +46,8 @@ public class MetropolisAFrameExporter {
         Collection<ACityElement> floors = repository.getElementsByType(ACityElement.ACityType.Floor);
         builder.append(createElementsExport(floors));
 
-        Collection<ACityElement> chimneys = repository.getElementsByType(ACityElement.ACityType.Chimney);
-        builder.append(createElementsExport(chimneys));
+        //Collection<ACityElement> chimneys = repository.getElementsByType(ACityElement.ACityType.Chimney);
+        //builder.append(createElementsExport(chimneys));
 
         Collection<ACityElement> buildings = repository.getElementsByType(ACityElement.ACityType.Building);
         builder.append(createElementsExport(buildings));

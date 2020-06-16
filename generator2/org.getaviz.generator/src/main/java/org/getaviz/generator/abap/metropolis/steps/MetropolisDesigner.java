@@ -42,7 +42,7 @@ public class MetropolisDesigner {
 
         designMetropolisElementsByType(ACityElement.ACityType.Floor);
 
-        designMetropolisElementsByType(ACityElement.ACityType.Chimney);
+      //  designMetropolisElementsByType(ACityElement.ACityType.Chimney);
     }
 
     private void designMetropolisElementsByType(ACityElement.ACityType aCityType){
@@ -59,7 +59,7 @@ public class MetropolisDesigner {
                 case District: designDistrict(aCityElement); break;
                 case Building: designBuilding(aCityElement); break;
                 case Floor: designFloor(aCityElement); break;
-                case Chimney: designChimney(aCityElement); break;
+               // case Chimney: designChimney(aCityElement); break;
                 default:
                     designBuilding(aCityElement);
                     log.error(aCityType.name() + "is not a valid cityType");
@@ -98,23 +98,30 @@ public class MetropolisDesigner {
 
         district.setShape(config.getACityDistrictShape());
 
-        if (district.getSourceNode() != null){
-            //namespace district
-            district.setColor(config.getMetropolisDistrictColorHex("packageDistrict"));
-        } else {
-            //type district
-            switch (district.getSubType()){
-                case Class:         district.setColor(config.getMetropolisDistrictColorHex("classDistrict")); break;
-                case Interface:     district.setColor(config.getMetropolisDistrictColorHex("interfaceDistrict")); break;
-                case Report:        district.setColor(config.getMetropolisDistrictColorHex("reportDistrict")); break;
-                case FunctionGroup: district.setColor(config.getMetropolisDistrictColorHex("functionGroupDistrict")); break;
-                case Table:         district.setColor(config.getMetropolisDistrictColorHex("tableDistrict")); break;
-                case Structure:     district.setColor(config.getMetropolisDistrictColorHex("structureDistrict")); break;
-                case DataElement:   district.setColor(config.getMetropolisDistrictColorHex("dataElementDistrict")); break;
+            String propertyTypeName = district.getSourceNodeProperty(SAPNodeProperties.type_name);
+
+            switch (SAPNodeTypes.valueOf(propertyTypeName)) {
+                case Namespace:     district.setColor(config.getMetropolisDistrictColorHex("packageDistrict")); break;
+                case Class:         district.setColor(config.getMetropolisDistrictColorHex("classDistrict"));
+                                    district.setHeight(config.getACityDistrictHeight()); break;
+                case Interface:     district.setColor(config.getMetropolisDistrictColorHex("interfaceDistrict"));
+                                    district.setHeight(config.getACityDistrictHeight()); break;
+                case Report:        district.setColor(config.getMetropolisDistrictColorHex("reportDistrict"));
+                                    district.setHeight(config.getACityDistrictHeight());
+                    break;
+                case FunctionGroup: district.setColor(config.getMetropolisDistrictColorHex("functionGroupDistrict"));
+                                    district.setHeight(config.getACityDistrictHeight()); break;
+                case Table:
+                case TableType:     district.setColor(config.getMetropolisDistrictColorHex("tableDistrict"));
+                                    district.setHeight(config.getACityDistrictHeight()); break;
+                case Structure:     district.setColor(config.getMetropolisDistrictColorHex("structureDistrict"));
+                                    district.setHeight(config.getACityDistrictHeight()); break;
+                case DataElement:   district.setColor(config.getMetropolisDistrictColorHex("dataElementDistrict"));
+                                    district.setHeight(config.getACityDistrictHeight()); break;
                 default:            district.setColor(config.getMetropolisDistrictColorHex("defaultValue"));
-                    log.error(district.getSubType().name() + " is not a valid type for \"district\""); break;
+                    log.error(district.getSubType().name() + " is not a valid type for \"district\"");
+                    district.setHeight(config.getACityDistrictHeight()); break;
             }
-        }
     }
 
     private void designBuilding(ACityElement building) {
@@ -182,7 +189,7 @@ public class MetropolisDesigner {
                 building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                 building.setLength(building.getLength() - config.adjustACityBuildingLength());
                 break;
-            case Structure:
+            case StructureElement:
                 building.setColor(config.getMetropolisBuildingColorHex("structureBuilding"));
                 building.setShape(config.getMetropolisBuildingShape("structureBuilding"));
                 building.setWidth(config.getACityBuildingWidth("structureBuilding"));

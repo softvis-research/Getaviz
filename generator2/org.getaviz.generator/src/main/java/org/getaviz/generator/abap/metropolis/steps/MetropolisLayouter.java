@@ -144,7 +144,7 @@ public class MetropolisLayouter {
 
         log.info(parentDistricts.size() + " parentDistrict loaded"); // first for buildings, then for typedistricts
 
-        if (parentDistricts.isEmpty()){
+        /*if (parentDistricts.isEmpty()){
             layoutVirtualRootDistrict();
             return;
         }
@@ -154,6 +154,17 @@ public class MetropolisLayouter {
         }
 
         layoutParentDistricts(parentDistricts);
+         */
+
+        for(ACityElement parentDistrict : parentDistricts){
+            layoutDistrict(parentDistrict);
+        }
+
+        if (!parentDistricts.isEmpty()) {
+            layoutParentDistricts(parentDistricts);
+        } else {
+            layoutVirtualRootDistrict();
+        }
     }
 
 
@@ -198,11 +209,9 @@ public class MetropolisLayouter {
             ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(district, subElements, config);
             aCityDistrictLayout.calculate();
 
-            if (district.getSubType() != null) {
-                log.info("\"" + district.getSubType() + "\"" + "-Distritct with " + subElements.size() + " buildings layouted");
-            } else {
-                log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-Package with " + subElements.size() + " typeDistricts layouted");
-            }
+
+            log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-Package with " + subElements.size() + " districts layouted");
+
         }
     }
 
