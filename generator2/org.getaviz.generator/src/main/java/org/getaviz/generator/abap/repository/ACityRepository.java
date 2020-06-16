@@ -48,6 +48,10 @@ public class ACityRepository {
     }
 
     public Collection<ACityElement> getElementsByType(ACityElement.ACityType type){
+        if(!elementsByType.containsKey(type)) {
+            return new ArrayList<>();
+        }
+
         Map<String, ACityElement> elementsByTypeMap = elementsByType.get(type);
         return new ArrayList(elementsByTypeMap.values());
     }

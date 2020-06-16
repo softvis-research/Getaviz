@@ -48,10 +48,12 @@ public class MetropolisLayouter {
 
             SAPNodeTypes sourceNodeType = building.getSourceNodeType();
 
+
+
             if(sourceNodeType == SAPNodeTypes.TableType) {
                 SAPNodeTypes buildingSourceType = getTableTypeTypeOfType(building);
 
-                if(buildingSourceType != null){
+                if (buildingSourceType != null) {
                     layoutTableTypeBuilding(building, buildingSourceType);
 
                     log.info(building.getSourceNodeProperty(SAPNodeProperties.type_name) + " \""
@@ -141,6 +143,8 @@ public class MetropolisLayouter {
     private void layoutParentDistricts(Collection<ACityElement> districtElements) {
 
         Collection<ACityElement> parentDistricts = getParentDistricts(districtElements);
+
+        //TODO load report district for report Builindg
 
         log.info(parentDistricts.size() + " parentDistrict loaded"); // first for buildings, then for typedistricts
 
