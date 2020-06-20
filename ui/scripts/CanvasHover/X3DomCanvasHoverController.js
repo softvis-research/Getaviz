@@ -15,8 +15,7 @@ var canvasHoverController = (function() {
 	var controllerConfig = {
 		hoverColor: "darkred",
 		showQualifiedName : false,
-		showVersion : false,
-		showIssues : false
+		showVersion : false
 	};
 	
 	function activate(){
@@ -70,23 +69,7 @@ var canvasHoverController = (function() {
 			versionPElement.id = "tooltipVersion";
 			tooltipDivElement.appendChild(versionPElement);
 		}
-		if(controllerConfig.showIssues) {
-			var openIssuesPElement = document.createElement("P");
-			openIssuesPElement.id = "tooltipOpenIssues";
-			tooltipDivElement.appendChild((openIssuesPElement));
 
-            var closedIssuesPElement = document.createElement("P");
-            closedIssuesPElement.id = "tooltipClosedIssues";
-            tooltipDivElement.appendChild((closedIssuesPElement));
-
-            var openSecurityIssuesPElement = document.createElement("P");
-            openSecurityIssuesPElement.id = "tooltipOpenSecurityIssues";
-            tooltipDivElement.appendChild((openSecurityIssuesPElement));
-
-            var closedSecurityIssuesPElement = document.createElement("P");
-            closedSecurityIssuesPElement.id = "tooltipClosedSecurityIssues";
-            tooltipDivElement.appendChild((closedSecurityIssuesPElement));
-		}
 		canvas.appendChild(tooltipDivElement);
     }
 		
@@ -165,27 +148,6 @@ var canvasHoverController = (function() {
 		if(controllerConfig.showVersion) {
 			$("#tooltipVersion").text("Version: " + entity.version);
 		}
-		if(controllerConfig.showIssues) {
-			let openIssuesSelector = $('#tooltipOpenIssues');
-			let closedIssuesSelector = $('#tooltipClosedIssues');
-			let openSecurityIssuesSelector = $('#tooltipOpenSecurityIssues');
-			let closedSecurityIssuesSelector = $('#tooltipClosedSecurityIssues');
-			if (entity.type === "Namespace") {
-                openIssuesSelector.css("display", "none");
-                closedIssuesSelector.css("display", "none");
-                openSecurityIssuesSelector.css("display", "none");
-                closedSecurityIssuesSelector.css("display", "none");
-            } else {
-                openIssuesSelector.text("Open Issues: " + entity.numberOfOpenIssues);
-            	closedIssuesSelector.text("Closed Issues: " + entity.numberOfClosedIssues);
-                openSecurityIssuesSelector.text("Open Security Issues: " + entity.numberOfOpenSecurityIssues);
-                closedSecurityIssuesSelector.text("Closed Security Issues: " + entity.numberOfClosedSecurityIssues);
-                openIssuesSelector.css("display", "block");
-                closedIssuesSelector.css("display", "block");
-                openSecurityIssuesSelector.css("display", "block");
-                closedSecurityIssuesSelector.css("display", "block");
-            }
-        }
 
 		var tooltip = $("#tooltip");
         tooltip.css("top", applicationEvent.posY + 50 + "px");

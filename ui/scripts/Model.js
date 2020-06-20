@@ -17,11 +17,7 @@ var model = (function() {
 	let entitiesById = new Map();
 	let eventEntityMap = new Map();
     let entitiesByVersion = new Map();
-    let entitiesByIssue = new Map();
 	let selectedVersions = [];
-	let selectedIssues = [];
-	let issues = [];
-	let issuesById = new Map();
 	let paths = [];
 	let labels = [];
 	let macrosById = new Map();
@@ -71,14 +67,6 @@ var model = (function() {
                     });
                     labels.push(entity);
                     break;
-				case "issue":
-					entity.open = (element.open === "true");
-                    entity.security = (element.security === "true");
-					entity.qualifiedName = entity.id;
-					issues.push(entity);
-                    issuesById.set(entity.id, entity);
-					break;
-
 				case "path":
 					entity.start = element.start;
 					entity.end = element.end;
@@ -147,31 +135,6 @@ var model = (function() {
 							entitiesByVersion.set(entity.version, map);
 						}
 					}
-					if(element.issues !== undefined) {
-                        entity.issues = element.issues.split(",");
-                    } else {
-						entity.issues = [];
-					}
-                  	for(let i = 0; i < entity.issues.length; ++i) {
-                        entity.issues[i] = entity.issues[i].trim();
-                    }
-                    entity.issues.forEach(function(issue) {
-                        if(entitiesByIssue.has(issue)) {
-                            let map = entitiesByIssue.get(issue);
-                        	map.push(entity);
-                            entitiesByIssue.set(issue, map);
-                        } else {
-                            addIssue(issue);
-                            let map = [];
-                            map.push(entity);
-                            entitiesByIssue.set(issue, map);
-                        }
-                    });
-					entity.numberOfOpenIssues = element.numberOfOpenIssues;
-					entity.numberOfClosedIssues = element.numberOfClosedIssues;
-					entity.numberOfClosedSecurityIssues = element.numberOfClosedSecurityIssues;
-					entity.numberOfOpenSecurityIssues = element.numberOfOpenSecurityIssues;
-
 					break;
 				case  "ParameterizableClass":
 					entity.superTypes = element.subClassOf.split(",");
@@ -323,9 +286,6 @@ var model = (function() {
 				case "Project":
                 case "text":
                     break;
-				case "issue":
-					break;
-                            
                 case "component":
                     let components = [];
                     entity.components.forEach(function(componentId) {
@@ -631,18 +591,10 @@ var model = (function() {
 	function getEntityById(id){
 		return entitiesById.get(id);
 	}
-
-    function getIssuesById(id){
-        return issuesById.get(id);
-    }
 	
 	function getAllVersions() {
             return entitiesByVersion;
 	}
-
-    function getAllIssues() {
-        return issues;
-    }
 	
 	function getAllMacrosById(){
 		return macrosById;
@@ -651,26 +603,6 @@ var model = (function() {
 	function getModelElementsByMacro(id){
 		return modelElementsByMacro.get(id);
 	}
-
-	function getAllSecureEntities(){
-	    let entities = [];
-	    entitiesById.forEach(function(entity){
-            if(entity.type === "Class" && entity.numberOfOpenSecurityIssues === 0){
-                entities.push(entity);
-            }
-        });
-	    return entities;
-    }
-
-    function getAllCorrectEntities(){
-        let entities = [];
-        entitiesById.forEach(function(entity){
-            if(entity.type === "Class" && entity.numberOfOpenIssues === 0 && entity.numberOfOpenSecurityIssues === 0){
-                entities.push(entity);
-            }
-        });
-        return entities;
-    }
 	
 	function getEntitiesByComponent(component) {
             let entities = [];
@@ -734,31 +666,16 @@ var model = (function() {
         }
     }
 
-    function removeIssue(issue) {
-        const index = selectedIssues.indexOf(issue);
-        if (index > -1) {
-            selectedIssues.splice(index, 1);
-        }
-    }
-        
     function addVersion(version) {
         selectedVersions.push(version);
     }
 
-    function addIssue(issue) {
-		selectedIssues.push(issue);
-	}
-	
 	function getEntitiesByState(stateEventObject){
 		return eventEntityMap.get(stateEventObject);
 	}
 	
 	function getEntitiesByVersion(versionId){
         return entitiesByVersion.get(versionId);
-    }
-
-    function getEntitiesByIssue(issue){
-        return entitiesByIssue.get(issue);
     }
 
     function getEntitiesByType(type) {
@@ -793,30 +710,21 @@ var model = (function() {
         initialize					: initialize,
 		reset						: reset,
 		states						: states,
-		
 		getAllEntities				: getAllEntities,
-        getAllSecureEntities        : getAllSecureEntities,
-        getAllCorrectEntities       : getAllCorrectEntities,
         getEntityById				: getEntityById,
 		getEntitiesByState			: getEntitiesByState,
 		getEntitiesByComponent		: getEntitiesByComponent,
 		getEntitiesByAntipattern	: getEntitiesByAntipattern,
 		getEntitiesByVersion		: getEntitiesByVersion,
-		getEntitiesByIssue			: getEntitiesByIssue,
 		getEntitiesByType			: getEntitiesByType,
         getAllParentsOfEntity       : getAllParentsOfEntity,
         getAllVersions              : getAllVersions,
-		getAllIssues				: getAllIssues,
-        getIssuesById               : getIssuesById,
 		getAllMacrosById			: getAllMacrosById,
 		getModelElementsByMacro     : getModelElementsByMacro,
 		createEntity				: createEntity,
 		removeEntity				: removeEntity,
-		
 		addVersion                  : addVersion,
 		removeVersion               : removeVersion,
-		addIssue					: addIssue,
-		removeIssue					: removeIssue,
 		getSelectedVersions			: getSelectedVersions,
 		getPaths					: getPaths,
         getRole 					: getRole,

@@ -137,8 +137,7 @@ var events = (function() {
 		weight				: { name: "weight"},
 		innerClasses		: { name: "innerClasses"},
 		bundledEdges		: { name: "bundledEdges"},
-		filterSettings		: { name: "filterSettings"},
-        issues              : { name: "issues"}
+		filterSettings		: { name: "filterSettings"}
 	};
 	events.config = {};
 	const configTypeArray = Object.keys(configTypes);
