@@ -83,7 +83,6 @@ var model = (function() {
 					entity.components = element.components.split(",");
 					entity.versions = element.versions.split(",");
 					return;
-				case "Project" :
 				case "Namespace":
 					entity.version = element.version;
 					if(entity.version !== undefined) {
@@ -283,7 +282,6 @@ var model = (function() {
 			let subTypes = [];
 			
 			switch(entity.type) {
-				case "Project":
                 case "text":
                     break;
                 case "component":

@@ -6,7 +6,6 @@ var packageExplorerController = (function() {
 	let tree;
 
 	let controllerConfig = {
-		projectIcon: 	"scripts/PackageExplorer/images/project.png",
 		packageIcon: 	"scripts/PackageExplorer/images/package.png",
 		typeIcon: 		"scripts/PackageExplorer/images/type.png",
 		fieldIcon: 		"scripts/PackageExplorer/images/field.png",
@@ -64,23 +63,10 @@ var packageExplorerController = (function() {
                             icon: controllerConfig.packageIcon,
                             iconSkin: "zt"
                         };
-                    } else {
-                        item = {
-                            id: entity.id,
-                            open: true,
-                            checked: true,
-                            parentId: "",
-                            name: entity.name,
-                            icon: controllerConfig.projectIcon,
-                            iconSkin: "zt"
-                        };
                     }
                 }
             } else {	
 				switch(entity.type) {
-					case "Project":
-						item = { id: entity.id, open: true, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.projectIcon, iconSkin: "zt"};
-						break;
 					case "Namespace":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.packageIcon, iconSkin: "zt"};
 						break;
