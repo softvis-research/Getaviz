@@ -121,7 +121,6 @@ var model = (function() {
                                         entity.component = element.component;
                     entity.version = element.version;
 					entity.betweennessCentrality = element.betweennessCentrality;
-					entity.changeFrequency = element.changeFrequency;
 					if(entity.version !== undefined) {
 						if(entitiesByVersion.has(entity.version)) {
 							let map = entitiesByVersion.get(entity.version);
