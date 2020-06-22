@@ -43,16 +43,18 @@ services:
     networks:
       - default
     depends_on:
-      - neo4j
+      - jqassistant
       - volumes-provisioner
-  neo4j:
-    image: neo4j:3.5.1
+  jqassistant:
+    build: jQAssistant/
     restart: always
     volumes:
       - 'getaviz-db:/data'
+     # - ./jQAssistant/target/org.getaviz.jqassistant-1.0.0-SNAPSHOT.war:/getaviz-jqassistant.war # uncomment only for development
     ports:
       - "7474:7474"
       - "7687:7687"
+      - "8080:8080"
     environment:
       NEO4J_AUTH: "none"
     networks:
