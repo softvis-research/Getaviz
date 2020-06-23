@@ -45,9 +45,11 @@ public class JQAssistantController {
         log.info("jQAssistant scan started.");
         log.info("Scanning from URI(s) " + decodeUrl(url));
         try {
+            stopServer();
             String options = "scan -reset -u " + decodeUrl(url);
             Process pScan = runtime.exec(pathJQAssistant + " " + options);
             pScan.waitFor();
+            startServer();
         } catch (IOException | InterruptedException e) {
             log.error(e);
             e.printStackTrace();
