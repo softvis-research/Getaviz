@@ -1,25 +1,26 @@
 package org.getaviz.generator.rd.m2m;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.ColorGradient;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
-import java.util.ArrayList;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.rd.Disk;
 import org.getaviz.generator.rd.DiskSegment;
 import org.getaviz.generator.rd.MainDisk;
 import org.getaviz.generator.rd.SubDisk;
-import org.neo4j.driver.v1.types.Node;
-import java.util.List;
 import org.neo4j.driver.v1.StatementResult;
+import org.neo4j.driver.v1.types.Node;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RD2RD implements Step {
-    private DatabaseConnector connector = DatabaseConnector.getInstance();
-    private Log log = LogFactory.getLog(RD2RD.class);
+    private final DatabaseConnector connector = DatabaseConnector.getInstance();
+    private final Log log = LogFactory.getLog(RD2RD.class);
     private List<String> NS_colors;
-    private double dataFactor;
+    private final double dataFactor;
     private ArrayList<SubDisk> subDisks = new ArrayList<>();
     private ArrayList<MainDisk> mainDisks = new ArrayList<>();
     private ArrayList<MainDisk> rootDisks = new ArrayList<>();
