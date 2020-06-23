@@ -162,7 +162,6 @@ public class JQA2JSON implements Step {
         if (parent.hasNext()) {
             belongsTo = parent.single().get("parent.hash").asString();
         }
-        log.info(attribute.id());
         StatementResult type = connector
                 .executeRead("MATCH (attribute)-[:OF_TYPE]->(t) WHERE ID(attribute) = " + attribute.id() + " RETURN t");
         if (type.hasNext()) {
