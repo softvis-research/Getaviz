@@ -222,10 +222,14 @@ public class JQA2JSON implements Step {
 
     private String toMetaDataEnum(Node e) {
         String belongsTo = "";
-        StatementResult parent = connector.executeRead("MATCH (parent)-[:DECLARES]->(enum) WHERE ID(enum) = " + e.id()
+        StatementResult parent = connector.executeRead("MATCH (parent:Type)-[:DECLARES]->(enum) WHERE ID(enum) = " + e.id()
                 + " RETURN parent.hash");
         if (parent.hasNext()) {
             belongsTo = parent.single().get("parent.hash").asString();
+        } else {
+            parent = connector.executeRead(
+                    "MATCH (parent:Package)-[:CONTAINS]->(enum) WHERE ID(enum) = " + e.id() + " RETURN parent");
+            belongsTo = parent.single().get("parent").asNode().get("hash").asString("YYY");
         }
         return "\"id\":            \"" + e.get("hash").asString() + "\"," +
                 "\n" +
