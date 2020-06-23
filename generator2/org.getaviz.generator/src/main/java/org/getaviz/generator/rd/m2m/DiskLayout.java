@@ -1,7 +1,5 @@
 package org.getaviz.generator.rd.m2m;
 
-import java.util.Collections;
-import java.util.List;
 import com.vividsolutions.jts.algorithm.MinimumBoundingCircle;
 import com.vividsolutions.jts.geom.CoordinateList;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -10,11 +8,14 @@ import org.getaviz.generator.rd.Disk;
 import org.getaviz.generator.rd.MainDisk;
 import org.getaviz.generator.rd.SubDisk;
 
+import java.util.Collections;
+import java.util.List;
+
 class DiskLayout {
 
-	private List<MainDisk> rootDisks;
-	private List<MainDisk> mainDisks;
-	private List<SubDisk> subDisks;
+	private final List<MainDisk> rootDisks;
+	private final List<MainDisk> mainDisks;
+	private final List<SubDisk> subDisks;
 
 	DiskLayout(List<MainDisk> rootDisks, List<MainDisk> mainDisks, List<SubDisk> subDisks) {
 		this.rootDisks = rootDisks;
