@@ -2,17 +2,21 @@ package org.getaviz.generator.extract;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.getaviz.generator.Step;
-import org.getaviz.generator.database.DatabaseConnector;
+
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 class ScanStep implements Step {
-
-    private Log log = LogFactory.getLog(this.getClass());
-    private Runtime runtime = Runtime.getRuntime();
-    private String inputFiles;
-    private String pathJQAssistant = "/opt/jqassistant/bin/jqassistant.sh";
-    private boolean skipScan;
+    private final String inputFiles;
+    private final boolean skipScan;
+    private static Log log = LogFactory.getLog(ScanStep.class);
 
     ScanStep(String inputFiles, boolean skipScan) {
         this.inputFiles = inputFiles;
@@ -25,23 +29,21 @@ class ScanStep implements Step {
 
     public void run() {
         if(checkRequirements()) {
-            log.info("jQAssistant scan started.");
-            log.info("Scanning from URI(s) " + inputFiles);
-            try {
-                String options = "scan -reset -u " + inputFiles + " -storeUri " +  DatabaseConnector.getDatabaseURL();
-                Process pScan = runtime.exec(pathJQAssistant + " " + options);
-                pScan.waitFor();
-            } catch (IOException | InterruptedException e) {
-                log.error(e);
+            HttpPost post = new HttpPost("http://jqassistant:8080/scan/" + encodeUrl(encodeUrl(inputFiles)));
+            try (CloseableHttpClient httpClient = HttpClients.createDefault();
+                 CloseableHttpResponse response = httpClient.execute(post)){
+                log.info("Status: " + response.getStatusLine().getStatusCode());
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            log.info("jQAssistant scan finished.");
-        } else {
-            log.info("Requirements for step not fulfilled");
         }
     }
 
-    void setPathJQAssistant(String path) {
-        this.pathJQAssistant = path;
+    private static String encodeUrl(String url) {
+        try {
+            return URLEncoder.encode(url, StandardCharsets.UTF_8.toString());
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex.getCause());
+        }
     }
 }
