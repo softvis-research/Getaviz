@@ -4,8 +4,6 @@ import com.vividsolutions.jts.algorithm.MinimumBoundingCircle;
 import com.vividsolutions.jts.geom.CoordinateList;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.MultiPoint;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.rd.Disk;
 import org.getaviz.generator.rd.MainDisk;
 import org.getaviz.generator.rd.SubDisk;
@@ -13,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 class DiskLayout {
-	private final Log log = LogFactory.getLog(this.getClass());
+	//private final Log log = LogFactory.getLog(this.getClass());
 	private final List<MainDisk> rootDisks;
 	private final List<SubDisk> subDisks;
 
@@ -29,7 +27,7 @@ class DiskLayout {
 	}
 
 	private <T extends Disk> void layout(List<T> diskList) {
-		diskList.forEach(disk->  {
+		diskList.forEach(disk ->  {
 			if (disk.getInnerDisks().size() > 0) {
 				List<Disk> innerDisks = disk.getInnerDisks();
 				layout(innerDisks);
@@ -114,6 +112,7 @@ class DiskLayout {
 		}
 
 		Disk second = disksList.get(1);
+
 		int m = 0;
 		double angleBetweenNAndM = 0;
 		second.setPosition(Position.calculateCentre(first, second, angleBetweenNAndM));

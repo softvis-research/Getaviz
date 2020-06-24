@@ -64,7 +64,7 @@ public class RD2RD implements Step {
 
     private void calculateData() {
         subDisks.forEach(SubDisk::calculateAreaWithoutBorder);
-        mainDisks.forEach(MainDisk::calculateAreaWithoutBorder);
+        rootDisks.forEach(MainDisk::calculateAreaWithoutBorder);
     }
 
     private void calculateLayouts() {
