@@ -1,13 +1,7 @@
 package org.getaviz.generator.database;
 
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.neo4j.driver.v1.*;
 import org.neo4j.driver.v1.types.Node;
-
-import java.io.IOException;
 
 public class DatabaseConnector implements AutoCloseable {
 	private static String URL = "bolt://jqassistant:7687";
@@ -41,15 +35,6 @@ public class DatabaseConnector implements AutoCloseable {
 			instance = new DatabaseConnector(URL);
 		}
 		return instance;
-	}
-
-	public static void startDatabase() {
-		HttpPost post2 = new HttpPost("http://jqassistant:8080/server/start");
-		try (CloseableHttpClient httpClient = HttpClients.createDefault();
-			 CloseableHttpResponse ignored = httpClient.execute(post2)){
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void executeWrite(String... statements) {
