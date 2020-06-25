@@ -8,21 +8,27 @@ import java.io.File;
 public class ABAPmock extends Mockup {
 
 	public void setupDatabase(String directory, String cypherScript) {
-		/*
+
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(directory))
 				.setConfig(bolt.type, "BOLT").setConfig(bolt.enabled, "true")
 				.setConfig(bolt.listen_address, "localhost:11003").newGraphDatabase();
 		registerShutdownHook(graphDb);
 		connector = DatabaseConnector.getInstance("bolt://localhost:11003");
-		 */
+		resetDatabase();
+		runCypherScript(cypherScript);
+
+
+		/*
 		try {
-			connector = DatabaseConnector.getInstance("bolt://localhost:7687");
+			//connector = DatabaseConnector.getInstance("bolt://localhost:7687");
+			connector = DatabaseConnector.getInstance("bolt://localhost:11003"); //Toni
 		} catch(Exception exception){
+			exception.printStackTrace();
 			graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(new File(directory))
 					.setConfig(bolt.type, "BOLT").setConfig(bolt.enabled, "true")
-					.setConfig(bolt.listen_address, "localhost:11003").newGraphDatabase();
+					.setConfig(bolt.listen_address, "localhost:1103").newGraphDatabase();
 			registerShutdownHook(graphDb);
-			connector = DatabaseConnector.getInstance("bolt://localhost:11003");
+			connector = DatabaseConnector.getInstance("bolt://localhost:1103");
 		}
 
 		resetDatabase();
@@ -34,5 +40,8 @@ public class ABAPmock extends Mockup {
 		if(graphDb != null){
 			super.close();
 		}
+	}
+
+		 */
 	}
 }

@@ -67,12 +67,12 @@ public class ACityRepository {
             if(sourceNode == null ){
                 ACityElement.ACitySubType subType = element.getSubType();
                 String subTypeString = subType.toString();
-                    if(!subTypeString.equals(sourcePropertyValue)){
-                        continue;
-                    }
-                    elementsByTypeAndSourceProperty.add(element);
+                if(!subTypeString.equals(sourcePropertyValue)){
+                    continue;
+                }
+                elementsByTypeAndSourceProperty.add(element);
 
-              continue;
+                continue;
             }
 
             Value propertyValue = sourceNode.get(sourceProperty.toString());
@@ -174,18 +174,18 @@ public class ACityRepository {
             }
         });
 
-            elementsByHash.forEach((id, element) -> {
-                Node elementsBySourceNode = element.getSourceNode();
-                if (elementsBySourceNode != null) {
+        elementsByHash.forEach((id, element) -> {
+            Node elementsBySourceNode = element.getSourceNode();
+            if (elementsBySourceNode != null) {
 
-                    String statement = "MATCH (sourceNode:Elements), (acityNode:Elements)" +
-                            "WHERE ID(sourceNode) = " + elementsBySourceNode.id() +
-                            "  AND ID(acityNode) =  " + element.getNodeID() +
-                            "  CREATE (sourceNode)<-[r:SOURCE]-(acityNode)";
+                String statement = "MATCH (sourceNode:Elements), (acityNode:Elements)" +
+                        "WHERE ID(sourceNode) = " + elementsBySourceNode.id() +
+                        "  AND ID(acityNode) =  " + element.getNodeID() +
+                        "  CREATE (sourceNode)<-[r:SOURCE]-(acityNode)";
 
-                    connector.executeWrite(statement);
-                }
-            });
+                connector.executeWrite(statement);
+            }
+        });
     }
 
     private String getACityProperties(ACityElement element) {
@@ -229,5 +229,4 @@ public class ACityRepository {
             addElement(element);
         }
     }
-
 }

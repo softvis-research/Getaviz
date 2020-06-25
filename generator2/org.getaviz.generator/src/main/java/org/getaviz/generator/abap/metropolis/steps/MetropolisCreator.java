@@ -71,12 +71,9 @@ public class MetropolisCreator {
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Table);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Table);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Floor, SAPNodeProperties.type_name, SAPNodeTypes.TableElement);
-
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.TableType);
-
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Structure);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.StructureElement);
-
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.DataElement);
         //createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.DataElement);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Domain);
@@ -97,12 +94,42 @@ public class MetropolisCreator {
         for (ACityElement element: aCityElements){
 
             Node sourceNode = element.getSourceNode();
+
+            if(element.getSourceNodeType() == SAPNodeTypes.Report){
+                if(element.getType() == ACityElement.ACityType.Building){
+                    continue;
+                }
+
+                ACityElement reportParentElements = getParentElementBySourceNode(nodeRepository, sourceNode);
+
+                element.setParentElement(reportParentElements);
+                reportParentElements.addSubElement(element);
+
+                Collection<ACityElement> reportElements = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.type_name, "Report");
+                for (ACityElement reportElement: reportElements) {
+
+                    String reportDistrictTypename = element.getSourceNodeProperty(SAPNodeProperties.object_name);
+                    String reportBuildingTypeName = reportElement.getSourceNodeProperty(SAPNodeProperties.object_name);
+
+                    if(reportBuildingTypeName == reportDistrictTypename){
+
+                        element.addSubElement(reportElement);
+                        reportElement.setParentElement(element);
+                        relationCounter++;
+                    }
+                }
+            }
+
             Collection<ACityElement> childElements = getChildElementsBySourceNode(nodeRepository, sourceNode);
 
             for (ACityElement childElement: childElements) {
 
                 //No nesting of packages
                 if (childElement.getType() == ACityElement.ACityType.District && childElement.getSourceNodeType() == SAPNodeTypes.Namespace ) {
+                    continue;
+                }
+
+                if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Report) {
                     continue;
                 }
 
@@ -180,5 +207,6 @@ public class MetropolisCreator {
 
         return aCityElements;
     }
+
 
 }

@@ -21,16 +21,16 @@ public class SourceNodeRepository {
     private DatabaseConnector connector = DatabaseConnector.getInstance();
 
     /* Node not implements comparable interface to use Sets
-    *   -> use Maps with ID to Node */
+     *   -> use Maps with ID to Node */
 
     private Map<Long, Node> nodeById;
 
     private Map<String, Map<Long, Node>> nodesByLabel;
 
     private Map<String,
-                Map<Boolean,
-                        Map<Long,
-                                Map<Long, Node>> > > nodesByRelation;
+            Map<Boolean,
+                    Map<Long,
+                            Map<Long, Node>> > > nodesByRelation;
 
 
     public SourceNodeRepository(){
@@ -48,14 +48,14 @@ public class SourceNodeRepository {
         AtomicInteger counter = new AtomicInteger(0);
 
         connector.executeRead("MATCH (n:Elements {" + property + ": '" + value + "'}) RETURN n")
-        .forEachRemaining((result) -> {
-            Node sourceNode = result.get("n").asNode();
+                .forEachRemaining((result) -> {
+                    Node sourceNode = result.get("n").asNode();
 
-            addNodeByID(sourceNode);
-            addNodesByProperty(sourceNode);
+                    addNodeByID(sourceNode);
+                    addNodesByProperty(sourceNode);
 
-            counter.addAndGet(1);
-        });
+                    counter.addAndGet(1);
+                });
 
         log.info(counter.get() + " Nodes added with property \"" + property + "\" and value \"" + value + "\"");
     }
@@ -193,8 +193,8 @@ public class SourceNodeRepository {
 
         for (Node node: nodesByID) {
             Value propertyValue = node.get(property.toString());
-             if( propertyValue == null){
-                 continue;
+            if( propertyValue == null){
+                continue;
             }
             String propertyValueString = propertyValue.asString();
             if(!propertyValueString.equals(value)){
@@ -212,13 +212,13 @@ public class SourceNodeRepository {
 
         Collection<Node> nodesByLabelAndProperty = new ArrayList<>();
 
-            StatementResult results = connector.executeRead("MATCH (n:Elements {" + property + ": '" + value + "'}) RETURN n");
-                results.forEachRemaining((result) -> {
-                Node propertyValue = result.get("n").asNode();
+        StatementResult results = connector.executeRead("MATCH (n:Elements {" + property + ": '" + value + "'}) RETURN n");
+        results.forEachRemaining((result) -> {
+            Node propertyValue = result.get("n").asNode();
 
-                    nodesByLabelAndProperty.add(propertyValue);
+            nodesByLabelAndProperty.add(propertyValue);
 
-                });
+        });
 
         return nodesByLabelAndProperty;
     }
@@ -296,7 +296,6 @@ public class SourceNodeRepository {
                 nodeById.put(nodeType, nodeIDMap);
             }
             Map<Long, Node> nodeIDMap = nodeById.get(nodeType);
-
             Long nodeID = node.id();
             if( !nodeIDMap.containsValue(nodeID)){
                 nodeIDMap.put(nodeID, node);
@@ -340,6 +339,5 @@ public class SourceNodeRepository {
             nodeIDMap.put(nNodeID, nNode);
         }
     }
-
 
 }

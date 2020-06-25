@@ -48,8 +48,6 @@ public class MetropolisLayouter {
 
             SAPNodeTypes sourceNodeType = building.getSourceNodeType();
 
-
-
             if(sourceNodeType == SAPNodeTypes.TableType) {
                 SAPNodeTypes buildingSourceType = getTableTypeTypeOfType(building);
 
@@ -140,11 +138,27 @@ public class MetropolisLayouter {
         return aCityElement.getSourceNodeProperty(SAPNodeProperties.rowtype);
     }
 
+    private void layoutEmptyDistricts() {
+
+        Collection<ACityElement> districts = repository.getElementsByType(ACityElement.ACityType.District);
+        for (ACityElement district: districts) {
+
+            if(district.getSubElements().isEmpty()){
+                district.setHeight(config.getACityDistrictHeight());
+                district.setLength(5);
+                district.setWidth(5);
+            }
+        }
+    }
+
     private void layoutParentDistricts(Collection<ACityElement> districtElements) {
+
+        layoutEmptyDistricts();
 
         Collection<ACityElement> parentDistricts = getParentDistricts(districtElements);
 
         //TODO load report district for report Builindg
+
 
         log.info(parentDistricts.size() + " parentDistrict loaded"); // first for buildings, then for typedistricts
 
@@ -152,11 +166,9 @@ public class MetropolisLayouter {
             layoutVirtualRootDistrict();
             return;
         }
-
         for(ACityElement parentDistrict : parentDistricts){
             layoutDistrict(parentDistrict);
         }
-
         layoutParentDistricts(parentDistricts);
          */
 
@@ -214,7 +226,7 @@ public class MetropolisLayouter {
             aCityDistrictLayout.calculate();
 
 
-            log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-Package with " + subElements.size() + " districts layouted");
+            log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
 
         }
     }
@@ -233,5 +245,4 @@ public class MetropolisLayouter {
             }
         }
     }
-
 }
