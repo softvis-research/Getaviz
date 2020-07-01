@@ -95,23 +95,35 @@ public class ACityDesigner {
 
     private void designDistrict(ACityElement district) {
 
-        district.setShape(config.getACityDistrictShape());
+            district.setShape(config.getACityDistrictShape());
 
-        if (district.getSourceNode() != null){
-            //namespace district
-            district.setColor(config.getACityDistrictColorHex("packageDistrict"));
-        } else {
-            //type district
-            switch (district.getSubType()){
-                case Class:         district.setColor(config.getACityDistrictColorHex("classDistrict"));break;
-                case Report:        district.setColor(config.getACityDistrictColorHex("reportDistrict")); break;
-                case FunctionGroup: district.setColor(config.getACityDistrictColorHex("functionGroupDistrict")); break;
-                case Table:         district.setColor(config.getACityDistrictColorHex("tableDistrict")); break;
-                case DDIC:          district.setColor(config.getACityDistrictColorHex("dataDictionaryDistrict")); break;
-                default:            district.setColor(config.getACityDistrictColorHex("defaultValue"));
-                                    log.error(district.getSubType().name() + " is not a valid type for \"district\""); break;
+            if (district.getSourceNode() != null) {
+                //namespace district
+                district.setColor(config.getACityDistrictColorHex("packageDistrict"));
+            } else {
+                //type district
+                switch (district.getSubType()) {
+                    case Class:
+                        district.setColor(config.getACityDistrictColorHex("classDistrict"));
+                        break;
+                    case Report:
+                        district.setColor(config.getACityDistrictColorHex("reportDistrict"));
+                        break;
+                    case FunctionGroup:
+                        district.setColor(config.getACityDistrictColorHex("functionGroupDistrict"));
+                        break;
+                    case Table:
+                        district.setColor(config.getACityDistrictColorHex("tableDistrict"));
+                        break;
+                    case DDIC:
+                        district.setColor(config.getACityDistrictColorHex("dataDictionaryDistrict"));
+                        break;
+                    default:
+                        district.setColor(config.getACityDistrictColorHex("defaultValue"));
+                        log.error(district.getSubType().name() + " is not a valid type for \"district\"");
+                        break;
+                }
             }
-        }
     }
 
     private void designBuilding(ACityElement building) {

@@ -10,9 +10,11 @@ import org.getaviz.generator.abap.repository.*;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ACityCreator {
 
@@ -86,23 +88,25 @@ public class ACityCreator {
         log.info(aCityElements.size() + " ACityElement with type \"" + aCityType.name() + "\" loaded");
 
         long relationCounter = 0;
-        for (ACityElement element: aCityElements){
+        for (ACityElement element: aCityElements) {
 
             Node sourceNode = element.getSourceNode();
+
             Collection<ACityElement> childElements = getChildElementsBySourceNode(nodeRepository, sourceNode);
 
-            for (ACityElement childElement: childElements) {
+                for (ACityElement childElement : childElements) {
 
-                //No nesting of packages/districts
-                if(childElement.getType() == ACityElement.ACityType.District){
-                    continue;
+                    //No nesting of packages/districts
+                    if (childElement.getType() == ACityElement.ACityType.District) {
+                        //repository.deleteElement(element);
+                        continue; //SEEF und BASIS bekommen hier weder Eltern noch Childs
+                    }
+
+                    element.addSubElement(childElement);
+                    childElement.setParentElement(element);
+                    relationCounter++;
                 }
-
-                element.addSubElement(childElement);
-                childElement.setParentElement(element);
-                relationCounter++;
             }
-        }
 
         log.info(relationCounter + " childRelations for relation \"CONTAINS\" created");
     }
@@ -115,6 +119,10 @@ public class ACityCreator {
 
         for (ACityElement district: districts){
             Collection<ACityElement> subElements =  district.getSubElements();
+
+           // if(subElements.isEmpty()){  //damit wird verhindert, dass 0 TypeDistrikte für blabla erstellt werden
+             //   continue;
+            //}
 
             createTypeDistricts(district, subElements);
 
@@ -144,7 +152,6 @@ public class ACityCreator {
     }
 
     private void addChildToTypeDistrict(ACityElement parentDistrict, ACityElement childElement, Map<ACityElement.ACitySubType, ACityElement> typeDistrictMap, ACityElement.ACitySubType districtType, SAPNodeTypes sapNodeTypes) {
-
         String typeNameProperty = childElement.getSourceNodeProperty(SAPNodeProperties.type_name);
 
         if( typeNameProperty.equals(sapNodeTypes.name())){
@@ -161,6 +168,7 @@ public class ACityCreator {
     }
 
     private void createTypeDistrict(ACityElement parentDistrict, Map<ACityElement.ACitySubType, ACityElement> typeDistrictMap, ACityElement.ACitySubType districtType) {
+
         ACityElement typeDistrict = new ACityElement(ACityElement.ACityType.District);
         typeDistrict.setSubType(districtType);
 
@@ -223,6 +231,7 @@ public class ACityCreator {
         Collection<Node> sourceNodes = nodeRepository.getNodesByProperty(property, nodeType.name());
 
         log.info(sourceNodes.size() + " SourceNodes with property \"" + property + "\" and value \"" + nodeType.name() + "\" loaded");
+
         List<ACityElement> aCityElements = createACityElements(sourceNodes, aCityType);
         repository.addElements(aCityElements);
 
@@ -233,9 +242,11 @@ public class ACityCreator {
         List<ACityElement> aCityElements = new ArrayList<>();
 
         for( Node sourceNode: sourceNodes ) {
+
             ACityElement aCityElement = new ACityElement(aCityType);
             aCityElement.setSourceNode(sourceNode);
             aCityElements.add(aCityElement);
+
         }
 
         return aCityElements;

@@ -95,29 +95,14 @@ public class MetropolisCreator {
 
             Node sourceNode = element.getSourceNode();
 
-            if(element.getSourceNodeType() == SAPNodeTypes.Report){
+            //TODO later also for interfaces
+            if(element.getSourceNodeType() == SAPNodeTypes.Report) {
                 if(element.getType() == ACityElement.ACityType.Building){
                     continue;
                 }
 
-                ACityElement reportParentElements = getParentElementBySourceNode(nodeRepository, sourceNode);
-
-                element.setParentElement(reportParentElements);
-                reportParentElements.addSubElement(element);
-
-                Collection<ACityElement> reportElements = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.type_name, "Report");
-                for (ACityElement reportElement: reportElements) {
-
-                    String reportDistrictTypename = element.getSourceNodeProperty(SAPNodeProperties.object_name);
-                    String reportBuildingTypeName = reportElement.getSourceNodeProperty(SAPNodeProperties.object_name);
-
-                    if(reportBuildingTypeName == reportDistrictTypename){
-
-                        element.addSubElement(reportElement);
-                        reportElement.setParentElement(element);
-                        relationCounter++;
-                    }
-                }
+                createMetropolisRelationsForIdenticalNodes(nodeRepository, sourceNode, element);
+                relationCounter++;
             }
 
             Collection<ACityElement> childElements = getChildElementsBySourceNode(nodeRepository, sourceNode);
@@ -141,6 +126,28 @@ public class MetropolisCreator {
         }
 
         log.info(relationCounter + " childRelations for relation \"CONTAINS\" created");
+    }
+
+    private void createMetropolisRelationsForIdenticalNodes(SourceNodeRepository nodeRepository, Node sourceNode, ACityElement element) {
+
+        ACityElement reportParentElements = getParentElementBySourceNode(nodeRepository, sourceNode);
+
+        element.setParentElement(reportParentElements);
+        reportParentElements.addSubElement(element);
+
+        Collection<ACityElement> reportBuildingElements = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.type_name, "Report");
+        for (ACityElement reportBuildingElement: reportBuildingElements) {
+
+            String reportDistrictTypename = element.getSourceNodeProperty(SAPNodeProperties.object_name);
+            String reportBuildingTypeName = reportBuildingElement.getSourceNodeProperty(SAPNodeProperties.object_name);
+
+            if(reportBuildingTypeName == reportDistrictTypename){
+
+                element.addSubElement(reportBuildingElement);
+                reportBuildingElement.setParentElement(element);
+
+            }
+        }
     }
 
     private void removeSubElementsFromDistrict(ACityElement district, Collection<ACityElement> subElements) {

@@ -31,6 +31,16 @@ public class ACityElement {
 
     public enum ACityType {
         District, Building, Floor, Chimney,
+
+        //additional for Metropolis
+        FactoryHall, //Report
+        FactoryBuilding_Form, //Form
+        FactoryBuilding_Fumo, //Fumo
+        RadioTower, //Interface
+        SkyScraper, //Method
+        CarPark, //Attribute_Class
+        Container, //Attribute_Table
+        Tube //Attribute_FuGr
     }
 
     public enum ACitySubType {

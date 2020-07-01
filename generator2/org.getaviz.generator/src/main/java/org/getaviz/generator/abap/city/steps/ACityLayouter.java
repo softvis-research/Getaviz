@@ -11,6 +11,7 @@ import org.getaviz.generator.abap.layouts.ACityDistrictLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
 import java.util.*;
@@ -31,6 +32,7 @@ public class ACityLayouter {
         repository = aCityRepository;
         nodeRepository = sourceNodeRepository;
 
+        log.info("*****************************************************************************************************************************************");
         log.info("created");
 
     }
@@ -78,10 +80,17 @@ public class ACityLayouter {
             return null;
         }
 
-        String typeOfNodeTypeProperty = building.getSourceNodeProperty(SAPNodeProperties.type_name);
+        //TODO gebraucht vom typeofnode nicht vom building
+        for (Node typeOfNode: typeOfNodes) {
+            Value propertyValue = typeOfNode.get(SAPNodeProperties.type_name.name());
+            String typeOfNodeTypeProperty = propertyValue.asString();
 
-        return SAPNodeTypes.valueOf(typeOfNodeTypeProperty);
+            return SAPNodeTypes.valueOf(typeOfNodeTypeProperty);
+        }
+
+        return null;
     }
+
 
     private void layoutTableTypeBuilding(ACityElement building, SAPNodeTypes typeOfType) {
 
@@ -128,7 +137,7 @@ public class ACityLayouter {
 
     private void layoutParentDistricts(Collection<ACityElement> districtElements) {
 
-        Collection<ACityElement> parentDistricts = getParentDistricts(districtElements);
+        Collection<ACityElement> parentDistricts = getParentDistricts(districtElements); //districtElements = Buildings && parentDistricts = Districts
         log.info(parentDistricts.size() + " parentDistrict loaded"); // first for buildings, then for typedistricts
 
         for(ACityElement parentDistrict : parentDistricts){
@@ -180,32 +189,39 @@ public class ACityLayouter {
     private void layoutDistrict(ACityElement district) {
         Collection<ACityElement> subElements = district.getSubElements();
 
-        ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(district,  subElements, config);
+        ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(district, subElements, config);
         aCityDistrictLayout.calculate();
 
-        if ( district.getSubType() != null) {
+        if (district.getSubType() != null) {
             log.info("\"" + district.getSubType() + "\"" + "-Distritct with " + subElements.size() + " buildings layouted");
         } else {
             log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-Package with " + subElements.size() + " typeDistricts layouted");
         }
+
     }
 
-    private void layoutVirtualRootDistrict(){
+    private void layoutVirtualRootDistrict() {
 
         Collection<ACityElement> districtWithoutParents = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, "Namespace");
 
         for (ACityElement districtWithoutParent : districtWithoutParents) {
 
-            if (districtWithoutParent.getParentElement() == null){
+            if (districtWithoutParent.getParentElement() == null) {
 
-                ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
+                Collection<ACityElement> districtWithoutParentAndSubElements = districtWithoutParent.getSubElements();
 
-                ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict,  districtWithoutParents, config);
-                aCityDistrictLayout.calculate();
+                if (districtWithoutParentAndSubElements.isEmpty()) {
+                    // delete these districts
+                    repository.deleteElement(districtWithoutParent);
+                } else {
+
+                    ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
+
+                    ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtWithoutParents, config);
+                    aCityDistrictLayout.calculate();
+                }
             }
-
         }
-
     }
 
 }

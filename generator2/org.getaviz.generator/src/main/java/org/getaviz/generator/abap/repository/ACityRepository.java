@@ -229,4 +229,27 @@ public class ACityRepository {
             addElement(element);
         }
     }
+
+    public void deleteElement(ACityElement element) {
+        elementsByHash.remove(element.getHash(), element);
+
+        //delete from type map
+        ACityElement.ACityType elementType = element.getType();
+        if (!elementsByType.containsKey(elementType)){
+            elementsByType.remove(elementType, new HashMap<>());
+        }
+        Map<String, ACityElement> elementsByTypeMap = elementsByType.get(elementType);
+        elementsByTypeMap.remove(element.getHash(), element);
+
+        //delete from source node id map
+        if (element.getSourceNode() != null){
+            elementsBySourceID.remove(element.getSourceNodeID(), element);
+        }
+    }
+
+    public void deleteElements(Collection<ACityElement> elements) {
+        for( ACityElement element : elements ){
+            deleteElement(element);
+        }
+    }
 }

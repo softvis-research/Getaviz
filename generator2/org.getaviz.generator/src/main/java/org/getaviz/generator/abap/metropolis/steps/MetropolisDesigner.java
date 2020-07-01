@@ -40,7 +40,11 @@ public class MetropolisDesigner {
 
         designMetropolisElementsByType(ACityElement.ACityType.Building);
 
+        //designMetropolisElementsByType(ACityElement.ACityType.FactoryHall);
+
         designMetropolisElementsByType(ACityElement.ACityType.Floor);
+
+
 
       //  designMetropolisElementsByType(ACityElement.ACityType.Chimney);
     }
