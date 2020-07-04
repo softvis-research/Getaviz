@@ -1,10 +1,17 @@
 package org.getaviz.generator;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
@@ -68,7 +75,20 @@ public class SettingsConfiguration {
 	public boolean isSkipScan() {
 		return config.getBoolean("input.skip_scan", false);
 	}
-	
+
+	public List<Path> getInputCSVFiles() {
+		List<Path> files = new ArrayList<>();
+		try {
+			files = Files.walk(Paths.get("C:/Getaviz2_origin/generator2/org.getaviz.generator/src/test/neo4jexport/"))
+					.filter(Files::isRegularFile)
+					.collect(Collectors.toList());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return files;
+	}
+
 	public String getInputFiles() {
 		String[] fileArray = config.getStringArray("input.files");
 		if(fileArray.length == 0) {
