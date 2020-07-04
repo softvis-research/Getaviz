@@ -1,9 +1,9 @@
-package org.getaviz.generator.abap.city.repository;
+package org.getaviz.generator.abap.repository;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.abap.city.enums.SAPNodeProperties;
-import org.getaviz.generator.abap.city.enums.SAPNodeTypes;
+import org.getaviz.generator.abap.enums.SAPNodeProperties;
+import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
@@ -32,10 +32,22 @@ public class ACityElement {
     public enum ACityType {
         District, Building, Floor, Chimney,
 
+        //additional for Metropolis
+        FactoryHall, //Report
+        FactoryBuilding_Form, //Form
+        FactoryBuilding_Fumo, //Fumo
+        RadioTower, //Interface
+        SkyScraper, //Method
+        CarPark, //Attribute_Class
+        Container, //Attribute_Table
+        Tube //Attribute_FuGr
     }
 
     public enum ACitySubType {
         Class, Report, FunctionGroup, Table, DDIC
+
+        // additional subTypes for metropolis
+        , Interface, DataElement, Structure
     }
 
 

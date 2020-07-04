@@ -1,9 +1,9 @@
-package org.getaviz.generator.abap.city.layouts;
+package org.getaviz.generator.abap.layouts;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.repository.ACityElement;
+import org.getaviz.generator.abap.repository.ACityElement;
 
 import java.util.Collection;
 

@@ -1,12 +1,12 @@
-package org.getaviz.generator.abap.city.layouts;
+package org.getaviz.generator.abap.layouts;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.repository.ACityElement;
-import org.getaviz.generator.abap.city.layouts.kdtree.ACityKDTree;
-import org.getaviz.generator.abap.city.layouts.kdtree.ACityKDTreeNode;
-import org.getaviz.generator.abap.city.layouts.kdtree.ACityRectangle;
+import org.getaviz.generator.abap.repository.ACityElement;
+import org.getaviz.generator.abap.layouts.kdtree.ACityKDTree;
+import org.getaviz.generator.abap.layouts.kdtree.ACityKDTreeNode;
+import org.getaviz.generator.abap.layouts.kdtree.ACityRectangle;
 
 import java.util.*;
 
@@ -41,9 +41,10 @@ public class ACityDistrictLayout {
 
 
     private void setSizeOfDistrict(ACityRectangle coveringACityRectangle) {
-        district.setWidth(coveringACityRectangle.getWidth());
-        district.setLength(coveringACityRectangle.getLength());
-        district.setHeight(config.getACityDistrictHeight());
+
+            district.setWidth(coveringACityRectangle.getWidth());
+            district.setLength(coveringACityRectangle.getLength());
+            district.setHeight(config.getACityDistrictHeight());
     }
 
     private void setPositionOfDistrict(ACityRectangle coveringACityRectangle) {

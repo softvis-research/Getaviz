@@ -1,6 +1,4 @@
-package org.getaviz.generator.abap.city.layouts.kdtree;
-
-import org.getaviz.generator.abap.city.layouts.kdtree.ACityRectangle;
+package org.getaviz.generator.abap.layouts.kdtree;
 
 import java.util.ArrayList;
 import java.util.List;

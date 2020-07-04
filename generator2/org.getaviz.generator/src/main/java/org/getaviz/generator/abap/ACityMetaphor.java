@@ -1,11 +1,11 @@
-package org.getaviz.generator.abap.city;
+package org.getaviz.generator.abap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.Metaphor;
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.repository.ACityRepository;
-import org.getaviz.generator.abap.city.repository.SourceNodeRepository;
+import org.getaviz.generator.abap.repository.ACityRepository;
+import org.getaviz.generator.abap.repository.SourceNodeRepository;
 
 public class ACityMetaphor implements Metaphor {
 

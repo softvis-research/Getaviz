@@ -1,8 +1,8 @@
-package org.getaviz.generator.abap.city.repository;
+package org.getaviz.generator.abap.repository;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.abap.city.enums.SAPNodeProperties;
+import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
@@ -48,6 +48,10 @@ public class ACityRepository {
     }
 
     public Collection<ACityElement> getElementsByType(ACityElement.ACityType type){
+        if(!elementsByType.containsKey(type)) {
+            return new ArrayList<>();
+        }
+
         Map<String, ACityElement> elementsByTypeMap = elementsByType.get(type);
         return new ArrayList(elementsByTypeMap.values());
     }
@@ -63,12 +67,12 @@ public class ACityRepository {
             if(sourceNode == null ){
                 ACityElement.ACitySubType subType = element.getSubType();
                 String subTypeString = subType.toString();
-                    if(!subTypeString.equals(sourcePropertyValue)){
-                        continue;
-                    }
-                    elementsByTypeAndSourceProperty.add(element);
+                if(!subTypeString.equals(sourcePropertyValue)){
+                    continue;
+                }
+                elementsByTypeAndSourceProperty.add(element);
 
-              continue;
+                continue;
             }
 
             Value propertyValue = sourceNode.get(sourceProperty.toString());
@@ -170,18 +174,18 @@ public class ACityRepository {
             }
         });
 
-            elementsByHash.forEach((id, element) -> {
-                Node elementsBySourceNode = element.getSourceNode();
-                if (elementsBySourceNode != null) {
+        elementsByHash.forEach((id, element) -> {
+            Node elementsBySourceNode = element.getSourceNode();
+            if (elementsBySourceNode != null) {
 
-                    String statement = "MATCH (sourceNode:Elements), (acityNode:Elements)" +
-                            "WHERE ID(sourceNode) = " + elementsBySourceNode.id() +
-                            "  AND ID(acityNode) =  " + element.getNodeID() +
-                            "  CREATE (sourceNode)<-[r:SOURCE]-(acityNode)";
+                String statement = "MATCH (sourceNode:Elements), (acityNode:Elements)" +
+                        "WHERE ID(sourceNode) = " + elementsBySourceNode.id() +
+                        "  AND ID(acityNode) =  " + element.getNodeID() +
+                        "  CREATE (sourceNode)<-[r:SOURCE]-(acityNode)";
 
-                    connector.executeWrite(statement);
-                }
-            });
+                connector.executeWrite(statement);
+            }
+        });
     }
 
     private String getACityProperties(ACityElement element) {
@@ -226,4 +230,26 @@ public class ACityRepository {
         }
     }
 
+    public void deleteElement(ACityElement element) {
+        elementsByHash.remove(element.getHash(), element);
+
+        //delete from type map
+        ACityElement.ACityType elementType = element.getType();
+        if (!elementsByType.containsKey(elementType)){
+            elementsByType.remove(elementType, new HashMap<>());
+        }
+        Map<String, ACityElement> elementsByTypeMap = elementsByType.get(elementType);
+        elementsByTypeMap.remove(element.getHash(), element);
+
+        //delete from source node id map
+        if (element.getSourceNode() != null){
+            elementsBySourceID.remove(element.getSourceNodeID(), element);
+        }
+    }
+
+    public void deleteElements(Collection<ACityElement> elements) {
+        for( ACityElement element : elements ){
+            deleteElement(element);
+        }
+    }
 }

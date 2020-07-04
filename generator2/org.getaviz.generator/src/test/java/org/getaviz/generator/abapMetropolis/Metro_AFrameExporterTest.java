@@ -1,15 +1,16 @@
-package org.getaviz.generator.acity;
+package org.getaviz.generator.abapMetropolis;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisAFrameExporter;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisDesigner;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisLayouter;
+import org.getaviz.generator.abap.city.steps.ACityAFrameExporter;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
-import org.getaviz.generator.abap.city.steps.ACityAFrameExporter;
-import org.getaviz.generator.abap.city.steps.ACityCreator;
-import org.getaviz.generator.abap.city.steps.ACityDesigner;
-import org.getaviz.generator.abap.city.steps.ACityLayouter;
 import org.getaviz.generator.mockups.ABAPmock;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,8 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class AFrameExporterTest {
-
+public class Metro_AFrameExporterTest {
 
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 
@@ -45,17 +45,17 @@ public class AFrameExporterTest {
 
         aCityRepository = new ACityRepository();
 
-        ACityCreator aCityCreator = new ACityCreator(aCityRepository, nodeRepository, config);
-        aCityCreator.createRepositoryFromNodeRepository();
+        MetropolisCreator metropolisCreator = new MetropolisCreator(aCityRepository, nodeRepository, config);
+        metropolisCreator.createRepositoryFromNodeRepository();
 
-        ACityLayouter aCityLayouter = new ACityLayouter(aCityRepository, nodeRepository, config);
-        aCityLayouter.layoutRepository();
+        MetropolisLayouter metropolisLayouter = new MetropolisLayouter(aCityRepository, nodeRepository, config);
+        metropolisLayouter.layoutRepository();
 
-        ACityDesigner designer = new ACityDesigner(aCityRepository, nodeRepository, config);
-        designer.designRepository();
+        MetropolisDesigner metropolisDesigner = new MetropolisDesigner(aCityRepository, nodeRepository, config);
+        metropolisDesigner.designRepository();
 
-        ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config);
-        exportString = aCityAFrameExporter.createAFrameExportFile();
+        MetropolisAFrameExporter metropolisAFrameExporter = new MetropolisAFrameExporter(aCityRepository, config);
+        exportString = metropolisAFrameExporter.createAFrameExportFile();
     }
 
     @AfterAll
@@ -69,6 +69,5 @@ public class AFrameExporterTest {
 
         System.out.println(exportString);
     }
-
 
 }

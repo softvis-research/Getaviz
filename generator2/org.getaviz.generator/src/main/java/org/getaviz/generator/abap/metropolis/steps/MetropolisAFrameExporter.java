@@ -1,16 +1,16 @@
-package org.getaviz.generator.abap.city.steps;
+package org.getaviz.generator.abap.metropolis.steps;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
-import org.getaviz.generator.output.abap_output.acity_AFrame;
 import org.getaviz.generator.output.abap_output.ABAP_OutputFormat;
+import org.getaviz.generator.output.abap_output.metropolis_AFrame;
 
 import java.util.Collection;
 
-public class ACityAFrameExporter {
+public class MetropolisAFrameExporter {
 
     private Log log = LogFactory.getLog(this.getClass());
     private SettingsConfiguration config;
@@ -19,12 +19,12 @@ public class ACityAFrameExporter {
 
     private ABAP_OutputFormat aFrameOutput;
 
-    public ACityAFrameExporter(ACityRepository aCityRepository, SettingsConfiguration config) {
+    public MetropolisAFrameExporter(ACityRepository aCityRepository, SettingsConfiguration config) {
         this.config = config;
 
         repository = aCityRepository;
 
-        aFrameOutput = new acity_AFrame();
+        aFrameOutput = new metropolis_AFrame();
     }
 
     public String createAFrameExportFile(){
@@ -46,8 +46,8 @@ public class ACityAFrameExporter {
         Collection<ACityElement> floors = repository.getElementsByType(ACityElement.ACityType.Floor);
         builder.append(createElementsExport(floors));
 
-        Collection<ACityElement> chimneys = repository.getElementsByType(ACityElement.ACityType.Chimney);
-        builder.append(createElementsExport(chimneys));
+        //Collection<ACityElement> chimneys = repository.getElementsByType(ACityElement.ACityType.Chimney);
+        //builder.append(createElementsExport(chimneys));
 
         Collection<ACityElement> buildings = repository.getElementsByType(ACityElement.ACityType.Building);
         builder.append(createElementsExport(buildings));
@@ -87,13 +87,6 @@ public class ACityAFrameExporter {
             builder.append("\n");
         }
 
-
-
-        //builder.append("\t shader=\"flat\"");
-        //builder.append("\n");
-        //builder.append("\t flat-shading=\"true\"");
-        //builder.append("\n");
-
         builder.append("\t color=\"" + element.getColor() + "\"");
         builder.append("\n");
         builder.append("\t shadow");
@@ -114,6 +107,5 @@ public class ACityAFrameExporter {
         }
         return "a-sphere";
     }
-
 
 }
