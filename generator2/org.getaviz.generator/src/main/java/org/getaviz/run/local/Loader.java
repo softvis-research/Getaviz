@@ -1,4 +1,4 @@
-package run.local;
+package org.getaviz.run.local;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.database.DatabaseConnector;
@@ -12,7 +12,7 @@ public class Loader {
     private static DatabaseConnector connector = DatabaseConnector.getInstance("bolt://localhost:7687");
 
     public static void main(String[] args) {
-        boolean silentMode = true;
+        boolean isSilentMode = true;
         String pathToNodesCsv = "C:\\Getaviz2_origin\\generator2\\org.getaviz.generator\\src\\test\\neo4jexport\\integration\\20200214_Test.csv";
         String pathToTypeOfRelationsCsv = "C:\\Getaviz2_origin\\generator2\\org.getaviz.generator\\src\\test\\neo4jexport\\20200214_Test_TypeOf.csv";
         Scanner userInput = new Scanner(System.in);
@@ -20,7 +20,7 @@ public class Loader {
         String input = userInput.nextLine();
 
         if (input.equals("n")) {
-            silentMode = false;
+            isSilentMode = false;
             // Get list of files and ask which of them to import
             List<Path> files = config.getInputCSVFiles();
             System.out.println("Files found:");
@@ -42,7 +42,11 @@ public class Loader {
         connector.executeWrite("MATCH (n) DETACH DELETE n;");
 
         // 1. Upload nodes
-        if (silentMode) { System.out.println("SAPExportCreateNodes: " + pathToNodesCsv); }
+        System.out.println("SAPExportCreateNodes: " + pathToNodesCsv);
+        if (!isSilentMode) {
+            System.out.print("\nLoading nodes in Neo4j. Press any key to continue...");
+            userInput.nextLine();
+        }
         pathToNodesCsv = pathToNodesCsv.replace("\\", "/");
         connector.executeWrite(
                 "LOAD CSV WITH HEADERS FROM \"file:///" + pathToNodesCsv + "\"\n" +
@@ -52,10 +56,18 @@ public class Loader {
         );
 
         // 2. Upload relations
+        if (!isSilentMode) {
+            System.out.print("\nCreating 'CONTAINS' relationships. Press any key to continue...");
+            userInput.nextLine();
+        }
         connector.executeWrite("MATCH (a:Elements), (b:Elements) WHERE a.element_id = b.container_id CREATE (a)-[r:CONTAINS]->(b)");
 
         // 3. Upload TypeOfRelations
-        if (silentMode) { System.out.println("SAPExportCreateTypeOfRelations: " + pathToTypeOfRelationsCsv); }
+        System.out.println("SAPExportCreateTypeOfRelations: " + pathToTypeOfRelationsCsv);
+        if (!isSilentMode) {
+            System.out.print("\nCreating 'TYPEOF' relationships. Press any key to continue...");
+            userInput.nextLine();
+        }
         pathToTypeOfRelationsCsv = pathToTypeOfRelationsCsv.replace("\\", "/");
         connector.executeWrite(
                 "LOAD CSV WITH HEADERS FROM \"file:///" + pathToTypeOfRelationsCsv + "\"\n" +
