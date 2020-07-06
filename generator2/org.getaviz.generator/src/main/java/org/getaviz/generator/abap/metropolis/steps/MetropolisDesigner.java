@@ -106,17 +106,10 @@ public class MetropolisDesigner {
 
             switch (SAPNodeTypes.valueOf(propertyTypeName)) {
                 case Namespace:     district.setColor(config.getMetropolisDistrictColorHex("packageDistrict")); break;
-                case Class:         district.setColor(config.getMetropolisDistrictColorHex("classDistrict"));
-                                    //district.setHeight(config.getACityDistrictHeight());
-                                    break;
-                case Interface:     district.setColor(config.getMetropolisDistrictColorHex("interfaceDistrict"));
-                                    district.setHeight(config.getACityDistrictHeight()); break;
-                case Report:        district.setColor(config.getMetropolisDistrictColorHex("reportDistrict"));
-                                    //district.setHeight(config.getACityDistrictHeight());
-                    break;
-                case FunctionGroup: district.setColor(config.getMetropolisDistrictColorHex("functionGroupDistrict"));
-                                    //district.setHeight(config.getACityDistrictHeight());
-                    break;
+                case Class:         district.setColor(config.getMetropolisDistrictColorHex("classDistrict")); break;
+                case Interface:     district.setColor(config.getMetropolisDistrictColorHex("interfaceDistrict")); break;
+                case Report:        district.setColor(config.getMetropolisDistrictColorHex("reportDistrict")); break;
+                case FunctionGroup: district.setColor(config.getMetropolisDistrictColorHex("functionGroupDistrict")); break;
                 case Table:
                 case TableType:     district.setColor(config.getMetropolisDistrictColorHex("tableDistrict"));
                                     district.setHeight(config.getACityDistrictHeight()); break;
@@ -135,12 +128,6 @@ public class MetropolisDesigner {
 
         switch (SAPNodeTypes.valueOf(propertyTypeName)) {
 
-            case Class:
-                building.setColor(config.getMetropolisBuildingColorHex("classBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("classBuilding"));
-                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                break;
             case Interface:
                 building.setColor(config.getMetropolisBuildingColorHex("interfaceBuilding"));
                 building.setShape(config.getMetropolisBuildingShape("interfaceBuilding"));
@@ -165,9 +152,9 @@ public class MetropolisDesigner {
                 building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                 building.setLength(building.getLength() - config.adjustACityBuildingLength());
                 break;
-            case FunctionGroup:
-                building.setColor(config.getMetropolisBuildingColorHex("functionGroupBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("functionGroupBuilding"));
+            case Attribute:
+                building.setColor(config.getMetropolisBuildingColorHex("attributeBuilding"));
+                building.setShape(config.getMetropolisBuildingShape("attributeBuilding"));
                 building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                 building.setLength(building.getLength() - config.adjustACityBuildingLength());
                 break;
@@ -219,7 +206,6 @@ public class MetropolisDesigner {
 
 
     private void designChimney(ACityElement chimney) {
-
         chimney.setColor(config.getACityChimneyColorHex("attributeColor"));
         chimney.setShape(config.getACityChimneyShape("attributeChimney"));
     }

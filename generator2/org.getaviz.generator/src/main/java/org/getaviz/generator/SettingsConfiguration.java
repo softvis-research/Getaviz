@@ -749,8 +749,8 @@ public class SettingsConfiguration {
 
 	public String getMetropolisBuildingColorHex(String type) {
 		switch (type) {
-			case "classBuilding":
-				return config.getString("city.abap.metropolis.color.classBuilding", "#C5CEA9");
+			case "attributeBuilding":
+				return config.getString("city.abap.metropolis.color.attributeBuilding", "#C5CEA9");
 			case "interfaceBuilding":
 				return config.getString("city.abap.metropolis.color.interfaceBuilding", "#C5CEA9");
 			case "methodBuilding":
@@ -759,8 +759,6 @@ public class SettingsConfiguration {
 				return config.getString("city.abap.metropolis.color.reportBuilding", "#C5CEA9");
 			case "formRoutineBuilding":
 				return config.getString("city.abap.metropolis.color.formRoutineBuilding", "#3ff493");
-			case "functionGroupBuilding":
-				return config.getString("city.abap.metropolis.color.functionGroupBuilding", "#C5CEA9");
 			case "functionModuleBuilding":
 				return config.getString("city.abap.metropolis.color.functionModuleBuilding", "#C5CEA9");
 			case "tableBuilding":
@@ -923,8 +921,8 @@ public class SettingsConfiguration {
 
 	public ACityElement.ACityShape getMetropolisBuildingShape(String type) {
 		switch (type) {
-			case "classBuilding":
-				String value = config.getString("city.abap.metropolis.shape.classBuilding", "box");
+			case "attributeBuilding":
+				String value = config.getString("city.abap.metropolis.shape.attributeBuilding", "box");
 				switch (value) {
 					case "box":
 						return ACityElement.ACityShape.Box;
@@ -973,18 +971,6 @@ public class SettingsConfiguration {
 				}
 			case "formRoutineBuilding":
 				value = config.getString("city.abap.metropolis.shape.formRoutineBuilding", "box");
-				switch (value) {
-					case "box":
-						return ACityElement.ACityShape.Box;
-					case "cone":
-						return ACityElement.ACityShape.Cone;
-					case "cylinder":
-						return ACityElement.ACityShape.Cylinder;
-					default:
-						return ACityElement.ACityShape.Cone;
-				}
-			case "functionGroupBuilding":
-				value = config.getString("city.abap.metropolis.shape.functionGroupBuilding", "box");
 				switch (value) {
 					case "box":
 						return ACityElement.ACityShape.Box;

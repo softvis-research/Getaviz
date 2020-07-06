@@ -56,8 +56,8 @@ public class MetropolisCreator {
 
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Class);
         //TODO
-        //createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Interface);
-        //createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Interface);
+        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Interface);
+        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Interface);
 
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Method);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Attribute);
@@ -96,7 +96,7 @@ public class MetropolisCreator {
             Node sourceNode = element.getSourceNode();
 
             //TODO later also for interfaces
-            if(element.getSourceNodeType() == SAPNodeTypes.Report) {
+            if(element.getSourceNodeType() == SAPNodeTypes.Report || element.getSourceNodeType() == SAPNodeTypes.Interface) {
                 if(element.getType() == ACityElement.ACityType.Building){
                     continue;
                 }
@@ -118,6 +118,10 @@ public class MetropolisCreator {
                     continue;
                 }
 
+                if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Interface) {
+                    continue;
+                }
+
                 element.addSubElement(childElement);
                 childElement.setParentElement(element);
                 relationCounter++;
@@ -130,7 +134,7 @@ public class MetropolisCreator {
 
     private void createMetropolisRelationsForIdenticalNodes(SourceNodeRepository nodeRepository, Node sourceNode, ACityElement element) {
 
-        ACityElement reportParentElements = getParentElementBySourceNode(nodeRepository, sourceNode);
+        /*ACityElement reportParentElements = getParentElementBySourceNode(nodeRepository, sourceNode);
 
         element.setParentElement(reportParentElements);
         reportParentElements.addSubElement(element);
@@ -145,6 +149,28 @@ public class MetropolisCreator {
 
                 element.addSubElement(reportBuildingElement);
                 reportBuildingElement.setParentElement(element);
+
+            }
+        }
+         */
+
+        ACityElement buildingParentElements = getParentElementBySourceNode(nodeRepository, sourceNode);
+
+        element.setParentElement(buildingParentElements);
+        buildingParentElements.addSubElement(element);
+
+        String buildingElementTypeName = element.getSourceNodeType().name();
+
+        Collection<ACityElement> BuildingElements = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.type_name, buildingElementTypeName);
+        for (ACityElement buildingElement: BuildingElements) {
+
+            String districtTypename = element.getSourceNodeProperty(SAPNodeProperties.object_name);
+            String buildingTypeName = buildingElement.getSourceNodeProperty(SAPNodeProperties.object_name);
+
+            if(buildingTypeName == districtTypename){
+
+                element.addSubElement(buildingElement);
+                buildingElement.setParentElement(element);
 
             }
         }

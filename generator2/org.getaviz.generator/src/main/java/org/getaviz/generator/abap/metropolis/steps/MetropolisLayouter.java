@@ -64,6 +64,7 @@ public class MetropolisLayouter {
             }
         }
 
+        layoutEmptyDistricts(buildings);
         layoutParentDistricts(buildings);
 
     }
@@ -138,30 +139,32 @@ public class MetropolisLayouter {
         return aCityElement.getSourceNodeProperty(SAPNodeProperties.rowtype);
     }
 
-    private void layoutEmptyDistricts() {
+    private void layoutEmptyDistricts( Collection<ACityElement> districtElements) {
 
         Collection<ACityElement> districts = repository.getElementsByType(ACityElement.ACityType.District);
 
         for (ACityElement district: districts) {
 
-            if(district.getSubElements().isEmpty()){
+            if (district.getSubElements().isEmpty()) {
 
-                    district.setHeight(config.getACityDistrictHeight());
-                    district.setLength(5);
-                    district.setWidth(5);
+                district.setHeight(config.getACityDistrictHeight());
+                district.setLength(5);
+                district.setWidth(5);
 
+                ACityElement parentElementOfEmptyDistricts = district.getParentElement();
+
+                if (parentElementOfEmptyDistricts != null) {
+
+                    districtElements.add(district);
+
+                }
             }
         }
     }
 
     private void layoutParentDistricts(Collection<ACityElement> districtElements) {
 
-        layoutEmptyDistricts();
-
         Collection<ACityElement> parentDistricts = getParentDistricts(districtElements);
-
-        //TODO load report district for report Builindg
-
 
         log.info(parentDistricts.size() + " parentDistrict loaded"); // first for buildings, then for typedistricts
 
@@ -217,7 +220,6 @@ public class MetropolisLayouter {
 
             ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(district, subElements, config);
             aCityDistrictLayout.calculate();
-
             log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
 
         }
@@ -230,10 +232,18 @@ public class MetropolisLayouter {
 
             if (districtsWithoutParent.getParentElement() == null) {
 
-                ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
+                Collection<ACityElement> districtWithoutParentAndSubElements = districtsWithoutParent.getSubElements();
 
-                ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtsWithoutParents, config);
-                aCityDistrictLayout.calculate();
+                if (districtWithoutParentAndSubElements.isEmpty()) {
+                    // delete these districts
+                    repository.deleteElement(districtsWithoutParent);
+                } else {
+
+                    ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
+
+                    ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtsWithoutParents, config);
+                    aCityDistrictLayout.calculate();
+                }
             }
         }
     }

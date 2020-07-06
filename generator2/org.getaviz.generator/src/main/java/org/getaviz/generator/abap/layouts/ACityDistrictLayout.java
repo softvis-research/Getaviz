@@ -42,9 +42,9 @@ public class ACityDistrictLayout {
 
     private void setSizeOfDistrict(ACityRectangle coveringACityRectangle) {
 
-            district.setWidth(coveringACityRectangle.getWidth());
-            district.setLength(coveringACityRectangle.getLength());
-            district.setHeight(config.getACityDistrictHeight());
+        district.setWidth(coveringACityRectangle.getWidth());
+        district.setLength(coveringACityRectangle.getLength());
+        district.setHeight(config.getACityDistrictHeight());
     }
 
     private void setPositionOfDistrict(ACityRectangle coveringACityRectangle) {
