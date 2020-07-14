@@ -77,9 +77,11 @@ public class SettingsConfiguration {
 	}
 
 	public List<Path> getInputCSVFiles() {
+		File currentDir = new File("src/test/neo4jexport/");
+		String helper = currentDir.getAbsolutePath();
 		List<Path> files = new ArrayList<>();
 		try {
-			files = Files.walk(Paths.get("C:/Getaviz2_origin/generator2/org.getaviz.generator/src/test/neo4jexport/"))
+			files = Files.walk(Paths.get(helper))
 					.filter(Files::isRegularFile)
 					.collect(Collectors.toList());
 

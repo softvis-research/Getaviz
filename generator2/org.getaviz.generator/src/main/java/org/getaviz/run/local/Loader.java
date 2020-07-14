@@ -5,6 +5,7 @@ import org.getaviz.generator.database.DatabaseConnector;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
+import java.io.File;
 
 
 public class Loader {
@@ -13,8 +14,11 @@ public class Loader {
 
     public static void main(String[] args) {
         boolean isSilentMode = true;
-        String pathToNodesCsv = "C:\\Getaviz2_origin\\generator2\\org.getaviz.generator\\src\\test\\neo4jexport\\integration\\20200214_Test.csv";
-        String pathToTypeOfRelationsCsv = "C:\\Getaviz2_origin\\generator2\\org.getaviz.generator\\src\\test\\neo4jexport\\20200214_Test_TypeOf.csv";
+        File nodesCsvFile = new File("src/test/neo4jexport/integration/20200214_Test.csv");
+        File TypeOfRelationsCsvFile = new File("src/test/neo4jexport/20200214_Test_TypeOf.csv");
+        String pathToNodesCsv = nodesCsvFile.getAbsolutePath();
+        String pathToTypeOfRelationsCsv = TypeOfRelationsCsvFile.getAbsolutePath();
+
         Scanner userInput = new Scanner(System.in);
         System.out.print("Silent mode? (y/n): "); // Silent mode to run with default values
         String input = userInput.nextLine();
