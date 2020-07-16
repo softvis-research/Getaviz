@@ -1,22 +1,38 @@
 package org.getaviz.generator.database;
 
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.neo4j.driver.v1.*;
 import org.neo4j.driver.v1.types.Node;
 
+import java.io.IOException;
+
 public class DatabaseConnector implements AutoCloseable {
-	private static String URL = "bolt://jqassistant:7687";
+	private static final String dbname = "jqassistant";
+	private static String URL = "bolt://" + dbname + ":7687";
 	private final Driver driver;
 	private static DatabaseConnector instance = null;
 
-	private DatabaseConnector() {
-		//startDatabase();
+	public DatabaseConnector() {
+		startDatabase();
 		driver = GraphDatabase.driver(URL);
 	}
 	
 	private DatabaseConnector(String URL) {
-		//startDatabase();
+		startDatabase();
 		DatabaseConnector.URL = URL;
 		driver = GraphDatabase.driver(URL);
+	}
+
+	public void startDatabase() {
+		HttpPost post = new HttpPost("http://" + dbname + ":8080/server/start");
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		try {
+			httpClient.execute(post);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static String getDatabaseURL() {
