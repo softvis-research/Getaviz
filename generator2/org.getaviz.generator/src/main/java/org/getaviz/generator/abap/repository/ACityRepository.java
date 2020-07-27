@@ -108,7 +108,7 @@ public class ACityRepository {
             }
              */
 
-            Long aCityNodeID = connector.addNode("CREATE ( n:Elements { " + getACityProperties(element) + "})", "n").id();
+            Long aCityNodeID = connector.addNode("CREATE ( n:Elements:ACityRep { " + getACityProperties(element) + "})", "n").id();
 
             element.setNodeID(aCityNodeID);
 

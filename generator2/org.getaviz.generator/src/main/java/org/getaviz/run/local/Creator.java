@@ -15,7 +15,7 @@ import java.util.Scanner;
 
 public class Creator {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
-    private static DatabaseConnector connector = DatabaseConnector.getInstance("bolt://localhost:7687");
+    private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     private static SourceNodeRepository nodeRepository;
     private static ACityRepository aCityRepository;
 
@@ -31,6 +31,12 @@ public class Creator {
 
         ACityCreator aCityCreator = new ACityCreator(aCityRepository, nodeRepository, config);
         aCityCreator.createRepositoryFromNodeRepository();
+
+        // Delete old ACityRepository Nodes
+        connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
+
+        // Update Neo4j with new nodes
+        aCityRepository.writeRepositoryToNeo4j();
 
         System.out.println("\nCreator step was completed\"");
     }

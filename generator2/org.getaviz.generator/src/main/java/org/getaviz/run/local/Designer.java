@@ -13,7 +13,7 @@ import org.getaviz.generator.database.DatabaseConnector;
 
 public class Designer {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
-    private static DatabaseConnector connector = DatabaseConnector.getInstance("bolt://localhost:7687");
+    private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     private static SourceNodeRepository nodeRepository;
     private static ACityRepository aCityRepository;
 
@@ -34,6 +34,12 @@ public class Designer {
 
         ACityDesigner designer = new ACityDesigner(aCityRepository, nodeRepository, config);
         designer.designRepository();
+
+        // Delete old ACityRepository Nodes
+        connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
+
+        // Update Neo4j with new nodes
+        aCityRepository.writeRepositoryToNeo4j();
 
         System.out.println("\nDesigner step was completed\"");
     }

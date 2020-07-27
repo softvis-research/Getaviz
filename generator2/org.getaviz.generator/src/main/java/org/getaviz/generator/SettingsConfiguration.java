@@ -27,6 +27,7 @@ public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
 	private static SettingsConfiguration instance = null;
 	private static Log log = LogFactory.getLog(SettingsConfiguration.class);
+	private static String defaultBoldAddress = "bolt://localhost:7687";
 
 	public static SettingsConfiguration getInstance() {
 		if (instance == null) {
@@ -49,6 +50,10 @@ public class SettingsConfiguration {
 		}
 		loadConfig(request);
 		return instance;
+	}
+
+	public String getDefaultBoldAddress() {
+		return defaultBoldAddress;
 	}
 	
 	private static void loadConfig(HttpServletRequest request) {
@@ -81,10 +86,9 @@ public class SettingsConfiguration {
 		String helper = currentDir.getAbsolutePath();
 		List<Path> files = new ArrayList<>();
 		try {
-			files = Files.walk(Paths.get(helper))
+			files = Files.walk(Paths.get(helper), 1)
 					.filter(Files::isRegularFile)
 					.collect(Collectors.toList());
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
