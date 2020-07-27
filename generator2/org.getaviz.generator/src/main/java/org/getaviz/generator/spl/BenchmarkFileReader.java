@@ -51,7 +51,7 @@ public class BenchmarkFileReader {
 			trace.traceType = "Class";
 			trace.name = parts.get(0);
 		} else {
-			// Werfe Exception
+			// TODO Werfe Exception
 		}
 		if (isRefinement) {
 			trace.traceType += " Refinement";
