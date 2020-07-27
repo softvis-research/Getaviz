@@ -41,8 +41,6 @@ public class BenchmarkFileReader {
 			isRefinement = true;
 			parts.remove(parts.size() - 1);
 		}
-		System.out.println(parts.size());
-		System.out.println(parts.get(parts.size() - 1));
 		if (parts.size() == 2 && parts.get(1).matches("[^\\(]*\\(.*\\)")) {
 			trace.traceType = "Method";
 			parts.add(1, parts.get(1).replaceAll("\\(.*\\)", ""));
