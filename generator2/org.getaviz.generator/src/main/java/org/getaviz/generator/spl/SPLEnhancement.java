@@ -4,6 +4,9 @@ import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 
 import java.io.FileReader;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
@@ -28,8 +31,8 @@ public class SPLEnhancement implements Step {
 
 	private void enhanceClasses() {
 		BenchmarkFileReader bfReader = new BenchmarkFileReader();
-		bfReader.read();
-		String path = "C:\\Users\\Janik\\Documents\\Bachelorarbeit\\getaviz\\generator2\\org.getaviz.generator\\test\\output\\ArgoUmlTest\\default\\model\\metaData.json";
+		ArrayList<FeatureTrace> featureTraces = bfReader.read();
+ 		String path = "C:\\Users\\Janik\\Documents\\Bachelorarbeit\\getaviz\\generator2\\org.getaviz.generator\\test\\output\\ArgoUmlTest\\default\\model\\metaData.json";
 		JSONParser parser = new JSONParser();
 		try { 
 			FileReader reader = new FileReader(path);
@@ -41,7 +44,11 @@ public class SPLEnhancement implements Step {
 				if (index >= 0) {
 					qualifiedName = qualifiedName.substring(0, index);
 				}
-				System.out.println(qualifiedName);
+				for (FeatureTrace featureTrace: featureTraces) {
+					if (qualifiedName.equals(featureTrace.name)) {
+						System.out.println("Match! QualifiedName: " + qualifiedName + " ||| Feature: " + featureTrace.featureAffiliation + " ||| " + featureTrace.traceType);
+					}
+				}
 			}
 		} catch (Exception e) {
 			System.out.println(e.toString());
