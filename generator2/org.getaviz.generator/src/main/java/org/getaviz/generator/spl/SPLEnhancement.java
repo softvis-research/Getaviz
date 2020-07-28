@@ -4,7 +4,7 @@ import org.getaviz.generator.Step;
 import org.getaviz.generator.database.DatabaseConnector;
 
 import java.io.FileReader;
-import java.io.PrintWriter;
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 import org.json.simple.*;
@@ -44,12 +44,18 @@ public class SPLEnhancement implements Step {
 				if (index >= 0) {
 					qualifiedName = qualifiedName.substring(0, index);
 				}
+				String featureAffiliations = ""; 
 				for (FeatureTrace featureTrace: featureTraces) {
 					if (qualifiedName.equals(featureTrace.name)) {
 						System.out.println("Match! QualifiedName: " + qualifiedName + " ||| Feature: " + featureTrace.featureAffiliation + " ||| " + featureTrace.traceType);
+						featureAffiliations += featureTrace.featureAffiliation + " ";
 					}
 				}
+				jsonObj.put("featureAffiliations", featureAffiliations);
 			}
+			FileWriter file = new FileWriter("C:\\Users\\Janik\\Desktop\\metaDataJson_modified.json");
+	        file.write(arr.toJSONString());
+	        file.close();
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
