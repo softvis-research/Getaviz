@@ -73,7 +73,7 @@ public class ACityBuildingLayout {
 
             //no floors, but numberOfStatements
             if (floors.isEmpty()){
-                String NOS = building.getSourceNodeProperty(SAPNodeProperties.numberOfStatements);
+                String NOS = building.getSourceNodeProperty(SAPNodeProperties.numberofstatements);
 
                 if(NOS != "null") {
                     Double nos = Double.valueOf(NOS);

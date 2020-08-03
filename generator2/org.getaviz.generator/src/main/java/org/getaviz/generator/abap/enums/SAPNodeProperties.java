@@ -6,6 +6,6 @@ public enum SAPNodeProperties {
     element_id, object_name, type, type_name, creator, created, changed_by, changed, iteration,
 
     //spezifische Eigenschaften
-    datatype, rowtype, length, decimals, domname, dataelement, structure, modifiers, numberOfStatements, local_class, container_id, uses_id
+    datatype, rowtype, length, decimals, domname, dataelement, structure, modifiers, numberofstatements, local_class, container_id, uses_id
 
 }

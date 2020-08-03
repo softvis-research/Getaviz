@@ -24,7 +24,11 @@ public class metropolis_AFrame implements ABAP_OutputFormat {
                 "\n" +
                 "\t\t <a-scene>" +
                 "\n" +
+                //"\t\t\t <a-entity id=\"rig\" position=\"25 10 0\">" +
+                //"\n" +
                 "\t\t\t <a-entity camera look-controls wasd-controls=\"acceleration: 10000\" position=\"-10 10 0\"></a-entity>" +
+                //"\n" +
+                //"\t\t\t </a-entity>" +
                 "\n";
 
     }
