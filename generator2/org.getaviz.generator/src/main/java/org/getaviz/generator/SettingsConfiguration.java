@@ -1238,6 +1238,11 @@ public class SettingsConfiguration {
 	}
 
 	public double getACityDistrictHeight() {return config.getDouble("city.abap.height.district", 0.2); }
+	public double getMetropolisEmptyDistrictHeight() {return config.getDouble("city.abap.metropolis.height.emptyDistrict", 0.2); }
+	public double getMetropolisEmptyDistrictLength() {return config.getDouble("city.abap.metropolis.length.emptyDistrict", 0.2); }
+	public double getMetropolisEmptyDistrictWidth() {return config.getDouble("city.abap.metropolis.width.emptyDistrict", 0.2); }
+
+
 	public double adjustACityDistrictYPosition() {return config.getDouble("city.abap.adjust.district.yPosition", 0.1); }
 
 	public double getACityBuildingHorizontalMargin() { return config.getDouble("city.abap.building.horizontal_margin", 0.0); }

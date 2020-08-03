@@ -3,9 +3,12 @@ package org.getaviz.generator.abap.layouts;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.abap.enums.SAPNodeProperties;
+import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.repository.ACityElement;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class ACityBuildingLayout {
 
@@ -65,14 +68,28 @@ public class ACityBuildingLayout {
     }
 
     private Double calculateFloorHeightSum() {
-        double floorHeightSum = config.getFloorHeightSum();
-        for(ACityElement floor : floors){
-            double floorTopEdge = floor.getYPosition() + ( floor.getHeight() / 2);
-            if(floorTopEdge > floorHeightSum){
-                floorHeightSum = floorTopEdge;
+            // no floors & no numberOfStatements => default
+            double floorHeightSum = config.getFloorHeightSum();
+
+            //no floors, but numberOfStatements
+            if (floors.isEmpty()){
+                String NOS = building.getSourceNodeProperty(SAPNodeProperties.numberOfStatements);
+
+                if(NOS != "null") {
+                    Double nos = Double.valueOf(NOS);
+                    floorHeightSum = config.getFloorHeightSum() + nos;
+                }
             }
-        }
-        return floorHeightSum;
+
+            //floors, but no numberOfStatements
+            for (ACityElement floor : floors) {
+                double floorTopEdge = floor.getYPosition() + (floor.getHeight() / 2);
+                if (floorTopEdge > floorHeightSum) {
+                    floorHeightSum = floorTopEdge;
+                }
+            }
+
+            return floorHeightSum;
     }
 
     private double calculateGroundAreaByChimneyAmount() {

@@ -170,6 +170,7 @@ public class ACityLayouter {
     }
 
     private void layoutBuilding(ACityElement building) {
+
         Collection<ACityElement> floors = building.getSubElementsOfType(ACityElement.ACityType.Floor);
 
         Collection<ACityElement> chimneys = building.getSubElementsOfType(ACityElement.ACityType.Chimney);
@@ -208,20 +209,11 @@ public class ACityLayouter {
 
             if (districtWithoutParent.getParentElement() == null) {
 
-                Collection<ACityElement> districtWithoutParentAndSubElements = districtWithoutParent.getSubElements();
+                ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
 
-                if (districtWithoutParentAndSubElements.isEmpty()) {
-                    // delete these districts
-                    repository.deleteElement(districtWithoutParent);
-                } else {
-
-                    ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
-
-                    ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtWithoutParents, config);
-                    aCityDistrictLayout.calculate();
-                }
+                ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtWithoutParents, config);
+                aCityDistrictLayout.calculate();
             }
         }
     }
-
 }

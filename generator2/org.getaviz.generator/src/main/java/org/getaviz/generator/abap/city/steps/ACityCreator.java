@@ -47,8 +47,31 @@ public class ACityCreator {
         log.info("Create typeDistricts");
         createTypeDistrictRelations(nodeRepository);
 
+        log.info("Delete empty Districts");
+        deleteEmptyDistricts();
+
     }
 
+    private void deleteEmptyDistricts() {
+
+        Collection<ACityElement> districtsWithoutParents = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, "Namespace");
+
+        for (ACityElement districtsWithoutParent : districtsWithoutParents) {
+
+            if (districtsWithoutParent.getParentElement() == null) {
+
+                Collection<ACityElement> districtWithoutParentAndSubElements = districtsWithoutParent.getSubElements();
+
+                if (districtWithoutParentAndSubElements.isEmpty()) {
+
+                    repository.deleteElement(districtsWithoutParent);
+
+                    String districtName = districtsWithoutParent.getSourceNodeProperty(SAPNodeProperties.object_name);
+                    log.info("district \"" + districtName + "\" deleted");
+                }
+            }
+        }
+    }
 
 
     private void createAllACityElements(SourceNodeRepository nodeRepository) {
@@ -78,6 +101,7 @@ public class ACityCreator {
     }
 
 
+
     private void createAllACityRelations(SourceNodeRepository nodeRepository) {
         createACityRelations(nodeRepository, ACityElement.ACityType.District);
         createACityRelations(nodeRepository, ACityElement.ACityType.Building);
@@ -98,8 +122,7 @@ public class ACityCreator {
 
                     //No nesting of packages/districts
                     if (childElement.getType() == ACityElement.ACityType.District) {
-                        //repository.deleteElement(element);
-                        continue; //SEEF und BASIS bekommen hier weder Eltern noch Childs
+                        continue;
                     }
 
                     element.addSubElement(childElement);
@@ -119,10 +142,6 @@ public class ACityCreator {
 
         for (ACityElement district: districts){
             Collection<ACityElement> subElements =  district.getSubElements();
-
-           // if(subElements.isEmpty()){  //damit wird verhindert, dass 0 TypeDistrikte für blabla erstellt werden
-             //   continue;
-            //}
 
             createTypeDistricts(district, subElements);
 

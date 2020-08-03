@@ -41,8 +41,11 @@ public class MetropolisCreator {
         log.info("Create City Relations");
         createAllMetropolisRelations(nodeRepository);
 
-    }
+        log.info("Delete empty Districts");
+        deleteEmptyDistricts();
 
+
+    }
 
     private void createAllMetropolisElements(SourceNodeRepository nodeRepository) {
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Namespace);
@@ -55,9 +58,8 @@ public class MetropolisCreator {
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.FormRoutine);
 
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Class);
-        //TODO
+
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Interface);
-        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Interface);
 
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Method);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Attribute);
@@ -96,7 +98,7 @@ public class MetropolisCreator {
             Node sourceNode = element.getSourceNode();
 
             //TODO later also for interfaces
-            if(element.getSourceNodeType() == SAPNodeTypes.Report || element.getSourceNodeType() == SAPNodeTypes.Interface) {
+            if(element.getSourceNodeType() == SAPNodeTypes.Report) {
                 if(element.getType() == ACityElement.ACityType.Building){
                     continue;
                 }
@@ -134,26 +136,6 @@ public class MetropolisCreator {
 
     private void createMetropolisRelationsForIdenticalNodes(SourceNodeRepository nodeRepository, Node sourceNode, ACityElement element) {
 
-        /*ACityElement reportParentElements = getParentElementBySourceNode(nodeRepository, sourceNode);
-
-        element.setParentElement(reportParentElements);
-        reportParentElements.addSubElement(element);
-
-        Collection<ACityElement> reportBuildingElements = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.type_name, "Report");
-        for (ACityElement reportBuildingElement: reportBuildingElements) {
-
-            String reportDistrictTypename = element.getSourceNodeProperty(SAPNodeProperties.object_name);
-            String reportBuildingTypeName = reportBuildingElement.getSourceNodeProperty(SAPNodeProperties.object_name);
-
-            if(reportBuildingTypeName == reportDistrictTypename){
-
-                element.addSubElement(reportBuildingElement);
-                reportBuildingElement.setParentElement(element);
-
-            }
-        }
-         */
-
         ACityElement buildingParentElements = getParentElementBySourceNode(nodeRepository, sourceNode);
 
         element.setParentElement(buildingParentElements);
@@ -172,6 +154,27 @@ public class MetropolisCreator {
                 element.addSubElement(buildingElement);
                 buildingElement.setParentElement(element);
 
+            }
+        }
+    }
+
+    private void deleteEmptyDistricts() {
+
+        Collection<ACityElement> districtsWithoutParents = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, "Namespace");
+
+        for (ACityElement districtsWithoutParent : districtsWithoutParents) {
+
+            if (districtsWithoutParent.getParentElement() == null) {
+
+                Collection<ACityElement> districtWithoutParentAndSubElements = districtsWithoutParent.getSubElements();
+
+                if (districtWithoutParentAndSubElements.isEmpty()) {
+
+                    repository.deleteElement(districtsWithoutParent);
+
+                    String districtName = districtsWithoutParent.getSourceNodeProperty(SAPNodeProperties.object_name);
+                    log.info("district \"" + districtName + "\" deleted");
+                }
             }
         }
     }

@@ -64,6 +64,16 @@ public class MetropolisLayouter {
             }
         }
 
+        /*Collection<ACityElement> parentElements = getParentDistricts(buildings);
+        Collection<ACityElement> emptyDistricts  = getEmptyDistricts();
+
+        layoutEmptyDistricts(emptyDistricts);
+
+        parentElements.add(emptyDistricts);
+
+        layoutDistricts();
+         */
+        
         layoutEmptyDistricts(buildings);
         layoutParentDistricts(buildings);
 
@@ -147,9 +157,9 @@ public class MetropolisLayouter {
 
             if (district.getSubElements().isEmpty()) {
 
-                district.setHeight(config.getACityDistrictHeight());
-                district.setLength(5);
-                district.setWidth(5);
+                district.setHeight(config.getMetropolisEmptyDistrictHeight());
+                district.setLength(config.getMetropolisEmptyDistrictLength());
+                district.setWidth(config.getMetropolisEmptyDistrictWidth());
 
                 ACityElement parentElementOfEmptyDistricts = district.getParentElement();
 
@@ -220,6 +230,7 @@ public class MetropolisLayouter {
 
             ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(district, subElements, config);
             aCityDistrictLayout.calculate();
+
             log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
 
         }
@@ -232,18 +243,11 @@ public class MetropolisLayouter {
 
             if (districtsWithoutParent.getParentElement() == null) {
 
-                Collection<ACityElement> districtWithoutParentAndSubElements = districtsWithoutParent.getSubElements();
+                ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
 
-                if (districtWithoutParentAndSubElements.isEmpty()) {
-                    // delete these districts
-                    repository.deleteElement(districtsWithoutParent);
-                } else {
+                ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtsWithoutParents, config);
+                aCityDistrictLayout.calculate();
 
-                    ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
-
-                    ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtsWithoutParents, config);
-                    aCityDistrictLayout.calculate();
-                }
             }
         }
     }
