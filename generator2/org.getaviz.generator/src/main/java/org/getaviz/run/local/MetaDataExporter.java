@@ -30,8 +30,8 @@ public class MetaDataExporter {
 
         Writer fw = null;
         try {
-            File currentDir = new File("src/test/neo4jexport/");
-            String path = currentDir.getAbsolutePath() + "metaData.json";
+            File currentDir = new File("src/test/neo4jexport");
+            String path = currentDir.getAbsolutePath() + "/metaData.json";
             fw = new FileWriter(path);
             fw.write(toJSON(nodeRepository.getNodes()));
         } catch (IOException e) {
@@ -46,6 +46,7 @@ public class MetaDataExporter {
         }
 
         System.out.println("\nMetaDataExporter step was completed\"");
+        connector.close();
     }
 
     private static String toJSON(Collection<Node> nodes) {

@@ -76,8 +76,8 @@ public class AFrameExporter {
 
         Writer fw = null;
         try {
-            File currentDir = new File("src/test/neo4jexport/");
-            String path = currentDir.getAbsolutePath() + "model.html";
+            File currentDir = new File("src/test/neo4jexport");
+            String path = currentDir.getAbsolutePath() + "/model.html";
             fw = new FileWriter(path);
             fw.write(exportString);
         } catch (IOException e) {
@@ -92,5 +92,6 @@ public class AFrameExporter {
         }
 
         System.out.println("\nA-Frame Exporter step was completed\"");
+        connector.close();
     }
 }
