@@ -9,6 +9,7 @@ import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.types.Node;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -29,8 +30,8 @@ public class MetaDataExporter {
 
         Writer fw = null;
         try {
-            // TODO: relative path to output map?
-            String path = "C:\\Getaviz2_origin\\generator2\\org.getaviz.generator\\src\\test\\" + "metaData.json";
+            File currentDir = new File("src/test/neo4jexport/");
+            String path = currentDir.getAbsolutePath() + "metaData.json";
             fw = new FileWriter(path);
             fw.write(toJSON(nodeRepository.getNodes()));
         } catch (IOException e) {
@@ -61,7 +62,7 @@ public class MetaDataExporter {
             metaDataFile.append("\n");
             metaDataFile.append(toMetaData(node));
 
-            // write data to Neo4j as propery
+            // write data to Neo4j as property
             StringBuilder metaDataNeo = new StringBuilder();
             metaDataNeo.append("\"{");
             metaDataNeo.append(toMetaData(node).replaceAll("\"", "\'")); // "- are not allowed
@@ -71,52 +72,6 @@ public class MetaDataExporter {
                     "MATCH (n:Elements) WHERE ID(n) = " + node.id()
                             + " SET n.metaData = " + metaDataNeo.toString()
             );
-
-           /* if (nodeType.equals("\"DEVC\"")) { //Namespace
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"CLAS\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"INTF\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"METH\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"ATTR\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"TABL\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"TTYP\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"STRU\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"COMP\"")) { //TableElement
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"DOMA\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"DTEL\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"REPS\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"FORM\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"FUGR\"")) {
-                builder.append(toMetaData(node));
-            }
-            if (nodeType.equals("\"FUMO\"")) {
-                builder.append(toMetaData(node));
-            }*/
         }
         if (hasElements) {
             metaDataFile.append("}]");
