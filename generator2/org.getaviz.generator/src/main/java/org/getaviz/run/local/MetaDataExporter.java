@@ -1,7 +1,10 @@
 package org.getaviz.run.local;
 
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.abap.city.steps.ACityAFrameExporter;
 import org.getaviz.generator.abap.city.steps.ACityCreator;
+import org.getaviz.generator.abap.city.steps.ACityDesigner;
+import org.getaviz.generator.abap.city.steps.ACityLayouter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
@@ -23,6 +26,7 @@ public class MetaDataExporter {
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     private static SourceNodeRepository nodeRepository;
     private static ACityRepository aCityRepository;
+    private static String exportString;
 
     public static void main(String[] args) {
         boolean isSilentMode = true;
@@ -32,6 +36,7 @@ public class MetaDataExporter {
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
         nodeRepository.loadNodesByRelation(SAPRelationLabels.TYPEOF, true);
         aCityRepository = new ACityRepository();
+
 
         ACityCreator aCityCreator = new ACityCreator(aCityRepository, nodeRepository, config);
         aCityCreator.createRepositoryFromNodeRepository();
@@ -52,6 +57,38 @@ public class MetaDataExporter {
                     e.printStackTrace();
                 }
         }
+
+        ACityLayouter aCityLayouter = new ACityLayouter(aCityRepository, nodeRepository, config);
+        aCityLayouter.layoutRepository();
+
+        ACityDesigner designer = new ACityDesigner(aCityRepository, nodeRepository, config);
+        designer.designRepository();
+
+        // Delete old ACityRepository Nodes
+        connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
+
+        // Update Neo4j with new nodes
+        aCityRepository.writeRepositoryToNeo4j();
+
+        ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config);
+        exportString = aCityAFrameExporter.createAFrameExportFile();
+
+        try {
+            File currentDir = new File("src/test/neo4jexport");
+            String path = currentDir.getAbsolutePath() + "/model.html";
+            fw = new FileWriter(path);
+            fw.write(exportString);
+        } catch (IOException e) {
+            System.out.println(e);
+        } finally {
+            if (fw != null)
+                try {
+                    fw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        }
+
 
         System.out.println("\nMetaDataExporter step was completed\"");
         connector.close();
