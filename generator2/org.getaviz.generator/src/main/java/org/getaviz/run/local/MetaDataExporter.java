@@ -54,6 +54,7 @@ public class MetaDataExporter {
         }
 
         System.out.println("\nMetaDataExporter step was completed\"");
+        connector.close();
     }
 
     private static String toJSON(Collection<Node> nodes) {
