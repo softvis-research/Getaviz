@@ -72,12 +72,10 @@ public class AFrameExporter {
         ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config);
         exportString = aCityAFrameExporter.createAFrameExportFile();
 
-        //System.out.println(exportString);
-
         Writer fw = null;
         try {
-            File currentDir = new File("src/test/neo4jexport/");
-            String path = currentDir.getAbsolutePath() + "model.html";
+            File currentDir = new File("src/test/neo4jexport");
+            String path = currentDir.getAbsolutePath() + "/model.html";
             fw = new FileWriter(path);
             fw.write(exportString);
         } catch (IOException e) {

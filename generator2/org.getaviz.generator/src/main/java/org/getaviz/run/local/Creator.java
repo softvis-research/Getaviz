@@ -38,6 +38,7 @@ public class Creator {
         // Update Neo4j with new nodes
         aCityRepository.writeRepositoryToNeo4j();
 
+        connector.close();
         System.out.println("\nCreator step was completed\"");
     }
 }

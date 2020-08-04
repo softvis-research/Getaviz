@@ -38,6 +38,7 @@ public class Layouter {
         // Update Neo4j with new nodes
         aCityRepository.writeRepositoryToNeo4j();
 
+        connector.close();
         System.out.println("\nLayouter step was completed\"");
     }
 }

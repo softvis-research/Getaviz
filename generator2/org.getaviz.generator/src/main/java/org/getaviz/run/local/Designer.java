@@ -41,6 +41,7 @@ public class Designer {
         // Update Neo4j with new nodes
         aCityRepository.writeRepositoryToNeo4j();
 
+        connector.close();
         System.out.println("\nDesigner step was completed\"");
     }
 }
