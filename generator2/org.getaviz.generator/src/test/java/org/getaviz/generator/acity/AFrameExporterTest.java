@@ -54,7 +54,7 @@ public class AFrameExporterTest {
         ACityDesigner designer = new ACityDesigner(aCityRepository, nodeRepository, config);
         designer.designRepository();
 
-        ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config);
+        ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config, "");
         exportString = aCityAFrameExporter.createAFrameExportFile();
     }
 

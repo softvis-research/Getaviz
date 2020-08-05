@@ -6,6 +6,7 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.output.abap_output.acity_AFrame;
+import org.getaviz.generator.output.abap_output.acity_AFrame_UI;
 import org.getaviz.generator.output.abap_output.ABAP_OutputFormat;
 
 import java.util.Collection;
@@ -19,12 +20,18 @@ public class ACityAFrameExporter {
 
     private ABAP_OutputFormat aFrameOutput;
 
-    public ACityAFrameExporter(ACityRepository aCityRepository, SettingsConfiguration config) {
+    public ACityAFrameExporter(ACityRepository aCityRepository, SettingsConfiguration config, String aFrameOutputName) {
         this.config = config;
 
         repository = aCityRepository;
 
+        if (aFrameOutputName.equals("acity_AFrame_UI")) {
+            aFrameOutput = new acity_AFrame_UI();
+            return;
+        }
+
         aFrameOutput = new acity_AFrame();
+
     }
 
     public String createAFrameExportFile(){

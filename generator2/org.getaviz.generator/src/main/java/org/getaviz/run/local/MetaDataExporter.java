@@ -1,10 +1,7 @@
 package org.getaviz.run.local;
 
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.steps.ACityAFrameExporter;
 import org.getaviz.generator.abap.city.steps.ACityCreator;
-import org.getaviz.generator.abap.city.steps.ACityDesigner;
-import org.getaviz.generator.abap.city.steps.ACityLayouter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
@@ -12,6 +9,7 @@ import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.run.local.common.Maps;
 import org.neo4j.driver.v1.types.Node;
 
 import java.io.File;
@@ -26,11 +24,9 @@ public class MetaDataExporter {
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     private static SourceNodeRepository nodeRepository;
     private static ACityRepository aCityRepository;
-    private static String exportString;
 
     public static void main(String[] args) {
         boolean isSilentMode = true;
-
         nodeRepository = new SourceNodeRepository();
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
@@ -58,38 +54,6 @@ public class MetaDataExporter {
                 }
         }
 
-        ACityLayouter aCityLayouter = new ACityLayouter(aCityRepository, nodeRepository, config);
-        aCityLayouter.layoutRepository();
-
-        ACityDesigner designer = new ACityDesigner(aCityRepository, nodeRepository, config);
-        designer.designRepository();
-
-        // Delete old ACityRepository Nodes
-        connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
-
-        // Update Neo4j with new nodes
-        aCityRepository.writeRepositoryToNeo4j();
-
-        ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config);
-        exportString = aCityAFrameExporter.createAFrameExportFile();
-
-        try {
-            File currentDir = new File("src/test/neo4jexport");
-            String path = currentDir.getAbsolutePath() + "/model.html";
-            fw = new FileWriter(path);
-            fw.write(exportString);
-        } catch (IOException e) {
-            System.out.println(e);
-        } finally {
-            if (fw != null)
-                try {
-                    fw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-        }
-
-
         System.out.println("\nMetaDataExporter step was completed\"");
         connector.close();
     }
@@ -99,6 +63,12 @@ public class MetaDataExporter {
 
         boolean hasElements = false;
         for (final Node node : nodes) {
+            // Some elements are not in aCityRep; Example - standard SAP-packages
+            ACityElement element = aCityRepository.getElementBySourceID(node.id());
+            if (element == null) {
+                continue;
+            }
+
             if (!hasElements) {
                 hasElements = true;
                 metaDataFile.append("[{");
@@ -130,20 +100,16 @@ public class MetaDataExporter {
         ACityElement element = aCityRepository.getElementBySourceID(node.id());
 
         Arrays.asList(SAPNodeProperties.values()).forEach(prop -> {
-           if (prop.toString().equals("element_id")) {
-               if (element != null) {
-                   builder.append("\"id\": \"" + element.getHash() + "\"," +"\n");
-               } else {
-                   System.out.println("element == null");
-                /*  builder.append("\"id\": " + node.get("element_id").toString().replace("\"", "") + "," +"\n");
-                  builder.append("\"elemid\": " + node.id());*/
-               }
+            if (prop.toString().equals("element_id")) {
+                if (element != null) {
+                    builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": \"" + element.getHash() + "\"," +"\n");
+                }
 
-               return; // Jump to the next prop
-           }
+                return; // Jump to the next prop
+            }
 
             if (!node.get(prop.toString()).toString().replace("\"", "").equals("NULL")) {
-                builder.append("\"" + prop.toString() + "\": " + node.get(prop.toString()).toString() + "," + "\n");
+                builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": " + node.get(prop.toString()).toString() + "," + "\n");
             }
         });
 
