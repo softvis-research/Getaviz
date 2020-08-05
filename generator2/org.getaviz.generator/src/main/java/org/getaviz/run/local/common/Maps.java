@@ -9,7 +9,7 @@ public class Maps {
     static{
         metaDataProperties =   new HashMap<String, String>() {{
             put("element_id", "id");
-            put("object_name", "qualifiedName");
+            put("object_name", "name");
             put("type_name", "type");
             put("container_id", "belongsTo");
 
