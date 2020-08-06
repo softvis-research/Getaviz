@@ -1,0 +1,49 @@
+#metricFromText {
+    float: left;
+}
+
+#metricFromInput {
+    float: left;
+    position: relative;
+    left: 10%;
+}
+
+#metricToText {
+    clear: left;
+    float: left;
+}
+
+#metricToInput {
+    float: left;
+    position: relative;
+    left: 10%;
+}
+
+#mappings {
+    clear: left;
+}
+
+#mappingFromText {
+    float: left;
+}
+
+#mappingFromInput {
+    float: left;
+    position: relative;
+    left: 10%;
+}
+
+#mappingToText {
+    clear: left;
+    float: left;
+}
+
+#mappingToInput {
+    float: left;
+    position: relative;
+    left: 10%;
+}
+
+#executeButton {
+    clear: left;
+}
