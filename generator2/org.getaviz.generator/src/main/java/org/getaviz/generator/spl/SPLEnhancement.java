@@ -1,19 +1,16 @@
 package org.getaviz.generator.spl;
 
 import org.getaviz.generator.Step;
-import org.getaviz.generator.database.DatabaseConnector;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+
 import java.util.ArrayList;
 
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
 public class SPLEnhancement implements Step {
-
-	//private DatabaseConnector connector = DatabaseConnector.getInstance();
-	//private 
 	
 	@Override
 	public boolean checkRequirements() {
@@ -44,14 +41,18 @@ public class SPLEnhancement implements Step {
 				if (index >= 0) {
 					qualifiedName = qualifiedName.substring(0, index);
 				}
-				String featureAffiliations = ""; 
+				JSONArray featureAffiliations = new JSONArray(); 
 				for (FeatureTrace featureTrace: featureTraces) {
 					if (qualifiedName.equals(featureTrace.name)) {
-						System.out.println("Match! QualifiedName: " + qualifiedName + " ||| Feature: " + featureTrace.featureAffiliation + " ||| " + featureTrace.traceType);
-						featureAffiliations += featureTrace.featureAffiliation + " ";
+						JSONObject featureAffiliation = new JSONObject();
+						featureAffiliation.put("feature", featureTrace.featureAffiliation);
+						featureAffiliation.put("traceType", featureTrace.traceType);
+						featureAffiliations.add(featureAffiliation);
 					}
 				}
-				jsonObj.put("featureAffiliations", featureAffiliations);
+				if (!featureAffiliations.isEmpty()) {
+					jsonObj.put("featureAffiliations", featureAffiliations);					
+				}
 			}
 			FileWriter file = new FileWriter("C:\\Users\\Janik\\Desktop\\metaDataJson_modified.json");
 	        file.write(arr.toJSONString());
