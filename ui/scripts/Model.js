@@ -172,7 +172,7 @@ var model = (function() {
 					entity.numberOfClosedSecurityIssues = element.numberOfClosedSecurityIssues;
 					entity.numberOfOpenSecurityIssues = element.numberOfOpenSecurityIssues;
 					if(element.featureAffiliations){
-						entity.featureAffiliations = element.featureAffiliations.split(" ");
+						entity.featureAffiliations = element.featureAffiliations;
 					} else {
 						entity.featureAffiliations = [];
 					}
@@ -225,7 +225,7 @@ var model = (function() {
 						entity.accesses = [];
 					}
 					if(element.featureAffiliations){
-						entity.featureAffiliations = element.featureAffiliations.split(" ");
+						entity.featureAffiliations = element.featureAffiliations;
 					} else {
 						entity.featureAffiliations = [];
 					}
