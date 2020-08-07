@@ -157,6 +157,7 @@ EOT;
 <script type="text/javascript" src="scripts/RelationTransparency/RelationTransparencyController.js"></script>
 <script type="text/javascript" src="scripts/RelationHighlight/RelationHighlightController.js"></script>
 <script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>
+<script type="text/javascript" src="scripts/FeatureExplorer/FeatureExplorerController.js"></script>
 <script type="text/javascript" src="scripts/Search/SearchController.js"></script>
 <script type="text/javascript" src="scripts/Experiment/ExperimentController.js"></script>
 <script type="text/javascript" src="scripts/SourceCode/SourceCodeController.js"></script>
