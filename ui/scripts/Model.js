@@ -171,6 +171,11 @@ var model = (function() {
 					entity.numberOfClosedIssues = element.numberOfClosedIssues;
 					entity.numberOfClosedSecurityIssues = element.numberOfClosedSecurityIssues;
 					entity.numberOfOpenSecurityIssues = element.numberOfOpenSecurityIssues;
+					if(element.featureAffiliations){
+						entity.featureAffiliations = element.featureAffiliations.split(" ");
+					} else {
+						entity.featureAffiliations = [];
+					}
 
 					break;
 				case  "ParameterizableClass":
@@ -218,6 +223,11 @@ var model = (function() {
 						entity.accesses = element.accesses.split(",");
 					} else {
 						entity.accesses = [];
+					}
+					if(element.featureAffiliations){
+						entity.featureAffiliations = element.featureAffiliations.split(" ");
+					} else {
+						entity.featureAffiliations = [];
 					}
 					break;
 				case "Function":
