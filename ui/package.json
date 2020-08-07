@@ -8,7 +8,7 @@
     "jqwidgets-scripts": "7.1.0",
     "aframe": "1.0.0",
     "d3": "4.13.0",
-    "prismjs": "1.16.0",
+    "prismjs": "1.21.0",
     "@ztree/ztree_v3": "3.5.40",
     "jquery": "1.11.1",
     "typeahead.js": "0.10.5",
