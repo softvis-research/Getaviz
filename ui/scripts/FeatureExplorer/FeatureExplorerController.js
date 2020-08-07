@@ -69,6 +69,9 @@ var featureExplorerController = (function () {
                     rootPId: ''
                 }
             },
+            callback: {
+                onCheck: zTreeOnCheck,
+            },
             view: {
                 showLine: false,
                 showIcon: false,
@@ -108,6 +111,7 @@ var featureExplorerController = (function () {
             checked: true,
             parentId: (featureName + '_' + traceType).replace(' ', ''),
             name: entity.qualifiedName,
+            entityId: entity.id,
         }
         featureTree.push(node);
     }
@@ -123,6 +127,32 @@ var featureExplorerController = (function () {
         return includes;
     }
 
+    
+    /**
+     * Callbacks
+     */
+    function zTreeOnCheck(event, treeId, treeNode) {
+        let nodes = zTreeObject.getChangeCheckedNodes();
+        
+		let entities = [];
+		nodes.forEach(function(node){
+            node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes
+            if (node.entityId) {
+                entities.push(model.getEntityById(node.entityId));
+            }
+		});
+								
+		let applicationEvent = {			
+			sender: 	featureExplorerController,
+			entities:	entities
+		};
+		
+		if (!treeNode.checked){
+			events.filtered.on.publish(applicationEvent);
+		} else {
+			events.filtered.off.publish(applicationEvent);
+		}
+    }
 
     return {
         initialize: initialize,
