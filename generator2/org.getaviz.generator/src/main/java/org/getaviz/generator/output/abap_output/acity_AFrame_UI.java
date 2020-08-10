@@ -37,6 +37,8 @@ public class acity_AFrame_UI implements ABAP_OutputFormat {
                 "\t\t    \t   \t \"\n" +
                 "\t\t    \t mouse-cursor=\"\"\n" +
                 "\t\t   \t\t >" +
+                "\n" +
+                "\t\t\t </a-entity>" +
                 "\n";
 
     }
