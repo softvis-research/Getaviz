@@ -86,6 +86,7 @@ var featureExplorerController = (function () {
 
         completeTree = featureTreePart.concat(traceTypeTreePart.concat(traceTreePart));
         setIconColors();
+        setCanvasColors();
         zTreeObject = $.fn.zTree.init($(jQFeatureExplorerTree), settings, completeTree);
     }
 
@@ -142,7 +143,7 @@ var featureExplorerController = (function () {
         const colors = [];
         for(let i = 0; i < featureTreePart.length; ++i) {
             const hue = i * (360 / featureTreePart.length);
-            const hslColor = 'hsl(' + hue + ',100%,85%)';
+            const hslColor = 'hsl(' + hue + ',100%,70%)';
             colors.push(hslColor);
         }
 
@@ -161,6 +162,18 @@ var featureExplorerController = (function () {
         const iconString = "<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><circle cx='10' cy='10' r='10' fill='" + color + "' /></svg>";
         const base64Icon = window.btoa(iconString);
         return '"data:image/svg+xml;base64,' + base64Icon + '"';
+    }
+
+    function setCanvasColors() {
+        featureColorMap.forEach(function (value, key, map) {
+            let entities = [];
+            traceTreePart.forEach(function (node) {
+                if (key == node.feature) {
+                    entities.push(model.getEntityById(node.entityId));
+                }
+            });
+            canvasManipulator.changeColorOfEntities(entities, value);
+        });
     }
     
     /**
