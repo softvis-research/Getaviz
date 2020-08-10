@@ -76,6 +76,7 @@ var featureExplorerController = (function () {
             },
             callback: {
                 onCheck: zTreeOnCheck,
+                onClick: zTreeOnClick,
             },
             view: {
                 showLine: false,
@@ -200,6 +201,12 @@ var featureExplorerController = (function () {
 		} else {
 			events.filtered.off.publish(applicationEvent);
 		}
+    }
+
+    function zTreeOnClick(treeEvent, treeId, treeNode) {
+        if (treeNode.entityId) {
+            canvasManipulator.flyToEntity(model.getEntityById(treeNode.entityId));
+        }
     }
 
     return {
