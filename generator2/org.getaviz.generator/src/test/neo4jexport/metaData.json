@@ -1,0 +1,183 @@
+[{
+"id": "ID_f45070f1-7eca-44ae-ae46-b16a385727ca",
+"name": "EXTEND_REPORT",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_50acadd7-e9a5-4c8a-839c-afa223e1b30c",
+"name": "EXTEND_FUNCTION_GROUP",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_07c78f45-a30c-4555-86a3-6d191c4f961d",
+"name": "EXTEND_FUNCTION_MODULE",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_bc2ced97-4a9f-4930-844f-959ee9d7589f",
+"name": "EXTRACT_DATA",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PUBLIC",
+"belongsTo": "1"
+},{
+"id": "ID_f25c94fa-f01c-4a5b-8fc8-52b52b026982",
+"name": "GET_ITERATION_HANDLER",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PUBLIC",
+"belongsTo": "1"
+},{
+"id": "ID_b7147f82-b300-4132-8154-8998b9a8858d",
+"name": "INVALIDATE_OBJECT",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_5d453f71-6df2-4397-a3fa-c27351f820e1",
+"name": "EXTEND_GLOBAL_CLIF",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_560bf324-8ef3-4a98-b588-1d5bfeee15a7",
+"name": "IS_OBJECT_VALID",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_111bd09c-a235-4127-841d-8f0dee879c84",
+"name": "MO_RUNTIME",
+"abap_type": "ATTR",
+"type": "Attribute",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_6d75bceb-21c5-4bfe-8034-44e8d06bed9c",
+"name": "MO_ITERATION_HANDLER",
+"abap_type": "ATTR",
+"type": "Attribute",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_78904160-f10c-40c3-8214-c367ecc30b3f",
+"name": "/GISA/CCLMV_EXTRACT",
+"abap_type": "DEVC",
+"type": "Namespace",
+"creator": "GPRA440",
+"created": "20200309",
+"changed_by": "GPRA440",
+"changed": "20200309",
+"iteration": "0",
+"belongsTo": "135"
+},{
+"id": "ID_d855662d-dec4-4ecc-8fbf-ab242a52a767",
+"name": "EXTEND_LOCAL_CLIF",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_6f00d307-8fb2-43b6-a314-bae4deed05f6",
+"name": "EXTEND_METHOD",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_d2b080db-1421-404a-b823-2f4bb4c97414",
+"name": "/GISA/CL_CCLMV_EXTRACT",
+"abap_type": "CLAS",
+"type": "Class",
+"creator": "GPRA440",
+"created": "20200309",
+"changed_by": "GPRA440",
+"changed": "20200618",
+"iteration": "0",
+"local_class": "false",
+"belongsTo": "2"
+},{
+"id": "ID_9689f053-6486-4c19-8ffe-0aa50c450d6a",
+"name": "CONSTRUCTOR",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PUBLIC",
+"belongsTo": "1"
+},{
+"id": "ID_525cfa26-7d1a-4510-a5e1-32dcb9da4ac4",
+"name": "CREATE_ATTRIBUTE",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_3f350517-a1c5-41c2-89e5-b7a0e51e257d",
+"name": "EXTEND_FORMROUTINE",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"
+},{
+"id": "ID_a174dd44-e0a6-4fa3-aad2-32d454ca795a",
+"name": "EXTEND_PACKAGE",
+"abap_type": "METH",
+"type": "Method",
+"created": "0",
+"changed": "0",
+"iteration": "0",
+"modifiers": "PRIVATE",
+"belongsTo": "1"}]
