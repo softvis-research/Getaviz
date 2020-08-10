@@ -205,7 +205,10 @@ var canvasHoverController = (function() {
 	
 	function getTooltipName(entity) {
         if(entity.type === "Method") {
-			return entity.type + ": " + entity.signature;
+			if (entity.signature != "")
+				return entity.type + ": " + entity.signature;
+			else
+				return entity.type + ": " + entity.name;
         }
         
 		if (entity.type === "Namespace") {
