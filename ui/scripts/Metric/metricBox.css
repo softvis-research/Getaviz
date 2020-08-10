@@ -1,49 +1,32 @@
-#metricFromText {
+#metricDropDown {
     float: left;
 }
 
-#metricFromInput {
+.metricParameter {
     float: left;
-    position: relative;
-    left: 10%;
+    display: none;
 }
 
-#metricToText {
-    clear: left;
-    float: left;
-}
 
-#metricToInput {
-    float: left;
-    position: relative;
-    left: 10%;
-}
 
 #mappings {
     clear: left;
 }
 
-#mappingFromText {
+#mappingDropDown {
     float: left;
 }
 
-#mappingFromInput {
+.mappingParameter {
     float: left;
-    position: relative;
-    left: 10%;
-}
-
-#mappingToText {
-    clear: left;
-    float: left;
-}
-
-#mappingToInput {
-    float: left;
-    position: relative;
-    left: 10%;
+    display: none;
 }
 
 #executeButton {
     clear: left;
+    float: left;
+}
+
+#resetButton {
+    float: left;
 }

@@ -76,42 +76,40 @@ var setup = {
                         size: "100%",
                         first: {
                             size: "20%",
+                            collapsible: false,
+                            controllers: [
+                                { name: "packageExplorerController" },
+                            ]
+                        },
+                        second: {
+                            size: "80%",
                             area: {
-                                name: "leftPanel",
-                                orientation : "horizontal",
+                                name: "rightPanel",
+                                orientation: "horizontal",
                                 size: "100%",
                                 first: {
-                                    size: "50%",
+                                    size: "80%",
                                     collapsible: false,
+                                    canvas: {},
+
                                     controllers: [
-                                        { name: "packageExplorerController" },
-                                    ]
+                                        { name: "canvasMarkController" },
+                                        { name: "canvasFilterController"},
+                                        { name: "canvasSelectController"},
+                                        { name: "canvasHoverController"},
+                                        { name: "relationHighlightController"},
+                                        { name: "relationTransparencyController"},
+                                        { name: "relationConnectorController"},
+                                        { name: "defaultLogger" }
+                                    ]                                    
                                 },
                                 second: {
-                                    size: "50%",
-                                    collapsible: false,
+                                    size: "20%",
                                     controllers: [
                                         { name: "metricController" },
                                     ]
                                 }
-                            }
-                        },
-                        second: {
-                            size: "80%",
-                            collapsible: false,
-
-                            canvas: {},
-
-                            controllers: [
-                                { name: "canvasMarkController" },
-                                { name: "canvasFilterController"},
-                                { name: "canvasSelectController"},
-                                { name: "canvasHoverController"},
-                                { name: "relationHighlightController"},
-                                { name: "relationTransparencyController"},
-                                { name: "relationConnectorController"},
-                                { name: "defaultLogger" }
-                            ]
+                            }                            
                         }
                     }
 
