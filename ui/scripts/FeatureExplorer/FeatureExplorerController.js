@@ -5,7 +5,12 @@ var featureExplorerController = (function () {
 
     let zTreeObject;
 
-    let featureTree = [];
+    let featureTreePart = [];
+    let traceTypeTreePart = [];
+    let traceTreePart = [];
+    let completeTree = [];
+
+    let featureColorMap = new Map();
 
     function initialize(controllerSetup) {
 
@@ -74,12 +79,14 @@ var featureExplorerController = (function () {
             },
             view: {
                 showLine: false,
-                showIcon: false,
+                showIcon: true,
                 selectMulti: false
             }
         };
 
-        zTreeObject = $.fn.zTree.init($(jQFeatureExplorerTree), settings, featureTree);
+        completeTree = featureTreePart.concat(traceTypeTreePart.concat(traceTreePart));
+        setIconColors();
+        zTreeObject = $.fn.zTree.init($(jQFeatureExplorerTree), settings, completeTree);
     }
 
     function addFeatureToFeatureTree(featureName) {
@@ -89,8 +96,9 @@ var featureExplorerController = (function () {
             checked: true,
             parentId: '',
             name: featureName.charAt(0).toUpperCase() + featureName.slice(1).toLowerCase(),
+            feature: featureName,
         }
-        featureTree.push(featureNode);
+        featureTreePart.push(featureNode);
         const traceTypes = ['Class', 'Class Refinement', 'Method', 'Method Refinement'];
         traceTypes.forEach(function (traceType) {
             let traceTypeNode = {
@@ -99,8 +107,9 @@ var featureExplorerController = (function () {
                 checked: true,
                 parentId: featureName,
                 name: traceType,
+                feature: featureName,
             }
-            featureTree.push(traceTypeNode);
+            traceTypeTreePart.push(traceTypeNode);
         });
     }
 
@@ -112,13 +121,14 @@ var featureExplorerController = (function () {
             parentId: (featureName + '_' + traceType).replace(' ', ''),
             name: entity.qualifiedName,
             entityId: entity.id,
+            feature: featureName,
         }
-        featureTree.push(node);
+        traceTreePart.push(node);
     }
 
     function featureTreeIncludes(featureName) {
         let includes;
-        featureTree.forEach(function (featureNode) {
+        featureTreePart.forEach(function (featureNode) {
             if (featureNode.id == featureName) {
                 includes = true;
                 return;
@@ -127,6 +137,31 @@ var featureExplorerController = (function () {
         return includes;
     }
 
+    function setIconColors() {
+        const numberOfColors = featureTreePart.length;
+        const colors = [];
+        for(let i = 0; i < featureTreePart.length; ++i) {
+            const hue = i * (360 / featureTreePart.length);
+            const hslColor = 'hsl(' + hue + ',100%,85%)';
+            colors.push(hslColor);
+        }
+
+        featureTreePart.forEach(function (featureNode) {
+            featureColorMap.set(featureNode.feature, colors.pop());
+        })
+
+        completeTree.forEach(function (node) {
+            const color = featureColorMap.get(node.feature);
+            node.icon = getColoredIcon(color);
+            node.iconSkin = "zt";
+        })
+    }
+
+    function getColoredIcon(color) {
+        const iconString = "<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><circle cx='10' cy='10' r='10' fill='" + color + "' /></svg>";
+        const base64Icon = window.btoa(iconString);
+        return '"data:image/svg+xml;base64,' + base64Icon + '"';
+    }
     
     /**
      * Callbacks
