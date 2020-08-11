@@ -55,7 +55,7 @@ public class AFrameExporterTest {
         designer.designRepository();
 
         ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config, "");
-        exportString = aCityAFrameExporter.createAFrameExportFile();
+        exportString = aCityAFrameExporter.createAFrameExportString();
     }
 
     @AfterAll

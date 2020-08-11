@@ -9,6 +9,10 @@ import org.getaviz.generator.output.abap_output.acity_AFrame;
 import org.getaviz.generator.output.abap_output.acity_AFrame_UI;
 import org.getaviz.generator.output.abap_output.ABAP_OutputFormat;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Collection;
 
 public class ACityAFrameExporter {
@@ -34,7 +38,7 @@ public class ACityAFrameExporter {
 
     }
 
-    public String createAFrameExportFile(){
+    public String createAFrameExportString(){
 
         StringBuilder aFrameExport = new StringBuilder();
 
@@ -45,6 +49,25 @@ public class ACityAFrameExporter {
         aFrameExport.append(aFrameOutput.tail());
 
         return aFrameExport.toString();
+    }
+
+    public void exportAFrame() {
+        Writer fw = null;
+        try {
+            File currentDir = new File("src/test/neo4jexport");
+            String path = currentDir.getAbsolutePath() + "/model.html";
+            fw = new FileWriter(path);
+            fw.write(createAFrameExportString());
+        } catch (IOException e) {
+            System.out.println(e);
+        } finally {
+            if (fw != null)
+                try {
+                    fw.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+        }
     }
 
     private String createAFrameRepositoryExport() {

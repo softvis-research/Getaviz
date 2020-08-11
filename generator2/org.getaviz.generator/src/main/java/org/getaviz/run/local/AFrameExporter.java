@@ -1,9 +1,8 @@
 package org.getaviz.run.local;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.steps.ACityCreator;
-import org.getaviz.generator.abap.city.steps.ACityDesigner;
-import org.getaviz.generator.abap.city.steps.ACityLayouter;
+import org.getaviz.generator.abap.city.steps.*;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
@@ -11,7 +10,6 @@ import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.abap.city.steps.ACityAFrameExporter;
 import org.neo4j.driver.v1.types.Node;
 import org.getaviz.run.local.common.Maps;
 
@@ -74,115 +72,15 @@ public class AFrameExporter {
         // Update Neo4j with new nodes
         aCityRepository.writeRepositoryToNeo4j();
 
-
         // Create metaData.json
-        Writer fw = null;
-        try {
-            File currentDir = new File("src/test/neo4jexport");
-            String path = currentDir.getAbsolutePath() + "/metaData.json";
-            fw = new FileWriter(path);
-            fw.write(toJSON(nodeRepository.getNodes()));
-        } catch (IOException e) {
-            System.out.println(e);
-        } finally {
-            if (fw != null)
-                try {
-                    fw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-        }
+        ACityMetaDataExporter aCityMetaDataExporter = new ACityMetaDataExporter(aCityRepository, nodeRepository);
+        aCityMetaDataExporter.exportMetaData();
 
         // Create A-Frame
         ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config, "acity_AFrame_UI");
-        exportString = aCityAFrameExporter.createAFrameExportFile();
-
-        fw = null;
-        try {
-            File currentDir = new File("src/test/neo4jexport");
-            String path = currentDir.getAbsolutePath() + "/model.html";
-            fw = new FileWriter(path);
-            fw.write(exportString);
-        } catch (IOException e) {
-            System.out.println(e);
-        } finally {
-            if (fw != null)
-                try {
-                    fw.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-        }
+        aCityAFrameExporter.exportAFrame();
 
         System.out.println("\nA-Frame Exporter step was completed\"");
         connector.close();
-    }
-
-    private static String toJSON(Collection<Node> nodes) {
-        StringBuilder metaDataFile = new StringBuilder();
-        boolean hasElements = false;
-        for (final Node node : nodes) {
-            // Some elements are not in aCityRep; Example - standard SAP-packages
-            ACityElement element = aCityRepository.getElementBySourceID(node.id());
-            if (element == null) {
-                continue;
-            }
-
-            if (!hasElements) {
-                hasElements = true;
-                metaDataFile.append("[{");
-            } else {
-                metaDataFile.append("\n},{");
-            }
-            metaDataFile.append("\n");
-            metaDataFile.append(toMetaData(node));
-
-            // write data to Neo4j as property
-            StringBuilder metaDataNeo = new StringBuilder();
-            metaDataNeo.append("\"{");
-            metaDataNeo.append(toMetaData(node).replaceAll("\"", "\'")); // "- are not allowed
-            metaDataNeo.append("}\"");
-
-            connector.executeWrite(
-                    "MATCH (n:Elements) WHERE ID(n) = " + node.id()
-                            + " SET n.metaData = " + metaDataNeo.toString()
-            );
-        }
-        if (hasElements) {
-            metaDataFile.append("}]");
-        }
-        return metaDataFile.toString();
-    }
-
-    private static String toMetaData(Node node) {
-        StringBuilder builder = new StringBuilder();
-        ACityElement element = aCityRepository.getElementBySourceID(node.id());
-
-        Arrays.asList(SAPNodeProperties.values()).forEach(prop -> {
-            if (prop.toString().equals("element_id")) {
-                if (element != null) {
-                    builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": \"" + element.getHash() + "\"," +"\n");
-                }
-
-                return; // Jump to the next prop
-            }
-
-            if (!node.get(prop.toString()).toString().replace("\"", "").equals("NULL")) {
-                builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": " + node.get(prop.toString()).toString() + "," + "\n");
-            }
-        });
-
-        // Make sure we have the right syntax -> no commas at the end
-        char lastChar = builder.charAt(builder.length() - 1);
-        if (Character.compare(lastChar, '\n') == 0) {
-            lastChar = builder.charAt(builder.length() - 2);
-
-            if (Character.compare(lastChar, ',') == 0) {
-                builder.deleteCharAt(builder.length() - 1); // Delete '\n'
-                builder.deleteCharAt(builder.length() - 1); // Delete ,
-            }
-        }
-
-        return builder.toString();
     }
 }
