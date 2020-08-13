@@ -40,20 +40,42 @@ public class ACityBuildingLayout {
     }
 
     private void setPositionOfBuilding() {
+
         building.setXPosition(0.0);
         building.setYPosition(building.getHeight() / 2);
         building.setZPosition(0.0);
     }
 
     private void setSizeOfBuilding() {
-        Double floorHeightSum = calculateFloorHeightSum();
-        Double biggestChimneyHeight = getBiggestChimneyHeight();
-        Double groundAreaLength = calculateGroundAreaByChimneyAmount();
 
-        building.setWidth(groundAreaLength);
-        building.setLength(groundAreaLength);
-        building.setHeight(floorHeightSum);
+        ACityElement.ACitySubType referenceBuildingType = building.getSubType();
 
+        if(referenceBuildingType != null) {
+            switch (referenceBuildingType) {
+                case Sea:
+                    building.setHeight(config.getMetropolisReferenceBuildingHeigth("seaReferenceBuilding"));
+                    building.setWidth(config.getMetropolisReferenceBuildingWidth("seaReferenceBuilding"));
+                    building.setLength(config.getMetropolisReferenceBuildingLength("seaReferenceBuilding"));
+                    break;
+
+                case Mountain:
+                    building.setHeight(config.getMetropolisReferenceBuildingHeigth("mountainReferenceBuilding"));
+                    building.setWidth(config.getMetropolisReferenceBuildingWidth("mountainReferenceBuilding"));
+                    building.setLength(config.getMetropolisReferenceBuildingLength("mountainReferenceBuilding"));
+                    building.setXScale(config.getMetropolisReferenceBuildingXScale());
+                    building.setYScale(config.getMetropolisReferenceBuildingYScale());
+                    building.setZScale(config.getMetropolisReferenceBuildingZScale());
+                    break;
+            }
+        } else {
+            Double floorHeightSum = calculateFloorHeightSum();
+            Double biggestChimneyHeight = getBiggestChimneyHeight();
+            Double groundAreaLength = calculateGroundAreaByChimneyAmount();
+
+            building.setWidth(groundAreaLength);
+            building.setLength(groundAreaLength);
+            building.setHeight(floorHeightSum);
+        }
       }
 
     private Double getBiggestChimneyHeight() {
@@ -73,11 +95,16 @@ public class ACityBuildingLayout {
 
             //no floors, but numberOfStatements
             if (floors.isEmpty()){
+                if(building.getSourceNode() == null){
+                    return floorHeightSum;
+                }
                 String NOS = building.getSourceNodeProperty(SAPNodeProperties.numberofstatements);
 
                 if(NOS != "null") {
                     Double nos = Double.valueOf(NOS);
-                    floorHeightSum = config.getFloorHeightSum() + nos;
+
+                    //floorHeightSum = config.getFloorHeightSum() + nos;
+                    floorHeightSum = getScaledHeight(nos);
                 }
             }
 
@@ -90,6 +117,16 @@ public class ACityBuildingLayout {
             }
 
             return floorHeightSum;
+    }
+
+    private double getScaledHeight(double unscaledHeight) {
+        if (unscaledHeight < config.getAbapScoMinHeight()) {
+            return config.getAbapScoMinHeight();
+        } else if (unscaledHeight > config.getAbapScoMaxHeight()) {
+            return config.getAbapScoMaxHeight();
+        } else {
+            return unscaledHeight;
+        }
     }
 
     private double calculateGroundAreaByChimneyAmount() {

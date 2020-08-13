@@ -77,7 +77,7 @@ public class MetropolisAFrameExporter {
         builder.append("\t height=\"" + element.getHeight() + "\"");
         builder.append("\n");
 
-        if(element.getShape() == ACityElement.ACityShape.Box){
+        if(element.getShape() == ACityElement.ACityShape.Box || element.getShape() == ACityElement.ACityShape.Entity){
             builder.append("\t width=\"" + element.getWidth() + "\"");
             builder.append("\n");
             builder.append("\t depth=\"" + element.getLength() + "\"");
@@ -89,6 +89,20 @@ public class MetropolisAFrameExporter {
 
         builder.append("\t color=\"" + element.getColor() + "\"");
         builder.append("\n");
+
+        if (element.getTextureSource() != null){
+            builder.append("\t src=\"" + element.getTextureSource() + "\"");
+            builder.append("\n");
+            builder.append("\t rotation=\" -90 0 0 \"");
+            builder.append("\n");
+        }
+        if(element.getModel() != null){
+            builder.append("\t scale=\"" + element.getXScale() + " " + element.getYScale() + " " + element.getZScale() + "\"");
+            builder.append("\n");
+            builder.append("\t gltf-model=\"" + element.getModel() + "\"");
+            builder.append("\n");
+        }
+
         builder.append("\t shadow");
         builder.append(">");
 
@@ -104,6 +118,11 @@ public class MetropolisAFrameExporter {
             case Box: return "a-box";
             case Cylinder: return "a-cylinder";
             case Cone: return "a-cone";
+            case Ring: return "a-ring";
+            case Plane: return "a-plane";
+            case Circle: return "a-circle";
+            case Sphere: return "a-sphere";
+            case Entity: return "a-entity";
         }
         return "a-sphere";
     }

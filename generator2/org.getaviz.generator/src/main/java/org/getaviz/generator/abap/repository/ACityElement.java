@@ -48,11 +48,16 @@ public class ACityElement {
 
         // additional subTypes for metropolis
         , Interface, DataElement, Structure
+
+        , Sea, Mountain
     }
 
 
     public enum ACityShape {
         Box, Cylinder, Cone
+
+        // alternative shapes
+        , Sphere, Ring, Plane, Circle, Tetrahedron, Entity
     }
 
     private String hash;
@@ -72,6 +77,8 @@ public class ACityElement {
 
     private String color;
     private ACityShape shape;
+    private String source;
+    private String model;
 
     private double height;
     private double width;
@@ -80,6 +87,10 @@ public class ACityElement {
     private double xPosition;
     private double yPosition;
     private double zPosition;
+
+    private double xScale;
+    private double yScale;
+    private double zScale;
 
     public ACityElement(ACityType type) {
         this.type = type;
@@ -135,6 +146,28 @@ public class ACityElement {
         this.length = length;
     }
 
+    //Test scale
+    public void setXScale(double xScale) {
+        this.xScale = xScale;
+    }
+    public void setYScale(double yScale) {
+        this.yScale = yScale;
+    }
+    public void setZScale(double zScale) {
+        this.zScale = zScale;
+    }
+
+    public double getXScale() {
+        return xScale;
+    }
+    public double getYScale() {
+        return xScale;
+    }
+    public double getZScale() {
+        return xScale;
+    }
+//
+
     public double getXPosition() {
         return xPosition;
     }
@@ -166,6 +199,22 @@ public class ACityElement {
     public void setColor(String color) {
         this.color = color;
     }
+
+    public String getTextureSource() {
+        return source;
+    }
+
+    public void setTextureSource(String src) {
+        this.source = src;
+    }
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String gltfModel) {
+        this.model = gltfModel;
+    }
+
 
     public ACityElement getParentElement() {
         return parentElement;

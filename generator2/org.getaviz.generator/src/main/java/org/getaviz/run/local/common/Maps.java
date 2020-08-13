@@ -5,9 +5,10 @@ import java.util.HashMap;
 
 public class Maps {
     private static final Map<String, String> metaDataProperties;
+//    private static final Map<String, String> metaDataPropType;
 
     static{
-        metaDataProperties =   new HashMap<String, String>() {{
+        metaDataProperties = new HashMap<String, String>() {{
             put("element_id", "id");
             put("object_name", "name");
             put("type_name", "type");
@@ -31,6 +32,10 @@ public class Maps {
             put("local_class", "local_class");
             put("uses_id", "uses_id");
         }};
+//
+//        metaDataPropType = new HashMap<String, String>() {{
+//            put("element_id", "numeric");
+//        }};
     }
 
     public static Map<String, String> getMetaDataProperties() {

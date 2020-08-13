@@ -92,7 +92,7 @@ public class MetropolisDesigner {
 
     private String getPropertyTypeName(ACityElement aCityElement){
         if(aCityElement.getSubType() != null){
-            return aCityElement.getSubType().name() + "-TypeDistrict";
+            return aCityElement.getSubType().name() + "-ReferenceBuilding";
         }
         return aCityElement.getSourceNodeProperty(SAPNodeProperties.type_name);
     }
@@ -124,83 +124,108 @@ public class MetropolisDesigner {
     }
 
     private void designBuilding(ACityElement building) {
-        String propertyTypeName = building.getSourceNodeProperty(SAPNodeProperties.type_name);
 
-        switch (SAPNodeTypes.valueOf(propertyTypeName)) {
+        ACityElement.ACitySubType refBuildingType = building.getSubType();
 
-            case Interface:
-                building.setColor(config.getMetropolisBuildingColorHex("interfaceBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("interfaceBuilding"));
-                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                break;
-            case Method:
-                building.setColor(config.getMetropolisBuildingColorHex("methodBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("methodBuilding"));
-                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                break;
-            case Report:
-                building.setColor(config.getMetropolisBuildingColorHex("reportBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("reportBuilding"));
-                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                break;
-            case FormRoutine:
-                building.setColor(config.getMetropolisBuildingColorHex("formRoutineBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("formRoutineBuilding"));
-                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                break;
-            case Attribute:
-                building.setColor(config.getMetropolisBuildingColorHex("attributeBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("attributeBuilding"));
-                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                break;
-            case FunctionModule:
-                building.setColor(config.getMetropolisBuildingColorHex("functionModuleBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("functionModuleBuilding"));
-                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                break;
-            case Table:
-                building.setColor(config.getMetropolisBuildingColorHex("tableBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("tableBuilding"));
-                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                break;
-            case DataElement:
-                building.setColor(config.getMetropolisBuildingColorHex("dataElementBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("dataElementBuilding"));
-                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                break;
-            case Domain:
-                building.setColor(config.getMetropolisBuildingColorHex("domainBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("domainBuilding"));
-                building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                break;
-            case StructureElement:
-                building.setColor(config.getMetropolisBuildingColorHex("structureBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("structureBuilding"));
-                building.setWidth(config.getACityBuildingWidth("structureBuilding"));
-                building.setLength(config.getACityBuildingLength("structureBuilding"));
-                break;
-            case TableType:
-                building.setColor(config.getMetropolisBuildingColorHex("tableTypeBuilding"));
-                building.setShape(config.getMetropolisBuildingShape("tableTypeBuilding"));
-                building.setWidth(config.getACityBuildingWidth("tableTypeBuilding"));
-                building.setLength(config.getACityBuildingLength("tableTypeBuilding"));
-                break;
-            default:
-                building.setColor(config.getMetropolisDistrictColorHex("defaultValue"));
-                building.setShape(config.getMetropolisBuildingShape("defaultValue"));
-                building.setWidth(config.getACityBuildingWidth("defaultValue"));
-                building.setLength(config.getACityBuildingLength("defaultValue"));
-                log.error(propertyTypeName + " is not a valid type for \"building\"");
-                break;
+        if (building.getSourceNode() == null && refBuildingType == null) {
+            return;
+        } else if ( refBuildingType != null) {
+            switch (refBuildingType) {
+                case Sea:
+                    building.setColor(config.getMetropolisBuildingColorHex("seaReferenceBuilding"));
+                    building.setShape(ACityElement.ACityShape.Circle);
+                    building.setTextureSource("#sea");
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case Mountain:
+                    building.setColor(config.getMetropolisBuildingColorHex("mountainReferenceBuilding"));
+                    building.setShape(ACityElement.ACityShape.Entity);
+                    building.setModel("#polyMountain");
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+        }
+    } else {
+
+            String propertyTypeName = building.getSourceNodeProperty(SAPNodeProperties.type_name);
+
+            switch (SAPNodeTypes.valueOf(propertyTypeName)) {
+
+                case Interface:
+                    building.setColor(config.getMetropolisBuildingColorHex("interfaceBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("interfaceBuilding"));
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case Method:
+                    building.setColor(config.getMetropolisBuildingColorHex("methodBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("methodBuilding"));
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case Report:
+                    building.setColor(config.getMetropolisBuildingColorHex("reportBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("reportBuilding"));
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case FormRoutine:
+                    building.setColor(config.getMetropolisBuildingColorHex("formRoutineBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("formRoutineBuilding"));
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case Attribute:
+                    building.setColor(config.getMetropolisBuildingColorHex("attributeBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("attributeBuilding"));
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case FunctionModule:
+                    building.setColor(config.getMetropolisBuildingColorHex("functionModuleBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("functionModuleBuilding"));
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case Table:
+                    building.setColor(config.getMetropolisBuildingColorHex("tableBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("tableBuilding"));
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case DataElement:
+                    building.setColor(config.getMetropolisBuildingColorHex("dataElementBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("dataElementBuilding"));
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case Domain:
+                    building.setColor(config.getMetropolisBuildingColorHex("domainBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("domainBuilding"));
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case StructureElement:
+                    building.setColor(config.getMetropolisBuildingColorHex("structureBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("structureBuilding"));
+                    building.setWidth(config.getACityBuildingWidth("structureBuilding"));
+                    building.setLength(config.getACityBuildingLength("structureBuilding"));
+                    break;
+                case TableType:
+                    building.setColor(config.getMetropolisBuildingColorHex("tableTypeBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("tableTypeBuilding"));
+                    building.setWidth(config.getACityBuildingWidth("tableTypeBuilding"));
+                    building.setLength(config.getACityBuildingLength("tableTypeBuilding"));
+                    break;
+                default:
+                    building.setColor(config.getMetropolisDistrictColorHex("defaultValue"));
+                    building.setShape(config.getMetropolisBuildingShape("defaultValue"));
+                    building.setWidth(config.getACityBuildingWidth("defaultValue"));
+                    building.setLength(config.getACityBuildingLength("defaultValue"));
+                    log.error(propertyTypeName + " is not a valid type for \"building\"");
+                    break;
+            }
         }
     }
 
