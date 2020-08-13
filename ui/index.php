@@ -76,10 +76,10 @@ EOT;
     $canvas = <<<EOT
         <x3d id="x3dElement" showConsole="true">
 			<scene id="scene">
-								
+
 				<Transform id="addedElements"></Transform>
-				
-				<MultiPart id="multiPart" mapDEFToID="true" url="$multipartX3dUrl" urlIDMap="$multipartJsonUrl"></MultiPart>							
+
+				<MultiPart id="multiPart" mapDEFToID="true" url="$multipartX3dUrl" urlIDMap="$multipartJsonUrl"></MultiPart>
 
 			</scene>
 		</x3d>
@@ -90,8 +90,6 @@ EOT;
 <script type="text/javascript">
     var modelUrl = "<?php echo $modelUrl; ?>";
     var stateHashcode = "<?php echo $stateHashcode; ?>";
-    var multipartX3dUrl = "<?php echo $multipartX3dUrl; ?>";
-    var multipartJsonUrl = "<?php echo $multipartJsonUrl; ?>";
     var metaDataJsonUrl = "<?php echo $metaDataJsonUrl; ?>";
     var metaStateJsonUrl = "<?php echo $metaStateJsonUrl; ?>";
     var canvasId = "<?php echo $canvasId; ?>";
@@ -131,6 +129,8 @@ EOT;
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxdropdownlist.js"></script>
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxslider.js"></script>
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxnumberinput.js"></script>
+<script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxdatetimeinput.js"></script>
+<script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxcalendar.js"></script>
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxform.js"></script>
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxvalidator.js"></script>
 <script type="text/javascript" src="node_modules/prismjs/prism.js"></script>
@@ -176,6 +176,11 @@ EOT;
 <script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimation.js"></script>
 <script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimationColor.js"></script>
 <script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimationExpanding.js"></script>
+
+<script type="text/javascript" src="scripts/Metric/Constants.js"></script>
+<script type="text/javascript" src="scripts/Metric/DomHelper.js"></script>
+<script type="text/javascript" src="scripts/Metric/ColorGradient.js"></script>
+<script type="text/javascript" src="scripts/Metric/MetricController.js"></script>
 
 <!-- filter -->
 <script type="text/javascript" src="scripts/Filter/Helpers/Constants.js"></script>

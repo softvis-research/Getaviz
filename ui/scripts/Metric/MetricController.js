@@ -2,30 +2,56 @@ var metricController = (function () {
 
     var controllerConfig = {
         metrics: [
-            "Number of Statements",
-            "Date of Creation",
-            "Date of Last Change"
+            metrics.numberOfStatements,
+            metrics.dateOfCreation,
+            metrics.dateOfLastChange
         ],
         mappings: [
-            "Color",
-            "Transparency",
-            "Pulsation",
-            "Flashing",
-            "Rotation",
+            mappings.color,
+            mappings.colorGradient,
+            mappings.transparency,
+            mappings.pulsation,
+            mappings.flashing,
+            mappings.rotation,
         ]
     };
 
     var domHelper = new DomHelper();
 
-    var metric = "Number of Statements";
-    var metricFrom = 0;
-    var metricTo = 0;
+    var metric = {
+        variant: "",
+        from: 0,
+        to: 0
+    };
 
-    var mapping = "Color";
-    var mappingFrom = "";
-    var mappingTo = "";
+    var metricDefault = {
+        variant: metrics.numberOfStatements,
+        from: 0,
+        to: 0
+    }
+
+    var mapping = {
+        variant: "",
+        color: "",
+        startColor: "",
+        endColor: "",
+        transparency: 0,
+        period: 0,
+        scale: 0
+    };
+
+    var mappingDefault = {
+        variant: mappings.color,
+        color: "black",
+        startColor: "blue",
+        endColor: "red",
+        transparency: 0.5,
+        period: 1000,
+        scale: 2
+    };
 
     var entities = [];
+    var entityMetricMap = new Map();
 
     function initialize(setupConfig) {
         application.transferConfigParams(setupConfig, controllerConfig);
@@ -34,32 +60,13 @@ var metricController = (function () {
     function activate(rootDiv) {
         domHelper.buildUI(rootDiv, controllerConfig);
 
-        $("#executeButton").click(executeButtonClicked);
-        $("#resetButton").click(reset);
+        $(cssIDs.executeButton).click(executeButtonClicked);
+        $(cssIDs.resetButton).click(reset);
     }
 
     async function executeButtonClicked(event) {
 
-        metric = $("#metricDropDown").val();
-
-        switch (metric) {
-            case "Number of Statements":
-                metricFrom = $("#metricFromInput").val();
-                metricTo = $("#metricToInput").val();
-                break;
-            case "Date of Creation":
-            case "Date of Last Change":
-                metricFrom = $("#metricFromDateInput").val();
-                metricTo = $("#metricToDateInput").val();
-                break;
-        }
-
-
-
-        mapping = $("#mappingDropDown").val();
-        mappingFrom = $("#mappingFromInput").val();
-        mappingTo = $("#mappingToInput").val();
-
+        readUIData();
 
         await getMatchingEntities(buildCypherQuery());
 
@@ -69,37 +76,37 @@ var metricController = (function () {
     function buildCypherQuery() {
         var cypherQuery = "";
 
-        switch (metric) {
+        switch (metric.variant) {
             default:
-            case "Number of Statements":
-                if (metricFrom == "" && metricTo == "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.number_of_statements > 10 RETURN n.hash";
-                else if (metricFrom != "" && metricTo == "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.number_of_statements >= " + metricFrom + " RETURN n.hash";
-                else if (metricFrom == "" && metricTo != "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.number_of_statements <= " + metricTo + " RETURN n.hash";
-                else if (metricFrom != "" && metricTo != "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where " + metricFrom + " <= p.number_of_statements <= " + metricTo + " RETURN n.hash";
+            case metrics.numberOfStatements:
+                if (metric.from == "" && metric.to == "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.number_of_statements > 10 RETURN n.hash, p.number_of_statements";
+                else if (metric.from != "" && metric.to == "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.number_of_statements >= " + metric.from + " RETURN n.hash, p.number_of_statements";
+                else if (metric.from == "" && metric.to != "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.number_of_statements <= " + metric.to + " RETURN n.hash, p.number_of_statements";
+                else if (metric.from != "" && metric.to != "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where " + metric.from + " <= p.number_of_statements <= " + metric.to + " RETURN n.hash, p.number_of_statements";
                 break;
-            case "Date of Creation":
-                if (metricFrom == "" && metricTo == "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.created >= date('20200101') RETURN n.hash";
-                else if (metricFrom != "" && metricTo == "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.created >= date('" + metricFrom + "') RETURN n.hash";
-                else if (metricFrom == "" && metricTo != "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.created <= date('" + metricTo + "') RETURN n.hash";
-                else if (metricFrom != "" && metricTo != "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where date('" + metricFrom + "') <= p.created <= date('" + metricTo + "') RETURN n.hash";
+            case metrics.dateOfCreation:
+                if (metric.from == "" && metric.to == "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.created >= date('20200101') RETURN n.hash, p.created";
+                else if (metric.from != "" && metric.to == "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.created >= date('" + metric.from + "') RETURN n.hash, p.created";
+                else if (metric.from == "" && metric.to != "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.created <= date('" + metric.to + "') RETURN n.hash, p.created";
+                else if (metric.from != "" && metric.to != "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where date('" + metric.from + "') <= p.created <= date('" + metric.to + "') RETURN n.hash, p.created";
                 break;
-            case "Date of Last Change":
-                if (metricFrom == "" && metricTo == "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.changed >= date('20200101') RETURN n.hash";
-                else if (metricFrom != "" && metricTo == "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.changed >= date('" + metricFrom + "') RETURN n.hash";
-                else if (metricFrom == "" && metricTo != "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.changed <= date('" + metricTo + "') RETURN n.hash";
-                else if (metricFrom != "" && metricTo != "")
-                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where date('" + metricFrom + "') <= p.changed <= date('" + metricTo + "') RETURN n.hash";
+            case metrics.dateOfLastChange:
+                if (metric.from == "" && metric.to == "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.changed >= date('20200101') RETURN n.hash, p.changed";
+                else if (metric.from != "" && metric.to == "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.changed >= date('" + metric.from + "') RETURN n.hash, p.changed";
+                else if (metric.from == "" && metric.to != "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where p.changed <= date('" + metric.to + "') RETURN n.hash, p.changed";
+                else if (metric.from != "" && metric.to != "")
+                    cypherQuery = "MATCH (n)-[:SOURCE]->(p) where date('" + metric.from + "') <= p.changed <= date('" + metric.to + "') RETURN n.hash, p.changed";
                 break;
         }
 
@@ -111,32 +118,31 @@ var metricController = (function () {
 
         response[0].data.forEach(element => {
             entities.push(model.getEntityById(element.row[0]));
+            entityMetricMap.set(element.row[0], element.row[1]);
         });
     }
 
     function doMapping() {
 
-        switch (mapping) {
+        switch (mapping.variant) {
             default:
-            case "Color":
-                mappingFrom = $("#mappingColorDropDown").val();
-                if (mappingFrom == "")
-                    canvasManipulator.changeColorOfEntities(entities, "black");
-                else
-                    canvasManipulator.changeColorOfEntities(entities, mappingFrom);
+            case mappings.color:
+                canvasManipulator.changeColorOfEntities(entities, mapping.color);
                 break;
-            case "Transparency":
-                mappingFrom = $("#mappingTransparencyInput").val();
-                if (mappingFrom == "")
-                    canvasManipulator.changeTransparencyOfEntities(entities, 0.5);
-                else
-                    canvasManipulator.changeTransparencyOfEntities(entities, mappingFrom);
+            case mappings.colorGradient:
+                setColorGradient();
                 break;
-            case "Pulsation":
+            case mappings.transparency:
+                canvasManipulator.changeTransparencyOfEntities(entities, mapping.transparency);
                 break;
-            case "Flashing":
+            case mappings.pulsation:
+                canvasManipulator.startAnimation({ animation: "Expanding", entities: entities, period: mapping.period, scale: mapping.scale });
                 break;
-            case "Rotation":
+            case mappings.flashing:
+                canvasManipulator.startAnimation({ animation: "Flashing", entities: entities, period: mapping.period, flashingColor: mapping.color });
+                break;
+            case mappings.rotation:
+                canvasManipulator.startAnimation({ animation: "Rotation", entities: entities, period: mapping.period });
                 break;
         }
 
@@ -168,22 +174,99 @@ var metricController = (function () {
         }
     }
 
+    function readUIData() {
+        metric.variant = ($(cssIDs.metricDropDown).val() == "" ? metricDefault.variant : $(cssIDs.metricDropDown).val());
+
+        switch (metric.variant) {
+            case metrics.numberOfStatements:
+                metric.from = $(cssIDs.metricFromInput).val();
+                metric.to = $(cssIDs.metricToInput).val();
+                break;
+            case metrics.dateOfCreation:
+            case metrics.dateOfLastChange:
+                metric.from = $(cssIDs.metricFromDateInput).val();
+                metric.to = $(cssIDs.metricToDateInput).val();
+                break;
+        }
+
+        mapping.variant = ($(cssIDs.mappingDropDown).val() == "" ? mappingDefault.variant : $(cssIDs.mappingDropDown).val());
+
+        switch (mapping.variant) {
+            case mappings.color:
+                mapping.color = ($(cssIDs.mappingColorDropDown).val() == "" ? mappingDefault.color : $(cssIDs.mappingColorDropDown).val());
+                break;
+
+            case mappings.colorGradient:
+                mapping.startColor = ($(cssIDs.mappingStartColorDropDown).val() == "" ? mappingDefault.startColor : $(cssIDs.mappingStartColorDropDown).val());
+                mapping.endColor = ($(cssIDs.mappingEndColorDropDown).val() == "" ? mappingDefault.endColor : $(cssIDs.mappingEndColorDropDown).val());
+                break;
+
+            case mappings.transparency:
+                mapping.transparency = ($(cssIDs.mappingTransparencyInput).val() == "" ? mappingDefault.transparency : $(cssIDs.mappingTransparencyInput).val());
+                break;
+
+            case mappings.pulsation:
+                mapping.period = ($(cssIDs.mappingPeriodInput).val() == "" ? mappingDefault.period : $(cssIDs.mappingPeriodInput).val());
+                mapping.scale = ($(cssIDs.mappingScaleInput).val() == "" ? mappingDefault.scale : $(cssIDs.mappingScaleInput).val());
+                break;
+
+            case mappings.flashing:
+                mapping.period = ($(cssIDs.mappingPeriodInput).val() == "" ? mappingDefault.period : $(cssIDs.mappingPeriodInput).val());
+                mapping.color = ($(cssIDs.mappingColorDropDown).val() == "" ? mappingDefault.color : $(cssIDs.mappingColorDropDown).val());
+                break;
+
+            case mappings.rotation:
+                mapping.period = ($(cssIDs.mappingPeriodInput).val() == "" ? mappingDefault.period : $(cssIDs.mappingPeriodInput).val());
+                break;
+        }
+    }
+
+    function setColorGradient() {
+        var minValue;
+        var maxValue;
+
+        entityMetricMap.forEach(function(metricValue) {
+            if (minValue >= metricValue || minValue == undefined) {
+                minValue = metricValue;
+            }
+            if (maxValue <= metricValue || maxValue == undefined) {
+                maxValue = metricValue;
+            }
+        })
+
+        var colorGradient = new ColorGradient(mapping.startColor, mapping.endColor, minValue, maxValue);
+
+        entities.forEach(function(entity) {
+            var gradientColor = colorGradient.calculateGradientColor(entityMetricMap.get(entity.id));
+            canvasManipulator.changeColorOfEntities([entity], gradientColor.r + " " + gradientColor.g + " " + gradientColor.b);
+        })
+
+    }
+
     function reset() {
-        switch (mapping) {
-            case "Color":
+        switch (mapping.variant) {
+            case mappings.color:
                 canvasManipulator.resetColorOfEntities(entities);
                 break;
-            case "Transparency":
+            case mappings.colorGradient:
+                canvasManipulator.resetColorOfEntities(entities);
+                break;
+            case mappings.transparency:
                 canvasManipulator.resetTransparencyOfEntities(entities);
                 break;
-            case "Pulsation":
+            case mappings.pulsation:
+                canvasManipulator.stopAnimation({ animation: "Expanding", entities: entities });
                 break;
-            case "Flashing":
+            case mappings.flashing:
+                canvasManipulator.stopAnimation({ animation: "Flashing", entities: entities });
                 break;
-            case "Rotation":
+            case mappings.rotation:
+                canvasManipulator.stopAnimation({ animation: "Rotation", entities: entities });
                 break;
         }
         domHelper.resetUI();
+        entities = [];
+        entityMetricMap = new Map();
     }
 
 

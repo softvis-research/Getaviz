@@ -1,3 +1,17 @@
+#executeButton {
+    clear: left;
+    float: left;
+}
+
+#resetButton {
+    float: left;
+}
+
+#metrics {
+    clear: left;
+    float: left;
+}
+
 #metricDropDown {
     float: left;
 }
@@ -7,10 +21,8 @@
     display: none;
 }
 
-
-
 #mappings {
-    clear: left;
+    float: left;
 }
 
 #mappingDropDown {
@@ -20,13 +32,4 @@
 .mappingParameter {
     float: left;
     display: none;
-}
-
-#executeButton {
-    clear: left;
-    float: left;
-}
-
-#resetButton {
-    float: left;
 }
