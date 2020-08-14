@@ -1,25 +1,13 @@
 package org.getaviz.run.local;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.city.steps.*;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.neo4j.driver.v1.types.Node;
-import org.getaviz.run.local.common.Maps;
-
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Scanner;
 
 public class AFrameExporter {
@@ -27,7 +15,6 @@ public class AFrameExporter {
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     private static SourceNodeRepository nodeRepository;
     private static ACityRepository aCityRepository;
-    private static String exportString;
 
     public static void main(String[] args) {
         boolean isSilentMode = true;

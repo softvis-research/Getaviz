@@ -8,6 +8,8 @@ import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.run.local.common.Maps;
+import org.neo4j.driver.v1.Record;
+import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 
 import java.io.File;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 public class ACityMetaDataExporter {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
@@ -45,7 +48,7 @@ public class ACityMetaDataExporter {
                     e.printStackTrace();
                 }
         }
-        connector.close();
+//        connector.close();
     }
 
     private String toJSON(Collection<Node> nodes) {
@@ -70,12 +73,12 @@ public class ACityMetaDataExporter {
             // write data to Neo4j as property
             StringBuilder metaDataNeo = new StringBuilder();
             metaDataNeo.append("\"{");
-            metaDataNeo.append(toMetaData(node).replaceAll("\"", "\'")); // "- are not allowed
+            metaDataNeo.append(toMetaData(node)); //.replaceAll("\"", "\'")); // "- are not allowed
             metaDataNeo.append("}\"");
 
             connector.executeWrite(
-                    "MATCH (n:Elements) WHERE ID(n) = " + node.id()
-                            + " SET n.metaData = " + metaDataNeo.toString()
+                    "MATCH (n:ACityRep) WHERE n.hash = " + "\'" + element.getHash() + "\' "
+                            + " SET n.metaData = \'" + metaDataNeo.toString() + "\'"
             );
         }
         if (hasElements) {
@@ -103,7 +106,25 @@ public class ACityMetaDataExporter {
             }
 
             // Write strings with "" and numbers without
-            String propValue = node.get(prop.toString()).asString();
+            String propValue = node.get(prop.toString()).toString().replaceAll("\"", "");
+
+            // Belongs to - must be hash value of a parent container
+            if (prop == SAPNodeProperties.container_id) {
+                // Remove value first, so that we have correct hash.
+                // If no hash was found, for example default SAP packages, no container_id will be written.
+                propValue = "";
+                Long container_id = Long.parseLong(node.get(prop.toString()).asString());
+
+                StatementResult results = connector.executeRead("MATCH (aCityNode)-[r:SOURCE]->(sourceNode) " +
+                                                                    "WHERE sourceNode.element_id = "+ "\'" + container_id + "\'" +
+                                                                    " RETURN aCityNode.hash");
+
+                if (results.hasNext()) {
+                    Map<String,Object> row = results.next().asMap();
+                    propValue = row.get("aCityNode.hash").toString();
+                }
+            }
+
             if (NumberUtils.isCreatable(propValue)) {
                 builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": " + propValue + "," + "\n");
             } else {
