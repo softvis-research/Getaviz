@@ -41,6 +41,10 @@ public class MetropolisCreator {
         log.info("Create City Relations");
         createAllMetropolisRelations(nodeRepository);
 
+        log.info("Create ReferenceBuildings");
+        createReferenceBuildingRelations();
+
+
         log.info("Delete empty Districts");
         deleteEmptyDistricts();
 
@@ -64,10 +68,6 @@ public class MetropolisCreator {
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Method);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Attribute);
 
-
-
-
-
         //TODO
         /*
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Table);
@@ -82,6 +82,42 @@ public class MetropolisCreator {
          */
     }
 
+    private void createReferenceBuildingRelations() {
+
+        Collection<ACityElement> packageDistricts = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Namespace.toString());
+        log.info(packageDistricts.size() + "  districts loaded");
+
+        for (ACityElement packageDistrict: packageDistricts){
+
+            // nur für Hauptpaket (Iteration 0)
+            String iterationString = packageDistrict.getSourceNodeProperty(SAPNodeProperties.iteration);
+            int iterationInt = Integer.parseInt(iterationString);
+
+            if(iterationInt == 0) {
+                Collection<ACityElement> subElements = packageDistrict.getSubElements();
+
+                if (!subElements.isEmpty()) {
+
+                    if(config.showMountainReferenceBuilding() == true) {
+                        createRefBuilding(packageDistrict, ACityElement.ACitySubType.Mountain);
+                    }
+                    if(config.showSeaReferenceBuilding() == true) {
+                        createRefBuilding(packageDistrict, ACityElement.ACitySubType.Sea);
+                    }
+                }
+            }
+           // removeSubElementsFromDistrict(district, subElements);
+        }
+    }
+
+    private void createRefBuilding(ACityElement packageDistrict, ACityElement.ACitySubType refBuildingType) {
+        ACityElement refBuilding = new ACityElement(ACityElement.ACityType.Building);
+        refBuilding.setSubType(refBuildingType);
+
+        repository.addElement(refBuilding);
+
+        packageDistrict.addSubElement(refBuilding);
+    }
 
     private void createAllMetropolisRelations(SourceNodeRepository nodeRepository) {
         createMetropolisRelations(nodeRepository, ACityElement.ACityType.District);
