@@ -25,24 +25,32 @@ class DomHelper {
         executeButtonDiv.textContent = "Execute";
         rootDiv.appendChild(executeButtonDiv);
 
-        $(cssIDs.executeButton).jqxButton({ theme: "metro", height: 20, width: "49%" });
+        $(cssIDs.executeButton).jqxButton({ theme: "metro", height: 20, width: "32%" });
 
         var resetButtonDiv = document.createElement("div");
         resetButtonDiv.id = domIDs.resetButton;
         resetButtonDiv.textContent = "Reset";
         rootDiv.appendChild(resetButtonDiv);
 
-        $(cssIDs.resetButton).jqxButton({ theme: "metro", height: 20, width: "49%" });
+        $(cssIDs.resetButton).jqxButton({ theme: "metro", height: 20, width: "32%" });
 
-        this.buildMetricArea(rootDiv, controllerConfig);
+        var addLayerButtonDiv = document.createElement("div");
+        addLayerButtonDiv.id = domIDs.addLayerButton;
+        addLayerButtonDiv.textContent = "Add Metric-Mapping";
+        rootDiv.appendChild(addLayerButtonDiv);
 
-        this.buildMappingArea(rootDiv, controllerConfig);
+        $(cssIDs.addLayerButton).jqxButton({ theme: "metro", height: 20, width: "32%" });
+
+        // this.buildMetricArea(rootDiv, controllerConfig);
+
+        // this.buildMappingArea(rootDiv, controllerConfig);
 
     }
 
     buildMetricArea(rootDiv, controllerConfig) {
         var metricTextNode = document.createElement("p");
         metricTextNode.id = "metrics";
+        metricTextNode.classList.add("metrics");
         metricTextNode.textContent = "Metrics";
         rootDiv.appendChild(metricTextNode);
 
@@ -124,6 +132,7 @@ class DomHelper {
     buildMappingArea(rootDiv, controllerConfig) {
         var mappingTextNode = document.createElement("p");
         mappingTextNode.id = "mappings";
+        mappingTextNode.classList.add("mappings");
         mappingTextNode.textContent = "Mappings";
         rootDiv.appendChild(mappingTextNode);
 

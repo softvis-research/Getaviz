@@ -16,7 +16,8 @@ var metricController = (function () {
         ]
     };
 
-    var domHelper = new DomHelper();
+    var domHelper;
+    var metricContainer;
 
     var metric = {
         variant: "",
@@ -58,10 +59,15 @@ var metricController = (function () {
     }
 
     function activate(rootDiv) {
+        domHelper = new DomHelper();
         domHelper.buildUI(rootDiv, controllerConfig);
+
+        metricContainer = new MetricContainer(rootDiv);
+        metricContainer.addLayer();
 
         $(cssIDs.executeButton).click(executeButtonClicked);
         $(cssIDs.resetButton).click(reset);
+        $(cssIDs.addLayerButton).click(addLayer);
     }
 
     async function executeButtonClicked(event) {
@@ -122,8 +128,11 @@ var metricController = (function () {
         });
     }
 
-    function doMapping() {
+    function addLayer() {
+        metricContainer.addLayer();
+    }
 
+    function doMapping() {
         switch (mapping.variant) {
             default:
             case mappings.color:
@@ -145,8 +154,6 @@ var metricController = (function () {
                 canvasManipulator.startAnimation({ animation: "Rotation", entities: entities, period: mapping.period });
                 break;
         }
-
-
     }
 
     // Universal method to load a data from Neo4j using imported cypher-query
@@ -272,8 +279,10 @@ var metricController = (function () {
 
     return {
         initialize: initialize,
-        activate: activate,
-        reset: reset
+        activate:   activate,
+        reset:      reset,
+
+        controllerConfig: controllerConfig
     }
 
 })();

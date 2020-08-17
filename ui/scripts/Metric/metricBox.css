@@ -7,25 +7,29 @@
     float: left;
 }
 
-#metrics {
-    clear: left;
+#addLayerButton {
     float: left;
 }
 
-#metricDropDown {
+.metrics {
+    clear: left;
     float: left;
-}
+} 
+
+.metricDropDown {
+    float: left;
+} 
 
 .metricParameter {
     float: left;
     display: none;
 }
 
-#mappings {
+.mappings {
     float: left;
 }
 
-#mappingDropDown {
+.mappingDropDown {
     float: left;
 }
 

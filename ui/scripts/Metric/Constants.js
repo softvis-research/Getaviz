@@ -1,6 +1,7 @@
 const domIDs = {
     executeButton: "executeButton",
     resetButton: "resetButton",
+    addLayerButton: "addLayerButton",
 
     metricDropDown: "metricDropDown",
     mappingDropDown: "mappingDropDown",
@@ -28,6 +29,7 @@ const domIDs = {
 const cssIDs = {
     executeButton: "#" + domIDs.executeButton,
     resetButton: "#" + domIDs.resetButton,
+    addLayerButton: "#" + domIDs.addLayerButton,
 
     metricDropDown: "#" + domIDs.metricDropDown,
     mappingDropDown: "#" + domIDs.mappingDropDown,
@@ -66,3 +68,12 @@ const mappings = {
     flashing: "Flashing",
     rotation: "Rotation"
 };
+
+const colors = [
+    "red",
+    "blue",
+    "green",
+    "black",
+    "yellow",
+    "orange"
+]
