@@ -23,7 +23,9 @@ const domIDs = {
     mappingScaleInput: "mappingScaleInput",
 
     mappingPeriodText: "mappingPeriodText",
-    mappingScaleText: "mappingScaleText"
+    mappingScaleText: "mappingScaleText",
+
+    deleteButton: "deleteButton"
 };
 
 const cssIDs = {
@@ -51,7 +53,9 @@ const cssIDs = {
     mappingScaleInput: "#" + domIDs.mappingScaleInput,
 
     mappingPeriodText: "#" + domIDs.mappingPeriodText,
-    mappingScaleText: "#" + domIDs.mappingScaleText
+    mappingScaleText: "#" + domIDs.mappingScaleText,
+
+    deleteButton: "#" + domIDs.deleteButton
 };
 
 const metrics = {

@@ -11,6 +11,10 @@
     float: left;
 }
 
+.deleteButton {
+    float: left;
+}
+
 .metrics {
     clear: left;
     float: left;

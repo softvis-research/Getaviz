@@ -36,7 +36,7 @@ class DomHelper {
 
         var addLayerButtonDiv = document.createElement("div");
         addLayerButtonDiv.id = domIDs.addLayerButton;
-        addLayerButtonDiv.textContent = "Add Metric-Mapping";
+        addLayerButtonDiv.textContent = "Add Metric-Layer";
         rootDiv.appendChild(addLayerButtonDiv);
 
         $(cssIDs.addLayerButton).jqxButton({ theme: "metro", height: 20, width: "32%" });
