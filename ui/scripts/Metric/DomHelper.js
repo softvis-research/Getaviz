@@ -1,6 +1,8 @@
 class DomHelper {
 
-    constructor() {
+    constructor(rootDiv, controllerConfig) {
+        this.rootDiv = rootDiv;
+        this.controllerConfig = controllerConfig;
         this.colors = [
             "red",
             "blue",
@@ -12,7 +14,7 @@ class DomHelper {
 
     }
 
-    buildUI(rootDiv, controllerConfig) {
+    buildUiHead() {
         let cssLink = document.createElement("link");
         cssLink.type = "text/css";
         cssLink.rel = "stylesheet";
@@ -23,263 +25,325 @@ class DomHelper {
         var executeButtonDiv = document.createElement("div");
         executeButtonDiv.id = domIDs.executeButton;
         executeButtonDiv.textContent = "Execute";
-        rootDiv.appendChild(executeButtonDiv);
+        this.rootDiv.appendChild(executeButtonDiv);
 
         $(cssIDs.executeButton).jqxButton({ theme: "metro", height: 20, width: "32%" });
 
         var resetButtonDiv = document.createElement("div");
         resetButtonDiv.id = domIDs.resetButton;
         resetButtonDiv.textContent = "Reset";
-        rootDiv.appendChild(resetButtonDiv);
+        this.rootDiv.appendChild(resetButtonDiv);
 
         $(cssIDs.resetButton).jqxButton({ theme: "metro", height: 20, width: "32%" });
 
         var addLayerButtonDiv = document.createElement("div");
         addLayerButtonDiv.id = domIDs.addLayerButton;
         addLayerButtonDiv.textContent = "Add Metric-Layer";
-        rootDiv.appendChild(addLayerButtonDiv);
+        this.rootDiv.appendChild(addLayerButtonDiv);
 
         $(cssIDs.addLayerButton).jqxButton({ theme: "metro", height: 20, width: "32%" });
 
-        // this.buildMetricArea(rootDiv, controllerConfig);
-
-        // this.buildMappingArea(rootDiv, controllerConfig);
-
     }
 
-    buildMetricArea(rootDiv, controllerConfig) {
+    buildUiLayer(layerID) {
+        this.buildMetricArea(layerID);
+        this.buildMappingArea(layerID);
+        this.buildDeleteButton(layerID);
+    }
+
+    buildMetricArea(layerID) {
         var metricTextNode = document.createElement("p");
-        metricTextNode.id = "metrics";
-        metricTextNode.classList.add("metrics");
+        metricTextNode.id = "metrics" + layerID;
+        metricTextNode.classList.add("metrics", "layer" + layerID);
         metricTextNode.textContent = "Metrics";
-        rootDiv.appendChild(metricTextNode);
+        this.rootDiv.appendChild(metricTextNode);
 
         var metricDropDownDiv = document.createElement("div");
-        metricDropDownDiv.id = domIDs.metricDropDown;
-        rootDiv.appendChild(metricDropDownDiv);
+        metricDropDownDiv.id = domIDs.metricDropDown + layerID;
+        metricDropDownDiv.classList.add(domIDs.metricDropDown, "layer" + layerID);
+        this.rootDiv.appendChild(metricDropDownDiv);
 
-        $(cssIDs.metricDropDown).jqxDropDownList({ source: controllerConfig.metrics, placeHolder: "Select Metric", width: 250, height: 30, dropDownVerticalAlignment: "top" });
+        $(cssIDs.metricDropDown + layerID).jqxDropDownList({
+            source: metricController.controllerConfig.metrics,
+            placeHolder: "Select Metric",
+            width: 250, height: 30,
+            dropDownVerticalAlignment: "top"
+        });
 
-        $(cssIDs.metricDropDown).on("change", this.metricDropDownSelected);
+        $(cssIDs.metricDropDown + layerID).on("change", () => { this.metricDropDownSelected(layerID) });
 
         var metricFromTextNode = document.createElement("p");
-        metricFromTextNode.id = domIDs.metricFromText;
-        metricFromTextNode.classList.add("metricParameter");
+        metricFromTextNode.id = domIDs.metricFromText + layerID;
+        metricFromTextNode.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
         metricFromTextNode.textContent = "Metric - From";
-        rootDiv.appendChild(metricFromTextNode);
+        this.rootDiv.appendChild(metricFromTextNode);
 
         var metricFromInput = document.createElement("input");
         metricFromInput.type = "number";
-        metricFromInput.id = domIDs.metricFromInput;
-        metricFromInput.classList.add("metricParameter");
-        rootDiv.appendChild(metricFromInput);
+        metricFromInput.id = domIDs.metricFromInput + layerID;
+        metricFromInput.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(metricFromInput);
 
-        $(cssIDs.metricFromInput).jqxInput({ placeHolder: "From", width: 100, height: 30, minLength: 1 });
+        $(cssIDs.metricFromInput + layerID).jqxInput({ placeHolder: "From", width: 100, height: 30, minLength: 1 });
 
         var metricFromDateInput = document.createElement("div");
-        metricFromDateInput.id = domIDs.metricFromDateInput;
-        metricFromDateInput.classList.add("metricParameter");
-        rootDiv.appendChild(metricFromDateInput);
+        metricFromDateInput.id = domIDs.metricFromDateInput + layerID;
+        metricFromDateInput.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(metricFromDateInput);
 
-        $(cssIDs.metricFromDateInput).jqxDateTimeInput({ placeHolder: "YYYYMMDD", formatString: "yyyyMMdd", value: null, dropDownVerticalAlignment: "top", width: 100, height: 30 });
+        $(cssIDs.metricFromDateInput + layerID).jqxDateTimeInput({
+            placeHolder: "YYYYMMDD",
+            formatString: "yyyyMMdd",
+            value: null,
+            dropDownVerticalAlignment: "top",
+            width: 100, height: 30
+        });
 
 
         var metricToTextNode = document.createElement("p");
-        metricToTextNode.id = domIDs.metricToText;
-        metricToTextNode.classList.add("metricParameter");
+        metricToTextNode.id = domIDs.metricToText + layerID;
+        metricToTextNode.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
         metricToTextNode.textContent = "Metric - To";
-        rootDiv.appendChild(metricToTextNode);
+        this.rootDiv.appendChild(metricToTextNode);
 
         var metricToInput = document.createElement("input");
         metricToInput.type = "number";
-        metricToInput.id = domIDs.metricToInput;
-        metricToInput.classList.add("metricParameter");
-        rootDiv.appendChild(metricToInput);
+        metricToInput.id = domIDs.metricToInput + layerID;
+        metricToInput.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(metricToInput);
 
-        $(cssIDs.metricToInput).jqxInput({ placeHolder: "To", width: 100, height: 30, minLength: 1 });
+        $(cssIDs.metricToInput + layerID).jqxInput({ placeHolder: "To", width: 100, height: 30, minLength: 1 });
 
         var metricToDateInput = document.createElement("div");
-        metricToDateInput.id = domIDs.metricToDateInput;
-        metricToDateInput.classList.add("metricParameter");
-        rootDiv.appendChild(metricToDateInput);
+        metricToDateInput.id = domIDs.metricToDateInput + layerID;
+        metricToDateInput.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(metricToDateInput);
 
-        $(cssIDs.metricToDateInput).jqxDateTimeInput({ placeHolder: "YYYYMMDD", formatString: "yyyyMMdd", value: null, dropDownVerticalAlignment: "top", width: 100, height: 30 });
-
+        $(cssIDs.metricToDateInput + layerID).jqxDateTimeInput({
+            placeHolder: "YYYYMMDD",
+            formatString: "yyyyMMdd",
+            value: null,
+            dropDownVerticalAlignment: "top",
+            width: 100, height: 30
+        });
     }
 
-    metricDropDownSelected() {
-        $(cssIDs.metricFromText).show();
-        $(cssIDs.metricToText).show();
+    metricDropDownSelected(layerID) {
+        $(cssIDs.metricFromText + layerID).show();
+        $(cssIDs.metricToText + layerID).show();
 
-        switch ($(cssIDs.metricDropDown).val()) {
+        switch ($(cssIDs.metricDropDown + layerID).val()) {
             case metrics.numberOfStatements:
-                $(cssIDs.metricFromDateInput).hide();
-                $(cssIDs.metricToDateInput).hide();
-                $(cssIDs.metricFromInput).show();
-                $(cssIDs.metricToInput).show();
+                $(cssIDs.metricFromDateInput + layerID).hide();
+                $(cssIDs.metricToDateInput + layerID).hide();
+                $(cssIDs.metricFromInput + layerID).show();
+                $(cssIDs.metricToInput + layerID).show();
                 break;
             case metrics.dateOfCreation:
             case metrics.dateOfLastChange:
-                $(cssIDs.metricFromInput).hide();
-                $(cssIDs.metricToInput).hide();
-                $(cssIDs.metricFromDateInput).show();
-                $(cssIDs.metricToDateInput).show();
+                $(cssIDs.metricFromInput + layerID).hide();
+                $(cssIDs.metricToInput + layerID).hide();
+                $(cssIDs.metricFromDateInput + layerID).show();
+                $(cssIDs.metricToDateInput + layerID).show();
                 break;
-
         }
     }
 
-    buildMappingArea(rootDiv, controllerConfig) {
+    buildMappingArea(layerID) {
         var mappingTextNode = document.createElement("p");
-        mappingTextNode.id = "mappings";
-        mappingTextNode.classList.add("mappings");
+        mappingTextNode.id = "mappings" + layerID;
+        mappingTextNode.classList.add("mappings", "layer" + layerID);
         mappingTextNode.textContent = "Mappings";
-        rootDiv.appendChild(mappingTextNode);
+        this.rootDiv.appendChild(mappingTextNode);
 
         var mappingDropDownDiv = document.createElement("div");
-        mappingDropDownDiv.id = domIDs.mappingDropDown;
-        rootDiv.appendChild(mappingDropDownDiv);
+        mappingDropDownDiv.id = domIDs.mappingDropDown + layerID;
+        mappingDropDownDiv.classList.add(domIDs.mappingDropDown, "layer" + layerID);
+        this.rootDiv.appendChild(mappingDropDownDiv);
 
-        $(cssIDs.mappingDropDown).jqxDropDownList({ source: controllerConfig.mappings, placeHolder: "Select Mapping", width: 250, height: 30, dropDownVerticalAlignment: "top" });
+        $(cssIDs.mappingDropDown + layerID).jqxDropDownList({
+            source: metricController.controllerConfig.mappings,
+            placeHolder: "Select Mapping",
+            width: 250, height: 30,
+            dropDownVerticalAlignment: "top"
+        });
 
-        $(cssIDs.mappingDropDown).on("change", this.mappingDropDownSelected);
+        $(cssIDs.mappingDropDown + layerID).on("change", () => { this.mappingDropDownSelected(layerID) });
 
 
         var mappingFromTextNode = document.createElement("p");
-        mappingFromTextNode.id = "mappingFromText";
-        mappingFromTextNode.classList.add("mappingParameter");
+        mappingFromTextNode.id = "mappingFromText" + layerID;
+        mappingFromTextNode.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
         mappingFromTextNode.textContent = "Mapping - From";
-        rootDiv.appendChild(mappingFromTextNode);
+        this.rootDiv.appendChild(mappingFromTextNode);
 
         var mappingFromInput = document.createElement("input");
         mappingFromInput.type = "text";
-        mappingFromInput.id = "mappingFromInput";
-        mappingFromInput.classList.add("mappingParameter");
-        rootDiv.appendChild(mappingFromInput);
+        mappingFromInput.id = "mappingFromInput" + layerID;
+        mappingFromInput.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(mappingFromInput);
 
-        $("#mappingFromInput").jqxInput({ placeHolder: "From", width: 100, height: 30, minLength: 1 });
+        $("#mappingFromInput" + layerID).jqxInput({ placeHolder: "From", width: 100, height: 30, minLength: 1 });
 
 
         var mappingToTextNode = document.createElement("p");
-        mappingToTextNode.id = "mappingToText";
-        mappingToTextNode.classList.add("mappingParameter");
+        mappingToTextNode.id = "mappingToText" + layerID;
+        mappingToTextNode.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
         mappingToTextNode.textContent = "Mapping - To";
-        rootDiv.appendChild(mappingToTextNode);
+        this.rootDiv.appendChild(mappingToTextNode);
 
         var mappingToInput = document.createElement("input");
         mappingToInput.type = "text";
-        mappingToInput.id = "mappingToInput";
-        mappingToInput.classList.add("mappingParameter");
-        rootDiv.appendChild(mappingToInput);
+        mappingToInput.id = "mappingToInput" + layerID;
+        mappingToInput.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(mappingToInput);
 
-        $("#mappingToInput").jqxInput({ placeHolder: "To", width: 100, height: 30, minLength: 1 });
+        $("#mappingToInput" + layerID).jqxInput({ placeHolder: "To", width: 100, height: 30, minLength: 1 });
 
 
         var mappingColorDropDownDiv = document.createElement("div");
-        mappingColorDropDownDiv.id = domIDs.mappingColorDropDown;
-        mappingColorDropDownDiv.classList.add("mappingParameter");
-        rootDiv.appendChild(mappingColorDropDownDiv);
+        mappingColorDropDownDiv.id = domIDs.mappingColorDropDown + layerID;
+        mappingColorDropDownDiv.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(mappingColorDropDownDiv);
 
-        $(cssIDs.mappingColorDropDown).jqxDropDownList({ source: this.colors, placeHolder: "Select Color", width: 250, height: 30, dropDownVerticalAlignment: "top" });
+        $(cssIDs.mappingColorDropDown + layerID).jqxDropDownList({
+            source: colors,
+            placeHolder: "Select Color",
+            width: 250, height: 30,
+            dropDownVerticalAlignment: "top"
+        });
 
 
         var mappingStartColorDropDownDiv = document.createElement("div");
-        mappingStartColorDropDownDiv.id = domIDs.mappingStartColorDropDown;
-        mappingStartColorDropDownDiv.classList.add("mappingParameter");
-        rootDiv.appendChild(mappingStartColorDropDownDiv);
+        mappingStartColorDropDownDiv.id = domIDs.mappingStartColorDropDown + layerID;
+        mappingStartColorDropDownDiv.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(mappingStartColorDropDownDiv);
 
-        $(cssIDs.mappingStartColorDropDown).jqxDropDownList({ source: this.colors, placeHolder: "Select Start Color", width: 250, height: 30, dropDownVerticalAlignment: "top" });
+        $(cssIDs.mappingStartColorDropDown + layerID).jqxDropDownList({
+            source: colors,
+            placeHolder: "Select Start Color",
+            width: 250, height: 30,
+            dropDownVerticalAlignment: "top"
+        });
 
         var mappingEndColorDropDownDiv = document.createElement("div");
-        mappingEndColorDropDownDiv.id = domIDs.mappingEndColorDropDown;
-        mappingEndColorDropDownDiv.classList.add("mappingParameter");
-        rootDiv.appendChild(mappingEndColorDropDownDiv);
+        mappingEndColorDropDownDiv.id = domIDs.mappingEndColorDropDown + layerID;
+        mappingEndColorDropDownDiv.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(mappingEndColorDropDownDiv);
 
-        $(cssIDs.mappingEndColorDropDown).jqxDropDownList({ source: this.colors, placeHolder: "Select End Color", width: 250, height: 30, dropDownVerticalAlignment: "top" });
+        $(cssIDs.mappingEndColorDropDown + layerID).jqxDropDownList({
+            source: colors,
+            placeHolder: "Select End Color",
+            width: 250, height: 30,
+            dropDownVerticalAlignment: "top"
+        });
 
-        
+
         var transparencyInputDiv = document.createElement("div");
-        transparencyInputDiv.id = domIDs.mappingTransparencyInput;
-        transparencyInputDiv.classList.add("mappingParameter");
-        rootDiv.appendChild(transparencyInputDiv);
+        transparencyInputDiv.id = domIDs.mappingTransparencyInput + layerID;
+        transparencyInputDiv.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(transparencyInputDiv);
 
-        $(cssIDs.mappingTransparencyInput).jqxNumberInput({ width: 250, height: 30, min: 0, max: 1, inputMode: "simple", spinButtons: true });
+        $(cssIDs.mappingTransparencyInput + layerID).jqxNumberInput({
+            width: 250, height: 30,
+            min: 0, max: 1,
+            inputMode: "simple",
+            spinButtons: true
+        });
 
         var mappingPeriodTextNode = document.createElement("p");
-        mappingPeriodTextNode.id = domIDs.mappingPeriodText;
-        mappingPeriodTextNode.classList.add("mappingParameter");
+        mappingPeriodTextNode.id = domIDs.mappingPeriodText + layerID;
+        mappingPeriodTextNode.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
         mappingPeriodTextNode.textContent = "Period in ms";
-        rootDiv.appendChild(mappingPeriodTextNode);
+        this.rootDiv.appendChild(mappingPeriodTextNode);
 
         var mappingPeriodInput = document.createElement("input");
         mappingPeriodInput.type = "number";
-        mappingPeriodInput.id = domIDs.mappingPeriodInput;
-        mappingPeriodInput.classList.add("mappingParameter");
-        rootDiv.appendChild(mappingPeriodInput);
+        mappingPeriodInput.id = domIDs.mappingPeriodInput + layerID;
+        mappingPeriodInput.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(mappingPeriodInput);
 
-        $(cssIDs.mappingPeriodInput).jqxInput({ width: 100, height: 30, minLength: 1 });
+        $(cssIDs.mappingPeriodInput + layerID).jqxInput({ width: 100, height: 30, minLength: 1 });
 
 
         var mappingScaleTextNode = document.createElement("p");
-        mappingScaleTextNode.id = domIDs.mappingScaleText;
-        mappingScaleTextNode.classList.add("mappingParameter");
+        mappingScaleTextNode.id = domIDs.mappingScaleText + layerID;
+        mappingScaleTextNode.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
         mappingScaleTextNode.textContent = "Scale";
-        rootDiv.appendChild(mappingScaleTextNode);
+        this.rootDiv.appendChild(mappingScaleTextNode);
 
         var mappingScaleInput = document.createElement("input");
         mappingScaleInput.type = "number";
-        mappingScaleInput.id = domIDs.mappingScaleInput;
-        mappingScaleInput.classList.add("mappingParameter");
-        rootDiv.appendChild(mappingScaleInput);
+        mappingScaleInput.id = domIDs.mappingScaleInput + layerID;
+        mappingScaleInput.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        this.rootDiv.appendChild(mappingScaleInput);
 
-        $(cssIDs.mappingScaleInput).jqxInput({ width: 100, height: 30, minLength: 1 });
+        $(cssIDs.mappingScaleInput + layerID).jqxInput({ width: 100, height: 30, minLength: 1 });
     }
 
-    mappingDropDownSelected() {
-        $(".mappingParameter").hide();
-        switch ($(cssIDs.mappingDropDown).val()) {
+    mappingDropDownSelected(layerID) {
+        $(".mappingParameter" + layerID).hide();
+
+        switch ($(cssIDs.mappingDropDown + layerID).val()) {
             case mappings.color:
-                $(cssIDs.mappingColorDropDown).show();
+                $(cssIDs.mappingColorDropDown + layerID).show();
                 break;
             case mappings.colorGradient:
-                $(cssIDs.mappingStartColorDropDown).show();
-                $(cssIDs.mappingEndColorDropDown).show();
+                $(cssIDs.mappingStartColorDropDown + layerID).show();
+                $(cssIDs.mappingEndColorDropDown + layerID).show();
                 break;
             case mappings.transparency:
-                $(cssIDs.mappingTransparencyInput).show();
+                $(cssIDs.mappingTransparencyInput + layerID).show();
                 break;
             case mappings.pulsation:
-                $(cssIDs.mappingPeriodText).show();
-                $(cssIDs.mappingPeriodInput).show();
-                $(cssIDs.mappingScaleText).show();
-                $(cssIDs.mappingScaleInput).show();
+                $(cssIDs.mappingPeriodText + layerID).show();
+                $(cssIDs.mappingPeriodInput + layerID).show();
+                $(cssIDs.mappingScaleText + layerID).show();
+                $(cssIDs.mappingScaleInput + layerID).show();
                 break;
             case mappings.flashing:
-                $(cssIDs.mappingPeriodText).show();
-                $(cssIDs.mappingPeriodInput).show();
-                $(cssIDs.mappingColorDropDown).show();
+                $(cssIDs.mappingPeriodText + layerID).show();
+                $(cssIDs.mappingPeriodInput + layerID).show();
+                $(cssIDs.mappingColorDropDown + layerID).show();
                 break;
             case mappings.rotation:
-                $(cssIDs.mappingPeriodText).show();
-                $(cssIDs.mappingPeriodInput).show();
+                $(cssIDs.mappingPeriodText + layerID).show();
+                $(cssIDs.mappingPeriodInput + layerID).show();
                 break;
         }
     }
 
-    resetUI() {
-        $(cssIDs.metricDropDown).jqxDropDownList("clearSelection");
-        $(cssIDs.mappingDropDown).jqxDropDownList("clearSelection");
+    buildDeleteButton(layerID) {
+        var deleteButtonDiv = document.createElement("div");
+        deleteButtonDiv.id = domIDs.deleteButton + layerID;
+        deleteButtonDiv.classList.add(domIDs.deleteButton, "layer" + layerID);
+        this.rootDiv.appendChild(deleteButtonDiv);
 
-        $(".metricParameter").jqxInput("clear");
-        $(".metricParameter").jqxDateTimeInput("clear");
+        $(cssIDs.deleteButton + layerID).jqxButton({ theme: "metro", height: 30, width: 30, imgSrc: "./scripts/Metric/close.png" });
+        
+        $(cssIDs.deleteButton + layerID).click((event) => metricController.removeLayer(event));
+    }
 
-        $(".mappingParameter").jqxInput("clear");
-        $(".mappingParameter").jqxDropDownList("clearSelection");
+    destroyLayerUI(layerID) {
+        this.resetLayerUI(layerID);
+        $(".layer" + layerID).remove();        
+    }
 
-        $(cssIDs.mappingColorDropDown).jqxDropDownList("clearSelection");
+    resetLayerUI(layerID) {
+        $(cssIDs.metricDropDown + layerID).jqxDropDownList("clearSelection");
+        $(cssIDs.mappingDropDown + layerID).jqxDropDownList("clearSelection");
 
-        $(".metricParameter").hide();
-        $(".mappingParameter").hide();
+        $(".metricParameter" + layerID).jqxInput("clear");
+        $(".metricParameter" + layerID).jqxDateTimeInput("clear");
+
+        $(".mappingParameter" + layerID).jqxInput("clear");
+        $(".mappingParameter" + layerID).jqxNumberInput("clear");
+        $(".mappingParameter" + layerID).jqxDropDownList("clearSelection");
+
+        $(cssIDs.mappingColorDropDown + layerID).jqxDropDownList("clearSelection");
+
+        $(".metricParameter" + layerID).hide();
+        $(".mappingParameter" + layerID).hide();
     }
 
 }
