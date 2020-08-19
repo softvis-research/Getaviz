@@ -301,7 +301,7 @@ class MetricLayer {
         $(cssIDs.deleteButton + this.id).jqxButton({ theme: "metro", height: 30, width: 30, imgSrc: "./scripts/Metric/close.png" });
         
         // $(cssIDs.deleteButton + this.id).click(() => this.container.removeLayer());
-        $(cssIDs.deleteButton + this.id).click(() => metricController.removeLayer());
+        $(cssIDs.deleteButton + this.id).click((event) => metricController.removeLayer(event));
     }
 
     readUIData() {

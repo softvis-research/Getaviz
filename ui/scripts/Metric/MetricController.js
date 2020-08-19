@@ -74,7 +74,11 @@ var metricController = (function () {
         }
     }
 
-    function removeLayer() {
+    function removeLayer(event) {
+        if ($("#" + event.currentTarget.id).jqxButton("disabled")) {
+            return;
+        }
+
         if (layerCounter == 1) {
             reset();
         } else {

@@ -180,7 +180,6 @@ EOT;
 <script type="text/javascript" src="scripts/Metric/Constants.js"></script>
 <script type="text/javascript" src="scripts/Metric/ColorGradient.js"></script>
 <script type="text/javascript" src="scripts/Metric/MetricLayer.js"></script>
-<script type="text/javascript" src="scripts/Metric/MetricContainer.js"></script>
 <script type="text/javascript" src="scripts/Metric/DomHelper.js"></script>
 <script type="text/javascript" src="scripts/Metric/MetricController.js"></script>
 
