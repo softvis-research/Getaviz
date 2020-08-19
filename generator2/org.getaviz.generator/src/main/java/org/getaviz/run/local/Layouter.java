@@ -18,7 +18,6 @@ public class Layouter {
     private static ACityRepository aCityRepository;
 
     public static void main(String[] args) {
-        boolean isSilentMode = true;
         nodeRepository = new SourceNodeRepository();
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
