@@ -17,7 +17,7 @@ var metricController = (function () {
     };
 
     var domHelper;
-    
+
     var layerCounter = 0;
     var layers = [];
 
@@ -70,7 +70,7 @@ var metricController = (function () {
         domHelper.buildUiLayer(layerCounter);
 
         if (layerCounter > 1) {
-           $(cssIDs.deleteButton + (layerCounter - 1)).jqxButton({ disabled: true });
+            $(cssIDs.deleteButton + (layerCounter - 1)).jqxButton({ disabled: true });
         }
     }
 
@@ -89,7 +89,7 @@ var metricController = (function () {
             //really necessary?
             layers.forEach(layer => layer.doMapping());
         }
-        
+
         $(cssIDs.deleteButton + layerCounter).jqxButton({ disabled: false });
     }
 
@@ -122,7 +122,7 @@ var metricController = (function () {
         while (layerCounter > 1) {
             removeLayer();
         }
-        
+
         layers[0].reset();
         domHelper.resetLayerUI(1);
     }

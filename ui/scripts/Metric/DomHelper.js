@@ -53,14 +53,14 @@ class DomHelper {
 
     buildMetricArea(layerID) {
         var metricTextNode = document.createElement("p");
-        metricTextNode.id = "metrics" + layerID;
-        metricTextNode.classList.add("metrics", "layer" + layerID);
+        metricTextNode.id = domIDs.metrics + layerID;
+        metricTextNode.classList.add(domClasses.metrics, domClasses.layer + layerID);
         metricTextNode.textContent = "Metrics";
         this.rootDiv.appendChild(metricTextNode);
 
         var metricDropDownDiv = document.createElement("div");
         metricDropDownDiv.id = domIDs.metricDropDown + layerID;
-        metricDropDownDiv.classList.add(domIDs.metricDropDown, "layer" + layerID);
+        metricDropDownDiv.classList.add(domClasses.metricDropDown, domClasses.layer + layerID);
         this.rootDiv.appendChild(metricDropDownDiv);
 
         $(cssIDs.metricDropDown + layerID).jqxDropDownList({
@@ -74,21 +74,21 @@ class DomHelper {
 
         var metricFromTextNode = document.createElement("p");
         metricFromTextNode.id = domIDs.metricFromText + layerID;
-        metricFromTextNode.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
+        metricFromTextNode.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID);
         metricFromTextNode.textContent = "Metric - From";
         this.rootDiv.appendChild(metricFromTextNode);
 
         var metricFromInput = document.createElement("input");
         metricFromInput.type = "number";
         metricFromInput.id = domIDs.metricFromInput + layerID;
-        metricFromInput.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
+        metricFromInput.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(metricFromInput);
 
         $(cssIDs.metricFromInput + layerID).jqxInput({ placeHolder: "From", width: 100, height: 30, minLength: 1 });
 
         var metricFromDateInput = document.createElement("div");
         metricFromDateInput.id = domIDs.metricFromDateInput + layerID;
-        metricFromDateInput.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
+        metricFromDateInput.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(metricFromDateInput);
 
         $(cssIDs.metricFromDateInput + layerID).jqxDateTimeInput({
@@ -102,21 +102,21 @@ class DomHelper {
 
         var metricToTextNode = document.createElement("p");
         metricToTextNode.id = domIDs.metricToText + layerID;
-        metricToTextNode.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
+        metricToTextNode.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID);
         metricToTextNode.textContent = "Metric - To";
         this.rootDiv.appendChild(metricToTextNode);
 
         var metricToInput = document.createElement("input");
         metricToInput.type = "number";
         metricToInput.id = domIDs.metricToInput + layerID;
-        metricToInput.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
+        metricToInput.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(metricToInput);
 
         $(cssIDs.metricToInput + layerID).jqxInput({ placeHolder: "To", width: 100, height: 30, minLength: 1 });
 
         var metricToDateInput = document.createElement("div");
         metricToDateInput.id = domIDs.metricToDateInput + layerID;
-        metricToDateInput.classList.add("metricParameter", "metricParameter" + layerID, "layer" + layerID);
+        metricToDateInput.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(metricToDateInput);
 
         $(cssIDs.metricToDateInput + layerID).jqxDateTimeInput({
@@ -151,14 +151,14 @@ class DomHelper {
 
     buildMappingArea(layerID) {
         var mappingTextNode = document.createElement("p");
-        mappingTextNode.id = "mappings" + layerID;
-        mappingTextNode.classList.add("mappings", "layer" + layerID);
+        mappingTextNode.id = domIDs.mappings + layerID;
+        mappingTextNode.classList.add(domClasses.mappings, domClasses.layer + layerID);
         mappingTextNode.textContent = "Mappings";
         this.rootDiv.appendChild(mappingTextNode);
 
         var mappingDropDownDiv = document.createElement("div");
         mappingDropDownDiv.id = domIDs.mappingDropDown + layerID;
-        mappingDropDownDiv.classList.add(domIDs.mappingDropDown, "layer" + layerID);
+        mappingDropDownDiv.classList.add(domClasses.mappingDropDown, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingDropDownDiv);
 
         $(cssIDs.mappingDropDown + layerID).jqxDropDownList({
@@ -172,38 +172,38 @@ class DomHelper {
 
 
         var mappingFromTextNode = document.createElement("p");
-        mappingFromTextNode.id = "mappingFromText" + layerID;
-        mappingFromTextNode.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        mappingFromTextNode.id = domIDs.mappingFromText + layerID;
+        mappingFromTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         mappingFromTextNode.textContent = "Mapping - From";
         this.rootDiv.appendChild(mappingFromTextNode);
 
         var mappingFromInput = document.createElement("input");
         mappingFromInput.type = "text";
-        mappingFromInput.id = "mappingFromInput" + layerID;
-        mappingFromInput.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        mappingFromInput.id = domIDs.mappingFromInput + layerID;
+        mappingFromInput.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingFromInput);
 
-        $("#mappingFromInput" + layerID).jqxInput({ placeHolder: "From", width: 100, height: 30, minLength: 1 });
+        $(cssIDs.mappingFromInput + layerID).jqxInput({ placeHolder: "From", width: 100, height: 30, minLength: 1 });
 
 
         var mappingToTextNode = document.createElement("p");
-        mappingToTextNode.id = "mappingToText" + layerID;
-        mappingToTextNode.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        mappingToTextNode.id = domIDs.mappingToText + layerID;
+        mappingToTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         mappingToTextNode.textContent = "Mapping - To";
         this.rootDiv.appendChild(mappingToTextNode);
 
         var mappingToInput = document.createElement("input");
         mappingToInput.type = "text";
-        mappingToInput.id = "mappingToInput" + layerID;
-        mappingToInput.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        mappingToInput.id = domIDs.mappingToInput + layerID;
+        mappingToInput.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingToInput);
 
-        $("#mappingToInput" + layerID).jqxInput({ placeHolder: "To", width: 100, height: 30, minLength: 1 });
+        $(cssIDs.mappingToInput + layerID).jqxInput({ placeHolder: "To", width: 100, height: 30, minLength: 1 });
 
 
         var mappingColorDropDownDiv = document.createElement("div");
         mappingColorDropDownDiv.id = domIDs.mappingColorDropDown + layerID;
-        mappingColorDropDownDiv.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        mappingColorDropDownDiv.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingColorDropDownDiv);
 
         $(cssIDs.mappingColorDropDown + layerID).jqxDropDownList({
@@ -216,7 +216,7 @@ class DomHelper {
 
         var mappingStartColorDropDownDiv = document.createElement("div");
         mappingStartColorDropDownDiv.id = domIDs.mappingStartColorDropDown + layerID;
-        mappingStartColorDropDownDiv.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        mappingStartColorDropDownDiv.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingStartColorDropDownDiv);
 
         $(cssIDs.mappingStartColorDropDown + layerID).jqxDropDownList({
@@ -228,7 +228,7 @@ class DomHelper {
 
         var mappingEndColorDropDownDiv = document.createElement("div");
         mappingEndColorDropDownDiv.id = domIDs.mappingEndColorDropDown + layerID;
-        mappingEndColorDropDownDiv.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        mappingEndColorDropDownDiv.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingEndColorDropDownDiv);
 
         $(cssIDs.mappingEndColorDropDown + layerID).jqxDropDownList({
@@ -241,7 +241,7 @@ class DomHelper {
 
         var transparencyInputDiv = document.createElement("div");
         transparencyInputDiv.id = domIDs.mappingTransparencyInput + layerID;
-        transparencyInputDiv.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        transparencyInputDiv.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(transparencyInputDiv);
 
         $(cssIDs.mappingTransparencyInput + layerID).jqxNumberInput({
@@ -253,14 +253,14 @@ class DomHelper {
 
         var mappingPeriodTextNode = document.createElement("p");
         mappingPeriodTextNode.id = domIDs.mappingPeriodText + layerID;
-        mappingPeriodTextNode.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        mappingPeriodTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         mappingPeriodTextNode.textContent = "Period in ms";
         this.rootDiv.appendChild(mappingPeriodTextNode);
 
         var mappingPeriodInput = document.createElement("input");
         mappingPeriodInput.type = "number";
         mappingPeriodInput.id = domIDs.mappingPeriodInput + layerID;
-        mappingPeriodInput.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        mappingPeriodInput.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingPeriodInput);
 
         $(cssIDs.mappingPeriodInput + layerID).jqxInput({ width: 100, height: 30, minLength: 1 });
@@ -268,21 +268,21 @@ class DomHelper {
 
         var mappingScaleTextNode = document.createElement("p");
         mappingScaleTextNode.id = domIDs.mappingScaleText + layerID;
-        mappingScaleTextNode.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        mappingScaleTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         mappingScaleTextNode.textContent = "Scale";
         this.rootDiv.appendChild(mappingScaleTextNode);
 
         var mappingScaleInput = document.createElement("input");
         mappingScaleInput.type = "number";
         mappingScaleInput.id = domIDs.mappingScaleInput + layerID;
-        mappingScaleInput.classList.add("mappingParameter", "mappingParameter" + layerID, "layer" + layerID);
+        mappingScaleInput.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingScaleInput);
 
         $(cssIDs.mappingScaleInput + layerID).jqxInput({ width: 100, height: 30, minLength: 1 });
     }
 
     mappingDropDownSelected(layerID) {
-        $(".mappingParameter" + layerID).hide();
+        $(cssClasses.mappingParameter + layerID).hide();
 
         switch ($(cssIDs.mappingDropDown + layerID).val()) {
             case mappings.color:
@@ -316,34 +316,34 @@ class DomHelper {
     buildDeleteButton(layerID) {
         var deleteButtonDiv = document.createElement("div");
         deleteButtonDiv.id = domIDs.deleteButton + layerID;
-        deleteButtonDiv.classList.add(domIDs.deleteButton, "layer" + layerID);
+        deleteButtonDiv.classList.add(cssClasses.deleteButton, cssClasses.layer + layerID);
         this.rootDiv.appendChild(deleteButtonDiv);
 
         $(cssIDs.deleteButton + layerID).jqxButton({ theme: "metro", height: 30, width: 30, imgSrc: "./scripts/Metric/close.png" });
-        
+
         $(cssIDs.deleteButton + layerID).click((event) => metricController.removeLayer(event));
     }
 
     destroyLayerUI(layerID) {
         this.resetLayerUI(layerID);
-        $(".layer" + layerID).remove();        
+        $(cssClasses.layer + layerID).remove();
     }
 
     resetLayerUI(layerID) {
         $(cssIDs.metricDropDown + layerID).jqxDropDownList("clearSelection");
         $(cssIDs.mappingDropDown + layerID).jqxDropDownList("clearSelection");
 
-        $(".metricParameter" + layerID).jqxInput("clear");
-        $(".metricParameter" + layerID).jqxDateTimeInput("clear");
+        $(cssClasses.metricParameter + layerID).jqxInput("clear");
+        $(cssClasses.metricParameter + layerID).jqxDateTimeInput("clear");
 
-        $(".mappingParameter" + layerID).jqxInput("clear");
-        $(".mappingParameter" + layerID).jqxNumberInput("clear");
-        $(".mappingParameter" + layerID).jqxDropDownList("clearSelection");
+        $(cssClasses.mappingParameter + layerID).jqxInput("clear");
+        $(cssClasses.mappingParameter + layerID).jqxNumberInput("clear");
+        $(cssClasses.mappingParameter + layerID).jqxDropDownList("clearSelection");
 
         $(cssIDs.mappingColorDropDown + layerID).jqxDropDownList("clearSelection");
 
-        $(".metricParameter" + layerID).hide();
-        $(".mappingParameter" + layerID).hide();
+        $(cssClasses.metricParameter + layerID).hide();
+        $(cssClasses.mappingParameter + layerID).hide();
     }
 
 }
