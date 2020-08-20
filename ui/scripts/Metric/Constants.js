@@ -88,7 +88,9 @@ const domClasses = {
     metricDropDown: "metricDropDown",
     mappingDropDown: "mappingDropDown",
 
-    deleteButton: "deleteButton"
+    deleteButton: "deleteButton",
+
+    textLabel: "textLabel"
 }
 
 const cssClasses = {
@@ -128,4 +130,14 @@ const colors = [
     "black",
     "yellow",
     "orange"
-]
+];
+
+const widgetSize = {
+    buttonHeight: 20,
+    dropDownHeight: 30,
+    inputHeight: 30,
+    deleteButtonHeight: 30,
+
+    dropDownWidth: "15%",
+    inputWidth: "8%",
+}

@@ -27,21 +27,21 @@ class DomHelper {
         executeButtonDiv.textContent = "Execute";
         this.rootDiv.appendChild(executeButtonDiv);
 
-        $(cssIDs.executeButton).jqxButton({ theme: "metro", height: 20, width: "32%" });
+        $(cssIDs.executeButton).jqxButton({ theme: "metro", height: widgetSize.buttonHeight, width: "32%" });
 
         var resetButtonDiv = document.createElement("div");
         resetButtonDiv.id = domIDs.resetButton;
         resetButtonDiv.textContent = "Reset";
         this.rootDiv.appendChild(resetButtonDiv);
 
-        $(cssIDs.resetButton).jqxButton({ theme: "metro", height: 20, width: "32%" });
+        $(cssIDs.resetButton).jqxButton({ theme: "metro", height: widgetSize.buttonHeight, width: "32%" });
 
         var addLayerButtonDiv = document.createElement("div");
         addLayerButtonDiv.id = domIDs.addLayerButton;
         addLayerButtonDiv.textContent = "Add Metric-Layer";
         this.rootDiv.appendChild(addLayerButtonDiv);
 
-        $(cssIDs.addLayerButton).jqxButton({ theme: "metro", height: 20, width: "32%" });
+        $(cssIDs.addLayerButton).jqxButton({ theme: "metro", height: widgetSize.buttonHeight, width: "32%" });
 
     }
 
@@ -52,9 +52,9 @@ class DomHelper {
     }
 
     buildMetricArea(layerID) {
-        var metricTextNode = document.createElement("p");
+        var metricTextNode = document.createElement("label");
         metricTextNode.id = domIDs.metrics + layerID;
-        metricTextNode.classList.add(domClasses.metrics, domClasses.layer + layerID);
+        metricTextNode.classList.add(domClasses.metrics, domClasses.layer + layerID, domClasses.textLabel);
         metricTextNode.textContent = "Metrics";
         this.rootDiv.appendChild(metricTextNode);
 
@@ -64,18 +64,20 @@ class DomHelper {
         this.rootDiv.appendChild(metricDropDownDiv);
 
         $(cssIDs.metricDropDown + layerID).jqxDropDownList({
-            source: metricController.controllerConfig.metrics,
+            source: this.controllerConfig.metrics,
             placeHolder: "Select Metric",
-            width: 250, height: 30,
-            dropDownVerticalAlignment: "top"
+            width: widgetSize.dropDownWidth, height: widgetSize.dropDownHeight,
+            dropDownVerticalAlignment: "top",
+            autoDropDownHeight: true,
+            autoItemsHeight: true
         });
 
         $(cssIDs.metricDropDown + layerID).on("change", () => { this.metricDropDownSelected(layerID) });
 
-        var metricFromTextNode = document.createElement("p");
+        var metricFromTextNode = document.createElement("label");
         metricFromTextNode.id = domIDs.metricFromText + layerID;
-        metricFromTextNode.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID);
-        metricFromTextNode.textContent = "Metric - From";
+        metricFromTextNode.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID, domClasses.textLabel);
+        metricFromTextNode.textContent = "From";
         this.rootDiv.appendChild(metricFromTextNode);
 
         var metricFromInput = document.createElement("input");
@@ -84,7 +86,7 @@ class DomHelper {
         metricFromInput.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(metricFromInput);
 
-        $(cssIDs.metricFromInput + layerID).jqxInput({ placeHolder: "From", width: 100, height: 30, minLength: 1 });
+        $(cssIDs.metricFromInput + layerID).jqxInput({ placeHolder: "From", width: widgetSize.inputWidth, height: widgetSize.inputHeight, minLength: 1 });
 
         var metricFromDateInput = document.createElement("div");
         metricFromDateInput.id = domIDs.metricFromDateInput + layerID;
@@ -96,14 +98,14 @@ class DomHelper {
             formatString: "yyyyMMdd",
             value: null,
             dropDownVerticalAlignment: "top",
-            width: 100, height: 30
+            width: widgetSize.inputWidth, height: widgetSize.inputHeight
         });
 
 
-        var metricToTextNode = document.createElement("p");
+        var metricToTextNode = document.createElement("label");
         metricToTextNode.id = domIDs.metricToText + layerID;
-        metricToTextNode.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID);
-        metricToTextNode.textContent = "Metric - To";
+        metricToTextNode.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID, domClasses.textLabel);
+        metricToTextNode.textContent = "To";
         this.rootDiv.appendChild(metricToTextNode);
 
         var metricToInput = document.createElement("input");
@@ -112,7 +114,7 @@ class DomHelper {
         metricToInput.classList.add(domClasses.metricParameter, domClasses.metricParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(metricToInput);
 
-        $(cssIDs.metricToInput + layerID).jqxInput({ placeHolder: "To", width: 100, height: 30, minLength: 1 });
+        $(cssIDs.metricToInput + layerID).jqxInput({ placeHolder: "To", width: widgetSize.inputWidth, height: widgetSize.inputHeight, minLength: 1 });
 
         var metricToDateInput = document.createElement("div");
         metricToDateInput.id = domIDs.metricToDateInput + layerID;
@@ -124,7 +126,7 @@ class DomHelper {
             formatString: "yyyyMMdd",
             value: null,
             dropDownVerticalAlignment: "top",
-            width: 100, height: 30
+            width: widgetSize.inputWidth, height: widgetSize.inputHeight
         });
     }
 
@@ -150,9 +152,9 @@ class DomHelper {
     }
 
     buildMappingArea(layerID) {
-        var mappingTextNode = document.createElement("p");
+        var mappingTextNode = document.createElement("label");
         mappingTextNode.id = domIDs.mappings + layerID;
-        mappingTextNode.classList.add(domClasses.mappings, domClasses.layer + layerID);
+        mappingTextNode.classList.add(domClasses.mappings, domClasses.layer + layerID, domClasses.textLabel);
         mappingTextNode.textContent = "Mappings";
         this.rootDiv.appendChild(mappingTextNode);
 
@@ -162,18 +164,20 @@ class DomHelper {
         this.rootDiv.appendChild(mappingDropDownDiv);
 
         $(cssIDs.mappingDropDown + layerID).jqxDropDownList({
-            source: metricController.controllerConfig.mappings,
+            source: this.controllerConfig.mappings,
             placeHolder: "Select Mapping",
-            width: 250, height: 30,
-            dropDownVerticalAlignment: "top"
+            width: widgetSize.dropDownWidth, height: widgetSize.dropDownHeight,
+            dropDownVerticalAlignment: "top",
+            autoDropDownHeight: true,
+            autoItemsHeight: true
         });
 
         $(cssIDs.mappingDropDown + layerID).on("change", () => { this.mappingDropDownSelected(layerID) });
 
 
-        var mappingFromTextNode = document.createElement("p");
+        var mappingFromTextNode = document.createElement("label");
         mappingFromTextNode.id = domIDs.mappingFromText + layerID;
-        mappingFromTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
+        mappingFromTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID, domClasses.textLabel);
         mappingFromTextNode.textContent = "Mapping - From";
         this.rootDiv.appendChild(mappingFromTextNode);
 
@@ -183,12 +187,12 @@ class DomHelper {
         mappingFromInput.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingFromInput);
 
-        $(cssIDs.mappingFromInput + layerID).jqxInput({ placeHolder: "From", width: 100, height: 30, minLength: 1 });
+        $(cssIDs.mappingFromInput + layerID).jqxInput({ placeHolder: "From", width: widgetSize.inputWidth, height: widgetSize.inputHeight, minLength: 1 });
 
 
-        var mappingToTextNode = document.createElement("p");
+        var mappingToTextNode = document.createElement("label");
         mappingToTextNode.id = domIDs.mappingToText + layerID;
-        mappingToTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
+        mappingToTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID, domClasses.textLabel);
         mappingToTextNode.textContent = "Mapping - To";
         this.rootDiv.appendChild(mappingToTextNode);
 
@@ -198,7 +202,7 @@ class DomHelper {
         mappingToInput.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingToInput);
 
-        $(cssIDs.mappingToInput + layerID).jqxInput({ placeHolder: "To", width: 100, height: 30, minLength: 1 });
+        $(cssIDs.mappingToInput + layerID).jqxInput({ placeHolder: "To", width: widgetSize.inputWidth, height: widgetSize.inputHeight, minLength: 1 });
 
 
         var mappingColorDropDownDiv = document.createElement("div");
@@ -209,8 +213,10 @@ class DomHelper {
         $(cssIDs.mappingColorDropDown + layerID).jqxDropDownList({
             source: colors,
             placeHolder: "Select Color",
-            width: 250, height: 30,
-            dropDownVerticalAlignment: "top"
+            width: widgetSize.dropDownWidth, height: widgetSize.dropDownHeight,
+            dropDownVerticalAlignment: "top",
+            autoDropDownHeight: true,
+            autoItemsHeight: true
         });
 
 
@@ -222,8 +228,10 @@ class DomHelper {
         $(cssIDs.mappingStartColorDropDown + layerID).jqxDropDownList({
             source: colors,
             placeHolder: "Select Start Color",
-            width: 250, height: 30,
-            dropDownVerticalAlignment: "top"
+            width: widgetSize.dropDownWidth, height: widgetSize.dropDownHeight,
+            dropDownVerticalAlignment: "top",
+            autoDropDownHeight: true,
+            autoItemsHeight: true
         });
 
         var mappingEndColorDropDownDiv = document.createElement("div");
@@ -234,8 +242,10 @@ class DomHelper {
         $(cssIDs.mappingEndColorDropDown + layerID).jqxDropDownList({
             source: colors,
             placeHolder: "Select End Color",
-            width: 250, height: 30,
-            dropDownVerticalAlignment: "top"
+            width: widgetSize.dropDownWidth, height: widgetSize.dropDownHeight,
+            dropDownVerticalAlignment: "top",
+            autoDropDownHeight: true,
+            autoItemsHeight: true
         });
 
 
@@ -245,15 +255,15 @@ class DomHelper {
         this.rootDiv.appendChild(transparencyInputDiv);
 
         $(cssIDs.mappingTransparencyInput + layerID).jqxNumberInput({
-            width: 250, height: 30,
+            width: widgetSize.inputWidth, height: widgetSize.inputHeight,
             min: 0, max: 1,
             inputMode: "simple",
             spinButtons: true
         });
 
-        var mappingPeriodTextNode = document.createElement("p");
+        var mappingPeriodTextNode = document.createElement("label");
         mappingPeriodTextNode.id = domIDs.mappingPeriodText + layerID;
-        mappingPeriodTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
+        mappingPeriodTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID, domClasses.textLabel);
         mappingPeriodTextNode.textContent = "Period in ms";
         this.rootDiv.appendChild(mappingPeriodTextNode);
 
@@ -263,12 +273,12 @@ class DomHelper {
         mappingPeriodInput.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingPeriodInput);
 
-        $(cssIDs.mappingPeriodInput + layerID).jqxInput({ width: 100, height: 30, minLength: 1 });
+        $(cssIDs.mappingPeriodInput + layerID).jqxInput({ width: widgetSize.inputWidth, height: widgetSize.inputHeight, minLength: 1 });
 
 
-        var mappingScaleTextNode = document.createElement("p");
+        var mappingScaleTextNode = document.createElement("label");
         mappingScaleTextNode.id = domIDs.mappingScaleText + layerID;
-        mappingScaleTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
+        mappingScaleTextNode.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID, domClasses.textLabel);
         mappingScaleTextNode.textContent = "Scale";
         this.rootDiv.appendChild(mappingScaleTextNode);
 
@@ -278,7 +288,7 @@ class DomHelper {
         mappingScaleInput.classList.add(domClasses.mappingParameter, domClasses.mappingParameter + layerID, domClasses.layer + layerID);
         this.rootDiv.appendChild(mappingScaleInput);
 
-        $(cssIDs.mappingScaleInput + layerID).jqxInput({ width: 100, height: 30, minLength: 1 });
+        $(cssIDs.mappingScaleInput + layerID).jqxInput({ width: widgetSize.inputWidth, height: widgetSize.inputHeight, minLength: 1 });
     }
 
     mappingDropDownSelected(layerID) {
@@ -316,10 +326,15 @@ class DomHelper {
     buildDeleteButton(layerID) {
         var deleteButtonDiv = document.createElement("div");
         deleteButtonDiv.id = domIDs.deleteButton + layerID;
-        deleteButtonDiv.classList.add(cssClasses.deleteButton, cssClasses.layer + layerID);
+        deleteButtonDiv.classList.add(domClasses.deleteButton, domClasses.layer + layerID);
         this.rootDiv.appendChild(deleteButtonDiv);
 
-        $(cssIDs.deleteButton + layerID).jqxButton({ theme: "metro", height: 30, width: 30, imgSrc: "./scripts/Metric/close.png" });
+        $(cssIDs.deleteButton + layerID).jqxButton({ 
+            theme: "metro", 
+            height: widgetSize.deleteButtonHeight, 
+            width: widgetSize.deleteButtonHeight, 
+            imgSrc: "./scripts/Metric/close.png" 
+        });
 
         $(cssIDs.deleteButton + layerID).click((event) => metricController.removeLayer(event));
     }

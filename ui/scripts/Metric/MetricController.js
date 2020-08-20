@@ -50,7 +50,7 @@ var metricController = (function () {
 
         $(cssIDs.executeButton).click(executeButtonClicked);
         $(cssIDs.resetButton).click(reset);
-        $(cssIDs.addLayerButton).click(() => addLayer(rootDiv));
+        $(cssIDs.addLayerButton).click(addLayer);
     }
 
     async function executeButtonClicked(event) {
@@ -63,7 +63,7 @@ var metricController = (function () {
         }
     }
 
-    function addLayer(rootDiv) {
+    function addLayer() {
         var newLayer = new MetricLayer(++layerCounter);
         layers.push(newLayer);
 
@@ -132,11 +132,10 @@ var metricController = (function () {
         initialize: initialize,
         activate: activate,
         reset: reset,
-        removeLayer: removeLayer,
 
+        removeLayer: removeLayer,
         getNeo4jData: getNeo4jData,
 
-        controllerConfig: controllerConfig,
         metricDefault: metricDefault,
         mappingDefault: mappingDefault
     }

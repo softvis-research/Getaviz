@@ -1,14 +1,20 @@
 #executeButton {
     clear: left;
     float: left;
+    font-size: 14px;
+    line-height: 20px;
 }
 
 #resetButton {
     float: left;
+    font-size: 14px;
+    line-height: 20px;
 }
 
 #addLayerButton {
     float: left;
+    font-size: 14px;
+    line-height: 20px;
 }
 
 .deleteButton {
@@ -22,7 +28,7 @@
 
 .metricDropDown {
     float: left;
-} 
+}
 
 .metricParameter {
     float: left;
@@ -40,4 +46,10 @@
 .mappingParameter {
     float: left;
     display: none;
+}
+
+.textLabel {
+    font-size: 21px;
+    margin: 1px;
+    padding: 1px;
 }
