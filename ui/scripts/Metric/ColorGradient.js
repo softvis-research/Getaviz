@@ -59,9 +59,9 @@ class ColorGradient {
         var proportion = (value - this.minValue) / (this.maxValue - this.minValue);
 
         return {
-            r: proportion * this.startColor.r + (1 - proportion) * this.endColor.r,
-            g: proportion * this.startColor.g + (1 - proportion) * this.endColor.g,
-            b: proportion * this.startColor.b + (1 - proportion) * this.endColor.b
+            r: (1 - proportion) * this.startColor.r + proportion * this.endColor.r,
+            g: (1 - proportion) * this.startColor.g + proportion * this.endColor.g,
+            b: (1 - proportion) * this.startColor.b + proportion * this.endColor.b
         };
     }
 
