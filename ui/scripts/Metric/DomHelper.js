@@ -255,7 +255,7 @@ class DomHelper {
         this.rootDiv.appendChild(transparencyInputDiv);
 
         $(cssIDs.mappingTransparencyInput + layerID).jqxNumberInput({
-            width: widgetSize.inputWidth, height: widgetSize.inputHeight,
+            width: 100, height: widgetSize.inputHeight,
             min: 0, max: 1,
             inputMode: "simple",
             spinButtons: true
