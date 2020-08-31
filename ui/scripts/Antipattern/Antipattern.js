@@ -80,10 +80,17 @@ var antipatternController = (function() {
             case "dataclass":
                 dataclass(treeEvent, treeId, treeNode);
                 break;
+            case "brainmethod":
+                brainmethod(treeEvent, treeId, treeNode);
+                break;
+            case "featureenvy":
+                featureenvy(treeEvent, treeId, treeNode);
+                break;
         }
     }
 
     function godclass(treeEvent, treeId, treeNode) {
+        console.log("Check");
         if (treeNode.checked){
             model.getAllEntities().forEach(entity => {
                 if(entity.godclass === 'TRUE'){
@@ -114,15 +121,42 @@ var antipatternController = (function() {
 
     function dataclass(treeEvent, treeId, treeNode) {
         if (treeNode.checked){
-            console.log("dataclass checked")
             model.getAllEntities().forEach(entity => {
                 if(entity.dataclass === 'TRUE'){
-                    console.log("DataclassMethod")
                     canvasManipulator.changeColorOfEntities([entity], "#FF4500");}
             })
         } else {
             model.getAllEntities().forEach(entity => {
                 if(entity.dataclass === 'TRUE'){
+                    canvasManipulator.resetColorOfEntities([entity]);}
+            })
+        }
+    }
+
+    function brainmethod(treeEvent, treeId, treeNode) {
+        if (treeNode.checked){
+            model.getAllEntities().forEach(entity => {
+                if(entity.brainmethod === 'TRUE'){
+                    console.log("dataclass checked")
+                    canvasManipulator.changeColorOfEntities([entity], "#FF4500");}
+            })
+        } else {
+            model.getAllEntities().forEach(entity => {
+                if(entity.brainmethod === 'TRUE'){
+                    canvasManipulator.resetColorOfEntities([entity]);}
+            })
+        }
+    }
+
+    function featureenvy(treeEvent, treeId, treeNode) {
+        if (treeNode.checked){
+            model.getAllEntities().forEach(entity => {
+                if(entity.featureenvy === 'TRUE'){
+                    canvasManipulator.changeColorOfEntities([entity], "#FF4500");}
+            })
+        } else {
+            model.getAllEntities().forEach(entity => {
+                if(entity.featureenvy === 'TRUE'){
                     canvasManipulator.resetColorOfEntities([entity]);}
             })
         }

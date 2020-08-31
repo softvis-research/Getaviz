@@ -275,7 +275,8 @@
                                         }
                                             ]
                                         },
-                                        second: {collapsible: false,
+                                        second: {
+                                            collapsible: false,
                                             size: "50%",
                                             expanders: [
 

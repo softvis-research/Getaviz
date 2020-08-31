@@ -46,6 +46,8 @@ var model = (function() {
 				element.isTransparent,
 				element.version,
 				element.godclass,
+				element.brainmethod,
+				element.featureenvy,
 				element.brainclass,
 				element.dataclass
 			);
@@ -179,6 +181,7 @@ var model = (function() {
 					entity.brainclass = element.brainclass;
 					entity.dataclass = element.dataclass;
 
+
 					break;
 				case  "ParameterizableClass":
 					entity.superTypes = element.subClassOf.split(",");
@@ -193,6 +196,9 @@ var model = (function() {
 					break;
 				case "Method":
 					entity.signature = element.signature;
+
+					entity.brainmethod = element.brainmethod;
+					entity.featureenvy = element.featureenvy;
 					
 					let pathParts = entity.qualifiedName.split("_");
 					let pathString = pathParts[0];
@@ -559,7 +565,7 @@ var model = (function() {
 	
 	
 	
-	function createEntity(type, id, name, qualifiedName, godclass, brainclass, dataclass, belongsTo){
+	function createEntity(type, id, name, qualifiedName, godclass, brainclass, dataclass, brainmethod, featureenvy, belongsTo){
 		let entity = {
 			type: type,
 			id: id,
@@ -568,6 +574,8 @@ var model = (function() {
 			godclass: godclass,
 			brainclass: brainclass,
 			dataclass: dataclass,
+			brainmethod: brainmethod,
+			featureenvy: featureenvy,
 			belongsTo: belongsTo,
 			children: []						
 		};
