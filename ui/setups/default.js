@@ -68,6 +68,11 @@
         {
             name: "packageExplorerController",
         },
+
+        {
+            name: "antipatternController",
+        },
+
         {
             name: "sourceCodeController",
             url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/",
@@ -259,7 +264,7 @@
                                 name: "packagePanel",
                                 first: {
                                     collapsible: false,
-                                    size: "100%",
+                                    size: "50%",
                                     expanders: [
                                         {
                                             name: "packageExplorer",
@@ -270,7 +275,21 @@
                                         }
                                     ]
                                 },
-                                second: {},
+                                second: {
+
+                                    collapsible: false,
+                                    size: "50%",
+                                    expanders: [
+
+                                        {
+                                            name: "antipatternController",
+                                            title: "Antipattern",
+                                            controllers: [
+                                                {name: "antipatternController"}
+                                            ],
+                                        },
+                                    ]
+                                },
                             },
                         },
                         second: {

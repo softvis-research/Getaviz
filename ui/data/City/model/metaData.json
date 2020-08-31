@@ -269,6 +269,8 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
+  "godclass":    "TRUE",
+  "brainclass":  "TRUE",
 "belongsTo":     "ID_bdd240c8fe7174e6ac1cfdd5282de76eb7ad6815"
 
 
@@ -449,6 +451,7 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
+  "dataclass":   "TRUE",
 "belongsTo":     "ID_4481fcdc97864a546f67c76536e0308a3058f75d"
 
 

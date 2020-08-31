@@ -152,6 +152,7 @@ EOT;
 <script type="text/javascript" src="scripts/CanvasMark/CanvasMarkController.js"></script>
 <script type="text/javascript" src="scripts/CanvasFlyTo/CanvasFlyToController.js"></script>
 <script type="text/javascript" src="scripts/CanvasSelect/CanvasSelectController.js"></script>
+<script type="text/javascript" src="scripts/Antipattern/Antipattern.js"></script>
 <script type="text/javascript" src="scripts/CanvasResetView/CanvasResetViewController.js"></script>
 <script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>
 <script type="text/javascript" src="scripts/HelpController/HelpController.js"></script>

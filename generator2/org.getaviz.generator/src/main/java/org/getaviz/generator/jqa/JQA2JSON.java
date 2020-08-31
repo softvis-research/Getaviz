@@ -149,6 +149,8 @@ public class JQA2JSON implements Step {
                 "\n" +
                 "\"superClassOf\":  \"" + getSubClasses(c) + "\"," +
                 "\n" +
+                "\"godclass\":  \"" + c.get("godclass").toString() + "\"," +
+                "\n" +
                 "\"belongsTo\":     \"" + belongsTo + "\"" +
                 "\n";
     }

@@ -44,7 +44,10 @@ var model = (function() {
                 element.antipattern,
                 element.roles,
 				element.isTransparent,
-				element.version
+				element.version,
+				element.godclass,
+				element.brainclass,
+				element.dataclass
 			);
 			
 			entity.isTransparent = false;
@@ -171,6 +174,10 @@ var model = (function() {
 					entity.numberOfClosedIssues = element.numberOfClosedIssues;
 					entity.numberOfClosedSecurityIssues = element.numberOfClosedSecurityIssues;
 					entity.numberOfOpenSecurityIssues = element.numberOfOpenSecurityIssues;
+
+					entity.godclass = element.godclass;
+					entity.brainclass = element.brainclass;
+					entity.dataclass = element.dataclass;
 
 					break;
 				case  "ParameterizableClass":
@@ -552,12 +559,15 @@ var model = (function() {
 	
 	
 	
-	function createEntity(type, id, name, qualifiedName, belongsTo){
+	function createEntity(type, id, name, qualifiedName, godclass, brainclass, dataclass, belongsTo){
 		let entity = {
 			type: type,
 			id: id,
 			name: name,
 			qualifiedName: qualifiedName,
+			godclass: godclass,
+			brainclass: brainclass,
+			dataclass: dataclass,
 			belongsTo: belongsTo,
 			children: []						
 		};
