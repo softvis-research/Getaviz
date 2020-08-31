@@ -24,7 +24,7 @@ public class MetropolisAFrameExporter {
 
         repository = aCityRepository;
 
-        aFrameOutput = new metropolis_AFrame();
+        aFrameOutput = new metropolis_AFrame(config);
     }
 
     public String createAFrameExportFile(){
@@ -66,7 +66,6 @@ public class MetropolisAFrameExporter {
         return builder.toString();
     }
 
-
     private String createACityElementExport(ACityElement element){
         StringBuilder builder = new StringBuilder();
 
@@ -93,11 +92,13 @@ public class MetropolisAFrameExporter {
         if (element.getTextureSource() != null){
             builder.append("\t src=\"" + element.getTextureSource() + "\"");
             builder.append("\n");
-            builder.append("\t rotation=\" -90 0 0 \"");
+        }
+        if (element.getRotation() != null){
+            builder.append("\t rotation=\"" + element.getRotation() + "\"");
             builder.append("\n");
         }
         if(element.getModel() != null){
-            builder.append("\t scale=\"" + element.getXScale() + " " + element.getYScale() + " " + element.getZScale() + "\"");
+            builder.append("\t scale=\"" + element.getModelScale() + "\"");
             builder.append("\n");
             builder.append("\t gltf-model=\"" + element.getModel() + "\"");
             builder.append("\n");

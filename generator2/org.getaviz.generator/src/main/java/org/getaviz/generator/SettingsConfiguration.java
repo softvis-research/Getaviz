@@ -1274,19 +1274,31 @@ public class SettingsConfiguration {
 		}
 	}
 
+	public String getMetropolisAssetsSourcePath(String type) {
+		switch (type) {
+			case "sky":
+				return config.getString("city.abap.metropolis.assets.sky.sourcePath", "images/sky_pano.jpg");
+			case "ground":
+				return config.getString("city.abap.metropolis.assets.ground.sourcePath", "images/ground.jpg");
+			case "mountain":
+				return config.getString("city.abap.metropolis.assets.mountain.sourcePath", "images/polyMountain_new_Color.jpg");
+			case "sea":
+				return config.getString("city.abap.metropolis.assets.sea.sourcePath", "images/sea_pool.jpg");
+			default:
+				return config.getString("");
+		}
+	}
+
 	public boolean showSeaReferenceBuilding() {return config.getBoolean("city.abap.metropolis.showSeaReferenceBuilding", false);}
 	public boolean showMountainReferenceBuilding() {return config.getBoolean("city.abap.metropolis.showMountainReferenceBuilding", false);}
 
+	public String getMetropolisBuildingRotation() {return config.getString("city.abap.metropolis.SeaReferenceBuildingRotation", " 0 0 0 ");}
+	public String getMetropolisReferenceBuildingModelScale() {return config.getString("city.abap.metropolis.MountainReferenceBuildingModelScale", " 0 0 0 ");}
 
 	public double getACityDistrictHeight() {return config.getDouble("city.abap.height.district", 0.2); }
 	public double getMetropolisEmptyDistrictHeight() {return config.getDouble("city.abap.metropolis.height.emptyDistrict", 0.2); }
 	public double getMetropolisEmptyDistrictLength() {return config.getDouble("city.abap.metropolis.length.emptyDistrict", 0.2); }
 	public double getMetropolisEmptyDistrictWidth() {return config.getDouble("city.abap.metropolis.width.emptyDistrict", 0.2); }
-
-	public double getMetropolisReferenceBuildingXScale(){ return config.getDouble("city.abap.metropolis.x.scale", 0.05); }
-	public double getMetropolisReferenceBuildingYScale() { return config.getDouble("city.abap.metropolis.y.scale", 0.05); }
-	public double getMetropolisReferenceBuildingZScale() { return config.getDouble("city.abap.metropolis.z.scale", 0.05); }
-
 
 	public double adjustACityDistrictYPosition() {return config.getDouble("city.abap.adjust.district.yPosition", 0.1); }
 
