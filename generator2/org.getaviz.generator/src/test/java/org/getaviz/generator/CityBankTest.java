@@ -50,7 +50,7 @@ class CityBankTest {
 				.executeRead("MATCH (building:Building)-[:VISUALIZES]->(:Type) RETURN count(building) AS result")
 				.single();
 		int numberOfVisualizedTypes = result.get("result").asInt();
-		assertEquals(7, numberOfVisualizedTypes);
+		assertEquals(5, numberOfVisualizedTypes);
 	}
 
 	@Test

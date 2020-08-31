@@ -47,7 +47,7 @@ class RDBankTest {
 		Record result = connector.executeRead("MATCH (disk:SubDisk)-[:VISUALIZES]->(:Type) RETURN count(disk) AS result")
 				.single();
 		int numberOfVisualizedTypes = result.get("result").asInt();
-		assertEquals(7, numberOfVisualizedTypes);
+		assertEquals(5, numberOfVisualizedTypes);
 	}
 
 	@Test
@@ -69,8 +69,8 @@ class RDBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(-9.214771, x);
-		assertEquals(-11.790536, y);
+		assertEquals(-11.897979, x);
+		assertEquals(-28.38599, y);
 		assertEquals(0, z);
 	}
 
@@ -84,8 +84,8 @@ class RDBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(-9.214771, x);
-		assertEquals(-1.498676, y);
+		assertEquals(-11.897979, x);
+		assertEquals(-5.155663, y);
 		assertEquals(0, z);
 	}
 
