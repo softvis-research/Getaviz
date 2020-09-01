@@ -151,6 +151,10 @@ public class JQA2JSON implements Step {
                 "\n" +
                 "\"godclass\":  \"" + c.get("godclass").toString() + "\"," +
                 "\n" +
+                "\"brainclass\":  \"" + c.get("brainclass").toString() + "\"," +
+                "\n" +
+                "\"dataclass\":  \"" + c.get("dataclass").toString() + "\"," +
+                "\n" +
                 "\"belongsTo\":     \"" + belongsTo + "\"" +
                 "\n";
     }
@@ -217,6 +221,10 @@ public class JQA2JSON implements Step {
                 "\"calledBy\":\t\t \"" + getCalledBy(method) + "\"," +
                 "\n" +
                 "\"accesses\":\t \t \"" + getAccesses(method) + "\"," +
+                "\n" +
+                "\"featureenvy\":  \"" + method.get("featureenvy").toString() + "\"," +
+                "\n" +
+                "\"brainmethod\":  \"" + method.get("brainmethod").toString() + "\"," +
                 "\n" +
                 "\"belongsTo\":     \"" + belongsTo + "\"" +
                 "\n";

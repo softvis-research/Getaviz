@@ -71,12 +71,12 @@ public class Antipattern implements Step {
     }
 
     /**
-     * Cyclo als cyclomatic Complexity, wmc, amw oder cyclo*loc besser?
+     * Cyclo cyclo(high)* loc(65)?
      * Maxnesting + Nr of Var fehlen! Sind nicht im Datensatz enthalten
      */
     public void brainmethod(){
         connector.executeWrite("MATCH (m:Method)\n" +
-                "WHERE m.effectiveLineCount > 65 AND m.cyclomaticComplexity > 31\n" +
+                "WHERE m.effectiveLineCount > 65 AND m.cyclomaticComplexity > 23\n" +
                 "SET m.brainmethod = true");
     }
 
