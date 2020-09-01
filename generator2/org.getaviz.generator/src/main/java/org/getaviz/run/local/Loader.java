@@ -49,8 +49,8 @@ public class Loader {
                         "SET n = row"
         );
         // Rewrite date fields (to be able to filter by date)
-        connector.executeWrite("MATCH (n) WHERE (n.created <> \"0\") SET n.created = date(n.created)");
-        connector.executeWrite("MATCH (n) WHERE (n.changed <> \"0\") SET n.changed = date(n.changed)");
+        connector.executeWrite("MATCH (n) WHERE (n.created <> \"00000000\") SET n.created = date(n.created)");
+        connector.executeWrite("MATCH (n) WHERE (n.changed <> \"00000000\") SET n.changed = date(n.changed)");
 
 
         // 2. Upload relations
