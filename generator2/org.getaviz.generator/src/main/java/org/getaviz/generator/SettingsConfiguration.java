@@ -1314,7 +1314,7 @@ public class SettingsConfiguration {
 			case "ground":
 				return config.getString("city.abap.metropolis.assets.ground.sourcePath", "images/ground.jpg");
 			case "mountain":
-				return config.getString("city.abap.metropolis.assets.mountain.sourcePath", "images/polyMountain_new_Color.jpg");
+				return config.getString("city.abap.metropolis.assets.mountain.sourcePath", "models/polyMountain_new_Color.jpg");
 			case "sea":
 				return config.getString("city.abap.metropolis.assets.sea.sourcePath", "images/sea_pool.jpg");
 			default:
