@@ -201,7 +201,9 @@ public class ACityRepository {
         propertyBuilder.append(" length :  " + element.getLength() + ",");
         propertyBuilder.append(" xPosition :  " + element.getXPosition() + ",");
         propertyBuilder.append(" yPosition :  " + element.getYPosition() + ",");
-        propertyBuilder.append(" zPosition :  " + element.getZPosition() + "");
+        propertyBuilder.append(" zPosition :  " + element.getZPosition() + ",");
+        propertyBuilder.append(" metaData : '" + element.getMetaData() + "',");
+        propertyBuilder.append(" aframeProperty : '" + element.getAframeProperty() + "'");
 
         return propertyBuilder.toString();
     }

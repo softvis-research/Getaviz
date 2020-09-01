@@ -9,21 +9,27 @@ import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 public class AFrameExporterStepTest {
 
@@ -58,69 +64,19 @@ public class AFrameExporterStepTest {
 
         // Create metaData.json
         ACityMetaDataExporter aCityMetaDataExporter = new ACityMetaDataExporter(aCityRepository, nodeRepository);
-        aCityMetaDataExporter.exportMetaData();
+        aCityMetaDataExporter.exportMetaDataFile();
+        aCityMetaDataExporter.setMetaDataPropToACityElements();
 
         // Create A-Frame
         ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config, "acity_AFrame_UI");
         aCityAFrameExporter.exportAFrame();
+        aCityAFrameExporter.setAframePropToACityElements();
+        connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
+        aCityRepository.writeRepositoryToNeo4j();
     }
 
     @AfterAll
     static void close() { connector.close(); }
-
-    @Test
-    void checkIfElementsAreAddedToNeo4j() {
-        Record record = connector
-                .executeRead("MATCH (n:Elements) RETURN count(n) AS result")
-                .single();
-        int numberOfElements = record.get("result").asInt();
-        assertEquals(657, numberOfElements);
-    }
-
-    @Test
-    void checkIfACityElementsAreAddedToNeo4j() {
-        Record record = connector
-                .executeRead("MATCH (n:ACityRep) RETURN count(n) AS result")
-                .single();
-        int numberOfElements = record.get("result").asInt();
-        assertEquals(317, numberOfElements);
-    }
-
-    @Test
-    void checkIfSourceRelationsExist() {
-        Record record = connector
-                .executeRead("MATCH p=()-[:SOURCE]->() RETURN count(p) AS result")
-                .single();
-        int numberOfRelations = record.get("result").asInt();
-        assertEquals(292, numberOfRelations);
-    }
-
-    @Test
-    void checkIfTypeOfRelationsExist() {
-        Record record = connector
-                .executeRead("MATCH p=()-[:TYPEOF]->() RETURN count(p) AS result")
-                .single();
-        int numberOfRelations = record.get("result").asInt();
-        assertEquals(108, numberOfRelations);
-    }
-
-    @Test
-    void checkIfContainsRelationsExist() {
-        Record record = connector
-                .executeRead("MATCH p=()-[:CONTAINS]->() RETURN count(p) AS result")
-                .single();
-        int numberOfRelations = record.get("result").asInt();
-        assertEquals(296, numberOfRelations);
-    }
-
-    @Test
-    void checkIfChildRelationsExist() {
-        Record record = connector
-                .executeRead("MATCH p=()-[:CHILD]->() RETURN count(p) AS result")
-                .single();
-        int numberOfRelations = record.get("result").asInt();
-        assertEquals(302, numberOfRelations);
-    }
 
     @Test
     void checkIfExportFilesWereCreated() {
@@ -147,5 +103,27 @@ public class AFrameExporterStepTest {
 
         assertEquals(true, metaDataFileExists);
         assertEquals(true, aframeFileExists);
+    }
+
+    @Test
+    void checkNeo4jAFrameProperty() {
+        Record record = connector
+                .executeRead("MATCH (n:ACityRep) WHERE EXISTS (n.aframeProperty)\n" +
+                        "RETURN n.aframeProperty AS aframeProperty \n" +
+                        "LIMIT 1")
+                .single();
+        String aframeProperty = record.get("aframeProperty").asString();
+        assertNotSame("null", aframeProperty);
+
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(aframeProperty);
+            JSONObject jsonObject = (JSONObject) obj;
+            assertNotSame("", jsonObject.get("id"));
+            assertNotSame("", jsonObject.get("shape"));
+            assertNotSame("", jsonObject.get("position"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

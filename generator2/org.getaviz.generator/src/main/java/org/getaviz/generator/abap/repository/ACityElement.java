@@ -92,6 +92,14 @@ public class ACityElement {
     private double yScale;
     private double zScale;
 
+    private String calls;
+    private String calledBy;
+    private String subClassOf;
+    private String superClassOf;
+
+    private String metaData;
+    private String aframeProperty;
+
     public ACityElement(ACityType type) {
         this.type = type;
         subElements = new ArrayList<>();
@@ -293,4 +301,47 @@ public class ACityElement {
     public void setNodeID(Long nodeID) {
         this.nodeID = nodeID;
     }
+
+    public void setMetaData(String metaData) { this.metaData = metaData; }
+
+    public String getMetaData() {
+        return metaData;
+    }
+
+    public void setAframeProperty(String aframeProperty) { this.aframeProperty = aframeProperty; }
+
+    public String getAframeProperty() { return aframeProperty; }
+
+    public String getCalls() {
+        return calls;
+    }
+
+    public void setCalls(String calls) {
+        this.calls = calls;
+    }
+
+    public String getCalledBy() {
+        return calledBy;
+    }
+
+    public void setCalledBy(String calledBy) {
+        this.calledBy = calledBy;
+    }
+
+    public String getSubClassOf() {
+        return subClassOf;
+    }
+
+    public void setSubClassOf(String subClassOf) {
+        this.subClassOf = subClassOf;
+    }
+
+    public String getSuperClassOf() {
+        return superClassOf;
+    }
+
+    public void setSuperClassOf(String superClassOf) {
+        this.superClassOf = superClassOf;
+    }
+
 }

@@ -14,15 +14,23 @@ import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 public class MetaDataExporterTest {
 
@@ -49,69 +57,18 @@ public class MetaDataExporterTest {
         aCityRepository.writeRepositoryToNeo4j();
 
         ACityMetaDataExporter aCityMetaDataExporter = new ACityMetaDataExporter(aCityRepository, nodeRepository);
-        aCityMetaDataExporter.exportMetaData();
+        aCityMetaDataExporter.exportMetaDataFile();
+        aCityMetaDataExporter.setMetaDataPropToACityElements();
+        connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
+        aCityRepository.writeRepositoryToNeo4j();
     }
 
     @AfterAll
     static void close() { connector.close(); }
 
     @Test
-    void checkIfElementsAreAddedToNeo4j() {
-        Record record = connector
-                .executeRead("MATCH (n:Elements) RETURN count(n) AS result")
-                .single();
-        int numberOfElements = record.get("result").asInt();
-        assertEquals(657, numberOfElements);
-    }
-
-    @Test
-    void checkIfACityElementsAreAddedToNeo4j() {
-        Record record = connector
-                .executeRead("MATCH (n:ACityRep) RETURN count(n) AS result")
-                .single();
-        int numberOfElements = record.get("result").asInt();
-        assertEquals(317, numberOfElements);
-    }
-
-    @Test
-    void checkIfSourceRelationsExist() {
-        Record record = connector
-                .executeRead("MATCH p=()-[:SOURCE]->() RETURN count(p) AS result")
-                .single();
-        int numberOfRelations = record.get("result").asInt();
-        assertEquals(292, numberOfRelations);
-    }
-
-    @Test
-    void checkIfTypeOfRelationsExist() {
-        Record record = connector
-                .executeRead("MATCH p=()-[:TYPEOF]->() RETURN count(p) AS result")
-                .single();
-        int numberOfRelations = record.get("result").asInt();
-        assertEquals(108, numberOfRelations);
-    }
-
-    @Test
-    void checkIfContainsRelationsExist() {
-        Record record = connector
-                .executeRead("MATCH p=()-[:CONTAINS]->() RETURN count(p) AS result")
-                .single();
-        int numberOfRelations = record.get("result").asInt();
-        assertEquals(296, numberOfRelations);
-    }
-
-    @Test
-    void checkIfChildRelationsExist() {
-        Record record = connector
-                .executeRead("MATCH p=()-[:CHILD]->() RETURN count(p) AS result")
-                .single();
-        int numberOfRelations = record.get("result").asInt();
-        assertEquals(302, numberOfRelations);
-    }
-
-    @Test
-    void checkIfExportFilesWereCreated() {
-        File currentDir = new File("src/test/neo4jexport/");
+    void checkIfExportFileWasCreated() {
+        File currentDir = new File(config.getOutputMap());
         String helper = currentDir.getAbsolutePath();
         boolean metaDataFileExists = false;
         List<Path> files = new ArrayList<>();
@@ -131,5 +88,58 @@ public class MetaDataExporterTest {
         }
 
         assertEquals(true, metaDataFileExists);
+    }
+
+    @Test
+    void checkMetaDataFile() {
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader(config.getOutputMap() + "/metaData.json"));
+            JSONArray jsonArray = objectToJSONArray(obj);
+            JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+
+            assertNotSame("", jsonObject.get("id"));
+            assertNotSame("", jsonObject.get("name"));
+            assertNotSame("", jsonObject.get("type"));
+            assertNotSame("", jsonObject.get("belongsTo"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void checkNeo4jMetaDataProperty() {
+        Record record = connector
+                .executeRead("MATCH (n:ACityRep) RETURN n.metaData AS metaData LIMIT 1")
+                .single();
+        String metaData = record.get("metaData").asString();
+
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(metaData);
+            JSONObject jsonObject = (JSONObject) obj;
+
+            assertNotSame("", jsonObject.get("id"));
+            assertNotSame("", jsonObject.get("name"));
+            assertNotSame("", jsonObject.get("type"));
+            assertNotSame("", jsonObject.get("belongsTo"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private JSONArray objectToJSONArray(Object obj) {
+        JSONArray jsonArray = new JSONArray();
+        if (obj instanceof Map){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.putAll((Map)obj);
+            jsonArray.add(jsonObject);
+        }
+        else if (obj instanceof List){
+            jsonArray.addAll((List)obj);
+        }
+
+        return jsonArray;
     }
 }

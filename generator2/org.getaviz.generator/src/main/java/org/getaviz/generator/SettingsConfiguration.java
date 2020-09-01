@@ -82,7 +82,8 @@ public class SettingsConfiguration {
 	}
 
 	public List<Path> getInputCSVFiles() {
-		File currentDir = new File("src/test/neo4jexport/");
+		String path = config.getString("input.map", "src/test/neo4jexport/");
+		File currentDir = new File(path);
 		String helper = currentDir.getAbsolutePath();
 		List<Path> files = new ArrayList<>();
 		try {
@@ -121,6 +122,8 @@ public class SettingsConfiguration {
 		}
 		return files.toString();
 	}
+
+	public String getOutputMap() { return config.getString("output.map", "src/test/neo4jexport");}
 	
 	public Metaphor getMetaphor() {
 		String metaphor = config.getString("metaphor", "rd");
@@ -129,8 +132,30 @@ public class SettingsConfiguration {
 		}
 		return Metaphor.RD;
 	}
-	
-	public String getName() {
+
+	public MetaDataOutput getMetaDataOutput() {
+	    String metaDataOutput = config.getString("output.metaData", "both");
+	    if ("file".equals(metaDataOutput)) {
+	        return MetaDataOutput.FILE;
+        } else if ("nodeProp".equals(metaDataOutput)) {
+	        return MetaDataOutput.NODEPROP;
+        }
+
+	    return MetaDataOutput.BOTH;
+    }
+
+    public AFrameOutput getAframeOutput() {
+		String aframeOutput = config.getString("output.aframe", "both");
+		if ("file".equals(aframeOutput)) {
+			return AFrameOutput.FILE;
+		} else if ("nodeProp".equals(aframeOutput)) {
+			return AFrameOutput.NODEPROP;
+		}
+
+		return AFrameOutput.BOTH;
+	}
+
+    public String getName() {
 		return config.getString("input.name", "default");
 	}
 	
@@ -698,6 +723,14 @@ public class SettingsConfiguration {
 	
 	public enum Metaphor {
 		RD, CITY
+	}
+
+	public enum MetaDataOutput {
+	    FILE, NODEPROP, BOTH
+    }
+
+    public enum  AFrameOutput {
+		FILE, NODEPROP, BOTH
 	}
 
 

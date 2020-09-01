@@ -9,6 +9,7 @@ import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.output.abap_output.acity_AFrame;
 import org.getaviz.generator.output.abap_output.acity_AFrame_UI;
 import org.getaviz.generator.output.abap_output.ABAP_OutputFormat;
+import org.neo4j.driver.v1.types.Node;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -57,7 +58,7 @@ public class ACityAFrameExporter {
     public void exportAFrame() {
         Writer fw = null;
         try {
-            File currentDir = new File("src/test/neo4jexport");
+            File currentDir = new File(config.getOutputMap());
             String path = currentDir.getAbsolutePath() + "/model.html";
             fw = new FileWriter(path);
             fw.write(createAFrameExportString());
@@ -70,6 +71,14 @@ public class ACityAFrameExporter {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+        }
+    }
+
+    public void setAframePropToACityElements() {
+        Collection<ACityElement> elements = repository.getAllElements();
+        for (final ACityElement element : elements) {
+            String aframeProperty = AFramePropAsJSON(element);
+            element.setAframeProperty(aframeProperty);
         }
     }
 
@@ -95,7 +104,7 @@ public class ACityAFrameExporter {
         StringBuilder builder = new StringBuilder();
         for (ACityElement element: elements) {
             builder.append(createACityElementExport(element));
-            writeAframePropertiesToNeo4jNode(element);
+//            writeAframePropertiesToNeo4jNode(element);
         }
         return builder.toString();
     }
@@ -143,7 +152,7 @@ public class ACityAFrameExporter {
 
     private String createACityElementExport(ACityElement element){
         StringBuilder builder = new StringBuilder();
-        builder.append("<" + getShapeExport(element.getShape()) + "id=" +"\"" + element.getHash() + "\"");
+        builder.append("<" + getShapeExport(element.getShape()) + " id=" +"\"" + element.getHash() + "\"");
         builder.append("\n");
         builder.append("\t position=\"" + element.getXPosition() + " " + element.getYPosition() + " " + element.getZPosition() + "\"");
         builder.append("\n");

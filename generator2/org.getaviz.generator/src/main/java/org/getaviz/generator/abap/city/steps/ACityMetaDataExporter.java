@@ -8,10 +8,8 @@ import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.run.local.common.Maps;
-import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,11 +29,11 @@ public class ACityMetaDataExporter {
         this.aCityRepository = aCityRepository;
     }
 
-    public void exportMetaData() {
+    public void exportMetaDataFile() {
         Writer fw = null;
         try {
-            File currentDir = new File("src/test/neo4jexport");
-            String path = currentDir.getAbsolutePath() + "/metaData.json";
+            File outputDir = new File(config.getOutputMap());
+            String path = outputDir.getAbsolutePath() + "/metaData.json";
             fw = new FileWriter(path);
             fw.write(toJSON(nodeRepository.getNodes()));
         } catch (IOException e) {
@@ -48,7 +46,19 @@ public class ACityMetaDataExporter {
                     e.printStackTrace();
                 }
         }
-//        connector.close();
+    }
+
+    public void setMetaDataPropToACityElements() {
+        Collection<Node> nodes = nodeRepository.getNodes();
+        for (final Node node : nodes) {
+            String metaData = toMetaData(node);
+            ACityElement aCityElement = aCityRepository.getElementBySourceID(node.id());
+            if (aCityElement == null) {
+                continue;
+            }
+
+            aCityElement.setMetaData("{" + metaData + "}");
+        }
     }
 
     private String toJSON(Collection<Node> nodes) {
@@ -69,17 +79,6 @@ public class ACityMetaDataExporter {
             }
             metaDataFile.append("\n");
             metaDataFile.append(toMetaData(node));
-
-            // write data to Neo4j as property
-            StringBuilder metaDataNeo = new StringBuilder();
-            metaDataNeo.append("\"{");
-            metaDataNeo.append(toMetaData(node)); //.replaceAll("\"", "\'")); // "- are not allowed
-            metaDataNeo.append("}\"");
-
-            connector.executeWrite(
-                    "MATCH (n:ACityRep) WHERE n.hash = " + "\'" + element.getHash() + "\' "
-                            + " SET n.metaData = \'" + metaDataNeo.toString() + "\'"
-            );
         }
         if (hasElements) {
             metaDataFile.append("}]");
@@ -110,19 +109,7 @@ public class ACityMetaDataExporter {
 
             // Belongs to - must be hash value of a parent container
             if (prop == SAPNodeProperties.container_id) {
-                // Remove value first, so that we have correct hash.
-                // If no hash was found, for example default SAP packages, no container_id will be written.
-                propValue = "";
-                Long container_id = Long.parseLong(node.get(prop.toString()).asString());
-
-                StatementResult results = connector.executeRead("MATCH (aCityNode)-[r:SOURCE]->(sourceNode) " +
-                                                                    "WHERE sourceNode.element_id = "+ "\'" + container_id + "\'" +
-                                                                    " RETURN aCityNode.hash");
-
-                if (results.hasNext()) {
-                    Map<String,Object> row = results.next().asMap();
-                    propValue = row.get("aCityNode.hash").toString();
-                }
+                propValue = getContainerHash(node, prop.toString());
             }
 
             if (NumberUtils.isCreatable(propValue)) {
@@ -144,5 +131,20 @@ public class ACityMetaDataExporter {
         }
 
         return builder.toString();
+    }
+
+    public String getContainerHash(Node node, String prop) {
+        Long container_id = Long.parseLong(node.get(prop).asString());
+        StatementResult results = connector.executeRead("MATCH (aCityNode)-[r:SOURCE]->(sourceNode) " +
+                "WHERE sourceNode.element_id = "+ "\'" + container_id + "\'" +
+                " RETURN aCityNode.hash");
+
+        if (results.hasNext()) {
+            Map<String,Object> row = results.next().asMap();
+            return row.get("aCityNode.hash").toString();
+        }
+
+        // If no hash was found, for example default SAP packages, no container_id will be written.
+        return "";
     }
 }
