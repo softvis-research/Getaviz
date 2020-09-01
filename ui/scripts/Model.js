@@ -45,11 +45,11 @@ var model = (function() {
                 element.roles,
 				element.isTransparent,
 				element.version,
-				element.godclass,
-				element.brainmethod,
-				element.featureenvy,
-				element.brainclass,
-				element.dataclass
+				// element.godclass,
+				// element.brainmethod,
+				// element.featureenvy,
+				// element.brainclass,
+				// element.dataclass
 			);
 			
 			entity.isTransparent = false;
@@ -565,17 +565,12 @@ var model = (function() {
 	
 	
 	
-	function createEntity(type, id, name, qualifiedName, godclass, brainclass, dataclass, brainmethod, featureenvy, belongsTo){
+	function createEntity(type, id, name, qualifiedName, belongsTo){
 		let entity = {
 			type: type,
 			id: id,
 			name: name,
 			qualifiedName: qualifiedName,
-			godclass: godclass,
-			brainclass: brainclass,
-			dataclass: dataclass,
-			brainmethod: brainmethod,
-			featureenvy: featureenvy,
 			belongsTo: belongsTo,
 			children: []						
 		};
