@@ -80,7 +80,7 @@ public class AFrameExporterStepTest {
 
     @Test
     void checkIfExportFilesWereCreated() {
-        File currentDir = new File("src/test/neo4jexport/");
+        File currentDir = new File(config.getOutputMap());
         String helper = currentDir.getAbsolutePath();
         boolean metaDataFileExists = false;
         boolean aframeFileExists = false;

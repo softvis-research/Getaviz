@@ -25,10 +25,9 @@ public class ACityCreator {
     private Log log = LogFactory.getLog(this.getClass());
 //    private SettingsConfiguration config;
 
-    private static SettingsConfiguration config = SettingsConfiguration.getInstance();
+    private static SettingsConfiguration config;
     private SourceNodeRepository nodeRepository;
     private ACityRepository repository;
-    private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
 
     public ACityCreator(ACityRepository aCityRepository, SourceNodeRepository sourceNodeRepository, SettingsConfiguration config) {
         this.config = config;
@@ -53,28 +52,6 @@ public class ACityCreator {
 
         log.info("Delete empty Districts");
         deleteEmptyDistricts();
-
-        // Setting up calls, calledBy, subClassOf, superClassOf
-        log.info("Write calls relations");
-        writeCallsRelationsToACity(nodeRepository);
-    }
-
-    private void writeCallsRelationsToACity(SourceNodeRepository nodeRepository) {
-        for (final Node node : nodeRepository.getNodes()) {
-            ArrayList<String> tmp = new ArrayList<>();
-            connector.executeRead("MATCH (element)-[:USES]->(call) WHERE ID(element) = " + node.id() + " RETURN call").forEachRemaining((result) -> {
-                Node calledNode = result.get("call").asNode();
-                if (repository.getElementBySourceID(calledNode.id()) != null) {
-                    String hash = repository.getElementBySourceID(calledNode.id()).getHash();
-                    tmp.add(hash);
-                }
-            });
-            Collections.sort(tmp);
-            ACityElement element = repository.getElementBySourceID(node.id());
-            if (element != null) {
-                element.setCalls(removeBrackets(tmp.toString()));
-            }
-        }
     }
 
     public String removeBrackets(String string) {
