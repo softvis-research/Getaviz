@@ -135,13 +135,15 @@ public class MetropolisDesigner {
                     building.setColor(config.getMetropolisBuildingColorHex("seaReferenceBuilding"));
                     building.setShape(ACityElement.ACityShape.Circle);
                     building.setTextureSource("#sea");
+                    building.setRotation(config.getMetropolisBuildingRotation());
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
                     break;
                 case Mountain:
                     building.setColor(config.getMetropolisBuildingColorHex("mountainReferenceBuilding"));
                     building.setShape(ACityElement.ACityShape.Entity);
-                    building.setModel("#polyMountain");
+                    building.setModel("#mountain");
+                    building.setModelScale(config.getMetropolisReferenceBuildingModelScale());
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
                     break;

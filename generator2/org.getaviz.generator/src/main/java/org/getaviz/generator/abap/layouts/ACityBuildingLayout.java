@@ -62,9 +62,6 @@ public class ACityBuildingLayout {
                     building.setHeight(config.getMetropolisReferenceBuildingHeigth("mountainReferenceBuilding"));
                     building.setWidth(config.getMetropolisReferenceBuildingWidth("mountainReferenceBuilding"));
                     building.setLength(config.getMetropolisReferenceBuildingLength("mountainReferenceBuilding"));
-                    building.setXScale(config.getMetropolisReferenceBuildingXScale());
-                    building.setYScale(config.getMetropolisReferenceBuildingYScale());
-                    building.setZScale(config.getMetropolisReferenceBuildingZScale());
                     break;
             }
         } else {

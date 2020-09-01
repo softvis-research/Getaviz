@@ -44,7 +44,6 @@ public class MetropolisCreator {
         log.info("Create ReferenceBuildings");
         createReferenceBuildingRelations();
 
-
         log.info("Delete empty Districts");
         deleteEmptyDistricts();
 
