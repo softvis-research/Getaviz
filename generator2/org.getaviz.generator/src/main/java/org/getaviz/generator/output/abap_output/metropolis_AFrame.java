@@ -1,10 +1,17 @@
 package org.getaviz.generator.output.abap_output;
 
+import org.getaviz.generator.SettingsConfiguration;
+
 public class metropolis_AFrame implements ABAP_OutputFormat {
 
+    private SettingsConfiguration config;
+
+    public metropolis_AFrame(SettingsConfiguration config) {
+        this.config = config;
+    }
 
     public String head() {
-        return "<!DOCTYPE html>" +
+        return  "<!DOCTYPE html>" +
                 "\n" +
                 "<html>" +
                 "\n" +
@@ -26,19 +33,19 @@ public class metropolis_AFrame implements ABAP_OutputFormat {
                 "\n" +
                 "\t\t\t <a-entity id=\"rig\" position=\"25 10 0\">" +
                 "\n" +
-                "\t\t\t <a-entity camera look-controls wasd-controls=\"acceleration: 10000\" position=\"-10 10 0\"></a-entity>" +
+                "\t\t\t\t <a-entity camera look-controls wasd-controls=\"acceleration: 10000\" position=\"-10 10 0\"></a-entity>" +
                 "\n" +
                 "\t\t\t </a-entity>" +
                 "\n" +
                 "\t\t\t <a-assets>" +
                 "\n" +
-                "\t\t\t <img id=\"sky\" crossorigin=\"anonymous\" src=\"https://cdn.glitch.com/bb053900-3a29-4a59-a2e0-f06514f3857d%2Fsky_pano.jpg?\">" +
+                "\t\t\t\t <img id=\"sky\" crossorigin=\"anonymous\" src=\"" + config.getMetropolisAssetsSourcePath("sky")  +  "\">" +
                 "\n" +
-                "\t\t\t <img id=\"sea\" crossorigin=\"anonymous\" src=\"https://static.vecteezy.com/system/resources/previews/000/108/621/original/blue-grunge-free-vector-texture.jpg\">" +
+                "\t\t\t\t <img id=\"sea\" crossorigin=\"anonymous\" src=\"" + config.getMetropolisAssetsSourcePath("sea")  +  "\">" +
                 "\n" +
-                "\t\t\t <img id=\"ground\" crossorigin=\"anonymous\" src=\"https://cdn.glitch.com/bb053900-3a29-4a59-a2e0-f06514f3857d%2F791f5b1689d633dafee4f889b5f8e44b.jpg?\">" +
+                "\t\t\t\t <img id=\"ground\" crossorigin=\"anonymous\" src=\"" + config.getMetropolisAssetsSourcePath("ground")  + "\">" +
                 "\n" +
-                "\t\t\t <a-asset-item id=\"polyMountain\" src=\"https://cdn.glitch.com/bb053900-3a29-4a59-a2e0-f06514f3857d%2FpolyMountain.glb\"></a-asset-item>" +
+                "\t\t\t\t <a-asset-item id=\"mountain\" src=\"" + config.getMetropolisAssetsSourcePath("mountain")  +  "\"></a-asset-item>" +
                 "\n" +
                 "\t\t\t </a-assets>" +
                 "\n" +
