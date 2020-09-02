@@ -95,7 +95,7 @@ public class ACityBuildingLayout {
                 if(building.getSourceNode() == null){
                     return floorHeightSum;
                 }
-                String NOS = building.getSourceNodeProperty(SAPNodeProperties.numberofstatements);
+                String NOS = building.getSourceNodeProperty(SAPNodeProperties.number_of_statements);
 
                 if(NOS != "null") {
                     Double nos = Double.valueOf(NOS);

@@ -3,6 +3,7 @@ package org.getaviz.generator.abap.city.steps;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
+import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
@@ -109,7 +110,7 @@ public class ACityMetaDataExporter {
 
             // Belongs to - must be hash value of a parent container
             if (prop == SAPNodeProperties.container_id) {
-                propValue = getContainerHash(node, prop.toString());
+                propValue = getContainerHash(node);
             }
 
             if (NumberUtils.isCreatable(propValue)) {
@@ -133,15 +134,24 @@ public class ACityMetaDataExporter {
         return builder.toString();
     }
 
-    public String getContainerHash(Node node, String prop) {
-        Long container_id = Long.parseLong(node.get(prop).asString());
-        StatementResult results = connector.executeRead("MATCH (aCityNode)-[r:SOURCE]->(sourceNode) " +
-                "WHERE sourceNode.element_id = "+ "\'" + container_id + "\'" +
-                " RETURN aCityNode.hash");
+    public String getContainerHash(Node node) {
+        Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, SAPRelationLabels.CONTAINS, false);
+        if (parentNodes.isEmpty()) {
+            return "";
+        }
 
-        if (results.hasNext()) {
-            Map<String,Object> row = results.next().asMap();
-            return row.get("aCityNode.hash").toString();
+        // Make sure we get direct parent
+        String container_id = node.get(SAPNodeProperties.container_id.name()).asString();
+        for (Node parentNode: parentNodes) {
+            String element_id = parentNode.get(SAPNodeProperties.element_id.name()).asString();
+            if (element_id.equals(container_id)) {
+                ACityElement parentElement = aCityRepository.getElementBySourceID(parentNode.id());
+                // Some SAP standard packages may not included
+                if (parentElement == null) {
+                    return "";
+                }
+                return parentElement.getHash();
+            }
         }
 
         // If no hash was found, for example default SAP packages, no container_id will be written.
