@@ -1,5 +1,6 @@
 package org.getaviz.generator.abap.city.steps;
 
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
@@ -15,9 +16,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 public class ACityMetaDataExporter {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
@@ -105,7 +104,7 @@ public class ACityMetaDataExporter {
                 return;
             }
 
-            // Write strings with "" and numbers without
+            // Remove extra "" (written by Neo4j)
             String propValue = node.get(prop.toString()).toString().replaceAll("\"", "");
 
             // Belongs to - must be hash value of a parent container
@@ -113,12 +112,25 @@ public class ACityMetaDataExporter {
                 propValue = getContainerHash(node);
             }
 
+            // Write strings with ""-signs and numbers without
             if (NumberUtils.isCreatable(propValue)) {
                 builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": " + propValue + "," + "\n");
             } else {
                 builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": \"" + propValue + "\"," + "\n");
             }
         });
+
+        // Add USES and INHERIT relations
+        String nodeType = node.get("type").asString();
+        if (Maps.getNodesWithUsesRelationByType().contains(nodeType)) {
+            builder.append("\"calls\": \"" + getRelations(node, SAPRelationLabels.USES, true) + "\",\n");
+            builder.append("\"calledBy\": \"" + getRelations(node, SAPRelationLabels.USES, false) + "\",\n");
+        }
+
+        if (Maps.getNodesWithInheritRelationByType().contains(nodeType)) {
+            builder.append("\"subClassOf\": \"" + getRelations(node, SAPRelationLabels.INHERIT, true) + "\",\n");
+            builder.append("\"superClassOf\": \"" + getRelations(node, SAPRelationLabels.INHERIT, false) + "\",\n");
+        }
 
         // Make sure we have the right syntax -> no commas at the end
         char lastChar = builder.charAt(builder.length() - 1);
@@ -156,5 +168,29 @@ public class ACityMetaDataExporter {
 
         // If no hash was found, for example default SAP packages, no container_id will be written.
         return "";
+    }
+
+    public String getRelations(Node node, SAPRelationLabels label, Boolean direction) {
+        Collection<Node> nodes = nodeRepository.getRelatedNodes(node, label, direction);
+        if (nodes.isEmpty()) {
+            return "";
+        }
+
+        List<String> nodesHashes = getNodesHashes(nodes);
+        return String.join(", ", nodesHashes); //returns "hash, hash_2, hash*"
+    }
+
+    private List<String> getNodesHashes(Collection<Node> nodes) {
+        List<String> nodesHashes = new ArrayList<>();
+        for (Node node : nodes) {
+            Long nodeId = node.id();
+            ACityElement aCityElement = aCityRepository.getElementBySourceID(nodeId);
+            if (aCityElement == null) {
+                continue;
+            }
+
+            nodesHashes.add(aCityElement.getHash());
+        }
+        return nodesHashes;
     }
 }
