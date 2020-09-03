@@ -24,6 +24,12 @@ var antipatternController = (function() {
         prepareAntipattern();
     }
 
+    function  listedAntipattern() {
+        var items = [];
+        item = {id: "foundGodclass", parentId: "", name: "Eine Gottklasse", iconSkin: "zt", checked: false};
+        items.push(item);
+    }
+
     function prepareAntipattern() {
 
         var items = [];
@@ -46,7 +52,8 @@ var antipatternController = (function() {
         var settings = {
             check: {
                 enable: true,
-                checkboxType: {"Y": "ps", "N": "s"}
+                chkStyle: "radio",
+                radioType: "level"
             },
             data: {
                 simpleData: {
@@ -65,101 +72,40 @@ var antipatternController = (function() {
                 selectMulti: false
             }
         };
-        //create zTree
         tree = $.fn.zTree.init( $(jQVersionExplorerTree), settings, items);
     }
 
     function decide(treeEvent, treeId, treeNode) {
-        switch (treeNode.id){
-            case "godclass":
-                godclass(treeEvent, treeId, treeNode);
-                break;
-            case "brainclass":
-                brainclass(treeEvent, treeId, treeNode);
-                break;
-            case "dataclass":
-                dataclass(treeEvent, treeId, treeNode);
-                break;
-            case "brainmethod":
-                brainmethod(treeEvent, treeId, treeNode);
-                break;
-            case "featureenvy":
-                featureenvy(treeEvent, treeId, treeNode);
-                break;
-        }
+        resetMarked()
+        model.getAllEntities().forEach(entity => {
+            switch (treeNode.id) {
+                case "godclass":
+                    if(entity.godclass === 'TRUE'){changeColor(entity)}
+                    break;
+                case "brainclass":
+                    if(entity.brainclass === 'TRUE'){changeColor(entity)}
+                    break;
+                case "dataclass":
+                    if(entity.dataclass === 'TRUE'){changeColor(entity)}
+                    break;
+                case "brainmethod":
+                    if(entity.brainmethod === 'TRUE'){changeColor(entity)}
+                    break;
+                case "featureenvy":
+                    if(entity.featureenvy === 'TRUE'){changeColor(entity)}
+                    break;
+            }
+        })
     }
 
-    function godclass(treeEvent, treeId, treeNode) {
-        console.log("Check");
-        if (treeNode.checked){
-            model.getAllEntities().forEach(entity => {
-                if(entity.godclass === 'TRUE'){
-                    canvasManipulator.changeColorOfEntities([entity], "#FF4500");}
-            })
-        } else {
-            model.getAllEntities().forEach(entity => {
-                if(entity.godclass === 'TRUE'){
-                    canvasManipulator.resetColorOfEntities([entity]);}
-            })
-
-        }
+    function changeColor(entity){
+        canvasManipulator.changeColorOfEntities([entity], "#FF4500");
     }
 
-    function brainclass(treeEvent, treeId, treeNode) {
-        if (treeNode.checked){
-            model.getAllEntities().forEach(entity => {
-                if(entity.brainclass === 'TRUE'){
-                    canvasManipulator.changeColorOfEntities([entity], "#FF4500");}
-            })
-        } else {
-            model.getAllEntities().forEach(entity => {
-                if(entity.brainclass === 'TRUE'){
-                    canvasManipulator.resetColorOfEntities([entity]);}
-            })
-        }
-    }
-
-    function dataclass(treeEvent, treeId, treeNode) {
-        if (treeNode.checked){
-            model.getAllEntities().forEach(entity => {
-                if(entity.dataclass === 'TRUE'){
-                    canvasManipulator.changeColorOfEntities([entity], "#FF4500");}
-            })
-        } else {
-            model.getAllEntities().forEach(entity => {
-                if(entity.dataclass === 'TRUE'){
-                    canvasManipulator.resetColorOfEntities([entity]);}
-            })
-        }
-    }
-
-    function brainmethod(treeEvent, treeId, treeNode) {
-        if (treeNode.checked){
-            model.getAllEntities().forEach(entity => {
-                if(entity.brainmethod === 'TRUE'){
-                    console.log("dataclass checked")
-                    canvasManipulator.changeColorOfEntities([entity], "#FF4500");}
-            })
-        } else {
-            model.getAllEntities().forEach(entity => {
-                if(entity.brainmethod === 'TRUE'){
-                    canvasManipulator.resetColorOfEntities([entity]);}
-            })
-        }
-    }
-
-    function featureenvy(treeEvent, treeId, treeNode) {
-        if (treeNode.checked){
-            model.getAllEntities().forEach(entity => {
-                if(entity.featureenvy === 'TRUE'){
-                    canvasManipulator.changeColorOfEntities([entity], "#FF4500");}
-            })
-        } else {
-            model.getAllEntities().forEach(entity => {
-                if(entity.featureenvy === 'TRUE'){
-                    canvasManipulator.resetColorOfEntities([entity]);}
-            })
-        }
+    function resetMarked(){
+        model.getAllEntities().forEach(entity => {
+            canvasManipulator.resetColorOfEntities([entity]);
+        })
     }
 
     return {
