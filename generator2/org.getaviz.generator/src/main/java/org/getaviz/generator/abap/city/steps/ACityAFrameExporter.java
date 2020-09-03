@@ -104,19 +104,8 @@ public class ACityAFrameExporter {
         StringBuilder builder = new StringBuilder();
         for (ACityElement element: elements) {
             builder.append(createACityElementExport(element));
-//            writeAframePropertiesToNeo4jNode(element);
         }
         return builder.toString();
-    }
-
-    private void writeAframePropertiesToNeo4jNode(ACityElement element) {
-        String aframePropAsJson = AFramePropAsJSON(element);
-
-        connector.executeWrite(
-          "MATCH (n) " +
-                  "WHERE n.hash = " + "\'" + element.getHash() + "\' " +
-                  "SET n.aframeProperty = \'" + aframePropAsJson + "\'"
-        );
     }
 
     private String AFramePropAsJSON(ACityElement element) {
