@@ -45,11 +45,6 @@ var model = (function() {
                 element.roles,
 				element.isTransparent,
 				element.version,
-				// element.godclass,
-				// element.brainmethod,
-				// element.featureenvy,
-				// element.brainclass,
-				// element.dataclass
 			);
 			
 			entity.isTransparent = false;
@@ -562,8 +557,6 @@ var model = (function() {
 			entityMap.clear();			
 		});
 	}
-	
-	
 	
 	function createEntity(type, id, name, qualifiedName, belongsTo){
 		let entity = {

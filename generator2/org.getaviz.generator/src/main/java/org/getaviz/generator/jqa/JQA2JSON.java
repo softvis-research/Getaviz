@@ -149,11 +149,11 @@ public class JQA2JSON implements Step {
                 "\n" +
                 "\"superClassOf\":  \"" + getSubClasses(c) + "\"," +
                 "\n" +
-                "\"godclass\":  \"" + c.get("godclass").toString() + "\"," +
+                "\"godclass\":  \"" + getGodclass(c) + "\"," +
                 "\n" +
-                "\"brainclass\":  \"" + c.get("brainclass").toString() + "\"," +
+                "\"brainclass\":  \"" + getBrainclass(c) + "\"," +
                 "\n" +
-                "\"dataclass\":  \"" + c.get("dataclass").toString() + "\"," +
+                "\"dataclass\":  \"" + getDataclass(c) + "\"," +
                 "\n" +
                 "\"belongsTo\":     \"" + belongsTo + "\"" +
                 "\n";
@@ -222,9 +222,9 @@ public class JQA2JSON implements Step {
                 "\n" +
                 "\"accesses\":\t \t \"" + getAccesses(method) + "\"," +
                 "\n" +
-                "\"featureenvy\":  \"" + method.get("featureenvy").toString() + "\"," +
+                "\"featureenvy\":  \"" + getFeatureEnvy(method) + "\"," +
                 "\n" +
-                "\"brainmethod\":  \"" + method.get("brainmethod").toString() + "\"," +
+                "\"brainmethod\":  \"" + getBrainmethod(method) + "\"," +
                 "\n" +
                 "\"belongsTo\":     \"" + belongsTo + "\"" +
                 "\n";
@@ -402,6 +402,46 @@ public class JQA2JSON implements Step {
             });
         });
         return removeBrackets(parameterList);
+    }
+
+    private String getGodclass(Node element) {
+        if (element.get("godclass").isTrue()) {
+            return  "TRUE";
+        } else {
+            return "FALSE";
+        }
+    }
+
+    private String getBrainclass(Node element) {
+        if (element.get("brainclass").isTrue()) {
+            return  "TRUE";
+        } else {
+            return "FALSE";
+        }
+    }
+
+    private String getDataclass(Node element) {
+        if (element.get("dataclass").isTrue()) {
+            return  "TRUE";
+        } else {
+            return "FALSE";
+        }
+    }
+
+    private String getFeatureEnvy(Node element) {
+        if (element.get("featureenvy").isTrue()) {
+            return  "TRUE";
+        } else {
+            return "FALSE";
+        }
+    }
+
+    private String getBrainmethod(Node element) {
+        if (element.get("brainmethod").isTrue()) {
+            return  "TRUE";
+        } else {
+            return "FALSE";
+        }
     }
 
     private String removeBrackets(List<String> list) {
