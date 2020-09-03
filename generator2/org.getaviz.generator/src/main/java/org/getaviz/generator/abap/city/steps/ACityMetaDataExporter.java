@@ -132,6 +132,14 @@ public class ACityMetaDataExporter {
             builder.append("\"superClassOf\": \"" + getRelations(node, SAPRelationLabels.INHERIT, false) + "\",\n");
         }
 
+        //qualifiedName
+        builder.append("\"qualifiedName\": \"" + getQualifiedName(node) + "\",\n");
+
+        //signature for methods
+        if (node.get("type").asString().equals("METH")) {
+            builder.append("\"signature\": \"" + "" + "\",\n");
+        }
+
         // Make sure we have the right syntax -> no commas at the end
         char lastChar = builder.charAt(builder.length() - 1);
         if (Character.compare(lastChar, '\n') == 0) {
@@ -146,7 +154,13 @@ public class ACityMetaDataExporter {
         return builder.toString();
     }
 
-    public String getContainerHash(Node node) {
+    private String getQualifiedName(Node node) {
+        List<String> nodesHashes = new ArrayList<>();
+        Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, SAPRelationLabels.CONTAINS, false);
+        return "";
+    }
+
+    private String getContainerHash(Node node) {
         Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, SAPRelationLabels.CONTAINS, false);
         if (parentNodes.isEmpty()) {
             return "";
@@ -170,7 +184,7 @@ public class ACityMetaDataExporter {
         return "";
     }
 
-    public String getRelations(Node node, SAPRelationLabels label, Boolean direction) {
+    private String getRelations(Node node, SAPRelationLabels label, Boolean direction) {
         Collection<Node> nodes = nodeRepository.getRelatedNodes(node, label, direction);
         if (nodes.isEmpty()) {
             return "";
