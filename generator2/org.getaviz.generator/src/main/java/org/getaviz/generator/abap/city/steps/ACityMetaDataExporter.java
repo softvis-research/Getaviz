@@ -35,7 +35,7 @@ public class ACityMetaDataExporter {
             File outputDir = new File(config.getOutputMap());
             String path = outputDir.getAbsolutePath() + "/metaData.json";
             fw = new FileWriter(path);
-            fw.write(toJSON(nodeRepository.getNodes()));
+            fw.write(toJSON(aCityRepository.getAllElements()));
         } catch (IOException e) {
             System.out.println(e);
         } finally {
@@ -49,28 +49,17 @@ public class ACityMetaDataExporter {
     }
 
     public void setMetaDataPropToACityElements() {
-        Collection<Node> nodes = nodeRepository.getNodes();
-        for (final Node node : nodes) {
-            String metaData = toMetaData(node);
-            ACityElement aCityElement = aCityRepository.getElementBySourceID(node.id());
-            if (aCityElement == null) {
-                continue;
-            }
-
-            aCityElement.setMetaData("{" + metaData + "}");
+        Collection<ACityElement> aCityElements = aCityRepository.getAllElements();
+        for (final ACityElement element : aCityElements) {
+            String metaData = toMetaData(element);
+            element.setMetaData("{" + metaData + "}");
         }
     }
 
-    private String toJSON(Collection<Node> nodes) {
+    private String toJSON(Collection<ACityElement> elements) {
         StringBuilder metaDataFile = new StringBuilder();
         boolean hasElements = false;
-        for (final Node node : nodes) {
-            // Some elements are not in aCityRep; Example - standard SAP-packages
-            ACityElement element = aCityRepository.getElementBySourceID(node.id());
-            if (element == null) {
-                continue;
-            }
-
+        for (final ACityElement element: elements) {
             if (!hasElements) {
                 hasElements = true;
                 metaDataFile.append("[{");
@@ -78,7 +67,7 @@ public class ACityMetaDataExporter {
                 metaDataFile.append("\n},{");
             }
             metaDataFile.append("\n");
-            metaDataFile.append(toMetaData(node));
+            metaDataFile.append(toMetaData(element));
         }
         if (hasElements) {
             metaDataFile.append("}]");
@@ -86,59 +75,19 @@ public class ACityMetaDataExporter {
         return metaDataFile.toString();
     }
 
-    private String toMetaData(Node node) {
+    private String toMetaData(ACityElement element) {
         StringBuilder builder = new StringBuilder();
-        ACityElement element = aCityRepository.getElementBySourceID(node.id());
 
-        Arrays.asList(SAPNodeProperties.values()).forEach(prop -> {
-            if (prop == SAPNodeProperties.element_id) {
-                if (element != null) {
-                    builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": \"" + element.getHash() + "\"," +"\n");
-                }
-
-                return; // Jump to the next prop
-            }
-
-            // If there is no value for property, then don't write
-            if (node.get(prop.toString()).isNull()) {
-                return;
-            }
-
-            // Remove extra "" (written by Neo4j)
-            String propValue = node.get(prop.toString()).toString().replaceAll("\"", "");
-
-            // Belongs to - must be hash value of a parent container
-            if (prop == SAPNodeProperties.container_id) {
-                propValue = getContainerHash(node);
-            }
-
-            // Write strings with ""-signs and numbers without
-            if (NumberUtils.isCreatable(propValue)) {
-                builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": " + propValue + "," + "\n");
-            } else {
-                builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": \"" + propValue + "\"," + "\n");
-            }
-        });
-
-        // Add USES and INHERIT relations
-        String nodeType = node.get("type").asString();
-        if (Maps.getNodesWithUsesRelationByType().contains(nodeType)) {
-            builder.append("\"calls\": \"" + getRelations(node, SAPRelationLabels.USES, true) + "\",\n");
-            builder.append("\"calledBy\": \"" + getRelations(node, SAPRelationLabels.USES, false) + "\",\n");
-        }
-
-        if (Maps.getNodesWithInheritRelationByType().contains(nodeType)) {
-            builder.append("\"subClassOf\": \"" + getRelations(node, SAPRelationLabels.INHERIT, true) + "\",\n");
-            builder.append("\"superClassOf\": \"" + getRelations(node, SAPRelationLabels.INHERIT, false) + "\",\n");
-        }
-
-        //qualifiedName
-        builder.append("\"qualifiedName\": \"" + getQualifiedName(node) + "\",\n");
-
-        //signature for methods
-        if (node.get("type").asString().equals("METH")) {
-            builder.append("\"signature\": \"" + "" + "\",\n");
-        }
+        // Add element hash
+        builder.append("\""+ Maps.getMetaDataProperty(SAPNodeProperties.element_id.name()) + "\": \"" + element.getHash() + "\"," +"\n");
+        // Add qualifiedName
+        builder.append("\"qualifiedName\": \"" + getQualifiedName(element) + "\",\n");
+        // Add node information
+        builder.append(addNodeInfoToBuilder(element));
+        // Add relations
+        builder.append(addRelationsToBuilder(element));
+        // Add additional meta
+        builder.append(addAdditionalMeta(element));
 
         // Make sure we have the right syntax -> no commas at the end
         char lastChar = builder.charAt(builder.length() - 1);
@@ -154,9 +103,82 @@ public class ACityMetaDataExporter {
         return builder.toString();
     }
 
-    private String getQualifiedName(Node node) {
-        List<String> nodesHashes = new ArrayList<>();
-        Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, SAPRelationLabels.CONTAINS, false);
+    private String addNodeInfoToBuilder(ACityElement element) {
+        StringBuilder builder = new StringBuilder();
+        Node node = element.getSourceNode();
+        // For some accessory elements there is no source node
+        if (node == null) {
+            return "";
+        }
+        Arrays.asList(SAPNodeProperties.values()).forEach(prop -> {
+            if (prop == SAPNodeProperties.element_id) {
+                return; // already added as first prop by toMetaData()
+            }
+
+            // Don't write properties  with NULL value
+            if (node.get(prop.toString()).isNull()) {
+                return;
+            }
+
+            // Remove extra "" (written by Neo4j)
+            String propValue = node.get(prop.toString()).toString().replaceAll("\"", "");
+
+            // Belongs to - must be hash a value of a parent container
+            if (prop == SAPNodeProperties.container_id) {
+                propValue = "";
+                if (element.getParentElement() != null) {
+                    //element.getParentElement() may be empty, so use relations to find parent
+                    propValue = getContainerHash(node);
+                }
+            }
+
+            // Write strings with quotation marks and numbers without
+            if (NumberUtils.isCreatable(propValue)) {
+                builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": " + propValue + "," + "\n");
+            } else {
+                builder.append("\""+ Maps.getMetaDataProperty(prop.toString()) + "\": \"" + propValue + "\"," + "\n");
+            }
+        });
+
+        return builder.toString();
+    }
+
+    private String addRelationsToBuilder(ACityElement element) {
+        StringBuilder builder = new StringBuilder();
+        Node node = element.getSourceNode();
+        // For some accessory elements there is no source node
+        if (node == null) {
+            return "";
+        }
+
+        // Add USES and INHERIT relations
+        String nodeType = node.get("type").asString();
+        if (Maps.getNodesWithUsesRelationByType().contains(nodeType)) {
+            builder.append("\"calls\": \"" + getRelations(node, SAPRelationLabels.USES, true) + "\",\n");
+            builder.append("\"calledBy\": \"" + getRelations(node, SAPRelationLabels.USES, false) + "\",\n");
+        }
+        if (Maps.getNodesWithInheritRelationByType().contains(nodeType)) {
+            builder.append("\"subClassOf\": \"" + getRelations(node, SAPRelationLabels.INHERIT, true) + "\",\n");
+            builder.append("\"superClassOf\": \"" + getRelations(node, SAPRelationLabels.INHERIT, false) + "\",\n");
+        }
+
+        return builder.toString();
+    }
+
+    private String addAdditionalMeta(ACityElement element) {
+        StringBuilder builder = new StringBuilder();
+        Node node = element.getSourceNode();
+        String nodeType = node.get("type").asString();
+
+        //signature for methods
+        if (node.get("type").asString().equals("METH")) {
+            builder.append("\"signature\": \"" + "" + "\",\n");
+        }
+
+        return builder.toString();
+    }
+
+    private String getQualifiedName(ACityElement element) {
         return "";
     }
 

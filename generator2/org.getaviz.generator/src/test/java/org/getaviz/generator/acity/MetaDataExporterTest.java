@@ -41,6 +41,7 @@ public class MetaDataExporterTest {
 
     @BeforeAll
     static void setup() {
+        SettingsConfiguration.getInstance("ABAPCityTest.properties");
         nodeRepository = new SourceNodeRepository();
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);

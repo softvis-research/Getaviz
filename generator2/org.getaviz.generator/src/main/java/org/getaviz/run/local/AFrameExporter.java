@@ -21,6 +21,7 @@ public class AFrameExporter {
     private static  AFrameOutput aFrameOutput;
 
     public static void main(String[] args) {
+        SettingsConfiguration.getInstance("src/test/resources/ABAPCityTest.properties");
         boolean isSilentMode = true;
         nodeRepository = new SourceNodeRepository();
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());

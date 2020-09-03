@@ -10,8 +10,8 @@ import java.util.Scanner;
 public class Loader {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
-
     public static void main(String[] args) {
+        SettingsConfiguration.getInstance("src/test/resources/ABAPCityTest.properties");
         boolean isSilentMode = true;
         String pathToNodesCsv = "";
         String pathToTypeOfRelationsCsv = "";
@@ -66,9 +66,11 @@ public class Loader {
         connector.executeWrite("MATCH (n) " +
                 "WHERE (n.created <> \"00000000\" AND n.created <> \"0\") " +
                 "SET n.created = date(n.created)");
+        connector.executeWrite("MATCH (n) WHERE (n.created = \"00000000\") SET n.created = \"0\"");
         connector.executeWrite("MATCH (n) " +
                 "WHERE (n.changed <> \"00000000\" AND n.changed <> \"0\") " +
                 "SET n.changed = date(n.changed)");
+        connector.executeWrite("MATCH (n) WHERE (n.changed = \"00000000\") SET n.changed = \"0\"");
 
 
         // 2. Upload relations  
