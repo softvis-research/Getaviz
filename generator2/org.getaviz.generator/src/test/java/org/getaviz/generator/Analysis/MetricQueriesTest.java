@@ -6,6 +6,7 @@ import org.getaviz.generator.Step;
 import org.getaviz.generator.StepFactory;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
+import org.getaviz.generator.mockups.BankAntipattern;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,13 +25,12 @@ import java.util.List;
 class MetricQueriesTest {
 
     private static DatabaseConnector connector;
-    private static Bank mockup = new Bank();
+    private static BankAntipattern mockup = new BankAntipattern();
 
 
     @BeforeAll
     static void setup() {
         mockup.setupDatabase("./test/databases/MetricQueriesTest.db");
-//        mockup.loadProperties("CityBankTest.properties");
         connector = mockup.getConnector();
         SettingsConfiguration config = SettingsConfiguration.getInstance();
         StepFactory factory = new StepFactory(config, Collections.singletonList(ProgrammingLanguage.JAVA));

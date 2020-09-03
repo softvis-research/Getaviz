@@ -32,7 +32,7 @@ class JavaEnhancementTest {
         Record result = connector.executeRead("MATCH (n) WHERE n.hash IS NOT NULL RETURN count(n.hash) AS result")
                 .single();
         int numberOfHashes = result.get("result").asInt();
-        assertEquals(65, numberOfHashes);
+        assertEquals(61, numberOfHashes);
     }
 
     @Test
@@ -47,7 +47,7 @@ class JavaEnhancementTest {
         Record result = connector.executeRead("MATCH (method:Getter) RETURN count(method) AS result")
                 .single();
         int numberOfGetter = result.get("result").asInt();
-        assertEquals(8, numberOfGetter);
+        assertEquals(9, numberOfGetter);
     }
 
     @Test

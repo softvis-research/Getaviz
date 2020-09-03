@@ -6,6 +6,7 @@ import org.getaviz.generator.Step;
 import org.getaviz.generator.StepFactory;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
+import org.getaviz.generator.mockups.BankAntipattern;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AntipatternTest {
 
     private static DatabaseConnector connector;
-    private static Bank mockup = new Bank();
+    private static BankAntipattern mockup = new BankAntipattern();
 
 
     @BeforeAll

@@ -13,6 +13,6 @@ public class Bank extends Mockup {
 		registerShutdownHook(graphDb);
 		connector = DatabaseConnector.getInstance("bolt://localhost:7689");
 		resetDatabase();
-		runCypherScript("BankAP.cypher");
+		runCypherScript("Bank.cypher");
 	}
 }

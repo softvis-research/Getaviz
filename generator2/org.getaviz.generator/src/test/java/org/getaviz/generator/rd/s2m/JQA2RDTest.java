@@ -45,7 +45,7 @@ class JQA2RDTest {
         Record result = connector
                 .executeRead("MATCH (disk:SubDisk)-[:VISUALIZES]->(n) RETURN count(disk) AS result").single();
         int numberOfDisks = result.get("result").asInt();
-        assertEquals(5, numberOfDisks);
+        assertEquals(7, numberOfDisks);
     }
 
 
