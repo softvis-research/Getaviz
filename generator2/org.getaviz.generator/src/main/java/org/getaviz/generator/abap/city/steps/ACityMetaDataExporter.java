@@ -1,6 +1,5 @@
 package org.getaviz.generator.abap.city.steps;
 
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
@@ -10,7 +9,6 @@ import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.run.local.common.Maps;
-import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.types.Node;
 import java.io.File;
 import java.io.FileWriter;
@@ -83,11 +81,11 @@ public class ACityMetaDataExporter {
         // Add qualifiedName
         builder.append("\"qualifiedName\": \"" + getQualifiedName(element) + "\",\n");
         // Add node information
-        builder.append(addNodeInfoToBuilder(element));
+        builder.append(getNodeMetaInfo(element));
         // Add relations
-        builder.append(addRelationsToBuilder(element));
+        builder.append(getRelationsMetaInfo(element));
         // Add additional meta
-        builder.append(addAdditionalMeta(element));
+        builder.append(getAdditionalMetaInfo(element));
 
         // Make sure we have the right syntax -> no commas at the end
         char lastChar = builder.charAt(builder.length() - 1);
@@ -103,7 +101,7 @@ public class ACityMetaDataExporter {
         return builder.toString();
     }
 
-    private String addNodeInfoToBuilder(ACityElement element) {
+    private String getNodeMetaInfo(ACityElement element) {
         StringBuilder builder = new StringBuilder();
         Node node = element.getSourceNode();
         // For some accessory elements there is no source node
@@ -143,7 +141,7 @@ public class ACityMetaDataExporter {
         return builder.toString();
     }
 
-    private String addRelationsToBuilder(ACityElement element) {
+    private String getRelationsMetaInfo(ACityElement element) {
         StringBuilder builder = new StringBuilder();
         Node node = element.getSourceNode();
         // For some accessory elements there is no source node
@@ -165,7 +163,7 @@ public class ACityMetaDataExporter {
         return builder.toString();
     }
 
-    private String addAdditionalMeta(ACityElement element) {
+    private String getAdditionalMetaInfo(ACityElement element) {
         StringBuilder builder = new StringBuilder();
         Node node = element.getSourceNode();
         String nodeType = node.get("type").asString();
