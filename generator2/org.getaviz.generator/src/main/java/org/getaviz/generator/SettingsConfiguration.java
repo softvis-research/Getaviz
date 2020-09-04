@@ -155,6 +155,56 @@ public class SettingsConfiguration {
 		return AFrameOutput.BOTH;
 	}
 
+	//Kind of arranging the districts of the SCO
+	public enum NotInOriginLayout {
+		DEFAULT, CIRCULAR
+	}
+
+	public NotInOriginLayout getAbapNotInOrigin_layout() {
+		String value = config.getString("city.abap.notInOrigin_layout", "default");
+		switch (value) {
+			case "default":
+				return NotInOriginLayout.DEFAULT;
+			case "circular":
+				return NotInOriginLayout.CIRCULAR;
+			default:
+				return NotInOriginLayout.DEFAULT;
+		}
+	}
+
+	public enum NotInOriginLayoutVersion {
+		MINIMAL_DISTANCE, FULL_CIRCLE
+	}
+
+	public NotInOriginLayoutVersion getAbapNotInOrigin_layout_version() {
+		String value = config.getString("city.abap.notInOrigin_layout_version", "minimalDistance");
+		switch (value) {
+			case "minimalDistance":
+				return NotInOriginLayoutVersion.MINIMAL_DISTANCE;
+			case "fullCircle":
+				return NotInOriginLayoutVersion.FULL_CIRCLE;
+			default:
+				return NotInOriginLayoutVersion.MINIMAL_DISTANCE;
+		}
+	}
+
+	public boolean clusterSubPackages() {
+		return config.getBoolean("city.abap.clusterSubPackages", true);
+	}
+
+    //Kind of arranging the districts of the SCO
+	public DistrictLayoutVersion getDistrictLayout_Version(){
+		String value = config.getString("city.abap_district_layout", "new");
+		switch (value) {
+			case "old":
+				return DistrictLayoutVersion.OLD;
+			case "new":
+				return DistrictLayoutVersion.NEW;
+			default:
+				return DistrictLayoutVersion.OLD;
+		}
+	}
+
     public String getName() {
 		return config.getString("input.name", "default");
 	}
@@ -732,6 +782,12 @@ public class SettingsConfiguration {
     public enum  AFrameOutput {
 		FILE, NODEPROP, BOTH
 	}
+
+	public enum DistrictLayoutVersion {
+		OLD, NEW
+	}
+
+
 
 
 

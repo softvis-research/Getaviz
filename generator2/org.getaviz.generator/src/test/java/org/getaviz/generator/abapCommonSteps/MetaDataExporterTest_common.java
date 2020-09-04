@@ -1,11 +1,11 @@
-package org.getaviz.generator.acity;
+package org.getaviz.generator.abapCommonSteps;
 
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.steps.*;
+import org.getaviz.generator.abap.city.steps.ACityCreator;
+import org.getaviz.generator.abap.common.steps.MetaDataExporter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
@@ -31,7 +31,8 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
-public class AFrameExporterStepTest {
+public class MetaDataExporterTest_common {
+
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     private static SourceNodeRepository nodeRepository;
@@ -44,17 +45,10 @@ public class AFrameExporterStepTest {
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
         nodeRepository.loadNodesByRelation(SAPRelationLabels.TYPEOF, true);
-
         aCityRepository = new ACityRepository();
 
         ACityCreator aCityCreator = new ACityCreator(aCityRepository, nodeRepository, config);
         aCityCreator.createRepositoryFromNodeRepository();
-
-        ACityLayouter aCityLayouter = new ACityLayouter(aCityRepository, nodeRepository, config);
-        aCityLayouter.layoutRepository();
-
-        ACityDesigner designer = new ACityDesigner(aCityRepository, nodeRepository, config);
-        designer.designRepository();
 
         // Delete old ACityRepository Nodes
         connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
@@ -62,15 +56,9 @@ public class AFrameExporterStepTest {
         // Update Neo4j with new nodes
         aCityRepository.writeRepositoryToNeo4j();
 
-        // Create metaData.json
-        ACityMetaDataExporter aCityMetaDataExporter = new ACityMetaDataExporter(aCityRepository, nodeRepository);
-        aCityMetaDataExporter.exportMetaDataFile();
-        aCityMetaDataExporter.setMetaDataPropToACityElements();
-
-        // Create A-Frame
-        ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config, "acity_AFrame_UI");
-        aCityAFrameExporter.exportAFrame();
-        aCityAFrameExporter.setAframePropToACityElements();
+        MetaDataExporter metaDataExporter = new MetaDataExporter(aCityRepository, nodeRepository);
+        metaDataExporter.exportMetaDataFile();
+        metaDataExporter.setMetaDataPropToACityElements();
         connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
         aCityRepository.writeRepositoryToNeo4j();
     }
@@ -79,11 +67,10 @@ public class AFrameExporterStepTest {
     static void close() { connector.close(); }
 
     @Test
-    void checkIfExportFilesWereCreated() {
+    void checkIfExportFileWasCreated() {
         File currentDir = new File(config.getOutputMap());
         String helper = currentDir.getAbsolutePath();
         boolean metaDataFileExists = false;
-        boolean aframeFileExists = false;
         List<Path> files = new ArrayList<>();
         try {
             files = Files.walk(Paths.get(helper), 1)
@@ -96,34 +83,64 @@ public class AFrameExporterStepTest {
         for(Path p : files) {
             if (p.toString().endsWith("metaData.json")) {
                 metaDataFileExists = p.toFile().length() > 0;
-            } else if (p.toString().endsWith("model.html")) {
-                aframeFileExists = p.toFile().length() > 0;
+                break;
             }
         }
 
         assertEquals(true, metaDataFileExists);
-        assertEquals(true, aframeFileExists);
     }
 
     @Test
-    void checkNeo4jAFrameProperty() {
-        Record record = connector
-                .executeRead("MATCH (n:ACityRep) WHERE EXISTS (n.aframeProperty)\n" +
-                        "RETURN n.aframeProperty AS aframeProperty \n" +
-                        "LIMIT 1")
-                .single();
-        String aframeProperty = record.get("aframeProperty").asString();
-        assertNotSame("null", aframeProperty);
-
+    void checkMetaDataFile() {
         JSONParser parser = new JSONParser();
         try {
-            Object obj = parser.parse(aframeProperty);
-            JSONObject jsonObject = (JSONObject) obj;
+            Object obj = parser.parse(new FileReader(config.getOutputMap() + "/metaData.json"));
+            JSONArray jsonArray = objectToJSONArray(obj);
+            JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+
             assertNotSame("", jsonObject.get("id"));
-            assertNotSame("", jsonObject.get("shape"));
-            assertNotSame("", jsonObject.get("position"));
+            assertNotSame("", jsonObject.get("name"));
+            assertNotSame("", jsonObject.get("type"));
+            assertNotSame("", jsonObject.get("belongsTo"));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    @Test
+    void checkNeo4jMetaDataProperty() {
+        Record record = connector
+                .executeRead("MATCH (n:ACityRep) RETURN n.metaData AS metaData LIMIT 1")
+                .single();
+        String metaData = record.get("metaData").asString();
+
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(metaData);
+            JSONObject jsonObject = (JSONObject) obj;
+
+            assertNotSame("", jsonObject.get("id"));
+            assertNotSame("", jsonObject.get("name"));
+            assertNotSame("", jsonObject.get("type"));
+            assertNotSame("", jsonObject.get("belongsTo"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private JSONArray objectToJSONArray(Object obj) {
+        JSONArray jsonArray = new JSONArray();
+        if (obj instanceof Map){
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.putAll((Map)obj);
+            jsonArray.add(jsonObject);
+        }
+        else if (obj instanceof List){
+            jsonArray.addAll((List)obj);
+        }
+
+        return jsonArray;
+    }
+
 }

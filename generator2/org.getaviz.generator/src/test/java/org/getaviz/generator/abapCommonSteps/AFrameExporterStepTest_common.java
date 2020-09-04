@@ -1,15 +1,14 @@
-package org.getaviz.generator.acity;
+package org.getaviz.generator.abapCommonSteps;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.city.steps.*;
+import org.getaviz.generator.abap.common.steps.AFrameExporter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.AfterAll;
@@ -18,20 +17,18 @@ import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
-public class AFrameExporterStepTest {
+public class AFrameExporterStepTest_common {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     private static SourceNodeRepository nodeRepository;
@@ -68,9 +65,9 @@ public class AFrameExporterStepTest {
         aCityMetaDataExporter.setMetaDataPropToACityElements();
 
         // Create A-Frame
-        ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config, "acity_AFrame_UI");
-        aCityAFrameExporter.exportAFrame();
-        aCityAFrameExporter.setAframePropToACityElements();
+        AFrameExporter aFrameExporter = new AFrameExporter(aCityRepository, config, "acity_AFrame_UI");
+        aFrameExporter.exportAFrame();
+        aFrameExporter.setAframePropToACityElements();
         connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
         aCityRepository.writeRepositoryToNeo4j();
     }
@@ -126,4 +123,5 @@ public class AFrameExporterStepTest {
             e.printStackTrace();
         }
     }
+
 }
