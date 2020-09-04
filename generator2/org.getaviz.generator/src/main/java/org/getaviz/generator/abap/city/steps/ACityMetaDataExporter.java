@@ -177,7 +177,21 @@ public class ACityMetaDataExporter {
     }
 
     private String getQualifiedName(ACityElement element) {
-        return "";
+        Node node = element.getSourceNode();
+        List<String> qualifiedNameAsList = getQualifiedNameAsList(node);
+        return String.join(".", qualifiedNameAsList); //returns "name1.name2.name3"
+    }
+
+    private List<String> getQualifiedNameAsList(Node node) {
+        List<String> qualifiedNameAsList = new ArrayList<>();
+        Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, SAPRelationLabels.CONTAINS, false);
+        if (!parentNodes.isEmpty()) {
+            qualifiedNameAsList.addAll(getQualifiedNameAsList(parentNodes.iterator().next()));
+        }
+
+        String nodeName = node.get(SAPNodeProperties.object_name.name()).asString();
+        qualifiedNameAsList.add(nodeName);
+        return qualifiedNameAsList;
     }
 
     private String getContainerHash(Node node) {
