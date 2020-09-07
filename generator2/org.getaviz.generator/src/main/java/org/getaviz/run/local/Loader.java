@@ -72,6 +72,9 @@ public class Loader {
                 "SET n.changed = date(n.changed)");
         connector.executeWrite("MATCH (n) WHERE (n.changed = \"00000000\") SET n.changed = \"0\"");
 
+        // Convert Number_of_statements string to int
+        connector.executeWrite("MATCH (n) SET n.number_of_statements = toInteger(n.number_of_statements)");
+
 
         // 2. Upload relations  
         if (!isSilentMode) {
