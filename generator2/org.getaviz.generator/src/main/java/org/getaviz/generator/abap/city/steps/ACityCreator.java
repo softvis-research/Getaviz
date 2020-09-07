@@ -1,5 +1,6 @@
 package org.getaviz.generator.abap.city.steps;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
@@ -10,6 +11,7 @@ import org.getaviz.generator.abap.repository.*;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
@@ -21,8 +23,9 @@ public class ACityCreator {
 
 
     private Log log = LogFactory.getLog(this.getClass());
-    private SettingsConfiguration config;
+//    private SettingsConfiguration config;
 
+    private static SettingsConfiguration config;
     private SourceNodeRepository nodeRepository;
     private ACityRepository repository;
 
@@ -49,7 +52,10 @@ public class ACityCreator {
 
         log.info("Delete empty Districts");
         deleteEmptyDistricts();
+    }
 
+    public String removeBrackets(String string) {
+        return StringUtils.remove(StringUtils.remove(string, "["), "]");
     }
 
     private void deleteEmptyDistricts() {

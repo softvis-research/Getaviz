@@ -91,6 +91,9 @@ public class ACityElement {
 
     private String rotation;
 
+    private String metaData;
+    private String aframeProperty;
+
     public ACityElement(ACityType type) {
         this.type = type;
         subElements = new ArrayList<>();
@@ -287,4 +290,15 @@ public class ACityElement {
     public void setNodeID(Long nodeID) {
         this.nodeID = nodeID;
     }
+
+    public void setMetaData(String metaData) { this.metaData = metaData; }
+
+    public String getMetaData() {
+        return metaData;
+    }
+
+    public void setAframeProperty(String aframeProperty) { this.aframeProperty = aframeProperty; }
+
+    public String getAframeProperty() { return aframeProperty; }
+
 }

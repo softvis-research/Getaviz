@@ -10,7 +10,6 @@ import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.StatementResult;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 

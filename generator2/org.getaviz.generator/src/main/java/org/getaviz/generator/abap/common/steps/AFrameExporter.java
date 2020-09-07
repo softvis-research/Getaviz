@@ -1,4 +1,4 @@
-package org.getaviz.generator.abap.city.steps;
+package org.getaviz.generator.abap.common.steps;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -6,10 +6,10 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.output.abap_output.acity_AFrame;
-import org.getaviz.generator.output.abap_output.acity_AFrame_UI;
 import org.getaviz.generator.output.abap_output.ABAP_OutputFormat;
-import org.neo4j.driver.v1.types.Node;
+import org.getaviz.generator.output.abap_output.acity_AFrame_UI;
+import org.getaviz.generator.output.abap_output.metropolis_AFrame;
+import org.getaviz.generator.output.abap_output.acity_AFrame;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
 
-public class ACityAFrameExporter {
+public class AFrameExporter {
 
     private Log log = LogFactory.getLog(this.getClass());
     private SettingsConfiguration config;
@@ -27,19 +27,17 @@ public class ACityAFrameExporter {
 
     private ABAP_OutputFormat aFrameOutput;
 
-    public ACityAFrameExporter(ACityRepository aCityRepository, SettingsConfiguration config, String aFrameOutputName) {
+    public AFrameExporter(ACityRepository aCityRepository, SettingsConfiguration config, String aFrameOutputName) {
         this.config = config;
         this.connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
 
         repository = aCityRepository;
 
-        if (aFrameOutputName.equals("acity_AFrame_UI")) {
-            aFrameOutput = new acity_AFrame_UI();
-            return;
+        switch(aFrameOutputName){
+            case "acity_AFrame":  aFrameOutput = new acity_AFrame(); break;
+            case "metropolis_AFrame":  aFrameOutput = new metropolis_AFrame(config); break;
+            case "acity_AFrame_UI": aFrameOutput = new acity_AFrame_UI(); break;
         }
-
-        aFrameOutput = new acity_AFrame();
-
     }
 
     public String createAFrameExportString(){
@@ -88,8 +86,10 @@ public class ACityAFrameExporter {
         Collection<ACityElement> floors = repository.getElementsByType(ACityElement.ACityType.Floor);
         builder.append(createElementsExport(floors));
 
-        Collection<ACityElement> chimneys = repository.getElementsByType(ACityElement.ACityType.Chimney);
-        builder.append(createElementsExport(chimneys));
+        if(aFrameOutput.equals("acity_AFrame")) {
+            Collection<ACityElement> chimneys = repository.getElementsByType(ACityElement.ACityType.Chimney);
+            builder.append(createElementsExport(chimneys));
+        }
 
         Collection<ACityElement> buildings = repository.getElementsByType(ACityElement.ACityType.Building);
         builder.append(createElementsExport(buildings));
@@ -141,14 +141,15 @@ public class ACityAFrameExporter {
 
     private String createACityElementExport(ACityElement element){
         StringBuilder builder = new StringBuilder();
-        builder.append("<" + getShapeExport(element.getShape()) + " id=" +"\"" + element.getHash() + "\"");
+
+        builder.append("<" + getShapeExport(element.getShape()) + " id=\"" + element.getHash() + "\"");
         builder.append("\n");
         builder.append("\t position=\"" + element.getXPosition() + " " + element.getYPosition() + " " + element.getZPosition() + "\"");
         builder.append("\n");
         builder.append("\t height=\"" + element.getHeight() + "\"");
         builder.append("\n");
 
-        if(element.getShape() == ACityElement.ACityShape.Box){
+        if(element.getShape() == ACityElement.ACityShape.Box || element.getShape() == ACityElement.ACityShape.Entity){
             builder.append("\t width=\"" + element.getWidth() + "\"");
             builder.append("\n");
             builder.append("\t depth=\"" + element.getLength() + "\"");
@@ -158,14 +159,24 @@ public class ACityAFrameExporter {
             builder.append("\n");
         }
 
-
-        //builder.append("\t shader=\"flat\"");
-        //builder.append("\n");
-        //builder.append("\t flat-shading=\"true\"");
-        //builder.append("\n");
-
         builder.append("\t color=\"" + element.getColor() + "\"");
         builder.append("\n");
+
+        if (element.getTextureSource() != null){
+            builder.append("\t src=\"" + element.getTextureSource() + "\"");
+            builder.append("\n");
+        }
+        if (element.getRotation() != null){
+            builder.append("\t rotation=\"" + element.getRotation() + "\"");
+            builder.append("\n");
+        }
+        if(element.getModel() != null){
+            builder.append("\t scale=\"" + element.getModelScale() + "\"");
+            builder.append("\n");
+            builder.append("\t gltf-model=\"" + element.getModel() + "\"");
+            builder.append("\n");
+        }
+
         builder.append("\t shadow");
         builder.append(">");
 
@@ -181,6 +192,11 @@ public class ACityAFrameExporter {
             case Box: return "a-box";
             case Cylinder: return "a-cylinder";
             case Cone: return "a-cone";
+            case Ring: return "a-ring";
+            case Plane: return "a-plane";
+            case Circle: return "a-circle";
+            case Sphere: return "a-sphere";
+            case Entity: return "a-entity";
         }
         return "a-sphere";
     }

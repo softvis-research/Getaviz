@@ -82,7 +82,8 @@ public class SettingsConfiguration {
 	}
 
 	public List<Path> getInputCSVFiles() {
-		File currentDir = new File("src/test/neo4jexport/");
+		String path = config.getString("input.map", "src/test/neo4jexport/");
+		File currentDir = new File(path);
 		String helper = currentDir.getAbsolutePath();
 		List<Path> files = new ArrayList<>();
 		try {
@@ -121,6 +122,8 @@ public class SettingsConfiguration {
 		}
 		return files.toString();
 	}
+
+	public String getOutputMap() { return config.getString("output.map", "src/test/neo4jexport");}
 	
 	public Metaphor getMetaphor() {
 		String metaphor = config.getString("metaphor", "rd");
@@ -129,8 +132,80 @@ public class SettingsConfiguration {
 		}
 		return Metaphor.RD;
 	}
-	
-	public String getName() {
+
+	public MetaDataOutput getMetaDataOutput() {
+	    String metaDataOutput = config.getString("output.metaData", "both");
+	    if ("file".equals(metaDataOutput)) {
+	        return MetaDataOutput.FILE;
+        } else if ("nodeProp".equals(metaDataOutput)) {
+	        return MetaDataOutput.NODEPROP;
+        }
+
+	    return MetaDataOutput.BOTH;
+    }
+
+    public AFrameOutput getAframeOutput() {
+		String aframeOutput = config.getString("output.aframe", "both");
+		if ("file".equals(aframeOutput)) {
+			return AFrameOutput.FILE;
+		} else if ("nodeProp".equals(aframeOutput)) {
+			return AFrameOutput.NODEPROP;
+		}
+
+		return AFrameOutput.BOTH;
+	}
+
+	//Kind of arranging the districts of the SCO
+	public enum NotInOriginLayout {
+		DEFAULT, CIRCULAR
+	}
+
+	public NotInOriginLayout getAbapNotInOrigin_layout() {
+		String value = config.getString("city.abap.notInOrigin_layout", "default");
+		switch (value) {
+			case "default":
+				return NotInOriginLayout.DEFAULT;
+			case "circular":
+				return NotInOriginLayout.CIRCULAR;
+			default:
+				return NotInOriginLayout.DEFAULT;
+		}
+	}
+
+	public enum NotInOriginLayoutVersion {
+		MINIMAL_DISTANCE, FULL_CIRCLE
+	}
+
+	public NotInOriginLayoutVersion getAbapNotInOrigin_layout_version() {
+		String value = config.getString("city.abap.notInOrigin_layout_version", "minimalDistance");
+		switch (value) {
+			case "minimalDistance":
+				return NotInOriginLayoutVersion.MINIMAL_DISTANCE;
+			case "fullCircle":
+				return NotInOriginLayoutVersion.FULL_CIRCLE;
+			default:
+				return NotInOriginLayoutVersion.MINIMAL_DISTANCE;
+		}
+	}
+
+	public boolean clusterSubPackages() {
+		return config.getBoolean("city.abap.clusterSubPackages", true);
+	}
+
+    //Kind of arranging the districts of the SCO
+	public DistrictLayoutVersion getDistrictLayout_Version(){
+		String value = config.getString("city.abap_district_layout", "new");
+		switch (value) {
+			case "old":
+				return DistrictLayoutVersion.OLD;
+			case "new":
+				return DistrictLayoutVersion.NEW;
+			default:
+				return DistrictLayoutVersion.OLD;
+		}
+	}
+
+    public String getName() {
 		return config.getString("input.name", "default");
 	}
 	
@@ -699,6 +774,20 @@ public class SettingsConfiguration {
 	public enum Metaphor {
 		RD, CITY
 	}
+
+	public enum MetaDataOutput {
+	    FILE, NODEPROP, BOTH
+    }
+
+    public enum  AFrameOutput {
+		FILE, NODEPROP, BOTH
+	}
+
+	public enum DistrictLayoutVersion {
+		OLD, NEW
+	}
+
+
 
 
 
@@ -1281,7 +1370,7 @@ public class SettingsConfiguration {
 			case "ground":
 				return config.getString("city.abap.metropolis.assets.ground.sourcePath", "images/ground.jpg");
 			case "mountain":
-				return config.getString("city.abap.metropolis.assets.mountain.sourcePath", "images/polyMountain_new_Color.jpg");
+				return config.getString("city.abap.metropolis.assets.mountain.sourcePath", "models/polyMountain_new_Color.jpg");
 			case "sea":
 				return config.getString("city.abap.metropolis.assets.sea.sourcePath", "images/sea_pool.jpg");
 			default:

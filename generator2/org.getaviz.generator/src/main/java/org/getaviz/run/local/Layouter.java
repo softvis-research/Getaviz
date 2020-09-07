@@ -18,10 +18,13 @@ public class Layouter {
     private static ACityRepository aCityRepository;
 
     public static void main(String[] args) {
+        SettingsConfiguration.getInstance("src/test/resources/ABAPCityTest.properties");
         nodeRepository = new SourceNodeRepository();
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
         nodeRepository.loadNodesByRelation(SAPRelationLabels.TYPEOF, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.USES, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.INHERIT, true);
 
         aCityRepository = new ACityRepository();
 
