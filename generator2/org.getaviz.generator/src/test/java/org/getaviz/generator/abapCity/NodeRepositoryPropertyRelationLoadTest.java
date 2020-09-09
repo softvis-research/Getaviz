@@ -1,4 +1,4 @@
-package org.getaviz.generator.acity;
+package org.getaviz.generator.abapCity;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;

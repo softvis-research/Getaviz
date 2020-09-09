@@ -1,13 +1,17 @@
-package org.getaviz.generator.acity;
+package org.getaviz.generator.abapCommonSteps;
 
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.steps.*;
+import org.getaviz.generator.abap.city.steps.ACityCreator;
+import org.getaviz.generator.abap.common.steps.MetaDataExporter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -20,19 +24,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
-public class MetaDataExporterTest {
+public class MetaDataExporterStepTest_common {
 
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
@@ -59,9 +58,9 @@ public class MetaDataExporterTest {
         // Update Neo4j with new nodes
         aCityRepository.writeRepositoryToNeo4j();
 
-        ACityMetaDataExporter aCityMetaDataExporter = new ACityMetaDataExporter(aCityRepository, nodeRepository);
-        aCityMetaDataExporter.exportMetaDataFile();
-        aCityMetaDataExporter.setMetaDataPropToACityElements();
+        MetaDataExporter metaDataExporter = new MetaDataExporter(aCityRepository, nodeRepository);
+        metaDataExporter.exportMetaDataFile();
+        metaDataExporter.setMetaDataPropToACityElements();
         connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
         aCityRepository.writeRepositoryToNeo4j();
     }
@@ -145,4 +144,5 @@ public class MetaDataExporterTest {
 
         return jsonArray;
     }
+
 }

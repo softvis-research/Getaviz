@@ -35,6 +35,11 @@ if (isset($_GET["state"])) {
     $metaStateJsonUrl = "state.php?hash=";
 }
 
+
+$multipartX3dUrl = $modelUrl . "/multiPart.x3d";
+$multipartJsonUrl = $modelUrl . "/multiPart.json";
+
+
 if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true') or (!isset($_GET["aframe"]))) {
     $loadFramework = "<script src=\"node_modules/aframe/dist/aframe-v1.0.0.min.js\"></script>";
     $loadVisualizationSpecificScripts = <<<'EOT'
@@ -58,8 +63,9 @@ EOT;
 EOT;
 
 } else {
-    $multipartX3dUrl = $modelUrl . "/multiPart.x3d";
-    $multipartJsonUrl = $modelUrl . "/multiPart.json";
+    
+    
+
     $loadVisualizationSpecificScripts = <<<'EOT'
         	<!--x3dom-->
         <script type="text/javascript" src="node_modules/x3dom/x3dom.js"></script>

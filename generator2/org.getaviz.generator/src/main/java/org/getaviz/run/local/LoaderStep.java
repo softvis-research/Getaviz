@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
 
-public class Loader {
+public class LoaderStep {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     public static void main(String[] args) {
