@@ -60,12 +60,6 @@ public class AFrameExporter {
         ACityDesigner designer = new ACityDesigner(aCityRepository, nodeRepository, config);
         designer.designRepository();
 
-        // Delete old ACityRepository Nodes
-        connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
-
-        // Update Neo4j with new nodes
-        aCityRepository.writeRepositoryToNeo4j();
-
         // Create metaData.json
         if (!isSilentMode) {
             System.out.println("Writing MetaData. Press any key to continue...");
@@ -80,8 +74,6 @@ public class AFrameExporter {
 
         if (metaDataOutput == MetaDataOutput.NODEPROP || metaDataOutput == MetaDataOutput.BOTH ) {
             aCityMetaDataExporter.setMetaDataPropToACityElements();
-            connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
-            aCityRepository.writeRepositoryToNeo4j();
         }
 
         // Create A-Frame
@@ -98,9 +90,10 @@ public class AFrameExporter {
 
         if (aFrameOutput == AFrameOutput.NODEPROP || aFrameOutput == AFrameOutput.BOTH ) {
             aCityAFrameExporter.setAframePropToACityElements();
-            connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
-            aCityRepository.writeRepositoryToNeo4j();
         }
+
+        connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
+        aCityRepository.writeRepositoryToNeo4j();
 
         System.out.println("\nA-Frame Exporter step was completed\"");
         connector.close();

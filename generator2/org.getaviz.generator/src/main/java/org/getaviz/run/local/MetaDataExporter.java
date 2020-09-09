@@ -31,11 +31,6 @@ public class MetaDataExporter {
         ACityCreator aCityCreator = new ACityCreator(aCityRepository, nodeRepository, config);
         aCityCreator.createRepositoryFromNodeRepository();
 
-        // Delete old ACityRepository Nodes
-        connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
-
-        // Update Neo4j with new nodes
-        aCityRepository.writeRepositoryToNeo4j();
 
         ACityMetaDataExporter aCityMetaDataExporter = new ACityMetaDataExporter(aCityRepository, nodeRepository);
         metaDataOutput = config.getMetaDataOutput();
@@ -47,9 +42,10 @@ public class MetaDataExporter {
 
         if (metaDataOutput == MetaDataOutput.NODEPROP || metaDataOutput == MetaDataOutput.BOTH ) {
             aCityMetaDataExporter.setMetaDataPropToACityElements();
-            connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
-            aCityRepository.writeRepositoryToNeo4j();
         }
+
+        connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
+        aCityRepository.writeRepositoryToNeo4j();
 
         connector.close();
         System.out.println("\nMetaDataExporter step was completed\"");
