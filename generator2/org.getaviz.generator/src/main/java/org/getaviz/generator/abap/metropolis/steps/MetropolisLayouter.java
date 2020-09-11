@@ -6,8 +6,9 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
+import org.getaviz.generator.abap.layouts.ABAPDistrictLightMapLayout;
 import org.getaviz.generator.abap.layouts.ACityBuildingLayout;
-import org.getaviz.generator.abap.layouts.ACityDistrictLayout;
+import org.getaviz.generator.abap.layouts.ABAPDistrictCircluarLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
@@ -228,8 +229,8 @@ public class MetropolisLayouter {
 
             Collection<ACityElement> subElements = district.getSubElements();
 
-            ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(district, subElements, config);
-            aCityDistrictLayout.calculate();
+            ABAPDistrictLightMapLayout aBAPDistrictLightMapLayout = new ABAPDistrictLightMapLayout(district, subElements, config);
+            aBAPDistrictLightMapLayout.calculate();
 
             log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
 
@@ -245,8 +246,17 @@ public class MetropolisLayouter {
 
                 ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
 
-                ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtsWithoutParents, config);
-                aCityDistrictLayout.calculate();
+
+                if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.DEFAULT) {
+
+                    ABAPDistrictLightMapLayout aBAPDistrictLightMapLayout = new ABAPDistrictLightMapLayout(virtualRootDistrict, districtsWithoutParents, config);
+                    aBAPDistrictLightMapLayout.calculate();
+
+                } else if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.CIRCULAR) {
+
+                    ABAPDistrictCircluarLayout aCityDistrictLayout = new ABAPDistrictCircluarLayout(virtualRootDistrict, districtsWithoutParents, config);
+                    aCityDistrictLayout.calculate();
+                }
 
             }
         }

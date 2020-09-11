@@ -7,7 +7,7 @@ import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.layouts.ACityBuildingLayout;
-import org.getaviz.generator.abap.layouts.ACityDistrictLayout;
+import org.getaviz.generator.abap.layouts.ABAPDistrictCircluarLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
@@ -15,7 +15,6 @@ import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ACityLayouter {
 
@@ -190,7 +189,7 @@ public class ACityLayouter {
     private void layoutDistrict(ACityElement district) {
         Collection<ACityElement> subElements = district.getSubElements();
 
-        ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(district, subElements, config);
+        ABAPDistrictCircluarLayout aCityDistrictLayout = new ABAPDistrictCircluarLayout(district, subElements, config);
         aCityDistrictLayout.calculate();
 
         if (district.getSubType() != null) {
@@ -211,7 +210,7 @@ public class ACityLayouter {
 
                 ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
 
-                ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtWithoutParents, config);
+                ABAPDistrictCircluarLayout aCityDistrictLayout = new ABAPDistrictCircluarLayout(virtualRootDistrict, districtWithoutParents, config);
                 aCityDistrictLayout.calculate();
             }
         }

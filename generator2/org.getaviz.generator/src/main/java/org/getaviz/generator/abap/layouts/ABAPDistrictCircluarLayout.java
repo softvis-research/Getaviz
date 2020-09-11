@@ -8,12 +8,10 @@ import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.layouts.kdtree.ACityKDTree;
 import org.getaviz.generator.abap.layouts.kdtree.ACityKDTreeNode;
 import org.getaviz.generator.abap.layouts.kdtree.ACityRectangle;
-import org.getaviz.generator.city.m2m.Rectangle;
-import org.neo4j.driver.v1.types.Node;
 
 import java.util.*;
 
-public class ACityDistrictLayout {
+public class ABAPDistrictCircluarLayout {
     //Old coding -> Refactor, generalize and maybe reimplement
 
     private Log log = LogFactory.getLog(this.getClass());
@@ -24,7 +22,7 @@ public class ACityDistrictLayout {
 
     private Map<ACityRectangle, ACityElement> rectangleElementsMap;
 
-    public ACityDistrictLayout(ACityElement district, Collection<ACityElement> subElements, SettingsConfiguration config) {
+    public ABAPDistrictCircluarLayout(ACityElement district, Collection<ACityElement> subElements, SettingsConfiguration config) {
         this.config = config;
 
         this.district = district;
@@ -34,18 +32,10 @@ public class ACityDistrictLayout {
     }
 
     public void calculate(){
-        if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.DEFAULT) {
 
-            ACityRectangle coveringACityRectangle = arrangeSubElementsDefault(subElements);
-            setSizeOfDistrict(coveringACityRectangle);
-            setPositionOfDistrict(coveringACityRectangle);
-
-        } else if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.CIRCULAR) {
-
-            ACityRectangle coveringACityRectangle = arrangeSubElementsCircular(subElements);
-            setSizeOfDistrict(coveringACityRectangle);
-            setPositionOfDistrict(coveringACityRectangle);
-        }
+        ACityRectangle coveringACityRectangle = arrangeSubElements(subElements);
+        setSizeOfDistrict(coveringACityRectangle);
+        setPositionOfDistrict(coveringACityRectangle);
 
     }
 
@@ -116,67 +106,7 @@ public class ACityDistrictLayout {
         Copied from CityLayout
      */
 
-    //TEst
-    private ACityRectangle arrangeSubElementsDefault(Collection<ACityElement> subElements){
-        // get maxArea (worst case) for root of KDTree
-        ACityRectangle docACityRectangle = calculateMaxAreaRoot(subElements);
-        ACityKDTree ptree = new ACityKDTree(docACityRectangle);
-
-        ACityRectangle covrec = new ACityRectangle();
-
-        List<ACityRectangle> elements = createACityRectanglesOfElements(subElements);
-        Collections.sort(elements);
-        Collections.reverse(elements);
-
-        // algorithm
-        for (ACityRectangle el : elements) {
-            Map<ACityKDTreeNode, Double> preservers = new LinkedHashMap<>();
-            Map<ACityKDTreeNode, Double> expanders = new LinkedHashMap<>();
-            ACityKDTreeNode targetNode = new ACityKDTreeNode();
-            ACityKDTreeNode fitNode = new ACityKDTreeNode();
-
-            List<ACityKDTreeNode> pnodes = ptree.getFittingNodes(el);
-
-            // check all empty leaves: either they extend COVREC (->expanders) or it doesn't
-            // change (->preservers)
-            for (ACityKDTreeNode pnode : pnodes) {
-                sortEmptyLeaf(pnode, el, covrec, preservers, expanders);
-            }
-
-            // choose best-fitting pnode
-            if (!preservers.isEmpty()) {
-                targetNode = bestFitIsPreserver(preservers.entrySet());
-            } else {
-                targetNode = bestFitIsExpander(expanders.entrySet());
-            }
-
-            // modify targetNode if necessary
-            if (targetNode.getACityRectangle().getWidth() == el.getWidth()
-                    && targetNode.getACityRectangle().getLength() == el.getLength()) { // this if could probably be skipped,
-                // trimmingNode() always returns
-                // fittingNode
-                fitNode = targetNode;
-            } else {
-                fitNode = trimmingNode(targetNode, el);
-            }
-
-            // set fitNode as occupied
-            fitNode.setOccupied();
-
-            // give Entity it's Position
-            setNewPositionFromNode(el, fitNode);
-
-            // if fitNode expands covrec, update covrec
-            if (fitNode.getACityRectangle().getBottomRightX() > covrec.getBottomRightX()
-                    || fitNode.getACityRectangle().getBottomRightY() > covrec.getBottomRightY()) {
-                updateCovrec(fitNode, covrec);
-            }
-        }
-
-        return covrec;
-    }
-
-    private ACityRectangle arrangeSubElementsCircular(Collection<ACityElement> subElements) {
+    private ACityRectangle arrangeSubElements(Collection<ACityElement> subElements) {
         // get maxArea (worst case) for root of KDTree
         ACityRectangle docACityRectangle = calculateMaxAreaRoot(subElements);
         ACityKDTree ptree = new ACityKDTree(docACityRectangle);
@@ -216,16 +146,12 @@ public class ACityDistrictLayout {
                 String iterationString = recElement.getSourceNodeProperty(SAPNodeProperties.iteration);
                 int iteration = Integer.parseInt(iterationString);
 
-                if (type_name.equals("Namespace")) {
-                    if (iteration == 0 && (!creator.equals("SAP"))) {
-                        originSet.add(element);
-                    } else if (iteration >= 1 && (!creator.equals("SAP"))) {
-                        customCode.add(element);
-                    } else if (iteration >= 1 && creator.equals("SAP")) {
-                        standardCode.add(element);
-                    }
-                } else {
+                if (iteration == 0 && (!creator.equals("SAP"))) {
                     originSet.add(element);
+                } else if (iteration >= 1 && (!creator.equals("SAP"))) {
+                    customCode.add(element);
+                } else if (iteration >= 1 && creator.equals("SAP")) {
+                    standardCode.add(element);
                 }
             }
         }
@@ -326,17 +252,13 @@ public class ACityDistrictLayout {
             double xPositionDelta = xPosition - biggestRectangle.getXPosition();
             biggestRectangle.setXPosition(xPosition);
 
-            double yPosition = biggestRectangle.getYPosition() + config.adjustACityDistrictYPosition();
-            double yPositionDelta = yPosition - biggestRectangle.getYPosition();
-            //biggestRectangle.setYPosition(yPosition);
-
             double zPosition = covrec.getCenterY();
             double zPositionDelta = zPosition - biggestRectangle.getZPosition();
             biggestRectangle.setZPosition(zPosition);
 
             Collection<ACityElement> subElements = biggestRectangle.getSubElements();
             if(!subElements.isEmpty()){
-                adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta, zPositionDelta);
+                adjustPositionsOfSubSubElements(subElements, xPositionDelta, 0, zPositionDelta);
             }
 
             if (elements.size() > 1) {
@@ -399,14 +321,10 @@ public class ACityDistrictLayout {
 
                     currentRectangle.setZPosition(newZ);
 
-                    double newY = currentRectangle.getYPosition() + config.adjustACityDistrictYPosition();
-                    double yPositionDeltaManyDistricts = newY - currentRectangle.getYPosition();
-
-                    //currentRectangle.setYPosition(newY);
 
                     Collection<ACityElement> subElementsManyDistricts = currentRectangle.getSubElements();
                     if(!subElementsManyDistricts.isEmpty()){
-                        adjustPositionsOfSubSubElements(subElementsManyDistricts, xPositionDeltaManyDistricts, yPositionDeltaManyDistricts, zPositionDeltaManyDistricts);
+                        adjustPositionsOfSubSubElements(subElementsManyDistricts, xPositionDeltaManyDistricts, 0, zPositionDeltaManyDistricts);
                     }
 
                 }
@@ -420,65 +338,6 @@ public class ACityDistrictLayout {
 
     //TEst Ende
 
-
-    private ACityRectangle arrangeSubElements(Collection<ACityElement> subElements){
-
-        ACityRectangle docACityRectangle = calculateMaxAreaRoot(subElements);
-        ACityKDTree ptree = new ACityKDTree(docACityRectangle);
-
-        ACityRectangle covrec = new ACityRectangle();
-
-        List<ACityRectangle> elements = createACityRectanglesOfElements(subElements);
-        Collections.sort(elements);
-        Collections.reverse(elements);
-
-        // algorithm
-        for (ACityRectangle el : elements) {
-            Map<ACityKDTreeNode, Double> preservers = new LinkedHashMap<>();
-            Map<ACityKDTreeNode, Double> expanders = new LinkedHashMap<>();
-            ACityKDTreeNode targetNode = new ACityKDTreeNode();
-            ACityKDTreeNode fitNode = new ACityKDTreeNode();
-
-            List<ACityKDTreeNode> pnodes = ptree.getFittingNodes(el);
-
-            // check all empty leaves: either they extend COVREC (->expanders) or it doesn't
-            // change (->preservers)
-            for (ACityKDTreeNode pnode : pnodes) {
-                sortEmptyLeaf(pnode, el, covrec, preservers, expanders);
-            }
-
-            // choose best-fitting pnode
-            if (!preservers.isEmpty()) {
-                targetNode = bestFitIsPreserver(preservers.entrySet());
-            } else {
-                targetNode = bestFitIsExpander(expanders.entrySet());
-            }
-
-            // modify targetNode if necessary
-            if (targetNode.getACityRectangle().getWidth() == el.getWidth()
-                    && targetNode.getACityRectangle().getLength() == el.getLength()) { // this if could probably be skipped,
-                // trimmingNode() always returns
-                // fittingNode
-                fitNode = targetNode;
-            } else {
-                fitNode = trimmingNode(targetNode, el);
-            }
-
-            // set fitNode as occupied
-            fitNode.setOccupied();
-
-            // give Entity it's Position
-            setNewPositionFromNode(el, fitNode);
-
-            // if fitNode expands covrec, update covrec
-            if (fitNode.getACityRectangle().getBottomRightX() > covrec.getBottomRightX()
-                    || fitNode.getACityRectangle().getBottomRightY() > covrec.getBottomRightY()) {
-                updateCovrec(fitNode, covrec);
-            }
-        }
-
-        return covrec;
-    }
 
     private List<ACityRectangle> createACityRectanglesOfElements(Collection<ACityElement> elements) {
         List<ACityRectangle> rectangles = new ArrayList<>();
