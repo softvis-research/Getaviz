@@ -97,10 +97,10 @@ public class MetropolisCreator {
 
                 if (!subElements.isEmpty()) {
 
-                    if(config.showMountainReferenceBuilding() == true) {
+                    if(config.showMountainReferenceBuilding()) {
                         createRefBuilding(packageDistrict, ACityElement.ACitySubType.Mountain);
                     }
-                    if(config.showSeaReferenceBuilding() == true) {
+                    if(config.showSeaReferenceBuilding()) {
                         createRefBuilding(packageDistrict, ACityElement.ACitySubType.Sea);
                     }
                 }
@@ -184,7 +184,7 @@ public class MetropolisCreator {
             String districtTypename = element.getSourceNodeProperty(SAPNodeProperties.object_name);
             String buildingTypeName = buildingElement.getSourceNodeProperty(SAPNodeProperties.object_name);
 
-            if(buildingTypeName == districtTypename){
+            if(buildingTypeName.equals(districtTypename)){
 
                 element.addSubElement(buildingElement);
                 buildingElement.setParentElement(element);

@@ -140,7 +140,7 @@ public class MetropolisLayouter {
 
     private String getRowtype(ACityElement aCityElement){
 
-        if (aCityElement.getSourceNodeProperty(SAPNodeProperties.type_name) == SAPNodeTypes.TableType.name()){
+        if (aCityElement.getSourceNodeProperty(SAPNodeProperties.type_name).equals(SAPNodeTypes.TableType.name())){
             if (aCityElement.getSourceNodeProperty(SAPNodeProperties.rowtype) == null) {
                 return "TableType doesn't have a rowType";
             }

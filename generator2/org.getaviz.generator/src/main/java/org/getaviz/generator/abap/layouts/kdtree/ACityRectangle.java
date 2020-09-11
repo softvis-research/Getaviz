@@ -107,6 +107,10 @@ public class ACityRectangle implements Comparable<ACityRectangle> {
 		update();
 	}
 
+	public double getPerimeterRadius(){
+		return Math.sqrt(Math.pow(this.getWidth() / 2.0, 2) + Math.pow(this.getLength() / 2.0, 2));
+	}
+
 	public void setCornerPoints(double x1, double y1, double x2, double y2) {
 		// upperLeftCorner of a rectangle always has the leftmost X-coordinate and the
 		// smallest Y-coordinate as it's values

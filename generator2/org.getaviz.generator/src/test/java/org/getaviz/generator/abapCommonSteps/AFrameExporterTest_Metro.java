@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class AFrameExporterStepTest_Metro {
+public class AFrameExporterTest_Metro {
 
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 
