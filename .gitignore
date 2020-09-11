@@ -6,3 +6,10 @@ ui/data/
 generator2/org.getaviz.generator/.idea/
 
 .idea/
+
+.project
+
+# Only for development
+container_*/
+neo4j_*/
+jsconfig.json 
