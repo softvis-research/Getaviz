@@ -78,7 +78,7 @@ public class SettingsConfiguration {
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		for(int i = 0; i < fileArray.length; i++) {
 			String path = fileArray[i];
-			if(!path.startsWith("http") && !path.startsWith("https")) {
+			if(!path.startsWith("http") && !path.startsWith("https") && !path.startsWith("file")) {
 				path = "file:" + Objects.requireNonNull(classLoader.getResource(path)).getPath();
 				try {
 					path = URLDecoder.decode(path, "UTF-8");

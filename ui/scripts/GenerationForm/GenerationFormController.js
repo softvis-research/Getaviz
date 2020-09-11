@@ -1095,7 +1095,7 @@ var generationFormController = (function() {
 	
 	// Validate input of url (jqxValidator has no support for this)
 	function validate_url(input) {
-		return (input.val().startsWith('http://') || input.val().startsWith('https://'));
+		return (input.val().startsWith('http://') || input.val().startsWith('https://') || input.val().startsWith('file://'));
 	}
 	
 	// Validate input of HEX colors (jqxValidator has no support for this)

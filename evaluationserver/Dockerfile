@@ -1,4 +1,4 @@
-FROM getaviz/evaluationserver-base:1.3.2
+FROM getaviz/evaluationserver-base:1.4.1
 WORkDIR /usr/src/app/
 COPY Gemfile .
 COPY Gemfile.lock .

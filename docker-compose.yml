@@ -36,20 +36,25 @@ services:
     restart: always
     volumes: 
       - data-gen:/var/lib/jetty/data-gen
+      - ./input:/var/lib/jetty/input
      #- ./generator2/org.getaviz.generator/target/org.getaviz.generator-1.0.0-SNAPSHOT.war:/var/lib/jetty/webapps/root.war # uncomment only for generator development
     ports:
       - "8083:8080"
     networks:
       - default
     depends_on:
-      - neo4j
+      - jqassistant
       - volumes-provisioner
-  neo4j:
-    image: neo4j:3.5.1
+  jqassistant:
+    build: jQAssistant/
     restart: always
+    volumes:
+      - 'getaviz-db:/data'
+     # - ./jQAssistant/target/org.getaviz.jqassistant-1.0.0-SNAPSHOT.war:/getaviz-jqassistant.war # uncomment only for development
     ports:
       - "7474:7474"
       - "7687:7687"
+      - "8080:8080"
     environment:
       NEO4J_AUTH: "none"
     networks:
@@ -62,6 +67,7 @@ services:
       - data-gen:/var/data
 volumes:
   data-gen:
+  getaviz-db:
     
 networks:
   default:

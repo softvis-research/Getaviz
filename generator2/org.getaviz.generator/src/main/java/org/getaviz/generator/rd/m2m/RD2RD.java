@@ -1,25 +1,25 @@
 package org.getaviz.generator.rd.m2m;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.ColorGradient;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
-import java.util.ArrayList;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.rd.Disk;
 import org.getaviz.generator.rd.DiskSegment;
 import org.getaviz.generator.rd.MainDisk;
 import org.getaviz.generator.rd.SubDisk;
-import org.neo4j.driver.v1.types.Node;
-import java.util.List;
 import org.neo4j.driver.v1.StatementResult;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RD2RD implements Step {
-    private DatabaseConnector connector = DatabaseConnector.getInstance();
-    private Log log = LogFactory.getLog(RD2RD.class);
+    private final DatabaseConnector connector = DatabaseConnector.getInstance();
+    private final Log log = LogFactory.getLog(RD2RD.class);
     private List<String> NS_colors;
-    private double dataFactor;
+    private final double dataFactor;
     private ArrayList<SubDisk> subDisks = new ArrayList<>();
     private ArrayList<MainDisk> mainDisks = new ArrayList<>();
     private ArrayList<MainDisk> rootDisks = new ArrayList<>();
@@ -53,9 +53,6 @@ public class RD2RD implements Step {
         setColorToDisk();
         addSubDisks();
         addSegmentsToDisk();
-
-        log.info("length:" + innerSegments.size());
-        log.info("length2:" + outerSegments.size());
     }
 
     private int calculateNamespaceMaxLevel() {
@@ -67,7 +64,7 @@ public class RD2RD implements Step {
 
     private void calculateData() {
         subDisks.forEach(SubDisk::calculateAreaWithoutBorder);
-        mainDisks.forEach(MainDisk::calculateAreaWithoutBorder);
+        rootDisks.forEach(MainDisk::calculateAreaWithoutBorder);
     }
 
     private void calculateLayouts() {
@@ -109,7 +106,6 @@ public class RD2RD implements Step {
         return getDiskSegments(result);
     }
 
-
     private ArrayList<MainDisk> createRootDisksList() {
         StatementResult result = connector.executeRead("MATCH (n:RD:Model)-[:CONTAINS]->(d:MainDisk)-[:VISUALIZES]->(element)" +
                 " RETURN d.ringWidth AS ringWidth, d.height AS height," +
@@ -127,7 +123,6 @@ public class RD2RD implements Step {
             double height = d.get("height").asDouble();
             MainDisk disk = new MainDisk(visualizedID, parentID, id, ringWidth, height);
             list.add(disk);
-            setPositionToPackages(disk);
         });
         return list;
     }
@@ -145,7 +140,6 @@ public class RD2RD implements Step {
             double height = d.get("height").asDouble();
             SubDisk disk = new SubDisk(visualizedID, parentID, id, ringWidth, height);
             list.add(disk);
-            setPositionToPackages(disk);
         });
         return list;
     }
@@ -158,15 +152,6 @@ public class RD2RD implements Step {
         ArrayList<MainDisk> list2 = getMainDisks(result);
         list.addAll(list2);
         return list;
-    }
-
-    private void setPositionToPackages(Disk disk) {
-        StatementResult position = connector
-                .executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + disk.getID() + " RETURN p");
-        if (!position.list().isEmpty()) {
-            Node node = position.single().get("p").asNode();
-            disk.setPosition(new Position(node.get("x").asDouble(), node.get("y").asDouble(), node.get("z").asDouble()));
-        }
     }
 
     private void setColorToDisk() {
@@ -244,7 +229,7 @@ public class RD2RD implements Step {
     }
 
     private void calculateDiskLayout() {
-        DiskLayout layout = new DiskLayout(rootDisks, mainDisks, subDisks);
+        DiskLayout layout = new DiskLayout(rootDisks, subDisks);
         layout.run();
         rootDisks.forEach(Disk::calculateSpines);
     }

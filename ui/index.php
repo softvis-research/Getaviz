@@ -44,6 +44,7 @@ if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true') or (!isset($_GET["afra
 	    <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
 	    <script type="text/javascript" src="scripts/CanvasHover/AframeCanvasHoverController.js"></script>
         <script type="text/javascript" src="node_modules/aframe-orbit-camera-component/aframe-orbit-camera-component.js"></script>
+        <script type="text/javascript" src="scripts/MagGlass/MagGlassController.js"></script>
 EOT;
     $canvasId = "aframe-canvas";
     $visMode = "aframe";
@@ -67,6 +68,7 @@ EOT;
         <script type="text/javascript" src="scripts/X3DomActionController.js"></script>
 	    <script type="text/javascript" src="scripts/RelationConnector/X3DomRelationConnectorController.js"></script>
 	    <script type="text/javascript" src="scripts/CanvasHover/X3DomCanvasHoverController.js"></script>
+        <script type="text/javascript" src="scripts/MagGlass/MagGlassController.js"></script>
 EOT;
     $canvasId = "x3dom-x3dElement-canvas";
     $visMode = "x3dom";
@@ -171,6 +173,10 @@ EOT;
 <script type="text/javascript" src="scripts/VersionExplorer/VersionExplorerController.js"></script>
 <script type="text/javascript" src="scripts/IssueExplorer/IssueExplorerController.js"></script>
 <script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script>
+<script type="text/javascript" src="scripts/MetricAnimation/MetricAnimationController.js"></script>
+<script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimation.js"></script>
+<script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimationColor.js"></script>
+<script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimationExpanding.js"></script>
 
 <!-- filter -->
 <script type="text/javascript" src="scripts/Filter/Helpers/Constants.js"></script>

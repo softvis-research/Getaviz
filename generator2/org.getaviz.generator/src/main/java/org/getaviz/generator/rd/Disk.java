@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Disk implements RDElement, Comparable<Disk> {
-
     protected double height;
     private double transparency;
     double borderWidth;
