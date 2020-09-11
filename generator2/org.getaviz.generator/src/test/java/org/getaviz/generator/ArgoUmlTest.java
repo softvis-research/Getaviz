@@ -29,9 +29,10 @@ class ArgoUmlTest {
 	}
 	
 	static void initializeDatabase() {
-		mockup.setupDatabase("./test/databases/ArgoUmlTest.db");
+		// mockup.setupDatabase("./test/databases/ArgoUmlTest.db");
 		mockup.loadProperties("ArgoUmlTest.properties");
-		connector = mockup.getConnector();
+		// connector = mockup.getConnector(); 
+		connector = DatabaseConnector.getInstance("bolt://localhost:7688");
 	}
 
 	
