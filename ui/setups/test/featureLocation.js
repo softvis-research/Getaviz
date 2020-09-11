@@ -25,6 +25,8 @@ var setup = {
 
         {
             name: "canvasHoverController",
+
+            showFeatureAffiliation: true,
         },
 
         {
