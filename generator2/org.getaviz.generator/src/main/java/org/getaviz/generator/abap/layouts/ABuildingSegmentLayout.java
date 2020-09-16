@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ACityBuildingSegmentLayout {
+public class ABuildingSegmentLayout {
 
     private Log log = LogFactory.getLog(this.getClass());
     private SettingsConfiguration config;
@@ -18,7 +18,7 @@ public class ACityBuildingSegmentLayout {
     private Collection<ACityElement> floors;
     private Collection<ACityElement> chimneys;
 
-    public ACityBuildingSegmentLayout(ACityElement building, Collection<ACityElement> floors, Collection<ACityElement> chimneys, SettingsConfiguration config) {
+    public ABuildingSegmentLayout(ACityElement building, Collection<ACityElement> floors, Collection<ACityElement> chimneys, SettingsConfiguration config) {
         this.config = config;
 
         this.building = building;

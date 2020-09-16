@@ -11,7 +11,7 @@ import org.getaviz.generator.abap.layouts.kdtree.ACityRectangle;
 
 import java.util.*;
 
-public class ABAPDistrictCircluarLayout {
+public class ADistrictCircluarLayout {
     //Old coding -> Refactor, generalize and maybe reimplement
 
     private Log log = LogFactory.getLog(this.getClass());
@@ -22,7 +22,7 @@ public class ABAPDistrictCircluarLayout {
 
     private Map<ACityRectangle, ACityElement> rectangleElementsMap;
 
-    public ABAPDistrictCircluarLayout(ACityElement district, Collection<ACityElement> subElements, SettingsConfiguration config) {
+    public ADistrictCircluarLayout(ACityElement district, Collection<ACityElement> subElements, SettingsConfiguration config) {
         this.config = config;
 
         this.district = district;
@@ -97,11 +97,6 @@ public class ABAPDistrictCircluarLayout {
     }
 
 
-
-
-
-
-
     /*
         Copied from CityLayout
      */
@@ -141,7 +136,7 @@ public class ABAPDistrictCircluarLayout {
 
             // for Elements with SourceNode
             if ( recElement.getSourceNode() != null && refBuilding == null) {
-                String type_name = recElement.getSourceNodeProperty(SAPNodeProperties.type_name);
+
                 String creator = recElement.getSourceNodeProperty(SAPNodeProperties.creator);
                 String iterationString = recElement.getSourceNodeProperty(SAPNodeProperties.iteration);
                 int iteration = Integer.parseInt(iterationString);
@@ -317,8 +312,8 @@ public class ABAPDistrictCircluarLayout {
                     double newZ = (previousRectangle.getXPosition() - covrec.getCenterX()) * Math.sin(rotationAngle)
                             + (previousRectangle.getZPosition() - covrec.getCenterY()) * Math.cos(rotationAngle)
                             + covrec.getCenterY();
-                    double zPositionDeltaManyDistricts = newZ - currentRectangle.getZPosition();
 
+                    double zPositionDeltaManyDistricts = newZ - currentRectangle.getZPosition();
                     currentRectangle.setZPosition(newZ);
 
 
@@ -334,10 +329,6 @@ public class ABAPDistrictCircluarLayout {
             covrec.changeRectangle(covrec.getCenterX(), covrec.getCenterY(), newCovrecWidth, newCovrecWidth, 0);
         }
     }
-
-
-    //TEst Ende
-
 
     private List<ACityRectangle> createACityRectanglesOfElements(Collection<ACityElement> elements) {
         List<ACityRectangle> rectangles = new ArrayList<>();

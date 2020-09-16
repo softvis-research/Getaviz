@@ -4,13 +4,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
-import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.repository.ACityElement;
 
 import java.util.Collection;
-import java.util.Collections;
 
-public class ACityBuildingLayout {
+public class ABuildingLayout {
 
     private Log log = LogFactory.getLog(this.getClass());
     private SettingsConfiguration config;
@@ -19,7 +17,7 @@ public class ACityBuildingLayout {
     private Collection<ACityElement> floors;
     private Collection<ACityElement> chimneys;
 
-    public ACityBuildingLayout(ACityElement building, Collection<ACityElement> floors, Collection<ACityElement> chimneys, SettingsConfiguration config) {
+    public ABuildingLayout(ACityElement building, Collection<ACityElement> floors, Collection<ACityElement> chimneys, SettingsConfiguration config) {
         this.config = config;
 
         this.building = building;
@@ -31,7 +29,7 @@ public class ACityBuildingLayout {
 
     public void calculate(){
 
-        ACityBuildingSegmentLayout buildingSegmentLayout = new ACityBuildingSegmentLayout(building, floors, chimneys, config);
+        ABuildingSegmentLayout buildingSegmentLayout = new ABuildingSegmentLayout(building, floors, chimneys, config);
         buildingSegmentLayout.calculate();
 
         setSizeOfBuilding();
@@ -41,10 +39,12 @@ public class ACityBuildingLayout {
 
     private void setPositionOfBuilding() {
 
-        building.setXPosition(0.0);
-        building.setYPosition(building.getHeight() / 2);
-        building.setZPosition(0.0);
+            building.setXPosition(0.0);
+            building.setYPosition(building.getHeight() / 2);
+            building.setZPosition(0.0);
+
     }
+
 
     private void setSizeOfBuilding() {
 

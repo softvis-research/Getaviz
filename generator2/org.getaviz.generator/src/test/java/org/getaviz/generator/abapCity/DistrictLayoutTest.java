@@ -1,8 +1,8 @@
 package org.getaviz.generator.abapCity;
 
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.layouts.ACityBuildingLayout;
-import org.getaviz.generator.abap.layouts.ABAPDistrictCircluarLayout;
+import org.getaviz.generator.abap.layouts.ABuildingLayout;
+import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ public class DistrictLayoutTest {
         district.addSubElement(building);
 
 
-        ABAPDistrictCircluarLayout districtLayout = new ABAPDistrictCircluarLayout(district, district.getSubElements(), config);
+        ADistrictCircluarLayout districtLayout = new ADistrictCircluarLayout(district, district.getSubElements(), config);
         districtLayout.calculate();
     }
 
@@ -56,7 +56,7 @@ public class DistrictLayoutTest {
             building.addSubElement(chimney);
             chimneys.add(chimney);
         }
-        ACityBuildingLayout buildingLayout = new ACityBuildingLayout(building, floors, chimneys, config);
+        ABuildingLayout buildingLayout = new ABuildingLayout(building, floors, chimneys, config);
         buildingLayout.calculate();
         return building;
     }

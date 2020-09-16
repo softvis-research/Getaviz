@@ -11,7 +11,7 @@ import org.getaviz.generator.abap.repository.ACityElement;
 
 import java.util.*;
 
-public class ABAPDistrictLightMapLayout {
+public class ADistrictLightMapLayout {
     //Old coding -> Refactor, generalize and maybe reimplement
 
     private Log log = LogFactory.getLog(this.getClass());
@@ -22,7 +22,7 @@ public class ABAPDistrictLightMapLayout {
 
     private Map<ACityRectangle, ACityElement> rectangleElementsMap;
 
-    public ABAPDistrictLightMapLayout(ACityElement district, Collection<ACityElement> subElements, SettingsConfiguration config) {
+    public ADistrictLightMapLayout(ACityElement district, Collection<ACityElement> subElements, SettingsConfiguration config) {
         this.config = config;
 
         this.district = district;

@@ -1,7 +1,7 @@
 package org.getaviz.generator.abapCity;
 
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.layouts.ACityBuildingLayout;
+import org.getaviz.generator.abap.layouts.ABuildingLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ public class BuildingLayoutTest {
         chimneys.add(new ACityElement((ACityElement.ACityType.Chimney)));
 
 
-        ACityBuildingLayout buildingLayout = new ACityBuildingLayout(building, floors, chimneys, config);
+        ABuildingLayout buildingLayout = new ABuildingLayout(building, floors, chimneys, config);
         buildingLayout.calculate();
     }
 
