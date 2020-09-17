@@ -44,6 +44,8 @@ public class AFrameExporterStep {
             isSilentMode = false;
         }
 
+        
+
         if (!isSilentMode) {
             System.out.print("Creator step to be processed. Press any key to continue...");
             userInput.nextLine();
