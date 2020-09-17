@@ -48,7 +48,7 @@ if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true') or (!isset($_GET["afra
         <script type="text/javascript" src="scripts/AframeActionController.js"></script>
 	    <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
 	    <script type="text/javascript" src="scripts/CanvasHover/AframeCanvasHoverController.js"></script>
-        <script type="text/javascript" src="scripts/ABAPNavigationController.js"></script>
+        <script type="text/javascript" src="scripts/ABAPNavigation/ABAPNavigationController.js"></script>
         <script type="text/javascript" src="scripts/MagGlass/MagGlassController.js"></script>
 EOT;
     $canvasId = "aframe-canvas";
