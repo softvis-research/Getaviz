@@ -23,8 +23,6 @@ public class metropolis_AFrame implements ABAP_OutputFormat {
                 "\n" +
                 "\t    <meta name=\"description\" content=\"Getaviz\">" +
                 "\n" +
-                "\t    <script src=\"https://aframe.io/releases/1.0.2/aframe.min.js\"></script>" +
-                "\n" +
                 "\t </head>" +
                 "\n" +
                 "\t <body>" +
@@ -33,7 +31,7 @@ public class metropolis_AFrame implements ABAP_OutputFormat {
                 "\n" +
                 "\t\t\t <a-entity id=\"rig\" position=\"25 10 0\">" +
                 "\n" +
-                "\t\t\t\t <a-entity camera look-controls wasd-controls=\"acceleration: 10000\" position=\"-10 10 0\"></a-entity>" +
+                "\t\t\t\t <a-entity id=\"cam\" camera look-controls wasd-controls=\"acceleration: 5000\" position=\"300 120 300\" rotation= \"0 -90 0\" ></a-entity>" +
                 "\n" +
                 "\t\t\t </a-entity>" +
                 "\n" +
