@@ -16,12 +16,15 @@ var canvasManipulator = (function () {
 
         scene = document.querySelector("a-scene");
 
+        /*
         initialCameraView.target = globalCamera.target;
         initialCameraView.position = globalCamera.object.position;
         initialCameraView.spherical = globalCamera.spherical;
+        */
     }
 
     function reset() {
+        /*
         let offset = new THREE.Vector3();
         offset.subVectors(initialCameraView.target, globalCamera.target).multiplyScalar(globalCamera.data.panSpeed);
         globalCamera.panOffset.add(offset);
@@ -30,6 +33,7 @@ var canvasManipulator = (function () {
         globalCamera.sphericalDelta.theta = 0.25 * (initialCameraView.spherical.theta - globalCamera.spherical.theta);
 
         globalCamera.scale = initialCameraView.spherical.radius/globalCamera.spherical.radius;
+        */
     }
 
     function changeTransparencyOfEntities(entities, value) {
@@ -297,7 +301,7 @@ var canvasManipulator = (function () {
         setCenterOfRotation(entity);
         let object = document.getElementById(entity.id);
         let boundingSphereRadius = object.object3DMap.mesh.geometry.boundingSphere.radius;
-        globalCamera.scale = boundingSphereRadius/globalCamera.spherical.radius;
+        //globalCamera.scale = boundingSphereRadius/globalCamera.spherical.radius;
     }
 
     function addElement(element) {
@@ -312,8 +316,8 @@ var canvasManipulator = (function () {
 
     function setCenterOfRotation(entity) {
         let offset = new THREE.Vector3();
-        offset.subVectors(getCenterOfEntity(entity), globalCamera.target).multiplyScalar(globalCamera.data.panSpeed);
-        globalCamera.panOffset.add(offset);
+        //offset.subVectors(getCenterOfEntity(entity), globalCamera.target).multiplyScalar(globalCamera.data.panSpeed);
+        //globalCamera.panOffset.add(offset);
     }
 
     function getCenterOfEntity(entity) {

@@ -10,9 +10,7 @@ var abapNavigationController = (function() {
             var finalZoom=document.getElementById('cam').getAttribute('camera').zoom+delta;
             //limiting the zoom so it doesnt zoom too much in or out
             if(finalZoom<1)
-              finalZoom=1;
-            if(finalZoom>5)
-              finalZoom=5; 
+              finalZoom=1;            
             if(finalZoom>10)
               finalZoom=10;   
         
