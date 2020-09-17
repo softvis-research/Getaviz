@@ -27,7 +27,7 @@ public class metropolis_AFrame implements ABAP_OutputFormat {
                 "\n" +
                 "\t <body>" +
                 "\n" +
-                "\t\t <a-scene>" +
+                "\t\t <a-scene id=\"aframe-canvas\" embedded=\"true\">" +
                 "\n" +
                 "\t\t\t <a-entity id=\"rig\" position=\"25 10 0\">" +
                 "\n" +
