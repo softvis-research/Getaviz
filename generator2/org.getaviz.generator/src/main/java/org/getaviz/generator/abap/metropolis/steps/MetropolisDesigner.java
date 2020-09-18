@@ -106,8 +106,16 @@ public class MetropolisDesigner {
 
             switch (SAPNodeTypes.valueOf(propertyTypeName)) {
                 case Namespace:     district.setColor(config.getMetropolisDistrictColorHex("packageDistrict")); break;
-                case Class:         district.setColor(config.getMetropolisDistrictColorHex("classDistrict")); break;
-                case Interface:     district.setColor(config.getMetropolisDistrictColorHex("interfaceDistrict")); break;
+                case Class:
+                    if(district.getSourceNodeProperty(SAPNodeProperties.local_class).equals("true")) {
+                         district.setColor(config.getMetropolisDistrictColorHex("localClassDistrict")); break;
+                    } else
+                         district.setColor(config.getMetropolisDistrictColorHex("classDistrict")); break;
+                case Interface:
+                    if(district.getSourceNodeProperty(SAPNodeProperties.local_class).equals("true")) {
+                        district.setColor(config.getMetropolisDistrictColorHex("localInterfaceDistrict")); break;
+                    } else
+                        district.setColor(config.getMetropolisDistrictColorHex("interfaceDistrict")); break;
                 case Report:        district.setColor(config.getMetropolisDistrictColorHex("reportDistrict")); break;
                 case FunctionGroup: district.setColor(config.getMetropolisDistrictColorHex("functionGroupDistrict")); break;
                 case Table:

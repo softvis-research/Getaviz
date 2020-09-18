@@ -821,8 +821,12 @@ public class SettingsConfiguration {
 				return config.getString("city.abap.color.metropolis.packageDistrict", "#95A5A6");
 			case "classDistrict":
 				return config.getString("city.abap.color.metropolis.classDistrict", "#C5CEA9");
+			case "localClassDistrict":
+				return config.getString("city.abap.color.metropolis.localClassDistrict", "#C5CEA9");
 			case "interfaceDistrict":
 				return config.getString("city.abap.color.metropolis.interfaceDistrict", "#C5CEA9");
+			case "localInterfaceDistrict":
+				return config.getString("city.abap.color.metropolis.localInterfaceDistrict", "#C5CEA9");
 			case "reportDistrict":
 				return config.getString("city.abap.color.metropolis.reportDistrict", "#C5CEA9");
 			case "functionGroupDistrict":
