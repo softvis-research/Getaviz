@@ -29,6 +29,8 @@ public class Antipattern implements Step {
         queries.accesToAllData();
         queries.numberOfAccessorMethods();
         queries.numberOfPublicAttributes();
+        queries.foreignDataProviders();
+        queries.numberOfAccessedVar();
         godclass();
         featureEnvy();
         dataclass();
@@ -51,7 +53,7 @@ public class Antipattern implements Step {
     public void featureEnvy(){
         connector.executeWrite("MATCH (m:Method)\n" +
                 "WITH m AS m\n" +
-                "WHERE (m.atad - m.atod) > 4 AND m.atad > 0\n" +
+                "WHERE (m.atad - m.atod) > 4 AND m.atad > 0 AND m.fdp <= 4\n" +
                 "WITH toFloat(m.atod) / toFLoat(m.atad) AS laa, m AS m\n" +
                 "WHERE laa < 0.33\n" +
                 "SET m.featureEnvy = true");
@@ -72,11 +74,12 @@ public class Antipattern implements Step {
 
     /**
      * Cyclo cyclo(high)* loc(65)?
-     * Maxnesting + Nr of Var fehlen! Sind nicht im Datensatz enthalten
+     * Nr of Var fehlen!
+     * Maxnesting ist nicht im Datensatz enthalten
      */
     public void brainmethod(){
         connector.executeWrite("MATCH (m:Method)\n" +
-                "WHERE m.effectiveLineCount > 65 AND m.cyclomaticComplexity > 23\n" +
+                "WHERE m.effectiveLineCount > 65 AND m.cyclomaticComplexity > 23 AND m.noav >= 7\n" +
                 "SET m.brainmethod = true");
     }
 

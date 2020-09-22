@@ -58,7 +58,7 @@ public class AntipatternTest {
     void brainmethodTest() {
         List<String> actual = new ArrayList<>();
         connector.executeRead("MATCH (m:Method)\n" +
-                "WHERE m.effectiveLineCount > 65 AND m.cyclomaticComplexity > 31\n" +
+                "WHERE m.effectiveLineCount > 65 AND m.cyclomaticComplexity > 31 AND m.noav >= 7\n" +
                 "return m.name").stream().forEach(record -> actual.add(record.get("m.name").asString()));
         ArrayList<String> correct = new ArrayList<>(Arrays.asList("getBusinessCustomers", "getPrivateCustomers"));
         assertEquals(actual, correct);

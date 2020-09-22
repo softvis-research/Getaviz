@@ -429,7 +429,7 @@ public class JQA2JSON implements Step {
     }
 
     private String getFeatureEnvy(Node element) {
-        if (element.get("featureenvy").isTrue()) {
+        if (element.get("featureEnvy").isTrue()) {
             return  "TRUE";
         } else {
             return "FALSE";

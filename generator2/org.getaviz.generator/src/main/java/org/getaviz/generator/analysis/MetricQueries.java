@@ -28,12 +28,13 @@ public class MetricQueries {
     /**
      * ATFD: Access To Foreign Data
      * Number of Attributes a Class accesses that do not belong to it
+     * READS|WRITES sind nurnoch für TestDB da!
      * Relevant for Godclass
      */
     public void accessToForeignData() {
         connector.executeWrite("MATCH (c:Class)-[:DECLARES|READS|WRITES]->(f:Field) " +
                 "    WITH f AS f, c AS c " +
-                "    WHERE (f.name CONTAINS '$') AND (NOT f.name CONTAINS \"$class$java\") " +
+                "    WHERE (f.name CONTAINS '$') " +
                 "    WITH c AS c, COUNT(f.name) AS atfd " +
                 "    SET c.atfd=atfd");
     }
@@ -57,10 +58,9 @@ public class MetricQueries {
      *  Relevant for Feature Envy
      */
     public void accessToOwnData(){
-        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field)\n" +
-                "WITH c AS c, m AS m, f AS f\n" +
-                "WHERE (NOT f.name CONTAINS '$') AND (NOT f.name CONTAINS \"$class$java\")\n" +
-                "WITH m AS m, count(f.fqn) AS atod\n" +
+        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field), (c:Class)-[:DECLARES]->(f:Field)\n" +
+                "with distinct m as m, f.name as attr\n" +
+                "with m as m, count(m) as atod\n" +
                 "set m.atod = atod");
     }
 
@@ -70,9 +70,10 @@ public class MetricQueries {
      * Relevant for Feature Envy
      */
     public void accesToAllData(){
-        connector.executeWrite("MATCH (m:Method)-[:DECLARES|READS|WRITES]->(f:Field)\n" +
-                "WITH m AS m, count(f.fqn) AS atad\n" +
-                "SET m.atad = atad");
+        connector.executeWrite("match (m:Method)-[:READS|WRITES]->(f:Field)\n" +
+                "with distinct m as m, f.name as attr\n" +
+                "with m as m, count(m) as atad\n" +
+                "set m.atad = atad");
     }
 
     /**
@@ -101,6 +102,30 @@ public class MetricQueries {
                 "SET c.noam = noam");
     }
 
+    /**
+     * FDP: Foreign Data Provider
+     * Count classes in which accessed attributes are defined
+     * Relevant for Feature Envy
+     */
+    public void foreignDataProviders(){
+        connector.executeWrite("match (c1:Class)-[:DECLARES]->(f:Field), (c2:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field) \n" +
+                "where (NOT c1.fqn = c2.fqn) \n" +
+                "with distinct m as m, c1.name as foreignClass\n" +
+                "with m as m, count(m.name) as fdp\n" +
+                "set m.fdp = fdp");
+    }
+
+
+    /**
+     * NOAV: Number of Accessed Variables
+     * Count the Number of Variables a Method uses
+     * Relevant for Brain Method
+     */
+    public void numberOfAccessedVar(){
+        connector.executeWrite("MATCH (m:Method)-[:DECLARES]->(v:Variable) \n" +
+                "WITH m AS m, COUNT(v.name) AS noav \n" +
+                "SET m.noav = noav");
+    }
 
 
 
