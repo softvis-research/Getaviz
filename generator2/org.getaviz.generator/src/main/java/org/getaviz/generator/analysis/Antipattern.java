@@ -74,7 +74,6 @@ public class Antipattern implements Step {
 
     /**
      * Cyclo cyclo(high)* loc(65)?
-     * Nr of Var fehlen!
      * Maxnesting ist nicht im Datensatz enthalten
      */
     public void brainmethod(){
