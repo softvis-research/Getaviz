@@ -1,8 +1,8 @@
 var packageExplorerController = (function() {
-    
+
 	let packageExplorerTreeID = "packageExplorerTree";
 	let jQPackageExplorerTree = "#packageExplorerTree";
-	
+
 	let tree;
 
 	let controllerConfig = {
@@ -13,42 +13,42 @@ var packageExplorerController = (function() {
 		methodIcon:		"scripts/PackageExplorer/images/method.png",
         elementsSelectable: true
 	};
-	
+
 	function initialize(setupConfig){
         application.transferConfigParams(setupConfig, controllerConfig);
     }
-	
+
 	function activate(rootDiv){
         //create zTree div-container
 		let zTreeDiv = document.createElement("DIV");
 		zTreeDiv.id = "zTreeDiv";
-				
+
 		let packageExplorerTreeUL = document.createElement("UL");
 		packageExplorerTreeUL.id = packageExplorerTreeID;
 		packageExplorerTreeUL.setAttribute("class", "ztree");
-				
+
 		zTreeDiv.appendChild(packageExplorerTreeUL);
 		rootDiv.appendChild(zTreeDiv);
-				
+
 		//create zTree
 		prepareTreeView();
 		events.selected.on.subscribe(onEntitySelected);
     }
-	
+
 	function reset(){
 		prepareTreeView();
 	}
-    
+
     function prepareTreeView() {
-        
+
         let entities = model.getCodeEntities();
         let items = [];
-		
+
 		//build items for ztree
 		entities.forEach(function(entity) {
-			
+
 			var item;
-			
+
 			if(entity.belongsTo === undefined){
 				//rootpackages
 				if(entity.type !== "issue" && entity.type !== "Macro"
@@ -76,7 +76,7 @@ var packageExplorerController = (function() {
                         };
                     }
                 }
-            } else {	
+            } else {
 				switch(entity.type) {
 					case "Project":
 						item = { id: entity.id, open: true, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.projectIcon, iconSkin: "zt"};
@@ -112,7 +112,7 @@ var packageExplorerController = (function() {
 					case "Union":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
 						break;
-					default: 
+					default:
 						events.log.warning.publish({ text: "FamixElement not in tree: " + entity.type});
 
 						return;
@@ -122,11 +122,11 @@ var packageExplorerController = (function() {
                 items.push(item);
             }
 		});
-		
+
 		//Sortierung nach Typ und Alphanumerisch
 		items.sort(
 			function(a,b) {
-				
+
 				var sortStringA = "";
 				switch(a.icon){
 					case controllerConfig.packageIcon:
@@ -144,7 +144,7 @@ var packageExplorerController = (function() {
 					default:
 						sortStringA = "0" + a.name.toUpperCase();
 				}
-				
+
 				var sortStringB = "";
 				switch(b.icon){
 					case controllerConfig.packageIcon:
@@ -169,8 +169,8 @@ var packageExplorerController = (function() {
 				}
 				if (sortStringA > sortStringB){
 					return 1;
-				}			
-				
+				}
+
 				return 0;
 			}
 		);
@@ -199,33 +199,33 @@ var packageExplorerController = (function() {
                 selectMulti: false
             }
 
-        };		
-		
+        };
+
 		//create zTree
         tree = $.fn.zTree.init( $(jQPackageExplorerTree), settings, items);
     }
-    
-	
+
+
 	function zTreeOnCheck(event, treeId, treeNode) {
         var nodes = tree.getChangeCheckedNodes();
-        
+
 		var entities = [];
 		nodes.forEach(function(node){
-			node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes	
+			node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes
 			entities.push(model.getEntityById(node.id));
 		});
-								
-		var applicationEvent = {			
+
+		var applicationEvent = {
 			sender: 	packageExplorerController,
 			entities:	entities
 		};
-		
+
 		if (!treeNode.checked){
 			events.filtered.on.publish(applicationEvent);
 		} else {
 			events.filtered.off.publish(applicationEvent);
 		}
-		
+
     }
 
     function zTreeOnClick(treeEvent, treeId, treeNode) {
@@ -235,69 +235,69 @@ var packageExplorerController = (function() {
 		};
 		events.selected.on.publish(applicationEvent);
     }
-	
+
 	function onEntitySelected(applicationEvent) {
         if(applicationEvent.sender !== packageExplorerController) {
 			var entity = applicationEvent.entities[0];
-			var item = tree.getNodeByParam("id", entity.id, null);            
+			var item = tree.getNodeByParam("id", entity.id, null);
 			tree.selectNode(item, false);
         }
 	}
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	/*
     function zTreeOnCheck(event, treeId, treeNode) {
-        		
+
 		var treeObj = $.fn.zTree.getZTreeObj("packageExplorerTree");
         var nodes = treeObj.getChangeCheckedNodes();
-        
+
 		var entityIds = [];
 		for(var i = 0; i < nodes.length;i++) {
 			nodes[i].checkedOld = nodes[i].checked; //Need for the ztree to set getChangeCheckedNodes correct
 			entityIds.push(nodes[i].id);
 		}
-		
+
 		publishOnVisibilityChanged(entityIds, treeNode.checked, "packageExplorerTree");
-		
+
     }
 
-    function zTreeOnClick(event, treeId, treeNode) {        
+    function zTreeOnClick(event, treeId, treeNode) {
 		publishOnEntitySelected(treeNode.id, "packageExplorerTree");
     }
-    
-	
+
+
     function onEntitySelected(event, entity) {
         if(event.sender != "packageExplorerTree") {
-			var tree = $.fn.zTree.getZTreeObj("packageExplorerTree");   
+			var tree = $.fn.zTree.getZTreeObj("packageExplorerTree");
             var item = tree.getNodeByParam("id", entity.id, null);
-            tree.selectNode(item, false);         
-        }   
+            tree.selectNode(item, false);
+        }
 		interactionLogger.logManipulation("PackageExplorerTree", "highlight", entity.id);
     }
-    
+
     function onVisibilityChanged(event, ids, visible) {
-        if(event.sender != "packageExplorerTree") {            
+        if(event.sender != "packageExplorerTree") {
 			var tree = $.fn.zTree.getZTreeObj("packageExplorerTree");
-            
+
 			for(var i = 0; i < ids.length;i++) {
 				var item = tree.getNodeByParam("id", ids[i], null);
 				tree.checkNode(item, visible, false, false);
 				item.checkedOld = item.checked;
 			}
         }
-		
+
     }
-    
+
     function onRelationsVisibilityChanged(event, entities, visible) {
         var tree = $.fn.zTree.getZTreeObj("packageExplorerTree");
         for(var i = 0; i < entities.length; i++) {
             var id = entities[i];
-            
+
 			var item = tree.getNodeByParam("id", id, null);
             tree.checkNode(item, visible, false, false);
             item.checkedOld = item.checked;
@@ -305,7 +305,7 @@ var packageExplorerController = (function() {
         }
     }
 	*/
-    
+
     return {
         initialize: initialize,
 		activate: activate,
