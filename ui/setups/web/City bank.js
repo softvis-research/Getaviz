@@ -80,23 +80,23 @@
             showCode: true
         },
 
-        {
-            name: "relationConnectorController",
-            fixPositionY: false,
-            showInnerRelations: true,
-            sourceStartAtParentBorder: false,
-            targetEndAtParentBorder: false,
-            sourceStartAtBorder: true,
-            targetEndAtBorder: true,
-            createEndpoints: true
-        },
-        {
-            name: "relationTransparencyController",
-        },
-
-        {
-            name: "relationHighlightController"
-        },
+        // {
+        //     name: "relationConnectorController",
+        //     fixPositionY: false,
+        //     showInnerRelations: true,
+        //     sourceStartAtParentBorder: false,
+        //     targetEndAtParentBorder: false,
+        //     sourceStartAtBorder: true,
+        //     targetEndAtBorder: true,
+        //     createEndpoints: true
+        // },
+        // {
+        //     name: "relationTransparencyController",
+        // },
+        //
+        // {
+        //     name: "relationHighlightController"
+        // },
         {
             name: "menuController",
             menuMapping: [
@@ -119,30 +119,30 @@
                     ]
                 },
 
-                {
-                    title: "Relations",
-                    subMenu: true,
-                    items: [
-                        {
-                            title: "Relation Connectors",
-                            toggle: true,
-                            eventOn: "relationConnectorController.activate",
-                            eventOff: "relationConnectorController.deactivate",
-                        },
-                        {
-                            title: "Relation Transparency",
-                            toggle: true,
-                            eventOn: "relationTransparencyController.activate",
-                            eventOff: "relationTransparencyController.deactivate",
-                        },
-                        {
-                            title: "Relation Highlight",
-                            toggle: true,
-                            eventOn: "relationHighlightController.activate",
-                            eventOff: "relationHighlightController.deactivate",
-                        },
-                    ]
-                },
+                // {
+                //     title: "Relations",
+                //     subMenu: true,
+                //     items: [
+                //         {
+                //             title: "Relation Connectors",
+                //             toggle: true,
+                //             eventOn: "relationConnectorController.activate",
+                //             eventOff: "relationConnectorController.deactivate",
+                //         },
+                //         {
+                //             title: "Relation Transparency",
+                //             toggle: true,
+                //             eventOn: "relationTransparencyController.activate",
+                //             eventOff: "relationTransparencyController.deactivate",
+                //         },
+                //         {
+                //             title: "Relation Highlight",
+                //             toggle: true,
+                //             eventOn: "relationHighlightController.activate",
+                //             eventOff: "relationHighlightController.deactivate",
+                //         },
+                //     ]
+                // },
 
                  {
                     title: "Visualizations",
@@ -312,9 +312,9 @@
                                         {name: "infoController"},
                                         {name: "shareController"},
                                         {name: "canvasFlyToController"},
-                                        {name: "relationConnectorController"},
-                                        {name: "relationTransparencyController"},
-                                        {name: "relationHighlightController"},
+                                        // {name: "relationConnectorController"},
+                                        // {name: "relationTransparencyController"},
+                                        // {name: "relationHighlightController"},
                                     ],
                                 },
                                 second: {

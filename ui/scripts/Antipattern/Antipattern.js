@@ -80,7 +80,7 @@ var antipatternController = (function() {
                 }
             },
             callback: {
-                onCheck: decide,
+                onCheck: checkedOrUnchecked,
                 onClick: zTreeOnClick
             },
             view:{
@@ -90,6 +90,14 @@ var antipatternController = (function() {
             }
         };
         tree = $.fn.zTree.init( $(jQAntipatternTree), settings, items);
+    }
+
+    function checkedOrUnchecked(treeEvent, treeId, treeNode){
+        if(treeNode.checked){
+            decide(treeEvent, treeId, treeNode)
+        } else {
+            resetMarked()
+        }
     }
 
     function decide(treeEvent, treeId, treeNode) {
@@ -116,7 +124,7 @@ var antipatternController = (function() {
     }
 
     function changeColor(entity){
-        canvasManipulator.changeColorOfEntities([entity], "#FF4500");
+        canvasManipulator.changeColorOfEntities([entity], "#ff5e1f");
     }
 
     function resetMarked(){
@@ -126,7 +134,6 @@ var antipatternController = (function() {
     }
 
     function zTreeOnClick(treeEvent, treeId, treeNode) {
-        resetMarked()
         var applicationEvent = {
             sender: antipatternController,
             entities: [model.getEntityById(treeNode.id)]
@@ -135,11 +142,11 @@ var antipatternController = (function() {
     }
 
     function onEntitySelected(applicationEvent) {
-        resetMarked()
         if(applicationEvent.sender !== antipatternController) {
             var entity = applicationEvent.entities[0];
             var item = tree.getNodeByParam("id", entity.id, null);
             tree.selectNode(item, false);
+            tree.checkNode(item, false, false)
         }
     }
 
