@@ -1,7 +1,12 @@
 var antipatternController = (function() {
 
-    var versionExplorerTreeID = "versionExplorerTree";
-    var jQVersionExplorerTree = "#versionExplorerTree";
+    var AntipatternTreeID = "AntipatternTree";
+    var jQAntipatternTree = "#AntipatternTree";
+
+    let antipatternConfig = {
+        typeIcon: 		"scripts/Antipattern/images/type.png",
+        methodIcon:		"scripts/Antipattern/images/method.png"
+    };
 
     function initialize() {
     }
@@ -10,11 +15,11 @@ var antipatternController = (function() {
         var zTreeDiv = document.createElement("DIV");
         zTreeDiv.id = "zTreeDiv";
 
-        var versionExplorerTreeUL = document.createElement("UL");
-        versionExplorerTreeUL.id = versionExplorerTreeID;
-        versionExplorerTreeUL.setAttribute("class", "ztree");
+        var AntipatternTreeUL = document.createElement("UL");
+        AntipatternTreeUL.id = AntipatternTreeID;
+        AntipatternTreeUL.setAttribute("class", "ztree");
 
-        zTreeDiv.appendChild(versionExplorerTreeUL);
+        zTreeDiv.appendChild(AntipatternTreeUL);
         rootDiv.appendChild(zTreeDiv);
 
         prepareAntipattern();
@@ -26,30 +31,31 @@ var antipatternController = (function() {
     }
 
     function antipatternFinder(){
-        let featureenvy = {id: "featureenvy", children: [],name: "Feature Envy", iconSkin: "zt", checked: false};
-        let brainmethod = {id: "brainmethod", children: [],name: "Brain Method", iconSkin: "zt", checked: false};
-        let brainclass = {id: "brainclass", children: [], name: "Brain Class", iconSkin: "zt", checked: false}
-        let dataclass = {id: "dataclass", children: [], name: "Data Class", iconSkin: "zt", checked: false};
-        let godclass  = {id: "godclass", children: [], name: "God Class", iconSkin: "zt", checked: false};
+        let featureenvy = {id: "featureenvy", children: [],name: "Feature Envy", checked: false};
+        let brainmethod = {id: "brainmethod", children: [],name: "Brain Method", checked: false};
+        let brainclass = {id: "brainclass", children: [], name: "Brain Class", checked: false}
+        let dataclass = {id: "dataclass", children: [], name: "Data Class", checked: false};
+        let godclass  = {id: "godclass", children: [], name: "God Class", checked: false};
         let items = []
 
         model.getAllEntities().forEach(entity => {
-            let item = {id: entity.id, name: entity.name, iconSkin: "zt", checked: false};
+            let methodAP = {id: entity.id, name: entity.name, iconSkin: "zt", chkDisabled:true, icon: antipatternConfig.methodIcon,checked: false};
+            let classAP = {id: entity.id, name: entity.name, iconSkin: "zt", chkDisabled:true, icon: antipatternConfig.typeIcon,checked: false};
             if(entity.godclass === 'TRUE'){
                 if(!items.includes(godclass)){items.push(godclass)}
-                godclass.children.push(item);
+                godclass.children.push(classAP);
             } else if (entity.brainclass === "TRUE"){
                 if(!items.includes(brainclass)){items.push(brainclass)}
-                brainclass.children.push(item);
+                brainclass.children.push(classAP);
             } else  if(entity.dataclass === 'TRUE'){
                 if(!items.includes(dataclass)){items.push(dataclass)}
-                dataclass.children.push(item);
+                dataclass.children.push(classAP);
             } else if(entity.brainmethod === 'TRUE'){
                 if(!items.includes(brainmethod)){items.push(brainmethod)}
-                brainmethod.children.push(item);
+                brainmethod.children.push(methodAP);
             } else if(entity.featureenvy === 'TRUE'){
                 if(!items.includes(featureenvy)){items.push(featureenvy)}
-                featureenvy.children.push(item);
+                featureenvy.children.push(methodAP);
             }})
 
         return items
@@ -79,11 +85,11 @@ var antipatternController = (function() {
             },
             view:{
                 showLine: false,
-                showIcon: false,
-                selectMulti: false
+                showIcon: true,
+                selectMulti: true
             }
         };
-        tree = $.fn.zTree.init( $(jQVersionExplorerTree), settings, items);
+        tree = $.fn.zTree.init( $(jQAntipatternTree), settings, items);
     }
 
     function decide(treeEvent, treeId, treeNode) {
@@ -120,6 +126,7 @@ var antipatternController = (function() {
     }
 
     function zTreeOnClick(treeEvent, treeId, treeNode) {
+        resetMarked()
         var applicationEvent = {
             sender: antipatternController,
             entities: [model.getEntityById(treeNode.id)]
@@ -128,6 +135,7 @@ var antipatternController = (function() {
     }
 
     function onEntitySelected(applicationEvent) {
+        resetMarked()
         if(applicationEvent.sender !== antipatternController) {
             var entity = applicationEvent.entities[0];
             var item = tree.getNodeByParam("id", entity.id, null);
