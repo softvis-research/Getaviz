@@ -2,7 +2,7 @@ FROM maven:3.6.0-jdk-8-alpine AS MAVEN_TOOL_CHAIN
 RUN mkdir -p /tmp/generator2/
 COPY . /tmp/generator2/
 WORKDIR /tmp/generator2/
-RUN mvn package
+RUN mvn package -DskipTests
 
 FROM getaviz/generator2-base:1.4.1
 COPY --from=MAVEN_TOOL_CHAIN /tmp/generator2/target/org.getaviz.generator*.war /var/lib/jetty/webapps/root.war
