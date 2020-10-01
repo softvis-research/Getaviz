@@ -27,18 +27,12 @@ public class CreatorStep {
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
         nodeRepository.loadNodesByRelation(SAPRelationLabels.TYPEOF, true);
         nodeRepository.loadNodesByRelation(SAPRelationLabels.USES, true);
-        nodeRepository.loadNodesByRelation(SAPRelationLabels.INHERIT, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
 
         aCityRepository = new ACityRepository();
 
         MetropolisCreator creator = new MetropolisCreator(aCityRepository, nodeRepository, config);
         creator.createRepositoryFromNodeRepository();
-
-
-
-
-
-
 
         // Delete old ACityRepository Nodes
         connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");

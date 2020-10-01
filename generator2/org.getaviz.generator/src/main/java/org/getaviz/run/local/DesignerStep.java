@@ -1,9 +1,6 @@
 package org.getaviz.run.local;
 
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.steps.ACityCreator;
-import org.getaviz.generator.abap.city.steps.ACityDesigner;
-import org.getaviz.generator.abap.city.steps.ACityLayouter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
@@ -31,7 +28,6 @@ public class DesignerStep {
 
         aCityRepository = new ACityRepository();
 
-
         MetropolisCreator creator = new MetropolisCreator(aCityRepository, nodeRepository, config);
         creator.createRepositoryFromNodeRepository();
 
@@ -41,12 +37,13 @@ public class DesignerStep {
         MetropolisDesigner designer = new MetropolisDesigner(aCityRepository, nodeRepository, config);
         designer.designRepository();
 
-
         // Delete old ACityRepository Nodes
         connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
 
         // Update Neo4j with new nodes
         aCityRepository.writeRepositoryToNeo4j();
+
+       // System.out.println(Thread.currentThread());
 
         connector.close();
         System.out.println("\nDesigner step was completed\"");

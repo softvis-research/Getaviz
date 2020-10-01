@@ -134,6 +134,7 @@ public class MetropolisCreator {
         repository.addElement(refBuilding);
 
         packageDistrict.addSubElement(refBuilding);
+        refBuilding.setParentElement(packageDistrict);
     }
 
     private void createAllMetropolisRelations(SourceNodeRepository nodeRepository) {
@@ -200,7 +201,7 @@ public class MetropolisCreator {
                         relationCounterUsesRelation++;
                     }
                 } else {
-                    repository.deleteElement(usesElement); //atm only for local classes
+                    repository.deleteElement(usesElement); //atm only for local classes, attributes are deleted
                 }
             }
 

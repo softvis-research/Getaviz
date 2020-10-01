@@ -27,8 +27,8 @@ public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
 	private static SettingsConfiguration instance = null;
 	private static Log log = LogFactory.getLog(SettingsConfiguration.class);
-	private static String defaultBoldAddress = "bolt://localhost:7687";
-	//private static String defaultBoldAddress = "bolt://localhost:11002";
+	//private static String defaultBoldAddress = "bolt://localhost:7687";
+	private static String defaultBoldAddress = "bolt://localhost:11002";
 
 	public static SettingsConfiguration getInstance() {
 		if (instance == null) {

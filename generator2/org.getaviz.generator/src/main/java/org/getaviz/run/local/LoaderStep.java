@@ -96,12 +96,9 @@ public class LoaderStep {
             System.out.print("Creating 'USES' relationships. Press any key to continue...");
             userInput.nextLine();
         }
-        pathToReferenceCsv = pathToReferenceCsv.replace("\\", "/");
-        connector.executeWrite(
-                "LOAD CSV WITH HEADERS FROM \"file:///" + pathToReferenceCsv + "\"\n" +
-                        "AS row FIELDTERMINATOR ';'\n" +
-                        "MATCH (a:Elements {element_id: row.source_id}), (b:Elements {element_id: row.target_id})\n" +
-                        "CREATE (a)-[r:"+ SAPRelationLabels.USES +"]->(b)"
+        connector.executeWrite("MATCH (a:Elements), (b:Elements) " +
+                "WHERE a.element_id = b.uses_id " +
+                "CREATE (a)-[r:" + SAPRelationLabels.USES + "]->(b)"
         );
 
 
