@@ -7,5 +7,6 @@ public class FeatureTrace {
 	public String traceType;
 	
 	public String name;
-	
+
+	public Boolean isRefinement = false;
 }

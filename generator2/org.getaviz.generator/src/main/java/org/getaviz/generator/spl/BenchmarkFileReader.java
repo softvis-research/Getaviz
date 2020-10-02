@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class BenchmarkFileReader {
 	
-	private String path = "C:\\Users\\Janik\\Documents\\Bachelorarbeit\\argouml-spl-benchmark-solution\\ArgoUMLSPLBenchmark\\yourResults\\ScenarioTraditionalVariants";
+	private String path = "/home/lyannen/Dokumente/Uni/Bachelor/Semester_6/ba/software/temp_files/benchmark-result";
 	
 	public ArrayList<FeatureTrace> read() {
 		File folder = new File(path);
@@ -35,10 +35,9 @@ public class BenchmarkFileReader {
 	
 	private FeatureTrace buildFeatureTrace(String line) {
 		FeatureTrace trace = new FeatureTrace();
-		boolean isRefinement = false;
 		ArrayList<String> parts = new ArrayList<String>(Arrays.asList(line.split(" ")));
 		if (parts.get(parts.size() - 1).equalsIgnoreCase("Refinement")) {
-			isRefinement = true;
+			trace.isRefinement = true;
 			parts.remove(parts.size() - 1);
 		}
 		if (parts.size() == 2 && parts.get(1).matches("[^\\(]*\\(.*\\)")) {
@@ -51,7 +50,7 @@ public class BenchmarkFileReader {
 		} else {
 			// TODO Werfe Exception
 		}
-		if (isRefinement) {
+		if (trace.isRefinement) {
 			trace.traceType += " Refinement";
 		}
 		return trace;
