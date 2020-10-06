@@ -47,14 +47,14 @@ var featureExplorerController = (function () {
                                 if (!featureTreeIncludes(andFeature)) {
                                     addFeatureToFeatureTree(andFeature);
                                 }
-                                addTraceToFeatureTree(andFeature, featureAffiliation.traceType, entity);
+                                addTraceToFeatureTree(andFeature, featureAffiliation, entity);
                             });
                         }
                         else {
                             if (!featureTreeIncludes(featureAffiliation.feature)) {
                                 addFeatureToFeatureTree(featureAffiliation.feature);
                             }
-                            addTraceToFeatureTree(featureAffiliation.feature, featureAffiliation.traceType, entity);
+                            addTraceToFeatureTree(featureAffiliation.feature, featureAffiliation, entity);
                         }
                     }
                 });
@@ -101,7 +101,7 @@ var featureExplorerController = (function () {
             feature: featureName,
         }
         featureTreePart.push(featureNode);
-        const traceTypes = ['Class', 'Class Refinement', 'Method', 'Method Refinement'];
+        const traceTypes = ['Class', 'Method', 'Class Refinement', 'Method Refinement'];
         traceTypes.forEach(function (traceType) {
             let traceTypeNode = {
                 id: (featureName + '_' + traceType).replace(' ', ''),
@@ -110,20 +110,23 @@ var featureExplorerController = (function () {
                 parentId: featureName,
                 name: traceType,
                 feature: featureName,
+                nocheck: traceType == "Class Refinement" || traceType == "Method Refinement"
             }
             traceTypeTreePart.push(traceTypeNode);
         });
     }
 
-    function addTraceToFeatureTree(featureName, traceType, entity) {
+    function addTraceToFeatureTree(featureName, featureAffiliation, entity) {
         let node = {
-            id: featureName + '_' + traceType.replace(' ', '') + '_' + entity.id,
+            id: featureName + '_' + featureAffiliation.traceType.replace(' ', '') + '_' + entity.id,
             open: false,
             checked: true,
-            parentId: (featureName + '_' + traceType).replace(' ', ''),
+            parentId: (featureName + '_' + featureAffiliation.traceType).replace(' ', ''),
             name: entity.qualifiedName,
             entityId: entity.id,
             feature: featureName,
+            isRefinement: featureAffiliation.isRefinement,
+            nocheck: featureAffiliation.isRefinement
         }
         traceTreePart.push(node);
     }
@@ -169,7 +172,7 @@ var featureExplorerController = (function () {
         featureColorMap.forEach(function (value, key, map) {
             let entities = [];
             traceTreePart.forEach(function (node) {
-                if (key == node.feature) {
+                if (key == node.feature && !node.isRefinement) {
                     entities.push(model.getEntityById(node.entityId));
                 }
             });
