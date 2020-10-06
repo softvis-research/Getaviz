@@ -190,18 +190,15 @@ var canvasHoverController = (function () {
 				switch (entity.featureAffiliations.length) {
 					case 0:
 						$("#tooltipFeatureAffiliation").text("Feature: Core");
-						console.log('Core');
 						break;
 					case 1:
 						$("#tooltipFeatureAffiliation").text("Feature: " + entity.featureAffiliations[0].feature);
-						console.log('One Feature: ' + entity.featureAffiliations[0].feature);
 						break;
 					default:
 						let tooltipText = 'Features: ';
 						entity.featureAffiliations.forEach(function (featureAffiliation) {
 							tooltipText += featureAffiliation.feature + ' | ';
 						})
-						console.log(tooltipText);
 						$("#tooltipFeatureAffiliation").text(tooltipText);
 						break;
 				}
