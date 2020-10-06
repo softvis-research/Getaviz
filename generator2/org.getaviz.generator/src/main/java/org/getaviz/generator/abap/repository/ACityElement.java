@@ -244,7 +244,6 @@ public class ACityElement {
 
         try{
         if(sourceNode == null){
-            //TODO Exception oder log fatal?
             throw new Exception("sourceNode is equal null");
         }
         } catch (Exception e) {
@@ -254,7 +253,6 @@ public class ACityElement {
         Value propertyValue = sourceNode.get(sapNodeProperties.name());
         try {
             if (propertyValue == null) {
-                //TODO Exception oder lof fatal?
                 //throw new Exception("propertyValue is equal null");
             }
         } catch (Exception e) {

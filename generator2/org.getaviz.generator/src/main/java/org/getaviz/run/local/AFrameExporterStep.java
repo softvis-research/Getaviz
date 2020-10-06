@@ -16,6 +16,7 @@ import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class AFrameExporterStep {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
@@ -28,14 +29,6 @@ public class AFrameExporterStep {
     public static void main(String[] args) {
         SettingsConfiguration.getInstance("src/test/resources/ABAPCityTest.properties");
         boolean isSilentMode = true;
-        nodeRepository = new SourceNodeRepository();
-        nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
-        nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
-        nodeRepository.loadNodesByRelation(SAPRelationLabels.TYPEOF, true);
-        nodeRepository.loadNodesByRelation(SAPRelationLabels.USES, true);
-        nodeRepository.loadNodesByRelation(SAPRelationLabels.INHERIT, true);
-
-        aCityRepository = new ACityRepository();
 
         Scanner userInput = new Scanner(System.in);
         System.out.print("Silent mode? (y/n): "); // Silent mode to run with default values
@@ -44,7 +37,15 @@ public class AFrameExporterStep {
             isSilentMode = false;
         }
 
-        
+        nodeRepository = new SourceNodeRepository();
+        nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.USES, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.TYPEOF, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
+        //nodeRepository.loadNodesByRelation(SAPRelationLabels.INHERIT, true);
+
+        aCityRepository = new ACityRepository();
 
         if (!isSilentMode) {
             System.out.print("Creator step to be processed. Press any key to continue...");
@@ -89,7 +90,8 @@ public class AFrameExporterStep {
             System.out.println("Writing A-Frame. Press any key to continue...");
             userInput.nextLine();
         }
-        AFrameExporter aFrameExporter = new AFrameExporter(aCityRepository, config, "acity_AFrame_UI");
+        //AFrameExporter aFrameExporter = new AFrameExporter(aCityRepository, config, "acity_AFrame_UI");
+        AFrameExporter aFrameExporter = new AFrameExporter(aCityRepository, config, "metropolis_AFrame");
         aFrameOutput = config.getAframeOutput();
         if (aFrameOutput == AFrameOutput.FILE || aFrameOutput == AFrameOutput.BOTH ) {
             aFrameExporter.exportAFrame();
@@ -98,6 +100,7 @@ public class AFrameExporterStep {
         if (aFrameOutput == AFrameOutput.NODEPROP || aFrameOutput == AFrameOutput.BOTH ) {
             aFrameExporter.setAframePropToACityElements();
         }
+
 
         connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
         aCityRepository.writeRepositoryToNeo4j();

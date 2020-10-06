@@ -96,7 +96,6 @@ public class MetropolisLayouter {
             return null;
         }
 
-        //TODO gebraucht vom typeofnode nicht vom building
         for (Node typeOfNode: typeOfNodes) {
             Value propertyValue = typeOfNode.get(SAPNodeProperties.type_name.name());
             String typeOfNodeTypeProperty = propertyValue.asString();
@@ -234,6 +233,7 @@ public class MetropolisLayouter {
 
             log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
 
+
         }
     }
 
@@ -245,7 +245,6 @@ public class MetropolisLayouter {
             if (districtsWithoutParent.getParentElement() == null) {
 
                 ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
-
 
                 if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.DEFAULT) {
 

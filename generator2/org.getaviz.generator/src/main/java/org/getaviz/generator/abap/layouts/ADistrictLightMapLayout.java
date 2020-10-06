@@ -9,6 +9,7 @@ import org.getaviz.generator.abap.layouts.kdtree.ACityKDTreeNode;
 import org.getaviz.generator.abap.layouts.kdtree.ACityRectangle;
 import org.getaviz.generator.abap.repository.ACityElement;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 public class ADistrictLightMapLayout {
@@ -61,7 +62,12 @@ public class ADistrictLightMapLayout {
 
         double yPosition = element.getYPosition() + config.adjustACityDistrictYPosition();
         double yPositionDelta = yPosition - element.getYPosition();
-        element.setYPosition(yPosition);
+
+        //Umrechnung, um Gleitkommazahlen zu vermeiden
+        BigDecimal yPosition_BigDecimal = BigDecimal.valueOf(yPosition);
+        BigDecimal elementY = BigDecimal.valueOf(element.getYPosition());
+        BigDecimal yPositionDelta_BigDecimal = yPosition_BigDecimal.subtract(elementY);
+        element.setYPosition(yPosition_BigDecimal.doubleValue());
 
         double zPosition = fitNode.getACityRectangle().getCenterY();//- config.getBuildingHorizontalGap() / 2;
         double zPositionDelta = zPosition - element.getZPosition();
@@ -69,7 +75,7 @@ public class ADistrictLightMapLayout {
 
         Collection<ACityElement> subElements = element.getSubElements();
         if(!subElements.isEmpty()){
-            adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta, zPositionDelta);
+            adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta_BigDecimal.doubleValue(), zPositionDelta);
         }
     }
 

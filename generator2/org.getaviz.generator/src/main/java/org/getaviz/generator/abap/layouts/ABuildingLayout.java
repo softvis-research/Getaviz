@@ -38,11 +38,9 @@ public class ABuildingLayout {
     }
 
     private void setPositionOfBuilding() {
-
             building.setXPosition(0.0);
             building.setYPosition(building.getHeight() / 2);
             building.setZPosition(0.0);
-
     }
 
 

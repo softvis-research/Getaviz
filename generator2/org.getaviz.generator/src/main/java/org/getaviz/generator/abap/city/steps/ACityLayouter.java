@@ -80,7 +80,6 @@ public class ACityLayouter {
             return null;
         }
 
-        //TODO gebraucht vom typeofnode nicht vom building
         for (Node typeOfNode: typeOfNodes) {
             Value propertyValue = typeOfNode.get(SAPNodeProperties.type_name.name());
             String typeOfNodeTypeProperty = propertyValue.asString();
@@ -178,7 +177,6 @@ public class ACityLayouter {
         ABuildingLayout buildingLayout = new ABuildingLayout(building, floors, chimneys, config);
         buildingLayout.calculate();
 
-        //TODO too much?
         if (floors.size() != 0) {
             log.info(building.getSourceNodeType() + " " + "\"" + building.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + " with " + floors.size() + " floors");
         }

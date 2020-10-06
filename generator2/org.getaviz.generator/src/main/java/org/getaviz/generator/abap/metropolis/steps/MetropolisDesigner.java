@@ -40,13 +40,10 @@ public class MetropolisDesigner {
 
         designMetropolisElementsByType(ACityElement.ACityType.Building);
 
-        //designMetropolisElementsByType(ACityElement.ACityType.FactoryHall);
-
         designMetropolisElementsByType(ACityElement.ACityType.Floor);
 
-
-
       //  designMetropolisElementsByType(ACityElement.ACityType.Chimney);
+
     }
 
     private void designMetropolisElementsByType(ACityElement.ACityType aCityType){

@@ -13,8 +13,10 @@ import org.getaviz.generator.database.DatabaseConnector;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.neo4j.driver.v1.Record;
 import org.neo4j.driver.v1.types.Node;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -102,17 +104,38 @@ public class CircularLayoutTest {
     @Test
     public void specificDistrictPosition(){
 
-        Collection<ACityElement> districts = aCityRepository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.object_name, "/GSA/CL_VISAP_T_TEST_UP_CLASS");
+    }
 
-        for (ACityElement dddd: districts
-        ) {
-               assertEquals(26, dddd.getXPosition());
-               assertEquals(4.400000000000001, dddd.getYPosition());
-               assertEquals(111.5, dddd.getZPosition());
+    @Test
+    public void specificDistrictPosition2(){
 
-        // echte Positionsdaten abfragen schwierig, da sie sich mit jedem Durchlauf ändern
+        Collection<ACityElement> districts = aCityRepository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.object_name, "/GSA/CL_VISAP_T_TEST_CLASS");
 
+        for (ACityElement dddd: districts) {
+            assertEquals(46.5, dddd.getXPosition());
+            //assertEquals(4.6000000000000005, dddd.getYPosition());
+            assertEquals(10.5, dddd.getZPosition());
         }
+
+    }
+
+    @Test
+    public void bigDecimal(){
+
+        double yPosition = 0.887 + config.adjustACityDistrictYPosition();
+        double yPositionDelta = yPosition - 0.887;
+
+        BigDecimal numBigDecimal = BigDecimal.valueOf(yPosition);
+
+        BigDecimal yPositionDeltaNEW = numBigDecimal.subtract(BigDecimal.valueOf(0.5));
+
+        double yPositionAsDouble = yPositionDeltaNEW.doubleValue();
+
+        System.out.println(yPosition);
+        System.out.println(yPositionDelta);
+        System.out.println(yPositionDeltaNEW);
+        System.out.println(yPositionAsDouble);
+        System.out.println(yPositionDeltaNEW.doubleValue());
 
     }
 }
