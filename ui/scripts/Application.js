@@ -18,34 +18,40 @@ $(document).ready(function () {
 			resizable: false
 		});		
 	}
-	//load famix data
-	$.getJSON( metaDataJsonUrl, initializeApplication);
+
+	// timeout, to make sure the scene is loaded
+	setTimeout(function(){initializeApplication(metaDataJsonUrl);}, 1000);
 });
 
-function initializeApplication(metaDataJson){
-    //wait for canvas to be loaded full here...
-	var canvas = document.getElementById(canvasId);
-	if(!canvas){
-		setTimeout(function(){initializeApplication(metaDataJson);}, 100);
-		return;
-	}
-
-	//create entity model
-	model.initialize(metaDataJson);
-
+async function initializeApplication(metaDataJsonUrl){
 	actionController.initialize();
 	canvasManipulator.initialize();
 
+	//initialize Events for entities
+	model.initialize();
+
+	// initialize neo4jModelLoadController
+	neo4jModelLoadController.initialize();
+
 	//initialize application
 	application.initialize();
+
+	// add entities
+	if (setup.useMetaDataFile == true) { 
+		let response = await fetch(metaDataJsonUrl);
+		let data = await response.json()
+		model.createEntities(data);
+	} else { // Load data from Neo4j
+		neo4jModelLoadController.loadStartMetaData();
+	}
 
 	if(setup.loadPopUp){
 		$("#RootLoadPopUp").jqxWindow("close");		
 	}
 }
 
-var application = (function() {
 
+var application = (function() {
 	var controllerFileFolder = "scripts/";
 	
 	var controllers = new Map();
@@ -94,17 +100,18 @@ var application = (function() {
 		});		
 		
 		//for ajax loading 
-		setTimeout(startConfigParsingAfterControllerLoading, 1);
+		// setTimeout(startConfigParsingAfterControllerLoading, 1);
+		startConfigParsingAfterControllerLoading();
 	}
 	
 	
 	function startConfigParsingAfterControllerLoading(){
-		//check that all controllers loaded
-		if(setup.controllers.length !== controllers.size){
-			console.debug("controllers not loaded yet...");
-			setTimeout(startConfigParsingAfterControllerLoading, 1);
-			return;
-		}
+		// //check that all controllers loaded
+		// if(setup.controllers.length !== controllers.size){
+		// 	console.debug("controllers not loaded yet...");
+		// 	setTimeout(startConfigParsingAfterControllerLoading, 1);
+		// 	return;
+		// }
 
 		//get body and canvas elements
 		bodyElement = document.body; 	
@@ -134,8 +141,7 @@ var application = (function() {
 		} catch(err) {
 			events.log.error.publish({ text: err.message });
 		}
-
-		macroExplorerController.sendInitialEvent();
+		
 	}
 		
 	

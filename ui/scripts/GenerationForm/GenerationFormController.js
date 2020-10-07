@@ -908,7 +908,7 @@ var generationFormController = (function() {
 					city_building_horizontal_gap: 3.0,
 					city_building_vertical_margin: 1.0,
 					city_package_color_start: '#969696',
-					city_package_color_end: '#B1B1B1',
+					city_package_color_end: '#F0F0F0',
 					city_class_color_start: '#131615',
 					city_class_color_end: '#00FF00',
 					city_class_color: '#353559',
@@ -1081,7 +1081,9 @@ var generationFormController = (function() {
 				const btn_submit = settingsForm.jqxForm('getComponentByName', 'submitButton');
 				btn_submit.on('click', function () {
 					settingsForm.jqxValidator('validate');
-					settingsForm.jqxForm('submit', "scripts/GenerationForm/generator-connector.php", "_self", 'POST');
+					let currentPage = window.location.href;
+					let newPath = currentPage.substring(0, currentPage.indexOf('index.php'));
+					settingsForm.jqxForm('submit', newPath + "generator-connector.php", "_self", 'POST');
 				});
 				
 				// Cancel Form Data 
@@ -1095,7 +1097,7 @@ var generationFormController = (function() {
 	
 	// Validate input of url (jqxValidator has no support for this)
 	function validate_url(input) {
-		return (input.val().startsWith('http://') || input.val().startsWith('https://') || input.val().startsWith('file://'));
+		return (input.val().startsWith('http://') || input.val().startsWith('https://'));
 	}
 	
 	// Validate input of HEX colors (jqxValidator has no support for this)

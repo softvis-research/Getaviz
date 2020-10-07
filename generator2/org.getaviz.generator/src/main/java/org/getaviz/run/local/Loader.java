@@ -62,6 +62,9 @@ public class Loader {
                         "CREATE (n:Elements)\n" +
                         "SET n = row"
         );
+        // Rewrite date fields (to be able to filter by date)
+        connector.executeWrite("MATCH (n) WHERE (n.created = \"00000000\") SET n.created = \"0\"");
+        connector.executeWrite("MATCH (n) WHERE (n.changed = \"00000000\") SET n.changed = \"0\"");
 
 
         // 2. Upload relations  

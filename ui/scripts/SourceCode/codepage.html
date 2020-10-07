@@ -2,25 +2,18 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <script src="../../node_modules/prismjs/prism.js" ></script>
-        <script src="../../node_modules/prismjs/components/prism-java.min.js" ></script>
-        <script src="../../node_modules/prismjs/components/prism-c.min.js" ></script>
-        <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
-        <script src="CodeHelperFunctions.js"></script>   
-        <link href="../../node_modules/prismjs/themes/prism.css" rel="stylesheet" />
-        <link href="prismPluginCodeController.css" rel="stylesheet" />
+        <link href="../../libs/prism/prism.css" rel="stylesheet" />
+        <link href="../../libs/prism/prismPluginCodeController.css" rel="stylesheet" />
+        <script src="../../libs/prism/prism.js" ></script>
+        <script src="../../libs/jquery-1.11.1.js"></script>
+        <script src="CodeHelperFunctions.js"></script>    
     </head>
-    <body>  
-            <!-- Display Code -->
-        <div style="width:100%; height:100%;">
-            <pre id="codepage"><code id="codeTag"></code></pre>
-        </div>
-        <script>
+    <body>                
+        <script>            
+            
 
-            function displayCode(file, classEntity, entity, filetype){
-                let preElement = document.getElementById('codepage');
-                preElement.className = "language-" + filetype + " line-numbers";
-                codeHelperFunction.displayCode(file, classEntity, entity, publishOnEntitySelected, filetype);
+            function displayCode(file, classEntity, entity){
+                codeHelperFunction.displayCode(file, classEntity, entity, publishOnEntitySelected);
             }
 
             
@@ -37,6 +30,9 @@
 				codeTag = $("#codeTag")[0].textContent = "";
 			}
         </script>
-
+        <!-- Display Code -->
+        <div style="width:100%; height:100%;">
+            <pre class="line-numbers language-java"><code id="codeTag"></code></pre>
+        </div>
     </body>
 </html>

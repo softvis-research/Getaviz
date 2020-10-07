@@ -12,8 +12,6 @@ var sourceCodeController = (function(){
 	let controllerConfig = {
 		fileType : "java",
         url: "",
-        showCodeWindowButton:true,
-        showCode:true,
 	};
     
 	function initialize(setupConfig){
@@ -43,55 +41,38 @@ var sourceCodeController = (function(){
 				//create html elements
 				let codeViewDiv = document.createElement("DIV");
 				codeViewDiv.id = "codeViewDiv";
-                rootDiv.appendChild(codeViewDiv);
-                
-                if(controllerConfig.showCodeWindowButton===true) {
-                    //button
-                     var codeWindowId = "jqxCodeWindowButton";
-                     var codeWindowButtonType = "button";
-                     var jqxCodeWindowButton = document.createElement("BUTTON");
-                     jqxCodeWindowButton.type = codeWindowButtonType;
-                     jqxCodeWindowButton.id = codeWindowId;
-                     var codeWindowtext = document.createTextNode("Show source code");
-                     jqxCodeWindowButton.appendChild(codeWindowtext);
-                     codeViewDiv.appendChild(jqxCodeWindowButton);
-                     
-                     $("#jqxCodeWindowButton").jqxButton({ 
-                        theme: "metro",
-                        width: "98%",
-                        height: "24px",
-                        textImageRelation: "imageBeforeText", 
-                        imgPosition:"left",
-                        textPosition: "left", 
-                        imgSrc: "scripts/SourceCode/images/open_in_new.png" 
-                      });
-                      
-                     $("#jqxCodeWindowButton").on('click', function (){
-                     codeWindow = window.open("scripts/SourceCode/codepage.html", "CodePage", "width=500,"+
-                            "height=500, menubar=no, status=no, titlebar=no,"+
-                            "toolbar=no, scrollbars");
-                        // lade Quellcode, des zuletzt betrachteten Objekts
-                     codeWindow.addEventListener('load', displayCodeChild, true);
-                     });
-                };
-               
-                if(controllerConfig.showCode===true) {
-                
-                    //codeField
-                    let codeValueDiv = document.createElement("DIV");
-                    codeValueDiv.id = "codeValueDiv";
-                    let codePre = document.createElement("PRE");
-                    codePre.className = "line-numbers language-"+controllerConfig.fileType;
-                    codePre.id = "codePre";
-                    codePre.style = "overflow:auto;";
 
-                    let codeTag = document.createElement("CODE");
-                    codeTag.id = "codeTag";
-                    
-                    codePre.appendChild(codeTag);
-                    codeValueDiv.appendChild(codePre);
-                    codeViewDiv.appendChild(codeValueDiv);
-                };
+                //button                                
+                let codeWindowButton = document.createElement("BUTTON");
+                codeWindowButton.type = "button";
+                codeWindowButton.style = "width: 98%;height: 25px;margin: 2px 0px -2px 2px;";
+                codeWindowButton.addEventListener("click", openWindow, false);
+
+                let fullScreenImage = document.createElement("IMG");
+                fullScreenImage.src = "scripts/SourceCode/images/fullscreen.png";
+                fullScreenImage.style = "width: 25px; height: 20px;";
+                
+                codeWindowButton.appendChild(fullScreenImage);
+                codeViewDiv.appendChild(codeWindowButton);
+
+
+                //codeField
+                let codeValueDiv = document.createElement("DIV");
+                codeValueDiv.id = "codeValueDiv";
+                
+                let codePre = document.createElement("PRE");
+                codePre.className = "line-numbers language-java";
+                codePre.id = "codePre";
+                codePre.style = "overflow:auto;";
+
+                let codeTag = document.createElement("CODE");
+                codeTag.id = "codeTag";
+                
+                codePre.appendChild(codeTag);
+                codeValueDiv.appendChild(codePre);
+                codeViewDiv.appendChild(codeValueDiv);
+
+				rootDiv.appendChild(codeViewDiv);
             });
 		});
 
@@ -118,14 +99,17 @@ var sourceCodeController = (function(){
         }
     }
 
+    function openWindow(){
+        codeWindow = window.open("scripts/SourceCode/codepage.html", "CodePage", "width=500,"+
+                "height=500, menubar=no, status=no, titlebar=no,"+
+                "toolbar=no, scrollbars");
+        // lade Quellcode, des zuletzt betrachteten Objekts
+        codeWindow.addEventListener('load', displayCodeChild, true);
+    }
 
     function displayCodeChild(){        
         if(codeWindow) {
-            let file = lastObject.file;
-             if(!file.startsWith("http")) {
-                    file = "../" + file;
-                }
-            codeWindow.displayCode(file, lastObject.classEntity, lastObject.entity, controllerConfig.fileType);
+            codeWindow.displayCode(lastObject.file, lastObject.classEntity, lastObject.entity);
         }
     }
 
@@ -133,45 +117,38 @@ var sourceCodeController = (function(){
 		
         const entity = applicationEvent.entities[0];
 
-        if(controllerConfig.fileType === "java"){
-            if (entity.type === "Namespace"){
-                // Package 
-                resetSourceCode();
-                return;
-            }
-            // classEntity = Klasse, in der sich das selektierte Element befindet
-            // inner Klassen werden auf Hauptklasse aufgeloest
-            let classEntity = entity;
-            while( classEntity.type !== "Class" ){
-                classEntity = classEntity.belongsTo;
-            }		
-            
-            // ersetze . durch / und fuege .java an -> file
-            const javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;
-    
-            displayCode(javaCodeFile, classEntity, entity);
-        } else if(controllerConfig.fileType === "c"){
-            const cCodeFile = entity.filename;
-            displayCode(cCodeFile);
-        }
-       	          
+       	if (entity.type === "Namespace"){
+			// Package 
+			resetSourceCode();
+			return;
+		}
+		// classEntity = Klasse, in der sich das selektierte Element befindet
+		// inner Klassen werden auf Hauptklasse aufgeloest
+		let classEntity = entity;
+		while( classEntity.type !== "Class" ){
+			classEntity = classEntity.belongsTo;
+		}		
+		
+		// ersetze . durch / und fuege .java an -> file
+        const javaCodeFile = classEntity.qualifiedName.replace(/\./g, "/") + "." + controllerConfig.fileType;
+
+        displayCode(javaCodeFile, classEntity, entity);          
     }
 
     function displayCode(file, classEntity, entity){
         if (controllerConfig.url === "") {
-            file = "../../ui/" + modelUrl + "/src/" + file;
+            file = "../../" + modelUrl + "/src/" + file;
         } else {
             file = controllerConfig.url + file;
         }
        
        // fuer das Extrafenster
-       lastObject.file = file;
-       lastObject.relativeFile = modelUrl + "/src"
+       lastObject.file = file;       
        lastObject.classEntity = classEntity;
        lastObject.entity = entity;
        displayCodeChild();
 
-       codeHelperFunction.displayCode(file, classEntity, entity, publishOnEntitySelected, controllerConfig.fileType);                
+       codeHelperFunction.displayCode(file, classEntity, entity, publishOnEntitySelected);                
     }     
 
     function publishOnEntitySelected(entityId){
@@ -189,5 +166,6 @@ var sourceCodeController = (function(){
         initialize          : initialize,
         activate            : activate,
         reset               : reset,
+        openWindow          : openWindow,
     };
 })();

@@ -1,215 +1,220 @@
 var setup = {
 
-    loadPopUp: true,
+	loadPopUp: true,
 
+		
+	controllers: [	
 
-    controllers: [
+		{ 	name: 	"defaultLogger",
 
-        {
-            name: "defaultLogger",
-
-            logInfoConsole: false,
-            logActionConsole: false,
-            logEventConsole: false
-        },
-
-        {
-            name: "emailController",
-
-            createHeadSection: false
-        },
-
-        {
-            name: "generationFormController",
-        },
-
+			logInfoConsole		: false,
+			logActionConsole	: false,
+			logEventConsole		: false
+		},		
+		
+		{	name: 	"emailController",
+			
+			createHeadSection: false
+		},
+		
+		{	name:	"generationFormController",
+		},
+        
         {
             name: 'canvasFilterController'
         },
 
-        {
-            name: 'helpController',
-            metaphor: "RD"
-        },
+        {	name: 	"canvasHoverController",
+		},	
 
+		{	name: 	"canvasMarkController",
+		},	
+		
+		{	name: 	"canvasSelectController" 
+		},
         {
-            name: 'infoController',
+            name: 'filterController',
+            devMode: false,
+            configuration: 'default.json'
+        },
+		{ 	name: 	"canvasFlyToController" 
+		},
+	
+		{	name: 	"searchController" 
+		},
+
+		{	name: 	"packageExplorerController",
+		},
+		{	name: 	"sourceCodeController",
+            url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/"
+		},
+		
+		{ 	name: 	"relationConnectorController",		
+						
+			fixPositionZ : 1,
+			showInnerRelations : true,
+			elementShape : "circle",					
+			sourceStartAtParentBorder : true,
+			targetEndAtParentBorder : false,
+			createEndpoints: true,
+		},
+
+		{ 	name: 	"relationTransparencyController",
+		},
+			
+		{ 	name: 	"relationHighlightController" 
+		},
+        {
+            name:   "systeminfoController",
             system: "Bank",
             link: "https://github.com/softvis-research/Bank",
             noc: true,
             loc: 192
         },
+		{	name: 	"menuController",
+			menuMapping: [
 
-        {
-            name: "shareController",
-            showDebugOutput: false
-        },
-        {
-            name: "canvasHoverController",
-        },
+				{	
+					title:		"View",
+					subMenu:	true,
+					items:		[
+						{
+							title: 		"FlyTo",
+							toggle: 	true,	
+							eventOn: 	"canvasFlyToController.activate",
+							eventOff: 	"canvasFlyToController.deactivate",									
+						},
 
-        {
-            name: "canvasMarkController",
-        },
+						{
+							title: "Reset Visualization",
+							event: "application.reset",
+						},
+					]
+				},
 
-        {
-            name: "canvasSelectController"
-        },
-        {
-            name: "canvasFlyToController"
-        },
+				{	
+					title:		"Relations",
+					subMenu:	true,
+					items:		[
+						{
+							title: 		"Relation Connectors",
+							toggle: 	true,	
+							eventOn: 	"relationConnectorController.activate",
+							eventOff: 	"relationConnectorController.deactivate",			
+						},
+						{
+							title: 		"Relation Transparency",
+							toggle: 	true,	
+							eventOn: 	"relationTransparencyController.activate",
+							eventOff: 	"relationTransparencyController.deactivate",			
+						},
+						{
+							title: 		"Relation Highlight",
+							toggle: 	true,	
+							eventOn: 	"relationHighlightController.activate",
+							eventOff: 	"relationHighlightController.deactivate",			
+						},
+					]
+				},
 
-        {
-            name: "searchController"
-        },
+				{	
+					title:		"Visualizations",
+					subMenu:	true,
+					items:		[
+						{
+							title: 	"City Original",
+							link: 	true,
+							url:	"index.php?setup=web_a-frame/City bank&model=City%20bank%20aframe&aframe=true"
+						},
+						{
+							title: 	"Recursive Disk",
+							link: 	true,
+							url:	"index.php?setup=web/RD bank&model=RD%20bank"
+						},
+                        {
+                            title: 	"New Visualization",
+                            event:	"generationFormController.openSettingsPopUp"
+                        },
+					]
+				},
 
-        {
-            name: "packageExplorerController",
-        },
-        {
-            name: "sourceCodeController",
-            url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/",
-            showCodeWindowButton: true,
-            showCode: true
-        },
-
-        {
-            name: "relationConnectorController",
-
-            fixPositionY: false,
-            showInnerRelations: true,
-            sourceStartAtParentBorder: true,
-            targetEndAtParentBorder: true,
-            sourceStartAtBorder: false,
-            targetEndAtBorder: false,
-            createEndpoints: false
-        },
-
-        {
-            name: "relationTransparencyController",
-        },
-
-        {
-            name: "relationHighlightController"
-        },
-        {
-            name: "menuController",
-            menuMapping: [
-
-                {
-                    title: "View",
-                    subMenu: true,
-                    items: [
+				{	
+					title:		"About",
+					subMenu:	true,
+					items:		[
+						{
+							title: 	"University Leipzig",
+							link: 	true,
+							url:	"https://www.wifa.uni-leipzig.de/en/information-systems-institute/se/research/softwarevisualization-in-3d-and-vr.html"							
+						},
+						{
+							title: 		"Feedback!",
+							event: 		"emailController.openMailPopUp",
+						},
+						{
+							title: 		"Impressum",
+							popup:		true,
+							text: 		"<b>Universität Leipzig</b><br\/\>"+
+										" <br\/\>"+										
+										"Wirtschaftswissenschaftliche Fakultät<br\/\>"+
+										"Institut für Wirtschaftsinformatik<br\/\>"+
+										"Grimmaische Straße 12<br\/\>"+
+										"D - 04109 Leipzig<br\/\>"+
+										" <br\/\>"+
+										"<b>Dr. Richard Müller</b><br\/\>"+
+										"rmueller(-a-t-)wifa.uni-leipzig.de<br\/\>",
+							height: 	200,
+							width:		2050,
+						},
                         {
-                            title: "FlyTo",
-                            toggle: true,
-                            eventOn: "canvasFlyToController.activate",
-                            eventOff: "canvasFlyToController.deactivate",
-                        },
-
-                        {
-                            title: "Reset Visualization",
-                            event: "application.reset",
-                        },
-                    ]
-                },
-
-                {
-                    title: "Relations",
-                    subMenu: true,
-                    items: [
-                        {
-                            title: "Relation Connectors",
-                            toggle: true,
-                            eventOn: "relationConnectorController.activate",
-                            eventOff: "relationConnectorController.deactivate",
-                        },
-                        {
-                            title: "Relation Transparency",
-                            toggle: true,
-                            eventOn: "relationTransparencyController.activate",
-                            eventOff: "relationTransparencyController.deactivate",
-                        },
-                        {
-                            title: "Relation Highlight",
-                            toggle: true,
-                            eventOn: "relationHighlightController.activate",
-                            eventOff: "relationHighlightController.deactivate",
-                        },
-                    ]
-                },
-
-                 {
-                    title: "Visualizations",
-                    subMenu: true,
-                    items: [
-                        {
-                            title: "City",
-                            link: true,
-                            url: "index.php?setup=web/City bank&model=City&aframe=true"
-                        },
-                        {
-                            title: "City bricks",
-                            link: true,
-                            url: "index.php?setup=web/City bricks bank&model=City%20bricks&aframe=true"
-                        },
-                        {
-                            title: "City floor",
-                            link: true,
-                            url: "index.php?setup=web/City floor bank&model=City%20floor&aframe=true"
-                        },
-                        {
-                            title: "Recursive Disk",
-                            link: true,
-                            url: "index.php?setup=web/RD bank&model=RD"
-                        },
-                        {
-                            title: "New Visualization",
-                            event: "generationFormController.openSettingsPopUp"
-                        },
-                    ]
-                },
-                {
-                    title: "About",
-                    subMenu: true,
-                    items: [
-                        {
-                            title: "Research Group",
-                            link: true,
-                            url: "http://home.uni-leipzig.de/svis/"
-                        },
-                        {
-                            title: "Feedback",
-                            event: "emailController.openMailPopUp",
-                        },
-                        {
-                            title: "Impressum",
-                            popup: true,
-                            text: "<b>Universität Leipzig</b><br\/\>" +
-                                " <br\/\>" +
-                                "Wirtschaftswissenschaftliche Fakultät<br\/\>" +
-                                "Institut für Wirtschaftsinformatik<br\/\>" +
-                                "Grimmaische Straße 12<br\/\>" +
-                                "D - 04109 Leipzig<br\/\>" +
-                                " <br\/\>" +
-                                "<b>Dr. Richard Müller</b><br\/\>" +
-                                "rmueller(-a-t-)wifa.uni-leipzig.de<br\/\>",
-                            height: 200,
-                            width: 2050,
-                        },
-                        {
-                            title: "Privacy Policy",
-                            link: true,
-                            url: "http://home.uni-leipzig.de/svis/privacy-policy/"
+                            title: 	"Privacy Policy",
+                            link: 	true,
+                            url:	"http://home.uni-leipzig.de/svis/privacy-policy/"
                         }
-                    ]
-                },
-            ]
+					]
+				},			
+			]
+		},
+        {
+            name: "legendController",
+            entries: [{
+                name: "Package",
+                icon: "grayCircle"
+            }, {
+                name: "Type",
+                icon: "purpleCircle",
+            }, {
+                name: "Method",
+                icon: "lightBlueCircle",
+            }, {
+                name: "Field",
+                icon: "yellowCircle",
+            }, {
+                name: "Navigation",
+                icon: "navigation",
+                entries: [
+                    {
+                        name: "Rotate",
+                        icon: "leftMouseButton"
+                    }, {
+                        name: "Center",
+                        icon: "doubleClick"
+                    }, {
+                        name: "Move",
+                        icon: "midMouseButton"
+                    }, {
+                        name: "Zoom",
+                        icon: "scrolling"
+                    }]
+            }
+            ],
         }
-    ],
+	],
+	
+	
+	
 
-
-    uis: [
+	uis: [
 
 
         {
@@ -232,17 +237,17 @@ var setup = {
                 resizable: false,
                 collapsible: false,
                 first: {
-                    size: "75px",
+                    size: "25px",
                     collapsible: false,
                     controllers: [
                         {name: "menuController"},
-                        {name: "searchController"},
+                        //{name: "searchController"},
                         {name: "emailController"},
-                        {name: "generationFormController"},
+						{name: "generationFormController"}	
                     ],
                 },
                 second: {
-                    size: "100%",
+                    size: "80%",
                     collapsible: false,
                     area: {
                         orientation: "vertical",
@@ -251,13 +256,32 @@ var setup = {
                         first: {
                             size: "20%",
                             area: {
-                                size: "100%",
+                                size: "50%",
                                 collapsible: false,
                                 orientation: "horizontal",
                                 name: "packagePanel",
                                 first: {
                                     collapsible: false,
-                                            size: "100%",
+                                    size: "33%",
+                                    expanders: [
+                                        {
+                                            name: "filterExplorer",
+                                            title: "Filter",
+                                            controllers: [
+                                                {name: "filterController"}
+                                            ],
+                                        }
+                                    ]
+                                },
+                                second: {
+                                    size: "50%",
+                                    area: {
+                                        orientation: "horizontal",
+                                        name: "legendPanel",
+                                        size: "50%%",
+                                        collapsible: false,
+                                        first: {
+                                            size: "50%",
                                             expanders: [
                                                 {
                                                     name: "packageExplorer",
@@ -265,10 +289,36 @@ var setup = {
                                                     controllers: [
                                                         {name: "packageExplorerController"}
                                                     ],
-                                        }
+                                                },
                                             ]
                                         },
-                                        second: {},
+                                        second: {
+                                            size: "50%",
+                                            area: {
+                                                orientation: "horizontal",
+                                                name: "legendPanel2",
+                                                size: "100%",
+                                                collapsible: false,
+                                                first: {
+                                                    size: "100%",
+                                                    expanders: [
+                                                        {
+                                                            name: "legend",
+                                                            title: "Legend",
+
+                                                            controllers: [
+                                                                {name: "legendController"}
+                                                            ],
+                                                        },
+                                                    ]
+                                                },
+                                                second: {
+
+                                                }
+                                            },
+                                        },
+                                    }
+                                },
                             },
                         },
                         second: {
@@ -288,10 +338,7 @@ var setup = {
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
-                                        {name: "helpController"},
-                                        {name: "infoController"},
-                                        {name: "shareController"},
-                                        //{name: "canvasFlyToController"},
+                                        {name: "canvasFlyToController"},
                                         {name: "relationConnectorController"},
                                         {name: "relationTransparencyController"},
                                         {name: "relationHighlightController"},
@@ -302,9 +349,9 @@ var setup = {
                                         orientation: "horizontal",
                                         collapsible: false,
                                         name: "rightPael",
-                                        size: "100%",
+                                        size: "80%",
                                         first: {
-                                            size: "100%",
+                                            size: "80%",
                                             min: "200",
                                             oriontation: "horizontal",
                                             expanders: [
@@ -317,7 +364,20 @@ var setup = {
                                                 },
                                             ],
                                         },
-                                        second: {}
+                                        second: {
+                                            size: "20%",
+                                            min: "200",
+                                            oriontation: "horizontal",
+                                            expanders: [
+                                                {
+                                                    name: "systeminfo",
+                                                    title: "Info",
+                                                    controllers: [
+                                                        {name: "systeminfoController"}
+                                                    ],
+                                                },
+                                            ],
+                                        }
                                     }
                                 }
                             }
@@ -326,5 +386,5 @@ var setup = {
                 }
             }
         }
-    ]
+	]
 }; 

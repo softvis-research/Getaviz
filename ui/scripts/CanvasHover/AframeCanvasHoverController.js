@@ -140,6 +140,11 @@ var canvasHoverController = (function() {
 			return;
 		}
 
+		let entityIsVisible = document.getElementById(entity.id).getAttribute('visible');
+		if (!entityIsVisible) {
+			return;
+		}
+
 		if(entity.type === "text"){
 			return;
 		}
@@ -187,6 +192,11 @@ var canvasHoverController = (function() {
 	
 	function onEntityUnhover(applicationEvent) {
 		var entity = applicationEvent.entities[0];
+
+		let entityIsVisible = document.getElementById(entity.id).getAttribute('visible');
+		if (!entityIsVisible) {
+			return;
+		}
 		
 		if(entity.marked && entity.selected){
 			canvasManipulator.highlightEntities([entity], controllerConfig.hoverColor);	

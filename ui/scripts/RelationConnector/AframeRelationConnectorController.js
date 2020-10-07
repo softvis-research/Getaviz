@@ -80,7 +80,7 @@ var relationConnectorController = function(){
 	
 	
 	function onRelationsChanged(applicationEvent) {
-            
+		
 		events.log.info.publish({ text: "connector - onRelationsChanged"});
 
 		removeAllConnectors();
@@ -105,7 +105,6 @@ var relationConnectorController = function(){
 				relatedEntities = sourceEntity.accessedBy;
 				break;
 			case "Method":
-                        case "Function":
 				relatedEntities = sourceEntity.accesses;
 				relatedEntities = relatedEntities.concat( sourceEntity.calls );
 				relatedEntities = relatedEntities.concat( sourceEntity.calledBy );			
@@ -189,7 +188,6 @@ var relationConnectorController = function(){
 
 	
 	function createConnector(entity, relatedEntity){
-            
 		//calculate attributes						
 		var sourcePosition = canvasManipulator.getCenterOfEntity(entity);
 		if( sourcePosition === null ){
@@ -198,7 +196,7 @@ var relationConnectorController = function(){
 		
 		var targetPosition = canvasManipulator.getCenterOfEntity(relatedEntity);
 		if( targetPosition === null ){
-                    return;
+			return;
 		}
 
         if(controllerConfig.sourceStartAtParentBorder){
@@ -250,16 +248,16 @@ var relationConnectorController = function(){
 			targetPosition.y = sourcePosition.y;
 		}
 
+
         let deltaX = targetPosition.x - sourcePosition.x;
         let deltaY = targetPosition.y - sourcePosition.y;
         let deltaZ = targetPosition.z - sourcePosition.z;
-        
+
         let distance = sourcePosition.distanceTo(targetPosition);
         let direction = new THREE.Vector3(deltaX, deltaY, deltaZ).normalize();
 
 		//create connector
         var connector = document.createElement("a-cylinder");
-
 		connector.addEventListener("loaded", function() {
 			let threeMesh = this.object3DMap.mesh;
 
@@ -268,18 +266,13 @@ var relationConnectorController = function(){
 			threeMesh.position.set(sourcePosition.x+deltaX/2,
                 sourcePosition.y+deltaY/2,
                 sourcePosition.z+deltaZ/2);
-                        
-                                        connector.setAttribute("radius", 5);
-
 
 
             var quaternion = threeMesh.quaternion;
             quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
-
 		});
 		connector.setAttribute("flat-shading", true);
 		connector.setAttribute("shader", "flat");
-//                 connector.setAttribute("radius", 5);
 
 
 

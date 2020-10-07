@@ -19,6 +19,34 @@ var canvasManipulator = (function () {
         initialCameraView.target = globalCamera.target;
         initialCameraView.position = globalCamera.object.position;
         initialCameraView.spherical = globalCamera.spherical;
+
+        AFRAME.registerComponent('set-aframe-attributes', {
+            // schema defines properties of element
+            schema: {
+                tag: { type: 'string', default: '' },
+                id: { type: 'string', default: '' },
+                class: { type: 'string', default: '' },
+                position: { type: 'string', default: '' },
+                width: { type: 'string', default: '' },
+                height: { type: 'string', default: '' },
+                depth: { type: 'string', default: '' },
+                color: { type: 'string', default: '' },            
+                shader: { type: 'string', default: '' },
+                flatShading: { type: 'string', default: '' }
+            },
+    
+            init: function () {
+                // This will be called after the entity has been properly attached and loaded.
+                this.attrValue = ''; // imported payload is in this.data, so we don't need this one
+                Object.keys(this.schema).forEach(key => {
+                    this.el.setAttribute(`${key}`, this.data[key]);                
+                })
+
+                // Adjust visibility
+                // let visible = this.data['checked'] ? true : false; // set to visible, because parent node was checked
+                this.el.setAttribute('visible', false);
+            }
+        });
     }
 
     function reset() {
@@ -32,10 +60,15 @@ var canvasManipulator = (function () {
         globalCamera.scale = initialCameraView.spherical.radius/globalCamera.spherical.radius;
     }
 
+    // function 
+
     function changeTransparencyOfEntities(entities, value) {
         entities.forEach(function (entity2) {
             //  getting the entity again here, because without it the check if originalTransparency is defined fails sometimes
             let entity = model.getEntityById(entity2.id);
+            if (entity == undefined) {
+                return;
+            }
             let component = document.getElementById(entity.id);
             if (component == undefined) {
                 events.log.error.publish({text: "CanvasManipualtor - changeTransparencyOfEntities - components for entityIds not found"});
@@ -44,8 +77,13 @@ var canvasManipulator = (function () {
             if (entity.originalTransparency === undefined) {
                 entity.originalTransparency = {};
                 entity.currentTransparency = {};
-                if(component.getAttribute("material").opacity) {
-                    entity.originalTransparency = 1 - component.getAttribute("material").opacity;
+                // If elements are new, they probably don't have opacity parameter
+                if (component.getAttribute("material")) {
+                    if(component.getAttribute("material").opacity) {
+                        entity.originalTransparency = 1 - component.getAttribute("material").opacity;
+                    }
+                } else {
+                    entity.originalTransparency = 0;
                 }
             }
             entity.currentTransparency = value;
@@ -67,130 +105,6 @@ var canvasManipulator = (function () {
         });
     }
 
-    /**
-     * Starts the metric dependent color animation for the entity.
-     */
-    function startColorAnimationForEntity(entity, colorAnimation) {
-        if (!(entity == undefined)) {
-            var component = document.getElementById(entity.id);
-        }
-        if (component == undefined) {
-            events.log.error.publish({text: "CanvasManipualtor - startColorAnimationForEntity - component for entityId not found"});
-            return;
-        }
-
-        let originalColor = component.getAttribute("color");
-        component.setAttribute("color-before-animation", originalColor);
-
-        let colorAnimationFrequency = colorAnimation.getAnimationFrequency();
-
-        if (colorAnimation.colors.length === 1){
-            // if there is only one color: just start a normal animation loop between the original color and the specified one
-            component.setAttribute("animation__color",
-                "property: components.material.material.color; type: color; from: " + originalColor +
-                "; to: " + colorAnimation.getNextToColor() + "; dur: " + colorAnimationFrequency + "; loop: true; dir: alternate");
-        } else {
-            // if there are multiple colors: loop through the color animations triggered by events
-            for (i = 1; i <= colorAnimation.colors.length; i++) {
-                // in general each color animation starts when the predecessor ends
-                let startEvents = "animationcomplete__color_" + (i -1);
-                if (i === 1){
-                    // the first color animation starts when the last ends
-                    startEvents = "animationcomplete__color_" + colorAnimation.colors.length;
-                } else if (i === 2){
-                    // the second color animation starts after the first and after the initializer
-                    startEvents = "animationcomplete__color_" + 1 + ", animationcomplete__color_" + 0;
-                }
-
-                component.setAttribute("animation__color_" + i,
-                    "property: components.material.material.color; type: color; from: " + colorAnimation.getNextFromColor() +
-                    "; to: " + colorAnimation.getNextToColor() + "; dur: " + colorAnimationFrequency + "; startEvents: " + startEvents);
-            }
-            // the initializing color animation has no start event
-            component.setAttribute("animation__color_" + 0,
-                "property: components.material.material.color; type: color; from: " + colorAnimation.getNextFromColor() +
-                "; to: " + colorAnimation.getNextToColor() + "; dur: " + colorAnimationFrequency);
-        }
-
-        colorAnimation.resetColorIndices();
-    }
-
-    /**
-     * Stops the metric animated color animation for the entity and resets its color to the value before the animation started.
-     */
-    function stopColorAnimationForEntity(entity) {
-        if (!(entity == undefined)) {
-            var component = document.getElementById(entity.id);
-        }
-        if (component == undefined) {
-            events.log.error.publish({text: "CanvasManipualtor - stopColorAnimationForEntity - component for entityId not found"});
-            return;
-        }
-
-        let attributeNames = component.getAttributeNames();
-        attributeNames.forEach(function (attributeName) {
-            if (attributeName.startsWith("animation__color")){
-                component.removeAttribute(attributeName);
-            }
-        });
-
-        let originalColor = component.getAttribute("color-before-animation");
-        if (originalColor !== null){
-            // only change the color back if there was a color animation before
-            component.setAttribute("animation__color_off",
-                "property: components.material.material.color; type: color; from: " + originalColor +
-                "; to: " + originalColor + "; dur: 0; loop: false");
-        }
-
-        // remark:
-        // A nice way would be to remove all of the color animation attributes.
-        // But this leads to components staying in their current animation color.
-        // Changing the color of the component back to original color does not work,
-        // because aframe thinks its still in this color.
-        // So this workaround is used: the components blink immediately back to its original color without a loop.
-        // This costs no further performance. Just the "animation__color_off" attribute is left.
-        //
-        // setColor(component, originalColor);          // looks nice, does not work
-    }
-
-    /**
-     * Starts the metric dependent expanding animation for the entity.
-     */
-    function startExpandingAnimationForEntity(entity, expandingAnimation) {
-        if (!(entity == undefined)) {
-            var component = document.getElementById(entity.id);
-        }
-        if (component == undefined) {
-            events.log.error.publish({text: "CanvasManipualtor - startExpandingAnimationForEntity - component for entityId not found"});
-            return;
-        }
-
-        let animationFrequency = expandingAnimation.getAnimationFrequency();
-        let growSize = expandingAnimation.getScale();
-        let scale = growSize + " " + growSize + " " + growSize;
-
-        component.setAttribute("animation__expanding",
-            "property: scale; from: 1 1 1; to: " + scale + "; dur: " + animationFrequency + "; loop: true; dir: alternate");
-
-    }
-
-    /**
-     * Stops the metric dependent expanding animation for the entity.
-     * Resets the entities scale back to its original value.
-     */
-    function stopExpandingAnimationForEntity(entity) {
-        if (!(entity == undefined)) {
-            var component = document.getElementById(entity.id);
-        }
-        if (component == undefined) {
-            events.log.error.publish({text: "CanvasManipualtor - stopExpandingAnimationForEntity - component for entityId not found"});
-            return;
-        }
-
-        component.removeAttribute("animation__expanding");
-        component.setAttribute("scale", "1 1 1");
-    }
-    
     function changeColorOfEntities(entities, color) {
         entities.forEach(function (entity) {
                 if (!(entity == undefined)) {
@@ -233,7 +147,8 @@ var canvasManipulator = (function () {
     }
 
     function hideEntities(entities) {
-        entities.forEach(function (entity) {
+        entities.forEach(async (entity) => {
+            // await aframeModelLoadController.checkAndLoadNodeById(entity.id);
             let component = document.getElementById(entity.id);
             if (component == undefined) {
                 events.log.error.publish({text: "CanvasManipualtor - hideEntities - components for entityIds not found"});
@@ -244,7 +159,8 @@ var canvasManipulator = (function () {
     }
 
     function showEntities(entities) {
-        entities.forEach(function (entity) {
+        entities.forEach(async (entity) => {
+            // await aframeModelLoadController.checkAndLoadNodeById(entity.id);
             let component = document.getElementById(entity.id);
             if (component == undefined) {
                 events.log.error.publish({text: "CanvasManipualtor - showEntities - components for entityIds not found"});
@@ -336,15 +252,26 @@ var canvasManipulator = (function () {
         object.setAttribute("visible", visibility);
     }
 
-    function getElementIds() {
-        let sceneArray = Array.from(scene.children);
-        sceneArray.shift(); // so camera entity needs to be first in model.html
-        sceneArray.pop();  // last element is of class "a-canvas"
+    function getElementIds() { 
+        let sceneArray = document.querySelectorAll('.city-element')
         let elementIds = [];
-        sceneArray.forEach(function (object) {
-            elementIds.push(object.id);
+        sceneArray.forEach(sceneElement => {
+            elementIds.push(sceneElement.id);
         });
+
         return elementIds;
+    }
+
+    function appendAframeElementWithProperties(element) {
+        let aframeProperty = element.row[0].aframeProperty;
+        let aframeObject = JSON.parse(`${aframeProperty}`); // create an object
+
+        let entityEl = document.createElement(`${aframeObject.tag}`);
+        entityEl.setAttribute('set-aframe-attributes', {...aframeObject}); // this attributes will be set after element is created
+        let sceneEl = document.querySelector('a-scene');
+        sceneEl.appendChild(entityEl);
+
+        neo4jModelLoadController.updateLoadSpinner(neo4jModelLoadController.loaderController.loaded);
     }
 
     return {
@@ -354,12 +281,6 @@ var canvasManipulator = (function () {
 
         changeTransparencyOfEntities: changeTransparencyOfEntities,
         resetTransparencyOfEntities: resetTransparencyOfEntities,
-
-        startColorAnimationForEntity : startColorAnimationForEntity,
-        stopColorAnimationForEntity : stopColorAnimationForEntity,
-
-        startExpandingAnimationForEntity : startExpandingAnimationForEntity,
-        stopExpandingAnimationForEntity : stopExpandingAnimationForEntity,
 
         changeColorOfEntities: changeColorOfEntities,
         resetColorOfEntities: resetColorOfEntities,
@@ -378,7 +299,9 @@ var canvasManipulator = (function () {
         setCenterOfRotation: setCenterOfRotation,
         getCenterOfEntity: getCenterOfEntity,
 
-        getElementIds: getElementIds
+        getElementIds: getElementIds,
+
+        appendAframeElementWithProperties: appendAframeElementWithProperties
     };
 
 })

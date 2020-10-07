@@ -44,7 +44,6 @@ if ((isset($_GET["aframe"]) && $_GET["aframe"] == 'true') or (!isset($_GET["afra
 	    <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
 	    <script type="text/javascript" src="scripts/CanvasHover/AframeCanvasHoverController.js"></script>
         <script type="text/javascript" src="node_modules/aframe-orbit-camera-component/aframe-orbit-camera-component.js"></script>
-        <script type="text/javascript" src="scripts/MagGlass/MagGlassController.js"></script>
 EOT;
     $canvasId = "aframe-canvas";
     $visMode = "aframe";
@@ -90,8 +89,6 @@ EOT;
 <script type="text/javascript">
     var modelUrl = "<?php echo $modelUrl; ?>";
     var stateHashcode = "<?php echo $stateHashcode; ?>";
-    var multipartX3dUrl = "<?php echo $multipartX3dUrl; ?>";
-    var multipartJsonUrl = "<?php echo $multipartJsonUrl; ?>";
     var metaDataJsonUrl = "<?php echo $metaDataJsonUrl; ?>";
     var metaStateJsonUrl = "<?php echo $metaStateJsonUrl; ?>";
     var canvasId = "<?php echo $canvasId; ?>";
@@ -148,14 +145,14 @@ EOT;
 <link rel="stylesheet" href="scripts/PackageExplorer/zt.css" type="text/css">
 
 <script type="text/javascript" src="scripts/CanvasFilter/CanvasFilterController.js"></script>
-<script type="text/javascript" src="scripts/ShareController/ShareController.js"></script>
+<!-- <script type="text/javascript" src="scripts/ShareController/ShareController.js"></script> -->
 <script type="text/javascript" src="scripts/CanvasMark/CanvasMarkController.js"></script>
 <script type="text/javascript" src="scripts/CanvasFlyTo/CanvasFlyToController.js"></script>
 <script type="text/javascript" src="scripts/CanvasSelect/CanvasSelectController.js"></script>
 <script type="text/javascript" src="scripts/CanvasResetView/CanvasResetViewController.js"></script>
 <script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>
-<script type="text/javascript" src="scripts/HelpController/HelpController.js"></script>
-<script type="text/javascript" src="scripts/InfoController/InfoController.js"></script>
+<!-- <script type="text/javascript" src="scripts/HelpController/HelpController.js"></script>
+<script type="text/javascript" src="scripts/InfoController/InfoController.js"></script> -->
 <script type="text/javascript" src="scripts/RelationTransparency/RelationTransparencyController.js"></script>
 <script type="text/javascript" src="scripts/RelationHighlight/RelationHighlightController.js"></script>
 <script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>
@@ -171,11 +168,11 @@ EOT;
 <script type="text/javascript" src="scripts/PatternExplorer/PatternExplorerController.js"></script>
 <script type="text/javascript" src="scripts/VersionExplorer/VersionExplorerController.js"></script>
 <script type="text/javascript" src="scripts/IssueExplorer/IssueExplorerController.js"></script>
-<script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script>
+<!-- <script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script>
 <script type="text/javascript" src="scripts/MetricAnimation/MetricAnimationController.js"></script>
 <script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimation.js"></script>
 <script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimationColor.js"></script>
-<script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimationExpanding.js"></script>
+<script type="text/javascript" src="scripts/MetricAnimation/Classes/MetricAnimationExpanding.js"></script> -->
 
 <!-- filter -->
 <script type="text/javascript" src="scripts/Filter/Helpers/Constants.js"></script>
@@ -186,10 +183,11 @@ EOT;
 <script type="text/javascript" src="scripts/Filter/Classes/Filter.js"></script>
 <script type="text/javascript" src="scripts/Filter/Classes/Container.js"></script>
 <script type="text/javascript" src="scripts/Filter/Classes/Layer.js"></script>
-<script type="text/javascript" src="scripts/Filter/X3DomFilterController.js"></script>
+<!-- <script type="text/javascript" src="scripts/Filter/X3DomFilterController.js"></script> -->
 
 <!--user interface-->
 <script type="text/javascript" src="scripts/DefaultLogger.js"></script>
+<script type="text/javascript" src="scripts/Neo4jModelLoadController.js"></script>
 <script type="text/javascript" src="scripts/Model.js"></script>
 <script type="text/javascript" src="scripts/Events.js"></script>
 
