@@ -224,8 +224,8 @@ public class MetropolisCreator {
         Collection<ACityElement> BuildingElements = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.type_name, buildingElementTypeName);
         for (ACityElement buildingElement: BuildingElements) {
 
-            String districtTypename = element.getSourceNodeProperty(SAPNodeProperties.object_name);
-            String buildingTypeName = buildingElement.getSourceNodeProperty(SAPNodeProperties.object_name);
+            String districtTypename = element.getSourceNodeProperty(SAPNodeProperties.element_id);
+            String buildingTypeName = buildingElement.getSourceNodeProperty(SAPNodeProperties.element_id);
 
             if(buildingTypeName.equals(districtTypename)){
 
