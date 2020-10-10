@@ -23,15 +23,17 @@ var canvasManipulator = (function () {
         AFRAME.registerComponent('set-aframe-attributes', {
             // schema defines properties of element
             schema: {
-                tag: { type: 'string', default: '' },
+                shape: { type: 'string', default: '' },
                 id: { type: 'string', default: '' },
                 class: { type: 'string', default: '' },
                 position: { type: 'string', default: '' },
                 width: { type: 'string', default: '' },
                 height: { type: 'string', default: '' },
                 depth: { type: 'string', default: '' },
+                radius: { type: 'string', default: '' },
                 color: { type: 'string', default: '' },            
                 shader: { type: 'string', default: '' },
+                shadow: { type: 'string', default: '' },
                 flatShading: { type: 'string', default: '' }
             },
     
@@ -266,7 +268,7 @@ var canvasManipulator = (function () {
         let aframeProperty = element.row[0].aframeProperty;
         let aframeObject = JSON.parse(`${aframeProperty}`); // create an object
 
-        let entityEl = document.createElement(`${aframeObject.tag}`);
+        let entityEl = document.createElement(`${aframeObject.shape}`);
         entityEl.setAttribute('set-aframe-attributes', {...aframeObject}); // this attributes will be set after element is created
         let sceneEl = document.querySelector('a-scene');
         sceneEl.appendChild(entityEl);

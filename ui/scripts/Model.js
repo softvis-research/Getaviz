@@ -58,6 +58,10 @@ var model = (function() {
 		let newEntities = [];            
 		//create initial entites from famix elements 
 		elements.forEach(function(element) {
+			// May happen, if it's dummy element (sub-distrikt)
+			if (element == null) {
+				return;
+			}
 			let entityAlreadyInModel = getEntityById(element.id);
 			if (entityAlreadyInModel) {
 				return;
@@ -164,7 +168,7 @@ var model = (function() {
 			}
 		});
 
-        //set all parents attribute
+        
 		newEntities.forEach(function(entity) {
 			entity.allParents = getAllParentsOfEntity(entity);
 		});				
@@ -173,7 +177,7 @@ var model = (function() {
 		let applicationEvent = {			
 			sender: 	 model,
 			entities:    newEntities,
-			adjustments: {checked: true},// to check the element in PackageExplorer
+			adjustments: {checked: false},// to check the element in PackageExplorer
 			callback:    ['addTreeNode']
 		};
 		

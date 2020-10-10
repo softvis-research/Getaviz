@@ -910,7 +910,7 @@ public class SettingsConfiguration {
 			case "dataElementFloor":
 				return config.getString("city.abap.color.dataElementFloor", "#C5CEA9");
 			default:
-				return config.getString("#FFFFFF");
+				return "#FFFFFF";
 		}
 	}
 

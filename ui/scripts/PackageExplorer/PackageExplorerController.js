@@ -15,7 +15,7 @@ var packageExplorerController = (function () {
 		elementsSelectable: true,
 
 		typeElements: ["Class", "Interface", "ParameterizableClass", "Enum"],
-		methodElements: ["Method", "Report", "Formroutine", "FunctionGroup", "FunctionModule"],
+		methodElements: ["Method", "Report", "FormRoutine", "FunctionGroup", "FunctionModule"],
 		fieldElements: ["EnumValue", "Attribute", "Domain", "DataElement", "ABAPStructure", "StrucElement", "Table", "TableElement", "TableType", "TableTypeElement"]
 	};
 
@@ -156,7 +156,7 @@ var packageExplorerController = (function () {
 		applicationEvent.entities.forEach(function (entity) {
 
 			let item;
-			let checked = false; // default value
+			let checked = false; // default value. Is changed to hide/show all the child elements of the item. Also loads child elements. 
 			if (applicationEvent.adjustments) { // Adjustments-prop may be used to change state
 				applicationEvent.adjustments.checked ? checked = true : checked = false; 
 			}
@@ -188,15 +188,15 @@ var packageExplorerController = (function () {
 				}
 			} else {
 				if(entity.type == "Project") {
-					item = { id: entity.id, open: true, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.projectIcon, iconSkin: "zt"};
+					item = { id: entity.id, open: true, checked, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.projectIcon, iconSkin: "zt"};
 				} else if(entity.type == "Namespace") {
-					item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.packageIcon, iconSkin: "zt"};
+					item = { id: entity.id, open: false, checked, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.packageIcon, iconSkin: "zt"};
 				} else if(controllerConfig.typeElements.includes(entity.type)) {
-					item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
+					item = { id: entity.id, open: false, checked, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
 				} else if(controllerConfig.methodElements.includes(entity.type)) {
-					item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt"};
+					item = { id: entity.id, open: false, checked, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt"};
 				} else if(controllerConfig.fieldElements.includes(entity.type)) {
-					item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt"};
+					item = { id: entity.id, open: false, checked, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt"};
 				} else {
 					events.log.warning.publish({ text: "FamixElement not in tree: " + entity.type});
 					return;
