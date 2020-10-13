@@ -60,7 +60,7 @@ var setup = {
             area: {
                 name: "top",
                 orientation: "horizontal",
-                resizable: false,
+                resizable: true,
                 first: {
                     size: "10%",
                     collapsible: false,

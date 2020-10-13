@@ -290,7 +290,7 @@
                                         {name: "canvasMarkController"},
                                         {name: "canvasHoverController"},
                                         {name: "canvasFilterController"},
-                                        //{name: "canvasFlyToController"},
+                                        {name: "canvasFlyToController"},
                                         {name: "helpController"},
                                         {name: "infoController"},
                                         {name: "shareController"},
