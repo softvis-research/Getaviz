@@ -1,5 +1,14 @@
 var featureExplorerController = (function () {
 
+    /**
+     * General data
+     */
+    let traces = []; // all entities that are traces 
+    let features = []; // all found features
+
+    /**
+     * zTree data
+     */
     const featureExplorerTreeID = 'featureExplorerTree';
     const jQFeatureExplorerTree = '#featureExplorerTree';
 
@@ -10,6 +19,9 @@ var featureExplorerController = (function () {
     let traceTreePart = [];
     let completeTree = [];
 
+    /**
+     * Color data
+     */
     let featureColorMap = new Map();
 
     function initialize(controllerSetup) {
@@ -27,40 +39,75 @@ var featureExplorerController = (function () {
         zTreeDiv.appendChild(featureExplorerTreeUl);
         rootDiv.appendChild(zTreeDiv);
 
+        filterTracesFromEntities();
+        setMainAffiliationForEachTrace();
         buildTree();
+        setCanvasColors();
     }
 
-    function buildTree() {
+    function filterTracesFromEntities() {
         const classEntities = model.getEntitiesByType('Class');
         const methodEntities = model.getEntitiesByType('Method');
         const entities = classEntities.concat(methodEntities);
 
         entities.forEach(function (entity) {
             if (entity.featureAffiliations && entity.featureAffiliations.length > 0) {
+                traces.push(entity);
+
                 entity.featureAffiliations.forEach(function (featureAffiliation) {
                     if (featureAffiliation.feature.includes('not_')) {
-
-                    } else {
-                        if (featureAffiliation.feature.includes('_and_')) {
-                            let andFeatures = featureAffiliation.feature.split('_and_');
-                            andFeatures.forEach(function (andFeature) {
-                                if (!featureTreeIncludes(andFeature)) {
-                                    addFeatureToFeatureTree(andFeature);
-                                }
-                                addTraceToFeatureTree(andFeature, featureAffiliation, entity);
-                            });
-                        }
-                        else {
-                            if (!featureTreeIncludes(featureAffiliation.feature)) {
-                                addFeatureToFeatureTree(featureAffiliation.feature);
+                        return;
+                    }
+                    if (featureAffiliation.feature.includes('_and_')) {
+                        let andFeatures = featureAffiliation.feature.split('_and_');
+                        andFeatures.forEach(function (feature) {
+                            if (!features.includes(feature)) {
+                                features.push(feature);
                             }
-                            addTraceToFeatureTree(featureAffiliation.feature, featureAffiliation, entity);
+                        })
+                    }
+                    else {
+                        if (!features.includes(featureAffiliation.feature)) {
+                            features.push(featureAffiliation.feature);
                         }
                     }
-                });
+                })
             }
-        });
+        })
+    }
 
+    function setMainAffiliationForEachTrace() {
+        traces.forEach(function (trace) {
+            let isSet;
+            trace.featureAffiliations.forEach(function (affiliation) {
+                if (!isSet) {
+                    if (affiliation.isRefinement) {
+                        return;
+                    }
+                    else {
+                        trace.elementarySetMain = affiliation.elementarySet;
+                        if (affiliation.elementarySet == "And") {
+                            let andFeatures = affiliation.feature.split('_and_');
+                            trace.featuresMain = andFeatures;
+                        } else {
+                            trace.featuresMain = [affiliation.feature]
+                        }
+                        isSet = true;
+                    }
+                } else {
+                    if (!affiliation.isRefinement && trace.elementarySetMain == affiliation.elementarySet) {
+                        trace.featuresMain.push(affiliation.feature);
+                    }
+                }
+            })
+        })
+    }
+
+    function buildTree() {
+        buildFeatureTreePart();
+        buildTraceTypeTreePart();
+        buildTraceTreePart();
+        
         let settings = {
             check: {
                 enable: true,
@@ -84,35 +131,61 @@ var featureExplorerController = (function () {
                 selectMulti: false
             }
         };
-
+        
         completeTree = featureTreePart.concat(traceTypeTreePart.concat(traceTreePart));
         setIconColors();
-        setCanvasColors();
         zTreeObject = $.fn.zTree.init($(jQFeatureExplorerTree), settings, completeTree);
     }
 
-    function addFeatureToFeatureTree(featureName) {
-        let featureNode = {
-            id: featureName,
-            open: false,
-            checked: true,
-            parentId: '',
-            name: featureName.charAt(0).toUpperCase() + featureName.slice(1).toLowerCase(),
-            feature: featureName,
-        }
-        featureTreePart.push(featureNode);
-        const traceTypes = ['Class', 'Method', 'Class Refinement', 'Method Refinement'];
-        traceTypes.forEach(function (traceType) {
-            let traceTypeNode = {
-                id: (featureName + '_' + traceType).replace(' ', ''),
+    function buildFeatureTreePart() {
+        features.forEach(function (feature) {
+            let featureNode = {
+                id: feature,
                 open: false,
                 checked: true,
-                parentId: featureName,
-                name: traceType,
-                feature: featureName,
-                nocheck: traceType == "Class Refinement" || traceType == "Method Refinement"
+                parentId: '',
+                name: feature.charAt(0).toUpperCase() + feature.slice(1).toLowerCase(),
+                feature: feature,
             }
-            traceTypeTreePart.push(traceTypeNode);
+            featureTreePart.push(featureNode);
+        })
+    }
+
+    function buildTraceTypeTreePart() {
+        const traceTypes = ['Class', 'Method', 'Class Refinement', 'Method Refinement'];
+        features.forEach(function (feature) {
+            traceTypes.forEach(function (traceType) {
+                let traceTypeNode = {
+                    id: (feature + '_' + traceType).replace(' ', ''),
+                    open: false,
+                    checked: true,
+                    parentId: feature,
+                    name: traceType,
+                    feature: feature,
+                    nocheck: traceType == "Class Refinement" || traceType == "Method Refinement"
+                }
+                traceTypeTreePart.push(traceTypeNode);
+            })
+        })
+    }
+
+    function buildTraceTreePart() {
+        traces.forEach(function (trace) {
+            trace.featureAffiliations.forEach(function (featureAffiliation) {
+                if (featureAffiliation.feature.includes('not_')) {
+
+                } else {
+                    if (featureAffiliation.feature.includes('_and_')) {
+                        let andFeatures = featureAffiliation.feature.split('_and_');
+                        andFeatures.forEach(function (andFeature) {
+                            addTraceToFeatureTree(andFeature, featureAffiliation, trace);
+                        });
+                    }
+                    else {
+                        addTraceToFeatureTree(featureAffiliation.feature, featureAffiliation, trace);
+                    }
+                }
+            });
         });
     }
 
@@ -131,21 +204,10 @@ var featureExplorerController = (function () {
         traceTreePart.push(node);
     }
 
-    function featureTreeIncludes(featureName) {
-        let includes;
-        featureTreePart.forEach(function (featureNode) {
-            if (featureNode.id == featureName) {
-                includes = true;
-                return;
-            }
-        })
-        return includes;
-    }
-
     function setIconColors() {
         const numberOfColors = featureTreePart.length;
         const colors = [];
-        for(let i = 0; i < featureTreePart.length; ++i) {
+        for (let i = 0; i < featureTreePart.length; ++i) {
             const hue = i * (360 / featureTreePart.length);
             const hslColor = 'hsl(' + hue + ',100%,70%)';
             colors.push(hslColor);
@@ -169,41 +231,59 @@ var featureExplorerController = (function () {
     }
 
     function setCanvasColors() {
+        setMonochromeColors();
+        setPolychromaticColors();
+    }
+
+    function setMonochromeColors() {
         featureColorMap.forEach(function (value, key, map) {
             let entities = [];
-            traceTreePart.forEach(function (node) {
-                if (key == node.feature && !node.isRefinement) {
-                    entities.push(model.getEntityById(node.entityId));
+            traces.forEach(function (trace) {
+                if (trace.elementarySetMain == "Pure" && key == trace.featuresMain[0]) {
+                    entities.push(model.getEntityById(trace.id));
                 }
             });
             canvasManipulator.changeColorOfEntities(entities, value);
         });
     }
-    
+
+    function setPolychromaticColors() {
+        traces.forEach(function (trace) {
+            switch (trace.elementarySetMain) {
+                case "And":
+                case "Or":
+                    // 1. Find colors to Features 2. Build Canvas with colors (look at aframe-test for algorithm inspiration) 3. Set Canvas as material
+                    break;
+                default:
+                    break;
+            }
+        })
+    }
+
     /**
      * Callbacks
      */
     function zTreeOnCheck(event, treeId, treeNode) {
         let nodes = zTreeObject.getChangeCheckedNodes();
-        
-		let entities = [];
-		nodes.forEach(function(node){
+
+        let entities = [];
+        nodes.forEach(function (node) {
             node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes
             if (node.entityId) {
                 entities.push(model.getEntityById(node.entityId));
             }
-		});
-								
-		let applicationEvent = {			
-			sender: 	featureExplorerController,
-			entities:	entities
-		};
-		
-		if (!treeNode.checked){
-			events.filtered.on.publish(applicationEvent);
-		} else {
-			events.filtered.off.publish(applicationEvent);
-		}
+        });
+
+        let applicationEvent = {
+            sender: featureExplorerController,
+            entities: entities
+        };
+
+        if (!treeNode.checked) {
+            events.filtered.on.publish(applicationEvent);
+        } else {
+            events.filtered.off.publish(applicationEvent);
+        }
     }
 
     function zTreeOnClick(treeEvent, treeId, treeNode) {
@@ -211,6 +291,8 @@ var featureExplorerController = (function () {
             canvasManipulator.flyToEntity(model.getEntityById(treeNode.entityId));
         }
     }
+
+
 
     return {
         initialize: initialize,

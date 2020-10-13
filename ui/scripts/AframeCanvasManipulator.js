@@ -347,6 +347,27 @@ var canvasManipulator = (function () {
         return elementIds;
     }
 
+    function setMaterialOfEntities(entities, material) {
+        entities.forEach(function (entity) {
+            if (!(entity == undefined)) {
+                var component = document.getElementById(entity.id);
+            }
+            if (component == undefined) {
+                events.log.error.publish({text: "CanvasManipualtor - changeColorOfEntities - components for entityIds not found"});
+                return;
+            }
+            if (entity.originalColor == undefined) {
+                entity.originalColor = component.getAttribute("color");
+            }
+            entity.currentColor = "";
+            setMaterial(component, color);
+        });
+    }
+
+    function setMaterial(object, material) {
+        object.setAttribute("material", material);
+    }
+
     return {
         initialize: initialize,
         reset: reset,
@@ -378,7 +399,9 @@ var canvasManipulator = (function () {
         setCenterOfRotation: setCenterOfRotation,
         getCenterOfEntity: getCenterOfEntity,
 
-        getElementIds: getElementIds
+        getElementIds: getElementIds,
+
+        setMaterialOfEntities: setMaterialOfEntities,
     };
 
 })
