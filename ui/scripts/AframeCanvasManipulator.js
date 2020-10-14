@@ -353,14 +353,11 @@ var canvasManipulator = (function () {
                 var component = document.getElementById(entity.id);
             }
             if (component == undefined) {
-                events.log.error.publish({text: "CanvasManipualtor - changeColorOfEntities - components for entityIds not found"});
+                events.log.error.publish({text: "CanvasManipulator - setMaterialOfEntities - components for entityIds not found"});
                 return;
             }
-            if (entity.originalColor == undefined) {
-                entity.originalColor = component.getAttribute("color");
-            }
-            entity.currentColor = "";
-            setMaterial(component, color);
+            setColor(component, '');
+            setMaterial(component, material);
         });
     }
 

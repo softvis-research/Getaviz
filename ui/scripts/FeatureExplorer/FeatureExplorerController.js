@@ -249,15 +249,55 @@ var featureExplorerController = (function () {
 
     function setPolychromaticColors() {
         traces.forEach(function (trace) {
-            switch (trace.elementarySetMain) {
-                case "And":
-                case "Or":
-                    // 1. Find colors to Features 2. Build Canvas with colors (look at aframe-test for algorithm inspiration) 3. Set Canvas as material
-                    break;
-                default:
-                    break;
+            if (trace.elementarySetMain == "And" || trace.elementarySetMain == "Or") {
+                let colors = [];
+                trace.featuresMain.forEach(function (feature) {
+                    colors.push(featureColorMap.get(feature));
+                })   
+                
+                if (!document.getElementById(getCanvasID(trace.featuresMain))) {
+                    buildCanvas(trace.featuresMain, colors);
+                }
+                
+                canvasManipulator.setMaterialOfEntities([trace], 'src: #' + getCanvasID(trace.featuresMain));
             }
         })
+    }
+
+    function buildCanvas(features, colors) {
+        let size = 1000;
+
+        let canv = document.createElement("canvas");
+        canv.id = getCanvasID(features);
+        canv.width = size;
+        canv.height = size;
+        let cont = canv.getContext("2d");
+
+        let amountColors = colors.length;
+        let stepSize = size / amountColors;
+        for (let i = 0; i < amountColors; ++i) {
+            cont.beginPath();
+            cont.rect(0, i * stepSize, size, stepSize);
+            cont.fillStyle = colors[i];
+            cont.fill();
+        }
+
+        if (document.getElementById("assets") == undefined) {
+            let assetElement = document.createElement("a-assets");
+            assetElement.id = "assets";
+            document.getElementById("aframe-canvas").appendChild(assetElement);
+        }
+
+        document.getElementById("assets").appendChild(canv);
+    }
+
+    function getCanvasID(features) {
+        let id = "";
+        features.forEach(function (feature) {
+            id += feature + "_";
+        });
+        id = id.slice(0, -1);
+        return id;
     }
 
     /**
