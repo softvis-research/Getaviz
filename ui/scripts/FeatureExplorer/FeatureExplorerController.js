@@ -108,7 +108,7 @@ var featureExplorerController = (function () {
         buildFeatureTreePart();
         buildTraceTypeTreePart();
         buildTraceTreePart();
-        
+
         let settings = {
             check: {
                 enable: true,
@@ -132,7 +132,7 @@ var featureExplorerController = (function () {
                 selectMulti: false
             }
         };
-        
+
         completeTree = featureTreePart.concat(traceTypeTreePart.concat(traceTreePart));
         setIconColors();
         zTreeObject = $.fn.zTree.init($(jQFeatureExplorerTree), settings, completeTree);
@@ -253,12 +253,12 @@ var featureExplorerController = (function () {
                 let colors = [];
                 trace.featuresMain.forEach(function (feature) {
                     colors.push(featureColorMap.get(feature));
-                })   
-                
+                })
+
                 if (!document.getElementById(getCanvasID(trace.featuresMain))) {
                     buildCanvas(trace.featuresMain, colors);
                 }
-                
+
                 canvasManipulator.setMaterialOfEntities([trace], 'src: #' + getCanvasID(trace.featuresMain));
             }
         })
@@ -330,35 +330,58 @@ var featureExplorerController = (function () {
 
     function handleOtherEntries(clickedNode, entities) {
         if (features.includes(clickedNode.id) || traceTypes.includes(clickedNode.name)) { // indirect selection
-            entities.forEach(function (entity) {
+            entities.slice().reverse().forEach(function (entity) { // iterate reverse with shallow copy, otherwise elements are left out
                 let otherNodes = zTreeObject.getNodesByFilter(function (node) {
                     return node.entityId == entity.id;
                 })
-                if (!clickedNode.checked && entity.elementarySetMain == "And") { // deselected
-                    otherNodes.forEach(function (otherNode) {
-                        zTreeObject.checkNode(otherNode, false);
-                    })
-                }
-                if (clickedNode.checked && entity.elementarySetMain == "And") { // selected
-                    let allFeaturesSelected = true;
-                    entity.featuresMain.forEach(function (feature) {
-                        let featureNode = zTreeObject.getNodeByParam("id", feature);
-                        if (!featureNode.checked) {
-                            allFeaturesSelected = false;
+                if (entity.elementarySetMain == "And") {
+                    if (clickedNode.checked) { // selected
+                        let allFeaturesSelected = true;
+                        entity.featuresMain.forEach(function (feature) {
+                            let featureNode = zTreeObject.getNodeByParam("id", feature);
+                            if (!featureNode.checked) {
+                                allFeaturesSelected = false;
+                            }
+                        })
+                        if (!allFeaturesSelected) {
+                            entities.splice(entities.indexOf(entity), 1);
+                        } else {
+                            otherNodes.forEach(function (otherNode) {
+                                zTreeObject.checkNode(otherNode, true);
+                            })
                         }
-                    })
-                    if (!allFeaturesSelected) {
-                        entities.splice(entities.indexOf(entity), 1);
-                    } else {
+                    } else { // deselected
+                        otherNodes.forEach(function (otherNode) {
+                            zTreeObject.checkNode(otherNode, false);
+                        })
+                    }
+                }
+                if (entity.elementarySetMain == "Or") {
+                    if (clickedNode.checked) { // selected
                         otherNodes.forEach(function (otherNode) {
                             zTreeObject.checkNode(otherNode, true);
                         })
+                    } else { // deselected
+                        let allFeaturesDeselected = true;
+                        entity.featuresMain.forEach(function (feature) {
+                            let featureNode = zTreeObject.getNodeByParam("id", feature);
+                            if (featureNode.checked) {
+                                allFeaturesDeselected = false;
+                            }
+                        })
+                        if (!allFeaturesDeselected) {
+                            entities.splice(entities.indexOf(entity), 1);
+                        } else {
+                            otherNodes.forEach(function (otherNode) {
+                                zTreeObject.checkNode(otherNode, true);
+                            })
+                        }
                     }
                 }
             })
         } else { // direct selection
             entities.forEach(function (entity) {
-                
+                // todo
             })
         }
     }
