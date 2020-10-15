@@ -304,11 +304,10 @@ var featureExplorerController = (function () {
      * Callbacks
      */
     function zTreeOnCheck(event, treeId, treeNode) {
-        let nodes = zTreeObject.getChangeCheckedNodes();
+        let nodes = getAllAffectedNodes(treeNode);
 
         let entities = [];
         nodes.forEach(function (node) {
-            node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes
             if (node.entityId) {
                 entities.push(model.getEntityById(node.entityId));
             }
@@ -326,6 +325,19 @@ var featureExplorerController = (function () {
         } else {
             events.filtered.off.publish(applicationEvent);
         }
+    }
+
+    function getAllAffectedNodes(treeNode) {
+        let childNodes = [];
+        if (treeNode.children) {
+            treeNode.children.forEach(function (child) {
+                if (!child.nocheck) {
+                    childNodes = childNodes.concat(getAllAffectedNodes(child));
+                }
+            })
+        }
+        childNodes.push(treeNode);
+        return childNodes;
     }
 
     function handleOtherEntries(clickedNode, entities) {
