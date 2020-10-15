@@ -109,6 +109,7 @@ EOT;
 
 <!--jqwidgets-->
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxcore.js"></script>
+<script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxcolorpicker.js"></script>
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxdata.js"></script>
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxbuttons.js"></script>
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxtabs.js"></script>

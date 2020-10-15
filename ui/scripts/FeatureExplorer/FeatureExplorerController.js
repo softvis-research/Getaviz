@@ -35,7 +35,7 @@ var featureExplorerController = (function () {
         addControlEvents();
 
         let zTreeDiv = document.createElement('div');
-        zTreeDiv.id = 'zTreeDiv';
+        zTreeDiv.id = 'featureExplorerZTreeDiv';
 
         let featureExplorerTreeUl = document.createElement('ul');
         featureExplorerTreeUl.id = featureExplorerTreeID;
@@ -48,6 +48,8 @@ var featureExplorerController = (function () {
         setMainAffiliationForEachTrace();
         buildTree();
         setDefaultColors();
+        buildColorPicker();
+        addTreeEvents();
     }
 
     function buildControls(rootDiv) {
@@ -279,7 +281,7 @@ var featureExplorerController = (function () {
     }
 
     function updateIconColors() {
-        let nodes = zTreeObject.getNodes();
+        let nodes = zTreeObject.getNodesByFilter(function () { return true; });
         nodes.forEach(function (node) {
             const color = featureColorMap.get(node.feature);
             node.icon = getColoredIcon(color);
@@ -312,6 +314,7 @@ var featureExplorerController = (function () {
     }
 
     function setPolychromaticColors() {
+        $(".visualizationCanvas").remove(); 
         traces.forEach(function (trace) {
             if (trace.elementarySetMain == "And" || trace.elementarySetMain == "Or") {
                 let colors = [];
@@ -333,6 +336,7 @@ var featureExplorerController = (function () {
 
         let canv = document.createElement("canvas");
         canv.id = getCanvasID(features);
+        canv.classList.add('visualizationCanvas');
         canv.width = size;
         canv.height = size;
         let cont = canv.getContext("2d");
@@ -377,15 +381,50 @@ var featureExplorerController = (function () {
         return childNodes;
     }
 
-    function getAllChildNodes(treeNode) {
-        let childNodes = [];
-        if (treeNode.children) {
-            treeNode.children.forEach(function (child) {
-                childNodes = childNodes.concat(getAllAffectedNodes(child));
-            })
-        }
-        childNodes.push(treeNode);
-        return childNodes;
+    function addTreeEvents() {
+        $("#featureExplorerTree .zt_ico_close").on('click', function (params) {
+            let nodeId = this.id.replace("_ico", "");
+            let node = zTreeObject.getNodeByTId(nodeId);
+            showColorPicker(node);
+        })
+    }
+
+    function buildColorPicker() {
+        let div = document.createElement('div');
+        div.id = "colorPickerWindow";
+        let header = document.createElement('div');
+        let colorPicker = document.createElement('div');
+        colorPicker.id = "colorPicker";
+        div.appendChild(header);
+        div.appendChild(colorPicker);
+        document.getElementById("featureExplorerZTreeDiv").appendChild(div);
+
+        $("#colorPickerWindow").jqxWindow({ 
+			theme: "metro", 
+			isModal: true, 
+			autoOpen: false,   
+            resizable: false,
+            height: 270,
+            width: 230,
+        });
+        $("#colorPickerWindow").on("close", function (event) {
+            //alert(this.getAttribute("data-feature") + " is now of color: " + $("#colorPicker").jqxColorPicker("getColor"));
+            let feature = this.getAttribute("data-feature");
+            let color = "#" + $("#colorPicker").jqxColorPicker("getColor").hex;
+            featureColorMap.set(feature, color);
+            updateColors();
+        })
+
+        $("#colorPicker").jqxColorPicker({ width: 200, height: 200, theme: "metro" });
+    }
+
+    function showColorPicker(node) {
+        let currentColor = featureColorMap.get(node.id);
+        $("#colorPicker").jqxColorPicker("setColor", currentColor);
+
+        $("#colorPickerWindow").attr("data-feature", node.id);
+        $("#colorPickerWindow").jqxWindow("setTitle", node.name);
+        $("#colorPickerWindow").jqxWindow("open");
     }
 
     /**
