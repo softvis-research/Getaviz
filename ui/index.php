@@ -99,7 +99,9 @@ if (isset($_GET["state"])) {
 <link rel="stylesheet" href="scripts/PackageExplorer/zt.css" type="text/css">
 
 <!-- orbitcam -->
-<script type="text/javascript" src="node_modules/aframe-orbit-camera-component/aframe-orbit-camera-component.js"></script>
+
+<!-- <script type="text/javascript" src="node_modules/aframe-orbit-camera-component/aframe-orbit-camera-component.js"></script> -->
+<script type="text/javascript" src="scripts/ABAPNavigation/aframe-orbit-camera-component.js"></script>
 
 
 <!-- controller -->
