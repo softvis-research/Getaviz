@@ -24,12 +24,16 @@ var featureExplorerController = (function () {
      * Color data
      */
     let featureColorMap = new Map();
+    const clearedColor = "#353559"
 
     function initialize(controllerSetup) {
 
     }
 
     function activate(rootDiv) {
+        buildControls(rootDiv);
+        addControlEvents();
+
         let zTreeDiv = document.createElement('div');
         zTreeDiv.id = 'zTreeDiv';
 
@@ -43,7 +47,49 @@ var featureExplorerController = (function () {
         filterTracesFromEntities();
         setMainAffiliationForEachTrace();
         buildTree();
-        setCanvasColors();
+        setDefaultColors();
+    }
+
+    function buildControls(rootDiv) {
+        let controlsDiv = document.createElement('div');
+        controlsDiv.id = 'featureControls';
+        controlsDiv.style = "margin-top: 6px";
+
+        let clearColorsButton = document.createElement('button');
+        clearColorsButton.id = "clearColors";
+        clearColorsButton.appendChild(document.createTextNode("Clear Colors"));
+        controlsDiv.appendChild(clearColorsButton);
+
+        let resetColorsButton = document.createElement('button');
+        resetColorsButton.id = "resetColors";
+        resetColorsButton.appendChild(document.createTextNode("Reset Colors"));
+        controlsDiv.appendChild(resetColorsButton);
+
+        rootDiv.appendChild(controlsDiv);
+
+        $("#clearColors").jqxButton({
+            width: 150,
+            height: 25,
+            theme: "metro",
+        });
+
+        $("#resetColors").jqxButton({
+            width: 150,
+            height: 25,
+            theme: "metro",
+        });
+    }
+
+    function addControlEvents() {
+        $("#clearColors").on('click', function () {
+            featureColorMap.forEach(function (value, key) {
+                featureColorMap.set(key, clearedColor);
+            })
+            updateColors();
+        })
+        $("#resetColors").on('click', function () {
+            setDefaultColors();
+        })
     }
 
     function filterTracesFromEntities() {
@@ -134,7 +180,6 @@ var featureExplorerController = (function () {
         };
 
         completeTree = featureTreePart.concat(traceTypeTreePart.concat(traceTreePart));
-        setIconColors();
         zTreeObject = $.fn.zTree.init($(jQFeatureExplorerTree), settings, completeTree);
     }
 
@@ -204,7 +249,22 @@ var featureExplorerController = (function () {
         traceTreePart.push(node);
     }
 
-    function setIconColors() {
+    /**
+     * Color functions
+     */
+
+    function setDefaultColors() {
+        calculateColors();
+        updateIconColors();
+        updateCanvasColors();
+    }
+
+    function updateColors() {
+        updateIconColors();
+        updateCanvasColors();
+    }
+
+    function calculateColors() {
         const numberOfColors = featureTreePart.length;
         const colors = [];
         for (let i = 0; i < featureTreePart.length; ++i) {
@@ -216,11 +276,15 @@ var featureExplorerController = (function () {
         featureTreePart.forEach(function (featureNode) {
             featureColorMap.set(featureNode.feature, colors.pop());
         })
+    }
 
-        completeTree.forEach(function (node) {
+    function updateIconColors() {
+        let nodes = zTreeObject.getNodes();
+        nodes.forEach(function (node) {
             const color = featureColorMap.get(node.feature);
             node.icon = getColoredIcon(color);
             node.iconSkin = "zt";
+            zTreeObject.updateNode(node);
         })
     }
 
@@ -230,7 +294,7 @@ var featureExplorerController = (function () {
         return '"data:image/svg+xml;base64,' + base64Icon + '"';
     }
 
-    function setCanvasColors() {
+    function updateCanvasColors() {
         setMonochromeColors();
         setPolychromaticColors();
     }
@@ -300,6 +364,30 @@ var featureExplorerController = (function () {
         return id;
     }
 
+    function getAllAffectedNodes(treeNode) {
+        let childNodes = [];
+        if (treeNode.children) {
+            treeNode.children.forEach(function (child) {
+                if (!child.nocheck) {
+                    childNodes = childNodes.concat(getAllAffectedNodes(child));
+                }
+            })
+        }
+        childNodes.push(treeNode);
+        return childNodes;
+    }
+
+    function getAllChildNodes(treeNode) {
+        let childNodes = [];
+        if (treeNode.children) {
+            treeNode.children.forEach(function (child) {
+                childNodes = childNodes.concat(getAllAffectedNodes(child));
+            })
+        }
+        childNodes.push(treeNode);
+        return childNodes;
+    }
+
     /**
      * Callbacks
      */
@@ -325,19 +413,6 @@ var featureExplorerController = (function () {
         } else {
             events.filtered.off.publish(applicationEvent);
         }
-    }
-
-    function getAllAffectedNodes(treeNode) {
-        let childNodes = [];
-        if (treeNode.children) {
-            treeNode.children.forEach(function (child) {
-                if (!child.nocheck) {
-                    childNodes = childNodes.concat(getAllAffectedNodes(child));
-                }
-            })
-        }
-        childNodes.push(treeNode);
-        return childNodes;
     }
 
     function handleOtherEntries(clickedNode, entities) {
