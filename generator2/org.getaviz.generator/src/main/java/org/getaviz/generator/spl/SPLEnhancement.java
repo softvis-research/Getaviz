@@ -1,39 +1,52 @@
 package org.getaviz.generator.spl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.Step;
 
 import java.io.FileReader;
 import java.io.FileWriter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 
 public class SPLEnhancement implements Step {
-	
+	private Log log = LogFactory.getLog(this.getClass());
+	private SettingsConfiguration config;
+
+	public SPLEnhancement(SettingsConfiguration _config) {
+		config = _config;
+	}
+
 	@Override
 	public boolean checkRequirements() {
-		// TODO Auto-generated method stub
+		boolean requirementsMet = true;
+		if (config.getSPLBenchmarkFileLocation() == "") {
+			requirementsMet = false;
+		}
 		// check if metaData.json exists and if not, tell that it has to run before
-		return false;
+		return requirementsMet;
 	}
 
 	@Override
 	public void run() {
+		log.info("SPL enhancement started.");
 		if (checkRequirements()) {
 			enhanceClasses();
 		}
+		log.info("SPL enhancement finished.");
 	}
 
 	private void enhanceClasses() {
-		BenchmarkFileReader bfReader = new BenchmarkFileReader();
+		BenchmarkFileReader bfReader = new BenchmarkFileReader(config);
 		ArrayList<FeatureTrace> featureTraces = bfReader.read();
- 		String path = "/home/lyannen/Dokumente/Uni/Bachelor/Semester_6/ba/software/temp_files/metaData.json";
+ 		String metaDataPath = config.getOutputPath() + "metaData.json";
 		JSONParser parser = new JSONParser();
 		try { 
-			FileReader reader = new FileReader(path);
+			FileReader reader = new FileReader(metaDataPath);
 			JSONArray arr = (JSONArray) parser.parse(reader);
 			for (Object obj: arr) {
 				JSONObject jsonObj = (JSONObject) obj;
@@ -72,7 +85,7 @@ public class SPLEnhancement implements Step {
 					jsonObj.put("featureAffiliations", featureAffiliationsJSON);
 				}
 			}
-			FileWriter file = new FileWriter("/home/lyannen/Dokumente/Uni/Bachelor/Semester_6/ba/software/temp_files/metaData_spl.json");
+			FileWriter file = new FileWriter(metaDataPath);
 	        file.write(arr.toJSONString());
 	        file.close();
 		} catch (Exception e) {
@@ -114,7 +127,7 @@ public class SPLEnhancement implements Step {
 	}
 	
 	public static void main(String[] args) {
-		SPLEnhancement spl = new SPLEnhancement();
+		SPLEnhancement spl = new SPLEnhancement(SettingsConfiguration.getInstance());
 		spl.enhanceClasses();
 	}
 

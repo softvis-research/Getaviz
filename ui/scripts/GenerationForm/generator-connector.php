@@ -66,7 +66,8 @@ $payload = array(
   'rd.color.namespace'          => $_REQUEST['rd_color_namespace'],
   'rd.method_disks'             => $_REQUEST['rd_method_disks'],
   'rd.data_disks'               => $_REQUEST['rd_data_disks'],
-  'rd.method_type_mode'         => $_REQUEST['rd_method_type_mode']
+  'rd.method_type_mode'         => $_REQUEST['rd_method_type_mode'],
+  'spl.benchmark_file_location' => $_REQUEST['spl_benchmark_file_location']
 );
 
 $curl = curl_init();
@@ -76,7 +77,11 @@ curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($payload));
 $return = curl_exec($curl);
 curl_close ($curl);
 if ($return == "OK") {
-  header("Location: ../../index.php?aframe=true&model=$model&setup=default&srcDir=data-gen");
+  if ($_REQUEST['spl_benchmark_file_location']) {
+    header("Location: ../../index.php?aframe=true&model=$model&setup=featureLocation&srcDir=data-gen");
+  } else {
+    header("Location: ../../index.php?aframe=true&model=$model&setup=default&srcDir=data-gen");
+  }
   die();
 }
 

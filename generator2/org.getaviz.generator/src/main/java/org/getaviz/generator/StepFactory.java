@@ -10,6 +10,7 @@ import org.getaviz.generator.rd.m2t.RD2AFrame;
 import org.getaviz.generator.rd.m2t.RD2X3D;
 import org.getaviz.generator.rd.s2m.C2RD;
 import org.getaviz.generator.rd.s2m.JQA2RD;
+import org.getaviz.generator.spl.SPLEnhancement;
 
 import java.util.List;
 
@@ -69,5 +70,9 @@ public class StepFactory {
                 return new City2X3D(config);
             }
         }
+    }
+
+    public Step createSPLEnhancementStep() {
+        return new SPLEnhancement(config);
     }
 }

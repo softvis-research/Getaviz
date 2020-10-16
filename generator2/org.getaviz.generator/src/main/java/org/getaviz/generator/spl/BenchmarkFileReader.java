@@ -1,13 +1,59 @@
 package org.getaviz.generator.spl;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.SettingsConfiguration;
+
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class BenchmarkFileReader {
-	
-	private String path = "/home/lyannen/Dokumente/Uni/Bachelor/Semester_6/ba/software/temp_files/benchmark-result";
+	private Log log = LogFactory.getLog(this.getClass());
+	private String path = "/var/lib/jetty/benchmark-files";
+
+	public BenchmarkFileReader(SettingsConfiguration config) {
+		String zipFileUrl = config.getSPLBenchmarkFileLocation();
+		try {
+			unzip(zipFileUrl);
+		} catch (Exception e) {
+			log.error(e);
+		}
+	}
+
+	public void unzip(String zipFileUrl) throws Exception {
+		File destinationDirectory = new File(path);
+		if (!destinationDirectory.exists()) {
+			destinationDirectory.mkdir();
+		}
+		ZipInputStream zis;
+		try {
+			zis = new ZipInputStream(new URL(zipFileUrl).openStream());
+		} catch (Exception e) {
+			throw new Exception("No .zip file found at: " + zipFileUrl);
+		}
+		ZipEntry zipEntry = zis.getNextEntry();
+		byte[] buffer = new byte[2048];
+		while (zipEntry != null) {
+			File currentFile = new File(destinationDirectory, new File(zipEntry.getName()).getName());
+			currentFile.createNewFile();
+			FileOutputStream outputStream = new FileOutputStream(currentFile);
+			int length;
+			while ((length = zis.read(buffer)) > 0) {
+				outputStream.write(buffer, 0, length);
+			}
+			outputStream.close();
+			zipEntry = zis.getNextEntry();
+		}
+		zis.closeEntry();
+		zis.close();
+	}
 	
 	public ArrayList<FeatureTrace> read() {
 		File folder = new File(path);
@@ -55,9 +101,9 @@ public class BenchmarkFileReader {
 		}
 		return trace;
 	}
-	
+
 	public static void main(String[] args) {
-		BenchmarkFileReader reader = new BenchmarkFileReader();
-		reader.read();
+		SettingsConfiguration config = SettingsConfiguration.getInstance();
+		BenchmarkFileReader benchmarkFileReader = new BenchmarkFileReader(config);
 	}
 }

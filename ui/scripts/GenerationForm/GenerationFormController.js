@@ -843,6 +843,19 @@ var generationFormController = (function() {
 						type: 'blank',
 						rowHeight: '25px',
 					},	
+					// Software product line options
+					{
+						bind: 'spl_benchmark_file_location',
+						name: 'spl.benchmark_file_location',
+						type: 'text',
+						info: 'URL to a .zip-file that contains the feature location benchmark .txt-files',
+						label: 'spl.benchmark_file_location',
+						labelAlign: 'right',
+						labelWidth: '325px',
+						align: 'left',
+						width: '200px',
+						padding: {left: 8, top: 0, bottom: 0, right: 8}
+					},
 					// Buttons
 					{
 						columns: [
@@ -944,7 +957,8 @@ var generationFormController = (function() {
 					rd_color_namespace: '#969696',
 					rd_method_disks: false,
 					rd_data_disks: false,
-					rd_method_type_mode: false
+					rd_method_type_mode: false,
+					spl_benchmark_file_location: '',
 				};	
 				
 				// Generate Form 
@@ -1038,6 +1052,7 @@ var generationFormController = (function() {
 				const manual_rd_color_data = settingsForm.jqxForm('getComponentByName', 'rd.color.data');
 				const manual_rd_color_method = settingsForm.jqxForm('getComponentByName', 'rd.color.method');
 				const manual_rd_color_namespace = settingsForm.jqxForm('getComponentByName', 'rd.color.namespace');
+				const manual_spl_benchmark_file_location = settingsForm.jqxForm('getComponentByName', 'spl.benchmark_file_location');
 				
 				// Validation rules
 				$('#settingsForm').jqxValidator({
@@ -1067,6 +1082,7 @@ var generationFormController = (function() {
 						{ input: manual_rd_color_data, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
 						{ input: manual_rd_color_method, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
 						{ input: manual_rd_color_namespace, message: 'Please enter a valid HEX Color!', action: 'keyup, change', position: 'top:0,15', rule: validate_hex},
+						{ input: manual_spl_benchmark_file_location, message: 'Please enter a valid URL!', action: 'keyup, focus, blur, change', position: 'top:0,15', rule: validate_url},
 					]
 				});
 				
