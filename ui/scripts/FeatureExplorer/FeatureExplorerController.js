@@ -192,7 +192,7 @@ var featureExplorerController = (function () {
                 open: false,
                 checked: true,
                 parentId: '',
-                name: feature.charAt(0).toUpperCase() + feature.slice(1).toLowerCase(),
+                name: getFormattedFeatureName(feature),
                 feature: feature,
             }
             featureTreePart.push(featureNode);
@@ -427,6 +427,34 @@ var featureExplorerController = (function () {
         $("#colorPickerWindow").jqxWindow("open");
     }
 
+    function getElementarySetMain(id) {
+        let trace = getTraceById(id);
+        if (trace) {
+            return trace.elementarySetMain;
+        }
+    }
+
+    function getFeaturesMain(id) {
+        let trace = getTraceById(id);
+        if (trace) {
+            return trace.featuresMain;
+        }
+    }
+
+    function getTraceById(id) {
+        let result;
+        traces.forEach(function (trace) {
+            if (trace.id == id) {
+                result = trace;
+            }
+        })
+        return result;
+    }
+
+    function getFormattedFeatureName(feature) {
+        return feature.charAt(0).toUpperCase() + feature.slice(1).toLowerCase();
+    }
+
     /**
      * Callbacks
      */
@@ -523,5 +551,9 @@ var featureExplorerController = (function () {
     return {
         initialize: initialize,
         activate: activate,
+
+        getElementarySetMain: getElementarySetMain,
+        getFeaturesMain: getFeaturesMain,
+        getFormattedFeatureName: getFormattedFeatureName,
     };
 })();

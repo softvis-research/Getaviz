@@ -84,7 +84,7 @@ var canvasHoverController = (function () {
 			tooltipDivElement.appendChild((closedSecurityIssuesPElement));
 		}
 		if (controllerConfig.showFeatureAffiliation) {
-			const featureAffiliationPElement = document.createElement("p");
+			const featureAffiliationPElement = document.createElement("div");
 			featureAffiliationPElement.id = "tooltipFeatureAffiliation";
 			tooltipDivElement.appendChild(featureAffiliationPElement);
 		}
@@ -185,22 +185,31 @@ var canvasHoverController = (function () {
 			}
 		}
 		if (controllerConfig.showFeatureAffiliation) {
-			$("#tooltipFeatureAffiliation").text("");
+			$("#tooltipFeatureAffiliation").empty();
+			if (featureExplorerController) {
+				let elementarySet = featureExplorerController.getElementarySetMain(entity.id);
+				if (elementarySet) {
+					let mainFeatures = featureExplorerController.getFeaturesMain(entity.id);
+					let mainFeaturesString = "";
+					mainFeatures.forEach(function (feature) {
+						mainFeaturesString += featureExplorerController.getFormattedFeatureName(feature) + ", ";
+					})
+					mainFeaturesString = mainFeaturesString.slice(0, -2);
+					$("#tooltipFeatureAffiliation").append(`<p>${elementarySet}-Trace of ${mainFeaturesString}</p>`);
+				}
+			}
+
 			if (entity.featureAffiliations) {
-				switch (entity.featureAffiliations.length) {
-					case 0:
-						$("#tooltipFeatureAffiliation").text("Feature: Core");
-						break;
-					case 1:
-						$("#tooltipFeatureAffiliation").text("Feature: " + entity.featureAffiliations[0].feature);
-						break;
-					default:
-						let tooltipText = 'Features: ';
-						entity.featureAffiliations.forEach(function (featureAffiliation) {
-							tooltipText += featureAffiliation.feature + ' | ';
-						})
-						$("#tooltipFeatureAffiliation").text(tooltipText);
-						break;
+				let refinements = "";
+				entity.featureAffiliations.forEach(function (featureAffiliation) {
+					if (featureAffiliation.isRefinement) {
+						refinements += featureAffiliation.feature + ", ";
+					}
+				})
+				if (refinements != "") {
+					refinements = refinements.slice(0, -2);
+					let refinementsString = "Contains refinements of " + refinements;
+					$("#tooltipFeatureAffiliation").append(`<p>${refinementsString}</p>`);
 				}
 			}
 		}
