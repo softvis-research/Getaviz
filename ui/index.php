@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 
+
 <!-- pass url parameters to javascript variables -->
 <?php
 
@@ -34,7 +35,6 @@ if (isset($_GET["state"])) {
 
 ?>
 
-
 <script type="text/javascript">
     var modelUrl = "<?php echo $modelUrl; ?>";
     var stateHashcode = "<?php echo $stateHashcode; ?>";
@@ -46,6 +46,10 @@ if (isset($_GET["state"])) {
     var visMode = "aframe";
 </script>
 
+
+
+
+<!-- HTML document -->
 <html>
 <title>Getaviz</title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -55,7 +59,9 @@ if (isset($_GET["state"])) {
 <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="node_modules/typeahead.js/dist/typeahead.bundle.min.js"></script>
 <script type="text/javascript" src="node_modules/handlebars/dist/handlebars.min.js"></script>
-<script type="text/javascript" src="node_modules/aframe/dist/aframe-v1.0.0.min.js"></script>
+
+<!--<script type="text/javascript" src="node_modules/aframe/dist/aframe-v1.0.0.min.js"></script>-->
+<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
 
 
 <!--jqwidgets-->
