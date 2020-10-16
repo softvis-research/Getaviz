@@ -49,7 +49,7 @@ public class ACityElement {
         // additional subTypes for metropolis
         , Interface, DataElement, Structure
 
-        , Sea, Mountain
+        , Sea, Mountain, Cloud
     }
 
 

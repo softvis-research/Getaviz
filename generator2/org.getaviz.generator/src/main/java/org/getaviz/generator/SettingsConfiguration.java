@@ -1313,6 +1313,8 @@ public class SettingsConfiguration {
 				return config.getDouble("city.abap.metropolis.width.seaReferenceBuilding", 0.1);
 			case "mountainReferenceBuilding":
 				return config.getDouble("city.abap.metropolis.width.mountainReferenceBuilding", 0.1);
+			case "cloudReferenceBuilding":
+				return config.getDouble("city.abap.metropolis.width.cloudReferenceBuilding", 0.1);
 			default:
 				return 0.1;
 		}
@@ -1324,6 +1326,8 @@ public class SettingsConfiguration {
 				return config.getDouble("city.abap.metropolis.length.seaReferenceBuilding", 0.1);
 			case "mountainReferenceBuilding":
 				return config.getDouble("city.abap.metropolis.length.mountainReferenceBuilding", 0.1);
+			case "cloudReferenceBuilding":
+				return config.getDouble("city.abap.metropolis.length.cloudReferenceBuilding", 0.1);
 			default:
 				return 0.1;
 		}
@@ -1335,6 +1339,8 @@ public class SettingsConfiguration {
 				return config.getDouble("city.abap.metropolis.height.seaReferenceBuilding", 0.1);
 			case "mountainReferenceBuilding":
 				return config.getDouble("city.abap.metropolis.height.mountainReferenceBuilding", 0.1);
+			case "cloudReferenceBuilding":
+				return config.getDouble("city.abap.metropolis.height.cloudReferenceBuilding", 0.1);
 			default:
 				return 0.1;
 		}
@@ -1378,6 +1384,8 @@ public class SettingsConfiguration {
 				return config.getString("city.abap.metropolis.assets.mountain.sourcePath", "models/polyMountain_new_Color.jpg");
 			case "sea":
 				return config.getString("city.abap.metropolis.assets.sea.sourcePath", "images/sea_pool.jpg");
+			case "cloud":
+				return config.getString("city.abap.metropolis.assets.cloud.sourcePath", "models/cloud_black.jpg");
 			default:
 				return config.getString("");
 		}
@@ -1385,8 +1393,12 @@ public class SettingsConfiguration {
 
 	public boolean showSeaReferenceBuilding() {return config.getBoolean("city.abap.metropolis.showSeaReferenceBuilding", false);}
 	public boolean showMountainReferenceBuilding() {return config.getBoolean("city.abap.metropolis.showMountainReferenceBuilding", false);}
+	public boolean showCloudReferenceBuilding() {return config.getBoolean("city.abap.metropolis.showCloudReferenceBuilding", false);}
 
-	public String getMetropolisBuildingRotation() {return config.getString("city.abap.metropolis.SeaReferenceBuildingRotation", " 0 0 0 ");}
+	public boolean addMigrationFindings() {return config.getBoolean("city.abap.metropolis.addMigrationFindings", false);}
+
+
+    public String getMetropolisBuildingRotation() {return config.getString("city.abap.metropolis.SeaReferenceBuildingRotation", " 0 0 0 ");}
 	public String getMetropolisReferenceBuildingModelScale() {return config.getString("city.abap.metropolis.MountainReferenceBuildingModelScale", " 0 0 0 ");}
 
 	public double getACityDistrictHeight() {return config.getDouble("city.abap.height.district", 0.2); }

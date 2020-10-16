@@ -45,11 +45,13 @@ public class metropolis_AFrame implements ABAP_OutputFormat {
                 "\n" +
                 "\t\t\t\t <a-asset-item id=\"mountain\" src=\"" + config.getMetropolisAssetsSourcePath("mountain")  +  "\"></a-asset-item>" +
                 "\n" +
+                "\t\t\t\t <a-asset-item id=\"cloud_black\" src=\"" + config.getMetropolisAssetsSourcePath("cloud")  +  "\"></a-asset-item>" +
+                "\n" +
                 "\t\t\t </a-assets>" +
                 "\n" +
-                "\t\t\t <a-sky src=\"#sky\"></a-sky>" +
+                "\t\t\t <a-sky src=\"#sky\" radius=\"7000\"></a-sky>" +
                 "\n" +
-                "\t\t\t <a-plane src=\"#ground\" height=\"750\" width=\"750\" rotation=\"-90 0 0\" position=\"0 0 0\" repeat=\"30 30\"></a-plane>" +
+                "\t\t\t <a-plane src=\"#ground\" height=\"1000\" width=\"1000\" rotation=\"-90 0 0\" position=\"0 0 0\" repeat=\"30 30\"></a-plane>" +
                 "\n";
 
     }

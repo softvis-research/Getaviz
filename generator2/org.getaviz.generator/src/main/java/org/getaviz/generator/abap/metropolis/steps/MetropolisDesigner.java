@@ -8,6 +8,7 @@ import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.neo4j.driver.v1.types.Node;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,8 +43,29 @@ public class MetropolisDesigner {
 
         designMetropolisElementsByType(ACityElement.ACityType.Floor);
 
+        /* new color for migration findings
+        designMetropolisElementsByMigrationFindings();
+         */
+
       //  designMetropolisElementsByType(ACityElement.ACityType.Chimney);
 
+    }
+
+    private void designMetropolisElementsByMigrationFindings() {
+
+       Collection<ACityElement> migrationElements = repository.getElementsBySourceProperty(SAPNodeProperties.migration_findings, "true");
+
+        for ( ACityElement migrationElement: migrationElements) {
+
+            if (!migrationElement.getSourceNodeType().equals(SAPNodeTypes.Namespace)) {
+                    migrationElement.setColor("#FF8C00");
+
+                    SAPNodeTypes typeParent = migrationElement.getParentElement().getSourceNodeType();
+                    if(typeParent.equals(SAPNodeTypes.Report)){
+                        migrationElement.getParentElement().setColor("#FF8C00");
+                }
+            }
+        }
     }
 
     private void designMetropolisElementsByType(ACityElement.ACityType aCityType){
@@ -151,6 +173,12 @@ public class MetropolisDesigner {
                     building.setModelScale(config.getMetropolisReferenceBuildingModelScale());
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case Cloud:
+                    building.setShape(ACityElement.ACityShape.Entity);
+                    building.setModel("#cloud_black");
+                    building.setModelScale("0.3 0.3 0.3");
+                    building.setYPosition(55);
                     break;
         }
     } else {

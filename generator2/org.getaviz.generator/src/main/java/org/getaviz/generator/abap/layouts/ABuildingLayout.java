@@ -6,6 +6,7 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.repository.ACityElement;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 public class ABuildingLayout {
@@ -38,9 +39,11 @@ public class ABuildingLayout {
     }
 
     private void setPositionOfBuilding() {
-            building.setXPosition(0.0);
-            building.setYPosition(building.getHeight() / 2);
-            building.setZPosition(0.0);
+
+        building.setXPosition(0.0);
+        building.setYPosition(building.getHeight() / 2);
+        building.setZPosition(0.0);
+
     }
 
 
@@ -60,6 +63,12 @@ public class ABuildingLayout {
                     building.setHeight(config.getMetropolisReferenceBuildingHeigth("mountainReferenceBuilding"));
                     building.setWidth(config.getMetropolisReferenceBuildingWidth("mountainReferenceBuilding"));
                     building.setLength(config.getMetropolisReferenceBuildingLength("mountainReferenceBuilding"));
+                    break;
+
+                case Cloud:
+                    building.setHeight(config.getMetropolisReferenceBuildingHeigth("cloudReferenceBuilding"));
+                    building.setWidth(config.getMetropolisReferenceBuildingWidth("cloudReferenceBuilding"));
+                    building.setLength(config.getMetropolisReferenceBuildingLength("cloudReferenceBuilding"));
                     break;
             }
         } else {

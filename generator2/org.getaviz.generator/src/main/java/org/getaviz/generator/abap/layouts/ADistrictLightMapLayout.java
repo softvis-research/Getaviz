@@ -10,6 +10,7 @@ import org.getaviz.generator.abap.layouts.kdtree.ACityRectangle;
 import org.getaviz.generator.abap.repository.ACityElement;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 public class ADistrictLightMapLayout {
@@ -33,7 +34,6 @@ public class ADistrictLightMapLayout {
     }
 
     public void calculate(){
-
         ACityRectangle coveringACityRectangle = arrangeSubElements(subElements);
         setSizeOfDistrict(coveringACityRectangle);
         setPositionOfDistrict(coveringACityRectangle);
@@ -61,7 +61,7 @@ public class ADistrictLightMapLayout {
         element.setXPosition(xPosition);
 
         double yPosition = element.getYPosition() + config.adjustACityDistrictYPosition();
-        double yPositionDelta = yPosition - element.getYPosition();
+        //double yPositionDelta = yPosition - element.getYPosition();
 
         //Umrechnung, um Gleitkommazahlen zu vermeiden
         BigDecimal yPosition_BigDecimal = BigDecimal.valueOf(yPosition);
@@ -84,19 +84,22 @@ public class ADistrictLightMapLayout {
 
             double centerX = element.getXPosition();
             double centerY = element.getYPosition();
+            BigDecimal centerY_Big = BigDecimal.valueOf(centerY);
             double centerZ = element.getZPosition();
 
             double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin();
-            double newYPosition = centerY + parentY + config.getACityBuildingVerticalMargin();
+            //double newYPosition = centerY + parentY + config.getACityBuildingVerticalMargin();
+            BigDecimal parentY_big = BigDecimal.valueOf(parentY);
+            BigDecimal newYPosition_Big = centerY_Big.add(parentY_big);
             double newZPosition = centerZ + parentZ + config.getACityBuildingHorizontalMargin();
 
             element.setXPosition(newXPosition);
-            element.setYPosition(newYPosition);
+            element.setYPosition((newYPosition_Big.setScale(2, RoundingMode.HALF_UP)).doubleValue());
             element.setZPosition(newZPosition);
 
             Collection<ACityElement> subElements = element.getSubElements();
             if(!subElements.isEmpty()){
-                adjustPositionsOfSubSubElements(subElements, parentX, parentY, parentZ);
+                adjustPositionsOfSubSubElements(subElements, parentX, parentY_big.doubleValue(), parentZ);
             }
         }
     }
@@ -124,6 +127,7 @@ public class ADistrictLightMapLayout {
 
         // algorithm
         for (ACityRectangle el : elements) {
+
             Map<ACityKDTreeNode, Double> preservers = new LinkedHashMap<>();
             Map<ACityKDTreeNode, Double> expanders = new LinkedHashMap<>();
             ACityKDTreeNode targetNode = new ACityKDTreeNode();
@@ -174,6 +178,11 @@ public class ADistrictLightMapLayout {
         List<ACityRectangle> rectangles = new ArrayList<>();
 
         for (ACityElement element : elements) {
+
+            if(element.getSubType() != null){
+            if(element.getSubType().equals(ACityElement.ACitySubType.Cloud)){
+                continue;
+            }}
             double width = element.getWidth();
             double length = element.getLength();
 
@@ -287,7 +296,8 @@ public class ADistrictLightMapLayout {
     private void updateCovrec(ACityKDTreeNode fitNode, ACityRectangle covrec) {
         double newX = (Math.max(fitNode.getACityRectangle().getBottomRightX(), covrec.getBottomRightX()));
         double newY = (Math.max(fitNode.getACityRectangle().getBottomRightY(), covrec.getBottomRightY()));
-        covrec.changeRectangle(0, 0, newX, newY);
+        BigDecimal newY_big = BigDecimal.valueOf(newY);
+        covrec.changeRectangle(0, 0, newX, newY_big.doubleValue());
     }
 
 }

@@ -15,6 +15,7 @@ import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +61,8 @@ public class MetropolisLayouter {
                             + " with rowType " + "\"" + building.getSourceNodeProperty(SAPNodeProperties.rowtype) + "\""
                             + " layouted");
                 }
+            //} else if(building.getSubType().equals(ACityElement.ACitySubType.Cloud)){
+              //  layoutCloudModel(building);
             } else {
                 layoutBuilding(building);
             }
@@ -77,6 +80,8 @@ public class MetropolisLayouter {
         
         layoutEmptyDistricts(buildings);
         layoutParentDistricts(buildings);
+
+        layoutCloudModel();
 
     }
 
@@ -178,7 +183,7 @@ public class MetropolisLayouter {
 
         log.info(parentDistricts.size() + " parentDistrict loaded"); // first for buildings, then for typedistricts
 
-        for(ACityElement parentDistrict : parentDistricts){
+        for(ACityElement parentDistrict : parentDistricts) {
             layoutDistrict(parentDistrict);
         }
 
@@ -208,6 +213,7 @@ public class MetropolisLayouter {
     }
 
     private void layoutBuilding(ACityElement building) {
+
         Collection<ACityElement> floors = building.getSubElementsOfType(ACityElement.ACityType.Floor);
         Collection<ACityElement> chimneys = building.getSubElementsOfType(ACityElement.ACityType.Chimney);
 
@@ -222,6 +228,64 @@ public class MetropolisLayouter {
         }
     }
 
+    private void layoutCloudModel() {
+
+        Collection<ACityElement> clouds = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.migration_findings, "true");
+
+        for ( ACityElement cloud: clouds) {
+            if (!cloud.getSourceNodeType().equals(SAPNodeTypes.Namespace)) {
+
+            Collection<ACityElement> cloudSubElements = cloud.getSubElements();
+
+            if(!cloudSubElements.isEmpty()) {
+
+                for (ACityElement cloudSubElement : cloudSubElements) {
+
+                    if (cloudSubElement.getSubType() == null){
+                        continue;
+                    } else if((cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud))){
+
+                        cloudSubElement.setWidth(0);
+                        cloudSubElement.setLength(0);
+                        cloudSubElement.setYPosition(55);
+
+                        double parentDistrictXPosition = cloudSubElement.getParentElement().getXPosition();
+                        double parentDistrictZPosition = cloudSubElement.getParentElement().getZPosition();
+
+                        cloudSubElement.setXPosition(parentDistrictXPosition);
+                        cloudSubElement.setZPosition(parentDistrictZPosition);
+
+                        cloudSubElement.setWidth(0);
+                        cloudSubElement.setLength(0);
+                    }
+                }
+            }
+            }
+
+
+        }
+
+
+
+
+
+        /*for (ACityElement cloud: clouds) {
+
+            cloud.setYPosition(40.0);
+
+            double parentDistrictXPosition = cloud.getParentElement().getXPosition();
+            double parentDistrictZPosition = cloud.getParentElement().getZPosition();
+
+            cloud.setXPosition(parentDistrictXPosition);
+            cloud.setZPosition(parentDistrictZPosition);
+
+            cloud.setHeight(config.getMetropolisReferenceBuildingHeigth("cloudReferenceBuilding"));
+            cloud.setWidth(config.getMetropolisReferenceBuildingWidth("cloudReferenceBuilding"));
+            cloud.setLength(config.getMetropolisReferenceBuildingLength("cloudReferenceBuilding"));
+        }*/
+
+    }
+
     private void layoutDistrict(ACityElement district) {
 
         if (district.getType() == ACityElement.ACityType.District) {
@@ -232,7 +296,6 @@ public class MetropolisLayouter {
             aBAPDistrictLightMapLayout.calculate();
 
             log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
-
 
         }
     }

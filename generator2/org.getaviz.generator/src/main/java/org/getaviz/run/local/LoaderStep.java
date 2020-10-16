@@ -17,6 +17,7 @@ public class LoaderStep {
         String pathToTypeOfRelationsCsv = "";
         String pathToReferenceCsv = "";
         String pathToInheritanceCsv = "";
+        String pathToMigrationFindingsCsv = "";
 
         Scanner userInput = new Scanner(System.in);
         System.out.print("Silent mode? (y/n): "); // Silent mode to run with default values
@@ -36,11 +37,14 @@ public class LoaderStep {
                 pathToReferenceCsv = p.toString();
             } else if (p.toString().endsWith("_Inheritance.csv")) {
                 pathToInheritanceCsv = p.toString();
+            } else if (p.toString().endsWith("_export.csv")) {
+                pathToMigrationFindingsCsv = p.toString();
             }
         }
 
         if (pathToNodesCsv.isEmpty() || pathToTypeOfRelationsCsv.isEmpty()
-                || pathToInheritanceCsv.isEmpty() || pathToReferenceCsv.isEmpty()) {
+                || pathToInheritanceCsv.isEmpty() || pathToReferenceCsv.isEmpty()
+                || pathToMigrationFindingsCsv.isEmpty()) {
             System.out.println("Some input file wasn't found");
             System.exit(0);
         }
@@ -115,6 +119,22 @@ public class LoaderStep {
                         "MATCH (a:Elements {element_id: row.subclass_id}), (b:Elements {element_id: row.superclass_id})\n" +
                         "CREATE (a)-[r:"+ SAPRelationLabels.INHERIT +"]->(b)"
         );
+
+        //6. Upload Migration Findings
+        if(config.addMigrationFindings()) {
+            System.out.println("Path to Migration Findings CSV : " + pathToMigrationFindingsCsv);
+            if (!isSilentMode) {
+                System.out.print("ADDING 'MIGRATION_FINDINGS' to Element-Nodes. Press any key to continue...");
+                userInput.nextLine();
+            }
+            pathToMigrationFindingsCsv = pathToMigrationFindingsCsv.replace("\\", "/");
+            connector.executeWrite(
+                    "LOAD CSV WITH HEADERS FROM \"file:///" + pathToMigrationFindingsCsv + "\"\n" +
+                            "AS row FIELDTERMINATOR ';'\n" +
+                            "MATCH (a:Elements {object_name: row.Objektname})\n" +
+                            "SET a.migration_findings = \"true\""
+            );
+        }
 
         connector.close();
         System.out.println("Loader step was completed");

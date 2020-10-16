@@ -114,6 +114,41 @@ public class ACityRepository {
         return elementsByTypeAndSourceProperty;
     }
 
+    public Collection<ACityElement> getElementsBySourceProperty(SAPNodeProperties sourceProperty, String sourcePropertyValue){
+        Collection<ACityElement> elementsByType = getAllElements();
+        List<ACityElement> elementsBySourceProperty = new ArrayList<>();
+
+        for (ACityElement element: elementsByType){
+
+            Node sourceNode = element.getSourceNode();
+
+            if(sourceNode == null ){
+                ACityElement.ACitySubType subType = element.getSubType();
+                String subTypeString = subType.toString();
+                if(!subTypeString.equals(sourcePropertyValue)){
+                    continue;
+                }
+                elementsBySourceProperty.add(element);
+
+                continue;
+            }
+
+            Value propertyValue = sourceNode.get(sourceProperty.toString());
+            if( propertyValue == null){
+                continue;
+            }
+
+            String propertyValueString = propertyValue.asString();
+            if(!propertyValueString.equals(sourcePropertyValue)){
+                continue;
+            }
+
+            elementsBySourceProperty.add(element);
+        }
+
+        return elementsBySourceProperty;
+    }
+
 
     //Schreiben der ACityElemente in die Neo4j-Datenbank
     public void writeRepositoryToNeo4j() {
