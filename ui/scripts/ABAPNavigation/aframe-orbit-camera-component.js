@@ -97,6 +97,11 @@ AFRAME.registerComponent('orbit-camera', {
       RIGHT: THREE.MOUSE.RIGHT
     };
 
+    this.navigation = {
+      PAN: this.mouseButtons.LEFT,
+      ROTATE: this.mouseButtons.RIGHT
+    }
+
     this.bindMethods();
   },
 
@@ -187,26 +192,42 @@ AFRAME.registerComponent('orbit-camera', {
 
     event.preventDefault();
 
+    // switch (event.button) {
+    //   case this.mouseButtons.LEFT:
+    //     if (event.ctrlKey || event.shiftKey) {
+    //       if (this.data.enablePan === false) return;
+    //       this.handleMouseDownPan(event);
+    //       this.state = this.STATE.PAN;
+    //     } else {
+    //       this.panOffset.set(0, 0, 0);
+    //       if (this.data.enableRotate === false) return;
+    //       this.handleMouseDownRotate(event);
+    //       this.state = this.STATE.ROTATE;
+    //     }
+    //     break;
+    //   case this.mouseButtons.RIGHT:
+    //     this.panOffset.set(0, 0, 0);
+    //     if (this.data.enableZoom === false) return;
+    //     this.handleMouseDownDolly(event);
+    //     this.state = this.STATE.DOLLY;
+    //     break;
+    //   case this.mouseButtons.MIDDLE:
+    //     if (this.data.enablePan === false) return;
+    //     this.handleMouseDownPan(event);
+    //     this.state = this.STATE.PAN;
+    //     break;
+    // }
+
     switch (event.button) {
-      case this.mouseButtons.LEFT:
-        if (event.ctrlKey || event.shiftKey) {
+      case this.navigation.ROTATE:
           if (this.data.enablePan === false) return;
-          this.handleMouseDownPan(event);
-          this.state = this.STATE.PAN;
-        } else {
+
           this.panOffset.set(0, 0, 0);
           if (this.data.enableRotate === false) return;
           this.handleMouseDownRotate(event);
           this.state = this.STATE.ROTATE;
-        }
         break;
-      case this.mouseButtons.RIGHT:
-        this.panOffset.set(0, 0, 0);
-        if (this.data.enableZoom === false) return;
-        this.handleMouseDownDolly(event);
-        this.state = this.STATE.DOLLY;
-        break;
-      case this.mouseButtons.MIDDLE:
+      case this.navigation.PAN:
         if (this.data.enablePan === false) return;
         this.handleMouseDownPan(event);
         this.state = this.STATE.PAN;
