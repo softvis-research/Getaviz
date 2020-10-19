@@ -150,7 +150,8 @@ var canvasHoverController = (function() {
 			canvasManipulator.highlightEntities([entity], controllerConfig.hoverColor);	
 		}
 		        
-		$("#tooltipName").text(getTooltipName(entity));
+		$("#tooltipName").html(getTooltipName(entity));
+
 		if(controllerConfig.showQualifiedName) {
 			$("#tooltipQualifiedName").text(entity.qualifiedName);
 		}
@@ -204,15 +205,20 @@ var canvasHoverController = (function() {
     }
 	
 	function getTooltipName(entity) {
-        if(entity.type === "Method") {
-			return entity.type + ": " + entity.signature;
-        }
+        
         
 		if (entity.type === "Namespace") {
             return "Package: " + entity.name;
-        }
-        
-        return entity.type + ": " + entity.name;        
+        } else {
+			var packages = entity.allParents.filter(parent => parent.type == "Namespace");			
+
+			if(entity.type === "Method" && entity.signature != "") {
+				return "Package: " + packages[0].name //namespace 
+					+ "<br/>" + entity.type + ": " + entity.signature;
+			}
+			return "Package: " + packages[0].name //namespace 
+					+ "<br/>" + entity.type + ": " + entity.name; 
+		}    
     }
 
     return {
