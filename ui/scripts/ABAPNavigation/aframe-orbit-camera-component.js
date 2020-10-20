@@ -428,8 +428,11 @@ AFRAME.registerComponent('orbit-camera', {
 
   panUp: function (distance, objectMatrix) {
     var v = new THREE.Vector3();
-    v.setFromMatrixColumn(objectMatrix, 1);  // get Y column of objectMatrix
-    v.multiplyScalar(distance);
+    v.setFromMatrixColumn(objectMatrix, 2);  // get Z column of objectMatrix
+    // v.multiplyScalar(distance);
+    v.x *= (-distance);
+    v.y = 0;
+    v.z *= (-distance);
     this.panOffset.add(v);
   },
 
