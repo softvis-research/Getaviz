@@ -61,8 +61,6 @@ public class MetropolisLayouter {
                             + " with rowType " + "\"" + building.getSourceNodeProperty(SAPNodeProperties.rowtype) + "\""
                             + " layouted");
                 }
-            //} else if(building.getSubType().equals(ACityElement.ACitySubType.Cloud)){
-              //  layoutCloudModel(building);
             } else {
                 layoutBuilding(building);
             }
@@ -77,7 +75,7 @@ public class MetropolisLayouter {
 
         layoutDistricts();
          */
-        
+
         layoutEmptyDistricts(buildings);
         layoutParentDistricts(buildings);
 
@@ -235,54 +233,33 @@ public class MetropolisLayouter {
         for ( ACityElement cloud: clouds) {
             if (!cloud.getSourceNodeType().equals(SAPNodeTypes.Namespace)) {
 
-            Collection<ACityElement> cloudSubElements = cloud.getSubElements();
+                Collection<ACityElement> cloudSubElements = cloud.getSubElements();
 
-            if(!cloudSubElements.isEmpty()) {
+                if(!cloudSubElements.isEmpty()) {
 
-                for (ACityElement cloudSubElement : cloudSubElements) {
+                    for (ACityElement cloudSubElement : cloudSubElements) {
 
-                    if (cloudSubElement.getSubType() == null){
-                        continue;
-                    } else if((cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud))){
+                        if (cloudSubElement.getSubType() == null){
+                            continue;
+                        } else if((cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud))){
 
-                        cloudSubElement.setWidth(0);
-                        cloudSubElement.setLength(0);
-                        cloudSubElement.setYPosition(55);
+                            cloudSubElement.setWidth(0);
+                            cloudSubElement.setLength(0);
+                            cloudSubElement.setYPosition(55);
 
-                        double parentDistrictXPosition = cloudSubElement.getParentElement().getXPosition();
-                        double parentDistrictZPosition = cloudSubElement.getParentElement().getZPosition();
+                            double parentDistrictXPosition = cloudSubElement.getParentElement().getXPosition();
+                            double parentDistrictZPosition = cloudSubElement.getParentElement().getZPosition();
 
-                        cloudSubElement.setXPosition(parentDistrictXPosition);
-                        cloudSubElement.setZPosition(parentDistrictZPosition);
+                            cloudSubElement.setXPosition(parentDistrictXPosition);
+                            cloudSubElement.setZPosition(parentDistrictZPosition);
 
-                        cloudSubElement.setWidth(0);
-                        cloudSubElement.setLength(0);
+                            cloudSubElement.setWidth(0);
+                            cloudSubElement.setLength(0);
+                        }
                     }
                 }
             }
-            }
-
-
         }
-
-
-
-
-
-        /*for (ACityElement cloud: clouds) {
-
-            cloud.setYPosition(40.0);
-
-            double parentDistrictXPosition = cloud.getParentElement().getXPosition();
-            double parentDistrictZPosition = cloud.getParentElement().getZPosition();
-
-            cloud.setXPosition(parentDistrictXPosition);
-            cloud.setZPosition(parentDistrictZPosition);
-
-            cloud.setHeight(config.getMetropolisReferenceBuildingHeigth("cloudReferenceBuilding"));
-            cloud.setWidth(config.getMetropolisReferenceBuildingWidth("cloudReferenceBuilding"));
-            cloud.setLength(config.getMetropolisReferenceBuildingLength("cloudReferenceBuilding"));
-        }*/
 
     }
 

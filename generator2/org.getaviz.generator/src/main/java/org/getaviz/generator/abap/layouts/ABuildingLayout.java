@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
+import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.repository.ACityElement;
 
 import java.math.BigDecimal;
@@ -107,8 +108,22 @@ public class ABuildingLayout {
                 if(NOS != "null") {
                     Double nos = Double.valueOf(NOS);
 
-                    //floorHeightSum = config.getFloorHeightSum() + nos;
-                    floorHeightSum = getScaledHeight(nos);
+                    //numberOfStatements = 0 --> concerns SAP Standard objects
+                    if (nos == 0){
+                        String iterationString = building.getSourceNodeProperty(SAPNodeProperties.iteration);
+                        int iteration = Integer.parseInt(iterationString);
+                        String type_name = building.getSourceNodeProperty(SAPNodeProperties.type_name);
+
+                        if(iteration >= 0) {
+                            if (building.getSourceNodeProperty(SAPNodeProperties.creator).equals("SAP")) {
+                                if (!type_name.equals(SAPNodeTypes.Attribute)) {
+                                    floorHeightSum = config.getAbapStandardCodeHeight();
+                                }
+                            }
+                        }
+                    } else {
+                        floorHeightSum = getScaledHeightNew(nos);
+                    }
                 }
             }
 
@@ -128,6 +143,18 @@ public class ABuildingLayout {
             return config.getAbapScoMinHeight();
         } else if (unscaledHeight > config.getAbapScoMaxHeight()) {
             return config.getAbapScoMaxHeight();
+        } else {
+            return unscaledHeight;
+        }
+    }
+
+    private double getScaledHeightNew(double unscaledHeight) {
+
+        if (unscaledHeight < config.getAbapScoMinHeight()) {
+            return config.getAbapScoMinHeight();
+        } else if (unscaledHeight > config.getAbapScoMaxHeight()) {
+            return config.getAbapScoMaxHeight() / config.getACityFactorMaxHeight();
+            //return config.getAbapScoMaxHeight();
         } else {
             return unscaledHeight;
         }

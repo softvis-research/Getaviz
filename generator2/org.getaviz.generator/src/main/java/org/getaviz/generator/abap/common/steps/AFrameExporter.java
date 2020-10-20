@@ -6,10 +6,7 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.getaviz.generator.output.abap_output.ABAP_OutputFormat;
-import org.getaviz.generator.output.abap_output.acity_AFrame_UI;
-import org.getaviz.generator.output.abap_output.metropolis_AFrame;
-import org.getaviz.generator.output.abap_output.acity_AFrame;
+import org.getaviz.generator.output.abap_output.*;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -36,6 +33,7 @@ public class AFrameExporter {
         switch(aFrameOutputName){
             case "acity_AFrame":  aFrameOutput = new acity_AFrame(); break;
             case "metropolis_AFrame":  aFrameOutput = new metropolis_AFrame(config); break;
+            case "metropolis_AFrame_UI":  aFrameOutput = new metropolis_AFrame_UI(config); break;
             case "acity_AFrame_UI": aFrameOutput = new acity_AFrame_UI(); break;
         }
     }

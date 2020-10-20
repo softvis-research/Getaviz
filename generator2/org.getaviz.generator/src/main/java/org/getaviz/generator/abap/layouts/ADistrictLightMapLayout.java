@@ -76,6 +76,7 @@ public class ADistrictLightMapLayout {
         Collection<ACityElement> subElements = element.getSubElements();
         if(!subElements.isEmpty()){
             adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta_BigDecimal.doubleValue(), zPositionDelta);
+            //adjustPositionsOfSubSubElements(subElements, xPositionDelta, 0, zPositionDelta);
         }
     }
 
@@ -100,6 +101,7 @@ public class ADistrictLightMapLayout {
             Collection<ACityElement> subElements = element.getSubElements();
             if(!subElements.isEmpty()){
                 adjustPositionsOfSubSubElements(subElements, parentX, parentY_big.doubleValue(), parentZ);
+                //adjustPositionsOfSubSubElements(subElements, parentX, 0, parentZ);
             }
         }
     }
@@ -180,9 +182,9 @@ public class ADistrictLightMapLayout {
         for (ACityElement element : elements) {
 
             if(element.getSubType() != null){
-            if(element.getSubType().equals(ACityElement.ACitySubType.Cloud)){
-                continue;
-            }}
+                if(element.getSubType().equals(ACityElement.ACitySubType.Cloud)){
+                    continue;
+                }}
             double width = element.getWidth();
             double length = element.getLength();
 

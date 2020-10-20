@@ -124,19 +124,27 @@ public class MetropolisDesigner {
             String propertyTypeName = district.getSourceNodeProperty(SAPNodeProperties.type_name);
 
             switch (SAPNodeTypes.valueOf(propertyTypeName)) {
-                case Namespace:     district.setColor(config.getMetropolisDistrictColorHex("packageDistrict")); break;
+                case Namespace:     district.setColor(config.getMetropolisDistrictColorHex("packageDistrict"));
+                    //district.setYPosition(district.getYPosition() + 2);
+                break;
                 case Class:
+                    //district.setYPosition(district.getYPosition() + 6);
                     if(district.getSourceNodeProperty(SAPNodeProperties.local_class).equals("true")) {
                          district.setColor(config.getMetropolisDistrictColorHex("localClassDistrict")); break;
                     } else
                          district.setColor(config.getMetropolisDistrictColorHex("classDistrict")); break;
                 case Interface:
+                    //district.setYPosition(district.getYPosition() + 6);
                     if(district.getSourceNodeProperty(SAPNodeProperties.local_class).equals("true")) {
                         district.setColor(config.getMetropolisDistrictColorHex("localInterfaceDistrict")); break;
                     } else
                         district.setColor(config.getMetropolisDistrictColorHex("interfaceDistrict")); break;
-                case Report:        district.setColor(config.getMetropolisDistrictColorHex("reportDistrict")); break;
-                case FunctionGroup: district.setColor(config.getMetropolisDistrictColorHex("functionGroupDistrict")); break;
+                case Report:        district.setColor(config.getMetropolisDistrictColorHex("reportDistrict"));
+                    //district.setYPosition(district.getYPosition() + 6);
+                    break;
+                case FunctionGroup: district.setColor(config.getMetropolisDistrictColorHex("functionGroupDistrict"));
+                    //district.setYPosition(district.getYPosition() + 6);
+                                    break;
                 case Table:
                 case TableType:     district.setColor(config.getMetropolisDistrictColorHex("tableDistrict"));
                                     district.setHeight(config.getACityDistrictHeight()); break;
@@ -152,6 +160,8 @@ public class MetropolisDesigner {
 
     private void designBuilding(ACityElement building) {
 
+        //building.setYPosition(building.getYPosition() + 10);
+
         ACityElement.ACitySubType refBuildingType = building.getSubType();
 
         if (building.getSourceNode() == null && refBuildingType == null) {
@@ -165,6 +175,7 @@ public class MetropolisDesigner {
                     building.setRotation(config.getMetropolisBuildingRotation());
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    //building.setYPosition(building.getYPosition() + 1);
                     break;
                 case Mountain:
                     building.setColor(config.getMetropolisBuildingColorHex("mountainReferenceBuilding"));
