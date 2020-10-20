@@ -10,12 +10,14 @@ AFRAME.registerComponent('orbit-camera', {
 
     enableRotate: { type: 'boolean', default: true },
     rotateSpeed: { type: 'number', default: 1.0 },
+    rotateKey: { type: 'number', default: 2 /*RIGHT*/},
 
     enableZoom: { type: 'boolean', default: true },
     zoomSpeed: { type: 'number', default: 1.0 },
 
     enablePan: { type: 'boolean', default: true },
     panSpeed: { type: 'number', default: 1.0 },
+    panKey: { type: 'number', default: 0 /*LEFT*/},
 
     enableDamping: { type: 'boolean', default: false },
     dampingFactor: { type: 'number', default: 0.25 },
@@ -24,7 +26,7 @@ AFRAME.registerComponent('orbit-camera', {
     maxAzimuthAngle: { type: 'number', default: Infinity },
 
     minPolarAngle: { type: 'number', default: 0 },
-    maxPolarAngle: { type: 'number', default: Math.PI },
+    maxPolarAngle: { type: 'number', default: Math.PI / 2.0 },
 
     minZoom: { type: 'number', default: 0 },
     maxZoom: { type: 'number', default: Infinity },
@@ -96,11 +98,6 @@ AFRAME.registerComponent('orbit-camera', {
       MIDDLE: THREE.MOUSE.MIDDLE,
       RIGHT: THREE.MOUSE.RIGHT
     };
-
-    this.navigation = {
-      PAN: this.mouseButtons.LEFT,
-      ROTATE: this.mouseButtons.RIGHT
-    }
 
     this.bindMethods();
   },
@@ -192,34 +189,8 @@ AFRAME.registerComponent('orbit-camera', {
 
     event.preventDefault();
 
-    // switch (event.button) {
-    //   case this.mouseButtons.LEFT:
-    //     if (event.ctrlKey || event.shiftKey) {
-    //       if (this.data.enablePan === false) return;
-    //       this.handleMouseDownPan(event);
-    //       this.state = this.STATE.PAN;
-    //     } else {
-    //       this.panOffset.set(0, 0, 0);
-    //       if (this.data.enableRotate === false) return;
-    //       this.handleMouseDownRotate(event);
-    //       this.state = this.STATE.ROTATE;
-    //     }
-    //     break;
-    //   case this.mouseButtons.RIGHT:
-    //     this.panOffset.set(0, 0, 0);
-    //     if (this.data.enableZoom === false) return;
-    //     this.handleMouseDownDolly(event);
-    //     this.state = this.STATE.DOLLY;
-    //     break;
-    //   case this.mouseButtons.MIDDLE:
-    //     if (this.data.enablePan === false) return;
-    //     this.handleMouseDownPan(event);
-    //     this.state = this.STATE.PAN;
-    //     break;
-    // }
-
     switch (event.button) {
-      case this.navigation.ROTATE:
+      case this.data.rotateKey:
           if (this.data.enablePan === false) return;
 
           this.panOffset.set(0, 0, 0);
@@ -227,7 +198,7 @@ AFRAME.registerComponent('orbit-camera', {
           this.handleMouseDownRotate(event);
           this.state = this.STATE.ROTATE;
         break;
-      case this.navigation.PAN:
+      case this.data.panKey:
         if (this.data.enablePan === false) return;
         this.handleMouseDownPan(event);
         this.state = this.STATE.PAN;
@@ -416,13 +387,18 @@ AFRAME.registerComponent('orbit-camera', {
   },
 
   rotateUp: function (angle) {
-    this.sphericalDelta.phi -= angle;
+      this.sphericalDelta.phi -= angle;
   },
 
   panLeft: function (distance, objectMatrix) {
     var v = new THREE.Vector3();
     v.setFromMatrixColumn(objectMatrix, 0);  // get X column of objectMatrix
-    v.multiplyScalar(-distance);
+    // v.multiplyScalar(-distance);
+    // We don't want to get closer to the x-z-plane
+    // so the delta of y (height) should be 0
+    v.x *= (-distance);
+    v.y = 0;
+    v.z *= (-distance);
     this.panOffset.add(v);
   },
 
@@ -430,6 +406,8 @@ AFRAME.registerComponent('orbit-camera', {
     var v = new THREE.Vector3();
     v.setFromMatrixColumn(objectMatrix, 2);  // get Z column of objectMatrix
     // v.multiplyScalar(distance);
+    // We don't want to get closer to the x-z-plane
+    // so the delta of y (height) should be 0
     v.x *= (-distance);
     v.y = 0;
     v.z *= (-distance);

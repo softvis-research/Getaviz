@@ -44,7 +44,7 @@ public class LoaderStep {
 
         if (pathToNodesCsv.isEmpty() || pathToTypeOfRelationsCsv.isEmpty()
                 || pathToInheritanceCsv.isEmpty() || pathToReferenceCsv.isEmpty()
-                || pathToMigrationFindingsCsv.isEmpty()) {
+                || (config.addMigrationFindings() && pathToMigrationFindingsCsv.isEmpty())) {
             System.out.println("Some input file wasn't found");
             System.exit(0);
         }

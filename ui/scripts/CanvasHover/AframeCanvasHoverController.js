@@ -101,7 +101,7 @@ var canvasHoverController = (function() {
 		var entity = model.getEntityById(eventObject.target.id);
 		if(entity === undefined){
 			entity = eventObject.target.id;
-			events.log.error.publish({ text: "Entity of partID " + eventObject.target.id + " not in model data."});
+			events.log.warning.publish({ text: "Entity of partID " + eventObject.target.id + " not in model data."});
 			return;
 		}
 		
@@ -117,7 +117,7 @@ var canvasHoverController = (function() {
 	function handleOnMouseLeave(eventObject) {
 		var entity = model.getEntityById(eventObject.target.id);
 		if(entity === undefined){
-			events.log.error.publish({ text: "Entity of partID " + eventObject.target.id + " not in model data."});
+			events.log.warning.publish({ text: "Entity of partID " + eventObject.target.id + " not in model data."});
 			return;
 		}
 
@@ -210,7 +210,12 @@ var canvasHoverController = (function() {
 		if (entity.type === "Namespace") {
             return "Package: " + entity.name;
         } else {
-			var packages = entity.allParents.filter(parent => parent.type == "Namespace");			
+			var packages = entity.allParents.filter(parent => parent.type == "Namespace");
+			
+			// Workaround
+			if (packages.length == 0) {
+				return entity.type + ": " + entity.name;
+			}
 
 			if(entity.type === "Method" && entity.signature != "") {
 				return "Package: " + packages[0].name //namespace 
