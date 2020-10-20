@@ -1438,4 +1438,5 @@ public class SettingsConfiguration {
 
 	public double getAbapScoMinHeight(){return config.getDouble("city.abap.sco.min.height", 1);}
 	public double getAbapScoMaxHeight(){return config.getDouble("city.abap.sco.max.height", 30);}
+	public double getAbapStandardCodeHeight(){return config.getDouble("city.abap.sco.standard.height", 4);}
 }

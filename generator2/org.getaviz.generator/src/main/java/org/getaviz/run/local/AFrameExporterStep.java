@@ -91,7 +91,7 @@ public class AFrameExporterStep {
             userInput.nextLine();
         }
         //AFrameExporter aFrameExporter = new AFrameExporter(aCityRepository, config, "acity_AFrame_UI");
-        AFrameExporter aFrameExporter = new AFrameExporter(aCityRepository, config, "metropolis_AFrame");
+        AFrameExporter aFrameExporter = new AFrameExporter(aCityRepository, config, "metropolis_AFrame_UI");
         aFrameOutput = config.getAframeOutput();
         if (aFrameOutput == AFrameOutput.FILE || aFrameOutput == AFrameOutput.BOTH ) {
             aFrameExporter.exportAFrame();
