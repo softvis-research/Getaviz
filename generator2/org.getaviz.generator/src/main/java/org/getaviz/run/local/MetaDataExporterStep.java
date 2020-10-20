@@ -7,6 +7,7 @@ import org.getaviz.generator.abap.common.steps.MetaDataExporter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
@@ -28,8 +29,8 @@ public class MetaDataExporterStep {
         nodeRepository.loadNodesByRelation(SAPRelationLabels.INHERIT, true);
         aCityRepository = new ACityRepository();
 
-        ACityCreator aCityCreator = new ACityCreator(aCityRepository, nodeRepository, config);
-        aCityCreator.createRepositoryFromNodeRepository();
+        MetropolisCreator aMetropolisCreator = new MetropolisCreator(aCityRepository, nodeRepository, config);
+        aMetropolisCreator.createRepositoryFromNodeRepository();
 
 
         MetaDataExporter metaDataExporter = new MetaDataExporter(aCityRepository, nodeRepository);

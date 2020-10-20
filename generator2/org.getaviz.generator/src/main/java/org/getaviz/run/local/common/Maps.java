@@ -19,7 +19,6 @@ public class Maps {
         metaDataProperties.put(SAPNodeProperties.element_id.name(), "id");
         metaDataProperties.put(SAPNodeProperties.object_name.name(), "name");
         metaDataProperties.put(SAPNodeProperties.type_name.name(), "type");
-        metaDataProperties.put(SAPNodeProperties.container_id.name(), "belongsTo");
         metaDataProperties.put(SAPNodeProperties.type.name(), "abap_type");
         metaDataProperties.put(SAPNodeProperties.creator.name(), "creator");
         metaDataProperties.put(SAPNodeProperties.created.name(), "created");

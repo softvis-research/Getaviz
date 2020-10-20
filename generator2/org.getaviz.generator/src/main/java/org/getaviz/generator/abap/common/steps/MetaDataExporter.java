@@ -125,14 +125,7 @@ public class MetaDataExporter {
             // Remove extra "" (written by Neo4j)
             String propValue = node.get(prop.toString()).toString().replaceAll("\"", "");
 
-            // Belongs to - must be hash a value of a parent container
-            if (prop == SAPNodeProperties.container_id) {
-                propValue = "";
-                if (element.getParentElement() != null) {
-                    //element.getParentElement() may be empty, so use relations to find parent
-                    propValue = getContainerHash(node);
-                }
-            }
+
 
             // Write strings with quotation marks and numbers without
             if (NumberUtils.isCreatable(propValue)) {
@@ -152,6 +145,13 @@ public class MetaDataExporter {
         if (node == null) {
             return "";
         }
+
+        if (element.getParentElement() != null) {
+            builder.append("\"belongsto\": \"" + getContainerHash(node) + "\",\n");
+        }
+
+
+
 
         // Add USES and INHERIT relations
         String nodeType = node.get("type").asString();
@@ -201,25 +201,19 @@ public class MetaDataExporter {
     private String getContainerHash(Node node) {
         Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, SAPRelationLabels.CONTAINS, false);
         if (parentNodes.isEmpty()) {
-            return "";
-        }
-
-        // Make sure we get direct parent
-        String container_id = node.get(SAPNodeProperties.container_id.name()).asString();
-        for (Node parentNode: parentNodes) {
-            String element_id = parentNode.get(SAPNodeProperties.element_id.name()).asString();
-            if (element_id.equals(container_id)) {
-                ACityElement parentElement = aCityRepository.getElementBySourceID(parentNode.id());
-                // Some SAP standard packages may not included
-                if (parentElement == null) {
-                    return "";
-                }
-                return parentElement.getHash();
+            parentNodes = nodeRepository.getRelatedNodes(node, SAPRelationLabels.USES, false);
+            if (parentNodes.isEmpty()) {
+                return "";
             }
         }
 
-        // If no hash was found, for example default SAP packages, no container_id will be written.
-        return "";
+        Node parentNode = parentNodes.iterator().next();
+
+        ACityElement parentElement = aCityRepository.getElementBySourceID(parentNode.id());
+        if (parentElement == null) {  // Some SAP standard packages may not included
+            return "";
+        }
+        return parentElement.getHash();
     }
 
     private String getRelations(Node node, SAPRelationLabels label, Boolean direction) {
