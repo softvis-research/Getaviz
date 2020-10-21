@@ -192,7 +192,7 @@ var canvasHoverController = (function () {
 					let mainFeatures = featureExplorerController.getFeaturesMain(entity.id);
 					let mainFeaturesString = "";
 					mainFeatures.forEach(function (feature) {
-						mainFeaturesString += featureExplorerController.getFormattedFeatureName(feature) + ", ";
+						mainFeaturesString += feature + ", ";
 					})
 					mainFeaturesString = mainFeaturesString.slice(0, -2);
 					$("#tooltipFeatureAffiliation").append(`<p>${elementarySet}-Trace of ${mainFeaturesString}</p>`);

@@ -191,8 +191,7 @@ var featureExplorerController = (function () {
                 id: feature,
                 open: false,
                 checked: true,
-                parentId: '',
-                name: getFormattedFeatureName(feature),
+                parentIdfeature,
                 feature: feature,
             }
             featureTreePart.push(featureNode);
@@ -451,10 +450,6 @@ var featureExplorerController = (function () {
         return result;
     }
 
-    function getFormattedFeatureName(feature) {
-        return feature.charAt(0).toUpperCase() + feature.slice(1).toLowerCase();
-    }
-
     /**
      * Callbacks
      */
@@ -554,6 +549,5 @@ var featureExplorerController = (function () {
 
         getElementarySetMain: getElementarySetMain,
         getFeaturesMain: getFeaturesMain,
-        getFormattedFeatureName: getFormattedFeatureName,
     };
 })();
