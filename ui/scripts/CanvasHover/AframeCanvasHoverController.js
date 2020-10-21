@@ -212,7 +212,6 @@ var canvasHoverController = (function() {
         } else {
 			var packages = entity.allParents.filter(parent => parent.type == "Namespace");
 			
-			// Workaround
 			if (packages.length == 0) {
 				return entity.type + ": " + entity.name;
 			}

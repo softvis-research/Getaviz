@@ -390,6 +390,39 @@ AFRAME.registerComponent('orbit-camera', {
       this.sphericalDelta.phi -= angle;
   },
 
+  /*
+  screen coordinate system:
+  ____________> x-axis
+  |
+  |
+  |
+  |
+  V
+  y-axis
+
+  camera coordinate system (on screen):
+  y-axis
+  ^
+  |
+  |
+  |
+  |___________> x-axis (z-axis comes from depth)
+
+  ==> x-axis from screen coos is like the x-axis from camera coos
+  ==> delta x on screen <=> delta x on camera
+  
+  ==> y-axis from screen coos is like the inverse y-axis from camera coos
+  ==> delta y on screen <==> -1 * delta y on camera 
+  
+  navigation <=> move the model <=> move the camera inverted(!)
+
+  panLeft on screen <=> move model to the left <=> move camera to the right
+  move model 10px on screen coos <=> move model 10px on camera coos <=> move camera -10px on camera coos
+   
+  panUp on screen <=> move model to the top <=> move camera to the bottom
+  move model 10px on screen coos <=> move model -10px on camera coos <=> move camera 10px on camera coos
+  */
+
   panLeft: function (distance, objectMatrix) {
     var v = new THREE.Vector3();
     v.setFromMatrixColumn(objectMatrix, 0);  // get X column of objectMatrix
@@ -404,13 +437,16 @@ AFRAME.registerComponent('orbit-camera', {
 
   panUp: function (distance, objectMatrix) {
     var v = new THREE.Vector3();
-    v.setFromMatrixColumn(objectMatrix, 2);  // get Z column of objectMatrix
+    v.setFromMatrixColumn(objectMatrix, 1);  // get Z column of objectMatrix
     // v.multiplyScalar(distance);
     // We don't want to get closer to the x-z-plane
     // so the delta of y (height) should be 0
-    v.x *= (-distance);
+    v.x *= distance;
     v.y = 0;
-    v.z *= (-distance);
+    v.z *= distance;
+
+    var pos = objectMatrix.getPosition();
+
     this.panOffset.add(v);
   },
 
