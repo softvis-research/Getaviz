@@ -53,6 +53,17 @@ public class MetaDataExporter {
     public void setMetaDataPropToACityElements() {
         Collection<ACityElement> aCityElements = aCityRepository.getAllElements();
         for (final ACityElement element : aCityElements) {
+
+            //skip reference buildings (only Metropolis)
+            if (element.getSubType() == ACityElement.ACitySubType.Mountain
+                || element.getSubType() == ACityElement.ACitySubType.Cloud
+                || element.getSubType() == ACityElement.ACitySubType.Sea)
+                continue;
+
+            //skip skip districts for source object types (only ABAPCity)
+            if (element.getSourceNode() == null) {
+                continue;
+            }
             String metaData = toMetaData(element);
             element.setMetaData("{" + metaData + "}");
         }
@@ -62,6 +73,18 @@ public class MetaDataExporter {
         StringBuilder metaDataFile = new StringBuilder();
         boolean hasElements = false;
         for (final ACityElement element: elements) {
+
+            //skip reference buildings (only Metropolis)
+            if (element.getSubType() == ACityElement.ACitySubType.Mountain
+                || element.getSubType() == ACityElement.ACitySubType.Cloud
+                || element.getSubType() == ACityElement.ACitySubType.Sea)
+                continue;
+
+            //skip districts fpr source object types (only ABAPCity)
+            if (element.getSourceNode() == null) {
+                continue;
+            }
+
             if (!hasElements) {
                 hasElements = true;
                 metaDataFile.append("[{");

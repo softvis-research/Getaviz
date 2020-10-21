@@ -32,7 +32,8 @@ public class ACityRepository {
 
 
     public Collection<ACityElement> getAllElements() {
-        return new ArrayList(elementsBySourceID.values());
+        // return new ArrayList(elementsBySourceID.values());
+        return new ArrayList(elementsByHash.values());
     }
 
     public Collection<ACityElement> getAllElementsByHash() {
