@@ -53,13 +53,7 @@ public class Mockup {
 		byte[] encoded;
 		try {
 			encoded = Files.readAllBytes(Paths.get(path));
-			String script = new String(encoded);
-			String[] scriptStatements = script.split(";\n");
-			for (String string : scriptStatements) {
-				if (string.length() > 3) {
-					connector.executeWrite(string);
-				}
-			}
+			connector.executeWrite(new String(encoded));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

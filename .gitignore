@@ -9,9 +9,3 @@ generator2/org.getaviz.generator/.idea/
 
 .project
 
-container_*/
-neo4j_*/
-jsconfig.json 
-jQAssistant/
-generator2/org.generator.generator/jqassistant/
-

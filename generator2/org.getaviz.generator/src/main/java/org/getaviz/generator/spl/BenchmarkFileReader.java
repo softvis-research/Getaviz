@@ -101,9 +101,4 @@ public class BenchmarkFileReader {
 		}
 		return trace;
 	}
-
-	public static void main(String[] args) {
-		SettingsConfiguration config = SettingsConfiguration.getInstance();
-		BenchmarkFileReader benchmarkFileReader = new BenchmarkFileReader(config);
-	}
 }

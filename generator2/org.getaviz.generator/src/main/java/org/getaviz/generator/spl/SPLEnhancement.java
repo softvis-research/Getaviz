@@ -125,10 +125,4 @@ public class SPLEnhancement implements Step {
 		}
 		return featureAffiliations;
 	}
-	
-	public static void main(String[] args) {
-		SPLEnhancement spl = new SPLEnhancement(SettingsConfiguration.getInstance());
-		spl.enhanceClasses();
-	}
-
 }
