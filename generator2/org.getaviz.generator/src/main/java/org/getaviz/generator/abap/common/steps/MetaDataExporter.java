@@ -170,7 +170,7 @@ public class MetaDataExporter {
         }
 
         if (element.getParentElement() != null) {
-            builder.append("\"belongsto\": \"" + getContainerHash(node) + "\",\n");
+            builder.append("\"belongsTo\": \"" + getContainerHash(node) + "\",\n");
         }
 
 
