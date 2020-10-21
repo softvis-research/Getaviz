@@ -62,7 +62,7 @@ public class ADistrictCircluarLayout {
 
         double yPosition = element.getYPosition() + config.adjustACityDistrictYPosition();
         double yPositionDelta = yPosition - element.getYPosition();
-        element.setYPosition(yPosition);
+        //element.setYPosition(yPosition);
 
         double zPosition = fitNode.getACityRectangle().getCenterY();//- config.getBuildingHorizontalGap() / 2;
         double zPositionDelta = zPosition - element.getZPosition();
@@ -70,7 +70,8 @@ public class ADistrictCircluarLayout {
 
         Collection<ACityElement> subElements = element.getSubElements();
         if(!subElements.isEmpty()){
-            adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta, zPositionDelta);
+            //adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta, zPositionDelta);
+            adjustPositionsOfSubSubElements(subElements, xPositionDelta, 0, zPositionDelta);
         }
     }
 
@@ -86,12 +87,13 @@ public class ADistrictCircluarLayout {
             double newZPosition = centerZ + parentZ + config.getACityBuildingHorizontalMargin();
 
             element.setXPosition(newXPosition);
-            element.setYPosition(newYPosition);
+            //element.setYPosition(newYPosition);
             element.setZPosition(newZPosition);
 
             Collection<ACityElement> subElements = element.getSubElements();
             if(!subElements.isEmpty()){
-                adjustPositionsOfSubSubElements(subElements, parentX, parentY, parentZ);
+                //adjustPositionsOfSubSubElements(subElements, parentX, parentY, parentZ);
+                adjustPositionsOfSubSubElements(subElements, parentX, 0, parentZ);
             }
         }
     }
