@@ -173,8 +173,9 @@ public class MetaDataExporter {
             builder.append("\"belongsTo\": \"" + getContainerHash(node) + "\",\n");
         }
 
-
-
+        if (element.getType() == ACityElement.ACityType.Building && node.get("type").asString().equals("REPS")) {
+            builder.append("\"parent\": \"" + element.getParentElement().getHash() + "\",\n");
+        }
 
         // Add USES and INHERIT relations
         String nodeType = node.get("type").asString();
