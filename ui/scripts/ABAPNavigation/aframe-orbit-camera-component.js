@@ -444,9 +444,6 @@ AFRAME.registerComponent('orbit-camera', {
     v.x *= distance;
     v.y = 0;
     v.z *= distance;
-
-    var pos = objectMatrix.getPosition();
-
     this.panOffset.add(v);
   },
 
