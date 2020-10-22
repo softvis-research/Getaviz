@@ -75,7 +75,7 @@ public class SPLEnhancement implements Step {
 					featureAffiliationJSON.put("feature", featureAffiliation.feature);
 					featureAffiliationJSON.put("traceType", featureAffiliation.traceType);
 					featureAffiliationJSON.put("isRefinement", featureAffiliation.isRefinement);
-					if (!featureAffiliation.isRefinement) {
+					if (!featureAffiliation.isRefinement && featureAffiliation.elementarySet != null) {
 						featureAffiliationJSON.put("elementarySet", featureAffiliation.elementarySet.toString());
 					}
 					featureAffiliationsJSON.add(featureAffiliationJSON);

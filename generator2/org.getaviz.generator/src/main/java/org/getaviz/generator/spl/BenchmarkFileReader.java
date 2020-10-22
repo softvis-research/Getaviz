@@ -31,6 +31,10 @@ public class BenchmarkFileReader {
 		File destinationDirectory = new File(path);
 		if (!destinationDirectory.exists()) {
 			destinationDirectory.mkdir();
+		} else {
+			for(File file: destinationDirectory.listFiles())
+				if (!file.isDirectory())
+					file.delete();
 		}
 		ZipInputStream zis;
 		try {
