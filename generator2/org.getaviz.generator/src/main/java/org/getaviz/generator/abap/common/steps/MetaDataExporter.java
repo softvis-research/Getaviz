@@ -164,17 +164,14 @@ public class MetaDataExporter {
     private String getRelationsMetaInfo(ACityElement element) {
         StringBuilder builder = new StringBuilder();
         Node node = element.getSourceNode();
+
         // For some accessory elements there is no source node
         if (node == null) {
             return "";
         }
 
         if (element.getParentElement() != null) {
-            builder.append("\"belongsTo\": \"" + getContainerHash(node) + "\",\n");
-        }
-
-        if (element.getType() == ACityElement.ACityType.Building && node.get("type").asString().equals("REPS")) {
-            builder.append("\"parent\": \"" + element.getParentElement().getHash() + "\",\n");
+            builder.append("\"belongsTo\": \"" + element.getParentElement().getHash() + "\",\n");
         }
 
         // Add USES and INHERIT relations
