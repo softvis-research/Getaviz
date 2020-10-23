@@ -129,6 +129,7 @@ if (isset($_GET["state"])) {
 <script type="text/javascript" src="scripts/InfoController/InfoController.js"></script>
 <script type="text/javascript" src="scripts/Email/EmailController.js"></script>
 <script type="text/javascript" src="scripts/ShareController/ShareController.js"></script>
+<script type="text/javascript" src="scripts/Legend/LegendController.js"></script>
 
 
 <script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>
