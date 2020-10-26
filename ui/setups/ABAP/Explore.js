@@ -12,63 +12,88 @@ var setup = {
         
         {   name: 	"legendController",
             entries: [{
-                name: "Package",
-                icon: "scripts/Legend/images/circle_gray.png",
-            }, {
-                name: "Class",
-                icon: "scripts/Legend/images/circle_yellow.png",
+                name: "Elements",
+                icon: "scripts/Legend/images/category.png",
                 entries: [{
-                    name: "Method",
-                    icon: "scripts/Legend/images/cuboid_gray.png",
+                    name: "Package",
+                    icon: "scripts/Legend/images/circle_gray.png",
                 },{
-                    name: "Attribute",
-                    icon: "scripts/Legend/images/cylinder_black.png",
-                }]
-            },{
-                name: "Interface",
-                icon: "scripts/Legend/images/circle_red.png",
-                entries: [{
-                    name: "Method",
-                    icon: "scripts/Legend/images/cuboid_gray.png",
+                    name: "Class",
+                    icon: "scripts/Legend/images/circle_yellow.png",
+                    entries: [{
+                        name: "Method",
+                        icon: "scripts/Legend/images/cuboid_gray.png",
+                        },{
+                        name: "Attribute",
+                        icon: "scripts/Legend/images/cylinder_black.png",
+                    }]
                 },{
-                    name: "Attribute",
-                    icon: "scripts/Legend/images/cylinder_black.png",
-                }]
-            },{
-                name: "Report",
-                icon: "scripts/Legend/images/circle_blue_light.png",
-                entries: [{
-                    name: "Report Building",
-                    icon: "scripts/Legend/images/cuboid_blue.png",
+                    name: "Interface",
+                    icon: "scripts/Legend/images/circle_red.png",
+                    entries: [{
+                        name: "Method",
+                        icon: "scripts/Legend/images/cuboid_gray.png",
                 },{
-                    name: "Formroutine",
-                    icon: "scripts/Legend/images/cuboid_gray.png",
+                        name: "Attribute",
+                        icon: "scripts/Legend/images/cylinder_black.png",
+                    }]
                 },{
-                    name: "Attribute",
-                    icon: "scripts/Legend/images/cylinder_black.png",
-                }]
-            },{
-                name: "Function Group",
-                icon: "scripts/Legend/images/circle_violet.png",
-                entries: [{
-                    name: "Function Module",
-                    icon: "scripts/Legend/images/cuboid_gray.png",
+                    name: "Report",
+                    icon: "scripts/Legend/images/circle_blue_light.png",
+                    entries: [{
+                        name: "Report Building",
+                        icon: "scripts/Legend/images/cuboid_blue.png",
                 },{
-                    name: "Formroutine",
-                    icon: "scripts/Legend/images/cuboid_gray.png",
+                        name: "Formroutine",
+                        icon: "scripts/Legend/images/cuboid_gray.png",
                 },{
-                    name: "Attribute",
-                    icon: "scripts/Legend/images/cylinder_black.png",
-                }]
-            },{
-                name: "Mountain",
-                icon: "scripts/Legend/images/mountain.png",
-            },{
-                name: "Cloud",
-                icon: "scripts/Legend/images/cloud_black.png",
-            },{
-                name: "Lake",
-                icon: "scripts/Legend/images/lake.png",
+                        name: "Attribute",
+                        icon: "scripts/Legend/images/cylinder_black.png",
+                    }]
+                },{
+                    name: "Function Group",
+                    icon: "scripts/Legend/images/circle_violet.png",
+                    entries: [{
+                        name: "Function Module",
+                        icon: "scripts/Legend/images/cuboid_gray.png",
+                },{
+                        name: "Formroutine",
+                        icon: "scripts/Legend/images/cuboid_gray.png",
+                },{
+                        name: "Attribute",
+                        icon: "scripts/Legend/images/cylinder_black.png",
+                    }]
+
+                },{
+                    name: "LocalClass",
+                    icon: "scripts/Legend/images/circle_yellow_light.png",
+                },{
+                    name: "LocalInterface",
+                    icon: "scripts/Legend/images/circle_red_light.png",
+                },{
+                    name: "Mountain",
+                    icon: "scripts/Legend/images/mountain.png",
+                },{
+                    name: "Cloud",
+                    icon: "scripts/Legend/images/cloud_black.png",
+                },{
+                    name: "Lake",
+                    icon: "scripts/Legend/images/lake.png",
+                    }]
+                },{
+                    name: "Navigation",
+                    icon: "scripts/Legend/images/mouse.png",
+                    entries: [{
+                        name: "Move",
+                        icon: "scripts/Legend/images/left.png",
+                    },{
+                        name: "Zoom",
+                        icon: "scripts/Legend/images/scrolling.png",
+                    },{
+                        name: "Rotate",
+                        icon: "scripts/Legend/images/right.png",
+                    }]
+                
             }],
 		},
     ],
