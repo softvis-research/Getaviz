@@ -114,6 +114,7 @@ if (isset($_GET["state"])) {
 <script type="text/javascript" src="scripts/CanvasGrid/CanvasGridController.js"></script>
 
 
+<script type="text/javascript" src="scripts/Relation/RelationController.js"></script>
 <script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
 <script type="text/javascript" src="scripts/RelationTransparency/RelationTransparencyController.js"></script>
 <script type="text/javascript" src="scripts/RelationHighlight/RelationHighlightController.js"></script>
