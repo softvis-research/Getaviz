@@ -203,6 +203,9 @@ var model = (function () {
 					});
 
 					entity.qualifiedName = entity.qualifiedName.trim();
+					if (entity.qualifiedName.slice(-1) == "." ) {
+						entity.qualifiedName = element.qualifiedName;
+					}
 
 					if (element.calls) {
 						entity.calls = element.calls.split(",");
@@ -634,6 +637,20 @@ var model = (function () {
 		return parents;
 	}
 
+	function getAllChildrenOfEntity(entity) {
+		let children = [];
+
+		if (entity.children.length != 0) {
+			entity.children.forEach(function(child) {
+				children.push(child);
+				const grandChildren = getAllChildrenOfEntity(child);
+				children = children.concat(grandChildren);
+			})
+		}
+
+		return children;
+	}
+
 	function retrieveAllUsedMacros(conditionId, modelElementId) {
 		var conditionEntity = getEntityById(conditionId);
 
@@ -847,6 +864,7 @@ var model = (function () {
 		getEntitiesByIssue: getEntitiesByIssue,
 		getEntitiesByType: getEntitiesByType,
 		getAllParentsOfEntity: getAllParentsOfEntity,
+		getAllChildrenOfEntity: getAllChildrenOfEntity,
 		getAllVersions: getAllVersions,
 		getAllIssues: getAllIssues,
 		getIssuesById: getIssuesById,
