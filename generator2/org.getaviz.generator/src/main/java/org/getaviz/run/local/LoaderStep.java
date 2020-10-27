@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
 
-public class Loader {
+public class LoaderStep {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     public static void main(String[] args) {
@@ -99,12 +99,9 @@ public class Loader {
             System.out.print("Creating 'USES' relationships. Press any key to continue...");
             userInput.nextLine();
         }
-        pathToReferenceCsv = pathToReferenceCsv.replace("\\", "/");
-        connector.executeWrite(
-                "LOAD CSV WITH HEADERS FROM \"file:///" + pathToReferenceCsv + "\"\n" +
-                        "AS row FIELDTERMINATOR ';'\n" +
-                        "MATCH (a:Elements {element_id: row.source_id}), (b:Elements {element_id: row.target_id})\n" +
-                        "CREATE (a)-[r:"+ SAPRelationLabels.USES +"]->(b)"
+        connector.executeWrite("MATCH (a:Elements), (b:Elements) " +
+                "WHERE a.element_id = b.uses_id " +
+                "CREATE (a)-[r:" + SAPRelationLabels.USES + "]->(b)"
         );
 
 

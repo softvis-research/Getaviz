@@ -4,15 +4,21 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.SettingsConfiguration.MetaDataOutput;
 import org.getaviz.generator.SettingsConfiguration.AFrameOutput;
 import org.getaviz.generator.abap.city.steps.*;
+import org.getaviz.generator.abap.common.steps.AFrameExporter;
+import org.getaviz.generator.abap.common.steps.MetaDataExporter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisDesigner;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisLayouter;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
-public class AFrameExporter {
+public class AFrameExporterStep {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     private static SourceNodeRepository nodeRepository;
@@ -23,14 +29,6 @@ public class AFrameExporter {
     public static void main(String[] args) {
         SettingsConfiguration.getInstance("src/test/resources/ABAPCityTest.properties");
         boolean isSilentMode = true;
-        nodeRepository = new SourceNodeRepository();
-        nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
-        nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
-        nodeRepository.loadNodesByRelation(SAPRelationLabels.TYPEOF, true);
-        nodeRepository.loadNodesByRelation(SAPRelationLabels.USES, true);
-        nodeRepository.loadNodesByRelation(SAPRelationLabels.INHERIT, true);
-
-        aCityRepository = new ACityRepository();
 
         Scanner userInput = new Scanner(System.in);
         System.out.print("Silent mode? (y/n): "); // Silent mode to run with default values
@@ -39,25 +37,35 @@ public class AFrameExporter {
             isSilentMode = false;
         }
 
+        nodeRepository = new SourceNodeRepository();
+        nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.USES, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.TYPEOF, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
+        //nodeRepository.loadNodesByRelation(SAPRelationLabels.INHERIT, true);
+
+        aCityRepository = new ACityRepository();
+
         if (!isSilentMode) {
             System.out.print("Creator step to be processed. Press any key to continue...");
             userInput.nextLine();
         }
-        ACityCreator aCityCreator = new ACityCreator(aCityRepository, nodeRepository, config);
-        aCityCreator.createRepositoryFromNodeRepository();
+        MetropolisCreator creator = new MetropolisCreator(aCityRepository, nodeRepository, config);
+        creator.createRepositoryFromNodeRepository();
 
         if (!isSilentMode) {
             System.out.print("Layouter step to be processed. Press any key to continue...");
             userInput.nextLine();
         }
-        ACityLayouter aCityLayouter = new ACityLayouter(aCityRepository, nodeRepository, config);
-        aCityLayouter.layoutRepository();
+        MetropolisLayouter layouter = new MetropolisLayouter(aCityRepository, nodeRepository, config);
+        layouter.layoutRepository();
 
         if (!isSilentMode) {
             System.out.print("\nDesigner step to be processed. Press any key to continue...");
             userInput.nextLine();
         }
-        ACityDesigner designer = new ACityDesigner(aCityRepository, nodeRepository, config);
+        MetropolisDesigner designer = new MetropolisDesigner(aCityRepository, nodeRepository, config);
         designer.designRepository();
 
         // Create metaData.json
@@ -65,15 +73,15 @@ public class AFrameExporter {
             System.out.println("Writing MetaData. Press any key to continue...");
             userInput.nextLine();
         }
-        ACityMetaDataExporter aCityMetaDataExporter = new ACityMetaDataExporter(aCityRepository, nodeRepository);
+        MetaDataExporter metaDataExporter = new MetaDataExporter(aCityRepository, nodeRepository);
         metaDataOutput = config.getMetaDataOutput();
         // Depending on setting, create file or write metaData as Node's property, or both actions
         if (metaDataOutput == MetaDataOutput.FILE || metaDataOutput == MetaDataOutput.BOTH ) {
-            aCityMetaDataExporter.exportMetaDataFile();
+            metaDataExporter.exportMetaDataFile();
         }
 
         if (metaDataOutput == MetaDataOutput.NODEPROP || metaDataOutput == MetaDataOutput.BOTH ) {
-            aCityMetaDataExporter.setMetaDataPropToACityElements();
+            metaDataExporter.setMetaDataPropToACityElements();
         }
 
         // Create A-Frame
@@ -82,15 +90,17 @@ public class AFrameExporter {
             System.out.println("Writing A-Frame. Press any key to continue...");
             userInput.nextLine();
         }
-        ACityAFrameExporter aCityAFrameExporter = new ACityAFrameExporter(aCityRepository, config, "acity_AFrame_UI");
+        //AFrameExporter aFrameExporter = new AFrameExporter(aCityRepository, config, "acity_AFrame_UI");
+        AFrameExporter aFrameExporter = new AFrameExporter(aCityRepository, config, "metropolis_AFrame");
         aFrameOutput = config.getAframeOutput();
         if (aFrameOutput == AFrameOutput.FILE || aFrameOutput == AFrameOutput.BOTH ) {
-            aCityAFrameExporter.exportAFrame();
+            aFrameExporter.exportAFrame();
         }
 
         if (aFrameOutput == AFrameOutput.NODEPROP || aFrameOutput == AFrameOutput.BOTH ) {
-            aCityAFrameExporter.setAframePropToACityElements();
+            aFrameExporter.setAframePropToACityElements();
         }
+
 
         connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
         aCityRepository.writeRepositoryToNeo4j();

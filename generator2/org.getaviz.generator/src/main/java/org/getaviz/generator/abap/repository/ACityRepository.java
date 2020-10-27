@@ -23,9 +23,9 @@ public class ACityRepository {
     private Map<ACityElement.ACityType, Map<String, ACityElement> > elementsByType;
 
     public ACityRepository(){
-        elementsBySourceID = new HashMap<>();
-        elementsByHash = new HashMap<>();
-        elementsByType = new HashMap<>();
+        elementsBySourceID = new TreeMap<>();
+        elementsByHash = new TreeMap<>();
+        elementsByType = new TreeMap<>();
 
         log.info("created");
     }
@@ -54,6 +54,29 @@ public class ACityRepository {
 
         Map<String, ACityElement> elementsByTypeMap = elementsByType.get(type);
         return new ArrayList(elementsByTypeMap.values());
+    }
+
+    public Collection<ACityElement> getElementsByRefBuildingType(ACityElement.ACitySubType refBuildingType){
+
+        Collection<ACityElement> buildings  = getElementsByType(ACityElement.ACityType.Building);
+        List<ACityElement> referenceBuildingElements = new ArrayList<>();
+
+        for ( ACityElement building : buildings) {
+            ACityElement.ACitySubType buildingSubType = building.getSubType();
+
+            if (buildingSubType == null) {
+                continue;
+            }
+
+            if(refBuildingType.equals(buildingSubType)) {
+                if (refBuildingType.equals(ACityElement.ACitySubType.Sea)) {
+                    referenceBuildingElements.add(building);
+                } else if (refBuildingType.equals(ACityElement.ACitySubType.Mountain)) {
+                    referenceBuildingElements.add(building);
+                }
+            }
+        }
+        return referenceBuildingElements;
     }
 
     public Collection<ACityElement> getElementsByTypeAndSourceProperty(ACityElement.ACityType type, SAPNodeProperties sourceProperty, String sourcePropertyValue){
@@ -95,6 +118,8 @@ public class ACityRepository {
     //Schreiben der ACityElemente in die Neo4j-Datenbank
     public void writeRepositoryToNeo4j() {
 
+        log.info("*****************************************************************************************************************************************");
+
         AtomicInteger cityBuildingCounter = new AtomicInteger(0);
         AtomicInteger cityFloorCounter = new AtomicInteger(0);
         AtomicInteger cityChimneyCounter = new AtomicInteger(0);
@@ -124,10 +149,10 @@ public class ACityRepository {
             }
         });
 
-        log.info(cityFloorCounter + " new Floors added");
-        log.info(cityBuildingCounter + " new Buildings added");
-        log.info(cityChimneyCounter + " new Chimneys added");
-        log.info(cityDistrictCounter + " new Districts added");
+        log.info(cityFloorCounter + " new Floors added to Neo4j");
+        log.info(cityBuildingCounter + " new Buildings added to Neo4j");
+        log.info(cityChimneyCounter + " new Chimneys added to Neo4j");
+        log.info(cityDistrictCounter + " new Districts added to Neo4j");
 
         AtomicInteger sourceRelationCounter = new AtomicInteger(0);
         AtomicInteger childRelationCounter = new AtomicInteger(0);
@@ -215,7 +240,7 @@ public class ACityRepository {
         //add to type map
         ACityElement.ACityType elementType = element.getType();
         if (!elementsByType.containsKey(elementType)){
-            elementsByType.put(elementType, new HashMap<>());
+            elementsByType.put(elementType, new TreeMap<>());
         }
         Map<String, ACityElement> elementsByTypeMap = elementsByType.get(elementType);
         elementsByTypeMap.put(element.getHash(), element);
@@ -238,7 +263,7 @@ public class ACityRepository {
         //delete from type map
         ACityElement.ACityType elementType = element.getType();
         if (!elementsByType.containsKey(elementType)){
-            elementsByType.remove(elementType, new HashMap<>());
+            elementsByType.remove(elementType, new TreeMap<>());
         }
         Map<String, ACityElement> elementsByTypeMap = elementsByType.get(elementType);
         elementsByTypeMap.remove(element.getHash(), element);
@@ -247,6 +272,8 @@ public class ACityRepository {
         if (element.getSourceNode() != null){
             elementsBySourceID.remove(element.getSourceNodeID(), element);
         }
+
+        //TODO Child and Parent delete
     }
 
     public void deleteElements(Collection<ACityElement> elements) {

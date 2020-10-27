@@ -6,8 +6,9 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.layouts.ACityBuildingLayout;
-import org.getaviz.generator.abap.layouts.ACityDistrictLayout;
+import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
+import org.getaviz.generator.abap.layouts.ABuildingLayout;
+import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
@@ -95,7 +96,6 @@ public class MetropolisLayouter {
             return null;
         }
 
-        //TODO gebraucht vom typeofnode nicht vom building
         for (Node typeOfNode: typeOfNodes) {
             Value propertyValue = typeOfNode.get(SAPNodeProperties.type_name.name());
             String typeOfNodeTypeProperty = propertyValue.asString();
@@ -140,7 +140,7 @@ public class MetropolisLayouter {
 
     private String getRowtype(ACityElement aCityElement){
 
-        if (aCityElement.getSourceNodeProperty(SAPNodeProperties.type_name) == SAPNodeTypes.TableType.name()){
+        if (aCityElement.getSourceNodeProperty(SAPNodeProperties.type_name).equals(SAPNodeTypes.TableType.name())){
             if (aCityElement.getSourceNodeProperty(SAPNodeProperties.rowtype) == null) {
                 return "TableType doesn't have a rowType";
             }
@@ -211,7 +211,7 @@ public class MetropolisLayouter {
         Collection<ACityElement> floors = building.getSubElementsOfType(ACityElement.ACityType.Floor);
         Collection<ACityElement> chimneys = building.getSubElementsOfType(ACityElement.ACityType.Chimney);
 
-        ACityBuildingLayout buildingLayout = new ACityBuildingLayout(building, floors, chimneys, config);
+        ABuildingLayout buildingLayout = new ABuildingLayout(building, floors, chimneys, config);
         buildingLayout.calculate();
 
         if (floors.size() != 0) {
@@ -228,10 +228,11 @@ public class MetropolisLayouter {
 
             Collection<ACityElement> subElements = district.getSubElements();
 
-            ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(district, subElements, config);
-            aCityDistrictLayout.calculate();
+            ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
+            aBAPDistrictLightMapLayout.calculate();
 
             log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
+
 
         }
     }
@@ -245,8 +246,16 @@ public class MetropolisLayouter {
 
                 ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
 
-                ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtsWithoutParents, config);
-                aCityDistrictLayout.calculate();
+                if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.DEFAULT) {
+
+                    ADistrictLightMapLayout aDistrictLightMapLayout = new ADistrictLightMapLayout(virtualRootDistrict, districtsWithoutParents, config);
+                    aDistrictLightMapLayout.calculate();
+
+                } else if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.CIRCULAR) {
+
+                    ADistrictCircluarLayout aDistrictLayout = new ADistrictCircluarLayout(virtualRootDistrict, districtsWithoutParents, config);
+                    aDistrictLayout.calculate();
+                }
 
             }
         }

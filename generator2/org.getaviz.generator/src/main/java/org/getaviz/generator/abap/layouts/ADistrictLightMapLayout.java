@@ -3,14 +3,16 @@ package org.getaviz.generator.abap.layouts;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.repository.ACityElement;
+import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.layouts.kdtree.ACityKDTree;
 import org.getaviz.generator.abap.layouts.kdtree.ACityKDTreeNode;
 import org.getaviz.generator.abap.layouts.kdtree.ACityRectangle;
+import org.getaviz.generator.abap.repository.ACityElement;
 
+import java.math.BigDecimal;
 import java.util.*;
 
-public class ACityDistrictLayout {
+public class ADistrictLightMapLayout {
     //Old coding -> Refactor, generalize and maybe reimplement
 
     private Log log = LogFactory.getLog(this.getClass());
@@ -21,7 +23,7 @@ public class ACityDistrictLayout {
 
     private Map<ACityRectangle, ACityElement> rectangleElementsMap;
 
-    public ACityDistrictLayout(ACityElement district, Collection<ACityElement> subElements, SettingsConfiguration config) {
+    public ADistrictLightMapLayout(ACityElement district, Collection<ACityElement> subElements, SettingsConfiguration config) {
         this.config = config;
 
         this.district = district;
@@ -33,10 +35,8 @@ public class ACityDistrictLayout {
     public void calculate(){
 
         ACityRectangle coveringACityRectangle = arrangeSubElements(subElements);
-
         setSizeOfDistrict(coveringACityRectangle);
         setPositionOfDistrict(coveringACityRectangle);
-
     }
 
 
@@ -53,7 +53,6 @@ public class ACityDistrictLayout {
         district.setZPosition(coveringACityRectangle.getCenterY());
     }
 
-
     private void setNewPositionFromNode(ACityRectangle rectangle, ACityKDTreeNode fitNode) {
         ACityElement element = rectangleElementsMap.get(rectangle);
 
@@ -63,7 +62,12 @@ public class ACityDistrictLayout {
 
         double yPosition = element.getYPosition() + config.adjustACityDistrictYPosition();
         double yPositionDelta = yPosition - element.getYPosition();
-        element.setYPosition(yPosition);
+
+        //Umrechnung, um Gleitkommazahlen zu vermeiden
+        BigDecimal yPosition_BigDecimal = BigDecimal.valueOf(yPosition);
+        BigDecimal elementY = BigDecimal.valueOf(element.getYPosition());
+        BigDecimal yPositionDelta_BigDecimal = yPosition_BigDecimal.subtract(elementY);
+        element.setYPosition(yPosition_BigDecimal.doubleValue());
 
         double zPosition = fitNode.getACityRectangle().getCenterY();//- config.getBuildingHorizontalGap() / 2;
         double zPositionDelta = zPosition - element.getZPosition();
@@ -71,11 +75,9 @@ public class ACityDistrictLayout {
 
         Collection<ACityElement> subElements = element.getSubElements();
         if(!subElements.isEmpty()){
-            adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta, zPositionDelta);
+            adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta_BigDecimal.doubleValue(), zPositionDelta);
         }
     }
-
-
 
     private void adjustPositionsOfSubSubElements(Collection<ACityElement> elements, double parentX, double parentY, double parentZ) {
         for (ACityElement element : elements) {
@@ -108,7 +110,6 @@ public class ACityDistrictLayout {
     /*
         Copied from CityLayout
      */
-
 
     private ACityRectangle arrangeSubElements(Collection<ACityElement> subElements){
 
@@ -194,9 +195,6 @@ public class ACityDistrictLayout {
         }
         return new ACityRectangle(0, 0, sum_width, sum_length, 1);
     }
-
-
-
 
     private void sortEmptyLeaf(ACityKDTreeNode pnode, ACityRectangle el, ACityRectangle covrec,
                                Map<ACityKDTreeNode, Double> preservers, Map<ACityKDTreeNode, Double> expanders) {
@@ -286,16 +284,10 @@ public class ACityDistrictLayout {
         }
     }
 
-
-
-
     private void updateCovrec(ACityKDTreeNode fitNode, ACityRectangle covrec) {
         double newX = (Math.max(fitNode.getACityRectangle().getBottomRightX(), covrec.getBottomRightX()));
         double newY = (Math.max(fitNode.getACityRectangle().getBottomRightY(), covrec.getBottomRightY()));
         covrec.changeRectangle(0, 0, newX, newY);
     }
-
-
-
 
 }

@@ -6,8 +6,9 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.layouts.ACityBuildingLayout;
-import org.getaviz.generator.abap.layouts.ACityDistrictLayout;
+import org.getaviz.generator.abap.layouts.ABuildingLayout;
+import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
+import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
@@ -15,7 +16,6 @@ import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ACityLayouter {
 
@@ -80,7 +80,6 @@ public class ACityLayouter {
             return null;
         }
 
-        //TODO gebraucht vom typeofnode nicht vom building
         for (Node typeOfNode: typeOfNodes) {
             Value propertyValue = typeOfNode.get(SAPNodeProperties.type_name.name());
             String typeOfNodeTypeProperty = propertyValue.asString();
@@ -175,10 +174,9 @@ public class ACityLayouter {
 
         Collection<ACityElement> chimneys = building.getSubElementsOfType(ACityElement.ACityType.Chimney);
 
-        ACityBuildingLayout buildingLayout = new ACityBuildingLayout(building, floors, chimneys, config);
+        ABuildingLayout buildingLayout = new ABuildingLayout(building, floors, chimneys, config);
         buildingLayout.calculate();
 
-        //TODO too much?
         if (floors.size() != 0) {
             log.info(building.getSourceNodeType() + " " + "\"" + building.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + " with " + floors.size() + " floors");
         }
@@ -190,7 +188,7 @@ public class ACityLayouter {
     private void layoutDistrict(ACityElement district) {
         Collection<ACityElement> subElements = district.getSubElements();
 
-        ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(district, subElements, config);
+        ADistrictLightMapLayout aCityDistrictLayout = new ADistrictLightMapLayout(district, subElements, config);
         aCityDistrictLayout.calculate();
 
         if (district.getSubType() != null) {
@@ -211,7 +209,7 @@ public class ACityLayouter {
 
                 ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
 
-                ACityDistrictLayout aCityDistrictLayout = new ACityDistrictLayout(virtualRootDistrict, districtWithoutParents, config);
+                ADistrictLightMapLayout aCityDistrictLayout = new ADistrictLightMapLayout(virtualRootDistrict, districtWithoutParents, config);
                 aCityDistrictLayout.calculate();
             }
         }

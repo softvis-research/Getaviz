@@ -1,19 +1,17 @@
 package org.getaviz.run.local;
 
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.steps.ACityCreator;
-import org.getaviz.generator.abap.city.steps.ACityDesigner;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisDesigner;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisLayouter;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
-import java.nio.file.Path;
-import java.util.List;
-import java.util.Scanner;
 
-public class Creator {
+public class DesignerStep {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     private static SourceNodeRepository nodeRepository;
@@ -30,8 +28,14 @@ public class Creator {
 
         aCityRepository = new ACityRepository();
 
-        ACityCreator aCityCreator = new ACityCreator(aCityRepository, nodeRepository, config);
-        aCityCreator.createRepositoryFromNodeRepository();
+        MetropolisCreator creator = new MetropolisCreator(aCityRepository, nodeRepository, config);
+        creator.createRepositoryFromNodeRepository();
+
+        MetropolisLayouter layouter = new MetropolisLayouter(aCityRepository, nodeRepository, config);
+        layouter.layoutRepository();
+
+        MetropolisDesigner designer = new MetropolisDesigner(aCityRepository, nodeRepository, config);
+        designer.designRepository();
 
         // Delete old ACityRepository Nodes
         connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
@@ -39,7 +43,9 @@ public class Creator {
         // Update Neo4j with new nodes
         aCityRepository.writeRepositoryToNeo4j();
 
+       // System.out.println(Thread.currentThread());
+
         connector.close();
-        System.out.println("\nCreator step was completed\"");
+        System.out.println("\nDesigner step was completed\"");
     }
 }

@@ -201,9 +201,9 @@ var actionController = (function () {
                 this.el.addEventListener("wheel", function (eventObject) {
                     eventObject.component = hoveredEntity;
 
-                    scrollAction(actions.mouse.doubleClick, eventObject);
+                    scrollAction(actions.mouse.scroll, eventObject);
 
-                    if (actions.mouse.doubleClick.bubbles) {
+                    if (actions.mouse.scroll.bubbles) {
                         return true;
                     }
 

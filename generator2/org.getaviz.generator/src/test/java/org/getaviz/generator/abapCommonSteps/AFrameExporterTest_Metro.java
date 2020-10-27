@@ -34,13 +34,15 @@ public class AFrameExporterTest_Metro {
 
         mockUp.runCypherScript("SAPExportCreateContainsRelation.cypher");
         mockUp.runCypherScript("SAPExportCreateTypeOfRelation.cypher");
+        mockUp.runCypherScript("SAPExportCreateUsesRelation.cypher");
 
         mockUp.loadProperties("ABAPCityTest.properties");
 
         nodeRepository = new SourceNodeRepository();
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
-        nodeRepository.loadNodesByRelation(SAPRelationLabels.TYPEOF, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.USES, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);
 
         aCityRepository = new ACityRepository();
 

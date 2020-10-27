@@ -5,9 +5,9 @@ import org.getaviz.generator.abap.common.steps.AFrameExporter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
-import org.getaviz.generator.abap.metropolis.steps.MetropolisDesigner;
-import org.getaviz.generator.abap.metropolis.steps.MetropolisLayouter;
+import org.getaviz.generator.abap.city.steps.ACityCreator;
+import org.getaviz.generator.abap.city.steps.ACityDesigner;
+import org.getaviz.generator.abap.city.steps.ACityLayouter;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.mockups.ABAPmock;
@@ -44,14 +44,14 @@ public class AFrameExporterTest_ACity {
 
         aCityRepository = new ACityRepository();
 
-        MetropolisCreator metropolisCreator = new MetropolisCreator(aCityRepository, nodeRepository, config);
-        metropolisCreator.createRepositoryFromNodeRepository();
+        ACityCreator aCityCreator = new ACityCreator(aCityRepository, nodeRepository, config);
+        aCityCreator.createRepositoryFromNodeRepository();
 
-        MetropolisLayouter metropolisLayouter = new MetropolisLayouter(aCityRepository, nodeRepository, config);
-        metropolisLayouter.layoutRepository();
+        ACityLayouter aCityLayouter = new ACityLayouter(aCityRepository, nodeRepository, config);
+        aCityLayouter.layoutRepository();
 
-        MetropolisDesigner metropolisDesigner = new MetropolisDesigner(aCityRepository, nodeRepository, config);
-        metropolisDesigner.designRepository();
+        ACityDesigner aCityDesigner = new ACityDesigner(aCityRepository, nodeRepository, config);
+        aCityDesigner.designRepository();
 
         AFrameExporter aFrameExporter = new AFrameExporter(aCityRepository, config, "acity_AFrame");
         exportString = aFrameExporter.createAFrameExportString();

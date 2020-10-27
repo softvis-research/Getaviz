@@ -7,11 +7,13 @@ import org.getaviz.generator.abap.city.steps.ACityLayouter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisLayouter;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 
-public class Designer {
+public class LayouterStep {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     private static SourceNodeRepository nodeRepository;
@@ -28,14 +30,11 @@ public class Designer {
 
         aCityRepository = new ACityRepository();
 
-        ACityCreator aCityCreator = new ACityCreator(aCityRepository, nodeRepository, config);
-        aCityCreator.createRepositoryFromNodeRepository();
+        MetropolisCreator creator = new MetropolisCreator(aCityRepository, nodeRepository, config);
+        creator.createRepositoryFromNodeRepository();
 
-        ACityLayouter aCityLayouter = new ACityLayouter(aCityRepository, nodeRepository, config);
-        aCityLayouter.layoutRepository();
-
-        ACityDesigner designer = new ACityDesigner(aCityRepository, nodeRepository, config);
-        designer.designRepository();
+        MetropolisLayouter layouter = new MetropolisLayouter(aCityRepository, nodeRepository, config);
+        layouter.layoutRepository();
 
         // Delete old ACityRepository Nodes
         connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
@@ -44,6 +43,6 @@ public class Designer {
         aCityRepository.writeRepositoryToNeo4j();
 
         connector.close();
-        System.out.println("\nDesigner step was completed\"");
+        System.out.println("\nLayouter step was completed\"");
     }
 }

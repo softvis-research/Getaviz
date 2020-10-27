@@ -3,6 +3,7 @@ package org.getaviz.generator.abapCommonSteps;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.city.steps.*;
 import org.getaviz.generator.abap.common.steps.AFrameExporter;
+import org.getaviz.generator.abap.common.steps.MetaDataExporter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
@@ -62,9 +63,9 @@ public class AFrameExporterStepTest_common {
         aCityRepository.writeRepositoryToNeo4j();
 
         // Create metaData.json
-        ACityMetaDataExporter aCityMetaDataExporter = new ACityMetaDataExporter(aCityRepository, nodeRepository);
-        aCityMetaDataExporter.exportMetaDataFile();
-        aCityMetaDataExporter.setMetaDataPropToACityElements();
+        MetaDataExporter metaDataExporter = new MetaDataExporter(aCityRepository, nodeRepository);
+        metaDataExporter.exportMetaDataFile();
+        metaDataExporter.setMetaDataPropToACityElements();
 
         // Create A-Frame
         AFrameExporter aFrameExporter = new AFrameExporter(aCityRepository, config, "acity_AFrame_UI");
