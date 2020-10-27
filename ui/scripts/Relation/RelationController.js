@@ -1,14 +1,17 @@
 var relationController = function () {
 
 	//var sourceEntities = new Array();
-	var sourceEntity = null;
+	var sourceEntities = new Array();
 
-	var relatedEntities = new Array();
+	var relatedEntitiesMap = new Map();
+	var relatedEntitiesSet = new Set();
 
 	var connectors = new Array();
 	var relations = new Array();
 
 	var activated = false;
+
+	var faded = false;
 
 	const majorSCElements = ["Class", "Interface", "FunctionGroup", "Report"];
 	const minorSCElements = ["Method", "FunctionModule", "Formroutine"];
@@ -24,7 +27,17 @@ var relationController = function () {
 		targetEndAtBorder: false,
 		createEndpoints: false,
 		connectorColor: { r: 1, g: 0, b: 0 },
-		endpointColor: { r: 0, g: 0, b: 0 }
+		endpointColor: { r: 0, g: 0, b: 0 },
+
+		highlightColor: "black",
+		unfadeOnHighlight: false,
+
+		fullFadeValue: 0.55,
+		halfFadeValue: 0.55,
+		noFadeValue: 0,
+		startFaded: false,
+
+		showRecursiveRelations: true
 	}
 
 
@@ -37,8 +50,15 @@ var relationController = function () {
 
 	function activate() {
 		activated = true;
-		if (relatedEntities.length != 0) {
+		if (relatedEntitiesMap.size != 0) {
 			createRelatedConnections();
+			highlightRelatedEntities();
+
+			// no transparency effects yet
+			// if (controllerConfig.startFaded) {
+			// 	setTimeout(fadeAllEntities, 1000);
+			// }
+			// fadeNotRelatedEntities();
 		}
 	}
 
@@ -48,7 +68,18 @@ var relationController = function () {
 	}
 
 	function reset() {
+		sourceEntities = new Array();
+		relatedEntitiesMap = new Map();
+		relatedEntitiesSet = new Set();
+
 		removeAllConnectors();
+		unhighlightRelatedEntities();
+
+		// no transparency effects yet
+		// if (faded) {
+		// 	setTimeout(unfadeAllEntities, 1000);
+		// }
+		// faded = false;
 	}
 
 	function removeAllConnectors() {
@@ -87,115 +118,118 @@ var relationController = function () {
 
 		events.log.info.publish({ text: "connector - onRelationsChanged" });
 
-		removeAllConnectors();
+		reset();
 
 		//get related entities
 		sourceEntities = applicationEvent.entities;
 
 		// events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + sourceEntity.name});
 
-		relatedEntities = new Array();
-
 		sourceEntities.forEach(function (sourceEntity) {
+			var relatedEntitiesPerSourceEntity = new Array();
 			switch (sourceEntity.type) {
 				case "Class":
-					relatedEntities = relatedEntities.concat(sourceEntity.superTypes);
-					relatedEntities = relatedEntities.concat(sourceEntity.subTypes);
+					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.superTypes);
+					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.subTypes);
 					break;
 				case "ParameterizableClass":
-					relatedEntities = relatedEntities.concat(sourceEntity.superTypes);
-					relatedEntities = relatedEntities.concat(sourceEntity.subTypes);
+					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.superTypes);
+					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.subTypes);
 					break;
 				case "Attribute":
-					relatedEntities = sourceEntity.accessedBy;
+					relatedEntitiesPerSourceEntity = sourceEntity.accessedBy;
 					break;
 				case "Method":
 				case "Function":
-					relatedEntities = sourceEntity.accesses;
+					relatedEntitiesPerSourceEntity = sourceEntity.accesses;
 				case "FunctionModule":
 				case "Report":
 				case "Formroutine":
-					relatedEntities = relatedEntities.concat(sourceEntity.calls);
-					relatedEntities = relatedEntities.concat(sourceEntity.calledBy);
+					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.calls);
+					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.calledBy);
 					break;
 
 				default:
 					return;
 			}
+
+			relatedEntitiesMap.set(sourceEntity, relatedEntitiesPerSourceEntity);
+			relatedEntitiesPerSourceEntity.forEach(relatedEntity => relatedEntitiesSet.add(relatedEntity));
+
 		});
 
-		events.log.info.publish({ text: "connector - onRelationsChanged - related Entities - " + relatedEntities.length });
+		events.log.info.publish({ text: "connector - onRelationsChanged - related Entities - " + relatedEntitiesMap.size });
 
-		if (relatedEntities.length == 0) {
+		if (relatedEntitiesMap.size == 0) {
 			return;
 		}
 
 		if (activated) {
 			createRelatedConnections();
+			highlightRelatedEntities();
+
+			// no transparency effects yet
+			// fadeNotRelatedEntities();
 		}
 
 	}
 
+
+	/*************************
+			Connection
+	*************************/
 
 	function createRelatedConnections() {
-		var relatedEntitiesMap = new Map();
+		var relatedEntitiesSet = new Set();
 
-		relatedEntities.forEach(function (relatedEntity) {
-			if (relatedEntitiesMap.has(relatedEntity)) {
-				events.log.info.publish({ text: "connector - onRelationsChanged - multiple relation" });
-				return;
-			}
+		relatedEntitiesMap.forEach(function (relatedEntitiesPerSourceEntity, sourceEntity) {
+			relatedEntitiesSet.clear();
 
-			if (controllerConfig.showInnerRelations === false) {
-				if (isTargetChildOfSourceParent(relatedEntity, sourceEntity)) {
-					events.log.info.publish({ text: "connector - onRelationsChanged - inner relation" });
+			relatedEntitiesPerSourceEntity.forEach(function (relatedEntity) {
+				if (relatedEntitiesSet.has(relatedEntity)) {
+					events.log.info.publish({ text: "connector - onRelationsChanged - multiple relation" });
 					return;
 				}
-			}
 
-			//create scene element
-			let connectorElements = createConnector(sourceEntity, relatedEntity);
+				if (controllerConfig.showInnerRelations === false) {
+					if (isTargetChildOfSourceParent(relatedEntity, sourceEntity)) {
+						events.log.info.publish({ text: "connector - onRelationsChanged - inner relation" });
+						return;
+					}
+				}
 
-			//target or source not rendered -> no connector -> remove relatation
-			if (connectorElements === undefined) {
-				return;
-			}
+				//create scene element
+				let connectorElements = createConnector(sourceEntity, relatedEntity);
 
-			events.log.info.publish({ text: "connector - onRelationsChanged - create connector" });
+				//target or source not rendered -> no connector -> remove relation
+				if (connectorElements === undefined) {
+					return;
+				}
 
-			connectorElements.forEach(function (element) {
-				connectors.push(element);
-			});
+				events.log.info.publish({ text: "connector - onRelationsChanged - create connector" });
 
-			//create model entity
-			var relation = model.createEntity(
-				"Relation",
-				sourceEntity.id + "--2--" + relatedEntity.id,
-				sourceEntity.name + " - " + relatedEntity.name,
-				sourceEntity.name + " - " + relatedEntity.name,
-				sourceEntity
-			);
+				connectorElements.forEach(function (element) {
+					connectors.push(element);
+				});
 
-			relation.source = sourceEntity;
-			relation.target = relatedEntity;
+				//create model entity
+				var relation = model.createEntity(
+					"Relation",
+					sourceEntity.id + "--2--" + relatedEntity.id,
+					sourceEntity.name + " - " + relatedEntity.name,
+					sourceEntity.name + " - " + relatedEntity.name,
+					sourceEntity
+				);
 
-			relations.push(relation);
+				relation.source = sourceEntity;
+				relation.target = relatedEntity;
 
-			relatedEntitiesMap.set(relatedEntity, relatedEntity);
-		});
+				relations.push(relation);
 
-
-		if (relatedEntitiesMap.size != 0) {
-
-			var applicationEvent = {
-				sender: relationConnectorController,
-				entities: relations
-			};
-			events.added.on.publish(applicationEvent);
-		}
-
+				relatedEntitiesSet.add(relatedEntity);
+			})
+		})
 	}
-
 
 	function createConnector(entity, relatedEntity) {
 
@@ -333,6 +367,82 @@ var relationController = function () {
 		return connectorElements;
 	}
 
+	function calculateBorderPosition(sourceOfRay, targetOfRay, entity) {
+		let object = document.getElementById(entity.id);
+		let raycaster = new THREE.Raycaster();
+		raycaster.set(sourceOfRay, targetOfRay.subVectors(targetOfRay, sourceOfRay).normalize());
+		let intersection = raycaster.intersectObject(object.object3DMap.mesh);
+		return intersection[0].point;
+	}
+
+
+	/************************
+			Highlight
+	************************/
+
+	function highlightRelatedEntities() {
+		if (relatedEntitiesSet.size == 0) {
+			return;
+		}
+
+		if (controllerConfig.unfadeOnHighlight) {
+			canvasManipulator.resetTransparencyOfEntities(Array.from(relatedEntitiesSet.values()).filter(relatedEntity => !(relatedEntity.marked)));
+		}
+
+		canvasManipulator.changeColorOfEntities(Array.from(relatedEntitiesSet.values()).filter(relatedEntity => !(relatedEntity.marked)), controllerConfig.highlightColor);
+	}
+
+	function unhighlightRelatedEntities() {
+		if (relatedEntitiesSet.size == 0) {
+			return;
+		}
+
+		canvasManipulator.resetColorOfEntities(Array.from(relatedEntitiesSet.values()).filter(relatedEntity => !(relatedEntity.marked)));
+	}
+
+
+	/***************************
+			Transparency
+	***************************/
+
+	function fadeNotRelatedEntities() {
+
+		fadeAllEntities();
+
+
+		//unfade related entities
+		canvasManipulator.changeTransparencyOfEntities(relatedEntitiesSet, controllerConfig.noFadeValue);
+
+		// //unfade parents of related entities				
+		// canvasManipulator.changeTransparencyOfEntities(parents, controllerConfig.halfFadeValue);
+	}
+
+	function fadeAllEntities() {
+		if (!faded) {
+			//really really bad fix for one model where elements in scene but not in model...
+			//add an all elements functionality for canvasmanipulator anyway 
+			var allCanvasElementIDs = canvasManipulator.getElementIds();
+			var allCanvasObjects = []; 
+			allCanvasElementIDs.filter(canvasElementID => canvasElementID != "").forEach(canvasElementID => allCanvasObjects.push({ id: canvasElementID }));
+
+			canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.fullFadeValue);
+			faded = true;
+		}
+	}
+
+	function unfadeAllEntities() {
+
+		//really really bad fix for one model where elements in scene but not in model...
+		//add an all elements functionality for canvasmanipulator anyway 
+		var allCanvasElementIDs = canvasManipulator.getElementIds();
+		var allCanvasObjects = [];
+		allCanvasElementIDs.filter(canvasElementID => canvasElementID != "").forEach(canvasElementID => allCanvasObjects.push({ id: canvasElementID }));
+
+		canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.noFadeValue);	
+
+	}
+
+
 	function isTargetChildOfSourceParent(target, source) {
 
 		var targetParent = target.belongsTo;
@@ -350,13 +460,6 @@ var relationController = function () {
 		return false;
 	}
 
-	function calculateBorderPosition(sourceOfRay, targetOfRay, entity) {
-		let object = document.getElementById(entity.id);
-		let raycaster = new THREE.Raycaster();
-		raycaster.set(sourceOfRay, targetOfRay.subVectors(targetOfRay, sourceOfRay).normalize());
-		let intersection = raycaster.intersectObject(object.object3DMap.mesh);
-		return intersection[0].point;
-	}
 
 	return {
 		initialize: initialize,
