@@ -34,7 +34,7 @@ var legendController = (function() {
 	}
 
 	function createItem(entry, parent) {
-        let item = { id: entry.name, parentId: parent, name: entry.name, iconSkin: "zt", icon: entry.icon, open: true, glossary: entry.glossary };
+        let item = { id: entry.name, parentId: parent, name: entry.name, iconSkin: "zt", icon: entry.icon, open: entry.open, glossary: entry.glossary };
         items.push(item);
         if(entry.entries !== undefined) {
             let parentid = entry.name;
