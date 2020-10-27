@@ -14,6 +14,13 @@ var setup = {
         {
             name: "canvasSelectController"
         },
+
+        {
+            name: "relationController",
+            sourceStartAtBorder: true,
+            targetEndAtBorder: true,
+            showInnerRelations: true
+        },
         
         {
             name: "legendController",
@@ -175,7 +182,9 @@ var setup = {
                             canvas: {},
                             controllers: [
                                 { name: "defaultLogger" },
-                                { name: "canvasHoverController" }
+                                { name: "canvasHoverController" },
+                                { name: "canvasSelectController" },
+                                { name: "relationController" }
                             ],
                         }
                     }
