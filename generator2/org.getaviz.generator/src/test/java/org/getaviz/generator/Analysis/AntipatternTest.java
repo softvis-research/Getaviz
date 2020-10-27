@@ -29,7 +29,6 @@ public class AntipatternTest {
     @BeforeAll
     static void setup() {
         mockup.setupDatabase("./test/databases/AntipatternTest.db");
-//        mockup.loadProperties("CityBankTest.properties");
         connector = mockup.getConnector();
         SettingsConfiguration config = SettingsConfiguration.getInstance();
         StepFactory factory = new StepFactory(config, Collections.singletonList(ProgrammingLanguage.JAVA));

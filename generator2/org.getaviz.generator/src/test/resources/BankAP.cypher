@@ -152,12 +152,12 @@ CREATE (m21)-[:READS]->(bankName)
 CREATE (m22)-[:READS]->(bankBooks)
 CREATE (m24)-[:READS]->(businessCustomers)
 CREATE (m25)-[:READS]->(transactions)
-CREATE (m26)-[:READS]->(creditsBank)  //O
-CREATE (m26)-[:READS]->(accountsBusiness) //F
-CREATE (m26)-[:READS]->(executeTransaction)  //F
-CREATE (m26)-[:READS]->(inTransaction) //F
-CREATE (m26)-[:READS]->(balance) //F
-CREATE (m26)-[:READS]->(productNumber) //F
+CREATE (m26)-[:READS]->(creditsBank)
+CREATE (m26)-[:READS]->(accountsBusiness)
+CREATE (m26)-[:READS]->(executeTransaction)
+CREATE (m26)-[:READS]->(inTransaction)
+CREATE (m26)-[:READS]->(balance)
+CREATE (m26)-[:READS]->(productNumber)
 CREATE (m27)-[:READS]->(privateCustomers)
 CREATE (m28)-[:READS]->(creditsBank)
 CREATE (m17)-[:DECLARES]->(size)

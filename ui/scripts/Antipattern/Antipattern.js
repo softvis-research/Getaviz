@@ -2,13 +2,23 @@ var antipatternController = (function() {
 
     var AntipatternTreeID = "AntipatternTree";
     var jQAntipatternTree = "#AntipatternTree";
+    // var blinking = ;
 
     let antipatternConfig = {
         typeIcon: 		"scripts/Antipattern/images/type.png",
-        methodIcon:		"scripts/Antipattern/images/method.png"
+        methodIcon:		"scripts/Antipattern/images/method.png",
+        colorAnimationColors:                // # available colors for color animation
+            [ "#ff5e1f", "red" ],
+        minColorChangeFrequency: 1000,       // # milliseconds - min freq for color animation
+        maxColorChangeFrequency: 500,        // # milliseconds - max freq for color animation
+    };
+
+    var controllerConfig = {
+
     };
 
     function initialize() {
+
     }
 
     function activate(rootDiv) {
@@ -125,12 +135,20 @@ var antipatternController = (function() {
 
     function changeColor(entity){
         canvasManipulator.changeColorOfEntities([entity], "#ff5e1f");
+        let colorAnimation = new MetricAnimationColor(antipatternConfig.minColorChangeFrequency,
+            antipatternConfig.maxColorChangeFrequency);
+        let metric;
+        colorAnimation.addMetric(metric, antipatternConfig.colorAnimationColors, 1);
+        entity.metricAnimationColor = colorAnimation;
+        canvasManipulator.startColorAnimationForEntity(entity, colorAnimation);
+        setTimeout(() => canvasManipulator.stopColorAnimationForEntity(entity), 3000)
     }
 
     function resetMarked(){
         model.getAllEntities().forEach(entity => {
-            canvasManipulator.resetColorOfEntities([entity]);
+            canvasManipulator.stopColorAnimationForEntity(entity);
         })
+        canvasManipulator.resetColorOfEntities(model.getAllEntities());
     }
 
     function zTreeOnClick(treeEvent, treeId, treeNode) {
