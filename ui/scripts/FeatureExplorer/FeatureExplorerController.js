@@ -191,7 +191,8 @@ var featureExplorerController = (function () {
                 id: feature,
                 open: false,
                 checked: true,
-                parentIdfeature,
+                parentId: '',
+                name: feature,
                 feature: feature,
             }
             featureTreePart.push(featureNode);
