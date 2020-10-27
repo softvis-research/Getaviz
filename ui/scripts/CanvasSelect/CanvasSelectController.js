@@ -132,11 +132,16 @@ var canvasSelectController = (function() {
 		}
 	}
 
-	function handleOnClick(eventObject) {            
+	function handleOnClick(eventObject) {
+		
+		var selectedEntities = [];
+		selectedEntities.push(eventObject.entity);
+
+		selectedEntities = selectedEntities.concat(model.getAllChildrenOfEntity(eventObject.entity));
 				
 		var applicationEvent = {			
 			sender: canvasSelectController,
-			entities: [eventObject.entity]
+			entities: selectedEntities
 		};
 		
 		events.selected.on.publish(applicationEvent);		
