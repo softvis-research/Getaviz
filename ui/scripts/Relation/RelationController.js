@@ -37,7 +37,8 @@ var relationController = function () {
 		noFadeValue: 0,
 		startFaded: false,
 
-		showRecursiveRelations: true
+		showRecursiveRelations: true,
+		useMultiSelect: true
 	}
 
 
@@ -121,42 +122,15 @@ var relationController = function () {
 		reset();
 
 		//get related entities
-		sourceEntities = applicationEvent.entities;
+		if (controllerConfig.useMultiSelect) {
+			sourceEntities = applicationEvent.entities;
+		} else {
+			sourceEntities.push(applicationEvent.entities[0]);
+		}
 
 		// events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + sourceEntity.name});
 
-		sourceEntities.forEach(function (sourceEntity) {
-			var relatedEntitiesPerSourceEntity = new Array();
-			switch (sourceEntity.type) {
-				case "Class":
-					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.superTypes);
-					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.subTypes);
-					break;
-				case "ParameterizableClass":
-					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.superTypes);
-					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.subTypes);
-					break;
-				case "Attribute":
-					relatedEntitiesPerSourceEntity = sourceEntity.accessedBy;
-					break;
-				case "Method":
-				case "Function":
-					relatedEntitiesPerSourceEntity = sourceEntity.accesses;
-				case "FunctionModule":
-				case "Report":
-				case "Formroutine":
-					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.calls);
-					relatedEntitiesPerSourceEntity = relatedEntitiesPerSourceEntity.concat(sourceEntity.calledBy);
-					break;
-
-				default:
-					return;
-			}
-
-			relatedEntitiesMap.set(sourceEntity, relatedEntitiesPerSourceEntity);
-			relatedEntitiesPerSourceEntity.forEach(relatedEntity => relatedEntitiesSet.add(relatedEntity));
-
-		});
+		getRelatedEntities(sourceEntities);
 
 		events.log.info.publish({ text: "connector - onRelationsChanged - related Entities - " + relatedEntitiesMap.size });
 
@@ -174,19 +148,18 @@ var relationController = function () {
 
 	}
 
+	function getRelatedEntities(sourceEntitiesArray) {
+		sourceEntitiesArray.forEach(function (sourceEntity) {
+			if (relatedEntitiesMap.has(sourceEntity)) {
+				//sourceEntity already analyzed
+				return;
+			}
 
-	/*************************
-			Connection
-	*************************/
+			var allRelatedEntitiesOfSourceEntity = getRelatedEntitiesOfSourceEntity(sourceEntity);
+			var relatedEntitiesOfSourceEntity = new Array();
 
-	function createRelatedConnections() {
-		var relatedEntitiesSet = new Set();
-
-		relatedEntitiesMap.forEach(function (relatedEntitiesPerSourceEntity, sourceEntity) {
-			relatedEntitiesSet.clear();
-
-			relatedEntitiesPerSourceEntity.forEach(function (relatedEntity) {
-				if (relatedEntitiesSet.has(relatedEntity)) {
+			allRelatedEntitiesOfSourceEntity.forEach(function (relatedEntity) {
+				if (relatedEntitiesOfSourceEntity.includes(relatedEntity)) {
 					events.log.info.publish({ text: "connector - onRelationsChanged - multiple relation" });
 					return;
 				}
@@ -197,20 +170,6 @@ var relationController = function () {
 						return;
 					}
 				}
-
-				//create scene element
-				let connectorElements = createConnector(sourceEntity, relatedEntity);
-
-				//target or source not rendered -> no connector -> remove relation
-				if (connectorElements === undefined) {
-					return;
-				}
-
-				events.log.info.publish({ text: "connector - onRelationsChanged - create connector" });
-
-				connectorElements.forEach(function (element) {
-					connectors.push(element);
-				});
 
 				//create model entity
 				var relation = model.createEntity(
@@ -226,9 +185,85 @@ var relationController = function () {
 
 				relations.push(relation);
 
+				relatedEntitiesOfSourceEntity.push(relatedEntity);
 				relatedEntitiesSet.add(relatedEntity);
 			})
+
+			relatedEntitiesMap.set(sourceEntity, relatedEntitiesOfSourceEntity);
+		});
+	}
+
+	function getRelatedEntitiesOfSourceEntity(sourceEntity) {
+		var relatedEntitiesOfSourceEntity = new Array();
+
+		switch (sourceEntity.type) {
+			case "Class":
+			// case "Interface":
+				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.superTypes);
+				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.subTypes);
+				break;
+			case "ParameterizableClass":
+				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.superTypes);
+				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.subTypes);
+				break;
+			case "Attribute":
+				relatedEntitiesOfSourceEntity = sourceEntity.accessedBy;
+				break;
+			case "Method":
+			case "Function":
+				relatedEntitiesOfSourceEntity = sourceEntity.accesses;
+			case "FunctionModule":
+			case "Report":
+			case "Formroutine":
+				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.calls);
+				//relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.calledBy);
+				break;
+		}
+
+		return relatedEntitiesOfSourceEntity;
+	}
+
+
+	/*************************
+			Connection
+	*************************/
+
+	function createRelatedConnections() {
+
+		relations.forEach(function (relation) {
+			var sourceEntity = relation.source;
+			var relatedEntity = relation.target;
+
+			//create scene element
+			let connectorElements = createConnector(sourceEntity, relatedEntity);
+
+			//source or target not rendered -> no connector
+			if (connectorElements === undefined) {
+				events.log.error.publish({ text: "connector - createRelatedConnections - source or target not rendered" });
+				return;
+			}
+
+			events.log.info.publish({ text: "connector - createRelatedConnections - create connector" });
+
+			connectorElements.forEach(function (element) {
+				connectors.push(element);
+			});
 		})
+	}
+
+	function createRelatedConnectionsRecursively(newRelatedEntitiesMap) {
+		var newerRelatedEntitiesMap = new Map();
+
+		newRelatedEntitiesMap.forEach(function (relatedEntitiesPerSourceEntity, sourceEntity) {
+			if (!sourceEntities.includes(sourceEntity) && relatedEntitiesMap.has(sourceEntity)) {
+				//sourceEntity already analyzed
+				return;
+			}
+			relatedEntitiesPerSourceEntity.forEach(function (relatedEntity) {
+
+			});
+		});
+
 	}
 
 	function createConnector(entity, relatedEntity) {
@@ -422,7 +457,7 @@ var relationController = function () {
 			//really really bad fix for one model where elements in scene but not in model...
 			//add an all elements functionality for canvasmanipulator anyway 
 			var allCanvasElementIDs = canvasManipulator.getElementIds();
-			var allCanvasObjects = []; 
+			var allCanvasObjects = [];
 			allCanvasElementIDs.filter(canvasElementID => canvasElementID != "").forEach(canvasElementID => allCanvasObjects.push({ id: canvasElementID }));
 
 			canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.fullFadeValue);
@@ -438,7 +473,7 @@ var relationController = function () {
 		var allCanvasObjects = [];
 		allCanvasElementIDs.filter(canvasElementID => canvasElementID != "").forEach(canvasElementID => allCanvasObjects.push({ id: canvasElementID }));
 
-		canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.noFadeValue);	
+		canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.noFadeValue);
 
 	}
 
