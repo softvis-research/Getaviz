@@ -113,6 +113,7 @@ var model = (function () {
 					break;
 
 				case "Class":
+				case "Interface":
 					entity.superTypes = element.subClassOf.split(",");
 					entity.subTypes = element.superClassOf.split(",");
 					if (element.reaches !== undefined) {

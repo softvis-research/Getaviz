@@ -132,6 +132,10 @@ var relationController = function () {
 
 		getRelatedEntities(sourceEntities);
 
+		if (controllerConfig.showRecursiveRelations) {
+			getRecursiveRelations(sourceEntities);
+		}
+
 		events.log.info.publish({ text: "connector - onRelationsChanged - related Entities - " + relatedEntitiesMap.size });
 
 		if (relatedEntitiesMap.size == 0) {
@@ -198,7 +202,7 @@ var relationController = function () {
 
 		switch (sourceEntity.type) {
 			case "Class":
-			// case "Interface":
+			case "Interface":
 				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.superTypes);
 				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.subTypes);
 				break;
@@ -221,6 +225,29 @@ var relationController = function () {
 		}
 
 		return relatedEntitiesOfSourceEntity;
+	}
+
+	function getRecursiveRelations(oldSourceEntities) {
+		oldSourceEntities.forEach(function(oldSourceEntity) {
+			var relatedEntities = relatedEntitiesMap.get(oldSourceEntity);
+			
+			if (relatedEntities.length == 0) {
+				return;
+			}
+
+			newSourceEntities = relatedEntities.filter(relatedEntity => (!relatedEntitiesMap.has(relatedEntity) && !isStandardElement(relatedEntity)));
+
+			if (newSourceEntities.length == 0) {
+				return;			
+			}
+			
+			getRelatedEntities(newSourceEntities);
+			getRecursiveRelations(newSourceEntities);
+		});
+	}
+
+	function isStandardElement(entity) {
+		return entity.allParents[entity.allParents.length - 1].creator == "SAP";
 	}
 
 
@@ -249,21 +276,6 @@ var relationController = function () {
 				connectors.push(element);
 			});
 		})
-	}
-
-	function createRelatedConnectionsRecursively(newRelatedEntitiesMap) {
-		var newerRelatedEntitiesMap = new Map();
-
-		newRelatedEntitiesMap.forEach(function (relatedEntitiesPerSourceEntity, sourceEntity) {
-			if (!sourceEntities.includes(sourceEntity) && relatedEntitiesMap.has(sourceEntity)) {
-				//sourceEntity already analyzed
-				return;
-			}
-			relatedEntitiesPerSourceEntity.forEach(function (relatedEntity) {
-
-			});
-		});
-
 	}
 
 	function createConnector(entity, relatedEntity) {
