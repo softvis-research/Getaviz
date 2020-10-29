@@ -13,11 +13,16 @@ var relationController = function () {
 
 	var faded = false;
 
-	const majorSCElements = ["Class", "Interface", "FunctionGroup", "Report"];
-	const minorSCElements = ["Method", "FunctionModule", "Formroutine"];
-
 	//config parameters	
 	var controllerConfig = {
+		showConnector: true,
+		showHighlight: true,
+		showTransparency: false,
+
+		showRecursiveRelations: true,
+		useMultiSelect: true,
+
+		//connector configs
 		fixPositionY: false,
 		fixPositionZ: false,
 		showInnerRelations: false,
@@ -29,16 +34,15 @@ var relationController = function () {
 		connectorColor: { r: 1, g: 0, b: 0 },
 		endpointColor: { r: 0, g: 0, b: 0 },
 
+		//highlight configs
 		highlightColor: "black",
 		unfadeOnHighlight: false,
 
+		//transparency configs
 		fullFadeValue: 0.55,
 		halfFadeValue: 0.55,
 		noFadeValue: 0,
-		startFaded: false,
-
-		showRecursiveRelations: true,
-		useMultiSelect: true
+		startFaded: false
 	}
 
 
@@ -52,14 +56,18 @@ var relationController = function () {
 	function activate() {
 		activated = true;
 		if (relatedEntitiesMap.size != 0) {
-			createRelatedConnections();
-			highlightRelatedEntities();
-
-			// no transparency effects yet
-			// if (controllerConfig.startFaded) {
-			// 	setTimeout(fadeAllEntities, 1000);
-			// }
-			// fadeNotRelatedEntities();
+			if (controllerConfig.showConnector) {
+				createRelatedConnections();
+			}
+			if (controllerConfig.showHighlight) {
+				highlightRelatedEntities();
+			}
+			if (controllerConfig.showTransparency) {
+				if (controllerConfig.startFaded) {
+					setTimeout(fadeAllEntities, 1000);
+				}
+				fadeNotRelatedEntities();
+			}
 		}
 	}
 
@@ -73,45 +81,26 @@ var relationController = function () {
 		relatedEntitiesMap = new Map();
 		relatedEntitiesSet = new Set();
 
-		removeAllConnectors();
-		unhighlightRelatedEntities();
-
-		// no transparency effects yet
-		// if (faded) {
-		// 	setTimeout(unfadeAllEntities, 1000);
-		// }
-		// faded = false;
-	}
-
-	function removeAllConnectors() {
-
-		events.log.info.publish({ text: "connector - removeAllConnectors" });
-
-		if (connectors.length == 0) {
-			return;
+		if (controllerConfig.showConnector) {
+			removeAllConnectors();
 		}
-
-		//remove scene elements
-		connectors.forEach(function (connector) {
-			canvasManipulator.removeElement(connector);
-		});
-
-		connectors = new Array();
+		if (controllerConfig.showHighlight) {
+			unhighlightRelatedEntities();
+		}
+		if (controllerConfig.showTransparency) {
+			if (faded) {
+				setTimeout(unfadeAllEntities, 1000);
+			}
+			faded = false;
+		}
 
 		//remove relation entities
 		relations.forEach(function (relation) {
-			model.removeEntity(relation);
+			model.removeEntity(relation.id);
 		});
-
-
-
-		//publish removed entities
-		var applicationEvent = {
-			sender: relationConnectorController,
-			entities: relations
-		};
-		events.added.off.publish(applicationEvent);
 	}
+
+	
 
 
 
@@ -128,7 +117,7 @@ var relationController = function () {
 			sourceEntities.push(applicationEvent.entities[0]);
 		}
 
-		// events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + sourceEntity.name});
+		events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + applicationEvent.entities[0]});
 
 		getRelatedEntities(sourceEntities);
 
@@ -143,11 +132,15 @@ var relationController = function () {
 		}
 
 		if (activated) {
-			createRelatedConnections();
-			highlightRelatedEntities();
-
-			// no transparency effects yet
-			// fadeNotRelatedEntities();
+			if (controllerConfig.showConnector) {
+				createRelatedConnections();
+			}
+			if (controllerConfig.showHighlight) {
+				highlightRelatedEntities();
+			}
+			if (controllerConfig.showTransparency) {
+				fadeNotRelatedEntities();
+			}
 		}
 
 	}
@@ -203,12 +196,12 @@ var relationController = function () {
 		switch (sourceEntity.type) {
 			case "Class":
 			case "Interface":
-				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.superTypes);
-				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.subTypes);
+				//relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.superTypes);
+				//relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.subTypes);
 				break;
 			case "ParameterizableClass":
 				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.superTypes);
-				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.subTypes);
+				//relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.subTypes);
 				break;
 			case "Attribute":
 				relatedEntitiesOfSourceEntity = sourceEntity.accessedBy;
@@ -228,26 +221,22 @@ var relationController = function () {
 	}
 
 	function getRecursiveRelations(oldSourceEntities) {
-		oldSourceEntities.forEach(function(oldSourceEntity) {
+		oldSourceEntities.forEach(function (oldSourceEntity) {
 			var relatedEntities = relatedEntitiesMap.get(oldSourceEntity);
-			
+
 			if (relatedEntities.length == 0) {
 				return;
 			}
 
-			newSourceEntities = relatedEntities.filter(relatedEntity => (!relatedEntitiesMap.has(relatedEntity) && !isStandardElement(relatedEntity)));
+			newSourceEntities = relatedEntities.filter(relatedEntity => (!relatedEntitiesMap.has(relatedEntity)));
 
 			if (newSourceEntities.length == 0) {
-				return;			
+				return;
 			}
-			
+
 			getRelatedEntities(newSourceEntities);
 			getRecursiveRelations(newSourceEntities);
 		});
-	}
-
-	function isStandardElement(entity) {
-		return entity.allParents[entity.allParents.length - 1].creator == "SAP";
 	}
 
 
@@ -412,6 +401,22 @@ var relationController = function () {
 
 		}
 		return connectorElements;
+	}
+
+	function removeAllConnectors() {
+
+		events.log.info.publish({ text: "connector - removeAllConnectors" });
+
+		if (connectors.length == 0) {
+			return;
+		}
+
+		//remove scene elements
+		connectors.forEach(function (connector) {
+			canvasManipulator.removeElement(connector);
+		});
+
+		connectors = new Array();
 	}
 
 	function calculateBorderPosition(sourceOfRay, targetOfRay, entity) {
