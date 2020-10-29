@@ -195,9 +195,6 @@ var canvasHoverController = (function() {
 			if(!entity.selected){
 				canvasManipulator.unhighlightEntities([entity]);			
 			}
-			if(entity.type === "Namespace"){
-			    canvasManipulator.unhighlightEntities([entity]);
-            }
         }
 		
 		$("#tooltip").css("display", "none");

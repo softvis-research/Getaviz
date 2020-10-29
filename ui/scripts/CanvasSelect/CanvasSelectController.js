@@ -9,12 +9,15 @@ var canvasSelectController = (function() {
 	//config parameters	
 	var controllerConfig = {
 		setCenterOfRotation : false,
-        color: "darkred",
+		color: "darkred",
+		multiselectColor: "240 128 128", //lightcoral - just for test purposes
 		selectionMouseKey: 1,
 		selectionMode: SELECTION_MODES.UP,					
 		selectionDurationSeconds: 0.5,
 		selectionMoveAllowed: false,
 		showProgressBar: false,
+
+		useMultiselect: true
 	};
 
 	var downActionEventObject;
@@ -137,7 +140,9 @@ var canvasSelectController = (function() {
 		var selectedEntities = [];
 		selectedEntities.push(eventObject.entity);
 
-		selectedEntities = selectedEntities.concat(model.getAllChildrenOfEntity(eventObject.entity));
+		if (controllerConfig.useMultiselect) {
+			selectedEntities = selectedEntities.concat(model.getAllChildrenOfEntity(eventObject.entity));
+		}		
 				
 		var applicationEvent = {			
 			sender: canvasSelectController,
@@ -149,43 +154,43 @@ var canvasSelectController = (function() {
 	
 	function onEntitySelected(applicationEvent) {	
 		
-		var entity = applicationEvent.entities[0];	
+		var selectedEntity = applicationEvent.entities[0];
+		var selectedEntities = applicationEvent.entities;
 		
-		var selectedEntities = events.selected.getEntities();		
+		var oldSelectedEntities = events.selected.getEntities();		
 		
+		//Das wird vermutlich nicht mehr gehen
 		//select same entity again -> nothing to do
-		if(selectedEntities.has(entity)){
+		if(oldSelectedEntities.has(selectedEntity)){
 			return;
 		}
 
-        if(entity.type == "text"){
+        if(selectedEntity.type == "text"){
             return;
         }
 
-        if(entity.type == "Namespace"){
-		    return;
-        }
-
 		//unhighlight old selected entities	for single select	
-		if(selectedEntities.size != 0){
+		if(oldSelectedEntities.size != 0){
 		
-			selectedEntities.forEach(function(selectedEntity){
+			oldSelectedEntities.forEach(function(oldSelectedEntity){
 								
 				var unselectEvent = {					
 					sender: canvasSelectController,
-					entities: [selectedEntity]
+					entities: [oldSelectedEntity]
 				}	
 
 				events.selected.off.publish(unselectEvent);	
 			});
 		}
 		
-		//higlight new selected entity
-		canvasManipulator.highlightEntities([entity], controllerConfig.color);		
+		//highlight multislected entities with 
+		canvasManipulator.highlightEntities(selectedEntities, controllerConfig.multiselectColor);	
+		//higlight selected entity with regular color
+		canvasManipulator.highlightEntities([selectedEntity], controllerConfig.color);	
 
 		//center of rotation
 		if(controllerConfig.setCenterOfRotation){
-			canvasManipulator.setCenterOfRotation(entity);
+			canvasManipulator.setCenterOfRotation(selectedEntity);
 		}
     }
 	
