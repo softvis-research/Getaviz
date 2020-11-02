@@ -40,7 +40,9 @@ public class Maps {
         nodesWithUsesRelationByType = Arrays.asList(
                 "METH",
                 "FUMO",
-                "REPS"
+                "REPS",
+                "FORM",
+                "FUGR"
         );
 
         // Elements, for which we want to show USES relation
@@ -62,7 +64,7 @@ public class Maps {
         return propertyName;
     }
 
-    public static List<String> getNodesWithUsesRelationByType() {
+    public static List<String> getNodesWithReferencesRelationByType() {
         return nodesWithUsesRelationByType;
     }
 

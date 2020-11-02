@@ -176,7 +176,7 @@ public class MetaDataExporter {
 
         // Add USES and INHERIT relations
         String nodeType = node.get("type").asString();
-        if (Maps.getNodesWithUsesRelationByType().contains(nodeType)) {
+        if (Maps.getNodesWithReferencesRelationByType().contains(nodeType)) {
             builder.append("\"calls\": \"" + getRelations(node, SAPRelationLabels.REFERENCES, true) + "\",\n");
             builder.append("\"calledBy\": \"" + getRelations(node, SAPRelationLabels.REFERENCES, false) + "\",\n");
         }
