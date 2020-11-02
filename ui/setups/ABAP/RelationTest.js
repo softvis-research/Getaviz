@@ -184,7 +184,7 @@ var setup = {
                                 { name: "defaultLogger" },
                                 { name: "canvasHoverController" },
                                 { name: "canvasSelectController" },
-                                //{ name: "relationController" }
+                                { name: "relationController" }
                             ],
                         }
                     }

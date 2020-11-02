@@ -316,9 +316,6 @@ var canvasManipulator = (function () {
 
     function removeElement(element) {
         element.parentNode.removeChild(element);
-        if (element.parentEl != null) {
-            element.parentEl.removeChild(element);            
-        }
     }
 
 

@@ -77,9 +77,6 @@ var relationController = function () {
 	}
 
 	function reset() {
-		sourceEntities = new Array();
-		relatedEntitiesMap = new Map();
-		relatedEntitiesSet = new Set();
 
 		if (controllerConfig.showConnector) {
 			removeAllConnectors();
@@ -98,6 +95,11 @@ var relationController = function () {
 		relations.forEach(function (relation) {
 			model.removeEntity(relation.id);
 		});
+		
+		sourceEntities = new Array();
+		relatedEntitiesMap = new Map();
+		relatedEntitiesSet = new Set();
+		relations = new Array();
 	}
 
 	
