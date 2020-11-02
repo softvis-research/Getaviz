@@ -27,6 +27,7 @@ public class LayouterStep {
         nodeRepository.loadNodesByRelation(SAPRelationLabels.TYPEOF, true);
         nodeRepository.loadNodesByRelation(SAPRelationLabels.USES, true);
         nodeRepository.loadNodesByRelation(SAPRelationLabels.INHERIT, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.REFERENCES, true);
 
         aCityRepository = new ACityRepository();
 

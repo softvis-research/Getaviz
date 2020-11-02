@@ -177,8 +177,8 @@ public class MetaDataExporter {
         // Add USES and INHERIT relations
         String nodeType = node.get("type").asString();
         if (Maps.getNodesWithUsesRelationByType().contains(nodeType)) {
-            builder.append("\"calls\": \"" + getRelations(node, SAPRelationLabels.USES, true) + "\",\n");
-            builder.append("\"calledBy\": \"" + getRelations(node, SAPRelationLabels.USES, false) + "\",\n");
+            builder.append("\"calls\": \"" + getRelations(node, SAPRelationLabels.REFERENCES, true) + "\",\n");
+            builder.append("\"calledBy\": \"" + getRelations(node, SAPRelationLabels.REFERENCES, false) + "\",\n");
         }
         if (Maps.getNodesWithInheritRelationByType().contains(nodeType)) {
             builder.append("\"subClassOf\": \"" + getRelations(node, SAPRelationLabels.INHERIT, true) + "\",\n");

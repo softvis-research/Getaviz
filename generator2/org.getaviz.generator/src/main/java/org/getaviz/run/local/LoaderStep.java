@@ -14,7 +14,6 @@ public class LoaderStep {
         SettingsConfiguration.getInstance("src/test/resources/ABAPCityTest.properties");
         boolean isSilentMode = true;
         String pathToNodesCsv = "";
-        String pathToTypeOfRelationsCsv = "";
         String pathToReferenceCsv = "";
         String pathToInheritanceCsv = "";
         String pathToMigrationFindingsCsv = "";
@@ -26,13 +25,11 @@ public class LoaderStep {
             isSilentMode = false;
         }
 
-        // Get files for nodes and typeofs
+        // Get files for nodes and relations
         List<Path> files = config.getInputCSVFiles();
         for(Path p : files) {
             if (p.toString().endsWith("_Test.csv")) {
                 pathToNodesCsv = p.toString();
-            } else if (p.toString().endsWith("_TypeOf.csv")) {
-                pathToTypeOfRelationsCsv = p.toString();
             } else if (p.toString().endsWith("_Reference.csv")) {
                 pathToReferenceCsv = p.toString();
             } else if (p.toString().endsWith("_Inheritance.csv")) {
@@ -42,8 +39,7 @@ public class LoaderStep {
             }
         }
 
-        if (pathToNodesCsv.isEmpty() || pathToTypeOfRelationsCsv.isEmpty()
-                || pathToInheritanceCsv.isEmpty() || pathToReferenceCsv.isEmpty()
+        if (pathToNodesCsv.isEmpty() || pathToInheritanceCsv.isEmpty() || pathToReferenceCsv.isEmpty()
                 || (config.addMigrationFindings() && pathToMigrationFindingsCsv.isEmpty())) {
             System.out.println("Some input file wasn't found");
             System.exit(0);
@@ -68,7 +64,7 @@ public class LoaderStep {
         );
 
 
-        // 2. Upload relations  
+        // 2. Upload contains relations
         if (!isSilentMode) {
             System.out.print("Creating 'CONTAINS' relationships. Press any key to continue...");
             userInput.nextLine();
@@ -78,24 +74,7 @@ public class LoaderStep {
                 "CREATE (a)-[r:" + SAPRelationLabels.CONTAINS + "]->(b)"
         );
 
-
-        // 3. Upload TypeOfRelations
-        System.out.println("SAPExportCreateTypeOfRelations: " + pathToTypeOfRelationsCsv);
-        if (!isSilentMode) {
-            System.out.print("Creating 'TYPEOF' relationships. Press any key to continue...");
-            userInput.nextLine();
-        }
-        pathToTypeOfRelationsCsv = pathToTypeOfRelationsCsv.replace("\\", "/");
-        connector.executeWrite(
-                "LOAD CSV WITH HEADERS FROM \"file:///" + pathToTypeOfRelationsCsv + "\"\n" +
-                        "AS row FIELDTERMINATOR ';'\n" +
-                        "MATCH (a:Elements {element_id: row.element_id}), (b:Elements {element_id: row.type_of_id})\n" +
-                        "CREATE (a)-[r:"+ SAPRelationLabels.TYPEOF +"]->(b)"
-        );
-
-
-        // 4. Upload References
-        System.out.println("Path to References CSV: " + pathToReferenceCsv);
+        // 3. Upload uses relations
         if (!isSilentMode) {
             System.out.print("Creating 'USES' relationships. Press any key to continue...");
             userInput.nextLine();
@@ -105,6 +84,20 @@ public class LoaderStep {
                 "CREATE (a)-[r:" + SAPRelationLabels.USES + "]->(b)"
         );
 
+        // 4. Upload References
+        System.out.println("Path to Reference CSV: " + pathToReferenceCsv);
+        if (!isSilentMode) {
+            System.out.print("Creating 'REFERENCE' relationships. Press any key to continue...");
+            userInput.nextLine();
+        }
+        pathToReferenceCsv = pathToReferenceCsv.replace("\\", "/");
+        connector.executeWrite(
+                "LOAD CSV WITH HEADERS FROM \"file:///" + pathToReferenceCsv + "\"\n" +
+                        "AS row FIELDTERMINATOR ';'\n" +
+                        "MATCH (a:Elements {element_id: row.source_id}), (b:Elements {element_id: row.target_id})\n" +
+                        "CREATE (a)-[r:"+ SAPRelationLabels.REFERENCES +"]->(b)"
+
+        );
 
         // 5. Upload Inheritances
         System.out.println("Path to Inheritances CSV: " + pathToInheritanceCsv);
@@ -120,7 +113,7 @@ public class LoaderStep {
                         "CREATE (a)-[r:"+ SAPRelationLabels.INHERIT +"]->(b)"
         );
 
-        //6. Upload Migration Findings
+        // 6. Upload Migration Findings
         if(config.addMigrationFindings()) {
             System.out.println("Path to Migration Findings CSV : " + pathToMigrationFindingsCsv);
             if (!isSilentMode) {

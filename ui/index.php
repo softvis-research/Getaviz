@@ -101,7 +101,7 @@ if (isset($_GET["state"])) {
 <!-- orbitcam -->
 
 <!-- <script type="text/javascript" src="node_modules/aframe-orbit-camera-component/aframe-orbit-camera-component.js"></script> -->
-<script type="text/javascript" src="scripts/ABAPNavigation/aframe-orbit-camera-component.js"></script>
+<script type="text/javascript" src="scripts/ABAP/aframe-orbit-camera-component.js"></script>
 
 
 <!-- controller -->
@@ -125,6 +125,7 @@ if (isset($_GET["state"])) {
 <script type="text/javascript" src="scripts/Email/EmailController.js"></script>
 <script type="text/javascript" src="scripts/ShareController/ShareController.js"></script>
 <script type="text/javascript" src="scripts/Legend/LegendController.js"></script>
+<script type="text/javascript" src="scripts/ABAP/BannerController.js"></script>
 
 
 <script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>

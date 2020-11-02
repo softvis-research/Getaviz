@@ -27,6 +27,7 @@ public class MetaDataExporterStep {
         nodeRepository.loadNodesByRelation(SAPRelationLabels.TYPEOF, true);
         nodeRepository.loadNodesByRelation(SAPRelationLabels.USES, true);
         nodeRepository.loadNodesByRelation(SAPRelationLabels.INHERIT, true);
+        nodeRepository.loadNodesByRelation(SAPRelationLabels.REFERENCES, true);
         aCityRepository = new ACityRepository();
 
         MetropolisCreator aMetropolisCreator = new MetropolisCreator(aCityRepository, nodeRepository, config);
