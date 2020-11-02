@@ -267,13 +267,15 @@ var canvasManipulator = (function () {
             let entity = model.getEntityById(entity2.id);
             let component = document.getElementById(entity.id);
             if (component == undefined) {
-                events.log.error.publish({text: "CanvasManipualtor - highlightEntities - components for entityIds not found"});
+                events.log.error.publish({text: "CanvasManipulator - highlightEntities - components for entityIds not found"});
                 return;
             }
+
             if (entity.originalColor == undefined) {
                 entity.originalColor = component.getAttribute("color");
                 entity.currentColor = entity.originalColor;
             }
+
             if (entity["originalTransparency"] === undefined) {
                 // in case "material".opacity is undefined originalTransparency gets set to 0 which would be the default value anyways
                 entity.originalTransparency = {};
@@ -292,7 +294,7 @@ var canvasManipulator = (function () {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
             if (component == undefined) {
-                events.log.error.publish({text: "CanvasManipualtor - unhighlightEntities - components for entityIds not found"});
+                events.log.error.publish({text: "CanvasManipulator - unhighlightEntities - components for entityIds not found"});
                 return;
             }
             setTransparency(component, entity.currentTransparency);
@@ -314,6 +316,9 @@ var canvasManipulator = (function () {
 
     function removeElement(element) {
         element.parentNode.removeChild(element);
+        if (element.parentEl != null) {
+            element.parentEl.removeChild(element);            
+        }
     }
 
 

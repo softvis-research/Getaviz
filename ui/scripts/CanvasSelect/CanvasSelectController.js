@@ -183,7 +183,7 @@ var canvasSelectController = (function() {
 			});
 		}
 		
-		//highlight multislected entities with 
+		//highlight multiselected entities with specific color
 		canvasManipulator.highlightEntities(selectedEntities, controllerConfig.multiselectColor);	
 		//higlight selected entity with regular color
 		canvasManipulator.highlightEntities([selectedEntity], controllerConfig.color);	
