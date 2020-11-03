@@ -85,7 +85,7 @@ public class Antipattern implements Step {
     public void brainclass(){
         connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method)\n" +
                 "WITH c AS c, m AS m, COUNT(m.brainmethod) AS nobm\n" +
-                "WHERE nobm = 1 AND c.loc > 390 AND c.cyclo > 92 OR nobm > 1 AND c.loc > 195 AND c.cyclo > 47\n" +
+                "WHERE nobm = 1 AND c.loc > 390 AND c.cyclo > 94gr OR nobm > 1 AND c.loc > 195 AND c.cyclo > 47\n" +
                 "WITH  toFloat(c.maa) / toFLoat(c.nom) AS tcc, c AS c\n" +
                 "WHERE tcc < 0.5\n" +
                 "SET c.brainclass = true");

@@ -8,7 +8,7 @@ var antipattern =(function(){
                         <div class='antipattern_Describe helpController'>
                             <h2>God Class</h2>
                             <p>The class centralizes the logic of the system and only assigns minor tasks to other very 
-                            simple classes. This goes against the principle of object oriented design that every class 
+                            simple classes. This goes against the principle of object-oriented design that every class 
                             should only have one responsibility and can hamper the reusability and understandability 
                             of the system.</p>
                         </div>
@@ -26,7 +26,7 @@ var antipattern =(function(){
                         </div>
                         <div class='antipattern_Describe helpController'>
                             <h2>Brain Method</h2>
-                            <p>These Methods centralize the classes functionality, they are often too long
+                            <p>These Methods centralize the classes functionality. They are often too long and
                              therefore hard to understand, debug and reuse.</p>
                         </div>
                          <div class='antipattern_Describe helpController'>
