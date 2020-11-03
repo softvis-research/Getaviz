@@ -148,8 +148,14 @@ var canvasSelectController = (function() {
 			sender: canvasSelectController,
 			entities: selectedEntities
 		};
+
+		if(eventObject.entity.selected){
+			events.selected.off.publish(applicationEvent);		
+		} else {
+			events.selected.on.publish(applicationEvent);		
+		}	
 		
-		events.selected.on.publish(applicationEvent);		
+		//events.selected.on.publish(applicationEvent);		
 	}
 	
 	function onEntitySelected(applicationEvent) {	
@@ -157,7 +163,7 @@ var canvasSelectController = (function() {
 		var selectedEntity = applicationEvent.entities[0];
 		var selectedEntities = applicationEvent.entities;
 		
-		var oldSelectedEntities = events.selected.getEntities();		
+		var oldSelectedEntities = events.selected.getEntities();
 		
 		//Das wird vermutlich nicht mehr gehen
 		//select same entity again -> nothing to do
@@ -196,7 +202,10 @@ var canvasSelectController = (function() {
 	
 	function onEntityUnselected(applicationEvent){
 		var entity = applicationEvent.entities[0];
-		canvasManipulator.unhighlightEntities([entity]);		
+		var entities = applicationEvent.entities;
+
+		//canvasManipulator.unhighlightEntities([entity]);
+		canvasManipulator.unhighlightEntities(entities);
 	}
 
 	function showProgressBar(eventObject){
