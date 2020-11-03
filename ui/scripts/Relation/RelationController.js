@@ -51,6 +51,8 @@ var relationController = function () {
 		application.transferConfigParams(setupConfig, controllerConfig);
 
 		events.selected.on.subscribe(onRelationsChanged);
+
+		events.selected.off.subscribe(reset);
 	}
 
 	function activate() {
@@ -95,22 +97,18 @@ var relationController = function () {
 		relations.forEach(function (relation) {
 			model.removeEntity(relation.id);
 		});
-		
+
 		sourceEntities = new Array();
 		relatedEntitiesMap = new Map();
 		relatedEntitiesSet = new Set();
 		relations = new Array();
 	}
 
-	
-
 
 
 	function onRelationsChanged(applicationEvent) {
 
 		events.log.info.publish({ text: "connector - onRelationsChanged" });
-
-		reset();
 
 		//get related entities
 		if (controllerConfig.useMultiSelect) {
@@ -119,7 +117,7 @@ var relationController = function () {
 			sourceEntities.push(applicationEvent.entities[0]);
 		}
 
-		events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + applicationEvent.entities[0]});
+		events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + applicationEvent.entities[0] });
 
 		getRelatedEntities(sourceEntities);
 
