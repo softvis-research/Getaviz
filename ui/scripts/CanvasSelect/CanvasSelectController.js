@@ -23,13 +23,10 @@ var canvasSelectController = (function () {
 	var selectedEntities = [];
 
 	var downActionEventObject;
-
-
+	
 
 	function initialize(setupConfig) {
-
 		application.transferConfigParams(setupConfig, controllerConfig);
-
 	}
 
 	function activate() {
@@ -135,38 +132,39 @@ var canvasSelectController = (function () {
 
 	function handleOnClick(eventObject) {
 
-		//deselect the old entities
+		var alreadySelected = eventObject.entity.selected;
+
+		//always deselect the previously selected entities
 		if (selectedEntities.length != 0) {
 			var unselectEvent = {
 				sender: canvasSelectController,
 				entities: selectedEntities
 			}
 
-			events.selected.off.publish(unselectEvent);			
+			events.selected.off.publish(unselectEvent);
 		};
 
-		var newSelectedEntities = new Array();
+		//select the clicked entities only if the clicked entities are not already selected
+		//otherwise the clicked entities should only be deselected
+		if (!alreadySelected) {
+			var newSelectedEntities = new Array();
 
-		newSelectedEntities.push(eventObject.entity);
+			newSelectedEntities.push(eventObject.entity);
 
-		if (controllerConfig.useMultiselect) {
-			newSelectedEntities = newSelectedEntities.concat(model.getAllChildrenOfEntity(eventObject.entity));
-		}
+			if (controllerConfig.useMultiselect) {
+				newSelectedEntities = newSelectedEntities.concat(model.getAllChildrenOfEntity(eventObject.entity));
+			}
 
-		var applicationEvent = {
-			sender: canvasSelectController,
-			entities: newSelectedEntities
-		};
-
-		if (eventObject.entity.selected) {
-			events.selected.off.publish(applicationEvent);
-		} else {
+			var applicationEvent = {
+				sender: canvasSelectController,
+				entities: newSelectedEntities
+			};
 			events.selected.on.publish(applicationEvent);
 		}
 	}
 
 	function onEntitySelected(applicationEvent) {
-		
+
 		var selectedEntity = applicationEvent.entities[0];
 		selectedEntities = applicationEvent.entities;
 
