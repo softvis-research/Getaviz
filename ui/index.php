@@ -115,9 +115,6 @@ if (isset($_GET["state"])) {
 
 
 <script type="text/javascript" src="scripts/Relation/RelationController.js"></script>
-<script type="text/javascript" src="scripts/RelationConnector/AframeRelationConnectorController.js"></script>
-<script type="text/javascript" src="scripts/RelationTransparency/RelationTransparencyController.js"></script>
-<script type="text/javascript" src="scripts/RelationHighlight/RelationHighlightController.js"></script>
 
 <script type="text/javascript" src="scripts/Menu/MenuController.js"></script>
 <script type="text/javascript" src="scripts/HelpController/HelpController.js"></script>
@@ -125,7 +122,6 @@ if (isset($_GET["state"])) {
 <script type="text/javascript" src="scripts/Email/EmailController.js"></script>
 <script type="text/javascript" src="scripts/ShareController/ShareController.js"></script>
 <script type="text/javascript" src="scripts/Legend/LegendController.js"></script>
-<script type="text/javascript" src="scripts/ABAP/BannerController.js"></script>
 
 
 <script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>
@@ -165,7 +161,7 @@ if (isset($_GET["state"])) {
 <script type="text/javascript" src="scripts/MagGlass/MagGlassController.js"></script>
 
 <!-- ABAP Extensions -->
-<script type="text/javascript" src="scripts/ABAPNavigation/ABAPNavigationController.js"></script>
+<script type="text/javascript" src="scripts/ABAP/BannerController.js"></script>
 
 
 <!--user interface-->
