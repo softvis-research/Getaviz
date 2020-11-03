@@ -1,18 +1,18 @@
-var canvasSelectController = (function() {
-	
+var canvasSelectController = (function () {
+
 	var SELECTION_MODES = {
-		UP 			: "UP",
-		DOWN 		: "DOWN",
-		DURATION	: "DURATION"
+		UP: "UP",
+		DOWN: "DOWN",
+		DURATION: "DURATION"
 	};
 
 	//config parameters	
 	var controllerConfig = {
-		setCenterOfRotation : false,
+		setCenterOfRotation: false,
 		color: "darkred",
 		multiselectColor: "240 128 128", //lightcoral - just for test purposes
 		selectionMouseKey: 1,
-		selectionMode: SELECTION_MODES.UP,					
+		selectionMode: SELECTION_MODES.UP,
 		selectionDurationSeconds: 0.5,
 		selectionMoveAllowed: false,
 		showProgressBar: false,
@@ -20,245 +20,227 @@ var canvasSelectController = (function() {
 		useMultiselect: true
 	};
 
+	var selectedEntities = [];
+
 	var downActionEventObject;
 
-	
-	
-	function initialize(setupConfig){	
 
-		application.transferConfigParams(setupConfig, controllerConfig);	
-			
-    }	
-	
-	function activate(){
-				
+
+	function initialize(setupConfig) {
+
+		application.transferConfigParams(setupConfig, controllerConfig);
+
+	}
+
+	function activate() {
+
 		actionController.actions.mouse.key[controllerConfig.selectionMouseKey].down.subscribe(downAction);
 		actionController.actions.mouse.key[controllerConfig.selectionMouseKey].up.subscribe(upAction);
 		actionController.actions.mouse.key[controllerConfig.selectionMouseKey].during.subscribe(duringAction);
-		actionController.actions.mouse.move.subscribe(mouseMove);	
-			
+		actionController.actions.mouse.move.subscribe(mouseMove);
+
 		events.selected.on.subscribe(onEntitySelected);
 		events.selected.off.subscribe(onEntityUnselected);
-        events.componentSelected.on.subscribe(onComponentSelected);
-        events.antipattern.on.subscribe(onComponentSelected);
+		events.componentSelected.on.subscribe(onComponentSelected);
+		events.antipattern.on.subscribe(onComponentSelected);
 	}
 
-	function onComponentSelected(applicationEvent){
+	function onComponentSelected(applicationEvent) {
 		console.log("executed")
-        var selectedEntities = events.selected.getEntities();
-        selectedEntities.forEach(function(selectedEntity){
+		var selectedEntities = events.selected.getEntities();
+		selectedEntities.forEach(function (selectedEntity) {
 
-            var unselectEvent = {
-                sender: canvasSelectController,
-                entities: [selectedEntity]
-            }
-
-            events.selected.off.publish(unselectEvent);
-        });
-	}
-	
-	function reset(){
-		var selectedEntities = events.selected.getEntities();		
-		
-		selectedEntities.forEach(function(selectedEntity){
 			var unselectEvent = {
-                sender: canvasSelectController,
-                entities: [selectedEntity]
-            };
+				sender: canvasSelectController,
+				entities: [selectedEntity]
+			}
 
-			events.selected.off.publish(unselectEvent);	
-		});		
+			events.selected.off.publish(unselectEvent);
+		});
 	}
 
-	function downAction(eventObject, timestamp){
+	function reset() {
+		var unselectEvent = {
+			sender: canvasSelectController,
+			entities: selectedEntities
+		};
+
+		events.selected.off.publish(unselectEvent);
+	}
+
+	function downAction(eventObject, timestamp) {
 
 		downActionEventObject = null;
 
-		if(!eventObject.entity){
+		if (!eventObject.entity) {
 			return;
 		}
 
-		if(controllerConfig.selectionMode == "DOWN"){
+		if (controllerConfig.selectionMode == "DOWN") {
 			handleOnClick(eventObject);
 			return;
 		}
-		
+
 		downActionEventObject = eventObject;
 
-		if(controllerConfig.selectionMode == "DURATION" && controllerConfig.showProgressBar){
+		if (controllerConfig.selectionMode == "DURATION" && controllerConfig.showProgressBar) {
 			showProgressBar(eventObject);
 		}
 	}
 
-	function upAction(eventObject){
+	function upAction(eventObject) {
 
-		if(!downActionEventObject){
+		if (!downActionEventObject) {
 			return;
 		}
 
-		if(controllerConfig.selectionMode == "UP"){
+		if (controllerConfig.selectionMode == "UP") {
 			handleOnClick(downActionEventObject);
 			return;
 		}
 
-		if(controllerConfig.selectionMode == "DURATION" && controllerConfig.showProgressBar){
+		if (controllerConfig.selectionMode == "DURATION" && controllerConfig.showProgressBar) {
 			hideProgressBar();
 		}
 	}
 
-	function duringAction(eventObject, timestamp, timeSinceStart){
+	function duringAction(eventObject, timestamp, timeSinceStart) {
 
-		if(!downActionEventObject){
+		if (!downActionEventObject) {
 			return;
 		}
 
-		if(controllerConfig.selectionMode != "DURATION"){
+		if (controllerConfig.selectionMode != "DURATION") {
 			return;
 		}
 
-		if(timeSinceStart > ( 1000 * controllerConfig.selectionDurationSeconds)){
+		if (timeSinceStart > (1000 * controllerConfig.selectionDurationSeconds)) {
 			hideProgressBar();
 			handleOnClick(downActionEventObject);
-			downActionEventObject = null;			
+			downActionEventObject = null;
 			return;
 		}
 	}
 
-	function mouseMove(eventObject, timestamp){
-		if(!downActionEventObject){
+	function mouseMove(eventObject, timestamp) {
+		if (!downActionEventObject) {
 			return;
 		}
 
-		if(!controllerConfig.selectionMoveAllowed){
+		if (!controllerConfig.selectionMoveAllowed) {
 			hideProgressBar();
 			downActionEventObject = null;
 		}
 	}
 
 	function handleOnClick(eventObject) {
-		
-		var selectedEntities = [];
-		selectedEntities.push(eventObject.entity);
 
-		if (controllerConfig.useMultiselect) {
-			selectedEntities = selectedEntities.concat(model.getAllChildrenOfEntity(eventObject.entity));
-		}		
-				
-		var applicationEvent = {			
-			sender: canvasSelectController,
-			entities: selectedEntities
+		//deselect the old entities
+		if (selectedEntities.length != 0) {
+			var unselectEvent = {
+				sender: canvasSelectController,
+				entities: selectedEntities
+			}
+
+			events.selected.off.publish(unselectEvent);			
 		};
 
-		if(eventObject.entity.selected){
-			events.selected.off.publish(applicationEvent);		
+		var newSelectedEntities = new Array();
+
+		newSelectedEntities.push(eventObject.entity);
+
+		if (controllerConfig.useMultiselect) {
+			newSelectedEntities = newSelectedEntities.concat(model.getAllChildrenOfEntity(eventObject.entity));
+		}
+
+		var applicationEvent = {
+			sender: canvasSelectController,
+			entities: newSelectedEntities
+		};
+
+		if (eventObject.entity.selected) {
+			events.selected.off.publish(applicationEvent);
 		} else {
-			events.selected.on.publish(applicationEvent);		
-		}	
-		
-		//events.selected.on.publish(applicationEvent);		
+			events.selected.on.publish(applicationEvent);
+		}
 	}
-	
-	function onEntitySelected(applicationEvent) {	
+
+	function onEntitySelected(applicationEvent) {
 		
 		var selectedEntity = applicationEvent.entities[0];
-		var selectedEntities = applicationEvent.entities;
-		
-		var oldSelectedEntities = events.selected.getEntities();
-		
-		//Das wird vermutlich nicht mehr gehen
-		//select same entity again -> nothing to do
-		if(oldSelectedEntities.has(selectedEntity)){
+		selectedEntities = applicationEvent.entities;
+
+		if (selectedEntity.type == "text") {
 			return;
 		}
 
-        if(selectedEntity.type == "text"){
-            return;
-        }
-
-		//unhighlight old selected entities	for single select	
-		if(oldSelectedEntities.size != 0){
-		
-			oldSelectedEntities.forEach(function(oldSelectedEntity){
-								
-				var unselectEvent = {					
-					sender: canvasSelectController,
-					entities: [oldSelectedEntity]
-				}	
-
-				events.selected.off.publish(unselectEvent);	
-			});
-		}
-		
 		//highlight multiselected entities with specific color
-		canvasManipulator.highlightEntities(selectedEntities, controllerConfig.multiselectColor);	
+		canvasManipulator.highlightEntities(selectedEntities, controllerConfig.multiselectColor);
 		//higlight selected entity with regular color
-		canvasManipulator.highlightEntities([selectedEntity], controllerConfig.color);	
+		canvasManipulator.highlightEntities([selectedEntity], controllerConfig.color);
 
 		//center of rotation
-		if(controllerConfig.setCenterOfRotation){
+		if (controllerConfig.setCenterOfRotation) {
 			canvasManipulator.setCenterOfRotation(selectedEntity);
 		}
-    }
-	
-	function onEntityUnselected(applicationEvent){
-		var entity = applicationEvent.entities[0];
-		var entities = applicationEvent.entities;
-
-		//canvasManipulator.unhighlightEntities([entity]);
-		canvasManipulator.unhighlightEntities(entities);
 	}
 
-	function showProgressBar(eventObject){
-		
+	function onEntityUnselected(applicationEvent) {
+		canvasManipulator.unhighlightEntities(applicationEvent.entities);
+		selectedEntities = new Array();
+	}
+
+	function showProgressBar(eventObject) {
+
 		var canvas = document.getElementById("canvas");
-		
+
 		var progressBarDivElement = document.createElement("DIV");
 		progressBarDivElement.id = "progressBarDiv";
-		
+
 		canvas.appendChild(progressBarDivElement);
 
 		var progressBar = $("#progressBarDiv");
 
-		progressBar.jqxProgressBar({ 
-			width: 				250, 
-			height: 			30, 
-			value: 				100, 
-			animationDuration: 	controllerConfig.selectionDurationSeconds * 1000, 
-			template: 			"danger"
+		progressBar.jqxProgressBar({
+			width: 250,
+			height: 30,
+			value: 100,
+			animationDuration: controllerConfig.selectionDurationSeconds * 1000,
+			template: "danger"
 		});
 
 
 		progressBar.css("top", eventObject.layerY + 10 + "px");
-        progressBar.css("left", eventObject.layerX + 10 +  "px");
+		progressBar.css("left", eventObject.layerX + 10 + "px");
 
 		progressBar.css("z-index", "1");
 		progressBar.css("position", "absolute");
 
-		progressBar.css("width", "250px");	
-		progressBar.css("height", "30px");	
+		progressBar.css("width", "250px");
+		progressBar.css("height", "30px");
 
 		progressBar.css("display", "block");
 
 	}
 
-	function hideProgressBar(){		
-		
+	function hideProgressBar() {
+
 		var progressBarDivElement = document.getElementById("progressBarDiv");
 
-		if(!progressBarDivElement){
+		if (!progressBarDivElement) {
 			return;
-		}	
+		}
 
-		var canvas = document.getElementById("canvas");		
+		var canvas = document.getElementById("canvas");
 		canvas.removeChild(progressBarDivElement);
 	}
-	
 
-    return {
-        initialize			: initialize,
-		reset				: reset,
-		activate			: activate,
-		SELECTION_MODES		: SELECTION_MODES
-    };    
+
+	return {
+		initialize: initialize,
+		reset: reset,
+		activate: activate,
+		SELECTION_MODES: SELECTION_MODES
+	};
 })();
 
