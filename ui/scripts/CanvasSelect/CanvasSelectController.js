@@ -133,6 +133,8 @@ var canvasSelectController = (function () {
 	function handleOnClick(eventObject) {
 
 		var alreadySelected = eventObject.entity.selected;
+		// oder besser so?
+		// var alreadySelected = eventObject.entity == selectedEntities[0];
 
 		//always deselect the previously selected entities
 		if (selectedEntities.length != 0) {
@@ -173,9 +175,9 @@ var canvasSelectController = (function () {
 		}
 
 		//highlight multiselected entities with specific color
-		canvasManipulator.highlightEntities(selectedEntities, controllerConfig.multiselectColor);
+		canvasManipulator.changeColorOfEntities(selectedEntities.slice(1), controllerConfig.multiselectColor, "canvasSelectController");
 		//higlight selected entity with regular color
-		canvasManipulator.highlightEntities([selectedEntity], controllerConfig.color);
+		canvasManipulator.changeColorOfEntities([selectedEntity], controllerConfig.color, "canvasSelectController");
 
 		//center of rotation
 		if (controllerConfig.setCenterOfRotation) {
@@ -184,7 +186,7 @@ var canvasSelectController = (function () {
 	}
 
 	function onEntityUnselected(applicationEvent) {
-		canvasManipulator.unhighlightEntities(applicationEvent.entities);
+		canvasManipulator.resetColorOfEntities(applicationEvent.entities, "canvasSelectController");
 		selectedEntities = new Array();
 	}
 

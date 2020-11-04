@@ -441,7 +441,7 @@ var relationController = function () {
 			canvasManipulator.resetTransparencyOfEntities(Array.from(relatedEntitiesSet.values()).filter(relatedEntity => !(relatedEntity.marked)));
 		}
 
-		canvasManipulator.changeColorOfEntities(Array.from(relatedEntitiesSet.values()).filter(relatedEntity => !(relatedEntity.marked)), controllerConfig.highlightColor);
+		canvasManipulator.changeColorOfEntities(Array.from(relatedEntitiesSet.values()), controllerConfig.highlightColor, "relationController");
 	}
 
 	function unhighlightRelatedEntities() {
@@ -449,7 +449,7 @@ var relationController = function () {
 			return;
 		}
 
-		canvasManipulator.resetColorOfEntities(Array.from(relatedEntitiesSet.values()).filter(relatedEntity => !(relatedEntity.marked)));
+		canvasManipulator.resetColorOfEntities(Array.from(relatedEntitiesSet.values()), "relationController");
 	}
 
 

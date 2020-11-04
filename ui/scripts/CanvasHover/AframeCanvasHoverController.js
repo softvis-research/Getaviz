@@ -143,12 +143,8 @@ var canvasHoverController = (function() {
 		if(entity.type === "text"){
 			return;
 		}
-
-		if(entity.marked && entity.selected){
-			canvasManipulator.unhighlightEntities([entity]);	
-		} else {
-			canvasManipulator.highlightEntities([entity], controllerConfig.hoverColor);	
-		}
+		
+		canvasManipulator.changeColorOfEntities([entity], controllerConfig.hoverColor, "canvasHoverController");
 		        
 		$("#tooltipName").html(getTooltipName(entity));
 
@@ -189,13 +185,7 @@ var canvasHoverController = (function() {
 	function onEntityUnhover(applicationEvent) {
 		var entity = applicationEvent.entities[0];
 		
-		if(entity.marked && entity.selected){
-			canvasManipulator.highlightEntities([entity], controllerConfig.hoverColor);	
-		} else {
-			if(!entity.selected){
-				canvasManipulator.unhighlightEntities([entity]);			
-			}
-        }
+		canvasManipulator.resetColorOfEntities([entity], "canvasHoverController");
 		
 		$("#tooltip").css("display", "none");
 
