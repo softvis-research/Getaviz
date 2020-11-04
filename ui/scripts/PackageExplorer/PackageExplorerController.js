@@ -4,6 +4,7 @@ var packageExplorerController = (function() {
 	let jQPackageExplorerTree = "#packageExplorerTree";
 	
 	let tree;
+	let items = [];
 
 	let controllerConfig = {
 		projectIcon: 	"scripts/PackageExplorer/images/project.png",
@@ -11,7 +12,25 @@ var packageExplorerController = (function() {
 		typeIcon: 		"scripts/PackageExplorer/images/type.png",
 		fieldIcon: 		"scripts/PackageExplorer/images/field.png",
 		methodIcon:		"scripts/PackageExplorer/images/method.png",
-        elementsSelectable: true
+		elementsSelectable: true,
+		
+		//abap specific
+
+		namespace: "scripts/PackageExplorer/images/abap/namespace.png",
+		class: "scripts/PackageExplorer/images/abap/class.png",
+		localClass: "scripts/PackageExplorer/images/abap/localClass.png",
+		interface: "scripts/PackageExplorer/images/abap/interface.png",
+		localInterface:"scripts/PackageExplorer/images/abap/localInterface.png",
+		functionGroup: "scripts/PackageExplorer/images/abap/fugr.png",
+		reportDistrict: "scripts/PackageExplorer/images/abap/report_district.png",
+		reportbuilding: "scripts/PackageExplorer/images/abap/report_building.png",
+		attribute: "scripts/PackageExplorer/images/abap/attribute.png",
+		form_fumo_meth: "scripts/PackageExplorer/images/abap/form&&fumo&&method.png"
+		
+
+
+
+
 	};
 	
 	function initialize(setupConfig){
@@ -38,12 +57,14 @@ var packageExplorerController = (function() {
 	function reset(){
 		prepareTreeView();
 	}
-    
+
     function prepareTreeView() {
         
-        let entities = model.getCodeEntities();
-        let items = [];
+		let entities = model.getCodeEntities();
 		
+		let items = [];
+		//controllerConfig.entries.forEach(createItem);
+
 		//build items for ztree
 		entities.forEach(function(entity) {
 			
@@ -76,20 +97,23 @@ var packageExplorerController = (function() {
                         };
                     }
                 }
-            } else {	
-				switch(entity.type) {
-					case "Project":
+            } else {
+				//controllerConfig.entries.forEach(createItem);	
+					switch(entity.type) {
+						case "Project":
 						item = { id: entity.id, open: true, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.projectIcon, iconSkin: "zt"};
 						break;
 					case "Namespace":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.packageIcon, iconSkin: "zt"};
 						break;
 					case "Class":
+						
                         if(entity.id.endsWith("_2") || entity.id.endsWith("_3")){
                             break;
                         };
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
 						break;
+			
 					case  "ParameterizableClass":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
 						break;
@@ -104,6 +128,8 @@ var packageExplorerController = (function() {
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt"};
 						break;
 					case "Method":
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt"};
+						break;
 					case "Function":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt"};
 						break;
@@ -111,16 +137,35 @@ var packageExplorerController = (function() {
 					case "Union":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
 						break;
+
+						case "FunctionGroup":
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.functionGroup, iconSkin: "zt"};
+						break;
+					case "FunctionModule":
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.form_fumo_meth, iconSkin: "zt"};
+						break;
+					case "Report":
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.reportbuilding, iconSkin: "zt"};
+						break;
+					case "Interface":
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.interface, iconSkin: "zt"};
+						break;
+					case "FormRoutine":
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.form_fumo_meth, iconSkin: "zt"};
+						break;	
 					default: 
 						events.log.warning.publish({ text: "FamixElement not in tree: " + entity.type});
 
 						return;
-				}
+					}
+				
            }
 			if(item !== undefined) {
                 items.push(item);
-            }
+			}
+			
 		});
+		
 		
 		//Sortierung nach Typ und Alphanumerisch
 		items.sort(
