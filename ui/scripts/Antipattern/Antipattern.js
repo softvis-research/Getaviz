@@ -8,18 +8,12 @@ var antipatternController = (function() {
         typeIcon: 		"scripts/Antipattern/images/type.png",
         methodIcon:		"scripts/Antipattern/images/method.png",
         colorAnimationColors:                // # available colors for color animation
-            [ orange, "red" ],
+            [ orange ],
         minColorChangeFrequency: 1000,       // # milliseconds - min freq for color animation
         maxColorChangeFrequency: 500,        // # milliseconds - max freq for color animation
     };
 
-    var controllerConfig = {
-
-    };
-
-    function initialize() {
-
-    }
+    function initialize() {}
 
     function activate(rootDiv) {
         var zTreeDiv = document.createElement("DIV");
@@ -41,16 +35,16 @@ var antipatternController = (function() {
     }
 
     function antipatternFinder(){
-        let featureenvy = {id: "featureenvy", children: [],name: "Feature Envy", checked: false};
-        let brainmethod = {id: "brainmethod", children: [],name: "Brain Method", checked: false};
-        let brainclass = {id: "brainclass", children: [], name: "Brain Class", checked: false}
-        let dataclass = {id: "dataclass", children: [], name: "Data Class", checked: false};
-        let godclass  = {id: "godclass", children: [], name: "God Class", checked: false};
+        let featureenvy = {id: "featureenvy", children: [],name: "Feature Envy", ap: true};
+        let brainmethod = {id: "brainmethod", children: [],name: "Brain Method", ap: true};
+        let brainclass = {id: "brainclass", children: [], name: "Brain Class", ap: true};
+        let dataclass = {id: "dataclass", children: [], name: "Data Class", ap: true};
+        let godclass  = {id: "godclass", children: [], name: "God Class", ap: true};
         let items = []
 
         model.getAllEntities().forEach(entity => {
-            let methodAP = {id: entity.id, name: entity.name, iconSkin: "zt", chkDisabled:true, icon: antipatternConfig.methodIcon,checked: false};
-            let classAP = {id: entity.id, name: entity.name, iconSkin: "zt", chkDisabled:true, icon: antipatternConfig.typeIcon,checked: false};
+            let methodAP = {id: entity.id, name: entity.name, iconSkin: "zt", icon: antipatternConfig.methodIcon,checked: false};
+            let classAP = {id: entity.id, name: entity.name, iconSkin: "zt", icon: antipatternConfig.typeIcon,checked: false};
             if(entity.godclass === 'TRUE'){
                 if(!items.includes(godclass)){items.push(godclass)}
                 godclass.children.push(classAP);
@@ -76,11 +70,6 @@ var antipatternController = (function() {
         var items = antipatternFinder()
 
         var settings = {
-            check: {
-                enable: true,
-                chkStyle: "radio",
-                radioType: "level"
-            },
             data: {
                 simpleData: {
                     enable:true,
@@ -90,8 +79,7 @@ var antipatternController = (function() {
                 }
             },
             callback: {
-                onCheck: checkedOrUnchecked,
-                onClick: zTreeOnClick
+                onClick: objectOrGroup
             },
             view:{
                 showLine: false,
@@ -102,16 +90,21 @@ var antipatternController = (function() {
         tree = $.fn.zTree.init( $(jQAntipatternTree), settings, items);
     }
 
-    function checkedOrUnchecked(treeEvent, treeId, treeNode){
-        if(treeNode.checked){
+    /**
+     * If an Anti-Pattern group is chosen, color all the antipattern objects
+     * If a method or class object is chosen, mark them read and flyto
+     */
+    function objectOrGroup(treeEvent, treeId, treeNode){
+        if(treeNode.ap){
             decide(treeEvent, treeId, treeNode)
         } else {
-            resetMarked()
+            zTreeOnClick(treeEvent, treeId, treeNode)
         }
     }
 
+
     function decide(treeEvent, treeId, treeNode) {
-        resetMarked()
+        resetColor();
         model.getAllEntities().forEach(entity => {
             switch (treeNode.id) {
                 case "godclass":
@@ -129,22 +122,24 @@ var antipatternController = (function() {
                 case "featureenvy":
                     if(entity.featureenvy === 'TRUE'){changeColor(entity)}
                     break;
-            }
-        })
+            }})
     }
 
     function changeColor(entity){
-        canvasManipulator.changeColorOfEntities([entity], orange)
-        let colorAnimation = new MetricAnimationColor(antipatternConfig.minColorChangeFrequency,
-            antipatternConfig.maxColorChangeFrequency);
-        let metric;
-        colorAnimation.addMetric(metric, antipatternConfig.colorAnimationColors, 1);
-        entity.metricAnimationColor = colorAnimation;
-        canvasManipulator.startColorAnimationForEntity(entity, colorAnimation);
-        setTimeout(() =>  canvasManipulator.stopColorAnimationForEntity(entity), 2150)
+            let colorAnimation = new MetricAnimationColor(antipatternConfig.minColorChangeFrequency,
+                antipatternConfig.maxColorChangeFrequency);
+            let metric;
+            colorAnimation.addMetric(metric, antipatternConfig.colorAnimationColors, 1);
+            entity.metricAnimationColor = colorAnimation;
+            canvasManipulator.startColorAnimationForEntity(entity, colorAnimation);
+            setTimeout(() => canvasManipulator.stopColorAnimationForEntityColorStays(entity), 1500)
+            canvasManipulator.changeColorOfEntities([entity], orange)
     }
 
-    function resetMarked(){
+    function resetColor(){
+        model.getAllEntities().forEach(entity => {
+                canvasManipulator.stopColorAnimationForEntity(entity);
+        })
         canvasManipulator.resetColorOfEntities(model.getAllEntities());
     }
 

@@ -44,10 +44,10 @@ public class AntipatternTest {
     @Test
     void godclassTest() {
         Record result = connector
-                .executeRead("MATCH (c:Class)\n" +
-                        "WHERE c.cyclo >= 47 AND c.atfd >= 4 AND c.nom > 0\n" +
-                        "WITH toFloat(c.maa) / toFLoat(c.nom) AS tcc, c AS c\n" +
-                        "WHERE tcc < 0.33\n" +
+                .executeRead("MATCH (c:Class) " +
+                        "WHERE c.cyclo >= 47 AND c.atfd >= 4 AND c.nom > 0 " +
+                        "WITH toFloat(c.maa) / toFLoat(c.nom) AS tcc, c AS c " +
+                        "WHERE tcc < 0.33 " +
                         "return c.name").single();
         String godclass = result.get("c.name").asString();
         assertEquals(godclass, "Bank");
@@ -56,8 +56,8 @@ public class AntipatternTest {
     @Test
     void brainmethodTest() {
         List<String> actual = new ArrayList<>();
-        connector.executeRead("MATCH (m:Method)\n" +
-                "WHERE m.effectiveLineCount > 65 AND m.cyclomaticComplexity > 31 AND m.noav >= 7\n" +
+        connector.executeRead("MATCH (m:Method) " +
+                "WHERE m.effectiveLineCount > 65 AND m.cyclomaticComplexity > 31 AND m.noav >= 7 " +
                 "return m.name").stream().forEach(record -> actual.add(record.get("m.name").asString()));
         ArrayList<String> correct = new ArrayList<>(Arrays.asList("getBusinessCustomers", "getPrivateCustomers"));
         assertEquals(actual, correct);
@@ -66,11 +66,11 @@ public class AntipatternTest {
     @Test
     void brainclassTest() {
         Record result = connector
-                .executeRead("MATCH (c:Class)-[:DECLARES]->(m:Method)\n" +
-                        "WITH c AS c, m AS m, COUNT(m.brainmethod) AS nobm\n" +
-                        "WHERE nobm = 1 AND c.loc > 390 AND c.cyclo > 92 OR nobm > 1 AND c.loc > 195 AND c.cyclo > 47\n" +
-                        "WITH  toFloat(c.maa) / toFLoat(c.nom) AS tcc, c AS c\n" +
-                        "WHERE tcc < 0.5\n" +
+                .executeRead("MATCH (c:Class)-[:DECLARES]->(m:Method) " +
+                        "WITH c AS c, m AS m, COUNT(m.brainmethod) AS nobm " +
+                        "WHERE nobm = 1 AND c.loc > 390 AND c.cyclo > 92 OR nobm > 1 AND c.loc > 195 AND c.cyclo > 47 " +
+                        "WITH  toFloat(c.maa) / toFLoat(c.nom) AS tcc, c AS c " +
+                        "WHERE tcc < 0.5 " +
                         "return distinct c.name").single();
         String brainclass = result.get("c.name").asString();
         assertEquals(brainclass, "Bank");
@@ -79,11 +79,11 @@ public class AntipatternTest {
     @Test
     void featureEnvyTest() {
         Record result = connector
-                .executeRead("MATCH (m:Method)\n" +
-                        "WITH m AS m\n" +
-                        "WHERE (m.atad - m.atod) > 4 AND m.atad > 0\n" +
-                        "WITH toFloat(m.atod) / toFLoat(m.atad) AS laa, m AS m\n" +
-                        "WHERE laa < 0.33\n" +
+                .executeRead("MATCH (m:Method) " +
+                        "WITH m AS m " +
+                        "WHERE (m.atad - m.atod) > 4 AND m.atad > 0 " +
+                        "WITH toFloat(m.atod) / toFLoat(m.atad) AS laa, m AS m " +
+                        "WHERE laa < 0.33 " +
                         "return m.name").single();
         String fe = result.get("m.name").asString();
         assertEquals(fe, "getAccounts");
@@ -92,11 +92,11 @@ public class AntipatternTest {
     @Test
     void dataclassTest() {
         Record result = connector
-                .executeRead("MATCH (c:Class)\n" +
-                        "WITH c AS c\n" +
-                        "WHERE c.cyclo < 31 AND (c.noam + c.nopa) > 4 OR c.cyclo < 47 AND (c.noam + c.nopa) > 7\n" +
-                        "WITH toFloat(c.nom - c.noam) / toFloat(c.nopa + c.noam) AS woc, c AS c\n" +
-                        "WHERE woc < 0.33\n" +
+                .executeRead("MATCH (c:Class) " +
+                        "WITH c AS c " +
+                        "WHERE c.cyclo < 31 AND (c.noam + c.nopa) > 4 OR c.cyclo < 47 AND (c.noam + c.nopa) > 7 " +
+                        "WITH toFloat(c.nom - c.noam) / toFloat(c.nopa + c.noam) AS woc, c AS c " +
+                        "WHERE woc < 0.33 " +
                         "return c.name").single();
         String fe = result.get("c.name").asString();
         assertEquals(fe, "PrivateCustomer");

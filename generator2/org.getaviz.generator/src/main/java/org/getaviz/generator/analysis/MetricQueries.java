@@ -47,9 +47,9 @@ public class MetricQueries {
      * Relevant for Godclass, Dataclass, Brainclass
      */
     public void complexityAndNumbOfMethods()  {
-        connector.executeWrite("match (c:Class)-[:DECLARES]->(m:Method)\n" +
-                "with sum(m.cyclomaticComplexity) as cyclo, count(m.fqn) as nom, sum(m.effectiveLineCount) as loc, c as c \n" +
-                "set c.cyclo=cyclo, c.nom=nom, c.loc=loc");
+        connector.executeWrite("match (c:Class)-[:DECLARES]->(m:Method) " +
+                "with sum(m.cyclomaticComplexity) as cyclo, count(m.fqn) as nom, sum(m.effectiveLineCount) as loc, c as c " +
+                "set c.cyclo=cyclo, c.nom=nom, c.loc=loc ");
     }
 
     /**
@@ -58,10 +58,10 @@ public class MetricQueries {
      *  Relevant for Feature Envy
      */
     public void accessToOwnData(){
-        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field), (c:Class)-[:DECLARES]->(f:Field)\n" +
-                "with distinct m as m, f.name as attr\n" +
-                "with m as m, count(m) as atod\n" +
-                "set m.atod = atod");
+        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field), (c:Class)-[:DECLARES]->(f:Field) " +
+                "with distinct m as m, f.name as attr " +
+                "with m as m, count(m) as atod " +
+                "set m.atod = atod ");
     }
 
     /**
@@ -70,10 +70,10 @@ public class MetricQueries {
      * Relevant for Feature Envy
      */
     public void accesToAllData(){
-        connector.executeWrite("match (m:Method)-[:READS|WRITES]->(f:Field)\n" +
-                "with distinct m as m, f.name as attr\n" +
-                "with m as m, count(m) as atad\n" +
-                "set m.atad = atad");
+        connector.executeWrite("match (m:Method)-[:READS|WRITES]->(f:Field) " +
+                "with distinct m as m, f.name as attr " +
+                "with m as m, count(m) as atad " +
+                "set m.atad = atad ");
     }
 
     /**
@@ -82,11 +82,11 @@ public class MetricQueries {
      * Relevant for Dataclass
      */
     public void numberOfPublicAttributes(){
-        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(f:Field)\n" +
-                "WITH c AS c, f AS f\n" +
-                "WHERE f.visibility CONTAINS \"public\"\n" +
-                "WITH COUNT(f.fqn) AS nopa, c AS c\n" +
-                "SET c.nopa = nopa");
+        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(f:Field) " +
+                "WITH c AS c, f AS f " +
+                "WHERE f.visibility CONTAINS \"public\" " +
+                "WITH COUNT(f.fqn) AS nopa, c AS c " +
+                "SET c.nopa = nopa ");
     }
 
     /**
@@ -95,11 +95,11 @@ public class MetricQueries {
      * Relevant for Dataclass
      */
     public void numberOfAccessorMethods(){
-        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method)\n" +
-                "WITH c AS c, m AS m\n" +
-                "WHERE m.name STARTS WITH \"get\" OR m.name STARTS WITH \"set\"\n" +
-                "WITH COUNT(m.fqn) AS noam, c AS c\n" +
-                "SET c.noam = noam");
+        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method) " +
+                "WITH c AS c, m AS m " +
+                "WHERE m.name STARTS WITH \"get\" OR m.name STARTS WITH \"set\" " +
+                "WITH COUNT(m.fqn) AS noam, c AS c " +
+                "SET c.noam = noam ");
     }
 
     /**
@@ -108,11 +108,11 @@ public class MetricQueries {
      * Relevant for Feature Envy
      */
     public void foreignDataProviders(){
-        connector.executeWrite("match (c1:Class)-[:DECLARES]->(f:Field), (c2:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field) \n" +
-                "where (NOT c1.fqn = c2.fqn) \n" +
-                "with distinct m as m, c1.name as foreignClass\n" +
-                "with m as m, count(m.name) as fdp\n" +
-                "set m.fdp = fdp");
+        connector.executeWrite("match (c1:Class)-[:DECLARES]->(f:Field), (c2:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field) " +
+                "where (NOT c1.fqn = c2.fqn) " +
+                "with distinct m as m, c1.name as foreignClass " +
+                "with m as m, count(m.name) as fdp " +
+                "set m.fdp = fdp ");
     }
 
 
@@ -122,8 +122,8 @@ public class MetricQueries {
      * Relevant for Brain Method
      */
     public void numberOfAccessedVar(){
-        connector.executeWrite("MATCH (m:Method)-[:DECLARES]->(v:Variable) \n" +
-                "WITH m AS m, COUNT(v.name) AS noav \n" +
+        connector.executeWrite("MATCH (m:Method)-[:DECLARES]->(v:Variable) " +
+                "WITH m AS m, COUNT(v.name) AS noav " +
                 "SET m.noav = noav");
     }
 

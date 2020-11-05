@@ -154,6 +154,26 @@ var canvasManipulator = (function () {
     }
 
     /**
+     * Stops the metric animated color animation for the entity and leaves the animation color.
+     */
+    function stopColorAnimationForEntityColorStays(entity) {
+        if (!(entity == undefined)) {
+            var component = document.getElementById(entity.id);
+        }
+        if (component == undefined) {
+            events.log.error.publish({text: "CanvasManipualtor - stopColorAnimationForEntity - component for entityId not found"});
+            return;
+        }
+
+        let attributeNames = component.getAttributeNames();
+        attributeNames.forEach(function (attributeName) {
+            if (attributeName.startsWith("animation__color")){
+                component.removeAttribute(attributeName);
+            }
+        });
+    }
+
+    /**
      * Starts the metric dependent expanding animation for the entity.
      */
     function startExpandingAnimationForEntity(entity, expandingAnimation) {
@@ -360,6 +380,7 @@ var canvasManipulator = (function () {
 
         startExpandingAnimationForEntity : startExpandingAnimationForEntity,
         stopExpandingAnimationForEntity : stopExpandingAnimationForEntity,
+        stopColorAnimationForEntityColorStays: stopColorAnimationForEntityColorStays,
 
         changeColorOfEntities: changeColorOfEntities,
         resetColorOfEntities: resetColorOfEntities,

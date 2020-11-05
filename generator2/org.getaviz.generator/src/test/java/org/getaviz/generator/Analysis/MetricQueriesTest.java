@@ -46,11 +46,11 @@ class MetricQueriesTest {
     @Test
     void countMethodsAccessingAttributesTest() {
         Record result = connector
-                .executeRead("match (c:Class)-[:DECLARES]->(m:Method)-[:WRITES|READS]->(f:Field)\n" +
-                        "where (not m.name contains '$')\n" +
-                        "with c as c, m as m, COUNT(f.name) as maa\n" +
-                        "where maa >= 2\n" +
-                        "with count(m) as result\n" +
+                .executeRead("match (c:Class)-[:DECLARES]->(m:Method)-[:WRITES|READS]->(f:Field) " +
+                        "where (not m.name contains '$') " +
+                        "with c as c, m as m, COUNT(f.name) as maa " +
+                        "where maa >= 2 " +
+                        "with count(m) as result " +
                         "return result").single();
         int maa = result.get("result").asInt();
         assertEquals(maa, 2);
@@ -59,10 +59,10 @@ class MetricQueriesTest {
     @Test
     void accessToForeignDataTest() {
         List<Integer> actual = new ArrayList<>();
-        connector.executeRead("MATCH (c:Class)-[:DECLARES|READS|WRITES]->(f:Field)\n" +
-                "WITH f AS f, c AS c\n" +
-                "WHERE (f.name CONTAINS '$') AND (NOT f.name CONTAINS \"$class$java\")\n" +
-                "WITH c AS c, COUNT(f.name) AS atfd\n" +
+        connector.executeRead("MATCH (c:Class)-[:DECLARES|READS|WRITES]->(f:Field) " +
+                "WITH f AS f, c AS c " +
+                "WHERE (f.name CONTAINS '$') AND (NOT f.name CONTAINS \"$class$java\") " +
+                "WITH c AS c, COUNT(f.name) AS atfd " +
                 "RETURN atfd").stream().forEach(record -> actual.add(record.get("atfd").asInt()));
         ArrayList<Integer> correct = new ArrayList<>(Arrays.asList(4,1));
         assertEquals(actual, correct);
@@ -73,8 +73,8 @@ class MetricQueriesTest {
         List<Integer> cyclo = new ArrayList<>();
         List<Integer> nom = new ArrayList<>();
         List<Integer> loc = new ArrayList<>();
-        connector.executeRead("match (c:Class)-[:DECLARES]->(m:Method)\n" +
-                "with sum(m.cyclomaticComplexity) as cyclo, count(m.fqn) as nom, sum(m.effectiveLineCount) as loc, c as c\n" +
+        connector.executeRead("match (c:Class)-[:DECLARES]->(m:Method) " +
+                "with sum(m.cyclomaticComplexity) as cyclo, count(m.fqn) as nom, sum(m.effectiveLineCount) as loc, c as c " +
                 "return cyclo, nom, loc").stream().forEach(record -> {cyclo.add(record.get("cyclo").asInt());
                                                                       nom.add(record.get("nom").asInt());
                                                                       loc.add(record.get("loc").asInt());});
@@ -89,8 +89,8 @@ class MetricQueriesTest {
     @Test
     void  accessToOwnDataTest() {
         List<Integer> actual = new ArrayList<>();
-        connector.executeRead("MATCH (c:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field), (c:Class)-[:DECLARES]->(f:Field)\n" +
-                "WITH m AS m, count(f.fqn) AS atod\n" +
+        connector.executeRead("MATCH (c:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field), (c:Class)-[:DECLARES]->(f:Field) " +
+                "WITH m AS m, count(f.fqn) AS atod " +
                 "return atod").stream().forEach(record -> actual.add(record.get("atod").asInt()));
         ArrayList<Integer> correct = new ArrayList<>(Arrays.asList(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1));
         assertEquals(actual, correct);
@@ -99,8 +99,8 @@ class MetricQueriesTest {
     @Test
     void  accesToAllDataTest() {
         List<Integer> actual = new ArrayList<>();
-        connector.executeRead("MATCH (m:Method)-[:DECLARES|READS|WRITES]->(f:Field)\n" +
-                "WITH m AS m, count(f.fqn) AS atad\n" +
+        connector.executeRead("MATCH (m:Method)-[:DECLARES|READS|WRITES]->(f:Field) " +
+                "WITH m AS m, count(f.fqn) AS atad " +
                 "return atad").stream().forEach(record -> actual.add(record.get("atad").asInt()));
         ArrayList<Integer> correct = new ArrayList<>(Arrays.asList(1, 1, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1));
         assertEquals(actual, correct);
@@ -109,10 +109,10 @@ class MetricQueriesTest {
     @Test
     void numberOfPublicAttributesTest() {
         List<Integer> actual = new ArrayList<>();
-        connector.executeRead("MATCH (c:Class)-[:DECLARES]->(f:Field)\n" +
-                "WITH c AS c, f AS f\n" +
-                "WHERE f.visibility CONTAINS \"public\"\n" +
-                "WITH COUNT(f.fqn) AS nopa, c AS c\n" +
+        connector.executeRead("MATCH (c:Class)-[:DECLARES]->(f:Field) " +
+                "WITH c AS c, f AS f " +
+                "WHERE f.visibility CONTAINS \"public\" " +
+                "WITH COUNT(f.fqn) AS nopa, c AS c " +
                 "return c.nopa").stream().forEach(record -> actual.add(record.get("c.nopa").asInt()));
         ArrayList<Integer> correct = new ArrayList<>(Arrays.asList(3,4,2,6));
         assertEquals(actual, correct);
@@ -121,10 +121,10 @@ class MetricQueriesTest {
     @Test
     void numberOfAccessorMethodsTest() {
         List<Integer> actual = new ArrayList<>();
-        connector.executeRead("MATCH (c:Class)-[:DECLARES]->(m:Method)\n" +
-                "WITH c AS c, m AS m\n" +
-                "WHERE m.name STARTS WITH \"get\" OR m.name STARTS WITH \"set\"\n" +
-                "WITH COUNT(m.fqn) AS noam, c AS c\n" +
+        connector.executeRead("MATCH (c:Class)-[:DECLARES]->(m:Method) " +
+                "WITH c AS c, m AS m " +
+                "WHERE m.name STARTS WITH \"get\" OR m.name STARTS WITH \"set\" " +
+                "WITH COUNT(m.fqn) AS noam, c AS c " +
                 "RETURN noam").stream().forEach(record -> actual.add(record.get("noam").asInt()));
         ArrayList<Integer> correct = new ArrayList<>(Arrays.asList(4,4,2,8));
         assertEquals(actual, correct);
