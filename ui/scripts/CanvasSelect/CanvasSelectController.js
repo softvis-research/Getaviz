@@ -132,9 +132,7 @@ var canvasSelectController = (function () {
 
 	function handleOnClick(eventObject) {
 
-		var alreadySelected = eventObject.entity.selected;
-		// oder besser so?
-		// var alreadySelected = eventObject.entity == selectedEntities[0];
+		var alreadySelected = eventObject.entity == selectedEntities[0];
 
 		//always deselect the previously selected entities
 		if (selectedEntities.length != 0) {
