@@ -233,7 +233,7 @@ var canvasManipulator = (function () {
 
             entityEffectMap.get(entity.id).get("color").push(
                 {
-                    controller: controller,
+                    controller: controller.name,
                     value: color
                 }
             );
@@ -257,7 +257,7 @@ var canvasManipulator = (function () {
                 return;
             }
 
-            var colorEffectIndex = colorList.findIndex(colorEffect => colorEffect.controller == controller);
+            var colorEffectIndex = colorList.findIndex(colorEffect => colorEffect.controller == controller.name);
 
             //controller not affected the color
             if (colorEffectIndex == -1) {

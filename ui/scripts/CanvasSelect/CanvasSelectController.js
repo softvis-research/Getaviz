@@ -23,7 +23,7 @@ var canvasSelectController = (function () {
 	var selectedEntities = [];
 
 	var downActionEventObject;
-	
+
 
 	function initialize(setupConfig) {
 		application.transferConfigParams(setupConfig, controllerConfig);
@@ -173,9 +173,9 @@ var canvasSelectController = (function () {
 		}
 
 		//highlight multiselected entities with specific color
-		canvasManipulator.changeColorOfEntities(selectedEntities.slice(1), controllerConfig.multiselectColor, "canvasSelectController");
+		canvasManipulator.changeColorOfEntities(selectedEntities.slice(1), controllerConfig.multiselectColor, { name: "canvasSelectController" });
 		//higlight selected entity with regular color
-		canvasManipulator.changeColorOfEntities([selectedEntity], controllerConfig.color, "canvasSelectController");
+		canvasManipulator.changeColorOfEntities([selectedEntity], controllerConfig.color, { name: "canvasSelectController" });
 
 		//center of rotation
 		if (controllerConfig.setCenterOfRotation) {
@@ -184,7 +184,7 @@ var canvasSelectController = (function () {
 	}
 
 	function onEntityUnselected(applicationEvent) {
-		canvasManipulator.resetColorOfEntities(applicationEvent.entities, "canvasSelectController");
+		canvasManipulator.resetColorOfEntities(applicationEvent.entities, { name: "canvasSelectController" });
 		selectedEntities = new Array();
 	}
 
