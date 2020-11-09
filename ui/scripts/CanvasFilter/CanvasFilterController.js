@@ -119,12 +119,12 @@ var canvasFilterController = (function() {
 		
 	function onEntityFilter(applicationEvent) {				
 		const entities = applicationEvent.entities;
-		canvasManipulator.hideEntities(entities);
+		canvasManipulator.hideEntities(entities, { name: "canvasFilterController" });
 	}
 	
 	function onEntityUnfilter(applicationEvent) {
 		const entities = applicationEvent.entities;
-		canvasManipulator.showEntities(entities);
+		canvasManipulator.showEntities(entities, { name: "canvasFilterController" });
 	}
 
     function onEntityTmpFilter(applicationEvent) {
@@ -135,23 +135,23 @@ var canvasFilterController = (function() {
                 stillTmpFiltered.push(entity);
             }
         });
-        canvasManipulator.hideEntities(stillTmpFiltered);
+        canvasManipulator.hideEntities(stillTmpFiltered, { name: "canvasFilterController" });
 
     }
 
     function onEntityTmpUnfilter(applicationEvent) {
         const entities = applicationEvent.entities;
-        canvasManipulator.showEntities(entities);
+        canvasManipulator.showEntities(entities, { name: "canvasFilterController" });
     }
 	
 	function onVersionSelected(applicationEvent) {
         const entities = model.getEntitiesByVersion(applicationEvent.entities[0]);
-        canvasManipulator.showEntities(entities);
+        canvasManipulator.showEntities(entities, { name: "canvasFilterController" });
     }    
         
     function offVersionSelected(applicationEvent) {
         const entities = model.getEntitiesByVersion(applicationEvent.entities[0]);
-        canvasManipulator.hideEntities(entities);
+        canvasManipulator.hideEntities(entities, { name: "canvasFilterController" });
     }
 
     function onMacroChanged(applicationEvent){
@@ -170,7 +170,7 @@ var canvasFilterController = (function() {
             if(applicationEvent.filterMode === "transparent"){
                 canvasManipulator.changeTransparencyOfEntities(shownEntities, 0.0, { name: "canvasFilterController" });
             } else{
-                canvasManipulator.showEntities(shownEntities);
+                canvasManipulator.showEntities(shownEntities, { name: "canvasFilterController" });
             }
         }
 
@@ -178,7 +178,7 @@ var canvasFilterController = (function() {
             if(applicationEvent.filterMode === "transparent"){
                 canvasManipulator.changeTransparencyOfEntities(hiddenEntities, 0.85, { name: "canvasFilterController" });
             } else {
-                canvasManipulator.hideEntities(hiddenEntities);
+                canvasManipulator.hideEntities(hiddenEntities, { name: "canvasFilterController" });
             }
         }
     }

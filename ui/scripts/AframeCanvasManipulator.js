@@ -342,25 +342,57 @@ var canvasManipulator = (function () {
         object.setAttribute("color", color);
     }
 
-    function hideEntities(entities) {
-        entities.forEach(function (entity) {
-            let component = document.getElementById(entity.id);
-            if (component == undefined) {
-                events.log.error.publish({ text: "CanvasManipualtor - hideEntities - components for entityIds not found" });
-                return;
-            }
-            setVisibility(component, false)
-        });
+    function hideEntities(entities, controller) {
+        changeVisibilityOfEntities(entities, false, controller);
     }
 
-    function showEntities(entities) {
+    function showEntities(entities, controller) {
+        changeVisibilityOfEntities(entities, true, controller);
+    }
+
+    function changeVisibilityOfEntities(entities, targetValue, controller) {
         entities.forEach(function (entity) {
-            let component = document.getElementById(entity.id);
-            if (component == undefined) {
-                events.log.error.publish({ text: "CanvasManipualtor - showEntities - components for entityIds not found" });
+            if (entity == undefined) {
                 return;
             }
-            setVisibility(component, true)
+
+            let component = document.getElementById(entity.id);
+            if (component == undefined) {
+                events.log.error.publish({ text: "CanvasManipulator - changeVisibilityOfEntities - components for entityIds not found" });
+                return;
+            }
+
+            updateEntityEffectMap(entity, "visibility");
+
+            var visibilityList = entityEffectMap.get(entity.id).get("visibility");
+
+            if (visibilityList.length == 0) {
+                visibilityList.push(
+                    {
+                        controller: "original",
+                        value: component.object3D.visible
+                    }
+                );
+            } else {
+                var visibilityEffectIndex = colorList.findIndex(visibilityEffect => visibilityEffect.controller == controller.name);
+
+                //remove old visibility entry
+                if (visibilityEffectIndex != -1) {
+                    visibilityList.splice(visibilityEffectIndex, 1);
+                }
+            }
+
+            visibilityList.push(
+                {
+                    controller: controller.name,
+                    value: targetValue
+                }
+            );
+
+            //length is always at least 2 (original value and target value)
+            if (visibilityList[length - 2] != visibilityList[length - 1]) {
+                setVisibility(component, targetValue);
+            }
         });
     }
 
@@ -412,9 +444,8 @@ var canvasManipulator = (function () {
         });
     }
 
-
     function setVisibility(object, visibility) {
-        object.setAttribute("visible", visibility);
+        object.object3D.visible = visibility;
     }
 
     function getElementIds() {
