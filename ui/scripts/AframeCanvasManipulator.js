@@ -38,41 +38,87 @@ var canvasManipulator = (function () {
         */
     }
 
-    function changeTransparencyOfEntities(entities, value) {
+    function changeTransparencyOfEntities(entities, transparency, controller) {
         entities.forEach(function (entity2) {
             //  getting the entity again here, because without it the check if originalTransparency is defined fails sometimes
             let entity = model.getEntityById(entity2.id);
             if (entity === undefined) {
                 return;
             }
+
             let component = document.getElementById(entity.id);
             if (component == undefined) {
-                events.log.error.publish({ text: "CanvasManipualtor - changeTransparencyOfEntities - components for entityIds not found" });
+                events.log.error.publish({ text: "CanvasManipulator - changeTransparencyOfEntities - components for entityIds not found" });
                 return;
             }
-            if (entity.originalTransparency === undefined) {
-                entity.originalTransparency = {};
-                entity.currentTransparency = {};
-                if (component.getAttribute("material").opacity) {
-                    entity.originalTransparency = 1 - component.getAttribute("material").opacity;
-                }
+
+            updateEntityEffectMap(entity, "transparency");
+
+            var transparencyList = entityEffectMap.get(entity.id).get("transparency");
+
+            if (transparencyList.length == 0) {
+                var opacity = component.getAttribute("material").opacity;
+                opacity = (opacity == undefined) ? 1 : opacity;
+
+                transparencyList.push(
+                    {
+                        controller: "original",
+                        value: 1 - opacity
+                    }
+                );
             }
-            entity.currentTransparency = value;
-            setTransparency(component, value);
+
+            transparencyList.push(
+                {
+                    controller: controller.name,
+                    value: transparency
+                }
+            );
+
+            // if (entity.originalTransparency === undefined) {
+            //     entity.originalTransparency = {};
+            //     entity.currentTransparency = {};
+            //     if (component.getAttribute("material").opacity) {
+            //         entity.originalTransparency = 1 - component.getAttribute("material").opacity;
+            //     }
+            // }
+            // entity.currentTransparency = transparency;
+
+            setTransparency(component, transparency);
         });
     }
 
-    function resetTransparencyOfEntities(entities) {
+    function resetTransparencyOfEntities(entities, controller) {
         entities.forEach(function (entity) {
-            let component = document.getElementById(entity.id);
-            if (component == undefined) {
-                events.log.error.publish({ text: "CanvasManipualtor - resetTransparencyOfEntities - components for entityIds not found" });
+
+            var transparencyList = entityEffectMap.get(entity.id).get("transparency");
+
+            //just original transparency => nothing to do
+            if (transparencyList.length <= 1) {
                 return;
             }
-            if (!(entity.originalTransparency == undefined)) {
-                entity.currentTransparency = entity.originalTransparency;
-                setTransparency(component, entity.originalTransparency);
+
+            var transparencyEffectIndex = transparencyList.findIndex(transparencyEffect => transparencyEffect.controller = controller.name);
+
+            //controller not affected the transparency
+            if (transparencyEffectIndex == -1) {
+                return;
             }
+
+            transparencyList.splice(transparencyEffectIndex, 1);
+
+            if (transparencyEffectIndex == transparencyList.length) {
+                let component = document.getElementById(entity.id);
+                if (component == undefined) {
+                    events.log.error.publish({ text: "CanvasManipulator - resetTransparencyOfEntities - components for entityIds not found" });
+                    return;
+                }
+                setTransparency(component, transparencyList[transparencyList.length - 1].value);
+            }
+
+            // if (!(entity.originalTransparency == undefined)) {
+            //     entity.currentTransparency = entity.originalTransparency;
+            // }
         });
     }
 
@@ -212,9 +258,11 @@ var canvasManipulator = (function () {
 
     function changeColorOfEntities(entities, color, controller) {
         entities.forEach(function (entity) {
-            if (!(entity == undefined)) {
-                var component = document.getElementById(entity.id);
+            if (entity == undefined) {
+                return;
             }
+
+            let component = document.getElementById(entity.id);
             if (component == undefined) {
                 events.log.error.publish({ text: "CanvasManipulator - changeColorOfEntities - components for entityIds not found" });
                 return;
@@ -222,8 +270,10 @@ var canvasManipulator = (function () {
 
             updateEntityEffectMap(entity, "color");
 
-            if (entityEffectMap.get(entity.id).get("color").length == 0) {
-                entityEffectMap.get(entity.id).get("color").push(
+            var colorList = entityEffectMap.get(entity.id).get("color");
+
+            if (colorList.length == 0) {
+                colorList.push(
                     {
                         controller: "original",
                         value: component.getAttribute("color")
@@ -231,7 +281,7 @@ var canvasManipulator = (function () {
                 );
             }
 
-            entityEffectMap.get(entity.id).get("color").push(
+            colorList.push(
                 {
                     controller: controller.name,
                     value: color
@@ -242,6 +292,7 @@ var canvasManipulator = (function () {
             //     entity.originalColor = component.getAttribute("color");
             // }
             // entity.currentColor = color;
+
             setColor(component, color);
         }
         );
@@ -252,8 +303,8 @@ var canvasManipulator = (function () {
 
             var colorList = entityEffectMap.get(entity.id).get("color");
 
-            //nothing to do
-            if (colorList.length < 2) {
+            //just original color => nothing to do
+            if (colorList.length <= 1) {
                 return;
             }
 

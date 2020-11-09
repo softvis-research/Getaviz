@@ -168,7 +168,7 @@ var canvasFilterController = (function() {
         if(shownEntities.length > 0){
             //there are two modes: "transparent" and "removed"
             if(applicationEvent.filterMode === "transparent"){
-                canvasManipulator.changeTransparencyOfEntities(shownEntities, 0.0);
+                canvasManipulator.changeTransparencyOfEntities(shownEntities, 0.0, { name: "canvasFilterController" });
             } else{
                 canvasManipulator.showEntities(shownEntities);
             }
@@ -176,7 +176,7 @@ var canvasFilterController = (function() {
 
         if(hiddenEntities.length > 0){
             if(applicationEvent.filterMode === "transparent"){
-                canvasManipulator.changeTransparencyOfEntities(hiddenEntities, 0.85);
+                canvasManipulator.changeTransparencyOfEntities(hiddenEntities, 0.85, { name: "canvasFilterController" });
             } else {
                 canvasManipulator.hideEntities(hiddenEntities);
             }

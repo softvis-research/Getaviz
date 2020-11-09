@@ -438,7 +438,7 @@ var relationController = function () {
 		}
 
 		if (controllerConfig.unfadeOnHighlight) {
-			canvasManipulator.resetTransparencyOfEntities(Array.from(relatedEntitiesSet.values()).filter(relatedEntity => !(relatedEntity.marked)));
+			canvasManipulator.resetTransparencyOfEntities(Array.from(relatedEntitiesSet.values()).filter(relatedEntity => !(relatedEntity.marked)), { name: "relationController" });
 		}
 
 		canvasManipulator.changeColorOfEntities(Array.from(relatedEntitiesSet.values()), controllerConfig.highlightColor, { name: "relationController" });
@@ -463,10 +463,10 @@ var relationController = function () {
 
 
 		//unfade related entities
-		canvasManipulator.changeTransparencyOfEntities(relatedEntitiesSet, controllerConfig.noFadeValue);
+		canvasManipulator.changeTransparencyOfEntities(relatedEntitiesSet, controllerConfig.noFadeValue, { name: "relationController" });
 
 		// //unfade parents of related entities				
-		// canvasManipulator.changeTransparencyOfEntities(parents, controllerConfig.halfFadeValue);
+		// canvasManipulator.changeTransparencyOfEntities(parents, controllerConfig.halfFadeValue, { name: "relationController" });
 	}
 
 	function fadeAllEntities() {
@@ -477,7 +477,7 @@ var relationController = function () {
 			var allCanvasObjects = [];
 			allCanvasElementIDs.filter(canvasElementID => canvasElementID != "").forEach(canvasElementID => allCanvasObjects.push({ id: canvasElementID }));
 
-			canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.fullFadeValue);
+			canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.fullFadeValue, { name: "relationController" });
 			faded = true;
 		}
 	}
@@ -490,7 +490,7 @@ var relationController = function () {
 		var allCanvasObjects = [];
 		allCanvasElementIDs.filter(canvasElementID => canvasElementID != "").forEach(canvasElementID => allCanvasObjects.push({ id: canvasElementID }));
 
-		canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.noFadeValue);
+		canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.noFadeValue, { name: "relationController" });
 
 	}
 
