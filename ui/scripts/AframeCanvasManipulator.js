@@ -364,45 +364,14 @@ var canvasManipulator = (function () {
         });
     }
 
-    function highlightEntities(entities, color) {
-        entities.forEach(function (entity2) {
-            //  getting the entity again here, because without it the check if originalTransparency is defined fails sometimes
-            let entity = model.getEntityById(entity2.id);
-            let component = document.getElementById(entity.id);
-            if (component == undefined) {
-                events.log.error.publish({ text: "CanvasManipulator - highlightEntities - components for entityIds not found" });
-                return;
-            }
-
-            if (entity.originalColor == undefined) {
-                entity.originalColor = component.getAttribute("color");
-                entity.currentColor = entity.originalColor;
-            }
-
-            if (entity["originalTransparency"] === undefined) {
-                // in case "material".opacity is undefined originalTransparency gets set to 0 which would be the default value anyways
-                entity.originalTransparency = {};
-                entity.currentTransparency = {};
-                if (component.getAttribute("material").opacity) {
-                    entity.originalTransparency = 1 - component.getAttribute("material").opacity;
-                } else entity.originalTransparency = 0;
-                entity.currentTransparency = entity.originalTransparency;
-            }
-            setColor(component, color);
-            setTransparency(component, 0);
-        });
+    function highlightEntities(entities, color, controller) {
+        changeColorOfEntities(entities, color, controller);
+        changeTransparencyOfEntities(entities, 0, controller);
     }
 
-    function unhighlightEntities(entities) {
-        entities.forEach(function (entity) {
-            let component = document.getElementById(entity.id);
-            if (component == undefined) {
-                events.log.error.publish({ text: "CanvasManipulator - unhighlightEntities - components for entityIds not found" });
-                return;
-            }
-            setTransparency(component, entity.currentTransparency);
-            setColor(component, entity.currentColor);
-        });
+    function unhighlightEntities(entities, controller) {
+        resetColorOfEntities(entities, controller);
+        resetTransparencyOfEntities(entities, controller);
     }
 
     function flyToEntity(entity) {
