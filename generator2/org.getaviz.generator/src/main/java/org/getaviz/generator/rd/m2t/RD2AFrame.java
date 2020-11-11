@@ -78,7 +78,7 @@ public class RD2AFrame implements Step {
 		connector.executeRead("MATCH (n)-[:CONTAINS]->(ds:DiskSegment)-[:VISUALIZES]->(element) WHERE ID(n) = "
 				+ disk.id() + " RETURN ds, element.hash ORDER BY element.hash").forEachRemaining((result) -> {
 					segments.add(result.get("ds").asNode());
-				});jd
+				});
 		StringBuilder builder = new StringBuilder();
 		if (radius - ringWidth == 0) {
 			builder.append("<a-circle id=\"").append(entity.get("hash").asString()).append("\" ");
