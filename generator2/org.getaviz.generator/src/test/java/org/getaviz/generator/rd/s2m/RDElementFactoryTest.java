@@ -35,8 +35,7 @@ class RDElementFactoryTest {
 
     @Test
     void methodToRDElementTest() {
-        RDElement element = factory.createFromMethod(method, 1.0, 1.5, 1.0,
-                1.5,0.5, "#000000");
+        RDElement element = factory.createFromMethod(method, 1.0, 1.5, 1.0, 0.5, "#000000");
         assertTrue(element instanceof DiskSegment);
     }
 
@@ -47,7 +46,7 @@ class RDElementFactoryTest {
     }
 
     private static void createObjectsForTest() {
-        factory = new RDElementsFactory(false, false, true);
+        factory = new RDElementsFactory(false, false, true, 1);
         long typeID = connector.addNode(("CREATE (t:Type)"), "t").id();
         long methodID = connector.addNode(("CREATE (m:Method)"), "m").id();
         long fieldID = connector.addNode(("CREATE (f:Field)"), "f").id();
