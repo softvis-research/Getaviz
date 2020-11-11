@@ -7,7 +7,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.getaviz.generator.Step;
-import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.jqa.JqassistantConnector;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -30,8 +30,8 @@ class ScanStep implements Step {
 
     public void run() {
         if(checkRequirements()) {
-            DatabaseConnector db = new DatabaseConnector();
-            db.startDatabase();
+            JqassistantConnector con = new JqassistantConnector();
+            con.startDatabase();
             HttpPost post = new HttpPost("http://jqassistant:8080/scan/" + encodeUrl(encodeUrl(inputFiles)));
             try (CloseableHttpClient httpClient = HttpClients.createDefault();
                  CloseableHttpResponse response = httpClient.execute(post)){
