@@ -16,6 +16,10 @@ var setup = {
         },
 
         {
+            name: "metricController"
+        },
+
+        {
             name: "bannerController"
         },
 
@@ -175,15 +179,28 @@ var setup = {
                         },
                         second: {
                             size: "90%",
-                            collapsible: false,
-                            name: "canvas",
-                            canvas: {},
-                            controllers: [
-                                { name: "defaultLogger" },
-                                { name: "canvasHoverController" },
-                                // { name: "canvasSelectController" },
-                                { name: "metricController" }
-                            ],
+                            area: {
+                                orientation: "horizontal",
+                                name: "rightPanel",
+                                first: {
+                                    size: "80%",
+                                    collapsible: false,
+                                    name: "canvas",
+                                    canvas: {},
+                                    controllers: [
+                                        { name: "defaultLogger" },
+                                        { name: "canvasHoverController" },
+                                        { name: "canvasSelectController" }
+                                    ]
+                                },
+                                second: {
+                                    size: "20%",
+                                    name: "metric",
+                                    controllers: [
+                                        { name: "metricController" }
+                                    ]
+                                }
+                            }
                         }
                     }
                 }
