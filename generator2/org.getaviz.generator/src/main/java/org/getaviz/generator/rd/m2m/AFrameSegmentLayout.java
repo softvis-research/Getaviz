@@ -54,14 +54,8 @@ class AFrameSegmentLayout {
 
     private void calculateAngle(ArrayList<DiskSegment> segments, double sizeSum, double outer, double inner) {
         if (!segments.isEmpty()) {
-            int length = segments.size();
             double position = 90.0;
-           // sizeSum += sizeSum / 360 ;
-           // sizeSum -= length;
-            log.info("length: " + length);
-            log.info("sizeSum: " + sizeSum);
             for (DiskSegment segment : segments) {
-                log.info("segment: " + segment.getID() + " size: " + segment.getSize());
                 double angle = (segment.getSize() / sizeSum) * 360 - 1;
                 segment.setAnglePosition(position);
                 if(angle < 0.1) {
@@ -74,7 +68,6 @@ class AFrameSegmentLayout {
                 if (position >= 360) {
                     position -= 360;
                 }
-                log.info("segment: " + segment.getID() + " angle position: " + position);
                 segment.setOuterRadius(outer);
                 segment.setInnerRadius(inner);
             }
