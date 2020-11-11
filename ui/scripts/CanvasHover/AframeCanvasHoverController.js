@@ -151,10 +151,10 @@ var canvasHoverController = (function () {
 		if (controllerConfig.showQualifiedName) {
 			$("#tooltipQualifiedName").text(entity.qualifiedName);
 		}
-		if (controllerConfig.showVersion) {
+		if(controllerConfig.showVersion) {
 			$("#tooltipVersion").text("Version: " + entity.version);
 		}
-		if (controllerConfig.showIssues) {
+		if(controllerConfig.showIssues) {
 			let openIssuesSelector = $('#tooltipOpenIssues');
 			let closedIssuesSelector = $('#tooltipClosedIssues');
 			let openSecurityIssuesSelector = $('#tooltipOpenSecurityIssues');
@@ -204,10 +204,10 @@ var canvasHoverController = (function () {
 			}
 
 			if (entity.type === "Method" && entity.signature != "") {
-				return "Package: " + packages[0].name //namespace 
+				return "Package: " + packages[0].name //namespace
 					+ "<br/>" + entity.type + ": " + entity.signature;
 			}
-			return "Package: " + packages[0].name //namespace 
+			return "Package: " + packages[0].name //namespace
 				+ "<br/>" + entity.type + ": " + entity.name;
 		}
 	}
@@ -218,5 +218,5 @@ var canvasHoverController = (function () {
 		reset: reset,
 		handleOnMouseEnter: handleOnMouseEnter,
 		handleOnMouseLeave: handleOnMouseLeave
-	};
+    };    
 })();

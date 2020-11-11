@@ -8,6 +8,12 @@ var canvasManipulator = (function () {
         darkorange: "darkorange"
     };
 
+    var animations = {
+        expanding: "Expanding",
+        flashing: "Flashing",
+        rotation: "Rotation"
+    }
+
     var scene = {};
 
     var entityEffectMap = new Map();
@@ -128,141 +134,82 @@ var canvasManipulator = (function () {
         });
     }
 
-    /**
-     * Starts the metric dependent color animation for the entity.
-     */
-    function startColorAnimationForEntity(entity, colorAnimation) {
-        if (!(entity == undefined)) {
-            var component = document.getElementById(entity.id);
-        }
-        if (component == undefined) {
-            events.log.error.publish({ text: "CanvasManipualtor - startColorAnimationForEntity - component for entityId not found" });
-            return;
-        }
-
-        let originalColor = component.getAttribute("color");
-        component.setAttribute("color-before-animation", originalColor);
-
-        let colorAnimationFrequency = colorAnimation.getAnimationFrequency();
-
-        if (colorAnimation.colors.length === 1) {
-            // if there is only one color: just start a normal animation loop between the original color and the specified one
-            component.setAttribute("animation__color",
-                "property: components.material.material.color; type: color; from: " + originalColor +
-                "; to: " + colorAnimation.getNextToColor() + "; dur: " + colorAnimationFrequency + "; loop: true; dir: alternate");
-        } else {
-            // if there are multiple colors: loop through the color animations triggered by events
-            for (i = 1; i <= colorAnimation.colors.length; i++) {
-                // in general each color animation starts when the predecessor ends
-                let startEvents = "animationcomplete__color_" + (i - 1);
-                if (i === 1) {
-                    // the first color animation starts when the last ends
-                    startEvents = "animationcomplete__color_" + colorAnimation.colors.length;
-                } else if (i === 2) {
-                    // the second color animation starts after the first and after the initializer
-                    startEvents = "animationcomplete__color_" + 1 + ", animationcomplete__color_" + 0;
-                }
-
-                component.setAttribute("animation__color_" + i,
-                    "property: components.material.material.color; type: color; from: " + colorAnimation.getNextFromColor() +
-                    "; to: " + colorAnimation.getNextToColor() + "; dur: " + colorAnimationFrequency + "; startEvents: " + startEvents);
+    function startAnimation({ animation, entities, period, scale, flashingColor } = {}) {
+        entities.forEach(function (entity) {
+            if (entity !== undefined) {
+                var component = document.getElementById(entity.id);
             }
-            // the initializing color animation has no start event
-            component.setAttribute("animation__color_" + 0,
-                "property: components.material.material.color; type: color; from: " + colorAnimation.getNextFromColor() +
-                "; to: " + colorAnimation.getNextToColor() + "; dur: " + colorAnimationFrequency);
-        }
+            if (component == undefined) {
+                events.log.error.publish({ text: "CanvasManipulator - startAnimation - component for entityId not found" });
+                return;
+            }
 
-        colorAnimation.resetColorIndices();
-    }
+            switch (animation) {
+                case animations.expanding:
+                    var scaleVector = scale + " " + scale + " " + scale;
 
-    /**
-     * Stops the metric animated color animation for the entity and resets its color to the value before the animation started.
-     */
-    function stopColorAnimationForEntity(entity) {
-        if (!(entity == undefined)) {
-            var component = document.getElementById(entity.id);
-        }
-        if (component == undefined) {
-            events.log.error.publish({ text: "CanvasManipualtor - stopColorAnimationForEntity - component for entityId not found" });
-            return;
-        }
+                    component.setAttribute("animation__expanding",
+                        "property: scale; from: 1 1 1; to: " + scaleVector + "; dur: " + period + "; loop: true; dir: alternate");
+                    break;
 
-        let attributeNames = component.getAttributeNames();
-        attributeNames.forEach(function (attributeName) {
-            if (attributeName.startsWith("animation__color")) {
-                component.removeAttribute(attributeName);
+                case animations.rotation:
+                    component.setAttribute("animation__yoyo",
+                        "property: rotation; dur: " + period + "; easing: easeInOutSine; loop: true; to: 0 360 0");
+                    break;
+
+                case animations.flashing:
+                    var originalColor = component.getAttribute("color");
+                    component.setAttribute("color-before-animation", originalColor);
+
+                    component.setAttribute("animation__color",
+                        "property: components.material.material.color; type: color; from: " + originalColor +
+                        "; to: " + flashingColor + "; dur: " + period + "; loop: true; dir: alternate");
+
+                default:
+                    break;
             }
         });
-
-        let originalColor = component.getAttribute("color-before-animation");
-        if (originalColor !== null) {
-            // only change the color back if there was a color animation before
-            component.setAttribute("animation__color_off",
-                "property: components.material.material.color; type: color; from: " + originalColor +
-                "; to: " + originalColor + "; dur: 0; loop: false");
-        }
-
-        // remark:
-        // A nice way would be to remove all of the color animation attributes.
-        // But this leads to components staying in their current animation color.
-        // Changing the color of the component back to original color does not work,
-        // because aframe thinks its still in this color.
-        // So this workaround is used: the components blink immediately back to its original color without a loop.
-        // This costs no further performance. Just the "animation__color_off" attribute is left.
-        //
-        // setColor(component, originalColor);          // looks nice, does not work
     }
 
-    /**
-     * Starts the metric dependent expanding animation for the entity.
-     */
-    function startExpandingAnimationForEntity(entity, expandingAnimation) {
-        if (!(entity == undefined)) {
-            var component = document.getElementById(entity.id);
-        }
-        if (component == undefined) {
-            events.log.error.publish({ text: "CanvasManipualtor - startExpandingAnimationForEntity - component for entityId not found" });
-            return;
-        }
+    function stopAnimation({ animation, entities } = {}) {
+        entities.forEach(function (entity) {
+            if (entity !== undefined) {
+                var component = document.getElementById(entity.id);
+            }
+            if (component == undefined) {
+                events.log.error.publish({ text: "CanvasManipulator - stopAnimation - component for entityId not found" });
+                return;
+            }
 
-        let animationFrequency = expandingAnimation.getAnimationFrequency();
-        let growSize = expandingAnimation.getScale();
-        let scale = growSize + " " + growSize + " " + growSize;
+            switch (animation) {
+                case animations.expanding:
+                    component.removeAttribute("animation__expanding");
+                    component.setAttribute("scale", "1 1 1");
+                    break;
 
-        component.setAttribute("animation__expanding",
-            "property: scale; from: 1 1 1; to: " + scale + "; dur: " + animationFrequency + "; loop: true; dir: alternate");
+                case animations.rotation:
+                    component.removeAttribute("animation__yoyo");
+                    component.setAttribute("rotation", "0 0 0");
+                    break;
 
+                case animations.flashing:
+                    var originalColor = component.getAttribute("color");
+
+                    if (originalColor !== null) {
+                        component.removeAttribute("animation__color");
+
+                        component.setAttribute("animation__color_off",
+                            "property: components.material.material.color; type: color; from: " + originalColor +
+                            "; to: " + originalColor + "; dur: 0; loop: false");
+                    }
+
+                default:
+                    break;
+            }
+        });
     }
 
-    /**
-     * Stops the metric dependent expanding animation for the entity.
-     * Resets the entities scale back to its original value.
-     */
-    function stopExpandingAnimationForEntity(entity) {
-        if (!(entity == undefined)) {
-            var component = document.getElementById(entity.id);
-        }
-        if (component == undefined) {
-            events.log.error.publish({ text: "CanvasManipualtor - stopExpandingAnimationForEntity - component for entityId not found" });
-            return;
-        }
-
-        component.removeAttribute("animation__expanding");
-        component.setAttribute("scale", "1 1 1");
-    }
-
-    function updateEntityEffectMap(entity, effect) {
-        if (!entityEffectMap.has(entity.id)) {
-            entityEffectMap.set(entity.id, new Map());
-        }
-
-        if (!entityEffectMap.get(entity.id).has(effect)) {
-            entityEffectMap.get(entity.id).set(effect, new Array);
-        }
-    }
-
-    function changeColorOfEntities(entities, color, controller) {
+    function changeColorOfEntities(entities, color) {
         entities.forEach(function (entity) {
             if (entity == undefined) {
                 return;
@@ -304,7 +251,7 @@ var canvasManipulator = (function () {
         );
     }
 
-    function resetColorOfEntities(entities, controller) {
+    function resetColorOfEntities(entities) {
         entities.forEach(function (entity) {
 
             var colorList = entityEffectMap.get(entity.id).get("color");
@@ -343,7 +290,7 @@ var canvasManipulator = (function () {
         color == colors.darkred ? color = colors.red : color = color;
         let colorValues = color.split(" ");
         if (colorValues.length == 3) {
-            color = "#" + parseInt(colorValues[0]).toString(16) + "" + parseInt(colorValues[1]).toString(16) + "" + parseInt(colorValues[2]).toString(16);
+            color = "#" + parseInt(colorValues[0]).toString(16).padStart(2, "0") + parseInt(colorValues[1]).toString(16).padStart(2, "0") + parseInt(colorValues[2]).toString(16).padStart(2, "0");
         }
         object.setAttribute("color", color);
     }
@@ -450,6 +397,7 @@ var canvasManipulator = (function () {
         });
     }
 
+
     function setVisibility(object, visibility) {
         object.object3D.visible = visibility;
     }
@@ -475,11 +423,8 @@ var canvasManipulator = (function () {
         changeTransparencyOfEntities: changeTransparencyOfEntities,
         resetTransparencyOfEntities: resetTransparencyOfEntities,
 
-        startColorAnimationForEntity: startColorAnimationForEntity,
-        stopColorAnimationForEntity: stopColorAnimationForEntity,
-
-        startExpandingAnimationForEntity: startExpandingAnimationForEntity,
-        stopExpandingAnimationForEntity: stopExpandingAnimationForEntity,
+        startAnimation: startAnimation,
+        stopAnimation: stopAnimation,
 
         changeColorOfEntities: changeColorOfEntities,
         resetColorOfEntities: resetColorOfEntities,

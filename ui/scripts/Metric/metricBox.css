@@ -1,0 +1,55 @@
+#executeButton {
+    clear: left;
+    float: left;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+#resetButton {
+    float: left;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+#addLayerButton {
+    float: left;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.deleteButton {
+    float: left;
+}
+
+.metrics {
+    clear: left;
+    float: left;
+} 
+
+.metricDropDown {
+    float: left;
+}
+
+.metricParameter {
+    float: left;
+    display: none;
+}
+
+.mappings {
+    float: left;
+}
+
+.mappingDropDown {
+    float: left;
+}
+
+.mappingParameter {
+    float: left;
+    display: none;
+}
+
+.textLabel {
+    font-size: 21px;
+    margin: 1px;
+    padding: 1px;
+}

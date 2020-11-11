@@ -41,7 +41,7 @@ if (isset($_GET["state"])) {
     var metaStateJsonUrl = "<?php echo $metaStateJsonUrl; ?>";
 
     var metaDataJsonUrl = "<?php echo $metaDataJsonUrl; ?>";
-    
+
     var canvasId = "aframe-canvas";
     var visMode = "aframe";
 </script>
@@ -82,6 +82,8 @@ if (isset($_GET["state"])) {
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxdropdownlist.js"></script>
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxslider.js"></script>
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxnumberinput.js"></script>
+<script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxdatetimeinput.js"></script>
+<script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxcalendar.js"></script>
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxform.js"></script>
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxvalidator.js"></script>
 <script type="text/javascript" src="node_modules/prismjs/prism.js"></script>
@@ -126,12 +128,12 @@ if (isset($_GET["state"])) {
 
 <script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>
 <script type="text/javascript" src="scripts/Search/SearchController.js"></script>
-<script type="text/javascript" src="scripts/SourceCode/SourceCodeController.js"></script>
-
 <script type="text/javascript" src="scripts/Experiment/ExperimentController.js"></script>
+<script type="text/javascript" src="scripts/SourceCode/SourceCodeController.js"></script>
 <script type="text/javascript" src="scripts/InteractionLogger/InteractionLogger.js"></script>
-
-<!-- obsolet extensions -->
+<script type="text/javascript" src="scripts/Email/EmailController.js"></script>
+<script type="text/javascript" src="scripts/GenerationForm/GenerationFormController.js"></script>
+<script type="text/javascript" src="scripts/Menu/MenuController.js"></script>
 <script type="text/javascript" src="scripts/PatternConnector/PatternConnectorController.js"></script>
 <script type="text/javascript" src="scripts/Configuration/ConfigurationController.js"></script>
 <script type="text/javascript" src="scripts/PatternExplorer/PatternExplorerController.js"></script>
@@ -139,6 +141,13 @@ if (isset($_GET["state"])) {
 <script type="text/javascript" src="scripts/IssueExplorer/IssueExplorerController.js"></script>
 <script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script>
 
+<script type="text/javascript" src="scripts/Metric/Constants.js"></script>
+<script type="text/javascript" src="scripts/Metric/ColorGradient.js"></script>
+<script type="text/javascript" src="scripts/Metric/MetricLayer.js"></script>
+<script type="text/javascript" src="scripts/Metric/DomHelper.js"></script>
+<script type="text/javascript" src="scripts/Metric/MetricController.js"></script>
+
+<!-- filter -->
 <script type="text/javascript" src="scripts/Filter/Helpers/Constants.js"></script>
 <script type="text/javascript" src="scripts/Filter/Helpers/DOMHelper.js"></script>
 <script type="text/javascript" src="scripts/Filter/Helpers/RelationHelper.js"></script>
