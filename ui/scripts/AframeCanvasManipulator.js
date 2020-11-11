@@ -329,17 +329,19 @@ var canvasManipulator = (function () {
 
             var visibilityList = entityEffectMap.get(entity.id).get("visibility");
 
+            var visible = component.object3D.visible;
+
             if (visibilityList.length == 0) {
                 visibilityList.push(
                     {
                         controller: "original",
-                        value: component.object3D.visible
+                        value: visible
                     }
                 );
             } else {
-                var visibilityEffectIndex = colorList.findIndex(visibilityEffect => visibilityEffect.controller == controller.name);
+                var visibilityEffectIndex = visibilityList.findIndex(visibilityEffect => visibilityEffect.controller == controller.name);
 
-                //remove old visibility entry
+                //remove old visibility entry of this controller
                 if (visibilityEffectIndex != -1) {
                     visibilityList.splice(visibilityEffectIndex, 1);
                 }
@@ -353,7 +355,7 @@ var canvasManipulator = (function () {
             );
 
             //length is always at least 2 (original value and target value)
-            if (visibilityList[length - 2] != visibilityList[length - 1]) {
+            if (visible != targetValue) {
                 setVisibility(component, targetValue);
             }
         });
