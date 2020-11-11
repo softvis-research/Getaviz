@@ -15,7 +15,10 @@ var packageExplorerController = (function() {
 		elementsSelectable: true,
 		
 		//abap specific
-
+		abap: true,
+		useMultiselect: true,
+		color: "darkred",
+ 
 		namespace: "scripts/PackageExplorer/images/abap/namespace.png",
 		class: "scripts/PackageExplorer/images/abap/class.png",
 		localClass: "scripts/PackageExplorer/images/abap/localClass.png",
@@ -27,11 +30,9 @@ var packageExplorerController = (function() {
 		attribute: "scripts/PackageExplorer/images/abap/attribute.png",
 		form_fumo_meth: "scripts/PackageExplorer/images/abap/form&&fumo&&method.png"
 		
-
-
-
-
 	};
+
+	var selectedEntities = [];
 	
 	function initialize(setupConfig){
         application.transferConfigParams(setupConfig, controllerConfig);
@@ -52,6 +53,7 @@ var packageExplorerController = (function() {
 		//create zTree
 		prepareTreeView();
 		events.selected.on.subscribe(onEntitySelected);
+		events.selected.off.subscribe(onEntityUnselected);
     }
 	
 	function reset(){
@@ -98,14 +100,18 @@ var packageExplorerController = (function() {
                     }
                 }
             } else {
-				//controllerConfig.entries.forEach(createItem);	
-					switch(entity.type) {
+				switch(entity.type) {
 						case "Project":
 						item = { id: entity.id, open: true, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.projectIcon, iconSkin: "zt"};
 						break;
 					case "Namespace":
+						if(entity.abap_type !== "DEVC") {
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.packageIcon, iconSkin: "zt"};
 						break;
+						} else {
+							item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.namespace, iconSkin: "zt"};
+							break;
+						};
 					case "Class":
 						
                         if(entity.id.endsWith("_2") || entity.id.endsWith("_3")){
@@ -128,8 +134,13 @@ var packageExplorerController = (function() {
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt"};
 						break;
 					case "Method":
+						if(entity.abap_type === "METH"){
+							item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.form_fumo_meth, iconSkin: "zt"};
+							break;
+						} else {
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt"};
 						break;
+						};
 					case "Function":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt"};
 						break;
@@ -138,7 +149,7 @@ var packageExplorerController = (function() {
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
 						break;
 
-						case "FunctionGroup":
+					case "FunctionGroup":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.functionGroup, iconSkin: "zt"};
 						break;
 					case "FunctionModule":
@@ -158,8 +169,7 @@ var packageExplorerController = (function() {
 
 						return;
 					}
-				
-           }
+		}
 			if(item !== undefined) {
                 items.push(item);
 			}
@@ -227,7 +237,7 @@ var packageExplorerController = (function() {
             },
             data: {
                 simpleData: {
-                enable:true,
+                enable: true,
                 idKey: "id",
                 pIdKey: "parentId",
                 rootPId: ""
@@ -249,16 +259,16 @@ var packageExplorerController = (function() {
         tree = $.fn.zTree.init( $(jQPackageExplorerTree), settings, items);
     }
     
-	
 	function zTreeOnCheck(event, treeId, treeNode) {
-        var nodes = tree.getChangeCheckedNodes();
+		var nodes = tree.getChangeCheckedNodes();
         
 		var entities = [];
 		nodes.forEach(function(node){
 			node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes	
 			entities.push(model.getEntityById(node.id));
 		});
-								
+
+		
 		var applicationEvent = {			
 			sender: 	packageExplorerController,
 			entities:	entities
@@ -270,22 +280,74 @@ var packageExplorerController = (function() {
 			events.filtered.off.publish(applicationEvent);
 		}
 		
-    }
+	}
+	
+	
 
-    function zTreeOnClick(treeEvent, treeId, treeNode) {
-        var applicationEvent = {
+function zTreeOnClick(treeEvent, treeId, treeNode,eventObject) {
+
+	var alreadySelected = model.getEntityById(treeNode.id) == selectedEntities[0];
+
+	    //always deselect the previously selected entities
+		if (selectedEntities.size != 0) {
+			var unselectEvent = {
+				sender: packageExplorerController,
+				entities: selectedEntities
+			}
+
+			events.selected.off.publish(unselectEvent);
+		};
+
+		//select the clicked entities only if the clicked entities are not already selected
+		//otherwise the clicked entities should only be deselected
+		if (!alreadySelected) {
+			var newSelectedEntities = new Array();
+
+			newSelectedEntities.push(model.getEntityById(treeNode.id));
+
+			if (controllerConfig.useMultiselect) {
+				newSelectedEntities = newSelectedEntities.concat(model.getAllChildrenOfEntity(model.getEntityById(treeNode.id)));
+			}
+		var applicationEvent = {
 			sender: packageExplorerController,
-			entities: [model.getEntityById(treeNode.id)]
+			entities: newSelectedEntities
+
 		};
 		events.selected.on.publish(applicationEvent);
+		}
     }
 	
 	function onEntitySelected(applicationEvent) {
         if(applicationEvent.sender !== packageExplorerController) {
 			var entity = applicationEvent.entities[0];
+			//selectedEntities = applicationEvent.entities;
 			var item = tree.getNodeByParam("id", entity.id, null);            
 			tree.selectNode(item, false);
-        }
+		}
+
+		var selectedEntity = applicationEvent.entities[0];
+		selectedEntities = applicationEvent.entities;
+
+		if (selectedEntity.type == "text") {
+			return;
+		}
+
+		//highlight multiselected entities with specific color
+		canvasManipulator.changeColorOfEntities(selectedEntities.slice(1), controllerConfig.multiselectColor, { name: "packageExplorerController" });
+		//higlight selected entity with regular color
+		canvasManipulator.changeColorOfEntities([selectedEntity], controllerConfig.color, { name: "packageExplorerController" });
+
+        //center of rotation
+		if (controllerConfig.setCenterOfRotation) {
+			canvasManipulator.setCenterOfRotation(selectedEntity);
+		}
+	}
+
+	
+
+	function onEntityUnselected(applicationEvent) {
+		canvasManipulator.resetColorOfEntities(applicationEvent.entities, { name: "packageExplorerController" });
+		selectedEntities = new Array();
 	}
 	
 	
