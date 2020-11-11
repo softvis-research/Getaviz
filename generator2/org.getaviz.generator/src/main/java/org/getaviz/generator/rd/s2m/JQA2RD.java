@@ -28,6 +28,7 @@ public class JQA2RD implements Step {
 	private double methodTransparency;
 	private double dataTransparency;
 	private double minArea;
+	private double dataFactor;
 	private String classColor;
 	private String methodColor;
 	private String dataColor;
@@ -49,6 +50,7 @@ public class JQA2RD implements Step {
 		this.methodColor = config.getRDMethodColor();
 		this.dataColor = config.getRDDataColor();
 		this.languages = languages;
+		this.dataFactor = config.getRDDataFactor();
 	}
 
 	@Override
@@ -60,7 +62,7 @@ public class JQA2RD implements Step {
 		log.info("JQA2RD started");
 		deleteOldNodes();
 		model = new Model(methodTypeMode, methodDisks, dataDisks);
-		factory = new RDElementsFactory(methodTypeMode, methodDisks, dataDisks);
+		factory = new RDElementsFactory(methodTypeMode, methodDisks, dataDisks, dataFactor);
 		queriesToRDElementList();
 		writeToDatabase();
 		log.info("JQA2RD finished");
@@ -119,7 +121,7 @@ public class JQA2RD implements Step {
 					" WHERE EXISTS(t.hash) AND (t:Class OR t:Interface OR t:Annotation OR t:Enum) AND NOT t:Inner AND EXISTS(m.hash)" +
 					" RETURN m AS node, m.effectiveLineCount AS line, ID(t) AS tID");
 			methods.forEachRemaining(result -> {
-				RDElement element = factory.createFromMethod(result, height, ringWidth, ringWidthAD, methodTransparency, minArea, methodColor);
+				RDElement element = factory.createFromMethod(result, height, ringWidth, methodTransparency, minArea, methodColor);
 				model.addRDElement(element);
 			});
 		} catch (Exception e) {

@@ -7,10 +7,9 @@ import org.getaviz.generator.rd.m2m.Position;
 import java.util.ArrayList;
 
 public class SubDisk extends Disk {
-    private Log log = LogFactory.getLog(this.getClass());
-    private ArrayList<DiskSegment> innerSegments = new ArrayList<>();
-    private ArrayList<DiskSegment> outerSegments = new ArrayList<>();
-    private double minArea;
+    private final Log log = LogFactory.getLog(this.getClass());
+    private final ArrayList<DiskSegment> innerSegments = new ArrayList<>();
+    private final ArrayList<DiskSegment> outerSegments = new ArrayList<>();
 
     public SubDisk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency,
          String color) {
@@ -24,21 +23,6 @@ public class SubDisk extends Disk {
         this.id = id;
         this.position = new Position(0, 0, 0);
         this.wroteToDatabase = true;
-    }
-
-    public void calculateAreaWithoutBorder() {
-        double innerSegmentsArea = getInnerSegmentsArea();
-        double outerSegmentsArea = getOuterSegmentsArea();
-
-        areaWithoutBorder = innerSegmentsArea + outerSegmentsArea;
-        radius = Math.sqrt(areaWithoutBorder / Math.PI) + borderWidth;
-        areaWithBorder = radius * radius * Math.PI;
-        areaWithoutBorder += getInnerDisksArea();
-        minArea = innerSegmentsArea + outerSegmentsArea;
-
-        outerSegments.forEach(segment -> {
-            segment.calculateSize(outerSegmentsArea);
-        });
     }
 
     public void setInnerSegmentsList(ArrayList<DiskSegment> list) {
@@ -55,10 +39,6 @@ public class SubDisk extends Disk {
 
     public ArrayList<DiskSegment> getOuterSegments() {
         return outerSegments;
-    }
-
-    public double getMinArea() {
-        return minArea;
     }
 
     public void createNode(DatabaseConnector connector) {
@@ -91,26 +71,10 @@ public class SubDisk extends Disk {
     }
 
     public double getInnerSegmentsArea() {
-        double sum = 0.0;
-        for (DiskSegment segment : innerSegments) {
-            sum += segment.getSize();
-        }
-        return sum;
+        return innerSegments.stream().mapToDouble(DiskSegment::getSize).sum();
     }
 
     public double getOuterSegmentsArea() {
-        double sum = 0.0;
-        for (DiskSegment segment : outerSegments) {
-            sum += segment.getSize();
-        }
-        return sum;
-    }
-
-    private double getInnerDisksArea() {
-        double sum = 0.0;
-        for (Disk disk : getInnerDisks()) {
-            sum += disk.getAreaWithoutBorder();
-        }
-        return sum;
+        return outerSegments.stream().mapToDouble(DiskSegment::getSize).sum();
     }
 }

@@ -26,8 +26,9 @@ public class C2RD implements Step {
 	private String methodColor;
 	private double methodTransparency;
 	private String dataColor;
-	private  double ringWidthAD;
+	private double ringWidthAD;
 	private double dataTransparency;
+	private double dataFactor;
 	private Model model;
 	private RDElementsFactory factory;
 	private List<ProgrammingLanguage> languages;
@@ -47,6 +48,7 @@ public class C2RD implements Step {
 		ringWidth = config.getRDRingWidth();
 		classTransparency = config.getRDClassTransparency();
 		classColor = config.getRDClassColor();
+		dataFactor = config.getRDDataFactor();
 		this.languages = languages;
 	}
 
@@ -54,7 +56,7 @@ public class C2RD implements Step {
 		log.info("C2RD started");
 		deleteOldNodes();
 		model = new Model(methodTypeMode, methodDisks, dataDisks);
-		factory = new RDElementsFactory(methodTypeMode, methodDisks, dataDisks);
+		factory = new RDElementsFactory(methodTypeMode, methodDisks, dataDisks, dataFactor);
 		queriesToRDElementList();
 		writeToDatabase();
 		log.info("C2RD finished");
@@ -108,7 +110,7 @@ public class C2RD implements Step {
 			String query = "MATCH (t:TranslationUnit)-[:DECLARES]->(f:Function) WHERE EXISTS(f.hash) RETURN f as node, ID(t) as tID";
 			StatementResult translationUnits = connector.executeRead(query);
 			translationUnits.forEachRemaining((result) -> {
-				RDElement element = factory.createFromFunction(result, height, ringWidthAD, methodTransparency, minArea, methodColor);
+				RDElement element = factory.createFromFunction(result, height, ringWidthAD, minArea, methodTransparency, methodColor);
 				model.addRDElement(element);
 			});
 		} catch (Exception e) {

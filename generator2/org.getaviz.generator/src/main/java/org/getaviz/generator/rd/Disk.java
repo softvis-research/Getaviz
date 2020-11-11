@@ -2,18 +2,22 @@ package org.getaviz.generator.rd;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.util.GeometricShapeFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.rd.m2m.Position;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class Disk implements RDElement, Comparable<Disk> {
+    private final Log log = LogFactory.getLog(this.getClass());
     protected double height;
     private double transparency;
     double borderWidth;
-    double areaWithBorder;
-    double areaWithoutBorder;
     protected double radius = 0;
+    protected double innerRadius = 0;
     protected Position position;
     protected String color;
     String spine;
@@ -21,14 +25,15 @@ public abstract class Disk implements RDElement, Comparable<Disk> {
     long visualizedNodeID;
     long parentID;
     protected long id;
-    private ArrayList<Disk> innerDisks = new ArrayList<>();
-    private static GeometricShapeFactory shapeFactory;
+    private final ArrayList<Disk> innerDisks = new ArrayList<>();
+    private static final GeometricShapeFactory shapeFactory;
     private double innerSegmentsRadius;
-    private double innerRadius = 0;
     boolean wroteToDatabase = false;
+    static Random random;
 
     static {
         shapeFactory = new GeometricShapeFactory();
+        random = new Random();
     }
 
     protected Disk(long visualizedNodeId, double ringWidth, double height) {
@@ -44,9 +49,8 @@ public abstract class Disk implements RDElement, Comparable<Disk> {
    }
 
     public int compareTo(Disk disk) {
-        return java.lang.Double.compare(disk.getAreaWithoutBorder(), areaWithoutBorder);
+        return java.lang.Double.compare(disk.radius, radius);
     }
-
 
     //TODO: move somewhere else
     public void calculateSpines() {
@@ -99,14 +103,6 @@ public abstract class Disk implements RDElement, Comparable<Disk> {
         return id;
     }
 
-    void setAreaWithoutBorder(double areaWithoutBorder) {
-        this.areaWithoutBorder = areaWithoutBorder;
-    }
-
-    public double getAreaWithoutBorder() {
-        return areaWithoutBorder;
-    }
-
     public void setRadius(double radius) {
         this.radius = radius;
     }
@@ -157,8 +153,6 @@ public abstract class Disk implements RDElement, Comparable<Disk> {
     }
 
     public String getSpine() {return spine;}
-
-    public abstract double getMinArea();
 
     public Coordinate[] getCoordinates() {
         shapeFactory.setNumPoints(64);

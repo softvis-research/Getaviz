@@ -1,14 +1,19 @@
 package org.getaviz.generator.rd.m2m;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.rd.DiskSegment;
 import org.getaviz.generator.rd.SubDisk;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 class AFrameSegmentLayout {
 
     private final List<SubDisk> disks;
-
+    private final Log log = LogFactory.getLog(this.getClass());
     AFrameSegmentLayout(List<SubDisk> disks) {
         this.disks = disks;
     }
@@ -51,12 +56,25 @@ class AFrameSegmentLayout {
         if (!segments.isEmpty()) {
             int length = segments.size();
             double position = 90.0;
-            sizeSum += sizeSum / 360 * length;
+           // sizeSum += sizeSum / 360 ;
+           // sizeSum -= length;
+            log.info("length: " + length);
+            log.info("sizeSum: " + sizeSum);
             for (DiskSegment segment : segments) {
-                double angle = (segment.getSize() / sizeSum) * 360;
-                segment.setAngle(angle);
+                log.info("segment: " + segment.getID() + " size: " + segment.getSize());
+                double angle = (segment.getSize() / sizeSum) * 360 - 1;
                 segment.setAnglePosition(position);
-                position += angle + 1;
+                if(angle < 0.1) {
+                    angle = 0.1;
+                    position += angle + 0.9;
+                } else {
+                    position += angle + 1;
+                }
+                segment.setAngle(angle);
+                if (position >= 360) {
+                    position -= 360;
+                }
+                log.info("segment: " + segment.getID() + " angle position: " + position);
                 segment.setOuterRadius(outer);
                 segment.setInnerRadius(inner);
             }

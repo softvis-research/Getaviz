@@ -29,14 +29,10 @@ public class DiskSegment implements RDElement {
         this.color = color;
     }
 
-    public DiskSegment(long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, double minArea, String color,
-                int numberOfStatements) {
+    public DiskSegment(long visualizedNodeID, long parentVisualizedNodeID, double height, double transparency, String color,
+                double area) {
         this(visualizedNodeID, parentVisualizedNodeID, transparency, height, color);
-
-        size = numberOfStatements;
-        if (numberOfStatements <= minArea) {
-            size = minArea;
-        }
+        size = area;
     }
 
     public DiskSegment(long parentID, long id, double size, double dataFactor) {
@@ -48,11 +44,6 @@ public class DiskSegment implements RDElement {
     public void createParentRelationship(DatabaseConnector connector) {
         connector.executeWrite(
                 "MATCH (parent), (s) WHERE ID(parent) = " + parentID + " AND ID(s) = " + id + " CREATE (parent)-[:CONTAINS]->(s)");
-    }
-
-
-    void calculateSize(double sum) {
-        size = size / sum;
     }
 
     public void createNode(DatabaseConnector connector) {

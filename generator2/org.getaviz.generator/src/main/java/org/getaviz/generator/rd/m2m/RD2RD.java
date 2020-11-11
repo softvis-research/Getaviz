@@ -38,7 +38,6 @@ public class RD2RD implements Step {
     public void run() {
         log.info("RD2RD started");
         createLists();
-        calculateData();
         calculateLayouts();
         writeToDatabase();
         log.info("RD2RD finished");
@@ -62,17 +61,12 @@ public class RD2RD implements Step {
         return length.single().get("length").asInt(0) + 1;
     }
 
-    private void calculateData() {
-        subDisks.forEach(SubDisk::calculateAreaWithoutBorder);
-        rootDisks.forEach(MainDisk::calculateAreaWithoutBorder);
-    }
-
     private void calculateLayouts() {
         calculateDiskLayout();
-        X3DSegmentLayout layout = new X3DSegmentLayout(subDisks);
+        X3DSegmentLayout x3dLayout = new X3DSegmentLayout(subDisks);
+        x3dLayout.calculateInnerSegments();
+        x3dLayout.calculateOuterSegments();
         AFrameSegmentLayout aFrameSegmentLayout = new AFrameSegmentLayout(subDisks);
-        layout.calculateInnerSegments();
-        layout.calculateOuterSegments();
         aFrameSegmentLayout.calculateInnerSegments();
         aFrameSegmentLayout.calculateOuterSegments();
     }
@@ -229,8 +223,13 @@ public class RD2RD implements Step {
     }
 
     private void calculateDiskLayout() {
-        DiskLayout layout = new DiskLayout(rootDisks, subDisks);
-        layout.run();
+        DiskLayout layout = new DiskLayout(rootDisks);
+        //CirclePackingLayout layout = new CirclePackingLayout(rootDisks);
+        try {
+            layout.run();
+        } catch (Exception e) {
+            log.error(e);
+        }
         rootDisks.forEach(Disk::calculateSpines);
     }
 

@@ -14,15 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RD2AFrame implements Step {
-	private DatabaseConnector connector = DatabaseConnector.getInstance();
-	private Log log = LogFactory.getLog(this.getClass());
-	private double ringWidth;
-	private String outputPath;
-	private AFrame outputFormat;
-	private SettingsConfiguration.OutputFormat format;
+	private final DatabaseConnector connector = DatabaseConnector.getInstance();
+	private final Log log = LogFactory.getLog(this.getClass());
+	private final String outputPath;
+	private final AFrame outputFormat;
+	private final SettingsConfiguration.OutputFormat format;
 
 	public RD2AFrame(SettingsConfiguration config) {
-		this.ringWidth = config.getRDRingWidth();
 		this.outputPath = config.getOutputPath();
 		this.outputFormat = new AFrame();
 		this.format = config.getOutputFormat();
@@ -74,12 +72,13 @@ public class RD2AFrame implements Step {
 
 	private String toDisk(Node disk, Node position) {
 		double radius = disk.get("radius").asDouble(0);
+		double ringWidth = disk.get("ringWidth").asDouble(0);
 		Node entity = connector.getVisualizedEntity(disk.id());
 		ArrayList<Node> segments = new ArrayList<>();
 		connector.executeRead("MATCH (n)-[:CONTAINS]->(ds:DiskSegment)-[:VISUALIZES]->(element) WHERE ID(n) = "
 				+ disk.id() + " RETURN ds, element.hash ORDER BY element.hash").forEachRemaining((result) -> {
 					segments.add(result.get("ds").asNode());
-				});
+				});jd
 		StringBuilder builder = new StringBuilder();
 		if (radius - ringWidth == 0) {
 			builder.append("<a-circle id=\"").append(entity.get("hash").asString()).append("\" ");

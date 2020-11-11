@@ -7,7 +7,7 @@ import org.getaviz.generator.rd.m2m.Position;
 
 public class MainDisk extends Disk {
 
-    private Log log = LogFactory.getLog(this.getClass());
+    private final Log log = LogFactory.getLog(this.getClass());
 
     public MainDisk(long visualizedNodeId, long parentVisualizedNodeID, double ringWidth, double height, double transparency) {
         super(visualizedNodeId, parentVisualizedNodeID, ringWidth, height, transparency);
@@ -17,8 +17,6 @@ public class MainDisk extends Disk {
         super(visualizedNodeID, ringWidth, height);
         this.parentID = parentID;
         this.id = id;
-        this.areaWithBorder = 0;
-        this.areaWithoutBorder = 0;
         this.position = new Position(0, 0, 0);
         this.wroteToDatabase = true;
     }
@@ -52,18 +50,5 @@ public class MainDisk extends Disk {
         String createPosition = String.format("CREATE (n)-[:HAS]->(:RD:Position {x: %f, y: %f, z: %f})", position.x,
                 position.y, position.z);
         connector.executeWrite(updateNode + createPosition);
-    }
-
-    public void calculateAreaWithoutBorder() {
-        for (Disk d : getInnerDisks()) {
-            if(d instanceof MainDisk) {
-                ((MainDisk) d).calculateAreaWithoutBorder();
-            }
-            setAreaWithoutBorder(getAreaWithoutBorder() + d.getAreaWithoutBorder());
-        }
-    }
-
-    public double getMinArea() {
-        return 0;
     }
 }
