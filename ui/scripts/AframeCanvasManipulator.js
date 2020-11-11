@@ -209,7 +209,17 @@ var canvasManipulator = (function () {
         });
     }
 
-    function changeColorOfEntities(entities, color) {
+    function updateEntityEffectMap(entity, effect) {
+        if (!entityEffectMap.has(entity.id)) {
+            entityEffectMap.set(entity.id, new Map());
+        }
+
+        if (!entityEffectMap.get(entity.id).has(effect)) {
+            entityEffectMap.get(entity.id).set(effect, new Array);
+        }
+    }
+
+    function changeColorOfEntities(entities, color, controller) {
         entities.forEach(function (entity) {
             if (entity == undefined) {
                 return;
@@ -251,7 +261,7 @@ var canvasManipulator = (function () {
         );
     }
 
-    function resetColorOfEntities(entities) {
+    function resetColorOfEntities(entities, controller) {
         entities.forEach(function (entity) {
 
             var colorList = entityEffectMap.get(entity.id).get("color");
