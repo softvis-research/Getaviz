@@ -1,7 +1,5 @@
 package org.getaviz.generator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.generator.mockups.Bank;
 import org.junit.jupiter.api.AfterAll;
@@ -10,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.neo4j.driver.v1.Record;
 
 import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RDBankTest {
 
@@ -69,8 +69,8 @@ class RDBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(-9.214771, x);
-		assertEquals(-11.790536, y);
+		assertEquals(-1.902378, x);
+		assertEquals(-14.843352, y);
 		assertEquals(0, z);
 	}
 
@@ -84,8 +84,8 @@ class RDBankTest {
 		double x = result.get("x").asDouble();
 		double y = result.get("y").asDouble();
 		double z = result.get("z").asDouble();
-		assertEquals(-9.214771, x);
-		assertEquals(-1.498676, y);
+		assertEquals(-1.902378, x);
+		assertEquals(-4.551492, y);
 		assertEquals(0, z);
 	}
 
@@ -95,6 +95,6 @@ class RDBankTest {
 		Record result = connector.executeRead("MATCH (segment:DiskSegment)-[:VISUALIZES]->(:Method {hash: '" + hash
 				+ "'}) RETURN segment.anglePosition as anglePosition").single();
 		double anglePosition = result.get("anglePosition").asDouble();
-		assertEquals(360.03296703296706, anglePosition);
+		assertEquals(0.0, anglePosition);
 	}
 }
