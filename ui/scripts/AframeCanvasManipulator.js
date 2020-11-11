@@ -23,6 +23,8 @@ var canvasManipulator = (function () {
         initialCameraView.position = globalCamera.object.position;
         initialCameraView.spherical = globalCamera.spherical;
         */
+
+        window.addEventListener("resize", function(event) { setTimeout(resizeScene, 100) });
     }
 
     function reset() {
@@ -36,6 +38,10 @@ var canvasManipulator = (function () {
 
         globalCamera.scale = initialCameraView.spherical.radius/globalCamera.spherical.radius;
         */
+    }
+
+    function resizeScene() {
+        document.querySelector('a-scene').resize();
     }
 
     function changeTransparencyOfEntities(entities, transparency, controller) {
@@ -463,6 +469,8 @@ var canvasManipulator = (function () {
         initialize: initialize,
         reset: reset,
         colors: colors,
+
+        resizeScene: resizeScene,
 
         changeTransparencyOfEntities: changeTransparencyOfEntities,
         resetTransparencyOfEntities: resetTransparencyOfEntities,
