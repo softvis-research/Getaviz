@@ -23,11 +23,18 @@ var setup = {
             name: "relationController",
             sourceStartAtBorder: true,
             targetEndAtBorder: true,
-            showInnerRelations: true
+            showInnerRelations: true,
+
+            connectorColor: { r: 0, g: 0, b: 1 },
         },
 
         {
             name: "packageExplorerController",
+            abap: true,
+            elementsSelectable: true 
+        },
+        {
+            name: "canvasFilterController"
         },
 
         {   name: "legendController",
@@ -120,13 +127,13 @@ var setup = {
                     open: true,
                     icon: "scripts/Legend/images/circle_width.png",
                     entries:[{
-                            name: "Mountain",
+                            name: "Mountain - Building Height",
                             icon: "scripts/Legend/images/mountain.png",
                         },{
-                            name: "Cloud",
+                            name: "Cloud - Migration Findings",
                             icon: "scripts/Legend/images/cloud_black.png",
                         },{
-                            name: "Lake",
+                            name: "Lake - District Area",
                             icon: "scripts/Legend/images/lake.png",
                     }]
                 }]
@@ -213,6 +220,7 @@ var setup = {
                                 { name: "defaultLogger" },
                                 { name: "canvasHoverController" },
                                 { name: "canvasSelectController" },
+                                { name: "canvasFilterController" },
                                 { name: "relationController" }
                             ],
                         }
