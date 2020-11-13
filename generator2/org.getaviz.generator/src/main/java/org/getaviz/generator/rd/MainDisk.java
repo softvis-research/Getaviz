@@ -60,6 +60,9 @@ public class MainDisk extends Disk {
 
     public void calculateAreaWithoutBorder() {
         for (Disk d : getInnerDisks()) {
+            if(d instanceof MainDisk) {
+                ((MainDisk) d).calculateAreaWithoutBorder();
+            }
             setAreaWithoutBorder(getAreaWithoutBorder() + d.getAreaWithoutBorder());
         }
     }
