@@ -99,6 +99,7 @@ public class JavaEnhancement implements Step {
 
 	private void enhanceNode(Record record) {
 		Node node = record.get("n").asNode();
+		String signatureForHash = getSignature(node);
 		Value fqnValue = node.get("fqn");
 		String fqn = fqnValue.asString();
 		if (fqnValue.isNull()) {
@@ -127,8 +128,16 @@ public class JavaEnhancement implements Step {
  	"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.name = '" + name + "', n.fqn = '" + fqn + "'");
 		}
 		connector.executeWrite(
-	"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.hash = '" + createHash(fqn) + "'"
+	"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.hash = '" + createHash(fqn + signatureForHash) + "'"
 		);
+	}
+
+	private String getSignature(Node node) {
+		if(node.containsKey("signature")) {
+			return node.get("signature").asString();
+		} else {
+			return "";
+		}
 	}
 
 }
