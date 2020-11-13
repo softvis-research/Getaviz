@@ -1,7 +1,5 @@
 package org.getaviz.generator.rd.m2m;
 
-import java.util.Collections;
-import java.util.List;
 import com.vividsolutions.jts.algorithm.MinimumBoundingCircle;
 import com.vividsolutions.jts.geom.CoordinateList;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -10,22 +8,24 @@ import org.getaviz.generator.rd.Disk;
 import org.getaviz.generator.rd.MainDisk;
 import org.getaviz.generator.rd.SubDisk;
 
+import java.util.Collections;
+import java.util.List;
+
 class DiskLayout {
 
 	private List<MainDisk> rootDisks;
 	private List<MainDisk> mainDisks;
 	private List<SubDisk> subDisks;
 
-	DiskLayout(List<MainDisk> rootDisks, List<MainDisk> mainDisks, List<SubDisk> subDisks) {
+	DiskLayout(List<MainDisk> rootDisks, List<SubDisk> subDisks) {
 		this.rootDisks = rootDisks;
-		this.mainDisks = mainDisks;
 		this.subDisks = subDisks;
 	}
 	
 	void run() {
 		layout(rootDisks);
-		transformPositions(mainDisks);
-		transformPositions(subDisks);
+		transformPositions(rootDisks);
+		transformPositionsSubDisks(subDisks);
 	}
 
 	private <T extends Disk> void layout(List<T> diskList) {
@@ -42,6 +42,16 @@ class DiskLayout {
 	}
 
 	private  <T extends Disk> void transformPositions(List<T> disks) {
+		disks.forEach( (disk) -> {
+			if(disk instanceof MainDisk) {
+				transformPositionOfInnerDisks(disk);
+			}
+			List<Disk> innerDisks = disk.getInnerDisks();
+			transformPositions(innerDisks);
+		});
+	}
+
+	private void transformPositionsSubDisks(List<SubDisk> disks) {
 		disks.forEach(this::transformPositionOfInnerDisks);
 	}
 
@@ -86,6 +96,7 @@ class DiskLayout {
 			d.getPosition().x -= disk.getPosition().x;
 			d.getPosition().y -= disk.getPosition().y;
 		}
+		disk.setPosition(new Position(0, 0, disk.getPosition().z));
 	}
 
 	private <T extends Disk> void calculate(final List<T> disksList) {
@@ -123,8 +134,12 @@ class DiskLayout {
 			double c = m_disk.getRadius() + n_minus1_disk.getRadius();
 
 			triangle_angle = Math.toDegrees(Math.acos((a * a - b * b - c * c) / (-2 * b * c)));
+			if(Double.isNaN(triangle_angle)) {
+				triangle_angle = 0;
+			}
 
-			n_disk.setPosition(Position.calculateCentre(disksList.get(m), n_disk, angleBetweenNAndM + triangle_angle));
+			n_disk.setPosition(Position.calculateCentre(m_disk, n_disk, angleBetweenNAndM + triangle_angle));
+
 			// 3. check intersect of new circle (n) with circle m+1
 			if (!Position.intersect(disksList.get(m + 1), n_disk)) {
 
