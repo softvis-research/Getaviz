@@ -111,20 +111,20 @@ public class RDIT {
 	@Test
 	void methodSorting() {
 		Record result = connector.executeRead(
-			"MATCH (segment:DiskSegment)-[:VISUALIZES]->(:Method {hash: 'ID_bfdf7b3da476584de47af84e759495ce14f31e46'}) " +
+			"MATCH (segment:DiskSegment)-[:VISUALIZES]->(:Method {hash: 'ID_1d573ecfa6e966a99a7bc5358cc5fbde40e1d472'}) " +
 			"RETURN segment.anglePosition as anglePosition"
 		).single();
 		double anglePosition = result.get("anglePosition").asDouble();
-		assertEquals(354.44000000000005, anglePosition);
+		assertEquals(108.94736842105263, anglePosition);
 	}
 	
 	@Test
 	void dataSorting() {
 		Record result = connector.executeRead(
-			"MATCH (segment:DiskSegment)-[:VISUALIZES]->(:Field {hash: 'ID_5be5ae42eb1bd217d8f987674d19652fc2ba19df'}) " +
+			"MATCH (segment:DiskSegment)-[:VISUALIZES]->(:Field {hash: 'ID_cc37950e08d5de980eb55cf907c9c0644a3dccb9'}) " +
 			"RETURN segment.angle as angle, segment.anglePosition as anglePosition"
 		).single();
 		double anglePosition = result.get("anglePosition").asDouble();
-		assertEquals(150.01639344262296, anglePosition);
+		assertEquals(141.42857142857142, anglePosition);
 	}
 }
