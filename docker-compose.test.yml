@@ -17,28 +17,38 @@ services:
         networks:
             - default
         depends_on:
-            - neo4j
+            - jqassistant
     tests:
         build: integrationtests/
-        command: "/bin/wait-for-it.sh neo4j:7687 -s -t 30 -- mvn install"
+        command: "mvn clean install"
         networks:
             - default
         depends_on:
-            - neo4j
+            - jqassistant
             - frontend
             - backend
-    neo4j:
-        image: neo4j:3.5.1
+    jqassistant:
+        build: jQAssistant/
         restart: always
+        volumes:
+            - 'getaviz-db:/data'
         ports:
             - "7474:7474"
             - "7687:7687"
+            - "8080:8080"
         environment:
             NEO4J_AUTH: "none"
         networks:
             - default
+    volumes-provisioner:
+        image: hasnat/volumes-provisioner
+        environment:
+            PROVISION_DIRECTORIES: "100:101:0755:/var/data /var/data/data-gen/"
+        volumes:
+           - data-gen:/var/data
 volumes:
-  data-gen:
+    data-gen:
+    getaviz-db:
     
 networks:
     default:
