@@ -41,7 +41,7 @@ public class Antipattern implements Step {
 
     public void godclass(){
        connector.executeWrite("MATCH (c:Class) " +
-               "WHERE c.cyclo >= 47 AND c.atfd >= 4 AND c.nom > 0 " +
+               "WHERE c.cyclo >= 47 AND c.atfd > 4 AND c.nom > 0 " +
                "WITH toFloat(c.maa) / toFLoat(c.nom) AS tcc, c AS c " +
                "WHERE tcc < 0.33 " +
                "SET c.godclass=true");

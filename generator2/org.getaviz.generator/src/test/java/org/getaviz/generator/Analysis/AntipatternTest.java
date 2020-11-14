@@ -45,7 +45,7 @@ public class AntipatternTest {
     void godclassTest() {
         Record result = connector
                 .executeRead("MATCH (c:Class) " +
-                        "WHERE c.cyclo >= 47 AND c.atfd >= 4 AND c.nom > 0 " +
+                        "WHERE c.cyclo >= 47 AND c.atfd > 4 AND c.nom > 0 " +
                         "WITH toFloat(c.maa) / toFLoat(c.nom) AS tcc, c AS c " +
                         "WHERE tcc < 0.33 " +
                         "return c.name").single();

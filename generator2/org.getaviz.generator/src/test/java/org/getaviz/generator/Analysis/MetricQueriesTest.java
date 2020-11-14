@@ -46,26 +46,23 @@ class MetricQueriesTest {
     @Test
     void countMethodsAccessingAttributesTest() {
         Record result = connector
-                .executeRead("match (c:Class)-[:DECLARES]->(m:Method)-[:WRITES|READS]->(f:Field) " +
-                        "where (not m.name contains '$') " +
+                .executeRead("match (c:Class)-[:DECLARES]->(m:Method)-[:WRITES|READS]->(f:Field), (c)-[:DECLARES]->(f) " +
                         "with c as c, m as m, COUNT(f.name) as maa " +
                         "where maa >= 2 " +
                         "with count(m) as result " +
                         "return result").single();
         int maa = result.get("result").asInt();
-        assertEquals(maa, 2);
+        assertEquals(maa, 1);
     }
 
     @Test
     void accessToForeignDataTest() {
-        List<Integer> actual = new ArrayList<>();
-        connector.executeRead("MATCH (c:Class)-[:DECLARES|READS|WRITES]->(f:Field) " +
-                "WITH f AS f, c AS c " +
-                "WHERE (f.name CONTAINS '$') AND (NOT f.name CONTAINS \"$class$java\") " +
-                "WITH c AS c, COUNT(f.name) AS atfd " +
-                "RETURN atfd").stream().forEach(record -> actual.add(record.get("atfd").asInt()));
-        ArrayList<Integer> correct = new ArrayList<>(Arrays.asList(4,1));
-        assertEquals(actual, correct);
+        Record result = connector.executeRead("match (c:Class) " +
+                "where c.atfd > 0 " +
+                "return c.atfd").single();
+        int atfd = result.get("c.atfd").asInt();
+        assertEquals(atfd, 5);
+//        actual.forEach(System.out::println);
     }
 
     @Test
@@ -92,7 +89,7 @@ class MetricQueriesTest {
         connector.executeRead("MATCH (c:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field), (c:Class)-[:DECLARES]->(f:Field) " +
                 "WITH m AS m, count(f.fqn) AS atod " +
                 "return atod").stream().forEach(record -> actual.add(record.get("atod").asInt()));
-        ArrayList<Integer> correct = new ArrayList<>(Arrays.asList(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1));
+        ArrayList<Integer> correct = new ArrayList<>(Arrays.asList(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1));
         assertEquals(actual, correct);
     }
 
@@ -102,7 +99,7 @@ class MetricQueriesTest {
         connector.executeRead("MATCH (m:Method)-[:DECLARES|READS|WRITES]->(f:Field) " +
                 "WITH m AS m, count(f.fqn) AS atad " +
                 "return atad").stream().forEach(record -> actual.add(record.get("atad").asInt()));
-        ArrayList<Integer> correct = new ArrayList<>(Arrays.asList(1, 1, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1));
+        ArrayList<Integer> correct = new ArrayList<>(Arrays.asList(1, 1, 7, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 3, 1, 2, 1, 1));
         assertEquals(actual, correct);
     }
 
@@ -132,23 +129,20 @@ class MetricQueriesTest {
 
     @Test
     void foreignDataProvidersTest() {
-        Record result = connector
-                .executeRead("match (m:Method) where m.fdp = 1 return m.fqn").single();
-        String fdp = result.get("m.fqn").asString();
-        assertEquals(fdp, "bank.Bank.getAccounts()");
+        List<String> actual = new ArrayList<>();
+        connector.executeRead("match (m:Method) " +
+                "where m.fdp = 1 " +
+                "return m.fqn").stream().forEach(record -> actual.add(record.get("m.fqn").asString()));
+        ArrayList<String> correct = new ArrayList<>(Arrays.asList("bank.Bank.getBankName()", "bank.Bank.getBusinessCustomers()", "bank.Bank.getTransactions()"));
+        assertEquals(correct, actual);
     }
 
     @Test
     void numberOfAccessedVarTest() {
         Record result = connector
                 .executeRead("MATCH (m:Method)-[:DECLARES]->(v:Variable) WITH count(v.name) AS noav RETURN noav").single();
-        int maa = result.get("noav").asInt();
-        assertEquals(maa, 17);
+        int noav = result.get("noav").asInt();
+        assertEquals(noav, 17);
     }
 
-    @Test
-    void test() {
-        connector
-                .executeRead("MATCH (m:Method)-[:DECLARES]->(v:Variable) WITH m as m, count(v.name) AS noav RETURN m.name, noav").stream().forEach(System.out::println);
-    }
 }

@@ -13,12 +13,12 @@ public class MetricQueries {
 
     /**
      * MAA: Methods Accessing Attributes
-     * Count Method pairs that access the same attribute
+     * Count Method pairs that access the same attribute inside a class
      * Relevant for Godclass, Brainclass
      */
     public void countMethodsAccessingAttributes() {
-        connector.executeWrite("match (c:Class)-[:DECLARES]->(m:Method)-[:WRITES|READS]->(f:Field) " +
-                "    where (not m.name contains '$') " +
+        connector.executeWrite("match (c:Class)-[:DECLARES]->(m:Method)-[:WRITES|READS]->(f:Field)" +
+                ", (c)-[:DECLARES]->(f) " +
                 "    with c as c, m.name as m, COUNT(f.name) as maa " +
                 "    where maa >= 2 " +
                 "    with c as c, count(m) as result " +
@@ -28,15 +28,14 @@ public class MetricQueries {
     /**
      * ATFD: Access To Foreign Data
      * Number of Attributes a Class accesses that do not belong to it
-     * READS|WRITES sind nurnoch für TestDB da!
      * Relevant for Godclass
      */
     public void accessToForeignData() {
-        connector.executeWrite("MATCH (c:Class)-[:DECLARES|READS|WRITES]->(f:Field) " +
-                "    WITH f AS f, c AS c " +
-                "    WHERE (f.name CONTAINS '$') " +
-                "    WITH c AS c, COUNT(f.name) AS atfd " +
-                "    SET c.atfd=atfd");
+        connector.executeWrite("match (c1:Class)-[:DECLARES]->(f:Field), " +
+                "(c2:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field) " +
+                "where (NOT c1.fqn = c2.fqn) " +
+                "with count(c2.fqn) as atfd, c2 as c2 " +
+                "set c2.atfd = atfd");
     }
 
     /**
