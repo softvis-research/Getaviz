@@ -49,6 +49,24 @@ var model = (function () {
 
 			entity.isTransparent = false;
 
+			if (element.created) {
+				//format: YYYY-MM-DD
+				var dateString = element.created.toString().slice(0, 4) + "-" + element.created.toString().slice(4, 6) + "-" + element.created.toString().slice(6, 8); 
+				
+				entity.dateOfCreation = new Date(dateString);
+			} else {
+				entity.dateOfCreation = new Date(0);
+			}
+
+			if (element.changed) {
+				//format: YYYY-MM-DD
+				var dateString = element.changed.toString().slice(0, 4) + "-" + element.changed.toString().slice(4, 6) + "-" + element.changed.toString().slice(6, 8); 
+				
+				entity.dateOfLastChange = new Date(dateString);
+			} else {
+				entity.dateOfLastChange = new Date(0);
+			}
+
 			switch (entity.type) {
 				case "text":
 					entity.versions = element.versions.split(",");
@@ -223,6 +241,9 @@ var model = (function () {
 					} else {
 						entity.accesses = [];
 					}
+
+					entity.numberOfStatements = element.number_of_statements;
+
 					break;
 				case "Function":
 					entity.signature = element.signature;
@@ -250,7 +271,7 @@ var model = (function () {
 					break;
 				case "FunctionModule":
 				case "Report":
-				case "Formroutine":
+				case "FormRoutine":
 					if (element.calls) {
 						entity.calls = element.calls.split(",");
 					} else {
@@ -261,6 +282,9 @@ var model = (function () {
 					} else {
 						entity.calledBy = [];
 					}
+
+					entity.numberOfStatements = element.number_of_statements;
+
 					break;
 				case "Variable":
 					if (element.accessedBy) {
@@ -509,7 +533,7 @@ var model = (function () {
 						return;
 					}
 				case "FunctionModule":
-				case "Formroutine":
+				case "FormRoutine":
 					let callsABAP = [];
 					entity.calls.forEach(function (callsId) {
 						let relatedEntity = entitiesById.get(callsId.trim());
