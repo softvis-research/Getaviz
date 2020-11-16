@@ -30,7 +30,11 @@ var canvasManipulator = (function () {
         initialCameraView.spherical = globalCamera.spherical;
         */
 
-        window.addEventListener("resize", function(event) { setTimeout(resizeScene, 100) });
+        //this is a workaround for a bug of a-frame
+        //if the window size is changed from/to max size,
+        //the a-scene resize-handler won't be called properly
+        //so we call the resize-handler here again
+        window.addEventListener("resize", function() { setTimeout(resizeScene, 100) });
     }
 
     function reset() {
@@ -59,7 +63,7 @@ var canvasManipulator = (function () {
             }
 
             let component = document.getElementById(entity.id);
-            if (component == undefined) {
+            if (component === undefined) {
                 events.log.error.publish({ text: "CanvasManipulator - changeTransparencyOfEntities - components for entityIds not found" });
                 return;
             }
@@ -68,9 +72,9 @@ var canvasManipulator = (function () {
 
             var transparencyList = entityEffectMap.get(entity.id).get("transparency");
 
-            if (transparencyList.length == 0) {
+            if (transparencyList.length === 0) {
                 var opacity = component.getAttribute("material").opacity;
-                opacity = (opacity == undefined) ? 1 : opacity;
+                opacity = (opacity === undefined) ? 1 : opacity;
 
                 transparencyList.push(
                     {
@@ -110,16 +114,16 @@ var canvasManipulator = (function () {
                 return;
             }
 
-            var transparencyEffectIndex = transparencyList.findIndex(transparencyEffect => transparencyEffect.controller = controller.name);
+            var transparencyEffectIndex = transparencyList.findIndex(transparencyEffect => transparencyEffect.controller == controller.name);
 
             //controller not affected the transparency
-            if (transparencyEffectIndex == -1) {
+            if (transparencyEffectIndex === -1) {
                 return;
             }
 
             transparencyList.splice(transparencyEffectIndex, 1);
 
-            if (transparencyEffectIndex == transparencyList.length) {
+            if (transparencyEffectIndex === transparencyList.length) {
                 let component = document.getElementById(entity.id);
                 if (component == undefined) {
                     events.log.error.publish({ text: "CanvasManipulator - resetTransparencyOfEntities - components for entityIds not found" });
@@ -176,7 +180,7 @@ var canvasManipulator = (function () {
             if (entity !== undefined) {
                 var component = document.getElementById(entity.id);
             }
-            if (component == undefined) {
+            if (component === undefined) {
                 events.log.error.publish({ text: "CanvasManipulator - stopAnimation - component for entityId not found" });
                 return;
             }
@@ -221,12 +225,12 @@ var canvasManipulator = (function () {
 
     function changeColorOfEntities(entities, color, controller) {
         entities.forEach(function (entity) {
-            if (entity == undefined) {
+            if (entity === undefined) {
                 return;
             }
 
             let component = document.getElementById(entity.id);
-            if (component == undefined) {
+            if (component === undefined) {
                 events.log.error.publish({ text: "CanvasManipulator - changeColorOfEntities - components for entityIds not found" });
                 return;
             }
@@ -235,7 +239,7 @@ var canvasManipulator = (function () {
 
             var colorList = entityEffectMap.get(entity.id).get("color");
 
-            if (colorList.length == 0) {
+            if (colorList.length === 0) {
                 colorList.push(
                     {
                         controller: "original",
@@ -274,15 +278,15 @@ var canvasManipulator = (function () {
             var colorEffectIndex = colorList.findIndex(colorEffect => colorEffect.controller == controller.name);
 
             //controller not affected the color
-            if (colorEffectIndex == -1) {
+            if (colorEffectIndex === -1) {
                 return;
             }
 
             colorList.splice(colorEffectIndex, 1);
 
-            if (colorEffectIndex == colorList.length) {
+            if (colorEffectIndex === colorList.length) {
                 let component = document.getElementById(entity.id);
-                if (component == undefined) {
+                if (component === undefined) {
                     events.log.error.publish({ text: "CanvasManipulator - resetColorOfEntities - components for entityIds not found" });
                     return;
                 }
@@ -315,12 +319,12 @@ var canvasManipulator = (function () {
 
     function changeVisibilityOfEntities(entities, targetValue, controller) {
         entities.forEach(function (entity) {
-            if (entity == undefined) {
+            if (entity === undefined) {
                 return;
             }
 
             let component = document.getElementById(entity.id);
-            if (component == undefined) {
+            if (component === undefined) {
                 events.log.error.publish({ text: "CanvasManipulator - changeVisibilityOfEntities - components for entityIds not found" });
                 return;
             }
@@ -331,7 +335,7 @@ var canvasManipulator = (function () {
 
             var visible = component.object3D.visible;
 
-            if (visibilityList.length == 0) {
+            if (visibilityList.length === 0) {
                 visibilityList.push(
                     {
                         controller: "original",
@@ -342,7 +346,7 @@ var canvasManipulator = (function () {
                 var visibilityEffectIndex = visibilityList.findIndex(visibilityEffect => visibilityEffect.controller == controller.name);
 
                 //remove old visibility entry of this controller
-                if (visibilityEffectIndex != -1) {
+                if (visibilityEffectIndex !== -1) {
                     visibilityList.splice(visibilityEffectIndex, 1);
                 }
             }
@@ -355,7 +359,7 @@ var canvasManipulator = (function () {
             );
 
             //length is always at least 2 (original value and target value)
-            if (visible != targetValue) {
+            if (visible !== targetValue) {
                 setVisibility(component, targetValue);
             }
         });
