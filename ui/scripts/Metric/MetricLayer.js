@@ -27,14 +27,14 @@ class MetricLayer {
         this.metric.variant = ($(cssIDs.metricDropDown + this.id).val() == "" ? metricController.metricDefault.variant : $(cssIDs.metricDropDown + this.id).val());
 
         switch (this.metric.variant) {
-            case metrics.numberOfStatements:
-                this.metric.from = $(cssIDs.metricFromInput + this.id).val();
-                this.metric.to = $(cssIDs.metricToInput + this.id).val();
-                break;
             case metrics.dateOfCreation:
             case metrics.dateOfLastChange:
-                this.metric.from = $(cssIDs.metricFromDateInput + this.id).val();
-                this.metric.to = $(cssIDs.metricToDateInput + this.id).val();
+                this.metric.from = $(cssIDs.metricFromDateInput + this.id).val() === "" ? (new Date(0)).getTime() : (new Date($(cssIDs.metricFromDateInput + this.id).val())).getTime();
+                this.metric.to = $(cssIDs.metricToDateInput + this.id).val() === "" ? (new Date()).getTime() : (new Date($(cssIDs.metricToDateInput + this.id).val())).getTime();
+                break;
+            default:
+                this.metric.from = $(cssIDs.metricFromInput + this.id).val() === "" ? Number.NEGATIVE_INFINITY : Number($(cssIDs.metricFromInput + this.id).val());
+                this.metric.to = $(cssIDs.metricToInput + this.id).val() === "" ? Number.POSITIVE_INFINITY : Number($(cssIDs.metricToInput + this.id).val());
                 break;
         }
 
@@ -70,7 +70,22 @@ class MetricLayer {
         }
     }
 
-    async getMatchingEntities() {
+    getMatchingEntities() {
+        model.getAllEntities().forEach((entity) => {
+            if (entity[this.metric.variant] === undefined) {
+                return;
+            }
+
+            if (this.metric.from <= entity[this.metric.variant] 
+                && entity[this.metric.variant] <= this.metric.to) {
+                this.entities.push(entity);
+                this.entityMetricMap.set(entity.id, entity[this.metric.variant])
+            }
+        })
+    }
+
+    //currently not used
+    async getMatchingEntitiesOutOfNeo4j() {
         var response = await metricController.getNeo4jData(this.buildCypherQuery());
 
         response[0].data.forEach(element => {
@@ -123,13 +138,13 @@ class MetricLayer {
         switch (this.mapping.variant) {
             default:
             case mappings.color:
-                canvasManipulator.changeColorOfEntities(this.entities, this.mapping.color);
+                canvasManipulator.changeColorOfEntities(this.entities, this.mapping.color, { name: "metricController - layer " + this.id });
                 break;
             case mappings.colorGradient:
                 this.setColorGradient();
                 break;
             case mappings.transparency:
-                canvasManipulator.changeTransparencyOfEntities(this.entities, this.mapping.transparency);
+                canvasManipulator.changeTransparencyOfEntities(this.entities, this.mapping.transparency, { name: "metricController - layer " + this.id });
                 break;
             case mappings.pulsation:
                 canvasManipulator.startAnimation({ animation: "Expanding", entities: this.entities, period: this.mapping.period, scale: this.mapping.scale });
@@ -160,22 +175,20 @@ class MetricLayer {
 
         this.entities.forEach(function (entity) {
             var gradientColor = colorGradient.calculateGradientColor(this.entityMetricMap.get(entity.id));
-            canvasManipulator.changeColorOfEntities([entity], gradientColor.r + " " + gradientColor.g + " " + gradientColor.b);
+            canvasManipulator.changeColorOfEntities([entity], gradientColor.r + " " + gradientColor.g + " " + gradientColor.b, { name: "metricController - layer " + this.id });
         }, this)
 
     }
 
     reset() {
-        
+
         switch (this.mapping.variant) {
             case mappings.color:
-                canvasManipulator.resetColorOfEntities(this.entities);
-                break;
             case mappings.colorGradient:
-                canvasManipulator.resetColorOfEntities(this.entities);
+                canvasManipulator.resetColorOfEntities(this.entities, { name: "metricController - layer " + this.id });
                 break;
             case mappings.transparency:
-                canvasManipulator.resetTransparencyOfEntities(this.entities);
+                canvasManipulator.resetTransparencyOfEntities(this.entities, { name: "metricController - layer " + this.id });
                 break;
             case mappings.pulsation:
                 canvasManipulator.stopAnimation({ animation: "Expanding", entities: this.entities });

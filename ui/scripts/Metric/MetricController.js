@@ -53,11 +53,11 @@ var metricController = (function () {
         $(cssIDs.addLayerButton).click(addLayer);
     }
 
-    async function executeButtonClicked(event) {
+    function executeButtonClicked(event) {
         for (let layer of layers) {
             layer.readUIData();
 
-            await layer.getMatchingEntities();
+            layer.getMatchingEntities();
 
             layer.doMapping()
         }
@@ -87,7 +87,7 @@ var metricController = (function () {
             domHelper.destroyLayerUI(layerCounter--);
 
             //really necessary?
-            layers.forEach(layer => layer.doMapping());
+            // layers.forEach(layer => layer.doMapping());
         }
 
         $(cssIDs.deleteButton + layerCounter).jqxButton({ disabled: false });

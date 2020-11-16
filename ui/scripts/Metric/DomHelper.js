@@ -94,8 +94,8 @@ class DomHelper {
         this.rootDiv.appendChild(metricFromDateInput);
 
         $(cssIDs.metricFromDateInput + layerID).jqxDateTimeInput({
-            placeHolder: "YYYYMMDD",
-            formatString: "yyyyMMdd",
+            placeHolder: "YYYY-MM-DD",
+            formatString: "yyyy-MM-dd",
             value: null,
             dropDownVerticalAlignment: "top",
             width: widgetSize.inputWidth, height: widgetSize.inputHeight
@@ -122,8 +122,8 @@ class DomHelper {
         this.rootDiv.appendChild(metricToDateInput);
 
         $(cssIDs.metricToDateInput + layerID).jqxDateTimeInput({
-            placeHolder: "YYYYMMDD",
-            formatString: "yyyyMMdd",
+            placeHolder: "YYYY-MM-DD",
+            formatString: "yyyy-MM-dd",
             value: null,
             dropDownVerticalAlignment: "top",
             width: widgetSize.inputWidth, height: widgetSize.inputHeight

@@ -109,9 +109,9 @@ const cssClasses = {
 }
 
 const metrics = {
-    numberOfStatements: "Number of Statements",
-    dateOfCreation: "Date of Creation",
-    dateOfLastChange: "Date of Last Change"
+    numberOfStatements: "numberOfStatements",
+    dateOfCreation: "dateOfCreation",
+    dateOfLastChange: "dateOfLastChange"
 };
 
 const mappings = {
