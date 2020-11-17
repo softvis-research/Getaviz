@@ -432,6 +432,10 @@ var packageExplorerController = (function () {
 	function onEntityUnselected(applicationEvent) {
 		canvasManipulator.resetColorOfEntities(applicationEvent.entities, { name: "packageExplorerController" });
 		selectedEntities = new Array();
+
+		if (controllerConfig.showSearchField) {
+			$("#" + domIDs.searchInput).val("");
+		}
 	}
 
 
