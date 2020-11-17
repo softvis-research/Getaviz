@@ -136,6 +136,12 @@ var packageExplorerController = (function () {
 				suggestion: Handlebars.compile('<div class="result"><p class="name">{{name}}</p><p class="entityType">{{type}}</p></div>')
 			}
 		});
+
+        $("#" + domIDs.searchInput).on("typeahead:selected", function(event, suggestion) {
+			var item = tree.getNodeByParam("id", suggestion.id, null);
+			tree.selectNode(item, false);
+			zTreeOnClick(undefined, undefined, { id: suggestion.id }, undefined);		
+        });	
 	}
 
 	function prepareTreeView() {
@@ -360,8 +366,6 @@ var packageExplorerController = (function () {
 
 	}
 
-
-
 	function zTreeOnClick(treeEvent, treeId, treeNode, eventObject) {
 
 		var alreadySelected = model.getEntityById(treeNode.id) == selectedEntities[0];
@@ -410,6 +414,10 @@ var packageExplorerController = (function () {
 			return;
 		}
 
+		if (controllerConfig.showSearchField) {
+			$("#" + domIDs.searchInput).val(selectedEntity.name);
+		}
+
 		//highlight multiselected entities with specific color
 		canvasManipulator.changeColorOfEntities(selectedEntities.slice(1), controllerConfig.multiselectColor, { name: "packageExplorerController" });
 		//higlight selected entity with regular color
@@ -421,17 +429,10 @@ var packageExplorerController = (function () {
 		}
 	}
 
-
-
 	function onEntityUnselected(applicationEvent) {
 		canvasManipulator.resetColorOfEntities(applicationEvent.entities, { name: "packageExplorerController" });
 		selectedEntities = new Array();
 	}
-
-
-
-
-
 
 
 	/*
