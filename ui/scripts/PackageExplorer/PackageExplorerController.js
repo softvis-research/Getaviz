@@ -4,7 +4,6 @@ var packageExplorerController = (function () {
 	let jQPackageExplorerTree = "#packageExplorerTree";
 
 	let tree;
-	let items = [];
 
 	var entityTypesForSearch = ["Namespace", "Class", "Interface", "Report", "FunctionGroup"];
 	const domIDs = {
@@ -138,9 +137,7 @@ var packageExplorerController = (function () {
 		});
 
         $("#" + domIDs.searchInput).on("typeahead:selected", function(event, suggestion) {
-			var item = tree.getNodeByParam("id", suggestion.id, null);
-			tree.selectNode(item, false);
-			zTreeOnClick(undefined, undefined, { id: suggestion.id }, undefined);		
+			publishSelectEvent(undefined, undefined, { id: suggestion.id }, undefined);		
         });	
 	}
 
@@ -329,7 +326,7 @@ var packageExplorerController = (function () {
 			},
 			callback: {
 				onCheck: zTreeOnCheck,
-				onClick: zTreeOnClick
+				onClick: publishSelectEvent,
 			},
 			view: {
 				showLine: false,
@@ -366,9 +363,11 @@ var packageExplorerController = (function () {
 
 	}
 
-	function zTreeOnClick(treeEvent, treeId, treeNode, eventObject) {
+	function publishSelectEvent(treeEvent, treeId, treeNode, eventObject) {
 
-		var alreadySelected = model.getEntityById(treeNode.id) == selectedEntities[0];
+		clickedEntity = model.getEntityById(treeNode.id);
+
+		var alreadySelected = clickedEntity === selectedEntities[0];
 
 		//always deselect the previously selected entities
 		if (selectedEntities.size != 0) {
@@ -385,57 +384,49 @@ var packageExplorerController = (function () {
 		if (!alreadySelected) {
 			var newSelectedEntities = new Array();
 
-			newSelectedEntities.push(model.getEntityById(treeNode.id));
+			newSelectedEntities.push(clickedEntity);
 
 			if (controllerConfig.useMultiselect) {
-				newSelectedEntities = newSelectedEntities.concat(model.getAllChildrenOfEntity(model.getEntityById(treeNode.id)));
+				newSelectedEntities = newSelectedEntities.concat(model.getAllChildrenOfEntity(clickedEntity));
 			}
-			var applicationEvent = {
+			var selectEvent = {
 				sender: packageExplorerController,
 				entities: newSelectedEntities
 
 			};
-			events.selected.on.publish(applicationEvent);
+			events.selected.on.publish(selectEvent);
 		}
 	}
 
-	function onEntitySelected(applicationEvent) {
-		if (applicationEvent.sender !== packageExplorerController) {
-			var entity = applicationEvent.entities[0];
-			//selectedEntities = applicationEvent.entities;
-			var item = tree.getNodeByParam("id", entity.id, null);
-			tree.selectNode(item, false);
-		}
+	function selectNode(entityID) {
+		var item = tree.getNodeByParam("id", entityID, null);
+		tree.selectNode(item, false);
+	}
 
+	function unselectNode(entityID) {
+		var item = tree.getNodeByParam("id", entityID, null);
+		tree.cancelSelectedNode(item, false);
+	}
+
+	function onEntitySelected(applicationEvent) {
 		var selectedEntity = applicationEvent.entities[0];
 		selectedEntities = applicationEvent.entities;
 
-		if (selectedEntity.type == "text") {
-			return;
-		}
+		selectNode(selectedEntity.id);
 
 		if (controllerConfig.showSearchField) {
 			$("#" + domIDs.searchInput).val(selectedEntity.name);
 		}
-
-		//highlight multiselected entities with specific color
-		canvasManipulator.changeColorOfEntities(selectedEntities.slice(1), controllerConfig.multiselectColor, { name: "packageExplorerController" });
-		//higlight selected entity with regular color
-		canvasManipulator.changeColorOfEntities([selectedEntity], controllerConfig.color, { name: "packageExplorerController" });
-
-		//center of rotation
-		if (controllerConfig.setCenterOfRotation) {
-			canvasManipulator.setCenterOfRotation(selectedEntity);
-		}
 	}
 
 	function onEntityUnselected(applicationEvent) {
-		canvasManipulator.resetColorOfEntities(applicationEvent.entities, { name: "packageExplorerController" });
-		selectedEntities = new Array();
+		unselectNode(applicationEvent[0]);
 
 		if (controllerConfig.showSearchField) {
 			$("#" + domIDs.searchInput).val("");
 		}
+
+		selectedEntities = new Array();
 	}
 
 
