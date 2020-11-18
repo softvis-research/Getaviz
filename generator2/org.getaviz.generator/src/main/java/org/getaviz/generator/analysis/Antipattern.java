@@ -29,6 +29,7 @@ public class Antipattern implements Step {
         queries.accesToAllData();
         queries.numberOfAccessorMethods();
         queries.numberOfPublicAttributes();
+        queries.numberOfPublicMethods();
         queries.foreignDataProviders();
         queries.numberOfAccessedVar();
         godclass();
@@ -67,7 +68,7 @@ public class Antipattern implements Step {
         connector.executeWrite("MATCH (c:Class) " +
                 "WITH c AS c " +
                 "WHERE c.cyclo < 31 AND (c.noam + c.nopa) > 4 OR c.cyclo < 47 AND (c.noam + c.nopa) > 7 " +
-                "WITH toFloat(c.nom - c.noam) / toFloat(c.nopa + c.noam) AS woc, c AS c " +
+                "WITH toFloat(c.nom - c.noam) / toFloat(c.nopa + c.nopm) AS woc, c AS c " +
                 "WHERE woc < 0.33 " +
                 "SET c.dataclass = true");
     }
@@ -78,14 +79,14 @@ public class Antipattern implements Step {
      */
     public void brainmethod(){
         connector.executeWrite("MATCH (m:Method) " +
-                "WHERE m.effectiveLineCount > 65 AND m.cyclomaticComplexity > 23 AND m.noav >= 7 " +
+                "WHERE m.effectiveLineCount > 65 AND m.cyclomaticComplexity >= 23 AND m.noav > 7 " +
                 "SET m.brainmethod = true");
     }
 
     public void brainclass(){
         connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method) " +
                 "WITH c AS c, m AS m, COUNT(m.brainmethod) AS nobm " +
-                "WHERE nobm = 1 AND c.loc > 390 AND c.cyclo > 94 OR nobm > 1 AND c.loc > 195 AND c.cyclo > 47 " +
+                "WHERE nobm = 1 AND c.loc >= 390 AND c.cyclo >= 94 OR nobm > 1 AND c.loc >= 195 AND c.cyclo >= 47 " +
                 "WITH  toFloat(c.maa) / toFLoat(c.nom) AS tcc, c AS c " +
                 "WHERE tcc < 0.5 " +
                 "SET c.brainclass = true");

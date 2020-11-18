@@ -21,7 +21,7 @@ CREATE (m9:Method { fqn : 'bank.customer.PrivateCustomer.getName()', name: 'getN
 CREATE (m10:Method { fqn : 'bank.products.Credit.transaction(bank.products.Transaction)', name : 'transaction', hash: 'ID_17bd18bd602e8e22b6c1db22c5d32a02542ed1ed', cyclomaticComplexity: 12, effectiveLineCount: 70 })
 CREATE (m11:Method { fqn : 'bank.products.Account.transaction(bank.products.Transaction)', name : 'transaction', hash: 'ID_ef646766f217c78d4a7ce6bd849dc15f9cc6f676', cyclomaticComplexity: 12, effectiveLineCount: 70 })
 CREATE (m12:Method { fqn : 'bank.products.AbstractProduct.getExecutedTransactions()', name : 'getExecutedTransactions', hash: 'ID_500db1187a5b547cb7d799c03f327421766bfc2a', cyclomaticComplexity: 12, effectiveLineCount: 70 })
-CREATE (m13:Method { fqn : 'bank.products.AbstractProduct.isInTransaction()', name : 'isInTransaction', hash: 'ID_a113953a4fd76dc7bd442656a08af378baed6667', cyclomaticComplexity: 12, effectiveLineCount: 70 })
+CREATE (m13:Method { fqn : 'bank.products.AbstractProduct.Transaction()', name : 'Transaction', hash: 'ID_a113953a4fd76dc7bd442656a08af378baed6667', cyclomaticComplexity: 12, effectiveLineCount: 70 })
 CREATE (m14:Method { fqn : 'bank.products.AbstractProduct.executeTransaction(bank.products.Transaction', name : 'executeTransaction', hash: 'ID_61658aef236e200a9ffa30030e7cb0549bef0d4f', cyclomaticComplexity: 12, effectiveLineCount: 70 })
 CREATE (m15:Method { fqn : 'bank.products.AbstractProduct.transaction(bank.products.Transaction)', name : 'transaction', hash : 'ID_78cd3ffe06ad51757c7facd4bbfdd3130313e03b', cyclomaticComplexity: 12, effectiveLineCount: 70 })
 CREATE (m16:Method { fqn : 'bank.products.AbstractProduct.getProductNumber()', name : 'getProductNumber', hash: 'ID_ffec14a7831c9af6e99a59101779abcfbc7be97f', cyclomaticComplexity: 12, effectiveLineCount: 70 })
@@ -45,7 +45,7 @@ CREATE (accountsPrivate:Field { fqn:  'bank.customer.PrivateCustomer.accounts', 
 CREATE (creditsPrivate:Field { fqn : 'bank.customer.PrivateCustomer.credits', name: 'credits', hash : 'ID_0166fed357196a09244efe558dbeb27e6e0d646b', visibility: 'public' })
 CREATE (namePrivate:Field { fqn : 'bank.customer.PrivateCustomer.name', name: 'name' , hash: 'ID_0cf4af5bed915ef9b74c93b2c50852c21f2d5364', visibility: 'public' })
 CREATE (executeTransaction:Field { fqn : 'bank.products.AbstractProduct.executedTransactions', name : 'executedTransactions', hash: 'ID_c7bc3b30c85e34e537f5ada76dafa4bb3f77646b', visibility: 'public' })
-CREATE (inTransaction:Field { fqn : 'bank.products.AbstractProduct.isInTransaction', name: 'isInTransaction', hash: 'ID_a113953a4fd76dc7bd442656a08af378baed6667', visibility: 'public' })
+CREATE (Transaction:Field { fqn : 'bank.products.AbstractProduct.Transaction', name: 'Transaction', hash: 'ID_a113953a4fd76dc7bd442656a08af378baed6667', visibility: 'public' })
 CREATE (productNumber:Field { fqn : 'bank.products.AbstractProduct.productNumber', name: 'productNumber', hash: 'ID_37834fec4533797c12daa8509eb11587547caac1', visibility: 'public' })
 CREATE (balance:Field { fqn : 'bank.products.AbstractProduct.balance', name: 'balance', hash: 'ID_dce8b98f162544734c5aacebb0a3731ee104eb77', visibility: 'public' })
 CREATE (secondProduct:Field { fqn : 'bank.products.Transaction.secondProduct', name: 'secondProduct', hash: 'ID_dbe90bb7628212f56ef88f4a152bc0fe402f350b', visibility: 'public' })
@@ -97,7 +97,7 @@ CREATE (ab)-[:DECLARES]->(m15)
 CREATE (ab)-[:DECLARES]->(m16)
 CREAte (ab)-[:DECLARES]->(m17)
 CREATE (ab)-[:DECLARES]->(executeTransaction)
-CREATE (ab)-[:DECLARES]->(inTransaction)
+CREATE (ab)-[:DECLARES]->(Transaction)
 CREATE (ab)-[:DECLARES]->(balance)
 CREATE (ab)-[:DECLARES]->(productNumber)
 CREATE (tr)-[:DECLARES]->(m18)
@@ -121,9 +121,10 @@ CREATE (bk)-[:DECLARES]->(transactions)
 CREATE (bk)-[:DECLARES]->(privateCustomers)
 CREATE (bk)-[:DECLARES]->(creditsBank)
 CREATE (bk)-[:READS]->(privateAccounts)
+
 CREATE (m1)-[:WRITES]->(nameBusiness)
 CREATE (m8)-[:WRITES]->(namePrivate)
-CREATE (m14)-[:WRITES]->(inTransaction)
+CREATE (m14)-[:WRITES]->(Transaction)
 CREATE (m22)-[:WRITES]->(bankName)
 CREATE (m2)-[:READS]->(nameBusiness)
 CREATE (m3)-[:READS]->(accountsBusiness)
@@ -133,34 +134,31 @@ CREATE (m6)-[:READS]->(accountsPrivate)
 CREATE (m7)-[:READS]->(creditsPrivate)
 CREATE (m9)-[:READS]->(namePrivate)
 CREATE (m12)-[:READS]->(executeTransactions)
-CREATE (m13)-[:READS]->(inTransaction)
+CREATE (m13)-[:READS]->(Transaction)
 CREATE (m16)-[:READS]->(productNumber)
 CREATE (m17)-[:READS]->(balance)
 CREATE (m18)-[:READS]->(secondProduct)
 CREATE (m19)-[:READS]->(firstProduct)
-
 CREATE (m21)-[:READS]->(bankName)
-CREATE (m21)-[:READS]->(inTransaction)
-
+CREATE (m21)-[:READS]->(Transaction)
 CREATE (m22)-[:READS]->(bankBooks)
 CREATE (m22)-[:READS]->(secondProduct)
-
 CREATE (m24)-[:READS]->(businessCustomers)
 CREATE (m24)-[:READS]->(firstProduct)
-
 CREATE (m25)-[:READS]->(transactions)
 CREATE (m25)-[:READS]->(bankBook)
 
 CREATE (m26)-[:READS]->(creditsBank)
 CREATE (m26)-[:READS]->(namePrivate)
-
 CREATE (m26)-[:READS]->(accountsBusiness)
 CREATE (m26)-[:READS]->(executeTransaction)
-CREATE (m26)-[:READS]->(inTransaction)
+CREATE (m26)-[:READS]->(Transaction)
 CREATE (m26)-[:READS]->(balance)
 CREATE (m26)-[:READS]->(productNumber)
+
 CREATE (m27)-[:READS]->(privateCustomers)
 CREATE (m28)-[:READS]->(creditsBank)
+
 CREATE (m17)-[:DECLARES]->(size)
 CREATE (m12)-[:DECLARES]->(position)
 CREATE (m12)-[:DECLARES]->(name)
@@ -178,6 +176,9 @@ CREATE (m24)-[:DECLARES]->(value)
 CREATE (m24)-[:DECLARES]->(str)
 CREATE (m24)-[:DECLARES]->(rank)
 CREATE (m24)-[:DECLARES]->(importance)
+
+
+
 
 
 

@@ -17,12 +17,12 @@ public class MetricQueries {
      * Relevant for Godclass, Brainclass
      */
     public void countMethodsAccessingAttributes() {
-        connector.executeWrite("match (c:Class)-[:DECLARES]->(m:Method)-[:WRITES|READS]->(f:Field)" +
-                ", (c)-[:DECLARES]->(f) " +
-                "    with c as c, m.name as m, COUNT(f.name) as maa " +
-                "    where maa >= 2 " +
-                "    with c as c, count(m) as result " +
-                "    set c.maa=result");
+        connector.executeWrite("match (c:Class)-[:DECLARES]->(m1:Method), (c)-[:DECLARES]-(m2:Method), " +
+                "(c)-[:DECLARES]-(f:Field), (m1)-[:WRITES|READS]->(f), (m2)-[:WRITES|READS]->(f) " +
+                "where (not m1.fqn = m2.fqn) " +
+                "with distinct m1.fqn + m2.fqn as pair, c as c " +
+                "with count(pair) as pairNr, c as c " +
+                "set c.maa= pairNr / 2");
     }
 
     /**
@@ -34,7 +34,8 @@ public class MetricQueries {
         connector.executeWrite("match (c1:Class)-[:DECLARES]->(f:Field), " +
                 "(c2:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field) " +
                 "where (NOT c1.fqn = c2.fqn) " +
-                "with count(c2.fqn) as atfd, c2 as c2 " +
+                "with distinct f as f, c2 as c2 " +
+                "with c2 as c2, count(f) as atfd " +
                 "set c2.atfd = atfd");
     }
 
@@ -57,10 +58,11 @@ public class MetricQueries {
      *  Relevant for Feature Envy
      */
     public void accessToOwnData(){
-        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field), (c:Class)-[:DECLARES]->(f:Field) " +
-                "with distinct m as m, f.name as attr " +
+        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method), " +
+                "(c)-[:DECLARES]->(f:Field),  (m)-[:READS|WRITES]->(f) " +
+                "with distinct f as f, m as m " +
                 "with m as m, count(m) as atod " +
-                "set m.atod = atod ");
+                "set m.atod = atod");
     }
 
     /**
@@ -69,8 +71,8 @@ public class MetricQueries {
      * Relevant for Feature Envy
      */
     public void accesToAllData(){
-        connector.executeWrite("match (m:Method)-[:READS|WRITES]->(f:Field) " +
-                "with distinct m as m, f.name as attr " +
+        connector.executeWrite("MATCH (m:Method)-[:READS|:WRITES]->(f:Field) " +
+                "with distinct f as f, m as m " +
                 "with m as m, count(m) as atad " +
                 "set m.atad = atad ");
     }
@@ -83,9 +85,22 @@ public class MetricQueries {
     public void numberOfPublicAttributes(){
         connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(f:Field) " +
                 "WITH c AS c, f AS f " +
-                "WHERE f.visibility CONTAINS \"public\" " +
+                "WHERE f.visibility = \"public\" " +
                 "WITH COUNT(f.fqn) AS nopa, c AS c " +
                 "SET c.nopa = nopa ");
+    }
+
+    /**
+     * NOPM: Number Of Public Methods
+     * Count all public methods a class owns
+     * Relevant for Dataclass
+     */
+    public void numberOfPublicMethods(){
+        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method) " +
+                "WITH c AS c, m AS m " +
+                "WHERE m.visibility = \"public\" " +
+                "WITH COUNT(m) AS nopm, c AS c " +
+                "SET c.nopm = nopm ");
     }
 
     /**
@@ -107,11 +122,12 @@ public class MetricQueries {
      * Relevant for Feature Envy
      */
     public void foreignDataProviders(){
-        connector.executeWrite("match (c1:Class)-[:DECLARES]->(f:Field), (c2:Class)-[:DECLARES]->(m:Method)-[:READS|WRITES]->(f:Field) " +
+        connector.executeWrite("match (c1:Class)-[:DECLARES]->(m:Method), " +
+                "(c2:Class)-[:DECLARES]->(f:Field), (m)-[:READS|WRITES]->(f) " +
                 "where (NOT c1.fqn = c2.fqn) " +
-                "with distinct m as m, c1.name as foreignClass " +
-                "with m as m, count(m.name) as fdp " +
-                "set m.fdp = fdp ");
+                "with distinct c2 as c2, c1 as c1 " +
+                "with count(c1) as fdp, c1 as c1 " +
+                "set c1.fdp = fdp ");
     }
 
 
