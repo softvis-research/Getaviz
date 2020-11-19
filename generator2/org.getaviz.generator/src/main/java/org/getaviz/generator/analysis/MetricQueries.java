@@ -58,16 +58,18 @@ public class MetricQueries {
      *  Relevant for Feature Envy
      */
     public void accessToOwnData(){
-        connector.executeWrite("MATCH (c:Class)-[:DECLARES]->(m:Method), " +
-                "(c)-[:DECLARES]->(f:Field),  (m)-[:READS|WRITES]->(f) " +
+        connector.executeWrite(
+                "MATCH (c:Class)-[:DECLARES]->(m:Method), " +
+                "(c)-[:DECLARES]->(f:Field),  " +
+                "(m)-[:READS|WRITES]->(f) " +
                 "with distinct f as f, m as m " +
                 "with m as m, count(m) as atod " +
                 "set m.atod = atod");
     }
 
     /**
-     * ATAD: Access to All Data
-     * Total number of attributes that method accesses
+     * NOA: Number of Attributes
+     * The number of attributes from the method’s definition class
      * Relevant for Feature Envy
      */
     public void accesToAllData(){
@@ -122,12 +124,14 @@ public class MetricQueries {
      * Relevant for Feature Envy
      */
     public void foreignDataProviders(){
-        connector.executeWrite("match (c1:Class)-[:DECLARES]->(m:Method), " +
-                "(c2:Class)-[:DECLARES]->(f:Field), (m)-[:READS|WRITES]->(f) " +
+        connector.executeWrite(
+                "match (c1:Class)-[:DECLARES]->(m:Method), " +
+                "(c2:Class)-[:DECLARES]->(f:Field)," +
+                "(m)-[:READS|WRITES]->(f) " +
                 "where (NOT c1.fqn = c2.fqn) " +
-                "with distinct c2 as c2, c1 as c1 " +
-                "with count(c1) as fdp, c1 as c1 " +
-                "set c1.fdp = fdp ");
+                "with distinct c2 as c2, m as m " +
+                "with count(c2) as fdp, m as m " +
+                "set m.fdp = fdp ");
     }
 
 

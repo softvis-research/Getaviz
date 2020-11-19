@@ -156,7 +156,7 @@ var canvasManipulator = (function () {
     /**
      * Stops the metric animated color animation for the entity and leaves the animation color.
      */
-    function stopColorAnimationForEntityColorStays(entity) {
+    function stopColorAnimationForEntityColorStays(entity, stopColor) {
         if (!(entity == undefined)) {
             var component = document.getElementById(entity.id);
         }
@@ -171,6 +171,10 @@ var canvasManipulator = (function () {
                 component.removeAttribute(attributeName);
             }
         });
+       ;
+        component.setAttribute("animation__color_off",
+            "property: components.material.material.color; type: color; from: " + stopColor +
+            "; to: " + stopColor + "; dur: 0; loop: false");
     }
 
     /**

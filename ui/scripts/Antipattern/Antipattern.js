@@ -2,13 +2,18 @@ var antipatternController = (function() {
 
     var AntipatternTreeID = "AntipatternTree";
     var jQAntipatternTree = "#AntipatternTree";
-    var orange = "#ff5e1f";
 
     let antipatternConfig = {
+        orange:         "#ff5e1f", // main color
+        pink:           "#ff55f0",
+        purple:         "#e155ff",
+        green:          "#78ff55",
+        cyan:           "#55fffe",
+        yellow:         "#fffe55",
         typeIcon: 		"scripts/Antipattern/images/type.png",
         methodIcon:		"scripts/Antipattern/images/method.png",
-        colorAnimationColors:                // # available colors for color animation
-            [ orange ],
+        // colorAnimationColors:                // # available colors for color animation
+        //     [ "#ff5e1f", ],
         minColorChangeFrequency: 1000,       // # milliseconds - min freq for color animation
         maxColorChangeFrequency: 500,        // # milliseconds - max freq for color animation
     };
@@ -48,16 +53,20 @@ var antipatternController = (function() {
             if(entity.godclass === 'TRUE'){
                 if(!items.includes(godclass)){items.push(godclass)}
                 godclass.children.push(classAP);
-            } else if (entity.brainclass === "TRUE"){
+            }
+            if (entity.brainclass === "TRUE"){
                 if(!items.includes(brainclass)){items.push(brainclass)}
                 brainclass.children.push(classAP);
-            } else  if(entity.dataclass === 'TRUE'){
+            }
+            if(entity.dataclass === 'TRUE'){
                 if(!items.includes(dataclass)){items.push(dataclass)}
                 dataclass.children.push(classAP);
-            } else if(entity.brainmethod === 'TRUE'){
+            }
+            if(entity.brainmethod === 'TRUE'){
                 if(!items.includes(brainmethod)){items.push(brainmethod)}
                 brainmethod.children.push(methodAP);
-            } else if(entity.featureenvy === 'TRUE'){
+            }
+            if(entity.featureenvy === 'TRUE'){
                 if(!items.includes(featureenvy)){items.push(featureenvy)}
                 featureenvy.children.push(methodAP);
             }})
@@ -108,32 +117,33 @@ var antipatternController = (function() {
         model.getAllEntities().forEach(entity => {
             switch (treeNode.id) {
                 case "godclass":
-                    if(entity.godclass === 'TRUE'){changeColor(entity)}
+                    if(entity.godclass === 'TRUE'){changeColor(entity, antipatternConfig.yellow)}
                     break;
                 case "brainclass":
-                    if(entity.brainclass === 'TRUE'){changeColor(entity)}
+                    if(entity.brainclass === 'TRUE'){changeColor(entity, antipatternConfig.purple)}
                     break;
                 case "dataclass":
-                    if(entity.dataclass === 'TRUE'){changeColor(entity)}
+                    if(entity.dataclass === 'TRUE'){changeColor(entity, antipatternConfig.cyan)}
                     break;
                 case "brainmethod":
-                    if(entity.brainmethod === 'TRUE'){changeColor(entity)}
+                    if(entity.brainmethod === 'TRUE'){changeColor(entity, antipatternConfig.pink)}
                     break;
                 case "featureenvy":
-                    if(entity.featureenvy === 'TRUE'){changeColor(entity)}
+                    if(entity.featureenvy === 'TRUE'){changeColor(entity, antipatternConfig.green)}
                     break;
             }})
     }
 
-    function changeColor(entity){
+    function changeColor(entity, color){
+            console.log(entity)
             let colorAnimation = new MetricAnimationColor(antipatternConfig.minColorChangeFrequency,
                 antipatternConfig.maxColorChangeFrequency);
             let metric;
-            colorAnimation.addMetric(metric, antipatternConfig.colorAnimationColors, 1);
+            colorAnimation.addMetric(metric, [antipatternConfig.orange, color], 1);
             entity.metricAnimationColor = colorAnimation;
             canvasManipulator.startColorAnimationForEntity(entity, colorAnimation);
-            setTimeout(() => canvasManipulator.stopColorAnimationForEntityColorStays(entity), 1500)
-            canvasManipulator.changeColorOfEntities([entity], orange)
+            setTimeout(() => canvasManipulator.stopColorAnimationForEntityColorStays(entity, antipatternConfig.orange), 3000)
+            canvasManipulator.changeColorOfEntities([entity], antipatternConfig.orange)
     }
 
     function resetColor(){

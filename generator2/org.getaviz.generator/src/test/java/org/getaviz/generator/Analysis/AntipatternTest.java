@@ -41,65 +41,54 @@ public class AntipatternTest {
         mockup.close();
     }
 
-//    @Test
-//    void godclassTest() {
-//        Record result = connector
-//                .executeRead("MATCH (c:Class) " +
-//                        "WHERE c.cyclo >= 47 AND c.atfd > 4 AND c.nom > 0 " +
-//                        "WITH toFloat(c.maa) / toFLoat(c.nom) AS tcc, c AS c " +
-//                        "WHERE tcc < 0.33 " +
-//                        "return c.name").single();
-//        String godclass = result.get("c.name").asString();
-//        assertEquals(godclass, "Bank");
-//    }
-//
-//    @Test
-//    void brainmethodTest() {
-//        List<String> actual = new ArrayList<>();
-//        connector.executeRead("MATCH (m:Method) " +
-//                "WHERE m.effectiveLineCount > 65 AND m.cyclomaticComplexity > 31 AND m.noav >= 7 " +
-//                "return m.name").stream().forEach(record -> actual.add(record.get("m.name").asString()));
-//        ArrayList<String> correct = new ArrayList<>(Arrays.asList("getBusinessCustomers", "getPrivateCustomers"));
-//        assertEquals(actual, correct);
-//    }
-//
-//    @Test
-//    void brainclassTest() {
-//        Record result = connector
-//                .executeRead("MATCH (c:Class)-[:DECLARES]->(m:Method) " +
-//                        "WITH c AS c, m AS m, COUNT(m.brainmethod) AS nobm " +
-//                        "WHERE nobm = 1 AND c.loc > 390 AND c.cyclo > 92 OR nobm > 1 AND c.loc > 195 AND c.cyclo > 47 " +
-//                        "WITH  toFloat(c.maa) / toFLoat(c.nom) AS tcc, c AS c " +
-//                        "WHERE tcc < 0.5 " +
-//                        "return distinct c.name").single();
-//        String brainclass = result.get("c.name").asString();
-//        assertEquals(brainclass, "Bank");
-//    }
-//
-//    @Test
-//    void featureEnvyTest() {
-//        Record result = connector
-//                .executeRead("MATCH (m:Method) " +
-//                        "WITH m AS m " +
-//                        "WHERE (m.atad - m.atod) > 4 AND m.atad > 0 " +
-//                        "WITH toFloat(m.atod) / toFLoat(m.atad) AS laa, m AS m " +
-//                        "WHERE laa < 0.33 " +
-//                        "return m.name").single();
-//        String fe = result.get("m.name").asString();
-//        assertEquals(fe, "getAccounts");
-//    }
-//
-//    @Test
-//    void dataclassTest() {
-//        Record result = connector
-//                .executeRead("MATCH (c:Class) " +
-//                        "WITH c AS c " +
-//                        "WHERE c.cyclo < 31 AND (c.noam + c.nopa) > 4 OR c.cyclo < 47 AND (c.noam + c.nopa) > 7 " +
-//                        "WITH toFloat(c.nom - c.noam) / toFloat(c.nopa + c.noam) AS woc, c AS c " +
-//                        "WHERE woc < 0.33 " +
-//                        "return c.name").single();
-//        String fe = result.get("c.name").asString();
-//        assertEquals(fe, "PrivateCustomer");
-//    }
+    @Test
+    void godclassTest() {
+        Record result = connector
+                .executeRead("MATCH (c:Class) " +
+                        "WHERE c.godclass = true " +
+                        "return c.name").single();
+        String godclass = result.get("c.name").asString();
+        assertEquals(godclass, "Bank");
+    }
+
+    @Test
+    void brainmethodTest() {
+        List<String> actual = new ArrayList<>();
+        connector.executeRead("MATCH (m:Method) " +
+                "WHERE m.brainmethod = true " +
+                "return m.name").stream().forEach(record -> actual.add(record.get("m.name").asString()));
+        ArrayList<String> correct = new ArrayList<>(Arrays.asList("getBusinessCustomers", "getPrivateCustomers"));
+        assertEquals(actual, correct);
+    }
+
+    @Test
+    void brainclassTest() {
+        Record result = connector
+                .executeRead("MATCH (c:Class) " +
+                        "where c.brainclass = true " +
+                        "return c.name").single();
+        String brainclass = result.get("c.name").asString();
+        assertEquals(brainclass, "Bank");
+    }
+
+    @Test
+    void featureEnvyTest() {
+        List<String> actual = new ArrayList<>();
+        connector.executeRead("MATCH (m:Method) " +
+                "where m.featureEnvy = true " +
+                "return m.name").stream().forEach(record -> actual.add(record.get("m.name").asString()));
+        ArrayList<String> correct = new ArrayList<>(Arrays.asList("getAccounts"));
+        assertEquals(actual, correct);
+    }
+
+    @Test
+    void dataclassTest() {
+        Record result = connector
+                .executeRead("MATCH (c:Class) " +
+                        "where c.dataclass = true " +
+                        "return c.name").single();
+        String fe = result.get("c.name").asString();
+        assertEquals(fe, "PrivateCustomer");
+    }
 
 }
