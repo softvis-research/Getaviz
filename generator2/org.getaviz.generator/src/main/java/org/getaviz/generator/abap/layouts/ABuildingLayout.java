@@ -150,11 +150,12 @@ public class ABuildingLayout {
 
     private double getScaledHeightNew(double unscaledHeight) {
 
+        unscaledHeight = unscaledHeight / config.getACityFactorMaxHeight();
+
         if (unscaledHeight < config.getAbapScoMinHeight()) {
             return config.getAbapScoMinHeight();
         } else if (unscaledHeight > config.getAbapScoMaxHeight()) {
-            return config.getAbapScoMaxHeight() / config.getACityFactorMaxHeight();
-            //return config.getAbapScoMaxHeight();
+            return config.getAbapScoMaxHeight();
         } else {
             return unscaledHeight;
         }
