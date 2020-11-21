@@ -68,8 +68,8 @@ public class MetricQueries {
     }
 
     /**
-     * NOA: Number of Attributes
-     * The number of attributes from the method’s definition class
+     * ATAD: Access To All Data
+     * Number of attributes a method access
      * Relevant for Feature Envy
      */
     public void accesToAllData(){
