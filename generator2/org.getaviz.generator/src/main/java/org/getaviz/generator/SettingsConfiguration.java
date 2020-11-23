@@ -156,6 +156,10 @@ public class SettingsConfiguration {
 		return AFrameOutput.BOTH;
 	}
 
+	public boolean getWriteRepToDb() {
+		return config.getBoolean("output.writeRepToDb", true);
+	}
+
 	//Kind of arranging the districts of the SCO
 	public enum NotInOriginLayout {
 		DEFAULT, CIRCULAR
