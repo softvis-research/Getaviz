@@ -23,20 +23,31 @@ var setup = {
             name: "relationController",
             sourceStartAtBorder: true,
             targetEndAtBorder: true,
-            showInnerRelations: true,
+            showInnerRelations: true,      
 
             connectorColor: { r: 0, g: 0, b: 1 },
         },
 
         {
             name: "packageExplorerController",
-            abap: true,
+            elements: [
+                { type: "Namespace",
+                  icon: "scripts/PackageExplorer/images/abap/namespace.png"
+                }, 
+                { type: "Class",
+                  icon: "scripts/PackageExplorer/images/abap/class.png"
+                }, 
+                { type: "FunctionGroup",
+                  icon: "scripts/PackageExplorer/images/abap/fugr.png"
+                },  
+            ],
+
+            //abap: true,
             elementsSelectable: true 
         },
         {
             name: "canvasFilterController"
         },
-
         {   name: "legendController",
             entries: [{
                 name: "Elements",

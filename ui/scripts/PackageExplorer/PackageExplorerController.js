@@ -6,38 +6,26 @@ var packageExplorerController = (function () {
 	let tree;
 
 	var entityTypesForSearch = ["Namespace", "Class", "Interface", "Report", "FunctionGroup"];
-	const domIDs = {
+	
+    var elementsMap = new Map();
+
+		const domIDs = {
 		zTreeDiv: "zTreeDiv",
 		searchDiv: "searchDiv",
 		searchInput: "searchField"
 	}
 
 	let controllerConfig = {
-		projectIcon: "scripts/PackageExplorer/images/project.png",
-		packageIcon: "scripts/PackageExplorer/images/package.png",
-		typeIcon: "scripts/PackageExplorer/images/type.png",
-		fieldIcon: "scripts/PackageExplorer/images/field.png",
-		methodIcon: "scripts/PackageExplorer/images/method.png",
+
+		elements: [],
+
 		elementsSelectable: true,
 
 		showSearchField: true,
 		entityTypesForSearch: entityTypesForSearch,
-
 		//abap specific
-		abap: true,
 		useMultiselect: true,
-		color: "darkred",
 
-		namespace: "scripts/PackageExplorer/images/abap/namespace.png",
-		class: "scripts/PackageExplorer/images/abap/class.png",
-		localClass: "scripts/PackageExplorer/images/abap/localClass.png",
-		interface: "scripts/PackageExplorer/images/abap/interface.png",
-		localInterface: "scripts/PackageExplorer/images/abap/localInterface.png",
-		functionGroup: "scripts/PackageExplorer/images/abap/fugr.png",
-		reportDistrict: "scripts/PackageExplorer/images/abap/report_district.png",
-		reportbuilding: "scripts/PackageExplorer/images/abap/report_building.png",
-		attribute: "scripts/PackageExplorer/images/abap/attribute.png",
-		form_fumo_meth: "scripts/PackageExplorer/images/abap/form&&fumo&&method.png"
 
 	};
 
@@ -45,6 +33,10 @@ var packageExplorerController = (function () {
 
 	function initialize(setupConfig) {
 		application.transferConfigParams(setupConfig, controllerConfig);
+
+        controllerConfig.elements.forEach(function (element) {
+			elementsMap.set(element.type, element.icon);
+		});
 	}
 
 	function activate(rootDiv) {
@@ -141,125 +133,38 @@ var packageExplorerController = (function () {
         });	
 	}
 
+	
+
 	function prepareTreeView() {
 
 		let entities = model.getCodeEntities();
-
-		let items = [];
-		//controllerConfig.entries.forEach(createItem);
+		items = [];
 
 		//build items for ztree
 		entities.forEach(function (entity) {
-
 			var item;
+			if(elementsMap.has(entity.type)){
+				var icon = elementsMap.get(entity.type);
 
-			if (entity.belongsTo === undefined) {
-				//rootpackages
-				if (entity.type !== "issue" && entity.type !== "Macro"
-					&& entity.type !== "And" && entity.type !== "Or"
-					&& entity.type !== "Negation") {
-					if (entity.type === "Namespace" || entity.type === "TranslationUnit") {
-						item = {
-							id: entity.id,
-							open: false,
-							checked: true,
-							parentId: "",
-							name: entity.name,
-							icon: controllerConfig.packageIcon,
-							iconSkin: "zt"
-						};
-					} else {
-						item = {
-							id: entity.id,
-							open: true,
-							checked: true,
-							parentId: "",
-							name: entity.name,
-							icon: controllerConfig.projectIcon,
-							iconSkin: "zt"
-						};
-					}
+				var parentId = "";
+				if (entity.belongsTo !== undefined) {
+					parentId = entity.belongsTo.id;
 				}
-			} else {
-				switch (entity.type) {
-					case "Project":
-						item = { id: entity.id, open: true, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.projectIcon, iconSkin: "zt" };
-						break;
-					case "Namespace":
-						if (entity.abap_type !== "DEVC") {
-							item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.packageIcon, iconSkin: "zt" };
-							break;
-						} else {
-							item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.namespace, iconSkin: "zt" };
-							break;
-						};
-					case "Class":
-
-						if (entity.id.endsWith("_2") || entity.id.endsWith("_3")) {
-							break;
-						};
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt" };
-						break;
-
-					case "ParameterizableClass":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt" };
-						break;
-					case "Enum":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt" };
-						break;
-					case "EnumValue":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt" };
-						break;
-					case "Attribute":
-					case "Variable":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt" };
-						break;
-					case "Method":
-						if (entity.abap_type === "METH") {
-							item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.form_fumo_meth, iconSkin: "zt" };
-							break;
-						} else {
-							item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt" };
-							break;
-						};
-					case "Function":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt" };
-						break;
-					case "Struct":
-					case "Union":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt" };
-						break;
-
-					case "FunctionGroup":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.functionGroup, iconSkin: "zt" };
-						break;
-					case "FunctionModule":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.form_fumo_meth, iconSkin: "zt" };
-						break;
-					case "Report":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.reportbuilding, iconSkin: "zt" };
-						break;
-					case "Interface":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.interface, iconSkin: "zt" };
-						break;
-					case "FormRoutine":
-						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.form_fumo_meth, iconSkin: "zt" };
-						break;
-					default:
-						events.log.warning.publish({ text: "FamixElement not in tree: " + entity.type });
-
-						return;
-				}
-			}
-			if (item !== undefined) {
+				item = {
+					id: entity.id,
+					open: false,
+					checked: true,
+					parentId: parentId,
+					name: entity.name,
+					icon: icon, 
+					iconSkin: "zt"
+				};
 				items.push(item);
 			}
-
 		});
 
-
 		//Sortierung nach Typ und Alphanumerisch
-		items.sort(
+		/*items.sort(
 			function (a, b) {
 
 				var sortStringA = "";
@@ -308,7 +213,7 @@ var packageExplorerController = (function () {
 
 				return 0;
 			}
-		);
+		);*/
 
 		//zTree settings
 		var settings = {
@@ -339,6 +244,23 @@ var packageExplorerController = (function () {
 		//create zTree
 		tree = $.fn.zTree.init($(jQPackageExplorerTree), settings, items);
 	}
+
+	function createItem(entry, entity) {
+		
+		let item = {
+			id: entity.id,
+			open: false,
+			checked: true,
+			parentId: entity.belongsTo.id,
+			name: entity.name,
+			type: entry.type,
+			icon: entry.icon,
+			iconSkin: "zt"
+		};
+		items.push(item);
+	
+	}
+
 
 	function zTreeOnCheck(event, treeId, treeNode) {
 		var nodes = tree.getChangeCheckedNodes();
@@ -428,63 +350,6 @@ var packageExplorerController = (function () {
 
 		selectedEntities = new Array();
 	}
-
-
-	/*
-	function zTreeOnCheck(event, treeId, treeNode) {
-				
-		var treeObj = $.fn.zTree.getZTreeObj("packageExplorerTree");
-		var nodes = treeObj.getChangeCheckedNodes();
-	    
-		var entityIds = [];
-		for(var i = 0; i < nodes.length;i++) {
-			nodes[i].checkedOld = nodes[i].checked; //Need for the ztree to set getChangeCheckedNodes correct
-			entityIds.push(nodes[i].id);
-		}
-		
-		publishOnVisibilityChanged(entityIds, treeNode.checked, "packageExplorerTree");
-		
-	}
-
-	function zTreeOnClick(event, treeId, treeNode) {        
-		publishOnEntitySelected(treeNode.id, "packageExplorerTree");
-	}
-    
-	
-	function onEntitySelected(event, entity) {
-		if(event.sender != "packageExplorerTree") {
-			var tree = $.fn.zTree.getZTreeObj("packageExplorerTree");   
-			var item = tree.getNodeByParam("id", entity.id, null);
-			tree.selectNode(item, false);         
-		}   
-		interactionLogger.logManipulation("PackageExplorerTree", "highlight", entity.id);
-	}
-    
-	function onVisibilityChanged(event, ids, visible) {
-		if(event.sender != "packageExplorerTree") {            
-			var tree = $.fn.zTree.getZTreeObj("packageExplorerTree");
-		    
-			for(var i = 0; i < ids.length;i++) {
-				var item = tree.getNodeByParam("id", ids[i], null);
-				tree.checkNode(item, visible, false, false);
-				item.checkedOld = item.checked;
-			}
-		}
-		
-	}
-    
-	function onRelationsVisibilityChanged(event, entities, visible) {
-		var tree = $.fn.zTree.getZTreeObj("packageExplorerTree");
-		for(var i = 0; i < entities.length; i++) {
-			var id = entities[i];
-		    
-			var item = tree.getNodeByParam("id", id, null);
-			tree.checkNode(item, visible, false, false);
-			item.checkedOld = item.checked;
-			interactionLogger.logManipulation("PackageExplorerTree", "uncheck", id);
-		}
-	}
-	*/
 
 	return {
 		initialize: initialize,
