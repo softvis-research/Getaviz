@@ -32,14 +32,45 @@ var setup = {
             name: "packageExplorerController",
             elements: [
                 { type: "Namespace",
-                  icon: "scripts/PackageExplorer/images/abap/namespace.png"
+                  icon: "scripts/PackageExplorer/images/abap/namespace.png",
+                  sortOrder: 1000
                 }, 
                 { type: "Class",
-                  icon: "scripts/PackageExplorer/images/abap/class.png"
+                  icon: "scripts/PackageExplorer/images/abap/class.png",
+                  sortOrder: 1100
+                }, 
+                { type: "Interface",
+                  icon: "scripts/PackageExplorer/images/abap/interface.png",
+                  sortOrder: 1200
+                },
+                { type: "Method",
+                  icon: "scripts/PackageExplorer/images/abap/form_fumo_method.png",
+                  sortOrder: 1110
+                }, 
+                { type: "Attribute",
+                  icon: "scripts/PackageExplorer/images/abap/attribute.png",
+                  sortOrder: 1120
                 }, 
                 { type: "FunctionGroup",
-                  icon: "scripts/PackageExplorer/images/abap/fugr.png"
+                  icon: "scripts/PackageExplorer/images/abap/fugr.png", 
+                  sortOrder: 1300
                 },  
+                { type: "FunctionModule",
+                  icon: "scripts/PackageExplorer/images/abap/form_fumo_method.png", 
+                  sortOrder: 1210
+                },  
+                { type: "FormRoutine",
+                  icon: "scripts/PackageExplorer/images/form_fumo_method.png",
+                  sortOrder: 1220
+                }, 
+                { type: "Report",
+                  icon: "scripts/PackageExplorer/images/abap/report_district.png", 
+                  sortOrder: 1400
+                }, 
+                { type: "FormRoutine",
+                  icon: "scripts/PackageExplorer/images/abap/form_fumo_method.png",
+                  sortOrder: 1410
+                }, 
             ],
 
             //abap: true,

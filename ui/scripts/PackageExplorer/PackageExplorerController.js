@@ -35,7 +35,7 @@ var packageExplorerController = (function () {
 		application.transferConfigParams(setupConfig, controllerConfig);
 
         controllerConfig.elements.forEach(function (element) {
-			elementsMap.set(element.type, element.icon);
+			elementsMap.set(element.type, element);
 		});
 	}
 
@@ -144,7 +144,7 @@ var packageExplorerController = (function () {
 		entities.forEach(function (entity) {
 			var item;
 			if(elementsMap.has(entity.type)){
-				var icon = elementsMap.get(entity.type);
+				var icon = elementsMap.get(entity.type).icon;
 
 				var parentId = "";
 				if (entity.belongsTo !== undefined) {
@@ -156,6 +156,7 @@ var packageExplorerController = (function () {
 					checked: true,
 					parentId: parentId,
 					name: entity.name,
+					type: entity.type,
 					icon: icon, 
 					iconSkin: "zt"
 				};
@@ -164,45 +165,22 @@ var packageExplorerController = (function () {
 		});
 
 		//Sortierung nach Typ und Alphanumerisch
-		/*items.sort(
+		items.sort(
 			function (a, b) {
 
 				var sortStringA = "";
-				switch (a.icon) {
-					case controllerConfig.packageIcon:
-						sortStringA = "1" + a.name.toUpperCase();
-						break;
-					case controllerConfig.typeIcon:
-						sortStringA = "2" + a.name.toUpperCase();
-						break;
-					case controllerConfig.fieldIcon:
-						sortStringA = "3" + a.name.toUpperCase();
-						break;
-					case controllerConfig.methodIcon:
-						sortStringA = "4" + a.name.toUpperCase();
-						break;
-					default:
-						sortStringA = "0" + a.name.toUpperCase();
-				}
+ 
+				var aSortOrder = elementsMap.get(a.type).sortOrder;
 
+				sortStringA = aSortOrder + a.name.toUpperCase();
+
+				
 				var sortStringB = "";
-				switch (b.icon) {
-					case controllerConfig.packageIcon:
-						sortStringB = "1" + b.name.toUpperCase();
-						break;
-					case controllerConfig.typeIcon:
-						sortStringB = "2" + b.name.toUpperCase();
-						break;
-					case controllerConfig.fieldIcon:
-						sortStringB = "3" + b.name.toUpperCase();
-						break;
-					case controllerConfig.methodIcon:
-						sortStringB = "4" + b.name.toUpperCase();
-						break;
-					default:
-						sortStringB = "0" + b.name.toUpperCase();
-						break;
-				}
+
+				var bSortOrder = elementsMap.get(b.type).sortOrder;
+				
+				sortStringB = bSortOrder + b.name.toUpperCase();
+					
 
 				if (sortStringA < sortStringB) {
 					return -1;
@@ -213,7 +191,7 @@ var packageExplorerController = (function () {
 
 				return 0;
 			}
-		);*/
+		);
 
 		//zTree settings
 		var settings = {
