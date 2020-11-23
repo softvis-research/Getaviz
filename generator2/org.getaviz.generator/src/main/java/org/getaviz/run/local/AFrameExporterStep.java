@@ -102,9 +102,10 @@ public class AFrameExporterStep {
             aFrameExporter.setAframePropToACityElements();
         }
 
-
-        connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
-        aCityRepository.writeRepositoryToNeo4j();
+        if (config.getWriteRepToDb()) {
+            connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
+            aCityRepository.writeRepositoryToNeo4j();
+        }
 
         System.out.println("\nA-Frame Exporter step was completed\"");
         connector.close();
