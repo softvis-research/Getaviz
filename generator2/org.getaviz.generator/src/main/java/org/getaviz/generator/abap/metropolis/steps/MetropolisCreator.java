@@ -222,9 +222,9 @@ public class MetropolisCreator {
             Node sourceNodeDistrict = element.getSourceNode();
             Collection<ACityElement> usesElements = getUsesElementsBySourceNode(nodeRepository, sourceNodeDistrict);
 
-            for(ACityElement usesElement: usesElements){
+            for(ACityElement usesElement: usesElements) {
 
-                if(usesElement.getSourceNodeProperty(SAPNodeProperties.local_class).equals("true")) {
+                if (usesElement.getSourceNodeProperty(SAPNodeProperties.local_class).equals("true")) {
 
                     String elementID = element.getSourceNodeProperty(SAPNodeProperties.element_id);
                     String usesID = usesElement.getSourceNodeProperty(SAPNodeProperties.uses_id);
@@ -234,11 +234,23 @@ public class MetropolisCreator {
                         usesElement.setParentElement(element);
                         relationCounterUsesRelation++;
                     }
+                } else if (usesElement.getSourceNodeType() == SAPNodeTypes.Attribute){
+
+                    String elementID = element.getSourceNodeProperty(SAPNodeProperties.element_id);
+                    String usesID = usesElement.getSourceNodeProperty(SAPNodeProperties.uses_id);
+
+                    if(element.getSourceNodeType() == SAPNodeTypes.Report){
+
+                        if (elementID.equals(usesID)) {
+                            element.addSubElement(usesElement);
+                            usesElement.setParentElement(element);
+                            relationCounterUsesRelation++;
+                        }
+                    }
                 } else {
                     repository.deleteElement(usesElement); //atm only for local classes, attributes are deleted
                 }
             }
-
         }
 
         log.info(relationCounter + " childRelations for relation \"CONTAINS\" created");
