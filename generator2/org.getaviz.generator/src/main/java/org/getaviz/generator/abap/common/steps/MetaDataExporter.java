@@ -75,7 +75,7 @@ public class MetaDataExporter {
         for (final ACityElement element: elements) {
 
             //skip reference buildings (only Metropolis)
-            if (element.getSubType() == ACityElement.ACitySubType.Mountain
+            /*if (element.getSubType() == ACityElement.ACitySubType.Mountain
                 || element.getSubType() == ACityElement.ACitySubType.Cloud
                 || element.getSubType() == ACityElement.ACitySubType.Sea)
                 continue;
@@ -83,16 +83,37 @@ public class MetaDataExporter {
             //skip districts fpr source object types (only ABAPCity)
             if (element.getSourceNode() == null) {
                 continue;
-            }
+            }*/
 
-            if (!hasElements) {
-                hasElements = true;
-                metaDataFile.append("[{");
+            if (element.getSourceNode() == null) {
+                if (element.getSubType() == ACityElement.ACitySubType.Mountain
+                        || element.getSubType() == ACityElement.ACitySubType.Cloud
+                        || element.getSubType() == ACityElement.ACitySubType.Sea) {
+
+                    if (!hasElements) {
+                        hasElements = true;
+                        metaDataFile.append("[{");
+                    } else {
+                        metaDataFile.append("\n},{");
+                    }
+                    metaDataFile.append("\n");
+                    metaDataFile.append(toMetaDataForReferenceElements(element));
+                } else {
+                    continue;
+                }
+
             } else {
-                metaDataFile.append("\n},{");
+
+
+                if (!hasElements) {
+                    hasElements = true;
+                    metaDataFile.append("[{");
+                } else {
+                    metaDataFile.append("\n},{");
+                }
+                metaDataFile.append("\n");
+                metaDataFile.append(toMetaData(element));
             }
-            metaDataFile.append("\n");
-            metaDataFile.append(toMetaData(element));
         }
         if (hasElements) {
             metaDataFile.append("}]");
@@ -113,6 +134,32 @@ public class MetaDataExporter {
         builder.append(getRelationsMetaInfo(element));
         // Add additional meta
         builder.append(getAdditionalMetaInfo(element));
+
+        // Make sure we have the right syntax -> no commas at the end
+        char lastChar = builder.charAt(builder.length() - 1);
+        if (Character.compare(lastChar, '\n') == 0) {
+            lastChar = builder.charAt(builder.length() - 2);
+
+            if (Character.compare(lastChar, ',') == 0) {
+                builder.deleteCharAt(builder.length() - 1); // Delete '\n'
+                builder.deleteCharAt(builder.length() - 1); // Delete ,
+            }
+        }
+
+        return builder.toString();
+    }
+
+    private String toMetaDataForReferenceElements(ACityElement element) {
+        StringBuilder builder = new StringBuilder();
+
+        // Add element hash
+        builder.append("\"id \": \"" + element.getHash() + "\"," +"\n");
+        // Add Belongs to
+        builder.append("\"belongsTo\": \"" + element.getParentElement().getHash() + "\",\n");
+        // Add Name
+        builder.append("\"type\": \"" + element.getType() + "\",\n");
+        // Add Type
+        builder.append("\"name\": \"" + element.getSubType() + "\",\n");
 
         // Make sure we have the right syntax -> no commas at the end
         char lastChar = builder.charAt(builder.length() - 1);
