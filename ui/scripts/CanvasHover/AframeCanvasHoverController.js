@@ -140,6 +140,11 @@ var canvasHoverController = (function () {
 			return;
 		}
 
+		let entityIsVisible = document.getElementById(entity.id).getAttribute('visible');
+		if (!entityIsVisible) {
+			return;
+		}
+
 		if (entity.type === "text") {
 			return;
 		}
@@ -192,6 +197,10 @@ var canvasHoverController = (function () {
 	}
 
 	function getTooltipName(entity) {
+
+		if(entity.type === "Reference"){
+			return "Reference: " + entity.name;
+		}
 
 
 		if (entity.type === "Namespace") {

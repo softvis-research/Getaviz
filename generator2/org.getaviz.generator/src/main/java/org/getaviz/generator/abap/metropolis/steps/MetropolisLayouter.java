@@ -269,6 +269,12 @@ public class MetropolisLayouter {
 
             Collection<ACityElement> subElements = district.getSubElements();
 
+            Collection<ACityElement> referenceElements = repository.getElementsByType(ACityElement.ACityType.Reference);
+
+            for (ACityElement referenceElement: referenceElements) {
+                layoutReference(referenceElement);
+            }
+
             ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
             aBAPDistrictLightMapLayout.calculate();
 
@@ -276,6 +282,31 @@ public class MetropolisLayouter {
 
         }
     }
+
+    private void layoutReference(ACityElement referenceElement) {
+        ACityElement.ACitySubType referenceBuildingType = referenceElement.getSubType();
+
+            switch (referenceBuildingType) {
+                case Sea:
+                    referenceElement.setHeight(config.getMetropolisReferenceBuildingHeigth("seaReferenceBuilding"));
+                    referenceElement.setWidth(config.getMetropolisReferenceBuildingWidth("seaReferenceBuilding"));
+                    referenceElement.setLength(config.getMetropolisReferenceBuildingLength("seaReferenceBuilding"));
+                    break;
+
+                case Mountain:
+                    referenceElement.setHeight(config.getMetropolisReferenceBuildingHeigth("mountainReferenceBuilding"));
+                    referenceElement.setWidth(config.getMetropolisReferenceBuildingWidth("mountainReferenceBuilding"));
+                    referenceElement.setLength(config.getMetropolisReferenceBuildingLength("mountainReferenceBuilding"));
+                    break;
+
+                case Cloud:
+                    referenceElement.setHeight(config.getMetropolisReferenceBuildingHeigth("cloudReferenceBuilding"));
+                    referenceElement.setWidth(config.getMetropolisReferenceBuildingWidth("cloudReferenceBuilding"));
+                    referenceElement.setLength(config.getMetropolisReferenceBuildingLength("cloudReferenceBuilding"));
+                    break;
+            }
+    }
+
 
     private void layoutVirtualRootDistrict(){
         Collection<ACityElement> districtsWithoutParents = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, "Namespace");

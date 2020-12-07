@@ -23,7 +23,7 @@ var packageExplorerController = (function () {
 
 		showSearchField: true,
 		entityTypesForSearch: entityTypesForSearch,
-		//abap specific
+
 		useMultiselect: true,
 
 
@@ -133,8 +133,6 @@ var packageExplorerController = (function () {
         });	
 	}
 
-	
-
 	function prepareTreeView() {
 
 		let entities = model.getCodeEntities();
@@ -165,33 +163,25 @@ var packageExplorerController = (function () {
 		});
 
 		//Sortierung nach Typ und Alphanumerisch
-		items.sort(
-			function (a, b) {
+		items.sort(function (a, b) {
 
-				var sortStringA = "";
- 
-				var aSortOrder = elementsMap.get(a.type).sortOrder;
+			var aSortOrder = elementsMap.get(a.type).sortOrder;
+			var sortStringA = aSortOrder + a.name.toUpperCase();
 
-				sortStringA = aSortOrder + a.name.toUpperCase();
-
-				
-				var sortStringB = "";
-
-				var bSortOrder = elementsMap.get(b.type).sortOrder;
-				
-				sortStringB = bSortOrder + b.name.toUpperCase();
+			var bSortOrder = elementsMap.get(b.type).sortOrder;
+			var sortStringB = bSortOrder + b.name.toUpperCase();
 					
 
-				if (sortStringA < sortStringB) {
-					return -1;
-				}
-				if (sortStringA > sortStringB) {
-					return 1;
-				}
-
-				return 0;
+			if (sortStringA < sortStringB) {
+				return -1;
 			}
-		);
+			if (sortStringA > sortStringB) {
+				return 1;
+			}
+
+			return 0;
+		
+		});
 
 		//zTree settings
 		var settings = {
@@ -223,23 +213,6 @@ var packageExplorerController = (function () {
 		tree = $.fn.zTree.init($(jQPackageExplorerTree), settings, items);
 	}
 
-	function createItem(entry, entity) {
-		
-		let item = {
-			id: entity.id,
-			open: false,
-			checked: true,
-			parentId: entity.belongsTo.id,
-			name: entity.name,
-			type: entry.type,
-			icon: entry.icon,
-			iconSkin: "zt"
-		};
-		items.push(item);
-	
-	}
-
-
 	function zTreeOnCheck(event, treeId, treeNode) {
 		var nodes = tree.getChangeCheckedNodes();
 
@@ -247,8 +220,10 @@ var packageExplorerController = (function () {
 		nodes.forEach(function (node) {
 			node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes	
 			entities.push(model.getEntityById(node.id));
-		});
 
+			// to filter of referenceElements, even if they're not shown in packageExplorer
+			entities = entities.concat(model.getAllChildrenOfEntity(model.getEntityById(node.id)));
+		});
 
 		var applicationEvent = {
 			sender: packageExplorerController,
@@ -289,6 +264,7 @@ var packageExplorerController = (function () {
 			if (controllerConfig.useMultiselect) {
 				newSelectedEntities = newSelectedEntities.concat(model.getAllChildrenOfEntity(clickedEntity));
 			}
+
 			var selectEvent = {
 				sender: packageExplorerController,
 				entities: newSelectedEntities

@@ -172,6 +172,7 @@ var canvasSelectController = (function () {
 			return;
 		}
 
+
 		//highlight multiselected entities with specific color
 		canvasManipulator.changeColorOfEntities(selectedEntities.slice(1), controllerConfig.multiselectColor, { name: "canvasSelectController" });
 		//higlight selected entity with regular color

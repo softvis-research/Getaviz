@@ -153,7 +153,7 @@ public class MetaDataExporter {
         StringBuilder builder = new StringBuilder();
 
         // Add element hash
-        builder.append("\"id \": \"" + element.getHash() + "\"," +"\n");
+        builder.append("\"id\": \"" + element.getHash() + "\"," +"\n");
         // Add Belongs to
         builder.append("\"belongsTo\": \"" + element.getParentElement().getHash() + "\",\n");
         // Add Name

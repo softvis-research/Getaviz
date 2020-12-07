@@ -129,7 +129,8 @@ var model = (function () {
 						}
 					}
 					break;
-
+                case "Reference":
+					break;
 				case "Class":
 				case "Interface":
 					entity.superTypes = element.subClassOf.split(",");
@@ -493,6 +494,8 @@ var model = (function () {
 					entity.accesses = accesses;
 
 					break;
+				case "Reference":
+					break;
 				case "Function":
 					let callsFunction = [];
 					entity.calls.forEach(function (callsId) {
@@ -552,7 +555,6 @@ var model = (function () {
 					});
 					entity.calledBy = calledByABAP;
 					break;
-
 				case "Variable":
 					let variableAccessedBy = [];
 					entity.accessedBy.forEach(function (accessedById) {
