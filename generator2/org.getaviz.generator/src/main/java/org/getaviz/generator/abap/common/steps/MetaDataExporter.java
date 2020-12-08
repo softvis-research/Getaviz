@@ -55,17 +55,17 @@ public class MetaDataExporter {
         for (final ACityElement element : aCityElements) {
 
             //skip reference buildings (only Metropolis)
-            if (element.getSubType() == ACityElement.ACitySubType.Mountain
-                || element.getSubType() == ACityElement.ACitySubType.Cloud
-                || element.getSubType() == ACityElement.ACitySubType.Sea)
-                continue;
-
-            //skip skip districts for source object types (only ABAPCity)
             if (element.getSourceNode() == null) {
-                continue;
+                if (element.getType() == ACityElement.ACityType.Reference) {
+                    String metaData = toMetaDataForReferenceElements(element);
+                    element.setMetaData("{" + metaData + "}");
+                } else {
+                    continue;
+                }
+            } else {
+                String metaData = toMetaData(element);
+                element.setMetaData("{" + metaData + "}");
             }
-            String metaData = toMetaData(element);
-            element.setMetaData("{" + metaData + "}");
         }
     }
 
@@ -74,22 +74,10 @@ public class MetaDataExporter {
         boolean hasElements = false;
         for (final ACityElement element: elements) {
 
-            //skip reference buildings (only Metropolis)
-            /*if (element.getSubType() == ACityElement.ACitySubType.Mountain
-                || element.getSubType() == ACityElement.ACitySubType.Cloud
-                || element.getSubType() == ACityElement.ACitySubType.Sea)
-                continue;
 
-            //skip districts fpr source object types (only ABAPCity)
-            if (element.getSourceNode() == null) {
-                continue;
-            }*/
 
             if (element.getSourceNode() == null) {
-                if (element.getSubType() == ACityElement.ACitySubType.Mountain
-                        || element.getSubType() == ACityElement.ACitySubType.Cloud
-                        || element.getSubType() == ACityElement.ACitySubType.Sea) {
-
+                if (element.getType() == ACityElement.ACityType.Reference) {
                     if (!hasElements) {
                         hasElements = true;
                         metaDataFile.append("[{");
