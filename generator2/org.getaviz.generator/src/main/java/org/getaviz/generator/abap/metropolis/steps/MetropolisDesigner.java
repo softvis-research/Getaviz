@@ -45,12 +45,6 @@ public class MetropolisDesigner {
 
         designMetropolisElementsByType(ACityElement.ACityType.Floor);
 
-        /* new color for migration findings
-        designMetropolisElementsByMigrationFindings();
-         */
-
-      //  designMetropolisElementsByType(ACityElement.ACityType.Chimney);
-
     }
 
     private void designMetropolisElementsByMigrationFindings() {

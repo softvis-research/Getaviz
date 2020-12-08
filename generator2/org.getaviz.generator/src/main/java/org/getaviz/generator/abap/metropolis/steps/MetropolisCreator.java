@@ -100,7 +100,6 @@ public class MetropolisCreator {
             Collection<ACityElement> subElements = packageDistrict.getSubElements();
 
             if(iterationInt == 0) {
-                //Collection<ACityElement> subElements = packageDistrict.getSubElements();
 
                 if (!subElements.isEmpty()) {
 
@@ -113,40 +112,20 @@ public class MetropolisCreator {
                 }
             }
 
-                for (ACityElement subElement: subElements) { //SubElements = Class/Repo/FuGr-District
+            if (config.showCloudReferenceBuilding()) {
+                for (ACityElement subElement : subElements) { //SubElements = Class/Repo/FuGr-District
 
-                    if(subElement.getType().equals(ACityElement.ACityType.District)) {
+                    if (subElement.getType().equals(ACityElement.ACityType.District)) {
                         String migrationFindingsString = subElement.getSourceNodeProperty(SAPNodeProperties.migration_findings);
                         if (migrationFindingsString.equals("true")) {
-
-                            if (config.showCloudReferenceBuilding()) {
-                                createRefBuilding(subElement, ACityElement.ACitySubType.Cloud);
-                            }
+                            createRefBuilding(subElement, ACityElement.ACitySubType.Cloud);
                         }
                     }
-            }
-
-            /*String migrationFindingsString = packageDistrict.getSourceNodeProperty(SAPNodeProperties.migration_findings);
-            if(migrationFindingsString.equals("true")) {
-
-                if (config.showCloudReferenceBuilding()) {
-                    createRefBuilding(packageDistrict, ACityElement.ACitySubType.Cloud);
                 }
-
-            } */
-           // removeSubElementsFromDistrict(district, subElements);
+            }
         }
     }
 
-    private void createRefBuildingForMigrationFindings(ACityElement packageDistrict, ACityElement.ACitySubType cloud) {
-        ACityElement refBuilding = new ACityElement(ACityElement.ACityType.Building);
-        refBuilding.setSubType(cloud);
-
-        repository.addElement(refBuilding);
-
-        refBuilding.setParentElement(packageDistrict);
-
-    }
 
     private void createRefBuilding(ACityElement packageDistrict, ACityElement.ACitySubType refBuildingType) {
         ACityElement refBuilding = new ACityElement(ACityElement.ACityType.Reference);

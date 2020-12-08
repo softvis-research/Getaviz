@@ -46,6 +46,28 @@ public class MetropolisLayouter {
         Collection<ACityElement> buildings = repository.getElementsByType(ACityElement.ACityType.Building);
         log.info(buildings.size() + " buildings loaded");
 
+        layoutBuildings(buildings);
+
+        Collection<ACityElement> referenceElements = repository.getElementsByType(ACityElement.ACityType.Reference);
+        log.info(referenceElements.size() + " reference elements loaded");
+
+        layoutReferenceElements(referenceElements);
+
+
+        layoutEmptyDistricts(buildings);
+        layoutParentDistricts(buildings);
+
+        layoutCloudModel();
+
+    }
+
+    private void layoutReferenceElements(Collection<ACityElement> referenceElements) {
+        for (ACityElement referenceElement: referenceElements) {
+            layoutReference(referenceElement);
+        }
+    }
+
+    private void layoutBuildings(Collection<ACityElement> buildings) {
         for (ACityElement building: buildings) {
 
             SAPNodeTypes sourceNodeType = building.getSourceNodeType();
@@ -65,22 +87,6 @@ public class MetropolisLayouter {
                 layoutBuilding(building);
             }
         }
-
-        /*Collection<ACityElement> parentElements = getParentDistricts(buildings);
-        Collection<ACityElement> emptyDistricts  = getEmptyDistricts();
-
-        layoutEmptyDistricts(emptyDistricts);
-
-        parentElements.add(emptyDistricts);
-
-        layoutDistricts();
-         */
-
-        layoutEmptyDistricts(buildings);
-        layoutParentDistricts(buildings);
-
-        layoutCloudModel();
-
     }
 
     private SAPNodeTypes getTableTypeTypeOfType(ACityElement building) {
@@ -228,37 +234,32 @@ public class MetropolisLayouter {
 
     private void layoutCloudModel() {
 
-        Collection<ACityElement> clouds = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.migration_findings, "true");
+        Collection<ACityElement> districtsWithFindings = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.migration_findings, "true");
 
-        for ( ACityElement cloud: clouds) {
-            if (!cloud.getSourceNodeType().equals(SAPNodeTypes.Namespace)) {
+        for (ACityElement districtWithFinding: districtsWithFindings) {
 
-                Collection<ACityElement> cloudSubElements = cloud.getSubElements();
+            Collection<ACityElement> cloudSubElements = districtWithFinding.getSubElements();
 
-                if(!cloudSubElements.isEmpty()) {
+            for (ACityElement cloudSubElement : cloudSubElements) {
 
-                    for (ACityElement cloudSubElement : cloudSubElements) {
+                if (cloudSubElement.getType().equals(ACityElement.ACityType.Reference) &&
+                        cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud)) {
 
-                        if (cloudSubElement.getSubType() == null){
-                            continue;
-                        } else if((cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud))){
+                    cloudSubElement.setWidth(0);
+                    cloudSubElement.setLength(0);
+                    cloudSubElement.setYPosition(55);
 
-                            cloudSubElement.setWidth(0);
-                            cloudSubElement.setLength(0);
-                            cloudSubElement.setYPosition(55);
+                    double parentDistrictXPosition = cloudSubElement.getParentElement().getXPosition();
+                    double parentDistrictZPosition = cloudSubElement.getParentElement().getZPosition();
 
-                            double parentDistrictXPosition = cloudSubElement.getParentElement().getXPosition();
-                            double parentDistrictZPosition = cloudSubElement.getParentElement().getZPosition();
+                    cloudSubElement.setXPosition(parentDistrictXPosition);
+                    cloudSubElement.setZPosition(parentDistrictZPosition);
 
-                            cloudSubElement.setXPosition(parentDistrictXPosition);
-                            cloudSubElement.setZPosition(parentDistrictZPosition);
-
-                            cloudSubElement.setWidth(0);
-                            cloudSubElement.setLength(0);
-                        }
-                    }
+                    cloudSubElement.setWidth(0);
+                    cloudSubElement.setLength(0);
                 }
             }
+
         }
 
     }
@@ -268,12 +269,6 @@ public class MetropolisLayouter {
         if (district.getType() == ACityElement.ACityType.District) {
 
             Collection<ACityElement> subElements = district.getSubElements();
-
-            Collection<ACityElement> referenceElements = repository.getElementsByType(ACityElement.ACityType.Reference);
-
-            for (ACityElement referenceElement: referenceElements) {
-                layoutReference(referenceElement);
-            }
 
             ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
             aBAPDistrictLightMapLayout.calculate();
