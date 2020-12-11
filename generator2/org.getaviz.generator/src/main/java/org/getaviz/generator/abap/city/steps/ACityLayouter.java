@@ -60,7 +60,36 @@ public class ACityLayouter {
 
         layoutParentDistricts(buildings);
 
+      //  layoutReferenceBuildings();
 
+    }
+
+    private void layoutReferenceBuildings() {
+
+        Collection<ACityElement> referenceElements = repository.getElementsByType(ACityElement.ACityType.Reference);
+        log.info(referenceElements.size() + " buildings loaded");
+
+        for (ACityElement referenceElement: referenceElements) {
+            layoutReferenceBuilding(referenceElement);
+        }
+
+    }
+
+    private void layoutReferenceBuilding(ACityElement referenceElement) {
+
+        Collection<ACityElement> floors = referenceElement.getSubElementsOfType(ACityElement.ACityType.Floor);
+
+        Collection<ACityElement> chimneys = referenceElement.getSubElementsOfType(ACityElement.ACityType.Chimney);
+
+        ABuildingLayout buildingLayout = new ABuildingLayout(referenceElement, floors, chimneys, config);
+        buildingLayout.calculate();
+
+        if (floors.size() != 0) {
+            log.info(referenceElement.getSourceNodeType() + " " + "\"" + referenceElement.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + " with " + floors.size() + " floors");
+        }
+        if (chimneys.size() != 0) {
+            log.info(referenceElement.getSourceNodeType() + " " + "\"" + referenceElement.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + " with " + chimneys.size() + " chimneys");
+        }
 
     }
 

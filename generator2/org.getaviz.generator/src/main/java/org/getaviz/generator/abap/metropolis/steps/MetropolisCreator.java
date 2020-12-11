@@ -84,19 +84,6 @@ public class MetropolisCreator {
 
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Method);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Attribute);
-
-        //TODO
-        /*
-        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Table);
-        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Table);
-        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Floor, SAPNodeProperties.type_name, SAPNodeTypes.TableElement);
-        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.TableType);
-        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Structure);
-        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.StructureElement);
-        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.DataElement);
-        //createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.DataElement);
-        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Domain);
-         */
     }
 
     private void createReferenceBuildingRelations() {
@@ -113,7 +100,6 @@ public class MetropolisCreator {
             Collection<ACityElement> subElements = packageDistrict.getSubElements();
 
             if(iterationInt == 0) {
-                //Collection<ACityElement> subElements = packageDistrict.getSubElements();
 
                 if (!subElements.isEmpty()) {
 
@@ -126,43 +112,23 @@ public class MetropolisCreator {
                 }
             }
 
-                for (ACityElement subElement: subElements) { //SubElements = Class/Repo/FuGr-District
+            if (config.showCloudReferenceBuilding()) {
+                for (ACityElement subElement : subElements) { //SubElements = Class/Repo/FuGr-District
 
-                    if(subElement.getType().equals(ACityElement.ACityType.District)) {
+                    if (subElement.getType().equals(ACityElement.ACityType.District)) {
                         String migrationFindingsString = subElement.getSourceNodeProperty(SAPNodeProperties.migration_findings);
                         if (migrationFindingsString.equals("true")) {
-
-                            if (config.showCloudReferenceBuilding()) {
-                                createRefBuilding(subElement, ACityElement.ACitySubType.Cloud);
-                            }
+                            createRefBuilding(subElement, ACityElement.ACitySubType.Cloud);
                         }
                     }
-            }
-
-            /*String migrationFindingsString = packageDistrict.getSourceNodeProperty(SAPNodeProperties.migration_findings);
-            if(migrationFindingsString.equals("true")) {
-
-                if (config.showCloudReferenceBuilding()) {
-                    createRefBuilding(packageDistrict, ACityElement.ACitySubType.Cloud);
                 }
-
-            } */
-           // removeSubElementsFromDistrict(district, subElements);
+            }
         }
     }
 
-    private void createRefBuildingForMigrationFindings(ACityElement packageDistrict, ACityElement.ACitySubType cloud) {
-        ACityElement refBuilding = new ACityElement(ACityElement.ACityType.Building);
-        refBuilding.setSubType(cloud);
-
-        repository.addElement(refBuilding);
-
-        refBuilding.setParentElement(packageDistrict);
-
-    }
 
     private void createRefBuilding(ACityElement packageDistrict, ACityElement.ACitySubType refBuildingType) {
-        ACityElement refBuilding = new ACityElement(ACityElement.ACityType.Building);
+        ACityElement refBuilding = new ACityElement(ACityElement.ACityType.Reference);
         refBuilding.setSubType(refBuildingType);
 
         repository.addElement(refBuilding);
@@ -222,9 +188,9 @@ public class MetropolisCreator {
             Node sourceNodeDistrict = element.getSourceNode();
             Collection<ACityElement> usesElements = getUsesElementsBySourceNode(nodeRepository, sourceNodeDistrict);
 
-            for(ACityElement usesElement: usesElements){
+            for(ACityElement usesElement: usesElements) {
 
-                if(usesElement.getSourceNodeProperty(SAPNodeProperties.local_class).equals("true")) {
+                if (usesElement.getSourceNodeProperty(SAPNodeProperties.local_class).equals("true")) {
 
                     String elementID = element.getSourceNodeProperty(SAPNodeProperties.element_id);
                     String usesID = usesElement.getSourceNodeProperty(SAPNodeProperties.uses_id);
@@ -234,11 +200,23 @@ public class MetropolisCreator {
                         usesElement.setParentElement(element);
                         relationCounterUsesRelation++;
                     }
+                } else if (usesElement.getSourceNodeType() == SAPNodeTypes.Attribute){
+
+                    String elementID = element.getSourceNodeProperty(SAPNodeProperties.element_id);
+                    String usesID = usesElement.getSourceNodeProperty(SAPNodeProperties.uses_id);
+
+                    if(element.getSourceNodeType() == SAPNodeTypes.Report){
+
+                        if (elementID.equals(usesID)) {
+                            element.addSubElement(usesElement);
+                            usesElement.setParentElement(element);
+                            relationCounterUsesRelation++;
+                        }
+                    }
                 } else {
                     repository.deleteElement(usesElement); //atm only for local classes, attributes are deleted
                 }
             }
-
         }
 
         log.info(relationCounter + " childRelations for relation \"CONTAINS\" created");

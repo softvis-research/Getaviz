@@ -16,9 +16,7 @@ import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MetropolisLayouter {
 
@@ -43,135 +41,65 @@ public class MetropolisLayouter {
 
     public void layoutRepository(){
 
+        //layout buildings
         Collection<ACityElement> buildings = repository.getElementsByType(ACityElement.ACityType.Building);
         log.info(buildings.size() + " buildings loaded");
+        layoutBuildings(buildings);
 
-        for (ACityElement building: buildings) {
+        //layout reference elements
+        Collection<ACityElement> referenceElements = repository.getElementsByType(ACityElement.ACityType.Reference);
+        log.info(referenceElements.size() + " reference elements loaded");
+        layoutReferenceElements(referenceElements);
 
-            SAPNodeTypes sourceNodeType = building.getSourceNodeType();
+        //layout empty districts
+        Collection<ACityElement> emptyDistrict = getEmptyDistricts();
+        layoutEmptyDistricts(emptyDistrict);
 
-            if(sourceNodeType == SAPNodeTypes.TableType) {
-                SAPNodeTypes buildingSourceType = getTableTypeTypeOfType(building);
+        //layout districts
+        Collection<ACityElement> layoutedSubElements = buildings;
+        layoutedSubElements.addAll(emptyDistrict);
 
-                if (buildingSourceType != null) {
-                    layoutTableTypeBuilding(building, buildingSourceType);
+        layoutParentDistricts(layoutedSubElements);
 
-                    log.info(building.getSourceNodeProperty(SAPNodeProperties.type_name) + " \""
-                            + building.getSourceNodeProperty(SAPNodeProperties.object_name) + "\""
-                            + " with rowType " + "\"" + building.getSourceNodeProperty(SAPNodeProperties.rowtype) + "\""
-                            + " layouted");
-                }
-            } else {
-                layoutBuilding(building);
-            }
-        }
-
-        /*Collection<ACityElement> parentElements = getParentDistricts(buildings);
-        Collection<ACityElement> emptyDistricts  = getEmptyDistricts();
-
-        layoutEmptyDistricts(emptyDistricts);
-
-        parentElements.add(emptyDistricts);
-
-        layoutDistricts();
-         */
-
-        layoutEmptyDistricts(buildings);
-        layoutParentDistricts(buildings);
-
+        //layout cloud elements
         layoutCloudModel();
 
     }
 
-    private SAPNodeTypes getTableTypeTypeOfType(ACityElement building) {
-
-        Node tableTypeSourceNode = building.getSourceNode();
-
-        Collection<Node> typeOfNodes = nodeRepository.getRelatedNodes(tableTypeSourceNode, SAPRelationLabels.TYPEOF, true);
-        if(typeOfNodes.isEmpty()){
-            String tableTypeName = building.getSourceNodeProperty(SAPNodeProperties.object_name);
-            log.warn("TYPEOF related nodes not found for tableType \"" + tableTypeName + "\"");
-            return null;
+    private void layoutReferenceElements(Collection<ACityElement> referenceElements) {
+        for (ACityElement referenceElement: referenceElements) {
+            layoutReference(referenceElement);
         }
-        if(typeOfNodes.size() != 1){
-            String tableTypeName = building.getSourceNodeProperty(SAPNodeProperties.object_name);
-            log.error("TYPEOF related nodes more than 1 for tableType \"" + tableTypeName + "\"");
-            return null;
-        }
-
-        for (Node typeOfNode: typeOfNodes) {
-            Value propertyValue = typeOfNode.get(SAPNodeProperties.type_name.name());
-            String typeOfNodeTypeProperty = propertyValue.asString();
-
-            return SAPNodeTypes.valueOf(typeOfNodeTypeProperty);
-        }
-
-        return null;
     }
 
-    private void layoutTableTypeBuilding(ACityElement building, SAPNodeTypes typeOfType) {
-
-        switch (typeOfType){
-            case Class:
-            case Interface:
-                building.setHeight(config.getACityTableTypeBuildingHeight("tableTypeBuilding_class"));
-                break;
-            case Table:
-            case TableType:
-                building.setHeight(config.getACityTableTypeBuildingHeight("tableTypeBuilding_table"));
-                break;
-            case Structure:
-                building.setHeight(config.getACityTableTypeBuildingHeight("tableTypeBuilding_structure"));
-                break;
-            case DataElement:
-                building.setHeight(config.getACityTableTypeBuildingHeight("tableTypeBuilding_dateElement"));
-            default:
-                building.setHeight(1);
-                String tableTypeName = building.getSourceNodeProperty(SAPNodeProperties.type_name);
-                log.error("Type \"" + typeOfType + "\" not allowed for tableType-Element \"" +  tableTypeName );
+    private void layoutBuildings(Collection<ACityElement> buildings) {
+        for (ACityElement building: buildings) {
+           layoutBuilding(building);
         }
-
-
-        Double groundAreaLength = config.getACityGroundAreaByChimneyAmount();
-        building.setWidth(groundAreaLength);
-        building.setLength(groundAreaLength);
-
-        building.setXPosition(0.0);
-        building.setYPosition(building.getHeight() / 2);
-        building.setZPosition(0.0);
     }
 
-    private String getRowtype(ACityElement aCityElement){
 
-        if (aCityElement.getSourceNodeProperty(SAPNodeProperties.type_name).equals(SAPNodeTypes.TableType.name())){
-            if (aCityElement.getSourceNodeProperty(SAPNodeProperties.rowtype) == null) {
-                return "TableType doesn't have a rowType";
-            }
+    private Collection<ACityElement> getEmptyDistricts(){
 
-        }
-        return aCityElement.getSourceNodeProperty(SAPNodeProperties.rowtype);
-    }
-
-    private void layoutEmptyDistricts( Collection<ACityElement> districtElements) {
+        Collection<ACityElement> emptyDistricts = new ArrayList<>();
 
         Collection<ACityElement> districts = repository.getElementsByType(ACityElement.ACityType.District);
 
         for (ACityElement district: districts) {
 
             if (district.getSubElements().isEmpty()) {
-
-                district.setHeight(config.getMetropolisEmptyDistrictHeight());
-                district.setLength(config.getMetropolisEmptyDistrictLength());
-                district.setWidth(config.getMetropolisEmptyDistrictWidth());
-
-                ACityElement parentElementOfEmptyDistricts = district.getParentElement();
-
-                if (parentElementOfEmptyDistricts != null) {
-
-                    districtElements.add(district);
-
-                }
+                emptyDistricts.add(district);
             }
+        }
+
+        return emptyDistricts;
+    }
+
+    private void layoutEmptyDistricts( Collection<ACityElement> districts) {
+        for (ACityElement district: districts) {
+            district.setHeight(config.getMetropolisEmptyDistrictHeight());
+            district.setLength(config.getMetropolisEmptyDistrictLength());
+            district.setWidth(config.getMetropolisEmptyDistrictWidth());
         }
     }
 
@@ -228,37 +156,32 @@ public class MetropolisLayouter {
 
     private void layoutCloudModel() {
 
-        Collection<ACityElement> clouds = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.migration_findings, "true");
+        Collection<ACityElement> districtsWithFindings = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.migration_findings, "true");
 
-        for ( ACityElement cloud: clouds) {
-            if (!cloud.getSourceNodeType().equals(SAPNodeTypes.Namespace)) {
+        for (ACityElement districtWithFinding: districtsWithFindings) {
 
-                Collection<ACityElement> cloudSubElements = cloud.getSubElements();
+            Collection<ACityElement> cloudSubElements = districtWithFinding.getSubElements();
 
-                if(!cloudSubElements.isEmpty()) {
+            for (ACityElement cloudSubElement : cloudSubElements) {
 
-                    for (ACityElement cloudSubElement : cloudSubElements) {
+                if (cloudSubElement.getType().equals(ACityElement.ACityType.Reference) &&
+                        cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud)) {
 
-                        if (cloudSubElement.getSubType() == null){
-                            continue;
-                        } else if((cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud))){
+                    cloudSubElement.setWidth(0);
+                    cloudSubElement.setLength(0);
+                    cloudSubElement.setYPosition(55);
 
-                            cloudSubElement.setWidth(0);
-                            cloudSubElement.setLength(0);
-                            cloudSubElement.setYPosition(55);
+                    double parentDistrictXPosition = cloudSubElement.getParentElement().getXPosition();
+                    double parentDistrictZPosition = cloudSubElement.getParentElement().getZPosition();
 
-                            double parentDistrictXPosition = cloudSubElement.getParentElement().getXPosition();
-                            double parentDistrictZPosition = cloudSubElement.getParentElement().getZPosition();
+                    cloudSubElement.setXPosition(parentDistrictXPosition);
+                    cloudSubElement.setZPosition(parentDistrictZPosition);
 
-                            cloudSubElement.setXPosition(parentDistrictXPosition);
-                            cloudSubElement.setZPosition(parentDistrictZPosition);
-
-                            cloudSubElement.setWidth(0);
-                            cloudSubElement.setLength(0);
-                        }
-                    }
+                    cloudSubElement.setWidth(0);
+                    cloudSubElement.setLength(0);
                 }
             }
+
         }
 
     }
@@ -276,6 +199,31 @@ public class MetropolisLayouter {
 
         }
     }
+
+    private void layoutReference(ACityElement referenceElement) {
+        ACityElement.ACitySubType referenceBuildingType = referenceElement.getSubType();
+
+            switch (referenceBuildingType) {
+                case Sea:
+                    referenceElement.setHeight(config.getMetropolisReferenceBuildingHeigth("seaReferenceBuilding"));
+                    referenceElement.setWidth(config.getMetropolisReferenceBuildingWidth("seaReferenceBuilding"));
+                    referenceElement.setLength(config.getMetropolisReferenceBuildingLength("seaReferenceBuilding"));
+                    break;
+
+                case Mountain:
+                    referenceElement.setHeight(config.getMetropolisReferenceBuildingHeigth("mountainReferenceBuilding"));
+                    referenceElement.setWidth(config.getMetropolisReferenceBuildingWidth("mountainReferenceBuilding"));
+                    referenceElement.setLength(config.getMetropolisReferenceBuildingLength("mountainReferenceBuilding"));
+                    break;
+
+                case Cloud:
+                    referenceElement.setHeight(config.getMetropolisReferenceBuildingHeigth("cloudReferenceBuilding"));
+                    referenceElement.setWidth(config.getMetropolisReferenceBuildingWidth("cloudReferenceBuilding"));
+                    referenceElement.setLength(config.getMetropolisReferenceBuildingLength("cloudReferenceBuilding"));
+                    break;
+            }
+    }
+
 
     private void layoutVirtualRootDistrict(){
         Collection<ACityElement> districtsWithoutParents = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, "Namespace");

@@ -119,12 +119,20 @@ var canvasFilterController = (function() {
 		
 	function onEntityFilter(applicationEvent) {				
 		const entities = applicationEvent.entities;
-		canvasManipulator.hideEntities(entities, { name: "canvasFilterController" });
+        canvasManipulator.hideEntities(entities, { name: "canvasFilterController" });
+        
+        var unselectEvent = {
+            sender: canvasFilterController,
+            entities: entities
+        }
+
+        events.selected.off.publish(unselectEvent);
 	}
 	
 	function onEntityUnfilter(applicationEvent) {
-		const entities = applicationEvent.entities;
-		canvasManipulator.showEntities(entities, { name: "canvasFilterController" });
+        const entities = applicationEvent.entities;
+        canvasManipulator.showEntities(entities, { name: "canvasFilterController" });
+    
 	}
 
     function onEntityTmpFilter(applicationEvent) {

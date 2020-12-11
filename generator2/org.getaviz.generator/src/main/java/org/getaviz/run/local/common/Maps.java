@@ -45,7 +45,7 @@ public class Maps {
                 "FUGR"
         );
 
-        // Elements, for which we want to show USES relation
+        // Elements, for which we want to show INHERIT relation
         nodesWithInheritRelationByType = Arrays.asList(
                 "CLAS",
                 "INTF"

@@ -41,13 +41,9 @@ public class MetropolisDesigner {
 
         designMetropolisElementsByType(ACityElement.ACityType.Building);
 
+        designMetropolisElementsByType(ACityElement.ACityType.Reference);
+
         designMetropolisElementsByType(ACityElement.ACityType.Floor);
-
-        /* new color for migration findings
-        designMetropolisElementsByMigrationFindings();
-         */
-
-      //  designMetropolisElementsByType(ACityElement.ACityType.Chimney);
 
     }
 
@@ -81,6 +77,7 @@ public class MetropolisDesigner {
             switch (aCityType) {
                 case District: designDistrict(aCityElement); break;
                 case Building: designBuilding(aCityElement); break;
+                case Reference: designReference(aCityElement); break;
                 case Floor: designFloor(aCityElement); break;
                // case Chimney: designChimney(aCityElement); break;
                 default:
@@ -191,8 +188,8 @@ public class MetropolisDesigner {
                     building.setModelScale("0.3 0.3 0.3");
                     building.setYPosition(55);
                     break;
-        }
-    } else {
+            }
+        } else {
 
             String propertyTypeName = building.getSourceNodeProperty(SAPNodeProperties.type_name);
 
@@ -275,6 +272,40 @@ public class MetropolisDesigner {
         }
     }
 
+    private void designReference(ACityElement building) {
+
+        ACityElement.ACitySubType refBuildingType = building.getSubType();
+
+        if (building.getSourceNode() == null && refBuildingType == null) {
+            return;
+        } else if ( refBuildingType != null) {
+            switch (refBuildingType) {
+                case Sea:
+                    building.setColor(config.getMetropolisBuildingColorHex("seaReferenceBuilding"));
+                    building.setShape(ACityElement.ACityShape.Circle);
+                    building.setTextureSource("#sea");
+                    building.setRotation(config.getMetropolisBuildingRotation());
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    //building.setYPosition(building.getYPosition() + 1);
+                    break;
+                case Mountain:
+                    building.setColor(config.getMetropolisBuildingColorHex("mountainReferenceBuilding"));
+                    building.setShape(ACityElement.ACityShape.Entity);
+                    building.setModel("#mountain");
+                    building.setModelScale(config.getMetropolisReferenceBuildingModelScale());
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case Cloud:
+                    building.setShape(ACityElement.ACityShape.Entity);
+                    building.setModel("#cloud_black");
+                    building.setModelScale("0.3 0.3 0.3");
+                    building.setYPosition(55);
+                    break;
+            }
+        }
+    }
 
     private void designChimney(ACityElement chimney) {
         chimney.setColor(config.getACityChimneyColorHex("attributeColor"));
