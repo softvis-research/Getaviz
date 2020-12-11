@@ -10,6 +10,11 @@
     right: 0px;
 }
 
+#searchDiv {
+    position: fixed;
+    size: 30%;
+}
+
 
 
 
