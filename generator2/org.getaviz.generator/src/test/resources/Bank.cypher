@@ -128,7 +128,7 @@ CREATE (m5)-[:READS]->(bankBook)
 CREATE (m6)-[:READS]->(accountsPrivate)
 CREATE (m7)-[:READS]->(creditsPrivate)
 CREATE (m9)-[:READS]->(namePrivate)
-CREATE (m12)-[:READS]->(executeTransactions)
+CREATE (m12)-[:READS]->(executeTransaction)
 CREATE (m13)-[:READS]->(inTransaction)
 CREATE (m16)-[:READS]->(productNumber)
 CREATE (m17)-[:READS]->(balance)
@@ -141,6 +141,8 @@ CREATE (m25)-[:READS]->(transactions)
 CREATE (m26)-[:READS]->(accountsBank)
 CREATE (m27)-[:READS]->(privateCustomers)
 CREATE (m28)-[:READS]->(creditsBank)
+
+
 
 
 

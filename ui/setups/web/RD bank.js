@@ -66,6 +66,11 @@ var setup = {
         {
             name: "packageExplorerController",
         },
+
+        {
+            name: "antipatternController",
+        },
+
         {
             name: "sourceCodeController",
             url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/",
@@ -73,25 +78,25 @@ var setup = {
             showCode: true
         },
 
-        {
-            name: "relationConnectorController",
+        // {
+        //     name: "relationConnectorController",
+        //
+        //     fixPositionY: false,
+        //     showInnerRelations: true,
+        //     sourceStartAtParentBorder: true,
+        //     targetEndAtParentBorder: true,
+        //     sourceStartAtBorder: false,
+        //     targetEndAtBorder: false,
+        //     createEndpoints: false
+        // },
 
-            fixPositionY: false,
-            showInnerRelations: true,
-            sourceStartAtParentBorder: true,
-            targetEndAtParentBorder: true,
-            sourceStartAtBorder: false,
-            targetEndAtBorder: false,
-            createEndpoints: false
-        },
-
-        {
-            name: "relationTransparencyController",
-        },
-
-        {
-            name: "relationHighlightController"
-        },
+        // {
+        //     name: "relationTransparencyController",
+        // },
+        //
+        // {
+        //     name: "relationHighlightController"
+        // },
         {
             name: "menuController",
             menuMapping: [
@@ -114,30 +119,30 @@ var setup = {
                     ]
                 },
 
-                {
-                    title: "Relations",
-                    subMenu: true,
-                    items: [
-                        {
-                            title: "Relation Connectors",
-                            toggle: true,
-                            eventOn: "relationConnectorController.activate",
-                            eventOff: "relationConnectorController.deactivate",
-                        },
-                        {
-                            title: "Relation Transparency",
-                            toggle: true,
-                            eventOn: "relationTransparencyController.activate",
-                            eventOff: "relationTransparencyController.deactivate",
-                        },
-                        {
-                            title: "Relation Highlight",
-                            toggle: true,
-                            eventOn: "relationHighlightController.activate",
-                            eventOff: "relationHighlightController.deactivate",
-                        },
-                    ]
-                },
+                // {
+                //     title: "Relations",
+                //     subMenu: true,
+                //     items: [
+                //         {
+                //             title: "Relation Connectors",
+                //             toggle: true,
+                //             eventOn: "relationConnectorController.activate",
+                //             eventOff: "relationConnectorController.deactivate",
+                //         },
+                //         {
+                //             title: "Relation Transparency",
+                //             toggle: true,
+                //             eventOn: "relationTransparencyController.activate",
+                //             eventOff: "relationTransparencyController.deactivate",
+                //         },
+                //         {
+                //             title: "Relation Highlight",
+                //             toggle: true,
+                //             eventOn: "relationHighlightController.activate",
+                //             eventOff: "relationHighlightController.deactivate",
+                //         },
+                //     ]
+                // },
 
                  {
                     title: "Visualizations",
@@ -257,7 +262,7 @@ var setup = {
                                 name: "packagePanel",
                                 first: {
                                     collapsible: false,
-                                            size: "100%",
+                                            size: "50%",
                                             expanders: [
                                                 {
                                                     name: "packageExplorer",
@@ -268,7 +273,20 @@ var setup = {
                                         }
                                             ]
                                         },
-                                        second: {},
+                                        second: {
+                                            collapsible: false,
+                                            size: "50%",
+                                            expanders: [
+
+                                                {
+                                                    name: "antipatternController",
+                                                    title: "Antipattern",
+                                                    controllers: [
+                                                        {name: "antipatternController"}
+                                                    ],
+                                                },
+                                            ]
+                                        },
                             },
                         },
                         second: {
@@ -292,9 +310,9 @@ var setup = {
                                         {name: "infoController"},
                                         {name: "shareController"},
                                         //{name: "canvasFlyToController"},
-                                        {name: "relationConnectorController"},
-                                        {name: "relationTransparencyController"},
-                                        {name: "relationHighlightController"},
+                                        // {name: "relationConnectorController"},
+                                        // {name: "relationTransparencyController"},
+                                        // {name: "relationHighlightController"},
                                     ],
                                 },
                                 second: {

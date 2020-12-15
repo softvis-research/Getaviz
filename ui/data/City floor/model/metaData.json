@@ -76,6 +76,7 @@
 "signature":  	 "java.util.List getPrivateCustomers()",
 "calls":		 "",
 "calledBy":		 "",
+  "brainmethod": "TRUE",
 "accesses":	 	 "ID_4862d1a456a6673eb3424c5f0c4248adf01a23cf",
 "belongsTo":     "ID_527aa1c76ab5cca95e6dbfcea35a5d2d9f5d737f"
 
@@ -269,6 +270,8 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
+  "godclass":    "TRUE",
+  "brainclass":  "TRUE",
 "belongsTo":     "ID_bdd240c8fe7174e6ac1cfdd5282de76eb7ad6815"
 
 
@@ -301,6 +304,7 @@
 "signature":  	 "java.util.List getBusinessCustomers()",
 "calls":		 "",
 "calledBy":		 "",
+  "brainmethod": "TRUE",
 "accesses":	 	 "ID_e511c29ffb94450ed119cc73fc706d047e45800f",
 "belongsTo":     "ID_527aa1c76ab5cca95e6dbfcea35a5d2d9f5d737f"
 
@@ -449,6 +453,7 @@
 "modifiers":     "public",
 "subClassOf":    "",
 "superClassOf":  "",
+  "dataclass":   "TRUE",
 "belongsTo":     "ID_4481fcdc97864a546f67c76536e0308a3058f75d"
 
 
@@ -651,6 +656,7 @@
 "signature":  	 "java.util.List getAccounts()",
 "calls":		 "",
 "calledBy":		 "",
+  "featureenvy": "TRUE",
 "accesses":	 	 "ID_378ed8adfffc2de1bfd23cb72bef113d8e2ac58b",
 "belongsTo":     "ID_527aa1c76ab5cca95e6dbfcea35a5d2d9f5d737f"
 

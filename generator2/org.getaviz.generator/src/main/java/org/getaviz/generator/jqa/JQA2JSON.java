@@ -149,6 +149,12 @@ public class JQA2JSON implements Step {
                 "\n" +
                 "\"superClassOf\":  \"" + getSubClasses(c) + "\"," +
                 "\n" +
+                "\"godclass\":  \"" + getGodclass(c) + "\"," +
+                "\n" +
+                "\"brainclass\":  \"" + getBrainclass(c) + "\"," +
+                "\n" +
+                "\"dataclass\":  \"" + getDataclass(c) + "\"," +
+                "\n" +
                 "\"belongsTo\":     \"" + belongsTo + "\"" +
                 "\n";
     }
@@ -215,6 +221,10 @@ public class JQA2JSON implements Step {
                 "\"calledBy\":\t\t \"" + getCalledBy(method) + "\"," +
                 "\n" +
                 "\"accesses\":\t \t \"" + getAccesses(method) + "\"," +
+                "\n" +
+                "\"featureenvy\":  \"" + getFeatureEnvy(method) + "\"," +
+                "\n" +
+                "\"brainmethod\":  \"" + getBrainmethod(method) + "\"," +
                 "\n" +
                 "\"belongsTo\":     \"" + belongsTo + "\"" +
                 "\n";
@@ -392,6 +402,46 @@ public class JQA2JSON implements Step {
             });
         });
         return removeBrackets(parameterList);
+    }
+
+    private String getGodclass(Node element) {
+        if (element.get("godclass").isTrue()) {
+            return  "TRUE";
+        } else {
+            return "FALSE";
+        }
+    }
+
+    private String getBrainclass(Node element) {
+        if (element.get("brainclass").isTrue()) {
+            return  "TRUE";
+        } else {
+            return "FALSE";
+        }
+    }
+
+    private String getDataclass(Node element) {
+        if (element.get("dataclass").isTrue()) {
+            return  "TRUE";
+        } else {
+            return "FALSE";
+        }
+    }
+
+    private String getFeatureEnvy(Node element) {
+        if (element.get("featureEnvy").isTrue()) {
+            return  "TRUE";
+        } else {
+            return "FALSE";
+        }
+    }
+
+    private String getBrainmethod(Node element) {
+        if (element.get("brainmethod").isTrue()) {
+            return  "TRUE";
+        } else {
+            return "FALSE";
+        }
     }
 
     private String removeBrackets(List<String> list) {

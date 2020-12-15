@@ -42,7 +42,7 @@ var helpController = (function() {
             document.body.appendChild(popup);
             $("#DisplayWindow").css("display", "block").jqxWindow({
                 theme: "metro",
-                width: 565,
+                width: 610,
                 height: 645,
                 isModal: true,
                 autoOpen: true,
@@ -64,7 +64,7 @@ var helpController = (function() {
     function createTabs(){
         $('#helpPopupTabs').jqxTabs({ 
             theme:'metro',
-            width: 550,
+            width: 600,
             height: 600,
             position:'top'
         });
@@ -106,6 +106,9 @@ var helpController = (function() {
         $.getScript("scripts/HelpController/HelpNavigation.js", function(){ 
             $('#helpPopupTabs').jqxTabs('setContentAt', 2, navigation.navigation());   
         });
+        $.getScript("scripts/HelpController/HelpAntipattern.js", function(){
+            $('#helpPopupTabs').jqxTabs('setContentAt', 3, antipattern.antipattern());
+        });
     }
 
     function createJqxTabsHTML(){
@@ -130,7 +133,14 @@ var helpController = (function() {
                             <div class='tabsUl_div helpController'>Navigation</div>
                         </div>
                     </li>
+                    <li>
+                        <div >
+                            <img src='scripts/HelpController/images/exclamation.png'>
+                            <div class='tabsUl_div helpController'>Antipattern</div>
+                        </div>
+                    </li>
                 </ul>
+                <div></div>
                 <div></div>
                 <div></div>
                 <div></div>

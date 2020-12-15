@@ -14,6 +14,7 @@ public class RDMetaphor implements Metaphor {
     public RDMetaphor(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
         StepFactory factory = new StepFactory(config, languages);
         steps.add(factory.createSteps2m());
+        steps.add(factory.createStepAntipattern());
         steps.add(factory.createMetadataFileStep());
         steps.add(factory.createStepm2m());
         steps.add(factory.createStepm2t());

@@ -44,7 +44,7 @@ var model = (function() {
                 element.antipattern,
                 element.roles,
 				element.isTransparent,
-				element.version
+				element.version,
 			);
 			
 			entity.isTransparent = false;
@@ -172,6 +172,11 @@ var model = (function() {
 					entity.numberOfClosedSecurityIssues = element.numberOfClosedSecurityIssues;
 					entity.numberOfOpenSecurityIssues = element.numberOfOpenSecurityIssues;
 
+					entity.godclass = element.godclass;
+					entity.brainclass = element.brainclass;
+					entity.dataclass = element.dataclass;
+
+
 					break;
 				case  "ParameterizableClass":
 					entity.superTypes = element.subClassOf.split(",");
@@ -186,6 +191,9 @@ var model = (function() {
 					break;
 				case "Method":
 					entity.signature = element.signature;
+
+					entity.brainmethod = element.brainmethod;
+					entity.featureenvy = element.featureenvy;
 					
 					let pathParts = entity.qualifiedName.split("_");
 					let pathString = pathParts[0];
@@ -549,8 +557,6 @@ var model = (function() {
 			entityMap.clear();			
 		});
 	}
-	
-	
 	
 	function createEntity(type, id, name, qualifiedName, belongsTo){
 		let entity = {
