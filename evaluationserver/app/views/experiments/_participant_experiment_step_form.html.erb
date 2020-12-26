@@ -9,7 +9,7 @@
 <% @questionaire = textual_element %>
 <%= render :partial => 'questionaire' %>
 <% else %>
-<div>FEHLER <%= textual_element.to_yaml %></div>
+<div><%= t('experiments.error')%> <%= textual_element.to_yaml %></div>
 <% end %>
 <% end %>
 

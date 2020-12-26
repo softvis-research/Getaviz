@@ -20,6 +20,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  administration_text: This is the administrative part of the evaluation server
   save: "Save"
   back: "Back"
   edit: "Edit"
@@ -138,6 +139,55 @@ en:
     metadata: "Metadata"
     steps: "Steps"
     results: "Results"
+    wrong_answer: "The answer was wrong"
+    answer: "Answer"
+    answer_time: "Answer time"
+    error_count: 'Error count'
+    count: 'Count'
+    correct: 'correct'
+    incorrect: 'incorrect'
+    total: 'Total'
+    correct_answer: 'Correct answer'
+    wrong_answer: 'Wrong answer'
+    value_is: 'The value is:'
+    answered: 'answered!'
+    dont_reload: "Please do not reload the page while conducting the experiment."
+    thank_you_answer: "Thank you for your answer"
+    upload: "Upload"
+    error: 'ERROR'
+    question: 'Question'
+    questionaire_results: 'Questionaire results'
+    results: 'Results'
+    experiment_data: 'Daten zum Experiment'
+    step_count: 'Step count'
+    scene_count: 'Scene count'
+    participant_count: 'Participant count'
+    results_single_steps: 'Results for single steps'
+    step_data: 'Data for step'
+    csv_results: 'Results as CSV'
+    interaction_csv_results: 'Interaction Results as CSV'
+    grouped_step: 'Grouped Step'
+    only_questionaire: 'Only questionaire'
+    only_scene: 'Only Scene'
+    scene_and_questionaire: 'Scene and questionaire'
+    questions_remarks: 'Questions/Remarks'
+    possible_scenes: 'Possible Scenes'
+    number_possible_scenes: 'Number of possible Scenes'
+    type_only_text: 'Type: Only Text'
+    type_scene_with_questionaires: 'Type: Scene with Questions'
+    scene_informations: 'Scene Informations'
+    scene_name: 'Scene name'
+    scene_url: 'Scene URL'
+    seen_by: 'Seen by'
+    seen_by_percent: 'Seen by in %'
+    min_clicks: 'Min clicks'
+    max_clicks: 'Max clicks'
+    avg_clicks: 'Average clicks'
+    min_time_mousedown: 'Min time mousedown'
+    max_time_mousedown: 'Max time mousedown'
+    avg_time_mousedown: 'Average time mousedown'
+    general: 'General'
+    question_text: 'Question text'
   assigners:
     assigner: "Assigner"
     name: "Name"
@@ -159,6 +209,8 @@ en:
     imprint: "Imprint"
     experiments: "Experiments"
     scenes: "Scenes"
+    tests: "Tests"
+    scene_tests: "Scene Tests"
     other: "Other"
     steps: "Steps"
     questions: "Questions"

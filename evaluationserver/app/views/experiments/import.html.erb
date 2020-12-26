@@ -1,4 +1,4 @@
 <%= form_tag({action: :upload}, multipart: true) do %>
 <%= file_field_tag 'experiment_xml' %>
-<%= submit_tag "Hochladen" %>
+<%= submit_tag t('experiments.upload') %>
 <% end %>

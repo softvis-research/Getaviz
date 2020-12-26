@@ -1,8 +1,6 @@
 <% if experiment_step.step.is_a?(GroupedStep) %>
-<div>Gruppierter Schritt</div>
-
+    <div><%= t('experiments.grouped_step')%></div>
 <% else %>
-<%= render :partial => 'single_step_results', :locals => {:experiment_step => experiment_step} %>
-
+    <%= render :partial => 'single_step_results', :locals => {:experiment_step => experiment_step} %>
 <% end %>
 

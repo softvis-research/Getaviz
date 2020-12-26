@@ -5,7 +5,7 @@
 
 <div id="question-<%= @question.id %>" class="form-group" style="border-top:1px solid black;border-bottom:1px solid black;">
   <div >
-	 <div style="margin-top:1em;font-weight:bold;">Question</div>
+	 <div style="margin-top:1em;font-weight:bold;"><%= t('experiments.question') %></div>
     <div style="margin-bottom:1em;"><%= @question.question_text %></div>
 </div>
 <%= render :partial => 'answer_collection', :locals => {:answer_collection => @question.answer_possibility_collections.first} %>

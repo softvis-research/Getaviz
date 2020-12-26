@@ -1,9 +1,9 @@
 <% if experiment_step.step.scenes.empty? %>
-<div>Ausschließlich Fragebogen</div>
-<%= render :partial => 'questionaire_results', :locals => {:experiment_step => experiment_step} %>
+    <div><%= t('experiments.only_questionaire') %></div>
+    <%= render :partial => 'questionaire_results', :locals => {:experiment_step => experiment_step} %>
 <% elsif not(experiment_step.step.scenes.empty?) and not(experiment_step.step.has_questions?) %>
-<div>Ausschließlich Szene</div>
-<%= render :partial => 'scene_results', :locals => {:experiment_step => experiment_step} %>
+    <div><%= t('experiments.only_scene') %></div>
+    <%= render :partial => 'scene_results', :locals => {:experiment_step => experiment_step} %>
 <% else %>
-<div>Szene und Fragen</div>
+    <div><%= t('experiments.scene_and_questionaire') %></div>
 <%  end %>

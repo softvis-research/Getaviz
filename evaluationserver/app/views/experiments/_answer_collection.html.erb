@@ -1,32 +1,31 @@
 <div class="answer-collection" id="answer-collection-<%= answer_collection.id%>" class="form-group">
-  <% if @participant_experiment_step_answer and not(@participant_experiment_step_answer.answered_correctly) %>
-  <div>die Anwort war leider nicht richtig</div>
-  <% end %>
-  <div style="font-weight:bold;">Answer</div>
-  
-  <%= form_for answer_collection, :url => check_answer_path(@participant_experiment_step.id_hash, @questionaire, answer_collection), :remote => true, :method => :post, :html => { :class => 'form-horizontal' } do |s| %>
-  <%= render :partial => 'scene_form_fields' %>
-  
-  
-  <div>
-<% for answer in answer_collection.answers %>
-<% if answer.is_a?(Answer::FreeText) %>
-  <%= text_field_tag "answers[#{answer_collection.id}][answer]", nil, {:placeholder => answer.placeholder, :class => 'form-field timed'} %> 
-<% elsif answer.is_a?(Answer::Slider) %>
-  <div class="form-field range"><%= range_field_tag "answers[#{answer_collection.id}][answer]", answer.default, :min => answer.min, :max => answer.max, :step => answer.step, :class => 'form-field timed slider' %><span>The value is: </span><span class="range_value"></div> 
-<% elsif answer.is_a?(Answer::MultipleChoice) %>
- <div class="form-field"><%= check_box_tag "answers[#{answer_collection.id}][answer][]", answer.id, false, {:class => "timed"} %> <%= answer.answer_text %></div>
- <% elsif answer.is_a?(Answer::Choice) %>
- <div class="form-field"><%= radio_button_tag "answers[#{answer_collection.id}][answer][]", answer.id, false, {:class => "timed"} %> <%= answer.answer_text %></div>
- <% else %>
-  <%= question.to_yaml %>
-  <% end %>
-  <% end %>
-  <%= hidden_field_tag "answers[#{answer_collection.id}][time]", {:value => 0}, {:class => "time"} %>
-  
-  </div>
-  <div class="form-field" style="margin-bottom:1em;margin-top:1em;">
-	 <%= s.submit answer_collection.has_correct_answer? ? "Check" : "Save", :class => 'btn btn-primary' %>
-	 </div>
-<% end %>
+    <% if @participant_experiment_step_answer and not(@participant_experiment_step_answer.answered_correctly) %>
+        <div><%= t('experiments.wrong_answer') %></div>
+    <% end %>
+    <div style="font-weight:bold;"><%= t('experiments.answer') %></div>
+    
+    <%= form_for answer_collection, :url => check_answer_path(@participant_experiment_step.id_hash, @questionaire, answer_collection), :remote => true, :method => :post, :html => { :class => 'form-horizontal' } do |s| %>
+        <%= render :partial => 'scene_form_fields' %>
+        
+        
+        <div>
+            <% for answer in answer_collection.answers %>
+                <% if answer.is_a?(Answer::FreeText) %>
+                    <%= text_field_tag "answers[#{answer_collection.id}][answer]", nil, {:placeholder => answer.placeholder, :class => 'form-field timed'} %> 
+                <% elsif answer.is_a?(Answer::Slider) %>
+                    <div class="form-field range"><%= range_field_tag "answers[#{answer_collection.id}][answer]", answer.default, :min => answer.min, :max => answer.max, :step => answer.step, :class => 'form-field timed slider' %><span><%= t('experiments.value_is')%> </span><span class="range_value"></div> 
+                <% elsif answer.is_a?(Answer::MultipleChoice) %>
+                        <div class="form-field"><%= check_box_tag "answers[#{answer_collection.id}][answer][]", answer.id, false, {:class => "timed"} %> <%= answer.answer_text %></div>
+                <% elsif answer.is_a?(Answer::Choice) %>
+                        <div class="form-field"><%= radio_button_tag "answers[#{answer_collection.id}][answer][]", answer.id, false, {:class => "timed"} %> <%= answer.answer_text %></div>
+                <% else %>
+                <% end %>
+            <% end %>
+            <%= hidden_field_tag "answers[#{answer_collection.id}][time]", {:value => 0}, {:class => "time"} %>
+
+        </div>
+        <div class="form-field" style="margin-bottom:1em;margin-top:1em;">
+            <%= s.submit answer_collection.has_correct_answer? ? "Check" : "Save", :class => 'btn btn-primary' %>
+        </div>
+    <% end %>
 </div>

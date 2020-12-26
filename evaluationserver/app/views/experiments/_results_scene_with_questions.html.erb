@@ -1,20 +1,20 @@
-<div>Typ: Szene mit Fragen</div>
+<div><%= t('experiments.type_scene_with_questionaires') %></div>
 
 
-<h6>Szeneninformationen</h6>
+<h6><%= t('experiments.scene_informations') %></h6>
 
 <div style="display:table:">
-  <div style="display:table-row;">
-	 <div class="tablecell">Szenenname</div>
-	 <div class="tablecell">Szenenurl</div>
-	 <div class="tablecell">Gesehen von</div>
-	 <div class="tablecell">gesehen von in %</div>
-	 <div class="tablecell">minimale Anzahl Klicks</div>
-	 <div class="tablecell">maximale Anzahl Klicks</div>
-	 <div class="tablecell">Durchschnitt Anzahl Klicks</div>
-	 <div class="tablecell">minimale Zeit Mousedown</div>
-	 <div class="tablecell">maximale Zeit Mousedown</div>
-	 <div class="tablecell">Durchschnitt Zeit Mousedown</div>
+    <div style="display:table-row;">
+	<div class="tablecell"><%= t('experiments.scene_name') %></div>
+	<div class="tablecell"><%= t('experiments.scene_url') %></div>
+	<div class="tablecell"><%= t('experiments.seen_by') %></div>
+	<div class="tablecell"><%= t('experiments.seen_by_percent') %></div>
+	<div class="tablecell"><%= t('experiments.min_clicks') %></div>
+	<div class="tablecell"><%= t('experiments.max_clicks') %></div>
+	<div class="tablecell"><%= t('experiments.avg_clicks') %></div>
+	<div class="tablecell"><%= t('experiments.min_time_mousedown') %></div>
+	<div class="tablecell"><%= t('experiments.max_time_mousedown') %></div>
+	<div class="tablecell"><%= t('experiments.avg_time_mousedown') %></div>
   </div>
 
   <% for scene_result in step_result[:result][:scenes] %>
@@ -33,7 +33,7 @@
   <% end %>
   <% sum_result = step_result[:sum_result][:scenes] %>
   <div style="display:table-row;margin-top:5pt;font-weight:bold;">
-	 <div class="tablecell">Allgemein</div>
+      <div class="tablecell"><%= t('experiments.general') %></div>
 	 <div class="tablecell"></div>
 	 <div class="tablecell"></div>
 	 <div class="tablecell"><%= sum_result[:sum_participants] %></div>
@@ -48,44 +48,44 @@
 </div>
 
 
-<h6>Fragen</h6>
+<h6><%= t('layout.questions') %></h6>
 
 <% for question_result in step_result[:result][:questions] %>
-<% has_correct_answer = question_result[:question_has_correct_answer]%>
-<h4>Frage <%= question_result[:question_id] %></h4>
+    <% has_correct_answer = question_result[:question_has_correct_answer]%>
+    <h4><%= t('experiments.question') %> <%= question_result[:question_id] %></h4>
 
-<div>Fragestellung: <%= question_result[:question_text] %></div>
+    <div><%= t('experiments.question_text') %>: <%= question_result[:question_text] %></div>
 
 
-<table>
-  <tr>
-	 <th rowspan="3">Szene</th>
-	 <% if has_correct_answer %>
-	 <th colspan="3">beantwortet</th>
-	 <% else %>
-	 <th>beantwortet</th>
-	 <% end %>
-	 <% if has_correct_answer %>
-	 <th colspan="9">Zeit bis Beantwortung</th>
-	 <th colspan="6">Fehleranzahl</th>
-	 <% else %>
-	 <th colspan="3">Zeit bis Beantwortung</th>
-	 <% end %>
-	 
-  </tr>
-  <tr>
+    <table>
+        <tr>
+	    <th rowspan="3"><%= t('scenes.scene') %></th>
+	    <% if has_correct_answer %>
+	        <th colspan="3"><%= t('experiments.answered') %></th>
+	    <% else %>
+	        <th><%= t('experiments.answered') %></th>
+	    <% end %>
+	    <% if has_correct_answer %>
+	        <th colspan="9"><%= t('experiments.answer_time') %></th>
+	        <th colspan="6"><%= t('experiments.error_count') %></th>
+	    <% else %>
+	        <th colspan="3"><%= t('experiments.answer_time') %></th>
+	    <% end %>
+	    
+        </tr>
+        <tr>
 
-	 <th rowspan="2">Anzahl</th>
-	 <% if has_correct_answer %>
-	 <th rowspan="2">korrekt</th>
-	 <th rowspan="2">inkorrekt %</th>
-	 <% end %>
-	 <th colspan="3">Gesamt</th>
-	 <% if has_correct_answer %>
-	 <th colspan="3">korrekte Antwort</th>
-	 <th colspan="3">falsche Antwort</th>
-	 <th colspan="3">Gesamt</th>
-	 <th colspan="3">korrekte Antwort</th>
+	    <th rowspan="2"><%= t('experiments.count') %></th>
+	    <% if has_correct_answer %>
+	        <th rowspan="2"><%= t('experiments.correct') %> %</th>
+	        <th rowspan="2"><%= t('experiments.incorrect') %> %</th>
+	    <% end %>
+	    <th colspan="3"><%= t('experiments.total') %></th>
+	    <% if has_correct_answer %>
+	        <th colspan="3"><%= t('experiments.correct_answer') %></th>
+	        <th colspan="3"><%= t('experiments.wrong_answer') %></th>
+	        <th colspan="3"><%= t('experiments.total') %></th>
+	        <th colspan="3"><%= t('experiments.correct_answer') %></th>
 	 <% end %>
   </tr>
   <tr>

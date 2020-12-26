@@ -1,33 +1,33 @@
 <% content_for :sidebar_title do %>
-Questions/Remarks
+    <%= t('experiments.questions_remarks') %>
 <% end %>
 <% content_for :sidebar do %>
-<div style="max-height:700px;overflow-y:scroll;">
-  <%= render :partial => 'participant_experiment_step_form' %>
-  </div>
+    <div style="max-height:700px;overflow-y:scroll;">
+        <%= render :partial => 'participant_experiment_step_form' %>
+    </div>
 <% end %>
 
 <% if @participant_experiment_step.get_participant_scene.mapping and not(@participant_experiment_step.get_participant_scene.mapping.to_s.strip.empty?) %>
-<% content_for :mapping do %>
-<div style="max-height:700px;overflow-y:scroll;">
-  <%= @participant_experiment_step.get_participant_scene.mapping.html_safe %>
-  </div>
-<% end %>
+    <% content_for :mapping do %>
+        <div style="max-height:700px;overflow-y:scroll;">
+            <%= @participant_experiment_step.get_participant_scene.mapping.html_safe %>
+        </div>
+    <% end %>
 <% end %>
 
 
 <% if @participant_experiment_step.get_participant_scene.remarks and not(@participant_experiment_step.get_participant_scene.remarks.to_s.strip.empty?) %>
-<% content_for :remarks do %>
-<div style="max-height:700px;overflow-y:scroll;">
-  <%= @participant_experiment_step.get_participant_scene.remarks.html_safe %>
-  </div>
-<% end %>
+    <% content_for :remarks do %>
+        <div style="max-height:700px;overflow-y:scroll;">
+            <%= @participant_experiment_step.get_participant_scene.remarks.html_safe %>
+        </div>
+    <% end %>
 <% end %>
 
 <% content_for :scene do %>
 
-<div style="padding-left:0;padding-right:;padding-top: 0em;margin-top: 0em;height: 100%;">
-<iframe src="<%= @participant_experiment_step.get_participant_scene.url %>" style="height: calc(100% - 3px);width: 100%;" >
-</iframe>
-</div>
+    <div style="padding-left:0;padding-right:;padding-top: 0em;margin-top: 0em;height: 100%;">
+        <iframe src="<%= @participant_experiment_step.get_participant_scene.url %>" style="height: calc(100% - 3px);width: 100%;" >
+        </iframe>
+    </div>
 <% end %>

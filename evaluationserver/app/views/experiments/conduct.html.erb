@@ -1,9 +1,9 @@
 <script type="text/javascript">
-    jQuery(window).bind('beforeunload', function(){
-      return "Bitte laden Sie die Seite während des Experiments nicht neu.";
-	 });
+ jQuery(window).bind('beforeunload', function(){
+     return "<%= t('experiments.dont_reload') %>";
+ });
 
-	 
+ 
 </script>
 
 <% if @participant_experiment_step.has_scene? %>
