@@ -30,6 +30,9 @@ services:
     neo4j:
         image: neo4j:3.5.1
         restart: always
+        ports:
+            - "7474:7474"
+            - "7687:7687"
         environment:
             NEO4J_AUTH: "none"
         networks:

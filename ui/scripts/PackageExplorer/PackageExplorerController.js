@@ -41,7 +41,7 @@ var packageExplorerController = (function() {
     
     function prepareTreeView() {
         
-        let entities = model.getAllEntities();
+        let entities = model.getCodeEntities();
         let items = [];
 		
 		//build items for ztree
@@ -51,8 +51,10 @@ var packageExplorerController = (function() {
 			
 			if(entity.belongsTo === undefined){
 				//rootpackages
-				if(entity.type !== "issue") {
-					if(entity.type === "Namespace") {
+				if(entity.type !== "issue" && entity.type !== "Macro"
+				&& entity.type !== "And" && entity.type !== "Or"
+				&& entity.type !== "Negation") {
+					if(entity.type === "Namespace" || entity.type === "TranslationUnit") {
                         item = {
                             id: entity.id,
                             open: false,
@@ -98,12 +100,17 @@ var packageExplorerController = (function() {
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt"};
 						break;
 					case "Attribute":
+					case "Variable":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.fieldIcon, iconSkin: "zt"};
 						break;
 					case "Method":
+					case "Function":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.methodIcon, iconSkin: "zt"};
 						break;
-					
+					case "Struct":
+					case "Union":
+						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.typeIcon, iconSkin: "zt"};
+						break;
 					default: 
 						events.log.warning.publish({ text: "FamixElement not in tree: " + entity.type});
 

@@ -11,26 +11,23 @@ import org.neo4j.driver.v1.types.Node;
  * available to ensure data validity, for interaction use changeRectangle
  */
 public class Rectangle implements Comparable<Rectangle> {
-//	@Accessors(PUBLIC_GETTER) var double width
-//	@Accessors(PUBLIC_GETTER) var double length
-	double width;
-	double length;
-	double area;
-//	@Accessors(PUBLIC_GETTER, PUBLIC_SETTER) var Node nodeLink
-	Node nodeLink;
-	double upperLeftX;
-	double upperLeftY;
-	double bottomRightX;
-	double bottomRightY;
-	double centerX;
-	double centerY;
+	private double width;
+	private double length;
+	private double area;
+	private Node nodeLink;
+	private double upperLeftX;
+	private double upperLeftY;
+	private double bottomRightX;
+	private double bottomRightY;
+	private double centerX;
+	private double centerY;
 
-	public Rectangle() {
+	Rectangle() {
 		super();
 		changeRectangle(0, 0, 0, 0);
 	}
 
-	public Rectangle(double x1, double y1, double x2, double y2) {
+	Rectangle(double x1, double y1, double x2, double y2) {
 		super();
 		changeRectangle(x1, y1, x2, y2);
 	}
@@ -47,7 +44,7 @@ public class Rectangle implements Comparable<Rectangle> {
 	 *                      UpperRight 3: P(x|y) is BottomRight 4: P(x|y) is
 	 *                      BottomLeft
 	 */
-	public Rectangle(double pX, double pY, double width, double length, int pointPosition) {
+	Rectangle(double pX, double pY, double width, double length, int pointPosition) {
 		super();
 		changeRectangle(pX, pY, width, length, pointPosition);
 	}
@@ -60,7 +57,7 @@ public class Rectangle implements Comparable<Rectangle> {
 	 * @param x2 corner2 of Rectangle
 	 * @param y2 corner2 of Rectangle
 	 */
-	public void changeRectangle(double x1, double y1, double x2, double y2) {
+	void changeRectangle(double x1, double y1, double x2, double y2) {
 		setCornerPoints(x1, y1, x2, y2);
 		update();
 	}
@@ -77,7 +74,7 @@ public class Rectangle implements Comparable<Rectangle> {
 	 *                      UpperRight 3: P(x|y) is BottomRight 4: P(x|y) is
 	 *                      BottomLeft
 	 */
-	public void changeRectangle(double x, double y, double width, double length, int pointPosition) {
+	private void changeRectangle(double x, double y, double width, double length, int pointPosition) {
 		// method forces width & length to equal/be greater than zero: using absolute
 		// value
 		double w = Math.abs(width);
@@ -106,7 +103,7 @@ public class Rectangle implements Comparable<Rectangle> {
 		update();
 	}
 
-	public void setCornerPoints(double x1, double y1, double x2, double y2) {
+	private void setCornerPoints(double x1, double y1, double x2, double y2) {
 		// upperLeftCorner of a rectangle always has the leftmost X-coordinate and the
 		// smallest Y-coordinate as it's values
 		// bottomRightCorner always uses the rightmost X-coordinate and the highest
@@ -133,18 +130,13 @@ public class Rectangle implements Comparable<Rectangle> {
 	public int compareTo(Rectangle second) {
 		int firstComparison = Double.compare(this.area, second.getArea());
 		if (firstComparison == 0) {
-			int secondComparison = Double.compare(this.width, second.getWidth());
-			if (secondComparison == 0) {
-				return 0;
-			} else {
-				return secondComparison;
-			}
+			return Double.compare(this.width, second.getWidth());
 		} else {
 			return firstComparison;
 		}
 	}
 
-	public double getArea() {
+	double getArea() {
 		return area;
 	}
 	
@@ -156,35 +148,35 @@ public class Rectangle implements Comparable<Rectangle> {
 		return width;
 	}
 	
-	public double getBottomRightX() {
+	double getBottomRightX() {
 		return bottomRightX;
 	}
 	
-	public double getBottomRightY() {
+	double getBottomRightY() {
 		return bottomRightY;
 	}
 	
-	public double getCenterX() {
+	double getCenterX() {
 		return centerX;
 	}
 	
-	public double getCenterY() {
+	double getCenterY() {
 		return centerY;
 	}
 	
-	public double getUpperLeftX() {
+	double getUpperLeftX() {
 		return upperLeftX;
 	}
 	
-	public double getUpperLeftY() {
+	double getUpperLeftY() {
 		return upperLeftY;
 	}
 	
-	public Node getNodeLink() {
+	Node getNodeLink() {
 		return nodeLink;
 	}
 	
-	public void setNodeLink(Node nodeLink) {
+	void setNodeLink(Node nodeLink) {
 		this.nodeLink = nodeLink;
 	}
 }

@@ -79,6 +79,7 @@ var relationHighlightController = function(){
 				relatedEntities = entity.accessedBy;
 				break;
 			case "Method":
+			case "Function":
 				relatedEntities = entity.accesses;
 				relatedEntities = relatedEntities.concat( entity.calls );
 				relatedEntities = relatedEntities.concat( entity.calledBy );			

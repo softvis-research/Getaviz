@@ -2,64 +2,29 @@ package org.getaviz.generator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.city.m2m.City2City;
-import org.getaviz.generator.city.m2t.City2AFrame;
-import org.getaviz.generator.city.m2t.City2X3D;
-import org.getaviz.generator.jqa.DatabaseBuilder;
-import org.getaviz.generator.jqa.JQA2JSON;
-import org.getaviz.generator.rd.m2m.RD2RD;
-import org.getaviz.generator.rd.m2t.RD2AFrame;
-import org.getaviz.generator.rd.m2t.RD2X3D;
-import org.getaviz.generator.city.s2m.JQA2City;
-import org.getaviz.generator.rd.s2m.JQA2RD;
+import org.getaviz.generator.jqa.CEnhancement;
+import org.getaviz.generator.jqa.JavaEnhancement;
+import java.util.List;
 
 public class Generator {
-	private static SettingsConfiguration config = SettingsConfiguration.getInstance();
 	private static Log log = LogFactory.getLog(Generator.class);
+	private Metaphor metaphor;
+	private SettingsConfiguration config;
+	private List<ProgrammingLanguage> languages;
 
-	public static void main(String[] args) {
-		run();
+	public Generator(SettingsConfiguration config, List<ProgrammingLanguage> languages) {
+		this.config = config;
+		metaphor = MetaphorFactory.createMetaphor(config, languages);
+		this.languages = languages;
 	}
 
-	public static void run() {
+	public void run() {
 		log.info("Generator started");
-		try {
-			if(!config.isSkipScan()) {
-				new DatabaseBuilder();
-			}
-			switch (config.getMetaphor()) {
-			case CITY: {
-				new JQA2City();
-				new JQA2JSON();
-				new City2City();
-				switch (config.getOutputFormat()) {
-				case X3D:
-					new City2X3D(); break;
-				case AFrame:
-					new City2AFrame(); break;
-				}
-				break;
-			}
-			case RD: {
-				new JQA2RD();
-				new JQA2JSON();
-				new RD2RD();
-				switch (config.getOutputFormat()) {
-				case X3D: {
-					new RD2X3D();
-					break;
-				}
-				case AFrame: {
-					new RD2AFrame();
-					break;
-				}
-				}
-				break;
-			}
-			}
-
-		} catch (Exception e) {
-			log.error(e);
-		}
+		JavaEnhancement java = new JavaEnhancement(config.isSkipScan(), languages);
+		java.run();
+		CEnhancement c = new CEnhancement(config,languages);
+		c.run();
+		metaphor.generate();
+		log.info("Generator finished");
 	}
 }
