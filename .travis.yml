@@ -36,6 +36,8 @@ matrix:
         - cat ./config/database.yml
         - echo $RAILS_ENV
         - bundle exec rake --version
+      services:
+        - mysql
 notifications:
   email:
     on_success: change # options: change, never, always
