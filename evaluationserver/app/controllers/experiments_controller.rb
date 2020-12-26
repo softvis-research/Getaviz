@@ -113,7 +113,7 @@ class ExperimentsController < ApplicationController
       return
     end
 
-    @participant_experiment_step.update_attributes(started: Time.now)
+    @participant_experiment_step.update(started: Time.now)
     @participant_experiment_step.save!
     if @participant_experiment_step.experiment_step.step.is_a?(GroupedStep)
       ### abtauchen in gruppierten Schritt
@@ -129,7 +129,7 @@ class ExperimentsController < ApplicationController
 
   def finish_step
     save_scene_interaction
-    @participant_experiment_step.update_attributes(done: Time.now)
+    @participant_experiment_step.update(done: Time.now)
     @participant_experiment_step = @participant_experiment_step.get_next_step
     if @participant_experiment_step
       redirect_to conduct_path({:id_hash => @participant_experiment_step.id_hash})
