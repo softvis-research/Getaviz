@@ -11,8 +11,9 @@
 }
 
 #searchDiv {
-    position: fixed;
-    size: 30%;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
 }
 
 
