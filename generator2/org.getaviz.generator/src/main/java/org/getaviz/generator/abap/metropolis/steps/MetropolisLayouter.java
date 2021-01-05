@@ -87,9 +87,22 @@ public class MetropolisLayouter {
 
         for (ACityElement district: districts) {
 
-            if (district.getSubElements().isEmpty()) {
+            Collection<ACityElement> subElements = district.getSubElements();
+
+            if (subElements.isEmpty()) {
                 emptyDistricts.add(district);
             }
+
+            // für leere Objekte, die von Migration betroffen sind
+            if(subElements.size() == 1){
+                for (ACityElement subElement: subElements) {
+                     if(subElement.getType().equals(ACityElement.ACityType.Reference)){
+                       emptyDistricts.add(district);
+                     }
+                }
+            }
+
+
         }
 
         return emptyDistricts;
@@ -208,6 +221,7 @@ public class MetropolisLayouter {
                     referenceElement.setHeight(config.getMetropolisReferenceBuildingHeigth("seaReferenceBuilding"));
                     referenceElement.setWidth(config.getMetropolisReferenceBuildingWidth("seaReferenceBuilding"));
                     referenceElement.setLength(config.getMetropolisReferenceBuildingLength("seaReferenceBuilding"));
+                    referenceElement.setYPosition(referenceElement.getHeight() / 2);
                     break;
 
                 case Mountain:
