@@ -34,17 +34,24 @@ public class ADistrictLightMapLayout {
     }
 
     public void calculate(){
+        initializeDistrictLayout();
+
         ACityRectangle coveringACityRectangle = arrangeSubElements(subElements);
+
         setSizeOfDistrict(coveringACityRectangle);
+
         setPositionOfDistrict(coveringACityRectangle);
     }
 
+    private void initializeDistrictLayout(){
+        district.setWidth(0);
+        district.setLength(0);
+        district.setHeight(config.getACityDistrictHeight());
+    }
 
     private void setSizeOfDistrict(ACityRectangle coveringACityRectangle) {
-
         district.setWidth(coveringACityRectangle.getWidth());
         district.setLength(coveringACityRectangle.getLength());
-        district.setHeight(config.getACityDistrictHeight());
     }
 
     private void setPositionOfDistrict(ACityRectangle coveringACityRectangle) {
@@ -60,14 +67,17 @@ public class ADistrictLightMapLayout {
         double xPositionDelta = xPosition - element.getXPosition();
         element.setXPosition(xPosition);
 
-        double yPosition = element.getYPosition() + config.adjustACityDistrictYPosition();
+        /*double yPosition = element.getYPosition() + config.adjustACityDistrictYPosition();
         //double yPositionDelta = yPosition - element.getYPosition();
 
         //Umrechnung, um Gleitkommazahlen zu vermeiden
         BigDecimal yPosition_BigDecimal = BigDecimal.valueOf(yPosition);
         BigDecimal elementY = BigDecimal.valueOf(element.getYPosition());
         BigDecimal yPositionDelta_BigDecimal = yPosition_BigDecimal.subtract(elementY);
-        element.setYPosition(yPosition_BigDecimal.doubleValue());
+        element.setYPosition(yPosition_BigDecimal.doubleValue());*/
+        double yPosition = district.getHeight() + element.getYPosition();
+        double yPositionDelta = district.getHeight();
+        element.setYPosition(yPosition);
 
         double zPosition = fitNode.getACityRectangle().getCenterY();//- config.getBuildingHorizontalGap() / 2;
         double zPositionDelta = zPosition - element.getZPosition();
@@ -75,7 +85,7 @@ public class ADistrictLightMapLayout {
 
         Collection<ACityElement> subElements = element.getSubElements();
         if(!subElements.isEmpty()){
-            adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta_BigDecimal.doubleValue(), zPositionDelta);
+            adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta, zPositionDelta);
             //adjustPositionsOfSubSubElements(subElements, xPositionDelta, 0, zPositionDelta);
         }
     }
@@ -89,9 +99,11 @@ public class ADistrictLightMapLayout {
             double centerZ = element.getZPosition();
 
             double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin();
+
             //double newYPosition = centerY + parentY + config.getACityBuildingVerticalMargin();
             BigDecimal parentY_big = BigDecimal.valueOf(parentY);
             BigDecimal newYPosition_Big = centerY_Big.add(parentY_big);
+
             double newZPosition = centerZ + parentZ + config.getACityBuildingHorizontalMargin();
 
             element.setXPosition(newXPosition);
