@@ -54,13 +54,9 @@ public class MetropolisLayouter {
 
 
         //layout districts
-        Collection<ACityElement> parentDistricts = getParentDistricts(buildings);
-        layoutDistrics(parentDistricts);
-
         Collection<ACityElement> packageDistricts = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, "Namespace");
-        layoutVirtualRootDistrict(packageDistricts);
+        layoutDistrics(packageDistricts);
 
-        stackDistricts(packageDistricts);
 
         //layout cloud elements
         layoutCloudModel();
@@ -80,46 +76,8 @@ public class MetropolisLayouter {
     }
 
 
-    private Collection<ACityElement> getEmptyDistricts(){
 
-        Collection<ACityElement> emptyDistricts = new ArrayList<>();
 
-        Collection<ACityElement> districts = repository.getElementsByType(ACityElement.ACityType.District);
-
-        for (ACityElement district: districts) {
-
-            Collection<ACityElement> subElements = district.getSubElements();
-
-            boolean isEmpty = true;
-            for (ACityElement subElement: subElements) {
-                if(!subElement.getType().equals(ACityElement.ACityType.Reference)){
-                    isEmpty = false;
-                    break;
-                }
-            }
-
-            if (isEmpty) {
-                emptyDistricts.add(district);
-            }
-        }
-
-        return emptyDistricts;
-    }
-
-    private boolean isDistrictEmpty(ACityElement district){
-        Collection<ACityElement> subElements = district.getSubElements();
-
-        boolean isEmpty = true;
-
-        for (ACityElement subElement: subElements) {
-            if(!subElement.getType().equals(ACityElement.ACityType.Reference)){
-                isEmpty = false;
-                break;
-            }
-        }
-
-        return isEmpty;
-    }
 
     private void layoutEmptyDistrict( ACityElement district) {
         district.setHeight(config.getMetropolisEmptyDistrictHeight());
@@ -128,17 +86,13 @@ public class MetropolisLayouter {
     }
 
     private void layoutDistrics(Collection<ACityElement> districtElements) {
-        log.info(districtElements.size() + " parentDistrict loaded");
+        log.info(districtElements.size() + " districts loaded");
 
         for (ACityElement districtElement : districtElements) {
             layoutDistrict(districtElement);
         }
 
-        Collection<ACityElement> parentDistricts = getParentDistricts(districtElements);
-
-        if (!parentDistricts.isEmpty()) {
-            layoutDistrics(parentDistricts);
-        }
+        layoutVirtualRootDistrict(districtElements);
     }
 
     private void layoutVirtualRootDistrict(Collection<ACityElement> districts){
@@ -159,33 +113,6 @@ public class MetropolisLayouter {
 
     }
 
-    private void stackDistricts(Collection<ACityElement> districts){
-        log.info(districts.size() + " districts for stacking layout loaded"); // first for buildings, then for typedistricts
-
-        for(ACityElement district : districts){
-            AStackLayout stackLayout = new AStackLayout(district, config);
-            stackLayout.calculate();
-        }
-    }
-
-
-
-    private Collection<ACityElement> getParentDistricts(Collection<ACityElement> elements) {
-        Map<String, ACityElement> parentDistricts = new HashMap<>();
-        for(ACityElement element : elements){
-
-            ACityElement parentElement = element.getParentElement();
-            if(parentElement == null){
-                continue;
-            }
-
-            String hash = parentElement.getHash();
-            if(!parentDistricts.containsKey(hash)){
-                parentDistricts.put(hash, parentElement);
-            }
-        }
-        return parentDistricts.values();
-    }
 
     private void layoutBuilding(ACityElement building) {
 
@@ -237,22 +164,32 @@ public class MetropolisLayouter {
 
     private void layoutDistrict(ACityElement district) {
 
-        if (district.getType() == ACityElement.ACityType.District) {
+        if(isDistrictEmpty(district)){
+            layoutEmptyDistrict(district);
 
-            if(isDistrictEmpty(district)){
-                layoutEmptyDistrict(district);
+            log.info("Empty district \"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\" layouted");
+        } else {
 
-                log.info("Empty district \"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\" layouted");
-            } else {
+            Collection<ACityElement> subElements = district.getSubElements();
 
-                Collection<ACityElement> subElements = district.getSubElements();
-
-                ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
-                aBAPDistrictLightMapLayout.calculate();
-
-                log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
+            //layout sub districts
+            for(ACityElement subElement : subElements){
+                if (subElement.getType() == ACityElement.ACityType.District) {
+                    layoutDistrict(subElement);
+                }
             }
+
+            //layout district
+            ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
+            aBAPDistrictLightMapLayout.calculate();
+
+            //stack district sub elements
+            AStackLayout stackLayout = new AStackLayout(district, subElements, config);
+            stackLayout.calculate();
+
+            log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
         }
+
     }
 
     private void layoutReference(ACityElement referenceElement) {
@@ -281,6 +218,19 @@ public class MetropolisLayouter {
     }
 
 
+    private boolean isDistrictEmpty(ACityElement district){
+        Collection<ACityElement> subElements = district.getSubElements();
 
+        boolean isEmpty = true;
+
+        for (ACityElement subElement: subElements) {
+            if(!subElement.getType().equals(ACityElement.ACityType.Reference)){
+                isEmpty = false;
+                break;
+            }
+        }
+
+        return isEmpty;
+    }
 
 }

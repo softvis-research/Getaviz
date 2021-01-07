@@ -13,32 +13,31 @@ public class AStackLayout {
     private SettingsConfiguration config;
 
     private ACityElement rootElement;
+    private Collection<ACityElement> stackElements;
 
 
-    public AStackLayout(ACityElement rootElement, SettingsConfiguration config){
+    public AStackLayout(ACityElement rootElement, Collection<ACityElement> stackElements, SettingsConfiguration config){
         this.config = config;
 
         this.rootElement = rootElement;
+        this.stackElements = stackElements;
     }
 
     public void calculate(){
-        Collection<ACityElement> subElements = rootElement.getSubElements();
-
-        stackSubElements(subElements, rootElement.getHeight());
+        stackSubElements(stackElements, rootElement.getHeight());
     }
 
-    private void stackSubElements(Collection<ACityElement> elements, double height){
+    private void stackSubElements(Collection<ACityElement> elements, double parentHeight){
         for (ACityElement element : elements) {
 
             //stack element
-            double stackedYPosition = element.getYPosition() + height;
+            double stackedYPosition = element.getYPosition() + parentHeight;
             element.setYPosition(stackedYPosition);
 
             //stack sub elements
             Collection<ACityElement> subElements = element.getSubElements();
             if (!subElements.isEmpty()) {
-                double stackedHeight = element.getHeight() + height;
-                stackSubElements(subElements, stackedHeight);
+                stackSubElements(subElements, parentHeight);
             }
         }
     }
