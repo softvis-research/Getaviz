@@ -34,8 +34,6 @@ public class ADistrictLightMapLayout {
     }
 
     public void calculate(){
-        initializeDistrictLayout();
-
         ACityRectangle coveringACityRectangle = arrangeSubElements(subElements);
 
         setSizeOfDistrict(coveringACityRectangle);
@@ -43,15 +41,11 @@ public class ADistrictLightMapLayout {
         setPositionOfDistrict(coveringACityRectangle);
     }
 
-    private void initializeDistrictLayout(){
-        district.setWidth(0);
-        district.setLength(0);
-        district.setHeight(config.getACityDistrictHeight());
-    }
 
     private void setSizeOfDistrict(ACityRectangle coveringACityRectangle) {
         district.setWidth(coveringACityRectangle.getWidth());
         district.setLength(coveringACityRectangle.getLength());
+        district.setHeight(config.getACityDistrictHeight());
     }
 
     private void setPositionOfDistrict(ACityRectangle coveringACityRectangle) {
@@ -67,53 +61,30 @@ public class ADistrictLightMapLayout {
         double xPositionDelta = xPosition - element.getXPosition();
         element.setXPosition(xPosition);
 
-        /*double yPosition = element.getYPosition() + config.adjustACityDistrictYPosition();
-        //double yPositionDelta = yPosition - element.getYPosition();
-
-        //Umrechnung, um Gleitkommazahlen zu vermeiden
-        BigDecimal yPosition_BigDecimal = BigDecimal.valueOf(yPosition);
-        BigDecimal elementY = BigDecimal.valueOf(element.getYPosition());
-        BigDecimal yPositionDelta_BigDecimal = yPosition_BigDecimal.subtract(elementY);
-        element.setYPosition(yPosition_BigDecimal.doubleValue());*/
-        double yPosition = district.getHeight() + element.getYPosition();
-        double yPositionDelta = district.getHeight();
-        element.setYPosition(yPosition);
-
         double zPosition = fitNode.getACityRectangle().getCenterY();//- config.getBuildingHorizontalGap() / 2;
         double zPositionDelta = zPosition - element.getZPosition();
         element.setZPosition(zPosition);
 
         Collection<ACityElement> subElements = element.getSubElements();
         if(!subElements.isEmpty()){
-            adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta, zPositionDelta);
-            //adjustPositionsOfSubSubElements(subElements, xPositionDelta, 0, zPositionDelta);
+            adjustPositionsOfSubSubElements(subElements, xPositionDelta, zPositionDelta);
         }
     }
 
-    private void adjustPositionsOfSubSubElements(Collection<ACityElement> elements, double parentX, double parentY, double parentZ) {
+    private void adjustPositionsOfSubSubElements(Collection<ACityElement> elements, double parentX, double parentZ) {
         for (ACityElement element : elements) {
 
             double centerX = element.getXPosition();
-            double centerY = element.getYPosition();
-            BigDecimal centerY_Big = BigDecimal.valueOf(centerY);
-            double centerZ = element.getZPosition();
-
             double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin();
-
-            //double newYPosition = centerY + parentY + config.getACityBuildingVerticalMargin();
-            BigDecimal parentY_big = BigDecimal.valueOf(parentY);
-            BigDecimal newYPosition_Big = centerY_Big.add(parentY_big);
-
-            double newZPosition = centerZ + parentZ + config.getACityBuildingHorizontalMargin();
-
             element.setXPosition(newXPosition);
-            element.setYPosition((newYPosition_Big.setScale(2, RoundingMode.HALF_UP)).doubleValue());
+
+            double centerZ = element.getZPosition();
+            double newZPosition = centerZ + parentZ + config.getACityBuildingHorizontalMargin();
             element.setZPosition(newZPosition);
 
             Collection<ACityElement> subElements = element.getSubElements();
             if(!subElements.isEmpty()){
-                adjustPositionsOfSubSubElements(subElements, parentX, parentY_big.doubleValue(), parentZ);
-                //adjustPositionsOfSubSubElements(subElements, parentX, 0, parentZ);
+                adjustPositionsOfSubSubElements(subElements, parentX,  parentZ);
             }
         }
     }

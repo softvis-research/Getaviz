@@ -9,6 +9,7 @@ import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
 import org.getaviz.generator.abap.layouts.ABuildingLayout;
 import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
+import org.getaviz.generator.abap.layouts.AStackLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
@@ -51,15 +52,15 @@ public class MetropolisLayouter {
         log.info(referenceElements.size() + " reference elements loaded");
         layoutReferenceElements(referenceElements);
 
-        //layout empty districts
-        Collection<ACityElement> emptyDistrict = getEmptyDistricts();
-        layoutEmptyDistricts(emptyDistrict);
 
         //layout districts
-        Collection<ACityElement> layoutedSubElements = buildings;
-        layoutedSubElements.addAll(emptyDistrict);
+        Collection<ACityElement> parentDistricts = getParentDistricts(buildings);
+        layoutDistrics(parentDistricts);
 
-        layoutParentDistricts(layoutedSubElements);
+        Collection<ACityElement> packageDistricts = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, "Namespace");
+        layoutVirtualRootDistrict(packageDistricts);
+
+        stackDistricts(packageDistricts);
 
         //layout cloud elements
         layoutCloudModel();
@@ -89,49 +90,84 @@ public class MetropolisLayouter {
 
             Collection<ACityElement> subElements = district.getSubElements();
 
-            if (subElements.isEmpty()) {
-                emptyDistricts.add(district);
-            }
-
-            // für leere Objekte, die von Migration betroffen sind
-            if(subElements.size() == 1){
-                for (ACityElement subElement: subElements) {
-                     if(subElement.getType().equals(ACityElement.ACityType.Reference)){
-                       emptyDistricts.add(district);
-                     }
+            boolean isEmpty = true;
+            for (ACityElement subElement: subElements) {
+                if(!subElement.getType().equals(ACityElement.ACityType.Reference)){
+                    isEmpty = false;
+                    break;
                 }
             }
 
-
+            if (isEmpty) {
+                emptyDistricts.add(district);
+            }
         }
 
         return emptyDistricts;
     }
 
-    private void layoutEmptyDistricts( Collection<ACityElement> districts) {
-        for (ACityElement district: districts) {
-            district.setHeight(config.getMetropolisEmptyDistrictHeight());
-            district.setLength(config.getMetropolisEmptyDistrictLength());
-            district.setWidth(config.getMetropolisEmptyDistrictWidth());
+    private boolean isDistrictEmpty(ACityElement district){
+        Collection<ACityElement> subElements = district.getSubElements();
+
+        boolean isEmpty = true;
+
+        for (ACityElement subElement: subElements) {
+            if(!subElement.getType().equals(ACityElement.ACityType.Reference)){
+                isEmpty = false;
+                break;
+            }
         }
+
+        return isEmpty;
     }
 
-    private void layoutParentDistricts(Collection<ACityElement> districtElements) {
+    private void layoutEmptyDistrict( ACityElement district) {
+        district.setHeight(config.getMetropolisEmptyDistrictHeight());
+        district.setLength(config.getMetropolisEmptyDistrictLength());
+        district.setWidth(config.getMetropolisEmptyDistrictWidth());
+    }
+
+    private void layoutDistrics(Collection<ACityElement> districtElements) {
+        log.info(districtElements.size() + " parentDistrict loaded");
+
+        for (ACityElement districtElement : districtElements) {
+            layoutDistrict(districtElement);
+        }
 
         Collection<ACityElement> parentDistricts = getParentDistricts(districtElements);
 
-        log.info(parentDistricts.size() + " parentDistrict loaded"); // first for buildings, then for typedistricts
-
-        for(ACityElement parentDistrict : parentDistricts) {
-            layoutDistrict(parentDistrict);
-        }
-
         if (!parentDistricts.isEmpty()) {
-            layoutParentDistricts(parentDistricts);
-        } else {
-            layoutVirtualRootDistrict();
+            layoutDistrics(parentDistricts);
         }
     }
+
+    private void layoutVirtualRootDistrict(Collection<ACityElement> districts){
+        log.info(districts.size() + " districts for virtual root district loaded");
+
+        ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
+
+        if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.DEFAULT) {
+
+            ADistrictLightMapLayout aDistrictLightMapLayout = new ADistrictLightMapLayout(virtualRootDistrict, districts, config);
+            aDistrictLightMapLayout.calculate();
+
+        } else if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.CIRCULAR) {
+
+            ADistrictCircluarLayout aDistrictLayout = new ADistrictCircluarLayout(virtualRootDistrict, districts, config);
+            aDistrictLayout.calculate();
+        }
+
+    }
+
+    private void stackDistricts(Collection<ACityElement> districts){
+        log.info(districts.size() + " districts for stacking layout loaded"); // first for buildings, then for typedistricts
+
+        for(ACityElement district : districts){
+            AStackLayout stackLayout = new AStackLayout(district, config);
+            stackLayout.calculate();
+        }
+    }
+
 
 
     private Collection<ACityElement> getParentDistricts(Collection<ACityElement> elements) {
@@ -203,13 +239,19 @@ public class MetropolisLayouter {
 
         if (district.getType() == ACityElement.ACityType.District) {
 
-            Collection<ACityElement> subElements = district.getSubElements();
+            if(isDistrictEmpty(district)){
+                layoutEmptyDistrict(district);
 
-            ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
-            aBAPDistrictLightMapLayout.calculate();
+                log.info("Empty district \"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\" layouted");
+            } else {
 
-            log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
+                Collection<ACityElement> subElements = district.getSubElements();
 
+                ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
+                aBAPDistrictLightMapLayout.calculate();
+
+                log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
+            }
         }
     }
 
@@ -239,27 +281,6 @@ public class MetropolisLayouter {
     }
 
 
-    private void layoutVirtualRootDistrict(){
-        Collection<ACityElement> districtsWithoutParents = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, "Namespace");
 
-        for (ACityElement districtsWithoutParent : districtsWithoutParents) {
 
-            if (districtsWithoutParent.getParentElement() == null) {
-
-                ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
-
-                if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.DEFAULT) {
-
-                    ADistrictLightMapLayout aDistrictLightMapLayout = new ADistrictLightMapLayout(virtualRootDistrict, districtsWithoutParents, config);
-                    aDistrictLightMapLayout.calculate();
-
-                } else if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.CIRCULAR) {
-
-                    ADistrictCircluarLayout aDistrictLayout = new ADistrictCircluarLayout(virtualRootDistrict, districtsWithoutParents, config);
-                    aDistrictLayout.calculate();
-                }
-
-            }
-        }
-    }
 }

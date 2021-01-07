@@ -60,22 +60,17 @@ public class ADistrictCircluarLayout {
         double xPositionDelta = xPosition - element.getXPosition();
         element.setXPosition(xPosition);
 
-        double yPosition = element.getYPosition() + config.adjustACityDistrictYPosition();
-        double yPositionDelta = yPosition - element.getYPosition();
-        //element.setYPosition(yPosition);
-
         double zPosition = fitNode.getACityRectangle().getCenterY();//- config.getBuildingHorizontalGap() / 2;
         double zPositionDelta = zPosition - element.getZPosition();
         element.setZPosition(zPosition);
 
         Collection<ACityElement> subElements = element.getSubElements();
         if(!subElements.isEmpty()){
-            //adjustPositionsOfSubSubElements(subElements, xPositionDelta, yPositionDelta, zPositionDelta);
-            adjustPositionsOfSubSubElements(subElements, xPositionDelta, 0, zPositionDelta);
+            adjustPositionsOfSubSubElements(subElements, xPositionDelta, zPositionDelta);
         }
     }
 
-    private void adjustPositionsOfSubSubElements(Collection<ACityElement> elements, double parentX, double parentY, double parentZ) {
+    private void adjustPositionsOfSubSubElements(Collection<ACityElement> elements, double parentX, double parentZ) {
         for (ACityElement element : elements) {
 
             double centerX = element.getXPosition();
@@ -83,17 +78,14 @@ public class ADistrictCircluarLayout {
             double centerZ = element.getZPosition();
 
             double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin();
-            double newYPosition = centerY + parentY + config.getACityBuildingVerticalMargin();
             double newZPosition = centerZ + parentZ + config.getACityBuildingHorizontalMargin();
 
             element.setXPosition(newXPosition);
-            //element.setYPosition(newYPosition);
             element.setZPosition(newZPosition);
 
             Collection<ACityElement> subElements = element.getSubElements();
             if(!subElements.isEmpty()){
-                //adjustPositionsOfSubSubElements(subElements, parentX, parentY, parentZ);
-                adjustPositionsOfSubSubElements(subElements, parentX, 0, parentZ);
+                adjustPositionsOfSubSubElements(subElements, parentX, parentZ);
             }
         }
     }
@@ -255,7 +247,7 @@ public class ADistrictCircluarLayout {
 
             Collection<ACityElement> subElements = biggestRectangle.getSubElements();
             if(!subElements.isEmpty()){
-                adjustPositionsOfSubSubElements(subElements, xPositionDelta, 0, zPositionDelta);
+                adjustPositionsOfSubSubElements(subElements, xPositionDelta, zPositionDelta);
             }
 
             if (elements.size() > 1) {
@@ -321,7 +313,7 @@ public class ADistrictCircluarLayout {
 
                     Collection<ACityElement> subElementsManyDistricts = currentRectangle.getSubElements();
                     if(!subElementsManyDistricts.isEmpty()){
-                        adjustPositionsOfSubSubElements(subElementsManyDistricts, xPositionDeltaManyDistricts, 0, zPositionDeltaManyDistricts);
+                        adjustPositionsOfSubSubElements(subElementsManyDistricts, xPositionDeltaManyDistricts, zPositionDeltaManyDistricts);
                     }
 
                 }
