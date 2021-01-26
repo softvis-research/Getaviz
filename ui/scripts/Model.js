@@ -130,6 +130,8 @@ var model = (function () {
 					}
 					break;
                 case "Reference":
+					entity.rcData = element.rcData;
+					entity.rcDataName = element.rcDataName;
 					break;
 				case "Class":
 				case "Interface":

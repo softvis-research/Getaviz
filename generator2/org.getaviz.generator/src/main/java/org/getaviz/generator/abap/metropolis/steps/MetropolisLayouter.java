@@ -133,6 +133,34 @@ public class MetropolisLayouter {
     private void layoutCloudModel() {
 
         Collection<ACityElement> districtsWithFindings = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.migration_findings, "true");
+        //Collection<ACityElement> buildingsWithFindings = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.migration_findings, "true");
+
+        /*for (ACityElement buildingsWithFinding: buildingsWithFindings) {
+
+            Collection<ACityElement> cloudSubElements = buildingsWithFinding.getSubElements();
+
+            for (ACityElement cloudSubElement : cloudSubElements) {
+
+                if (cloudSubElement.getType().equals(ACityElement.ACityType.Reference) &&
+                        cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud)) {
+
+                    cloudSubElement.setWidth(0);
+                    cloudSubElement.setLength(0);
+                    cloudSubElement.setYPosition(55);
+
+                    ACityElement parent = cloudSubElement.getParentElement();
+
+                    double parentDistrictXPosition = parent.getParentElement().getXPosition();
+                    double parentDistrictZPosition = parent.getParentElement().getZPosition();
+
+                    cloudSubElement.setXPosition(parentDistrictXPosition);
+                    cloudSubElement.setZPosition(parentDistrictZPosition);
+
+                    cloudSubElement.setWidth(0);
+                    cloudSubElement.setLength(0);
+                }
+            }
+        }*/
 
         for (ACityElement districtWithFinding: districtsWithFindings) {
 
@@ -157,8 +185,9 @@ public class MetropolisLayouter {
                     cloudSubElement.setLength(0);
                 }
             }
+            }
 
-        }
+
 
     }
 

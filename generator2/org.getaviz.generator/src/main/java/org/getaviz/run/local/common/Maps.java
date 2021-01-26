@@ -12,6 +12,7 @@ public class Maps {
     private static final Map<String, String> metaDataProperties;
     private static final List<String> nodesWithUsesRelationByType;
     private static final List<String> nodesWithInheritRelationByType;
+    private static final List<String> nodesWithMigrationRelationByType;
 
     static{
         // Change property names for metaData-output
@@ -50,6 +51,11 @@ public class Maps {
                 "CLAS",
                 "INTF"
         );
+
+        nodesWithMigrationRelationByType = Arrays.asList(
+                "CLAS",
+                "INTF"
+        );
     }
 
     public static Map<String, String> getMetaDataProperties() {
@@ -62,6 +68,10 @@ public class Maps {
             propertyName = key;
         }
         return propertyName;
+    }
+
+    public static List<String> getNodesWithMigrationRelationByType() {
+        return nodesWithMigrationRelationByType;
     }
 
     public static List<String> getNodesWithReferencesRelationByType() {

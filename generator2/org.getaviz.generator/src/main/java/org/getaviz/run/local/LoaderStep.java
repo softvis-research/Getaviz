@@ -17,6 +17,7 @@ public class LoaderStep {
         String pathToReferenceCsv = "";
         String pathToInheritanceCsv = "";
         String pathToMigrationFindingsCsv = "";
+        String pathToMigrationFindings4UECsv = "";
 
         Scanner userInput = new Scanner(System.in);
         System.out.print("Silent mode? (y/n): "); // Silent mode to run with default values
@@ -34,13 +35,15 @@ public class LoaderStep {
                 pathToReferenceCsv = p.toString();
             } else if (p.toString().endsWith("_Inheritance.csv")) {
                 pathToInheritanceCsv = p.toString();
-            } else if (p.toString().endsWith("_export.csv")) {
-                pathToMigrationFindingsCsv = p.toString();
-            }
+            //} else if (p.toString().endsWith("_export.csv")) {
+              //  pathToMigrationFindingsCsv = p.toString();
+            } else if (p.toString().endsWith("_rc3.0.csv")) {
+            pathToMigrationFindings4UECsv = p.toString();
+        }
         }
 
         if (pathToNodesCsv.isEmpty() || pathToInheritanceCsv.isEmpty() || pathToReferenceCsv.isEmpty()
-                || (config.addMigrationFindings() && pathToMigrationFindingsCsv.isEmpty())) {
+                || (config.addMigrationFindings() && pathToMigrationFindings4UECsv.isEmpty())) {
             System.out.println("Some input file wasn't found");
             System.exit(0);
         }
@@ -113,9 +116,32 @@ public class LoaderStep {
                         "CREATE (a)-[r:"+ SAPRelationLabels.INHERIT +"]->(b)"
         );
 
-        // 6. Upload Migration Findings
+        // 6. Upload Migration Findings NEW
         if(config.addMigrationFindings()) {
-            System.out.println("Path to Migration Findings CSV : " + pathToMigrationFindingsCsv);
+            System.out.println("Path to Migration Findings CSV : " + pathToMigrationFindings4UECsv);
+            if (!isSilentMode) {
+                System.out.print("ADDING 'MIGRATION_FINDINGS' to Element-Nodes. Press any key to continue...");
+                userInput.nextLine();
+            }
+            pathToMigrationFindings4UECsv = pathToMigrationFindings4UECsv.replace("\\", "/");
+            connector.executeWrite(
+                    "LOAD CSV WITH HEADERS FROM \"file:///" + pathToMigrationFindings4UECsv + "\"\n" +
+                            "AS row FIELDTERMINATOR ';'\n" +
+                            "MATCH (a:Elements {object_name: row.SUB_OBJ_NAME})\n" +
+                            "SET a.migration_findings = \"true\"\n"
+            );
+            connector.executeWrite(
+                    "LOAD CSV WITH HEADERS FROM \"file:///" + pathToMigrationFindings4UECsv + "\"\n" +
+                            "AS row FIELDTERMINATOR ';'\n" +
+                            "MATCH (a:Elements {object_name: row.OBJ_NAME})\n" +
+                            "SET a.migration_findings = \"true\"\n"
+
+            );
+        }
+
+        /*// 6. Upload Migration Findings
+        if(config.addMigrationFindings()) {
+            System.out.println("Path to Migration Findings UE CSV : " + pathToMigrationFindingsCsv);
             if (!isSilentMode) {
                 System.out.print("ADDING 'MIGRATION_FINDINGS' to Element-Nodes. Press any key to continue...");
                 userInput.nextLine();
@@ -127,7 +153,7 @@ public class LoaderStep {
                             "MATCH (a:Elements {object_name: row.Objektname})\n" +
                             "SET a.migration_findings = \"true\""
             );
-        }
+        }*/
 
         connector.close();
         System.out.println("Loader step was completed");

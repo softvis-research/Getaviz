@@ -29,6 +29,11 @@ public class ACityElement {
         this.subType = subType;
     }
 
+    public void setRCData(ACityElement refBuilding) {
+        this.refBuilding = refBuilding;
+    }
+
+
     public enum ACityType {
         District, Building, Floor, Chimney,
 
@@ -64,6 +69,7 @@ public class ACityElement {
 
     private List<ACityElement> subElements;
     private ACityElement parentElement;
+    private ACityElement refBuilding;
 
     private ACityType type;
     private ACitySubType subType;
@@ -209,6 +215,11 @@ public class ACityElement {
     public ACityElement getParentElement() {
         return parentElement;
     }
+
+    public ACityElement getRefBuildingData() {
+        return refBuilding;
+    }
+
 
     public void setParentElement(ACityElement parentElement) {
         this.parentElement = parentElement;

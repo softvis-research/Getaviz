@@ -3,12 +3,14 @@ package org.getaviz.generator.abap.common.steps;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
+import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.run.local.common.Maps;
+import org.neo4j.driver.v1.AccessMode;
 import org.neo4j.driver.v1.types.Node;
 
 import java.io.File;
@@ -144,6 +146,12 @@ public class MetaDataExporter {
         builder.append("\"id\": \"" + element.getHash() + "\"," +"\n");
         // Add Belongs to
         builder.append("\"belongsTo\": \"" + element.getParentElement().getHash() + "\",\n");
+        // Add reference (for clouds)
+        if(element.getSubType() == ACityElement.ACitySubType.Cloud) {
+            //builder.append("\"rcData\": \"" + getMigrationRelation() + "\",\n");
+            builder.append(getMigrationRelation(element));
+        }
+
         // Add Name
         builder.append("\"type\": \"" + element.getType() + "\",\n");
         // Add Type
@@ -162,6 +170,63 @@ public class MetaDataExporter {
 
         return builder.toString();
     }
+
+    private String getMigrationRelation(ACityElement element) {
+
+        StringBuilder builder = new StringBuilder();
+
+        // Parent for specific cloud
+        ACityElement district = element.getParentElement();
+
+        // all subElements of this parentDistrict
+        Collection<ACityElement> buildingsWithMigrationFindings = district.getSubElements();
+
+        for (ACityElement buildingsWithMigrationFinding: buildingsWithMigrationFindings) {
+
+            if (buildingsWithMigrationFinding.getType() == ACityElement.ACityType.Reference) {
+                continue;
+            }
+
+            // only subElements with the flag "migrationFindings" matters
+            String migrationFindingsString = buildingsWithMigrationFinding.getSourceNodeProperty(SAPNodeProperties.migration_findings);
+            if (!migrationFindingsString.equals("true")) {
+                //builder.append("\"rcData\": \"" + "" + "\",\n");
+                //continue;
+            } else {
+
+                builder.append("\"rcData\": \"" + buildingsWithMigrationFinding.getHash() + "\",\n");
+                builder.append("\"rcDataName\": \"" + buildingsWithMigrationFinding.getSourceNode().get("object_name").asString() + "\",\n");
+
+
+                
+                //List<String> migrationHashes = new ArrayList<>();
+                //migrationHashes.add(buildingsWithMigrationFinding.getHash());
+                //builder.append("\"rcData\": \"" + String.join(", ", migrationHashes) + "\",\n");
+                //builder.append("\"rcData\": \"" +  getMigratioNRelation(buildingsWithMigrationFinding) + "\",\n");
+                //builder.append("\"rcData\": \"" + getMigrationHashes(buildingsWithMigrationFinding) + "\",\n");
+
+            }
+        }
+
+        return builder.toString();
+    }
+
+    private String getMigratioNRelation(ACityElement buildingsWithMigrationFinding) {
+
+        List<String> nodesHashes = getMigrationHashes(buildingsWithMigrationFinding);
+        return String.join(", ", nodesHashes);
+    }
+
+    private List<String>  getMigrationHashes(ACityElement element) {
+        List<String> nodesHashes = new ArrayList<>();
+
+        for (String nodeHash: nodesHashes
+             ) {
+            nodesHashes.add(element.getHash());
+        }
+        return nodesHashes;
+    }
+
 
     private String getNodeMetaInfo(ACityElement element) {
         StringBuilder builder = new StringBuilder();

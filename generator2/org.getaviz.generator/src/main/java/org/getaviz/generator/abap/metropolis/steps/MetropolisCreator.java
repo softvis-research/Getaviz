@@ -11,6 +11,7 @@ import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.neo4j.driver.v1.types.Node;
 
+import java.text.CollationElementIterator;
 import java.util.*;
 
 public class MetropolisCreator {
@@ -91,6 +92,10 @@ public class MetropolisCreator {
         Collection<ACityElement> packageDistricts = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Namespace.toString());
         log.info(packageDistricts.size() + "  districts loaded");
 
+        long mountainCounter = 0;
+        long seaCounter = 0;
+        long cloudCounter = 0;
+
         for (ACityElement packageDistrict: packageDistricts){
 
             // nur für Hauptpaket (Iteration 0)
@@ -105,9 +110,12 @@ public class MetropolisCreator {
 
                     if (config.showMountainReferenceBuilding()) {
                         createRefBuilding(packageDistrict, ACityElement.ACitySubType.Mountain);
+                        mountainCounter++;
                     }
+
                     if (config.showSeaReferenceBuilding()) {
                         createRefBuilding(packageDistrict, ACityElement.ACitySubType.Sea);
+                        seaCounter++;
                     }
                 }
             }
@@ -118,16 +126,65 @@ public class MetropolisCreator {
                     if (subElement.getType().equals(ACityElement.ACityType.District)) {
                         String migrationFindingsString = subElement.getSourceNodeProperty(SAPNodeProperties.migration_findings);
                         if (migrationFindingsString.equals("true")) {
-                            createRefBuilding(subElement, ACityElement.ACitySubType.Cloud);
+                            ACityElement refBuilding = createRefBuilding(subElement, ACityElement.ACitySubType.Cloud);
+                            cloudCounter++;
+
+                            //createMigrationFindingsRelation(subElement, refBuilding);
+
+                            /*Collection<ACityElement> buildings = subElement.getSubElements();
+                            if (migrationFindingsString.equals("true")) {
+                                for (ACityElement building : buildings) {
+                                    createMigrationFindingsRelation(subElement, refBuilding);
+                                }
+                            }*/
                         }
-                    }
+
+                        }
                 }
+
+                // Migration Relation
+                //createMigrationFindingsRelation2();
+
+            }
+        }
+        Collection<ACityElement> testClass = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.object_name, "ZCL_SEPA_TOOLS");
+        Collection<ACityElement> testMeth = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.object_name, "SAVE_IBAN");
+
+        log.info(mountainCounter + " refBuildings of type mountain created");
+        log.info(seaCounter + " refBuildings of type sea created");
+        log.info(cloudCounter + " refBuildings of type cloud created");
+    }
+
+    private void createMigrationFindingsRelation2() {
+
+        Collection<ACityElement> migrationBuildings = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.migration_findings, "true");
+
+        for (ACityElement migrationBuilding : migrationBuildings) {
+
+        }
+
+
+    }
+
+    private void createMigrationFindingsRelation(ACityElement district, ACityElement refBuilding) {
+
+        Collection<ACityElement> buildings = district.getSubElements();
+        for (ACityElement building: buildings) {
+
+            if(building.getType() == ACityElement.ACityType.Reference){
+                continue;
+            }
+
+            String migrationFindingsString = building.getSourceNodeProperty(SAPNodeProperties.migration_findings);
+            if (migrationFindingsString.equals("true")) {
+                building.setRCData(refBuilding);
+                refBuilding.setRCData(building);
             }
         }
     }
 
 
-    private void createRefBuilding(ACityElement packageDistrict, ACityElement.ACitySubType refBuildingType) {
+    private ACityElement createRefBuilding(ACityElement packageDistrict, ACityElement.ACitySubType refBuildingType) {
         ACityElement refBuilding = new ACityElement(ACityElement.ACityType.Reference);
         refBuilding.setSubType(refBuildingType);
 
@@ -135,6 +192,8 @@ public class MetropolisCreator {
 
         packageDistrict.addSubElement(refBuilding);
         refBuilding.setParentElement(packageDistrict);
+
+        return refBuilding;
     }
 
     private void createAllMetropolisRelations(SourceNodeRepository nodeRepository) {
