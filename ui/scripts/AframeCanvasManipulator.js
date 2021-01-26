@@ -18,6 +18,8 @@ var canvasManipulator = (function () {
 
     var entityEffectMap = new Map();
 
+    var hiddenEntitiesMap = new Map();
+
     var initialCameraView = {};
 
     function initialize() {
@@ -310,11 +312,48 @@ var canvasManipulator = (function () {
     }
 
     function hideEntities(entities, controller) {
-        changeVisibilityOfEntities(entities, false, controller);
+        //changeVisibilityOfEntities(entities, false, controller);
+        
+        entities.forEach(function (entity) {
+            if (entity === undefined) {
+                return;
+            }
+
+            let component = document.getElementById(entity.id);
+            if (component === undefined) {
+                events.log.error.publish({ text: "CanvasManipulator - hideEntities - components for entityIds not found" });
+                return;
+            }
+
+            hiddenEntitiesMap.set(entity.id, component);
+
+            scene.remove(component);
+
+            //component.parentNode.removeChild(component);
+            //component.remove();
+        });
+
     }
 
     function showEntities(entities, controller) {
-        changeVisibilityOfEntities(entities, true, controller);
+        //changeVisibilityOfEntities(entities, true, controller);
+
+        entities.forEach(function (entity) {
+            if (entity === undefined) {
+                return;
+            }
+
+            if (!hiddenEntitiesMap.has(entity.id)) {
+                events.log.error.publish({ text: "CanvasManipulator - showEntities - components for entityIds not found" });
+                return;
+            }
+
+            let component = hiddenEntitiesMap.get(entity.id);
+            hiddenEntitiesMap.delete(entity.id);
+
+            //component.parentNode.appendChild(component);
+            scene.insertAdjacentHTML("beforeend", component.outerHTML);
+        });
     }
 
     function changeVisibilityOfEntities(entities, targetValue, controller) {
