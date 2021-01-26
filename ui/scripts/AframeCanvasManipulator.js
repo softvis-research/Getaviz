@@ -315,19 +315,17 @@ var canvasManipulator = (function () {
         //changeVisibilityOfEntities(entities, false, controller);
         
         entities.forEach(function (entity) {
-            if (entity === undefined) {
-                return;
-            }
-
+            
             let component = document.getElementById(entity.id);
-            if (component === undefined) {
+            if (component === null) {
                 events.log.error.publish({ text: "CanvasManipulator - hideEntities - components for entityIds not found" });
                 return;
             }
 
             hiddenEntitiesMap.set(entity.id, component);
 
-            scene.remove(component);
+            component.remove();
+            //scene.removeChild(component);
 
             //component.parentNode.removeChild(component);
             //component.remove();
@@ -339,10 +337,7 @@ var canvasManipulator = (function () {
         //changeVisibilityOfEntities(entities, true, controller);
 
         entities.forEach(function (entity) {
-            if (entity === undefined) {
-                return;
-            }
-
+            
             if (!hiddenEntitiesMap.has(entity.id)) {
                 events.log.error.publish({ text: "CanvasManipulator - showEntities - components for entityIds not found" });
                 return;
@@ -351,8 +346,27 @@ var canvasManipulator = (function () {
             let component = hiddenEntitiesMap.get(entity.id);
             hiddenEntitiesMap.delete(entity.id);
 
+            //TODO Create Copy of A-Frame Element
+            //https://aframe.io/docs/0.7.0/introduction/javascript-events-dom-apis.html
+
+            //var entityEl = document.createElement('a-entity');
+            /*
+            entityEl.setAttribute('geometry', {
+                primitive: 'box',
+                height: 3,
+                width: 1
+              });
+            
+
+              scene.appendChild(entityEl);
+
+              //Position Workaround
+              https://stackoverflow.com/questions/41336889/adding-new-entities-on-the-fly-in-aframe
+            */
+
+            //scene.appendChild(component);
             //component.parentNode.appendChild(component);
-            scene.insertAdjacentHTML("beforeend", component.outerHTML);
+            //scene.insertAdjacentHTML("beforeend", component.outerHTML);
         });
     }
 

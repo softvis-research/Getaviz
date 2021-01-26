@@ -214,16 +214,17 @@ var packageExplorerController = (function () {
 	}
 
 	function zTreeOnCheck(event, treeId, treeNode) {
-		var nodes = tree.getChangeCheckedNodes();
+		
+		//node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes	
 
 		var entities = [];
-		nodes.forEach(function (node) {
-			node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes	
-			entities.push(model.getEntityById(node.id));
+	
+		var entity = model.getEntityById(treeNode.id);
+		entities.push(entity);
 
-			// to filter of referenceElements, even if they're not shown in packageExplorer
-			entities = entities.concat(model.getAllChildrenOfEntity(model.getEntityById(node.id)));
-		});
+		var children = model.getAllChildrenOfEntity(entity);
+		entities = entities.concat(children);
+			
 
 		var applicationEvent = {
 			sender: packageExplorerController,
