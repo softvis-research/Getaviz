@@ -346,23 +346,30 @@ var canvasManipulator = (function () {
             let component = hiddenEntitiesMap.get(entity.id);
             hiddenEntitiesMap.delete(entity.id);
 
+            var newEntityEl = document.createElement(component.localName);
+
+            component.getAttributeNames().forEach(function(attribute){newEntityEl.setAttribute(attribute,component.getAttribute(attribute))});
+            
+            /*
+            AFRAME.registerComponent("position", {
+                init: function() {
+                    component.getAttribute("position");
+                }
+            });
+
+            // this workaround is needed to set the position
+            newEntityEl.setAttribute("position", "");
+            */
+
+            scene.appendChild(newEntityEl);
+            //Hier wird dann der Fehler geschmissen, dass document.getElementById(entity.id) noch null ist
+            document.getElementById(entity.id).setAttribute("position", component.getAttribute("position"));
+
             //TODO Create Copy of A-Frame Element
             //https://aframe.io/docs/0.7.0/introduction/javascript-events-dom-apis.html
 
-            //var entityEl = document.createElement('a-entity');
-            /*
-            entityEl.setAttribute('geometry', {
-                primitive: 'box',
-                height: 3,
-                width: 1
-              });
-            
-
-              scene.appendChild(entityEl);
-
-              //Position Workaround
-              https://stackoverflow.com/questions/41336889/adding-new-entities-on-the-fly-in-aframe
-            */
+            //Position Workaround
+            //https://stackoverflow.com/questions/41336889/adding-new-entities-on-the-fly-in-aframe
 
             //scene.appendChild(component);
             //component.parentNode.appendChild(component);
