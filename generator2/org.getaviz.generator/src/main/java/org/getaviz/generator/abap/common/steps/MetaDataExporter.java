@@ -146,16 +146,15 @@ public class MetaDataExporter {
         builder.append("\"id\": \"" + element.getHash() + "\"," +"\n");
         // Add Belongs to
         builder.append("\"belongsTo\": \"" + element.getParentElement().getHash() + "\",\n");
-        // Add reference (for clouds)
-        if(element.getSubType() == ACityElement.ACitySubType.Cloud) {
-            //builder.append("\"rcData\": \"" + getMigrationRelation() + "\",\n");
-            builder.append(getMigrationRelation(element));
-        }
-
         // Add Name
         builder.append("\"type\": \"" + element.getType() + "\",\n");
         // Add Type
         builder.append("\"name\": \"" + element.getSubType() + "\",\n");
+
+        // Add additional meta for clouds
+        if(element.getSubType() == ACityElement.ACitySubType.Cloud) {
+            builder.append(getMigrationRelation(element));
+        }
 
         // Make sure we have the right syntax -> no commas at the end
         char lastChar = builder.charAt(builder.length() - 1);
@@ -175,14 +174,18 @@ public class MetaDataExporter {
 
         StringBuilder builder = new StringBuilder();
 
+        //new Lists for all migrationRelations (name and hash)
+        List<String> migrationHashes = new ArrayList<>();
+        List<String> migrationNames = new ArrayList<>();
+
         // Parent for specific cloud
         ACityElement district = element.getParentElement();
 
         // all subElements of this parentDistrict
         Collection<ACityElement> buildingsWithMigrationFindings = district.getSubElements();
 
-        for (ACityElement buildingsWithMigrationFinding: buildingsWithMigrationFindings) {
 
+        for (ACityElement buildingsWithMigrationFinding: buildingsWithMigrationFindings) {
             if (buildingsWithMigrationFinding.getType() == ACityElement.ACityType.Reference) {
                 continue;
             }
@@ -190,43 +193,19 @@ public class MetaDataExporter {
             // only subElements with the flag "migrationFindings" matters
             String migrationFindingsString = buildingsWithMigrationFinding.getSourceNodeProperty(SAPNodeProperties.migration_findings);
             if (!migrationFindingsString.equals("true")) {
-                //builder.append("\"rcData\": \"" + "" + "\",\n");
-                //continue;
+                continue;
             } else {
-
-                builder.append("\"rcData\": \"" + buildingsWithMigrationFinding.getHash() + "\",\n");
-                builder.append("\"rcDataName\": \"" + buildingsWithMigrationFinding.getSourceNode().get("object_name").asString() + "\",\n");
-
-
-                
-                //List<String> migrationHashes = new ArrayList<>();
-                //migrationHashes.add(buildingsWithMigrationFinding.getHash());
-                //builder.append("\"rcData\": \"" + String.join(", ", migrationHashes) + "\",\n");
-                //builder.append("\"rcData\": \"" +  getMigratioNRelation(buildingsWithMigrationFinding) + "\",\n");
-                //builder.append("\"rcData\": \"" + getMigrationHashes(buildingsWithMigrationFinding) + "\",\n");
-
+                //fill list
+                migrationHashes.add(buildingsWithMigrationFinding.getHash());
+                migrationNames.add(buildingsWithMigrationFinding.getSourceNode().get("object_name").asString());
             }
         }
 
+        builder.append("\"rcData\": \"" + String.join(", ", migrationHashes) + "\",\n");
+        builder.append("\"rcDataName\": \"" + String.join(", ", migrationNames) + "\",\n");
+
         return builder.toString();
     }
-
-    private String getMigratioNRelation(ACityElement buildingsWithMigrationFinding) {
-
-        List<String> nodesHashes = getMigrationHashes(buildingsWithMigrationFinding);
-        return String.join(", ", nodesHashes);
-    }
-
-    private List<String>  getMigrationHashes(ACityElement element) {
-        List<String> nodesHashes = new ArrayList<>();
-
-        for (String nodeHash: nodesHashes
-             ) {
-            nodesHashes.add(element.getHash());
-        }
-        return nodesHashes;
-    }
-
 
     private String getNodeMetaInfo(ACityElement element) {
         StringBuilder builder = new StringBuilder();

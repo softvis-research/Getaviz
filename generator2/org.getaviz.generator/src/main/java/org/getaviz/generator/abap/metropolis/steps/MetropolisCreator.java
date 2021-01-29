@@ -126,61 +126,18 @@ public class MetropolisCreator {
                     if (subElement.getType().equals(ACityElement.ACityType.District)) {
                         String migrationFindingsString = subElement.getSourceNodeProperty(SAPNodeProperties.migration_findings);
                         if (migrationFindingsString.equals("true")) {
-                            ACityElement refBuilding = createRefBuilding(subElement, ACityElement.ACitySubType.Cloud);
+                            createRefBuilding(subElement, ACityElement.ACitySubType.Cloud);
                             cloudCounter++;
 
-                            //createMigrationFindingsRelation(subElement, refBuilding);
-
-                            /*Collection<ACityElement> buildings = subElement.getSubElements();
-                            if (migrationFindingsString.equals("true")) {
-                                for (ACityElement building : buildings) {
-                                    createMigrationFindingsRelation(subElement, refBuilding);
-                                }
-                            }*/
                         }
-
-                        }
+                    }
                 }
-
-                // Migration Relation
-                //createMigrationFindingsRelation2();
-
             }
         }
-        Collection<ACityElement> testClass = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.object_name, "ZCL_SEPA_TOOLS");
-        Collection<ACityElement> testMeth = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.object_name, "SAVE_IBAN");
 
         log.info(mountainCounter + " refBuildings of type mountain created");
         log.info(seaCounter + " refBuildings of type sea created");
         log.info(cloudCounter + " refBuildings of type cloud created");
-    }
-
-    private void createMigrationFindingsRelation2() {
-
-        Collection<ACityElement> migrationBuildings = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.migration_findings, "true");
-
-        for (ACityElement migrationBuilding : migrationBuildings) {
-
-        }
-
-
-    }
-
-    private void createMigrationFindingsRelation(ACityElement district, ACityElement refBuilding) {
-
-        Collection<ACityElement> buildings = district.getSubElements();
-        for (ACityElement building: buildings) {
-
-            if(building.getType() == ACityElement.ACityType.Reference){
-                continue;
-            }
-
-            String migrationFindingsString = building.getSourceNodeProperty(SAPNodeProperties.migration_findings);
-            if (migrationFindingsString.equals("true")) {
-                building.setRCData(refBuilding);
-                refBuilding.setRCData(building);
-            }
-        }
     }
 
 
