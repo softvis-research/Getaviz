@@ -37,6 +37,37 @@ var canvasManipulator = (function () {
         //the a-scene resize-handler won't be called properly
         //so we call the resize-handler here again
         window.addEventListener("resize", function() { setTimeout(resizeScene, 100) });
+
+        AFRAME.registerComponent('set-aframe-attributes', {
+            // schema defines properties of element
+            schema: {
+                tag: { type: 'string', default: '' },
+                id: { type: 'string', default: '' },
+                class: { type: 'string', default: '' },
+                position: { type: 'string', default: '' },
+                width: { type: 'string', default: '' },
+                height: { type: 'string', default: '' },
+                depth: { type: 'string', default: '' },
+                color: { type: 'string', default: '' },            
+                shader: { type: 'string', default: '' },
+                flatShading: { type: 'string', default: '' }
+                // component.getAtrributeNames() -> ["id", "position", "height", "width", "depth", "color",  ++++ Unknown Properties: "shadow", "material", "geometry"] ("radius")
+            },
+
+            init: function () {
+                // This will be called after the entity has been properly attached and loaded.
+                this.attrValue = ''; // imported payload is in this.data, so we don't need this one
+                Object.keys(this.schema).forEach(key => {
+                    this.el.setAttribute(`${key}`, this.data[key]);                
+                })
+                
+                //document.getElementById(this.data["id"]).setAttribute("position", this.data["position"]); // this does set position as a workaround
+                //document.getElementById(this.data["id"]).setAttribute("position", this.data["position"]);
+                // Adjust visibility
+                // let visible = this.data['checked'] ? true : false; // set to visible, because parent node was checked
+                //this.el.setAttribute('visible', true);
+            }
+        });
     }
 
     function reset() {
@@ -336,6 +367,8 @@ var canvasManipulator = (function () {
     function showEntities(entities, controller) {
         //changeVisibilityOfEntities(entities, true, controller);
 
+        
+        
         entities.forEach(function (entity) {
             
             if (!hiddenEntitiesMap.has(entity.id)) {
@@ -346,34 +379,21 @@ var canvasManipulator = (function () {
             let component = hiddenEntitiesMap.get(entity.id);
             hiddenEntitiesMap.delete(entity.id);
 
-            var newEntityEl = document.createElement(component.localName);
+            var attributes = {};
+            component.getAttributeNames().forEach(function(attribute){attributes[attribute] = component.getAttribute(attribute)});
 
-            component.getAttributeNames().forEach(function(attribute){newEntityEl.setAttribute(attribute,component.getAttribute(attribute))});
-            
-            /*
-            AFRAME.registerComponent("position", {
-                init: function() {
-                    component.getAttribute("position");
-                }
-            });
-
-            // this workaround is needed to set the position
-            newEntityEl.setAttribute("position", "");
-            */
-
-            scene.appendChild(newEntityEl);
-            //Hier wird dann der Fehler geschmissen, dass document.getElementById(entity.id) noch null ist
-            document.getElementById(entity.id).setAttribute("position", component.getAttribute("position"));
+            let entityEl = document.createElement(component.tagName);
+            entityEl.setAttribute('set-aframe-attributes', {...attributes}); // this attributes will be set after element is created
+            let sceneEl = document.querySelector('a-scene');
+            sceneEl.appendChild(entityEl);
+            //document.getElementById(entity.id).setAttribute("position", component.getAttribute("position")); // this does set position as a workaround
+            //Funktioniert hier nicht, da document.getElementById(entity.id) noch null ist
 
             //TODO Create Copy of A-Frame Element
             //https://aframe.io/docs/0.7.0/introduction/javascript-events-dom-apis.html
 
             //Position Workaround
             //https://stackoverflow.com/questions/41336889/adding-new-entities-on-the-fly-in-aframe
-
-            //scene.appendChild(component);
-            //component.parentNode.appendChild(component);
-            //scene.insertAdjacentHTML("beforeend", component.outerHTML);
         });
     }
 
