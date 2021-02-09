@@ -3,14 +3,12 @@ package org.getaviz.generator.abap.common.steps;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
-import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.run.local.common.Maps;
-import org.neo4j.driver.v1.AccessMode;
 import org.neo4j.driver.v1.types.Node;
 
 import java.io.File;
@@ -181,9 +179,17 @@ public class MetaDataExporter {
         // Parent for specific cloud
         ACityElement district = element.getParentElement();
 
-        // all subElements of this parentDistrict
-        Collection<ACityElement> buildingsWithMigrationFindings = district.getSubElements();
+        // get subElements of this parentDistrict with migrationFindings and fill hash value into list migrationHashes
+        getBuildingsWithMigrationFindingsHash(district, migrationHashes);
 
+        builder.append("\"rcData\": \"" + String.join(", ", migrationHashes) + "\",\n");
+
+        return builder.toString();
+    }
+
+    private Object getBuildingsWithMigrationFindingsHash(ACityElement district, List<String> migrationHashes) {
+
+        Collection<ACityElement> buildingsWithMigrationFindings = district.getSubElements();
 
         for (ACityElement buildingsWithMigrationFinding: buildingsWithMigrationFindings) {
             if (buildingsWithMigrationFinding.getType() == ACityElement.ACityType.Reference) {
@@ -197,14 +203,9 @@ public class MetaDataExporter {
             } else {
                 //fill list
                 migrationHashes.add(buildingsWithMigrationFinding.getHash());
-                migrationNames.add(buildingsWithMigrationFinding.getSourceNode().get("object_name").asString());
             }
         }
-
-        builder.append("\"rcData\": \"" + String.join(", ", migrationHashes) + "\",\n");
-        builder.append("\"rcDataName\": \"" + String.join(", ", migrationNames) + "\",\n");
-
-        return builder.toString();
+        return migrationHashes;
     }
 
     private String getNodeMetaInfo(ACityElement element) {
