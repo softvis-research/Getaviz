@@ -21,8 +21,8 @@ var setup = {
 
         {
             name: "relationController",
-            sourceStartAtBorder: true,
-            targetEndAtBorder: true,
+            sourceStartAtBorder: false,
+            targetEndAtBorder: false,
             showInnerRelations: true,      
 
             connectorColor: { r: 0, g: 0, b: 1 },

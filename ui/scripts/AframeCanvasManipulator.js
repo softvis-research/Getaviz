@@ -479,11 +479,23 @@ var canvasManipulator = (function () {
     }
 
     function getCenterOfEntity(entity) {
+        // old processing
+        //var center = new THREE.Vector3();
+        //var object = document.getElementById(entity.id).object3DMap.mesh;
+        //center.x = object.geometry.boundingSphere.center["x"];
+        //center.y = object.geometry.boundingSphere.center["y"];
+        //center.z = object.geometry.boundingSphere.center["z"];
+ 
+        //return object.localToWorld(center);
+
         var center = new THREE.Vector3();
+
         var object = document.getElementById(entity.id).object3DMap.mesh;
-        center.x = object.geometry.boundingSphere.center["x"];
-        center.y = object.geometry.boundingSphere.center["y"];
-        center.z = object.geometry.boundingSphere.center["z"];
+
+        center.x = object.position.x;
+        center.y = object.position.y;
+        center.z = object.position.z;
+
         return object.localToWorld(center);
     }
 
