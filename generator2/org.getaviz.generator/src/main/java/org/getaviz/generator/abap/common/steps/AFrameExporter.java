@@ -44,6 +44,8 @@ public class AFrameExporter {
 
         aFrameExport.append(aFrameOutput.head());
 
+        aFrameExport.append(createAFrameCamera());
+
         aFrameExport.append(createAFrameRepositoryExport());
 
         aFrameExport.append(aFrameOutput.tail());
@@ -76,6 +78,48 @@ public class AFrameExporter {
             String aframeProperty = AFramePropAsJSON(element);
             element.setAframeProperty(aframeProperty);
         }
+    }
+
+    private String createAFrameCamera() {
+        // where we put the camera depends on the size and position of the city model
+        double maxX = 0, maxZ = 0, minX = 0, minZ = 0;
+        for (ACityElement element : repository.getAllElements()) {
+            maxX = Math.max(maxX, element.getXPosition());
+            maxZ = Math.max(maxZ, element.getZPosition());
+            minX = Math.min(minX, element.getXPosition());
+            minZ = Math.min(minZ, element.getZPosition());
+        }
+        double maxSideLength = Math.max(maxX - minX, maxZ - minZ);
+        System.out.println("minX " + minX + " | maxX " + maxX);
+        System.out.println("minZ " + minZ + " | maxZ " + maxZ);
+
+        // these numbers are based on what looks good for a 100x100 city, scaled to match the actual proportions
+        double cameraX = minX - (maxSideLength * 0.05);
+        double cameraY = (maxSideLength * 0.35);
+        double cameraZ = minZ - (maxSideLength * 0.05);
+        // the point the camera will be looking at
+        double targetX = minX + (maxSideLength * 0.2);
+        double targetY = 0;
+        double targetZ = minZ + (maxSideLength * 0.2);
+
+        return "\t\t\t <a-entity id=\"camera\" camera=\"fov: 80; zoom: 1;\"\n" +
+                "\t\t    \t position=\"" + cameraX + " " + cameraY + " " + cameraZ + "\"\n" +
+                "\t\t    \t rotation=\"0 -90 0\"\n" +
+                "\t\t    \t orbit-camera=\"\n" +
+                "\t\t    \t   \t target: " + targetX + " " + targetY + " " + targetZ + ";\n" +
+                "\t\t    \t   \t enableDamping: true;\n" +
+                "\t\t    \t   \t dampingFactor: 0.25;\n" +
+                "\t\t    \t   \t rotateSpeed: 0.25;\n" +
+                "\t\t    \t   \t panSpeed: 0.25;\n" +
+                "\t\t    \t   \t invertZoom: true;\n" +
+                "\t\t    \t   \t logPosition: false;\n" +
+                "\t\t    \t   \t minDistance:0;\n" +
+                "\t\t    \t   \t maxDistance:1000;\n" +
+                "\t\t    \t   \t \"\n" +
+                "\t\t    \t mouse-cursor=\"\"\n" +
+                "\t\t   \t\t >" +
+                "\n" +
+                "\t\t\t </a-entity>\n";
     }
 
     private String createAFrameRepositoryExport() {
