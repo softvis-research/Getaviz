@@ -50,7 +50,11 @@ var canvasManipulator = (function () {
                 depth: { type: 'string', default: '' },
                 color: { type: 'string', default: '' },            
                 shader: { type: 'string', default: '' },
-                flatShading: { type: 'string', default: '' }
+                flatShading: { type: 'string', default: '' },
+                geometry: { type: 'string', default: '' },
+                material: { type: 'string', default: '' },
+                shadow: { type: 'string', default: '' },
+                radius: { type: 'string', default: '' }
                 // component.getAtrributeNames() -> ["id", "position", "height", "width", "depth", "color",  ++++ Unknown Properties: "shadow", "material", "geometry"] ("radius")
             },
 
@@ -61,11 +65,37 @@ var canvasManipulator = (function () {
                     this.el.setAttribute(`${key}`, this.data[key]);                
                 })
                 
+                //position = AFRAME.utils.coordinates.parse(this.data['position'].nodeValue);
+                //this.el.attributes['position'] = position;
+
+                
                 //document.getElementById(this.data["id"]).setAttribute("position", this.data["position"]); // this does set position as a workaround
                 //document.getElementById(this.data["id"]).setAttribute("position", this.data["position"]);
+                //this.el.setAttribute("position", this.data["position"]);
                 // Adjust visibility
                 // let visible = this.data['checked'] ? true : false; // set to visible, because parent node was checked
                 //this.el.setAttribute('visible', true);
+            }
+        });
+        AFRAME.registerComponent('set-position-attribute', {
+            schema: {
+                position: { type: 'vec3'}
+            },
+            
+            init: function () {
+                
+                var position = AFRAME.utils.coordinates.parse(this.data['position'].nodeValue);
+                this.el.setAttribute("position", position);
+                //this.el.setAttribute("position", this.data['position'].value);
+
+                //this.el.attributes[position] = this.data['position'].nodeValue;
+                
+                
+                //Funktionieren nicht
+                //document.getElementById(this.data["id"]).setAttribute("position", this.data["position"]); // this does set position as a workaround
+                //document.getElementById(this.data["id"]).setAttribute("position", this.data["position"]);
+                //this.el.setAttribute("position", this.data["position"]);
+                //this.el.attributes['position'] = position;
             }
         });
     }
@@ -354,7 +384,6 @@ var canvasManipulator = (function () {
             }
 
             hiddenEntitiesMap.set(entity.id, component);
-
             component.remove();
             //scene.removeChild(component);
 
@@ -381,9 +410,19 @@ var canvasManipulator = (function () {
 
             var attributes = {};
             component.getAttributeNames().forEach(function(attribute){attributes[attribute] = component.getAttribute(attribute)});
+            attributes['position'] = component.attributes['position']; // needed as a fix for a bug with getting position
+            /*if(attributes['set-position-attribute']) {
+                attributes['position'] = component.attributes['object Object'];
+            }
+            else {
+                attributes['position'] = component.attributes['position'];
+            }*/
+            
+            
 
             let entityEl = document.createElement(component.tagName);
-            entityEl.setAttribute('set-aframe-attributes', {...attributes}); // this attributes will be set after element is created
+            entityEl.setAttribute('set-aframe-attributes', {...attributes});  // these attributes will be set after element is created
+            entityEl.setAttribute('set-position-attribute', {...attributes}); // needed as a fix for an AFRAME bug with setting position
             let sceneEl = document.querySelector('a-scene');
             sceneEl.appendChild(entityEl);
             //document.getElementById(entity.id).setAttribute("position", component.getAttribute("position")); // this does set position as a workaround
