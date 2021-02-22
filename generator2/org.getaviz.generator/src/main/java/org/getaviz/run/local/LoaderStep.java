@@ -116,7 +116,7 @@ public class LoaderStep {
                         "CREATE (a)-[r:"+ SAPRelationLabels.INHERIT +"]->(b)"
         );
 
-        // 6. Upload Migration Findings NEW - for districts and bzuildings
+        // 6. Upload Migration Findings NEW - for districts and buildings
         if(config.addMigrationFindings()) {
             System.out.println("Path to Migration Findings CSV : " + pathToMigrationFindingsNewCsv);
             if (!isSilentMode) {

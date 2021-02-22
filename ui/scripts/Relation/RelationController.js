@@ -215,6 +215,9 @@ var relationController = function () {
 				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.calls);
 				//relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.calledBy);
 				break;
+			case "Reference":
+				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.rcData);
+				break;
 		}
 
 		return relatedEntitiesOfSourceEntity;

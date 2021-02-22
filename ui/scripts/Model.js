@@ -130,8 +130,14 @@ var model = (function () {
 					}
 					break;
                 case "Reference":
-					entity.rcData = element.rcData;
+					//entity.rcData = element.rcData;
 					entity.rcDataName = element.rcDataName;
+
+					if (element.rcData) {
+						entity.rcData = element.rcData.split(",");
+					} else {
+						entity.rcData = [];
+					}
 					break;
 				case "Class":
 				case "Interface":
@@ -497,6 +503,14 @@ var model = (function () {
 
 					break;
 				case "Reference":
+					let rcDataABAP = [];
+					entity.rcData.forEach(function (rcDataId) {
+						let relatedEntity = entitiesById.get(rcDataId.trim());
+						if (relatedEntity !== undefined) {
+							rcDataABAP.push(relatedEntity);
+						}
+					});
+					entity.rcData = rcDataABAP;
 					break;
 				case "Function":
 					let callsFunction = [];
