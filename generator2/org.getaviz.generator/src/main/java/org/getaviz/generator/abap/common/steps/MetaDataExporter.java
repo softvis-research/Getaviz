@@ -172,9 +172,8 @@ public class MetaDataExporter {
 
         StringBuilder builder = new StringBuilder();
 
-        //new Lists for all migrationRelations (name and hash)
+        //new hash list for all migrationRelations
         List<String> migrationHashes = new ArrayList<>();
-        List<String> migrationNames = new ArrayList<>();
 
         // Parent for specific cloud
         ACityElement district = element.getParentElement();
@@ -205,6 +204,12 @@ public class MetaDataExporter {
                 migrationHashes.add(buildingsWithMigrationFinding.getHash());
             }
         }
+
+        // If there is no subElement, then the relationship connector is drawn from the cloud to the district
+        if (migrationHashes.size() == 0){
+            migrationHashes.add(district.getHash());
+        }
+
         return migrationHashes;
     }
 
