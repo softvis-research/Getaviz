@@ -199,8 +199,7 @@ var canvasHoverController = (function () {
 	function getTooltipName(entity) {
 
 		if(entity.type === "Reference"){
-			return "Reference: " + entity.name 
-			    + "<br/>" + "migrationFinding at " + entity.rcDataName + ",";
+			return "Reference: " + entity.name;
 		}
 
 

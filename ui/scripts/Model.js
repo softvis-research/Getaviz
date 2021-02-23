@@ -130,8 +130,6 @@ var model = (function () {
 					}
 					break;
                 case "Reference":
-					//entity.rcData = element.rcData;
-					entity.rcDataName = element.rcDataName;
 
 					if (element.rcData) {
 						entity.rcData = element.rcData.split(",");
@@ -511,6 +509,7 @@ var model = (function () {
 						}
 					});
 					entity.rcData = rcDataABAP;
+					
 					break;
 				case "Function":
 					let callsFunction = [];
