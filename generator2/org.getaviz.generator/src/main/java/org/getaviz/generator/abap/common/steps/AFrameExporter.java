@@ -90,8 +90,6 @@ public class AFrameExporter {
             minZ = Math.min(minZ, element.getZPosition());
         }
         double maxSideLength = Math.max(maxX - minX, maxZ - minZ);
-        System.out.println("minX " + minX + " | maxX " + maxX);
-        System.out.println("minZ " + minZ + " | maxZ " + maxZ);
 
         // these numbers are based on what looks good for a 100x100 city, scaled to match the actual proportions
         double cameraX = minX - (maxSideLength * 0.05);
