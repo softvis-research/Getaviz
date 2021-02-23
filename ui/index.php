@@ -32,6 +32,11 @@ if (isset($_GET["state"])) {
     $metaStateJsonUrl = "state.php?hash=";
 }
 
+$lazyLoadingEnabled = false;
+if (isset($_GET["lazy"])) {
+    $lazyLoadingEnabled = $_GET["lazy"];
+}
+
 ?>
 
 
@@ -39,8 +44,8 @@ if (isset($_GET["state"])) {
     var modelUrl = "<?php echo $modelUrl; ?>";
     var stateHashcode = "<?php echo $stateHashcode; ?>";
     var metaStateJsonUrl = "<?php echo $metaStateJsonUrl; ?>";
-
     var metaDataJsonUrl = "<?php echo $metaDataJsonUrl; ?>";
+    var lazyLoadingEnabled = "<?php echo $lazyLoadingEnabled; ?>" === 'true';
 
     var canvasId = "aframe-canvas";
     var visMode = "aframe";
@@ -191,7 +196,9 @@ if (isset($_GET["state"])) {
 <div id="canvas">
     <script>
         $(function(){
-            $("#canvas").load(encodeURI(modelUrl + "/model.html"));
+            if (!lazyLoadingEnabled) {
+                $("#canvas").load(encodeURI(modelUrl + "/model.html"));
+            }
         });
         var globalCamera;
     </script>

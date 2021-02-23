@@ -25,7 +25,7 @@ $(document).ready(function () {
 function initializeApplication(metaDataJson) {
 	//wait for canvas to be loaded full here...
 	var canvas = document.getElementById(canvasId);
-	if (!canvas) {
+	if (!canvas && !lazyLoadingEnabled) {
 		setTimeout(function () { initializeApplication(metaDataJson); }, 100);
 		return;
 	}
@@ -33,7 +33,9 @@ function initializeApplication(metaDataJson) {
 	//create entity model
 	model.initialize(metaDataJson);
 
-	actionController.initialize();
+	if (!lazyLoadingEnabled) {
+		actionController.initialize();
+	}
 	canvasManipulator.initialize();
 
 	//initialize application
