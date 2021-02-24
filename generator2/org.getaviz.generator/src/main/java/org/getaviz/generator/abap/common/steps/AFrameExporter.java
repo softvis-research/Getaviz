@@ -169,7 +169,7 @@ public class AFrameExporter {
             builder.append("\"depth\": " + "\"" + element.getLength() + "\",");
             builder.append("\n");
         } else {
-            builder.append("\"radius\": " + "\"" + (element.getWidth() / 2) + "\"");
+            builder.append("\"radius\": " + "\"" + (element.getWidth() / 2) + "\",");
             builder.append("\n");
         }
 
