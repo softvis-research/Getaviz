@@ -30,20 +30,29 @@ function initializeApplication(metaDataJson) {
 		return;
 	}
 
+	var loaderPromise;
 	//create entity model
-	model.initialize(metaDataJson);
-
-	if (!lazyLoadingEnabled) {
-		actionController.initialize();
+	if (lazyLoadingEnabled) {
+		neo4jModelLoadController.initialize();
+		loaderPromise = neo4jModelLoadController.loadStartMetaData();
+	} else {
+		// this is synchronous, but if we wrap it into a promise we can use the same handling as for the async version
+		loaderPromise = new Promise((resolve) => resolve(model.initialize(metaDataJson)));
 	}
-	canvasManipulator.initialize();
 
-	//initialize application
-	application.initialize();
+	loaderPromise.catch(console.error).then(() => {
+		if (!lazyLoadingEnabled) {
+			actionController.initialize();
+		}
+		canvasManipulator.initialize();
 
-	if (setup.loadPopUp) {
-		$("#RootLoadPopUp").jqxWindow("close");
-	}
+		//initialize application
+		application.initialize();
+
+		if (setup.loadPopUp) {
+			$("#RootLoadPopUp").jqxWindow("close");
+		}
+	});
 }
 
 var application = (function () {
@@ -64,7 +73,7 @@ var application = (function () {
 
 
 	//initilize application
-	//*******************	
+	//*******************
 
 	function initialize() {
 
@@ -74,7 +83,7 @@ var application = (function () {
 			return;
 		}
 
-		//first ui config is initial config		
+		//first ui config is initial config
 
 		if (setup.uis && setup.uis.length && setup.uis[0]) {
 			setup.uis.forEach(function (uiConfig) {
@@ -95,7 +104,7 @@ var application = (function () {
 			loadAndInitializeController(controller);
 		});
 
-		//for ajax loading 
+		//for ajax loading
 		setTimeout(startConfigParsingAfterControllerLoading, 1);
 	}
 
@@ -143,7 +152,7 @@ var application = (function () {
 
 	function resetApplication() {
 
-		//controller reset		
+		//controller reset
 		activeControllers.forEach(function (controllerDiv, controllerObject, map) {
 			if (controllerObject.reset) {
 				controllerObject.reset();
@@ -184,7 +193,7 @@ var application = (function () {
 		var currentUIDIVParent = currentUIDIV.parentElement;
 		currentUIDIVParent.removeChild(currentUIDIV);
 
-		//create new ui		
+		//create new ui
 		currentUIConfig = nextUIConfig;
 		currentUIConfig.uiDIV = uiDIV;
 

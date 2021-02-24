@@ -28,7 +28,7 @@ var model = (function () {
 	let modelElementsByMacro = new Map();
 
 	function initialize(famixModel) {
-		//create initial entites from famix elements 
+		//create initial entites from famix elements
 		famixModel.forEach(function (element) {
 
 			if (element.type === undefined) {
@@ -51,8 +51,8 @@ var model = (function () {
 
 			if (element.created) {
 				//format: YYYY-MM-DD
-				var dateString = element.created.toString().slice(0, 4) + "-" + element.created.toString().slice(4, 6) + "-" + element.created.toString().slice(6, 8); 
-				
+				var dateString = element.created.toString().slice(0, 4) + "-" + element.created.toString().slice(4, 6) + "-" + element.created.toString().slice(6, 8);
+
 				entity.dateOfCreation = new Date(dateString);
 			} else {
 				entity.dateOfCreation = new Date(0);
@@ -60,8 +60,8 @@ var model = (function () {
 
 			if (element.changed) {
 				//format: YYYY-MM-DD
-				var dateString = element.changed.toString().slice(0, 4) + "-" + element.changed.toString().slice(4, 6) + "-" + element.changed.toString().slice(6, 8); 
-				
+				var dateString = element.changed.toString().slice(0, 4) + "-" + element.changed.toString().slice(4, 6) + "-" + element.changed.toString().slice(6, 8);
+
 				entity.dateOfLastChange = new Date(dateString);
 			} else {
 				entity.dateOfLastChange = new Date(0);
@@ -509,7 +509,7 @@ var model = (function () {
 						}
 					});
 					entity.rcData = rcDataABAP;
-					
+
 					break;
 				case "Function":
 					let callsFunction = [];
