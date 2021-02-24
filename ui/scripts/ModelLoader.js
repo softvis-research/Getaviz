@@ -15,23 +15,19 @@ let neo4jModelLoadController = (function () {
     };
 
 
-    // Get metadata on launch
-    async function loadStartMetaData() {
+    // load all model data and metadata that is necessary at launch
+    async function loadInitialData() {
         const cypherQuery = `MATCH (p:ACityRep) RETURN p`;
-        const nodeMetadata = await getMetadataForQuery(cypherQuery);
-        model.initialize(nodeMetadata);
+        const data = await getNeo4jData(cypherQuery);
+        // these can run in parallel and be awaited at the end
+        const metadataDone = getMetadataFromResponse(data).then(model.initialize);
+        const aframeDataDone = getAframeDataFromResponse(data).then(canvasManipulator.addElementsFromAframeData);
+
+        await Promise.all([metadataDone, aframeDataDone]);
     }
 
 
-    // Returning parent nodes metadata, prepared to be inserted into model.js
-    async function getMetadataForQuery(cypherQuery) {
-        let response = await getNeo4jData(cypherQuery);
-        let data = await getMetadataFromResponse(response);
-        return data;
-    }
-
-
-    // Return metadata object from response
+    // get array of each element's parsed metadata
     async function getMetadataFromResponse(response) {
         if (!response[0].data) {
             return [];
@@ -39,6 +35,17 @@ let neo4jModelLoadController = (function () {
 
         return response[0].data.map((obj) => {
             return JSON.parse(obj.row[0].metaData);
+        })
+    }
+
+    // get array of each element's parsed AFrame properties
+    async function getAframeDataFromResponse(response) {
+        if (!response[0].data) {
+            return [];
+        }
+
+        return response[0].data.map((obj) => {
+            return JSON.parse(obj.row[0].aframeProperty);
         })
     }
 
@@ -71,6 +78,6 @@ let neo4jModelLoadController = (function () {
 
     return {
         initialize: initialize,
-        loadStartMetaData: loadStartMetaData,
+        loadInitialData: loadInitialData,
     };
 })();

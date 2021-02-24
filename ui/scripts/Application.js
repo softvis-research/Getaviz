@@ -34,16 +34,16 @@ function initializeApplication(metaDataJson) {
 	//create entity model
 	if (lazyLoadingEnabled) {
 		neo4jModelLoadController.initialize();
-		loaderPromise = neo4jModelLoadController.loadStartMetaData();
+		loaderPromise = neo4jModelLoadController.loadInitialData();
 	} else {
 		// this is synchronous, but if we wrap it into a promise we can use the same handling as for the async version
 		loaderPromise = new Promise((resolve) => resolve(model.initialize(metaDataJson)));
 	}
 
-	loaderPromise.catch(console.error).then(() => {
-		if (!lazyLoadingEnabled) {
+	loaderPromise.then(() => {
+		// if (!lazyLoadingEnabled) {
 			actionController.initialize();
-		}
+		// }
 		canvasManipulator.initialize();
 
 		//initialize application

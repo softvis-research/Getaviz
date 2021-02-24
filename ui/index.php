@@ -199,6 +199,35 @@ if (isset($_GET["lazy"])) {
         $(function(){
             if (!lazyLoadingEnabled) {
                 $("#canvas").load(encodeURI(modelUrl + "/model.html"));
+            } else {
+                // add an empty scene that we can fill later
+                $('#canvas').append(`<a-scene id="${canvasId}" cursor="rayOrigin: mouse" embedded="true" renderer="logarithmicDepthBuffer: true;">
+    <a-assets>
+        <img id="sky" crossorigin="anonymous" src="assets/sky_pano.jpg">
+        <img id="sea" crossorigin="anonymous" src="assets/pool-water.jpg">
+        <img id="ground" crossorigin="anonymous" src="assets/ground.jpg">
+        <a-asset-item id="mountain" src="assets/polyMountain_new_Color.glb"></a-asset-item>
+        <a-asset-item id="cloud_black" src="assets/cloud_black.glb"></a-asset-item>
+    </a-assets>
+    <a-sky src="#sky" radius="7000"></a-sky>
+    <a-plane src="#ground" height="5000" width="5000" rotation="-90 0 0" position="0 0 0" repeat="30 30"></a-plane>
+    <a-entity id="camera" camera="fov: 80; zoom: 1;"
+        position="-20. 140 -20"
+        rotation="0 -90 0"
+        orbit-camera="
+            target: 80 0.0 80;
+            enableDamping: true;
+            dampingFactor: 0.25;
+            rotateSpeed: 0.25;
+            panSpeed: 0.25;
+            invertZoom: true;
+            logPosition: false;
+            minDistance:0;
+            maxDistance:1000;
+            "
+        mouse-cursor="">
+    </a-entity>
+ </a-scene>`);
             }
         });
         var globalCamera;

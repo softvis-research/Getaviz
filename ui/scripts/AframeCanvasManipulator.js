@@ -48,7 +48,7 @@ var canvasManipulator = (function () {
                 width: { type: 'string', default: '' },
                 height: { type: 'string', default: '' },
                 depth: { type: 'string', default: '' },
-                color: { type: 'string', default: '' },            
+                color: { type: 'string', default: '' },
                 shader: { type: 'string', default: '' },
                 flatShading: { type: 'string', default: '' },
                 geometry: { type: 'string', default: '' },
@@ -62,13 +62,13 @@ var canvasManipulator = (function () {
                 // This will be called after the entity has been properly attached and loaded.
                 this.attrValue = ''; // imported payload is in this.data, so we don't need this one
                 Object.keys(this.schema).forEach(key => {
-                    this.el.setAttribute(`${key}`, this.data[key]);                
+                    this.el.setAttribute(`${key}`, this.data[key]);
                 })
-                
+
                 //position = AFRAME.utils.coordinates.parse(this.data['position'].nodeValue);
                 //this.el.attributes['position'] = position;
 
-                
+
                 //document.getElementById(this.data["id"]).setAttribute("position", this.data["position"]); // this does set position as a workaround
                 //document.getElementById(this.data["id"]).setAttribute("position", this.data["position"]);
                 //this.el.setAttribute("position", this.data["position"]);
@@ -81,16 +81,16 @@ var canvasManipulator = (function () {
             schema: {
                 position: { type: 'vec3'}
             },
-            
+
             init: function () {
-                
+
                 var position = AFRAME.utils.coordinates.parse(this.data['position'].nodeValue);
                 this.el.setAttribute("position", position);
                 //this.el.setAttribute("position", this.data['position'].value);
 
                 //this.el.attributes[position] = this.data['position'].nodeValue;
-                
-                
+
+
                 //Funktionieren nicht
                 //document.getElementById(this.data["id"]).setAttribute("position", this.data["position"]); // this does set position as a workaround
                 //document.getElementById(this.data["id"]).setAttribute("position", this.data["position"]);
@@ -374,9 +374,9 @@ var canvasManipulator = (function () {
 
     function hideEntities(entities, controller) {
         //changeVisibilityOfEntities(entities, false, controller);
-        
+
         entities.forEach(function (entity) {
-            
+
             let component = document.getElementById(entity.id);
             if (component === null) {
                 events.log.error.publish({ text: "CanvasManipulator - hideEntities - components for entityIds not found" });
@@ -396,10 +396,10 @@ var canvasManipulator = (function () {
     function showEntities(entities, controller) {
         //changeVisibilityOfEntities(entities, true, controller);
 
-        
-        
+
+
         entities.forEach(function (entity) {
-            
+
             if (!hiddenEntitiesMap.has(entity.id)) {
                 events.log.error.publish({ text: "CanvasManipulator - showEntities - components for entityIds not found" });
                 return;
@@ -417,8 +417,8 @@ var canvasManipulator = (function () {
             else {
                 attributes['position'] = component.attributes['position'];
             }*/
-            
-            
+
+
 
             let entityEl = document.createElement(component.tagName);
             entityEl.setAttribute('set-aframe-attributes', {...attributes});  // these attributes will be set after element is created
@@ -524,7 +524,7 @@ var canvasManipulator = (function () {
         //center.x = object.geometry.boundingSphere.center["x"];
         //center.y = object.geometry.boundingSphere.center["y"];
         //center.z = object.geometry.boundingSphere.center["z"];
- 
+
         //return object.localToWorld(center);
 
         var center = new THREE.Vector3();
@@ -560,6 +560,19 @@ var canvasManipulator = (function () {
         return elementIds;
     }
 
+    function mapAframeDataToHTML(element) {
+        const stringProperties = ['id', 'position', 'height', 'width', 'depth', 'radius', 'color'];
+        const boolProperties = ['shadow'];
+        const htmlProperties = stringProperties.map(prop => (element[prop] ? `${prop}="${element[prop]}"` : ``)).filter(s => s.length).
+            concat(boolProperties.map(prop => (element[prop] ? prop : ``)).filter(s => s.length)).
+            join('\n\t');
+        return `<${element.shape} ${htmlProperties}>\n</${element.shape}>`;
+    }
+
+    function addElementsFromAframeData(dataArray) {
+        document.getElementById(canvasId).insertAdjacentHTML('beforeend', dataArray.map(mapAframeDataToHTML).join('\n'));
+    }
+
     return {
         initialize: initialize,
         reset: reset,
@@ -590,7 +603,9 @@ var canvasManipulator = (function () {
         setCenterOfRotation: setCenterOfRotation,
         getCenterOfEntity: getCenterOfEntity,
 
-        getElementIds: getElementIds
+        getElementIds: getElementIds,
+
+        addElementsFromAframeData: addElementsFromAframeData
     };
 
 })
