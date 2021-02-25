@@ -561,7 +561,7 @@ var canvasManipulator = (function () {
     }
 
     function mapAframeDataToHTML(element) {
-        const stringProperties = ['id', 'position', 'height', 'width', 'depth', 'radius', 'color'];
+        const stringProperties = ['id', 'position', 'height', 'width', 'depth', 'radius', 'color', 'src', 'gltf-model', 'scale', 'rotation'];
         const boolProperties = ['shadow'];
         const htmlProperties = stringProperties.map(prop => (element[prop] ? `${prop}="${element[prop]}"` : ``)).filter(s => s.length).
             concat(boolProperties.map(prop => (element[prop] ? prop : ``)).filter(s => s.length)).

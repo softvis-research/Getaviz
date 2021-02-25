@@ -175,6 +175,22 @@ public class AFrameExporter {
 
         builder.append("\"color\": " + "\"" + element.getColor() + "\",");
         builder.append("\n");
+        if (element.getTextureSource() != null) {
+            builder.append("\"src\": " + "\"" + element.getTextureSource() + "\",");
+            builder.append("\n");
+        }
+        if (element.getRotation() != null) {
+            builder.append("\"rotation\": " + "\"" + element.getRotation() + "\",");
+            builder.append("\n");
+        }
+        if (element.getModel() != null) {
+            builder.append("\"gltf-model\": " + "\"" + element.getModel() + "\",");
+            builder.append("\n");
+        }
+        if (element.getModelScale() != null) {
+            builder.append("\"scale\": " + "\"" + element.getModelScale() + "\",");
+            builder.append("\n");
+        }
         builder.append("\"shadow\": true");
         builder.append("\n");
         builder.append("}");
