@@ -41,9 +41,7 @@ function initializeApplication(metaDataJson) {
 	}
 
 	loaderPromise.then(() => {
-		// if (!lazyLoadingEnabled) {
-			actionController.initialize();
-		// }
+		actionController.initialize();
 		canvasManipulator.initialize();
 
 		//initialize application
@@ -72,7 +70,7 @@ var application = (function () {
 	var canvasElement;
 
 
-	//initilize application
+	//initialize application
 	//*******************
 
 	function initialize() {

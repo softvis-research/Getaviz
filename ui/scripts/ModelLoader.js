@@ -35,7 +35,7 @@ let neo4jModelLoadController = (function () {
 
         return response[0].data.map((obj) => {
             return JSON.parse(obj.row[0].metaData);
-        })
+        });
     }
 
     // get array of each element's parsed AFrame properties
@@ -46,7 +46,7 @@ let neo4jModelLoadController = (function () {
 
         return response[0].data.map((obj) => {
             return JSON.parse(obj.row[0].aframeProperty);
-        })
+        });
     }
 
 
