@@ -37,47 +37,6 @@ var canvasManipulator = (function () {
         //the a-scene resize-handler won't be called properly
         //so we call the resize-handler here again
         window.addEventListener("resize", function() { setTimeout(resizeScene, 100) });
-
-        AFRAME.registerComponent('set-aframe-attributes', {
-            // schema defines properties of element
-            schema: {
-                tag: { type: 'string', default: '' },
-                id: { type: 'string', default: '' },
-                class: { type: 'string', default: '' },
-                position: { type: 'string', default: '' },
-                width: { type: 'string', default: '' },
-                height: { type: 'string', default: '' },
-                depth: { type: 'string', default: '' },
-                color: { type: 'string', default: '' },
-                shader: { type: 'string', default: '' },
-                flatShading: { type: 'string', default: '' },
-                geometry: { type: 'string', default: '' },
-                material: { type: 'string', default: '' },
-                shadow: { type: 'string', default: '' },
-                radius: { type: 'string', default: '' }
-            },
-
-            init: function () {
-                // This will be called after the entity has been properly attached and loaded.
-                this.attrValue = ''; // imported payload is in this.data, so we don't need this one
-                Object.keys(this.schema).forEach(key => {
-                    this.el.setAttribute(`${key}`, this.data[key]);
-                })
-            }
-        });
-        
-        AFRAME.registerComponent('set-position-attribute', {
-            schema: {
-                position: { type: 'vec3'}
-            },
-
-            init: function () {
-
-                let position = AFRAME.utils.coordinates.parse(this.data['position'].nodeValue);
-                this.el.setAttribute("position", position);
-                this.el.flushToDOM();
-            }
-        });
     }
 
     function reset() {
@@ -369,9 +328,9 @@ var canvasManipulator = (function () {
     }
 
     function showEntities(entities, controller) {
+        const sceneEl = document.querySelector('a-scene');
 
         entities.forEach(function (entity) {
-
             if (!hiddenEntitiesMap.has(entity.id)) {
                 events.log.error.publish({ text: "CanvasManipulator - showEntities - components for entityIds not found" });
                 return;
@@ -380,14 +339,13 @@ var canvasManipulator = (function () {
             let component = hiddenEntitiesMap.get(entity.id);
             hiddenEntitiesMap.delete(entity.id);
 
-            let attributes = {};
-            component.getAttributeNames().forEach(function(attribute){attributes[attribute] = component.getAttribute(attribute)});
-            attributes['position'] = component.attributes['position']; // needed as a fix for a bug with getting position
-
+            // removed elements seemingly can't be simply re-inserted, so recreate the element instead
             let entityEl = document.createElement(component.tagName);
-            entityEl.setAttribute('set-aframe-attributes', {...attributes});  // these attributes will be set after element is created
-            entityEl.setAttribute('set-position-attribute', {position: attributes['position']}); // needed as a fix for an AFRAME bug with setting position
-            let sceneEl = document.querySelector('a-scene');
+            for (const curAttribute of component.attributes) {
+                entityEl.setAttribute(curAttribute.name, curAttribute.value);
+            }
+            // flushing is necessary to make AFrame apply the attribute changes (position in particular) to the DOM
+            entityEl.flushToDOM();
             sceneEl.appendChild(entityEl);
         });
     }
@@ -471,9 +429,9 @@ var canvasManipulator = (function () {
     function mapAframeDataToHTML(element) {
         const stringProperties = ['id', 'position', 'height', 'width', 'depth', 'radius', 'color', 'src', 'gltf-model', 'scale', 'rotation'];
         const boolProperties = ['shadow'];
-        const htmlProperties = stringProperties.map(prop => (element[prop] ? `${prop}="${element[prop]}"` : ``)).filter(s => s.length).
-            concat(boolProperties.map(prop => (element[prop] ? prop : ``)).filter(s => s.length)).
-            join('\n\t');
+        const htmlProperties = stringProperties.map(prop => (element[prop] ? `${prop}="${element[prop]}"` : ``)).filter(s => s.length)
+            .concat(boolProperties.map(prop => (element[prop] ? prop : ``)).filter(s => s.length))
+            .join('\n\t');
         return `<${element.shape} ${htmlProperties}>\n</${element.shape}>`;
     }
 
