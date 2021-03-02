@@ -86,6 +86,7 @@ var canvasManipulator = (function () {
 
                 var position = AFRAME.utils.coordinates.parse(this.data['position'].nodeValue);
                 this.el.setAttribute("position", position);
+                this.el.flushToDOM();
                 //this.el.setAttribute("position", this.data['position'].value);
 
                 //this.el.attributes[position] = this.data['position'].nodeValue;
@@ -422,7 +423,7 @@ var canvasManipulator = (function () {
 
             let entityEl = document.createElement(component.tagName);
             entityEl.setAttribute('set-aframe-attributes', {...attributes});  // these attributes will be set after element is created
-            entityEl.setAttribute('set-position-attribute', {...attributes}); // needed as a fix for an AFRAME bug with setting position
+            entityEl.setAttribute('set-position-attribute', {position: attributes['position']}); // needed as a fix for an AFRAME bug with setting position
             let sceneEl = document.querySelector('a-scene');
             sceneEl.appendChild(entityEl);
             //document.getElementById(entity.id).setAttribute("position", component.getAttribute("position")); // this does set position as a workaround
