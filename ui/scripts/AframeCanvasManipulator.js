@@ -20,18 +20,11 @@ var canvasManipulator = (function () {
 
     var hiddenEntitiesMap = new Map();
 
-    var initialCameraView = {};
 
     function initialize() {
 
         scene = document.querySelector("a-scene");
-
-        /*
-        initialCameraView.target = globalCamera.target;
-        initialCameraView.position = globalCamera.object.position;
-        initialCameraView.spherical = globalCamera.spherical;
-        */
-
+       
         //this is a workaround for a bug of a-frame
         //if the window size is changed from/to max size,
         //the a-scene resize-handler won't be called properly
@@ -40,16 +33,7 @@ var canvasManipulator = (function () {
     }
 
     function reset() {
-        /*
-        let offset = new THREE.Vector3();
-        offset.subVectors(initialCameraView.target, globalCamera.target).multiplyScalar(globalCamera.data.panSpeed);
-        globalCamera.panOffset.add(offset);
-
-        globalCamera.sphericalDelta.phi = 0.25 * (initialCameraView.spherical.phi - globalCamera.spherical.phi);
-        globalCamera.sphericalDelta.theta = 0.25 * (initialCameraView.spherical.theta - globalCamera.spherical.theta);
-
-        globalCamera.scale = initialCameraView.spherical.radius/globalCamera.spherical.radius;
-        */
+        
     }
 
     function resizeScene() {
@@ -93,15 +77,6 @@ var canvasManipulator = (function () {
                 }
             );
 
-            // if (entity.originalTransparency === undefined) {
-            //     entity.originalTransparency = {};
-            //     entity.currentTransparency = {};
-            //     if (component.getAttribute("material").opacity) {
-            //         entity.originalTransparency = 1 - component.getAttribute("material").opacity;
-            //     }
-            // }
-            // entity.currentTransparency = transparency;
-
             setTransparency(component, transparency);
         });
     }
@@ -133,10 +108,6 @@ var canvasManipulator = (function () {
                 }
                 setTransparency(component, transparencyList[transparencyList.length - 1].value);
             }
-
-            // if (!(entity.originalTransparency == undefined)) {
-            //     entity.currentTransparency = entity.originalTransparency;
-            // }
         });
     }
 
@@ -257,11 +228,6 @@ var canvasManipulator = (function () {
                 }
             );
 
-            // if (entity.originalColor == undefined) {
-            //     entity.originalColor = component.getAttribute("color");
-            // }
-            // entity.currentColor = color;
-
             setColor(component, color);
         }
         );
@@ -294,11 +260,7 @@ var canvasManipulator = (function () {
                 }
                 setColor(component, colorList[colorList.length - 1].value);
             }
-
-            // if (entity.originalColor) {
-            //     entity.currentColor = entity.originalColor;
-            //     setColor(component, entity.originalColor);
-            // }
+            
         });
     }
 
