@@ -27,10 +27,35 @@ var model = (function () {
 	let macrosById = new Map();
 	let modelElementsByMacro = new Map();
 
-	function initialize(famixModel) {
-		//create initial entites from famix elements
-		famixModel.forEach(function (element) {
+	function initialize() {
+		//subscribe for changing status of entities on events
+		let eventArray = Object.keys(states);
+		eventArray.forEach(function (eventName) {
 
+			let event = events[eventName];
+
+			let eventMap = new Map();
+			eventEntityMap.set(event, eventMap);
+
+			event.on.subscribe(function (applicationEvent) {
+				applicationEvent.entities.forEach(function (entity) {
+					entity[event.name] = true;
+					eventMap.set(entity.id, entity);
+				});
+			});
+
+			event.off.subscribe(function (applicationEvent) {
+				applicationEvent.entities.forEach(function (entity) {
+					entity[event.name] = false;
+					eventMap.delete(entity.id);
+				});
+			});
+		});
+	}
+
+	function createEntititesFromMetadata(metadataArray) {
+		const newElements = [];
+		metadataArray.forEach(function (element) {
 			if (element.type === undefined) {
 				console.log("element.type undefined");
 			}
@@ -130,7 +155,6 @@ var model = (function () {
 					}
 					break;
                 case "Reference":
-
 					if (element.rcData) {
 						entity.rcData = element.rcData.split(",");
 					} else {
@@ -348,10 +372,14 @@ var model = (function () {
 			}
 
 			entitiesById.set(element.id, entity);
+			newElements.push(entity);
 		});
 
-		//set object references
-		entitiesById.forEach(function (entity) {
+		setReferencesToEntities(newElements);
+	}
+
+	function setReferencesToEntities(entities) {
+		entities.forEach(function (entity) {
 
 			if (entity.belongsTo === undefined || entity.belongsTo === "root") {
 				delete entity.belongsTo;
@@ -599,32 +627,6 @@ var model = (function () {
 		//set all parents attribute
 		entitiesById.forEach(function (entity) {
 			entity.allParents = getAllParentsOfEntity(entity);
-		});
-
-
-
-		//subscribe for changing status of entities on events
-		let eventArray = Object.keys(states);
-		eventArray.forEach(function (eventName) {
-
-			let event = events[eventName];
-
-			let eventMap = new Map();
-			eventEntityMap.set(event, eventMap);
-
-			event.on.subscribe(function (applicationEvent) {
-				applicationEvent.entities.forEach(function (entity) {
-					entity[event.name] = true;
-					eventMap.set(entity.id, entity);
-				});
-			});
-
-			event.off.subscribe(function (applicationEvent) {
-				applicationEvent.entities.forEach(function (entity) {
-					entity[event.name] = false;
-					eventMap.delete(entity.id);
-				});
-			});
 		});
 	}
 
@@ -914,6 +916,7 @@ var model = (function () {
 		getModelElementsByMacro: getModelElementsByMacro,
 		createEntity: createEntity,
 		removeEntity: removeEntity,
+		createEntititesFromMetadata: createEntititesFromMetadata,
 
 		addVersion: addVersion,
 		removeVersion: removeVersion,

@@ -6,7 +6,7 @@ var packageExplorerController = (function () {
 	let tree;
 
 	var entityTypesForSearch = ["Namespace", "Class", "Interface", "Report", "FunctionGroup"];
-	
+
     var elementsMap = new Map();
 
 		const domIDs = {
@@ -16,17 +16,13 @@ var packageExplorerController = (function () {
 	}
 
 	let controllerConfig = {
-
 		elements: [],
-
 		elementsSelectable: true,
 
 		showSearchField: true,
 		entityTypesForSearch: entityTypesForSearch,
 
 		useMultiselect: true,
-
-
 	};
 
 	var selectedEntities = [];
@@ -129,18 +125,17 @@ var packageExplorerController = (function () {
 		});
 
         $("#" + domIDs.searchInput).on("typeahead:selected", function(event, suggestion) {
-			publishSelectEvent(undefined, undefined, { id: suggestion.id }, undefined);		
-        });	
+			publishSelectEvent(undefined, undefined, { id: suggestion.id }, undefined);
+        });
 	}
 
 	function prepareTreeView() {
 
-		let entities = model.getCodeEntities();
-		items = [];
+		const entities = model.getCodeEntities();
+		const items = [];
 
 		//build items for ztree
 		entities.forEach(function (entity) {
-			var item;
 			if(elementsMap.has(entity.type)){
 				var icon = elementsMap.get(entity.type).icon;
 
@@ -148,21 +143,21 @@ var packageExplorerController = (function () {
 				if (entity.belongsTo !== undefined) {
 					parentId = entity.belongsTo.id;
 				}
-				item = {
+				const item = {
 					id: entity.id,
 					open: false,
-					checked: true,
+					checked: !canvasManipulator.elementIsHidden(entity.id),
 					parentId: parentId,
 					name: entity.name,
 					type: entity.type,
-					icon: icon, 
+					icon: icon,
 					iconSkin: "zt"
 				};
 				items.push(item);
 			}
 		});
 
-		//Sortierung nach Typ und Alphanumerisch
+		// sort by type, then alphanumerically
 		items.sort(function (a, b) {
 
 			var aSortOrder = elementsMap.get(a.type).sortOrder;
@@ -170,7 +165,7 @@ var packageExplorerController = (function () {
 
 			var bSortOrder = elementsMap.get(b.type).sortOrder;
 			var sortStringB = bSortOrder + b.name.toUpperCase();
-					
+
 
 			if (sortStringA < sortStringB) {
 				return -1;
@@ -180,7 +175,7 @@ var packageExplorerController = (function () {
 			}
 
 			return 0;
-		
+
 		});
 
 		//zTree settings
@@ -214,17 +209,17 @@ var packageExplorerController = (function () {
 	}
 
 	function zTreeOnCheck(event, treeId, treeNode) {
-		
-		//node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes	
+
+		//node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes
 
 		var entities = [];
-	
+
 		var entity = model.getEntityById(treeNode.id);
 		entities.push(entity);
 
 		var children = model.getAllChildrenOfEntity(entity);
 		entities = entities.concat(children);
-			
+
 
 		var applicationEvent = {
 			sender: packageExplorerController,

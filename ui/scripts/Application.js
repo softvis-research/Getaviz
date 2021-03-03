@@ -30,6 +30,8 @@ function initializeApplication(metaDataJson) {
 		return;
 	}
 
+	model.initialize();
+
 	var loaderPromise;
 	//create entity model
 	if (lazyLoadingEnabled) {
@@ -37,7 +39,7 @@ function initializeApplication(metaDataJson) {
 		loaderPromise = neo4jModelLoadController.loadInitialData();
 	} else {
 		// this is synchronous, but if we wrap it into a promise we can use the same handling as for the async version
-		loaderPromise = new Promise((resolve) => resolve(model.initialize(metaDataJson)));
+		loaderPromise = new Promise((resolve) => resolve(model.createEntititesFromMetadata(metaDataJson)));
 	}
 
 	loaderPromise.then(() => {

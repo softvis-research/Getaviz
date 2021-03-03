@@ -24,7 +24,7 @@ var canvasManipulator = (function () {
     function initialize() {
 
         scene = document.querySelector("a-scene");
-       
+
         //this is a workaround for a bug of a-frame
         //if the window size is changed from/to max size,
         //the a-scene resize-handler won't be called properly
@@ -33,7 +33,7 @@ var canvasManipulator = (function () {
     }
 
     function reset() {
-        
+
     }
 
     function resizeScene() {
@@ -260,7 +260,7 @@ var canvasManipulator = (function () {
                 }
                 setColor(component, colorList[colorList.length - 1].value);
             }
-            
+
         });
     }
 
@@ -310,6 +310,10 @@ var canvasManipulator = (function () {
             entityEl.flushToDOM();
             sceneEl.appendChild(entityEl);
         });
+    }
+
+    function elementIsHidden(elementId) {
+        return hiddenEntitiesMap.has(elementId);
     }
 
     function highlightEntities(entities, color, controller) {
@@ -398,7 +402,17 @@ var canvasManipulator = (function () {
     }
 
     function addElementsFromAframeData(dataArray) {
-        document.getElementById(canvasId).insertAdjacentHTML('beforeend', dataArray.map(mapAframeDataToHTML).join('\n'));
+        const generatedHtml = dataArray.map(mapAframeDataToHTML);
+        document.getElementById(canvasId).insertAdjacentHTML('beforeend', generatedHtml);
+    }
+
+    function loadAsHiddenFromAframeData(dataArray) {
+        for (const jsonElement of dataArray) {
+            // helper element to transform the HTML string into an HTMLElement
+            const template = document.createElement('template');
+            template.innerHTML = mapAframeDataToHTML(jsonElement);
+            hiddenEntitiesMap.set(jsonElement.id, template.content.firstChild);
+        }
     }
 
     return {
@@ -419,6 +433,7 @@ var canvasManipulator = (function () {
 
         hideEntities: hideEntities,
         showEntities: showEntities,
+        elementIsHidden: elementIsHidden,
 
         highlightEntities: highlightEntities,
         unhighlightEntities: unhighlightEntities,
@@ -433,7 +448,8 @@ var canvasManipulator = (function () {
 
         getElementIds: getElementIds,
 
-        addElementsFromAframeData: addElementsFromAframeData
+        addElementsFromAframeData: addElementsFromAframeData,
+        loadAsHiddenFromAframeData: loadAsHiddenFromAframeData
     };
 
 })

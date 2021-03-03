@@ -17,11 +17,14 @@ let neo4jModelLoadController = (function () {
 
     // load all model data and metadata that is necessary at launch
     async function loadInitialData() {
-        const cypherQuery = `MATCH (p:ACityRep) RETURN p`;
-        const data = await getNeo4jData(cypherQuery);
+        const data = await loadRootNodes();
+        addNodesAsHidden(data);
+    }
+
+    async function addNodesAsHidden(nodeData) {
         // these can run in parallel and be awaited at the end
-        const metadataDone = getMetadataFromResponse(data).then(model.initialize);
-        const aframeDataDone = getAframeDataFromResponse(data).then(canvasManipulator.addElementsFromAframeData);
+        const metadataDone = getMetadataFromResponse(nodeData).then(model.createEntititesFromMetadata);
+        const aframeDataDone = getAframeDataFromResponse(nodeData).then(canvasManipulator.loadAsHiddenFromAframeData);
 
         await Promise.all([metadataDone, aframeDataDone]);
     }
@@ -49,6 +52,9 @@ let neo4jModelLoadController = (function () {
         });
     }
 
+    async function loadRootNodes() {
+        return await getNeo4jData(`MATCH (n:ACityRep) WHERE NOT ()-[:CHILD]->(n) RETURN n`);
+    }
 
     // Universal method to load a data from Neo4j using imported cypher-query
     async function getNeo4jData(cypherQuery) {
