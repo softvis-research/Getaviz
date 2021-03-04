@@ -17,18 +17,55 @@ let neo4jModelLoadController = (function () {
 
     // load all model data and metadata that is necessary at launch
     async function loadInitialData() {
-        const data = await loadRootNodes();
-        addNodesAsHidden(data);
+        const data = await queryRootNodes();
+        const createdEntities = await addNodesAsHidden(data);
+        events.loaded.on.publish({
+            entities: createdEntities,
+            hidden: true
+        });
     }
 
-    async function addNodesAsHidden(nodeData) {
+    // load all nodes that are (direct or indirect) children of or contained by the given root
+    async function loadAllChildrenOf(entityId, loadAsHidden) {
+        const nodeData = await queryAllChildrenOf(entityId);
+        let createdEntities;
+        if (loadAsHidden) {
+            createdEntities = await addNodesAsHidden(nodeData, false);
+        } else {
+            createdEntities = await addNodes(nodeData);
+        }
+
+        const parentEntity = model.getEntityById(entityId);
+        parentEntity.hasUnloadedChildren = false;
+
+        events.loaded.on.publish({
+            entities: createdEntities,
+            hidden: loadAsHidden,
+            parentId: entityId
+        });
+    }
+
+    async function addNodesAsHidden(nodeData, childrenNotYetLoaded = true) {
         // these can run in parallel and be awaited at the end
-        const metadataDone = getMetadataFromResponse(nodeData).then(model.createEntititesFromMetadata);
-        const aframeDataDone = getAframeDataFromResponse(nodeData).then(canvasManipulator.loadAsHiddenFromAframeData);
+        const metadataDone = getMetadataFromResponse(nodeData)
+            .then((data) => model.createEntititesFromMetadata(data, childrenNotYetLoaded));
+        const aframeDataDone = getAframeDataFromResponse(nodeData)
+            .then(canvasManipulator.loadAsHiddenFromAframeData);
 
         await Promise.all([metadataDone, aframeDataDone]);
+        return metadataDone;
     }
 
+    async function addNodes(nodeData) {
+        // these can run in parallel and be awaited at the end
+        const metadataDone = getMetadataFromResponse(nodeData)
+            .then(model.createEntititesFromMetadata);
+        const aframeDataDone = getAframeDataFromResponse(nodeData)
+            .then(canvasManipulator.addElementsFromAframeData);
+
+        await Promise.all([metadataDone, aframeDataDone]);
+        return metadataDone;
+    }
 
     // get array of each element's parsed metadata
     async function getMetadataFromResponse(response) {
@@ -52,8 +89,12 @@ let neo4jModelLoadController = (function () {
         });
     }
 
-    async function loadRootNodes() {
+    async function queryRootNodes() {
         return await getNeo4jData(`MATCH (n:ACityRep) WHERE NOT ()-[:CHILD]->(n) RETURN n`);
+    }
+
+    async function queryAllChildrenOf(entityId) {
+        return await getNeo4jData(`MATCH ({hash: "${entityId}"})-[:CHILD|CONTAINS*1..]->(n:ACityRep) RETURN n`);
     }
 
     // Universal method to load a data from Neo4j using imported cypher-query
@@ -85,5 +126,6 @@ let neo4jModelLoadController = (function () {
     return {
         initialize: initialize,
         loadInitialData: loadInitialData,
+        loadAllChildrenOf: loadAllChildrenOf,
     };
 })();

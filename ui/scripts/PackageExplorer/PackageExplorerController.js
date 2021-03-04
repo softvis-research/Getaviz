@@ -9,7 +9,7 @@ var packageExplorerController = (function () {
 
     var elementsMap = new Map();
 
-		const domIDs = {
+	const domIDs = {
 		zTreeDiv: "zTreeDiv",
 		searchDiv: "searchDiv",
 		searchInput: "searchField"
@@ -80,6 +80,7 @@ var packageExplorerController = (function () {
 
 		events.selected.on.subscribe(onEntitySelected);
 		events.selected.off.subscribe(onEntityUnselected);
+		events.loaded.on.subscribe(onEntitiesLoaded);
 	}
 
 	function reset() {
@@ -132,9 +133,41 @@ var packageExplorerController = (function () {
 	function prepareTreeView() {
 
 		const entities = model.getCodeEntities();
-		const items = [];
+		const items = createZTreeElements(entities);
 
-		//build items for ztree
+		//zTree settings
+		var settings = {
+			check: {
+				enable: controllerConfig.elementsSelectable,
+				chkboxType: { "Y": "ps", "N": "s" }
+			},
+			data: {
+				simpleData: {
+					enable: true,
+					idKey: "id",
+					pIdKey: "parentId",
+					rootPId: ""
+				}
+			},
+			callback: {
+				onCheck: zTreeOnCheck,
+				onClick: publishSelectEvent,
+				onExpand: zTreeOnExpand,
+			},
+			view: {
+				showLine: false,
+				showIcon: true,
+				selectMulti: false
+			}
+
+		};
+
+		//create zTree
+		tree = $.fn.zTree.init($(jQPackageExplorerTree), settings, items);
+	}
+
+	function createZTreeElements(entities) {
+		const items = [];
 		entities.forEach(function (entity) {
 			if(elementsMap.has(entity.type)){
 				var icon = elementsMap.get(entity.type).icon;
@@ -154,6 +187,18 @@ var packageExplorerController = (function () {
 					iconSkin: "zt"
 				};
 				items.push(item);
+
+				if (entity.hasUnloadedChildren) {
+					const placeholderItem = {
+						id: entity.id + "-children-placeholder",
+						open: false,
+						checked: false,
+						parentId: entity.id,
+						name: "Loading children...",
+						type: entity.type
+					};
+					items.push(placeholderItem);
+				}
 			}
 		});
 
@@ -166,7 +211,6 @@ var packageExplorerController = (function () {
 			var bSortOrder = elementsMap.get(b.type).sortOrder;
 			var sortStringB = bSortOrder + b.name.toUpperCase();
 
-
 			if (sortStringA < sortStringB) {
 				return -1;
 			}
@@ -175,53 +219,20 @@ var packageExplorerController = (function () {
 			}
 
 			return 0;
-
 		});
 
-		//zTree settings
-		var settings = {
-			check: {
-				enable: controllerConfig.elementsSelectable,
-				chkboxType: { "Y": "ps", "N": "s" }
-			},
-			data: {
-				simpleData: {
-					enable: true,
-					idKey: "id",
-					pIdKey: "parentId",
-					rootPId: ""
-				}
-			},
-			callback: {
-				onCheck: zTreeOnCheck,
-				onClick: publishSelectEvent,
-			},
-			view: {
-				showLine: false,
-				showIcon: true,
-				selectMulti: false
-			}
-
-		};
-
-		//create zTree
-		tree = $.fn.zTree.init($(jQPackageExplorerTree), settings, items);
+		return items;
 	}
 
 	function zTreeOnCheck(event, treeId, treeNode) {
 
 		//node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes
 
-		var entities = [];
+		const entity = model.getEntityById(treeNode.id);
+		const children = model.getAllChildrenOfEntity(entity);
+		const entities = [entity, ...children];
 
-		var entity = model.getEntityById(treeNode.id);
-		entities.push(entity);
-
-		var children = model.getAllChildrenOfEntity(entity);
-		entities = entities.concat(children);
-
-
-		var applicationEvent = {
+		const applicationEvent = {
 			sender: packageExplorerController,
 			entities: entities
 		};
@@ -230,8 +241,11 @@ var packageExplorerController = (function () {
 			events.filtered.on.publish(applicationEvent);
 		} else {
 			events.filtered.off.publish(applicationEvent);
-		}
 
+			if (entity.hasUnloadedChildren) {
+				neo4jModelLoadController.loadAllChildrenOf(entity.id, false);
+			}
+		}
 	}
 
 	function publishSelectEvent(treeEvent, treeId, treeNode, eventObject) {
@@ -264,9 +278,34 @@ var packageExplorerController = (function () {
 			var selectEvent = {
 				sender: packageExplorerController,
 				entities: newSelectedEntities
-
 			};
 			events.selected.on.publish(selectEvent);
+		}
+	}
+
+	function zTreeOnExpand(event, treeId, treeNode) {
+		const entity = model.getEntityById(treeNode.id);
+		if (!entity.hasUnloadedChildren) return;
+
+		console.log("expand clicked, getting children of " + treeNode.id);
+		neo4jModelLoadController.loadAllChildrenOf(entity.id, true);
+	}
+
+	function onEntitiesLoaded(applicationEvent) {
+		console.log(applicationEvent);
+		if (applicationEvent.parentId) {
+			// we were loading child elements
+			const parentTreeElem = tree.getNodeByParam('id', applicationEvent.parentId);
+			// store the placeholder first and remove it only afterwards, so the tree doesn't collapse due to lack of children
+			const placeholderToRemove = parentTreeElem.children[0];
+			const newChildTreeElements = createZTreeElements(applicationEvent.entities);
+			tree.addNodes(parentTreeElem, 0, newChildTreeElements, true);
+			if (placeholderToRemove) {
+				tree.removeNode(placeholderToRemove);
+			}
+		} else {
+			// we were loading root elements (at startup)
+			// this appears to already be happening on its own?
 		}
 	}
 

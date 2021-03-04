@@ -11,7 +11,8 @@ var model = (function () {
 		componentSelected: { name: "componentSelected" },
 		antipattern: { name: "antipattern" },
 		versionSelected: { name: "versionSelected" },
-		macroChanged: { name: "macroChanged" }
+		macroChanged: { name: "macroChanged" },
+		loaded: { name: "loaded"},
 	};
 
 	let entitiesById = new Map();
@@ -53,7 +54,7 @@ var model = (function () {
 		});
 	}
 
-	function createEntititesFromMetadata(metadataArray) {
+	function createEntititesFromMetadata(metadataArray, childrenNotYetLoaded = false) {
 		const newElements = [];
 		metadataArray.forEach(function (element) {
 			if (element.type === undefined) {
@@ -73,6 +74,8 @@ var model = (function () {
 			);
 
 			entity.isTransparent = false;
+
+			entity.hasUnloadedChildren = childrenNotYetLoaded;
 
 			if (element.created) {
 				//format: YYYY-MM-DD
@@ -368,7 +371,7 @@ var model = (function () {
 					entity.filename = element.filename;
 					break;
 				default:
-					return;
+					break;
 			}
 
 			entitiesById.set(element.id, entity);
@@ -376,6 +379,7 @@ var model = (function () {
 		});
 
 		setReferencesToEntities(newElements);
+		return newElements;
 	}
 
 	function setReferencesToEntities(entities) {
