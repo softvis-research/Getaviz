@@ -168,6 +168,11 @@ var relationController = function () {
 					}
 				}
 
+				if (canvasManipulator.elementIsHidden(relatedEntity.id)) {
+					events.log.info.publish({ text: "connector - onRelationsChanged - element hidden" });
+					return;
+				}
+
 				//create model entity
 				var relation = model.createEntity(
 					"Relation",
