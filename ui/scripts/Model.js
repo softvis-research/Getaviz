@@ -12,7 +12,7 @@ var model = (function () {
 		antipattern: { name: "antipattern" },
 		versionSelected: { name: "versionSelected" },
 		macroChanged: { name: "macroChanged" },
-		loaded: { name: "loaded"},
+		loaded: { name: "loaded" },
 	};
 
 	let entitiesById = new Map();
@@ -382,6 +382,11 @@ var model = (function () {
 		return newElements;
 	}
 
+	function replaceIdsWithReferences(parentObject, propertyName) {
+		const propertiesAsReferences = parentObject[propertyName].map(id => entitiesById.get(id.trim()));
+		parentObject[propertyName] = propertiesAsReferences.filter(entity => entity !== undefined);
+	}
+
 	function setReferencesToEntities(entities) {
 		entities.forEach(function (entity) {
 
@@ -397,9 +402,6 @@ var model = (function () {
 				}
 			}
 
-			let superTypes = [];
-			let subTypes = [];
-
 			switch (entity.type) {
 				case "Project":
 				case "text":
@@ -408,35 +410,13 @@ var model = (function () {
 					break;
 
 				case "component":
-					let components = [];
-					entity.components.forEach(function (componentId) {
-						const relatedEntity = entitiesById.get(componentId.trim());
-						if (relatedEntity !== undefined) {
-							components.push(relatedEntity);
-						}
-					});
-					entity.components = components;
+					replaceIdsWithReferences(entity, 'components');
 					break;
 
 
 				case "Class":
-					superTypes = [];
-					entity.superTypes.forEach(function (superTypeId) {
-						const relatedEntity = entitiesById.get(superTypeId.trim());
-						if (relatedEntity !== undefined) {
-							superTypes.push(relatedEntity);
-						}
-					});
-					entity.superTypes = superTypes;
-
-					subTypes = [];
-					entity.subTypes.forEach(function (subTypesId) {
-						const relatedEntity = entitiesById.get(subTypesId.trim());
-						if (relatedEntity !== undefined) {
-							subTypes.push(relatedEntity);
-						}
-					});
-					entity.subTypes = subTypes;
+					replaceIdsWithReferences(entity, 'superTypes');
+					replaceIdsWithReferences(entity, 'subTypes');
 
 					let reaches = [];
 					entity.reaches.forEach(function (reachesId) {
@@ -447,129 +427,36 @@ var model = (function () {
 						}
 					});
 					entity.reaches = reaches;
-					let antipatterns = [];
-					entity.antipattern.forEach(function (antipatternID
-					) {
-						let antipattern = entitiesById.get(antipatternID.trim());
-						if (antipattern !== undefined) {
-							antipatterns.push(antipattern);
-						}
-					});
-					entity.antipattern = antipatterns;
 
-					let roles = [];
-					entity.roles.forEach(function (roleID
-					) {
-						//var role = entitiesById.get(roleID.trim());
-						const role = roleID.trim();
-						if (role !== undefined) {
-							roles.push(role);
-						}
-					});
-					entity.roles = roles;
+					replaceIdsWithReferences(entity, 'antipattern');
+
+					entity.roles = entity.roles.map(roleId => roleId.trim());
 
 					break;
 
 				case "ParameterizableClass":
-					superTypes = [];
-					entity.superTypes.forEach(function (superTypeId) {
-						let relatedEntity = entitiesById.get(superTypeId.trim());
-						if (relatedEntity !== undefined) {
-							superTypes.push(relatedEntity);
-						}
-					});
-					entity.superTypes = superTypes;
-
-					subTypes = [];
-					entity.subTypes.forEach(function (subTypesId) {
-						let relatedEntity = entitiesById.get(subTypesId.trim());
-						if (relatedEntity !== undefined) {
-							subTypes.push(relatedEntity);
-						}
-					});
-					entity.subTypes = subTypes;
-
+					replaceIdsWithReferences(entity, 'superTypes');
+					replaceIdsWithReferences(entity, 'subTypes');
 					break;
 
 				case "Attribute":
-					let accessedBy = [];
-					entity.accessedBy.forEach(function (accessedById) {
-						let relatedEntity = entitiesById.get(accessedById.trim());
-						if (relatedEntity !== undefined) {
-							accessedBy.push(relatedEntity);
-						}
-					});
-					entity.accessedBy = accessedBy;
-
+					replaceIdsWithReferences(entity, 'accessedBy');
 					break;
 
 				case "Method":
-					let calls = [];
-					entity.calls.forEach(function (callsId) {
-						let relatedEntity = entitiesById.get(callsId.trim());
-						if (relatedEntity !== undefined) {
-							calls.push(relatedEntity);
-						}
-					});
-					entity.calls = calls;
-
-					let calledBy = [];
-					entity.calledBy.forEach(function (calledById) {
-						let relatedEntity = entitiesById.get(calledById.trim());
-						if (relatedEntity !== undefined) {
-							calledBy.push(relatedEntity);
-						}
-					});
-					entity.calledBy = calledBy;
-
-					let accesses = [];
-					entity.accesses.forEach(function (accessesId) {
-						let relatedEntity = entitiesById.get(accessesId.trim());
-						if (relatedEntity !== undefined) {
-							accesses.push(relatedEntity);
-						}
-					});
-					entity.accesses = accesses;
-
+					replaceIdsWithReferences(entity, 'calls');
+					replaceIdsWithReferences(entity, 'calledBy');
+					replaceIdsWithReferences(entity, 'accesses');
 					break;
+
 				case "Reference":
-					let rcDataABAP = [];
-					entity.rcData.forEach(function (rcDataId) {
-						let relatedEntity = entitiesById.get(rcDataId.trim());
-						if (relatedEntity !== undefined) {
-							rcDataABAP.push(relatedEntity);
-						}
-					});
-					entity.rcData = rcDataABAP;
-
+					replaceIdsWithReferences(entity, 'rcData');
 					break;
+
 				case "Function":
-					let callsFunction = [];
-					entity.calls.forEach(function (callsId) {
-						let relatedEntity = entitiesById.get(callsId.trim());
-						if (relatedEntity !== undefined) {
-							callsFunction.push(relatedEntity);
-						}
-					});
-					entity.calls = callsFunction;
-
-					let calledByFunction = [];
-					entity.calledBy.forEach(function (calledById) {
-						let relatedEntity = entitiesById.get(calledById.trim());
-						if (relatedEntity !== undefined) {
-							calledByFunction.push(relatedEntity);
-						}
-					});
-					entity.calledBy = calledByFunction;
-
-					let functionAccesses = [];
-					entity.accesses.forEach(function (accessesId) {
-						let relatedEntity = entitiesById.get(accessesId.trim());
-						if (relatedEntity !== undefined && !functionAccesses.includes(relatedEntity)) {
-							functionAccesses.push(relatedEntity);
-						}
-					});
-					entity.accesses = functionAccesses;
+					replaceIdsWithReferences(entity, 'calls');
+					replaceIdsWithReferences(entity, 'calledBy');
+					replaceIdsWithReferences(entity, 'accesses');
 
 					if (entity.dependsOn !== undefined && entity.dependsOn !== "") {
 						retrieveAllUsedMacros(entity.dependsOn, entity.id);
@@ -584,24 +471,10 @@ var model = (function () {
 					}
 				case "FunctionModule":
 				case "FormRoutine":
-					let callsABAP = [];
-					entity.calls.forEach(function (callsId) {
-						let relatedEntity = entitiesById.get(callsId.trim());
-						if (relatedEntity !== undefined) {
-							callsABAP.push(relatedEntity);
-						}
-					});
-					entity.calls = callsABAP;
-
-					let calledByABAP = [];
-					entity.calledBy.forEach(function (calledById) {
-						let relatedEntity = entitiesById.get(calledById.trim());
-						if (relatedEntity !== undefined) {
-							calledByABAP.push(relatedEntity);
-						}
-					});
-					entity.calledBy = calledByABAP;
+					replaceIdsWithReferences(entity, 'calls');
+					replaceIdsWithReferences(entity, 'calledBy');
 					break;
+
 				case "Variable":
 					let variableAccessedBy = [];
 					entity.accessedBy.forEach(function (accessedById) {
@@ -616,6 +489,7 @@ var model = (function () {
 						retrieveAllUsedMacros(entity.dependsOn, entity.id);
 					}
 					break;
+
 				case "Struct":
 				case "Union":
 				case "Enum":

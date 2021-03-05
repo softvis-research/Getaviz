@@ -18,7 +18,7 @@ let neo4jModelLoadController = (function () {
     // load all model data and metadata that is necessary at launch
     async function loadInitialData() {
         const data = await queryRootNodes();
-        const createdEntities = await addNodesAsHidden(data);
+        const createdEntities = await addNodesAsHidden(data, true);
         events.loaded.on.publish({
             entities: createdEntities,
             hidden: true

@@ -287,12 +287,10 @@ var packageExplorerController = (function () {
 		const entity = model.getEntityById(treeNode.id);
 		if (!entity.hasUnloadedChildren) return;
 
-		console.log("expand clicked, getting children of " + treeNode.id);
 		neo4jModelLoadController.loadAllChildrenOf(entity.id, true);
 	}
 
 	function onEntitiesLoaded(applicationEvent) {
-		console.log(applicationEvent);
 		if (applicationEvent.parentId) {
 			// we were loading child elements
 			const parentTreeElem = tree.getNodeByParam('id', applicationEvent.parentId);
