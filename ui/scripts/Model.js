@@ -54,7 +54,7 @@ var model = (function () {
 		});
 	}
 
-	function createEntititesFromMetadata(metadataArray, childrenNotYetLoaded = false) {
+	function createEntititesFromMetadata(metadataArray, areChildrenLoaded = true) {
 		const newElements = [];
 		metadataArray.forEach(function (element) {
 			if (element.type === undefined) {
@@ -75,7 +75,7 @@ var model = (function () {
 
 			entity.isTransparent = false;
 
-			entity.hasUnloadedChildren = childrenNotYetLoaded;
+			entity.hasUnloadedChildren = !areChildrenLoaded;
 
 			if (element.created) {
 				//format: YYYY-MM-DD

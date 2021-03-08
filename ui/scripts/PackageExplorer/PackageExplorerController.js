@@ -302,8 +302,7 @@ var packageExplorerController = (function () {
 				tree.removeNode(placeholderToRemove);
 			}
 		} else {
-			// we were loading root elements (at startup)
-			// this appears to already be happening on its own?
+			// root elements are currently only loaded on startup, which is fixed and doesn't go through the event system
 		}
 	}
 
