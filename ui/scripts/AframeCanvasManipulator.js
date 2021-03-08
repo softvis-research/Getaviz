@@ -274,13 +274,6 @@ var canvasManipulator = (function () {
     }
 
     function hideEntities(entities, controller) {
-        var unselectEvent = {
-            sender: canvasFilterController,
-            entities: entities
-        }
-
-        events.selected.off.publish(unselectEvent);
-
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
             if (component === null) {
@@ -315,10 +308,6 @@ var canvasManipulator = (function () {
             entityEl.flushToDOM();
             sceneEl.appendChild(entityEl);
         });
-    }
-
-    function elementIsHidden(elementId) {
-        return hiddenEntitiesMap.has(elementId);
     }
 
     function highlightEntities(entities, color, controller) {
@@ -438,7 +427,6 @@ var canvasManipulator = (function () {
 
         hideEntities: hideEntities,
         showEntities: showEntities,
-        elementIsHidden: elementIsHidden,
 
         highlightEntities: highlightEntities,
         unhighlightEntities: unhighlightEntities,

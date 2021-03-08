@@ -179,7 +179,7 @@ var packageExplorerController = (function () {
 				const item = {
 					id: entity.id,
 					open: false,
-					checked: !canvasManipulator.elementIsHidden(entity.id),
+					checked: !entity.filtered,
 					parentId: parentId,
 					name: entity.name,
 					type: entity.type,
@@ -240,6 +240,10 @@ var packageExplorerController = (function () {
 		if (!treeNode.checked) {
 			events.filtered.on.publish(applicationEvent);
 		} else {
+			// ensure that the parents of visible entities are also visible themselves
+			const parents = model.getAllParentsOfEntity(entity);
+			applicationEvent.entities = [...entities, ...parents];
+
 			events.filtered.off.publish(applicationEvent);
 
 			if (entity.hasUnloadedChildren) {
@@ -302,8 +306,7 @@ var packageExplorerController = (function () {
 				tree.removeNode(placeholderToRemove);
 			}
 		} else {
-			// we were loading root elements (at startup)
-			// this appears to already be happening on its own?
+			// root elements are currently only loaded on startup, which is fixed and doesn't go through the event system
 		}
 	}
 

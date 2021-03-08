@@ -18,7 +18,7 @@ let neo4jModelLoadController = (function () {
     // load all model data and metadata that is necessary at launch
     async function loadInitialData() {
         const data = await queryRootNodes();
-        const createdEntities = await addNodesAsHidden(data, true);
+        const createdEntities = await addNodesAsHidden(data, false);
         events.loaded.on.publish({
             entities: createdEntities,
             hidden: true
@@ -30,7 +30,7 @@ let neo4jModelLoadController = (function () {
         const nodeData = await queryAllChildrenOf(entityId);
         let createdEntities;
         if (loadAsHidden) {
-            createdEntities = await addNodesAsHidden(nodeData, false);
+            createdEntities = await addNodesAsHidden(nodeData, true);
         } else {
             createdEntities = await addNodes(nodeData);
         }
@@ -45,10 +45,14 @@ let neo4jModelLoadController = (function () {
         });
     }
 
-    async function addNodesAsHidden(nodeData, childrenNotYetLoaded = true) {
+    async function addNodesAsHidden(nodeData, areChildrenLoaded) {
         // these can run in parallel and be awaited at the end
         const metadataDone = getMetadataFromResponse(nodeData)
-            .then((data) => model.createEntititesFromMetadata(data, childrenNotYetLoaded));
+            .then(data => model.createEntititesFromMetadata(data, areChildrenLoaded))
+            .then(entities => {
+                entities.forEach(entity => { entity.filtered = true; });
+                return entities;
+            });
         const aframeDataDone = getAframeDataFromResponse(nodeData)
             .then(canvasManipulator.loadAsHiddenFromAframeData);
 

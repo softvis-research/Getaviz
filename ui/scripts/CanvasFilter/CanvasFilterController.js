@@ -119,14 +119,15 @@ var canvasFilterController = (function() {
 		
 	function onEntityFilter(applicationEvent) {				
 		const entities = applicationEvent.entities;
-        canvasManipulator.hideEntities(entities, { name: "canvasFilterController" });
-        
+
         var unselectEvent = {
             sender: canvasFilterController,
             entities: entities
         }
 
         events.selected.off.publish(unselectEvent);
+
+        canvasManipulator.hideEntities(entities, { name: "canvasFilterController" });
 	}
 	
 	function onEntityUnfilter(applicationEvent) {
