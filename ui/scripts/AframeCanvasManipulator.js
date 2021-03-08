@@ -274,13 +274,6 @@ var canvasManipulator = (function () {
     }
 
     function hideEntities(entities, controller) {
-        var unselectEvent = {
-            sender: canvasFilterController,
-            entities: entities
-        }
-
-        events.selected.off.publish(unselectEvent);
-
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
             if (component === null) {
