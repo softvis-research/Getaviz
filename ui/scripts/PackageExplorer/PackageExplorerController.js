@@ -240,6 +240,10 @@ var packageExplorerController = (function () {
 		if (!treeNode.checked) {
 			events.filtered.on.publish(applicationEvent);
 		} else {
+			// ensure that the parents of visible entities are also visible themselves
+			const parents = model.getAllParentsOfEntity(entity);
+			applicationEvent.entities = [...entities, ...parents];
+
 			events.filtered.off.publish(applicationEvent);
 
 			if (entity.hasUnloadedChildren) {
