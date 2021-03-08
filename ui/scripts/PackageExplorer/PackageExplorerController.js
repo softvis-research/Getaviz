@@ -179,7 +179,7 @@ var packageExplorerController = (function () {
 				const item = {
 					id: entity.id,
 					open: false,
-					checked: !canvasManipulator.elementIsHidden(entity.id),
+					checked: !entity.filtered,
 					parentId: parentId,
 					name: entity.name,
 					type: entity.type,

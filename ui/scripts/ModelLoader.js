@@ -48,7 +48,11 @@ let neo4jModelLoadController = (function () {
     async function addNodesAsHidden(nodeData, areChildrenLoaded) {
         // these can run in parallel and be awaited at the end
         const metadataDone = getMetadataFromResponse(nodeData)
-            .then((data) => model.createEntititesFromMetadata(data, areChildrenLoaded));
+            .then(data => model.createEntititesFromMetadata(data, areChildrenLoaded))
+            .then(entities => {
+                entities.forEach(entity => { entity.filtered = true; });
+                return entities;
+            });
         const aframeDataDone = getAframeDataFromResponse(nodeData)
             .then(canvasManipulator.loadAsHiddenFromAframeData);
 

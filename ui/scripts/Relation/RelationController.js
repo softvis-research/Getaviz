@@ -13,7 +13,7 @@ var relationController = function () {
 
 	var faded = false;
 
-	//config parameters	
+	//config parameters
 	var controllerConfig = {
 		showConnector: true,
 		showHighlight: true,
@@ -168,7 +168,7 @@ var relationController = function () {
 					}
 				}
 
-				if (canvasManipulator.elementIsHidden(relatedEntity.id)) {
+				if (relatedEntity.filtered) {
 					events.log.info.publish({ text: "connector - onRelationsChanged - element hidden" });
 					return;
 				}
@@ -277,7 +277,7 @@ var relationController = function () {
 
 	function createConnector(entity, relatedEntity) {
 
-		//calculate attributes						
+		//calculate attributes
 		var sourcePosition = canvasManipulator.getCenterOfEntity(entity);
 		if (sourcePosition === null) {
 			return;
@@ -473,14 +473,14 @@ var relationController = function () {
 		//unfade related entities
 		canvasManipulator.changeTransparencyOfEntities(relatedEntitiesSet, controllerConfig.noFadeValue, { name: "relationController" });
 
-		// //unfade parents of related entities				
+		// //unfade parents of related entities
 		// canvasManipulator.changeTransparencyOfEntities(parents, controllerConfig.halfFadeValue, { name: "relationController" });
 	}
 
 	function fadeAllEntities() {
 		if (!faded) {
 			//really really bad fix for one model where elements in scene but not in model...
-			//add an all elements functionality for canvasmanipulator anyway 
+			//add an all elements functionality for canvasmanipulator anyway
 			var allCanvasElementIDs = canvasManipulator.getElementIds();
 			var allCanvasObjects = [];
 			allCanvasElementIDs.filter(canvasElementID => canvasElementID != "").forEach(canvasElementID => allCanvasObjects.push({ id: canvasElementID }));
@@ -493,7 +493,7 @@ var relationController = function () {
 	function unfadeAllEntities() {
 
 		//really really bad fix for one model where elements in scene but not in model...
-		//add an all elements functionality for canvasmanipulator anyway 
+		//add an all elements functionality for canvasmanipulator anyway
 		var allCanvasElementIDs = canvasManipulator.getElementIds();
 		var allCanvasObjects = [];
 		allCanvasElementIDs.filter(canvasElementID => canvasElementID != "").forEach(canvasElementID => allCanvasObjects.push({ id: canvasElementID }));

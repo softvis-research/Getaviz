@@ -310,10 +310,6 @@ var canvasManipulator = (function () {
         });
     }
 
-    function elementIsHidden(elementId) {
-        return hiddenEntitiesMap.has(elementId);
-    }
-
     function highlightEntities(entities, color, controller) {
         changeColorOfEntities(entities, color, controller);
         changeTransparencyOfEntities(entities, 0, controller);
@@ -431,7 +427,6 @@ var canvasManipulator = (function () {
 
         hideEntities: hideEntities,
         showEntities: showEntities,
-        elementIsHidden: elementIsHidden,
 
         highlightEntities: highlightEntities,
         unhighlightEntities: unhighlightEntities,
