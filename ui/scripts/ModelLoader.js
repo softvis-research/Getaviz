@@ -45,6 +45,17 @@ let neo4jModelLoadController = (function () {
         });
     }
 
+    async function loadTreesContainingAnyOf(entityIds) {
+        const rootNodeQueries = entityIds.map(id => queryRelatedRootNodeIdOf(id));
+        const rootNodeIdSet = new Set();
+        await Promise.all(rootNodeQueries)
+            .then(responses => responses.map(getSinglePropertyFromResponse))
+            .then(ids => ids.forEach(id => rootNodeIdSet.add(id)));
+
+        const childrenQueries = [...rootNodeIdSet.values()].map(id => loadAllChildrenOf(id, true));
+        return Promise.all(childrenQueries);
+    }
+
     async function addNodesAsHidden(nodeData, areChildrenLoaded) {
         // these can run in parallel and be awaited at the end
         const metadataDone = getMetadataFromResponse(nodeData)
@@ -93,12 +104,23 @@ let neo4jModelLoadController = (function () {
         });
     }
 
+    function getSinglePropertyFromResponse(response) {
+        if (!response[0].data || response[0].data.length === 0) {
+            return null;
+        }
+        return response[0].data[0].row[0];
+    }
+
     async function queryRootNodes() {
         return await getNeo4jData(`MATCH (n:ACityRep) WHERE NOT ()-[:CHILD]->(n) RETURN n`);
     }
 
     async function queryAllChildrenOf(entityId) {
         return await getNeo4jData(`MATCH ({hash: "${entityId}"})-[:CHILD|CONTAINS*1..]->(n:ACityRep) RETURN n`);
+    }
+
+    async function queryRelatedRootNodeIdOf(entityId) {
+        return await getNeo4jData(`MATCH (n:ACityRep) WHERE NOT ()-[:CHILD|CONTAINS]->(n) AND (n)-[:CHILD|CONTAINS*0..]->({hash: "${entityId}"}) RETURN n.hash`);
     }
 
     // Universal method to load a data from Neo4j using imported cypher-query
@@ -131,5 +153,6 @@ let neo4jModelLoadController = (function () {
         initialize: initialize,
         loadInitialData: loadInitialData,
         loadAllChildrenOf: loadAllChildrenOf,
+        loadTreesContainingAnyOf: loadTreesContainingAnyOf
     };
 })();
