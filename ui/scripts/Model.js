@@ -27,6 +27,7 @@ var model = (function () {
 	let labels = [];
 	let macrosById = new Map();
 	let modelElementsByMacro = new Map();
+	let entitiesByContainedUnloadedProperty = new Map();
 
 	function initialize() {
 		//subscribe for changing status of entities on events
@@ -383,8 +384,36 @@ var model = (function () {
 	}
 
 	function replaceIdsWithReferences(parentObject, propertyName) {
-		const propertiesAsReferences = parentObject[propertyName].map(id => entitiesById.get(id.trim()));
-		parentObject[propertyName] = propertiesAsReferences.filter(entity => entity !== undefined);
+		const propertiesAsReferences = parentObject[propertyName]
+			.filter(id => id && id.length)
+			.map(id => [id.trim(), entitiesById.get(id.trim())]);
+		parentObject[propertyName] = [];
+
+		propertiesAsReferences.forEach(pair => {
+			const [id, entity] = pair;
+			if (entity === undefined) {
+				// no entity matching the id was found - store it to be replaced later
+				if (!(propertyName in parentObject.unloadedRelationships)) {
+					parentObject.unloadedRelationships[propertyName] = [id];
+				} else {
+					parentObject.unloadedRelationships[propertyName].push(id);
+				}
+
+				// store the mapping the other way round as well, so we easily know what to replace when we do load that entity
+				const entitiesContainingThis = entitiesByContainedUnloadedProperty.get(id);
+				const referenceReminder = {
+					entity: parentObject,
+					property: propertyName
+				};
+				if (entitiesContainingThis) {
+					entitiesContainingThis.push(referenceReminder);
+				} else {
+					entitiesByContainedUnloadedProperty.set(id, [referenceReminder]);
+				}
+			} else {
+				parentObject[propertyName].push(entity);
+			}
+		});
 	}
 
 	function setReferencesToEntities(entities) {
@@ -498,7 +527,20 @@ var model = (function () {
 					}
 					break;
 				default:
-					return;
+					break;
+			}
+
+			const entitiesReferencingThis = entitiesByContainedUnloadedProperty.get(entity.id);
+			if (entitiesReferencingThis) {
+				entitiesReferencingThis.forEach(referenceReminder => {
+					const {entity: refEntity, property: refProperty} = referenceReminder;
+					// add newly loaded element to property lists it's supposed to be on
+					refEntity[refProperty].push(entity);
+					// remove it from the list of properties that haven't been loaded yet
+					refEntity.unloadedRelationships[refProperty] =
+						refEntity.unloadedRelationships[refProperty].filter(id => id !== entity.id);
+				});
+				entitiesByContainedUnloadedProperty.delete(entity.id);
 			}
 		});
 
@@ -526,7 +568,8 @@ var model = (function () {
 			name: name,
 			qualifiedName: qualifiedName,
 			belongsTo: belongsTo,
-			children: []
+			children: [],
+			unloadedRelationships: {}
 		};
 
 		const statesArray = Object.keys(states);
