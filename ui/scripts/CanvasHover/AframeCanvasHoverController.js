@@ -100,8 +100,6 @@ var canvasHoverController = (function () {
 
 		var entity = model.getEntityById(eventObject.target.id);
 		if (entity === undefined) {
-			entity = eventObject.target.id;
-			events.log.warning.publish({ text: "Entity of partID " + eventObject.target.id + " not in model data." });
 			return;
 		}
 
@@ -117,7 +115,6 @@ var canvasHoverController = (function () {
 	function handleOnMouseLeave(eventObject) {
 		var entity = model.getEntityById(eventObject.target.id);
 		if (entity === undefined) {
-			events.log.warning.publish({ text: "Entity of partID " + eventObject.target.id + " not in model data." });
 			return;
 		}
 
