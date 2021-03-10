@@ -1404,6 +1404,7 @@ public class SettingsConfiguration {
 
     public String getMetropolisBuildingRotation() {return config.getString("city.abap.metropolis.SeaReferenceBuildingRotation", " 0 0 0 ");}
 	public String getMetropolisReferenceBuildingModelScale() {return config.getString("city.abap.metropolis.MountainReferenceBuildingModelScale", " 0 0 0 ");}
+	public double adjustReferenceYPosition() {return config.getDouble("city.abap.adjust.reference.mountain.yPosition", 0.1); }
 
 	public double getACityDistrictHeight() {return config.getDouble("city.abap.height.district", 0.2); }
 	public double getMetropolisEmptyDistrictHeight() {return config.getDouble("city.abap.metropolis.height.emptyDistrict", 0.2); }

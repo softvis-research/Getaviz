@@ -296,6 +296,7 @@ public class MetropolisDesigner {
                     building.setModelScale(config.getMetropolisReferenceBuildingModelScale());
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    building.setYPosition(building.getYPosition() + config.adjustReferenceYPosition());
                     break;
                 case Cloud:
                     building.setShape(ACityElement.ACityShape.Entity);
