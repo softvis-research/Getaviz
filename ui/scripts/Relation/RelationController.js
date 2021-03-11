@@ -58,6 +58,7 @@ var relationController = function () {
 
 	function activate() {
 		activated = true;
+		unhideRelatedEntities();
 		if (relatedEntitiesMap.size != 0) {
 			if (controllerConfig.showConnector) {
 				createRelatedConnections();
@@ -107,7 +108,7 @@ var relationController = function () {
 
 
 
-	function onRelationsChanged(applicationEvent) {
+	async function onRelationsChanged(applicationEvent) {
 
 		events.log.info.publish({ text: "connector - onRelationsChanged" });
 
@@ -120,10 +121,10 @@ var relationController = function () {
 
 		events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + applicationEvent.entities[0] });
 
-		getRelatedEntities(sourceEntities);
+		await getRelatedEntities(sourceEntities);
 
 		if (controllerConfig.showRecursiveRelations) {
-			getRecursiveRelations(sourceEntities);
+			await getRecursiveRelations(sourceEntities);
 		}
 
 		events.log.info.publish({ text: "connector - onRelationsChanged - related Entities - " + relatedEntitiesMap.size });
@@ -133,28 +134,37 @@ var relationController = function () {
 		}
 
 		if (activated) {
-			if (controllerConfig.showConnector) {
-				createRelatedConnections();
-			}
-			if (controllerConfig.showHighlight) {
-				highlightRelatedEntities();
-			}
-			if (controllerConfig.showTransparency) {
-				fadeNotRelatedEntities();
-			}
+			unhideRelatedEntities();
+
+			// we need to wait until the rendering updates before we can continue
+			this.setTimeout(() => {
+				if (controllerConfig.showConnector) {
+					createRelatedConnections();
+				}
+				if (controllerConfig.showHighlight) {
+					highlightRelatedEntities();
+				}
+				if (controllerConfig.showTransparency) {
+					fadeNotRelatedEntities();
+				}
+			}, 50);
 		}
 
 	}
 
-	function getRelatedEntities(sourceEntitiesArray) {
-		sourceEntitiesArray.forEach(function (sourceEntity) {
+	async function getRelatedEntities(sourceEntitiesArray) {
+		for (const sourceEntity of sourceEntitiesArray) {
 			if (relatedEntitiesMap.has(sourceEntity)) {
 				//sourceEntity already analyzed
 				return;
 			}
 
-			var allRelatedEntitiesOfSourceEntity = getRelatedEntitiesOfSourceEntity(sourceEntity);
-			var relatedEntitiesOfSourceEntity = new Array();
+			const unloadedRelatedEntities = getRelatedEntitiesOfSourceEntity(sourceEntity.unloadedRelationships, sourceEntity.type);
+			if (unloadedRelatedEntities.length) {
+				await neo4jModelLoadController.loadTreesContainingAnyOf(unloadedRelatedEntities);
+			}
+			const allRelatedEntitiesOfSourceEntity = getRelatedEntitiesOfSourceEntity(sourceEntity, sourceEntity.type);
+			const relatedEntitiesOfSourceEntity = [];
 
 			allRelatedEntitiesOfSourceEntity.forEach(function (relatedEntity) {
 				if (relatedEntitiesOfSourceEntity.includes(relatedEntity)) {
@@ -162,20 +172,14 @@ var relationController = function () {
 					return;
 				}
 
-				if (controllerConfig.showInnerRelations === false) {
+				if (!controllerConfig.showInnerRelations) {
 					if (isTargetChildOfSourceParent(relatedEntity, sourceEntity)) {
 						events.log.info.publish({ text: "connector - onRelationsChanged - inner relation" });
 						return;
 					}
 				}
 
-				if (relatedEntity.filtered) {
-					events.log.info.publish({ text: "connector - onRelationsChanged - element hidden" });
-					return;
-				}
-
-				//create model entity
-				var relation = model.createEntity(
+				const relation = model.createEntity(
 					"Relation",
 					sourceEntity.id + "--2--" + relatedEntity.id,
 					sourceEntity.name + " - " + relatedEntity.name,
@@ -190,47 +194,47 @@ var relationController = function () {
 
 				relatedEntitiesOfSourceEntity.push(relatedEntity);
 				relatedEntitiesSet.add(relatedEntity);
-			})
+			});
 
 			relatedEntitiesMap.set(sourceEntity, relatedEntitiesOfSourceEntity);
-		});
+		}
 	}
 
-	function getRelatedEntitiesOfSourceEntity(sourceEntity) {
-		var relatedEntitiesOfSourceEntity = new Array();
+	function getRelatedEntitiesOfSourceEntity(sourceEntity, entityType) {
+		let relatedEntitiesOfSourceEntity = [];
 
-		switch (sourceEntity.type) {
+		switch (entityType) {
 			case "Class":
 			case "Interface":
 				//relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.superTypes);
 				//relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.subTypes);
 				break;
 			case "ParameterizableClass":
-				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.superTypes);
+				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.superTypes || []);
 				//relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.subTypes);
 				break;
 			case "Attribute":
-				relatedEntitiesOfSourceEntity = sourceEntity.accessedBy;
+				relatedEntitiesOfSourceEntity = sourceEntity.accessedBy || [];
 				break;
 			case "Method":
 			case "Function":
-				relatedEntitiesOfSourceEntity = sourceEntity.accesses;
+				relatedEntitiesOfSourceEntity = sourceEntity.accesses || [];
 			case "FunctionModule":
 			case "Report":
 			case "FormRoutine":
-				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.calls);
+				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.calls || []);
 				//relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.calledBy);
 				break;
 			case "Reference":
-				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.rcData);
+				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.rcData || []);
 				break;
 		}
 
 		return relatedEntitiesOfSourceEntity;
 	}
 
-	function getRecursiveRelations(oldSourceEntities) {
-		oldSourceEntities.forEach(function (oldSourceEntity) {
+	async function getRecursiveRelations(oldSourceEntities) {
+		for (const oldSourceEntity of oldSourceEntities) {
 			var relatedEntities = relatedEntitiesMap.get(oldSourceEntity);
 
 			if (relatedEntities.length == 0) {
@@ -243,9 +247,9 @@ var relationController = function () {
 				return;
 			}
 
-			getRelatedEntities(newSourceEntities);
-			getRecursiveRelations(newSourceEntities);
-		});
+			await getRelatedEntities(newSourceEntities);
+			await getRecursiveRelations(newSourceEntities);
+		}
 	}
 
 
@@ -519,6 +523,19 @@ var relationController = function () {
 		}
 
 		return false;
+	}
+
+	function unhideRelatedEntities() {
+		let elementsToUnhide = [];
+		for (const relatedEntity of relatedEntitiesSet) {
+			if (relatedEntity.filtered) {
+				elementsToUnhide.push(relatedEntity);
+				elementsToUnhide = elementsToUnhide.concat(relatedEntity.allParents);
+			}
+		}
+		if (elementsToUnhide.length) {
+			canvasManipulator.showEntities(elementsToUnhide);
+		}
 	}
 
 

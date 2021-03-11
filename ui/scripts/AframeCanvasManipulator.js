@@ -407,6 +407,7 @@ var canvasManipulator = (function () {
             template.innerHTML = mapAframeDataToHTML(jsonElement);
             hiddenEntitiesMap.set(jsonElement.id, template.content.firstChild);
         }
+        console.log("added " + dataArray.length + " elements to hiddenEntitiesMap");
     }
 
     return {

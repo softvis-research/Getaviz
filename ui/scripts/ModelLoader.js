@@ -38,6 +38,8 @@ let neo4jModelLoadController = (function () {
         const parentEntity = model.getEntityById(entityId);
         parentEntity.hasUnloadedChildren = false;
 
+        console.log("loaded all " + createdEntities.length + " children of " + entityId);
+
         events.loaded.on.publish({
             entities: createdEntities,
             hidden: loadAsHidden,
@@ -84,7 +86,7 @@ let neo4jModelLoadController = (function () {
 
     // get array of each element's parsed metadata
     async function getMetadataFromResponse(response) {
-        if (!response[0].data) {
+        if (!response || !response[0].data) {
             return [];
         }
 
@@ -95,7 +97,7 @@ let neo4jModelLoadController = (function () {
 
     // get array of each element's parsed AFrame properties
     async function getAframeDataFromResponse(response) {
-        if (!response[0].data) {
+        if (!response || !response[0].data) {
             return [];
         }
 
@@ -105,7 +107,7 @@ let neo4jModelLoadController = (function () {
     }
 
     function getSinglePropertyFromResponse(response) {
-        if (!response[0].data || response[0].data.length === 0) {
+        if (!response || !response[0].data || response[0].data.length === 0) {
             return null;
         }
         return response[0].data[0].row[0];
