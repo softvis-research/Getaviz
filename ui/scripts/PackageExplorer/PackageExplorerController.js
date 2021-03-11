@@ -81,6 +81,7 @@ var packageExplorerController = (function () {
 		events.selected.on.subscribe(onEntitySelected);
 		events.selected.off.subscribe(onEntityUnselected);
 		events.loaded.on.subscribe(onEntitiesLoaded);
+		events.filtered.off.subscribe(onEntitiesUnfiltered);
 	}
 
 	function reset() {
@@ -307,6 +308,22 @@ var packageExplorerController = (function () {
 			}
 		} else {
 			// root elements are currently only loaded on startup, which is fixed and doesn't go through the event system
+		}
+	}
+
+	function onEntitiesUnfiltered(applicationEvent) {
+		// only catch events from elsewhere - if they come from here, the tree will already be updated
+		if (applicationEvent.sender !== this) {
+			// put all ids into a set, so we can use its constant-time has() to find the matching ZTree objects more efficiently
+			const entityIdSet = new Set();
+			for (const entity of applicationEvent.entities) {
+				entityIdSet.add(entity.id);
+			}
+			const zTreeNodesToCheck = tree.getNodesByFilter((node) => entityIdSet.has(node.id));
+			for (const node of zTreeNodesToCheck) {
+				// since we're updating the tree from the model, don't trigger onCheck
+				tree.checkNode(node, true, false, false);
+			}
 		}
 	}
 

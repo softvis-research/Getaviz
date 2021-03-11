@@ -533,7 +533,10 @@ var relationController = function () {
 			}
 		}
 		if (elementsToUnhide.length) {
-			canvasManipulator.showEntities(elementsToUnhide);
+			events.filtered.off.publish({
+				sender: relationController,
+				entities: elementsToUnhide
+			});
 		}
 	}
 
