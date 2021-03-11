@@ -1,6 +1,5 @@
 var relationController = function () {
 
-	//var sourceEntities = new Array();
 	var sourceEntities = new Array();
 
 	var relatedEntitiesMap = new Map();
@@ -53,6 +52,8 @@ var relationController = function () {
 		events.selected.on.subscribe(onRelationsChanged);
 
 		events.selected.off.subscribe(reset);
+
+		events.filtered.on.subscribe(onEntityFilter);
 	}
 
 	function activate() {
@@ -518,6 +519,12 @@ var relationController = function () {
 		}
 
 		return false;
+	}
+
+
+	function onEntityFilter(applicationEvent) {
+		reset();
+		onRelationsChanged(applicationEvent);
 	}
 
 
