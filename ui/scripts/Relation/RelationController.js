@@ -52,8 +52,6 @@ var relationController = function () {
 		events.selected.on.subscribe(onRelationsChanged);
 
 		events.selected.off.subscribe(reset);
-
-		events.filtered.on.subscribe(onEntityFilter);
 	}
 
 	function activate() {
@@ -536,12 +534,6 @@ var relationController = function () {
 		if (elementsToUnhide.length) {
 			canvasManipulator.showEntities(elementsToUnhide);
 		}
-	}
-
-
-	function onEntityFilter(applicationEvent) {
-		reset();
-		onRelationsChanged(applicationEvent);
 	}
 
 
