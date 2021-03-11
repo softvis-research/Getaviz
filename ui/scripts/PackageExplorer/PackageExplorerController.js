@@ -241,8 +241,8 @@ var packageExplorerController = (function () {
 			events.filtered.on.publish(applicationEvent);
 		} else {
 			// ensure that the parents of visible entities are also visible themselves
-			const parents = model.getAllParentsOfEntity(entity);
-			applicationEvent.entities = [...entities, ...parents];
+			const parents = entity.allParents;
+			applicationEvent.entities = [...entities, ...parents].filter(entity => entity.filtered);
 
 			events.filtered.off.publish(applicationEvent);
 

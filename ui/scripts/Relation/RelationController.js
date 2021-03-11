@@ -528,6 +528,7 @@ var relationController = function () {
 		for (const relatedEntity of relatedEntitiesSet) {
 			if (relatedEntity.filtered) {
 				elementsToUnhide.push(relatedEntity);
+				const hiddenParents = relatedEntity.allParents.filter(entity => entity.filtered);
 				elementsToUnhide = elementsToUnhide.concat(relatedEntity.allParents);
 			}
 		}
