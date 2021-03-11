@@ -524,18 +524,20 @@ var relationController = function () {
 	}
 
 	function unhideRelatedEntities() {
-		let elementsToUnhide = [];
+		const elementsToUnhide = new Set();
 		for (const relatedEntity of relatedEntitiesSet) {
 			if (relatedEntity.filtered) {
-				elementsToUnhide.push(relatedEntity);
+				elementsToUnhide.add(relatedEntity);
 				const hiddenParents = relatedEntity.allParents.filter(entity => entity.filtered);
-				elementsToUnhide = elementsToUnhide.concat(relatedEntity.allParents);
+				for (const parent of hiddenParents) {
+					elementsToUnhide.add(parent);
+				}
 			}
 		}
-		if (elementsToUnhide.length) {
+		if (elementsToUnhide.size) {
 			events.filtered.off.publish({
 				sender: relationController,
-				entities: elementsToUnhide
+				entities: [...elementsToUnhide]
 			});
 		}
 	}
