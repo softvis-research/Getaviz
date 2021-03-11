@@ -383,27 +383,27 @@ var model = (function () {
 		return newElements;
 	}
 
-	function replaceIdsWithReferences(parentObject, propertyName) {
-		const propertiesAsReferences = parentObject[propertyName]
+	function replaceIdsWithReferences(entity, relationName) {
+		const propertiesAsReferences = entity[relationName]
 			.filter(id => id && id.length)
 			.map(id => [id.trim(), entitiesById.get(id.trim())]);
-		parentObject[propertyName] = [];
+		entity[relationName] = [];
 
 		propertiesAsReferences.forEach(pair => {
 			const [id, entity] = pair;
 			if (entity === undefined) {
 				// no entity matching the id was found - store it to be replaced later
-				if (!(propertyName in parentObject.unloadedRelationships)) {
-					parentObject.unloadedRelationships[propertyName] = [id];
+				if (!(relationName in entity.unloadedRelationships)) {
+					entity.unloadedRelationships[relationName] = [id];
 				} else {
-					parentObject.unloadedRelationships[propertyName].push(id);
+					entity.unloadedRelationships[relationName].push(id);
 				}
 
 				// store the mapping the other way round as well, so we easily know what to replace when we do load that entity
 				const entitiesContainingThis = entitiesByContainedUnloadedProperty.get(id);
 				const referenceReminder = {
-					entity: parentObject,
-					property: propertyName
+					entity: entity,
+					property: relationName
 				};
 				if (entitiesContainingThis) {
 					entitiesContainingThis.push(referenceReminder);
@@ -411,7 +411,7 @@ var model = (function () {
 					entitiesByContainedUnloadedProperty.set(id, [referenceReminder]);
 				}
 			} else {
-				parentObject[propertyName].push(entity);
+				entity[relationName].push(entity);
 			}
 		});
 	}
