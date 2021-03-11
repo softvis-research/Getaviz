@@ -56,21 +56,22 @@ var relationController = function () {
 
 	function activate() {
 		activated = true;
-		unhideRelatedEntities();
-		if (relatedEntitiesMap.size != 0) {
-			if (controllerConfig.showConnector) {
-				createRelatedConnections();
-			}
-			if (controllerConfig.showHighlight) {
-				highlightRelatedEntities();
-			}
-			if (controllerConfig.showTransparency) {
-				if (controllerConfig.startFaded) {
-					setTimeout(fadeAllEntities, 1000);
+		unhideRelatedEntities().then(() => {
+			if (relatedEntitiesMap.size != 0) {
+				if (controllerConfig.showConnector) {
+					createRelatedConnections();
 				}
-				fadeNotRelatedEntities();
+				if (controllerConfig.showHighlight) {
+					highlightRelatedEntities();
+				}
+				if (controllerConfig.showTransparency) {
+					if (controllerConfig.startFaded) {
+						setTimeout(fadeAllEntities, 1000);
+					}
+					fadeNotRelatedEntities();
+				}
 			}
-		}
+		});
 	}
 
 	function deactivate() {
@@ -132,10 +133,7 @@ var relationController = function () {
 		}
 
 		if (activated) {
-			unhideRelatedEntities();
-
-			// we need to wait until the rendering updates before we can continue
-			this.setTimeout(() => {
+			unhideRelatedEntities().then(() => {
 				if (controllerConfig.showConnector) {
 					createRelatedConnections();
 				}
@@ -145,9 +143,8 @@ var relationController = function () {
 				if (controllerConfig.showTransparency) {
 					fadeNotRelatedEntities();
 				}
-			}, 50);
+			});
 		}
-
 	}
 
 	async function getRelatedEntities(sourceEntitiesArray) {
@@ -523,7 +520,7 @@ var relationController = function () {
 		return false;
 	}
 
-	function unhideRelatedEntities() {
+	async function unhideRelatedEntities() {
 		const elementsToUnhide = new Set();
 		for (const relatedEntity of relatedEntitiesSet) {
 			if (relatedEntity.filtered) {
@@ -535,10 +532,15 @@ var relationController = function () {
 			}
 		}
 		if (elementsToUnhide.size) {
+			const elementsAsArray = [...elementsToUnhide];
 			events.filtered.off.publish({
 				sender: relationController,
-				entities: [...elementsToUnhide]
+				entities: elementsAsArray
 			});
+
+			// re-inserting the elements is synchronous, but they will only be rendered on the next A-Frame tick
+			// which entity we wait for here doesn't really matter, it comes down to awaiting the next possible render step
+			await canvasManipulator.waitForRenderOfElement(elementsAsArray[0]);
 		}
 	}
 

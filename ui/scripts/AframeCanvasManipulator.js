@@ -20,6 +20,8 @@ var canvasManipulator = (function () {
 
     var hiddenEntitiesMap = new Map();
 
+    let notificationCallbackQueue = [];
+
 
     function initialize() {
 
@@ -30,6 +32,19 @@ var canvasManipulator = (function () {
         //the a-scene resize-handler won't be called properly
         //so we call the resize-handler here again
         window.addEventListener("resize", function() { setTimeout(resizeScene, 100) });
+
+        // this component serves as a crutch to tie a callback to AFrame finishing the next render step
+        // some operations with entities rely on render data being present in the DOM
+        AFRAME.registerComponent('notify-on-render', {
+            tock: function (time, timeDelta) {
+                if (notificationCallbackQueue.length > 0) {
+                    for (const callback of notificationCallbackQueue) {
+                        callback();
+                    }
+                    notificationCallbackQueue = [];
+                }
+            }
+        });
     }
 
     function reset() {
@@ -407,7 +422,23 @@ var canvasManipulator = (function () {
             template.innerHTML = mapAframeDataToHTML(jsonElement);
             hiddenEntitiesMap.set(jsonElement.id, template.content.firstChild);
         }
-        console.log("added " + dataArray.length + " elements to hiddenEntitiesMap");
+    }
+
+    async function waitForRenderOfElement(element) {
+        const domElement = document.getElementById(element.id);
+        // the callback gets inserted into a queue, where it will be called by the notify-on-render component, resolving this promise
+        await new Promise((resolve, reject) => {
+            const callback = (() => {
+                domElement.removeAttribute('notify-on-render');
+                resolve();
+            });
+            notificationCallbackQueue.push(callback);
+            domElement.setAttribute('notify-on-render', '');
+            // A-Frame renders many times per second, so if it's been a second without a call, something probably went wrong
+            window.setTimeout(() => reject(), 1000);
+        }).catch(() => {
+            events.log.error.publish({ text: `CanvasManipulator - waitForRenderOfElement on ${element.id} - timed out` });
+        });
     }
 
     return {
@@ -443,7 +474,9 @@ var canvasManipulator = (function () {
         getElementIds: getElementIds,
 
         addElementsFromAframeData: addElementsFromAframeData,
-        loadAsHiddenFromAframeData: loadAsHiddenFromAframeData
+        loadAsHiddenFromAframeData: loadAsHiddenFromAframeData,
+
+        waitForRenderOfElement: waitForRenderOfElement
     };
 
 })
