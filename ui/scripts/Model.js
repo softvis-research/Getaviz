@@ -390,17 +390,17 @@ var model = (function () {
 		entity[relationName] = [];
 
 		propertiesAsReferences.forEach(pair => {
-			const [id, entity] = pair;
-			if (entity === undefined) {
+			const [relationTargetId, relationTargetEntity] = pair;
+			if (relationTargetEntity === undefined) {
 				// no entity matching the id was found - store it to be replaced later
 				if (!(relationName in entity.unloadedRelationships)) {
-					entity.unloadedRelationships[relationName] = [id];
+					entity.unloadedRelationships[relationName] = [relationTargetId];
 				} else {
-					entity.unloadedRelationships[relationName].push(id);
+					entity.unloadedRelationships[relationName].push(relationTargetId);
 				}
 
 				// store the mapping the other way round as well, so we easily know what to replace when we do load that entity
-				const entitiesContainingThis = entitiesByContainedUnloadedProperty.get(id);
+				const entitiesContainingThis = entitiesByContainedUnloadedProperty.get(relationTargetId);
 				const referenceReminder = {
 					entity: entity,
 					property: relationName
@@ -408,10 +408,10 @@ var model = (function () {
 				if (entitiesContainingThis) {
 					entitiesContainingThis.push(referenceReminder);
 				} else {
-					entitiesByContainedUnloadedProperty.set(id, [referenceReminder]);
+					entitiesByContainedUnloadedProperty.set(relationTargetId, [referenceReminder]);
 				}
 			} else {
-				entity[relationName].push(entity);
+				entity[relationName].push(relationTargetEntity);
 			}
 		});
 	}
