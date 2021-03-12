@@ -256,13 +256,15 @@ var packageExplorerController = (function () {
 
 	function publishSelectEvent(treeEvent, treeId, treeNode, eventObject) {
 
-		clickedEntity = model.getEntityById(treeNode.id);
+		const clickedEntity = model.getEntityById(treeNode.id);
+		// do nothing when selecting an invisible entity
+		if (clickedEntity.filtered) return;
 
-		var alreadySelected = clickedEntity === selectedEntities[0];
+		const alreadySelected = clickedEntity === selectedEntities[0];
 
 		//always deselect the previously selected entities
 		if (selectedEntities.size != 0) {
-			var unselectEvent = {
+			const unselectEvent = {
 				sender: packageExplorerController,
 				entities: selectedEntities
 			}
@@ -273,15 +275,14 @@ var packageExplorerController = (function () {
 		//select the clicked entities only if the clicked entities are not already selected
 		//otherwise the clicked entities should only be deselected
 		if (!alreadySelected) {
-			var newSelectedEntities = new Array();
-
-			newSelectedEntities.push(clickedEntity);
+			let newSelectedEntities = [clickedEntity];
 
 			if (controllerConfig.useMultiselect) {
-				newSelectedEntities = newSelectedEntities.concat(model.getAllChildrenOfEntity(clickedEntity));
+				const visibleChildren = model.getAllChildrenOfEntity(clickedEntity).filter(entity => !entity.filtered);
+				newSelectedEntities = newSelectedEntities.concat(visibleChildren);
 			}
 
-			var selectEvent = {
+			const selectEvent = {
 				sender: packageExplorerController,
 				entities: newSelectedEntities
 			};
