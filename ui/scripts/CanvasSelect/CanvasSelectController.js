@@ -6,7 +6,7 @@ var canvasSelectController = (function () {
 		DURATION: "DURATION"
 	};
 
-	//config parameters	
+	//config parameters
 	var controllerConfig = {
 		setCenterOfRotation: false,
 		color: "darkred",
@@ -132,11 +132,11 @@ var canvasSelectController = (function () {
 
 	function handleOnClick(eventObject) {
 
-		var alreadySelected = eventObject.entity == selectedEntities[0];
+		const alreadySelected = eventObject.entity === selectedEntities[0];
 
 		//always deselect the previously selected entities
 		if (selectedEntities.length != 0) {
-			var unselectEvent = {
+			const unselectEvent = {
 				sender: canvasSelectController,
 				entities: selectedEntities
 			}
@@ -147,15 +147,14 @@ var canvasSelectController = (function () {
 		//select the clicked entities only if the clicked entities are not already selected
 		//otherwise the clicked entities should only be deselected
 		if (!alreadySelected) {
-			var newSelectedEntities = new Array();
-
-			newSelectedEntities.push(eventObject.entity);
+			let newSelectedEntities = [eventObject.entity];
 
 			if (controllerConfig.useMultiselect) {
-				newSelectedEntities = newSelectedEntities.concat(model.getAllChildrenOfEntity(eventObject.entity));
+				const visibleChildren = model.getAllChildrenOfEntity(eventObject.entity).filter(entity => !entity.filtered);
+				newSelectedEntities = newSelectedEntities.concat(visibleChildren);
 			}
 
-			var applicationEvent = {
+			const applicationEvent = {
 				sender: canvasSelectController,
 				entities: newSelectedEntities
 			};
