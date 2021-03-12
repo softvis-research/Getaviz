@@ -385,20 +385,8 @@ var canvasManipulator = (function () {
         });
     }
 
-
     function setVisibility(object, visibility) {
         object.object3D.visible = visibility;
-    }
-
-    function getElementIds() {
-        let sceneArray = Array.from(scene.children);
-        sceneArray.shift(); // so camera entity needs to be first in model.html
-        sceneArray.pop();  // last element is of class "a-canvas"
-        let elementIds = [];
-        sceneArray.forEach(function (object) {
-            elementIds.push(object.id);
-        });
-        return elementIds;
     }
 
     function mapAframeDataToHTML(element) {
@@ -470,8 +458,6 @@ var canvasManipulator = (function () {
 
         setCenterOfRotation: setCenterOfRotation,
         getCenterOfEntity: getCenterOfEntity,
-
-        getElementIds: getElementIds,
 
         addElementsFromAframeData: addElementsFromAframeData,
         loadAsHiddenFromAframeData: loadAsHiddenFromAframeData,

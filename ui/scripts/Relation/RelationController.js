@@ -10,13 +10,10 @@ var relationController = function () {
 
 	var activated = false;
 
-	var faded = false;
-
 	//config parameters
 	var controllerConfig = {
 		showConnector: true,
 		showHighlight: true,
-		showTransparency: false,
 
 		showRecursiveRelations: true,
 		useMultiSelect: true,
@@ -35,13 +32,6 @@ var relationController = function () {
 
 		//highlight configs
 		highlightColor: "black",
-		unfadeOnHighlight: false,
-
-		//transparency configs
-		fullFadeValue: 0.55,
-		halfFadeValue: 0.55,
-		noFadeValue: 0,
-		startFaded: false
 	}
 
 
@@ -64,12 +54,6 @@ var relationController = function () {
 				if (controllerConfig.showHighlight) {
 					highlightRelatedEntities();
 				}
-				if (controllerConfig.showTransparency) {
-					if (controllerConfig.startFaded) {
-						setTimeout(fadeAllEntities, 1000);
-					}
-					fadeNotRelatedEntities();
-				}
 			}
 		});
 	}
@@ -86,12 +70,6 @@ var relationController = function () {
 		}
 		if (controllerConfig.showHighlight) {
 			unhighlightRelatedEntities();
-		}
-		if (controllerConfig.showTransparency) {
-			if (faded) {
-				setTimeout(unfadeAllEntities, 1000);
-			}
-			faded = false;
 		}
 
 		//remove relation entities
@@ -139,9 +117,6 @@ var relationController = function () {
 				}
 				if (controllerConfig.showHighlight) {
 					highlightRelatedEntities();
-				}
-				if (controllerConfig.showTransparency) {
-					fadeNotRelatedEntities();
 				}
 			});
 		}
@@ -358,8 +333,6 @@ var relationController = function () {
 
 			connector.setAttribute("radius", 5);
 
-
-
 			var quaternion = threeMesh.quaternion;
 			quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
 
@@ -367,8 +340,6 @@ var relationController = function () {
 		connector.setAttribute("flat-shading", true);
 		connector.setAttribute("shader", "flat");
 		//                 connector.setAttribute("radius", 5);
-
-
 
 		let scene = document.querySelector("a-scene");
 		scene.appendChild(connector);
@@ -445,10 +416,6 @@ var relationController = function () {
 			return;
 		}
 
-		if (controllerConfig.unfadeOnHighlight) {
-			canvasManipulator.resetTransparencyOfEntities(Array.from(relatedEntitiesSet.values()).filter(relatedEntity => !(relatedEntity.marked)), { name: "relationController" });
-		}
-
 		canvasManipulator.highlightEntities(Array.from(relatedEntitiesSet.values()), controllerConfig.highlightColor, { name: "relationController" });
 	}
 
@@ -458,48 +425,6 @@ var relationController = function () {
 		}
 
 		canvasManipulator.unhighlightEntities(Array.from(relatedEntitiesSet.values()), { name: "relationController" });
-	}
-
-
-	/***************************
-			Transparency
-	***************************/
-
-	function fadeNotRelatedEntities() {
-
-		fadeAllEntities();
-
-
-		//unfade related entities
-		canvasManipulator.changeTransparencyOfEntities(relatedEntitiesSet, controllerConfig.noFadeValue, { name: "relationController" });
-
-		// //unfade parents of related entities
-		// canvasManipulator.changeTransparencyOfEntities(parents, controllerConfig.halfFadeValue, { name: "relationController" });
-	}
-
-	function fadeAllEntities() {
-		if (!faded) {
-			//really really bad fix for one model where elements in scene but not in model...
-			//add an all elements functionality for canvasmanipulator anyway
-			var allCanvasElementIDs = canvasManipulator.getElementIds();
-			var allCanvasObjects = [];
-			allCanvasElementIDs.filter(canvasElementID => canvasElementID != "").forEach(canvasElementID => allCanvasObjects.push({ id: canvasElementID }));
-
-			canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.fullFadeValue, { name: "relationController" });
-			faded = true;
-		}
-	}
-
-	function unfadeAllEntities() {
-
-		//really really bad fix for one model where elements in scene but not in model...
-		//add an all elements functionality for canvasmanipulator anyway
-		var allCanvasElementIDs = canvasManipulator.getElementIds();
-		var allCanvasObjects = [];
-		allCanvasElementIDs.filter(canvasElementID => canvasElementID != "").forEach(canvasElementID => allCanvasObjects.push({ id: canvasElementID }));
-
-		canvasManipulator.changeTransparencyOfEntities(allCanvasObjects, controllerConfig.noFadeValue, { name: "relationController" });
-
 	}
 
 
