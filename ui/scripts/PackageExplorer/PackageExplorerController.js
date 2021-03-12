@@ -239,6 +239,7 @@ var packageExplorerController = (function () {
 		};
 
 		if (!treeNode.checked) {
+			applicationEvent.entities = applicationEvent.entities.filter(entity => !entity.filtered);
 			events.filtered.on.publish(applicationEvent);
 		} else {
 			// ensure that the parents of visible entities are also visible themselves
