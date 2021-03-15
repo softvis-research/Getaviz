@@ -3,10 +3,10 @@ var canvasFilterController = (function() {
     let issueFilterId = "";
     let changeFrequency = 0;
     let issueFilter = "showAll";
-    
+
     function initialize(){
     }
-	
+
 	function activate(){
 		events.filtered.on.subscribe(onEntityFilter);
         events.tmpFiltered.on.subscribe(onEntityTmpFilter);
@@ -114,26 +114,26 @@ var canvasFilterController = (function() {
             };
             events.filtered.off.publish(fadeEvent);
         }
-
     }
-		
-	function onEntityFilter(applicationEvent) {				
+
+	function onEntityFilter(applicationEvent) {
 		const entities = applicationEvent.entities;
 
-        var unselectEvent = {
-            sender: canvasFilterController,
-            entities: entities
+        const selectedEntities = entities.filter(entity => entity.selected);
+        if (selectedEntities.length) {
+            const unselectEvent = {
+                sender: canvasFilterController,
+                entities: selectedEntities
+            }
+            events.selected.off.publish(unselectEvent);
         }
-
-        events.selected.off.publish(unselectEvent);
 
         canvasManipulator.hideEntities(entities, { name: "canvasFilterController" });
 	}
-	
+
 	function onEntityUnfilter(applicationEvent) {
         const entities = applicationEvent.entities;
         canvasManipulator.showEntities(entities, { name: "canvasFilterController" });
-    
 	}
 
     function onEntityTmpFilter(applicationEvent) {
@@ -145,19 +145,18 @@ var canvasFilterController = (function() {
             }
         });
         canvasManipulator.hideEntities(stillTmpFiltered, { name: "canvasFilterController" });
-
     }
 
     function onEntityTmpUnfilter(applicationEvent) {
         const entities = applicationEvent.entities;
         canvasManipulator.showEntities(entities, { name: "canvasFilterController" });
     }
-	
+
 	function onVersionSelected(applicationEvent) {
         const entities = model.getEntitiesByVersion(applicationEvent.entities[0]);
         canvasManipulator.showEntities(entities, { name: "canvasFilterController" });
-    }    
-        
+    }
+
     function offVersionSelected(applicationEvent) {
         const entities = model.getEntitiesByVersion(applicationEvent.entities[0]);
         canvasManipulator.hideEntities(entities, { name: "canvasFilterController" });
@@ -199,7 +198,7 @@ var canvasFilterController = (function() {
         if(condition !== undefined){
             showEntity = evaluateCondition(condition, applicationEvent.allTreeNodesById);
         }
-        
+
         return showEntity;
     }
 
@@ -261,5 +260,5 @@ var canvasFilterController = (function() {
     return {
         initialize: initialize,
 		activate: activate
-    };    
+    };
 })();
