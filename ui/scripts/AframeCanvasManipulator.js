@@ -251,14 +251,18 @@ var canvasManipulator = (function () {
     function resetColorOfEntities(entities, controller) {
         entities.forEach(function (entity) {
 
-            var colorList = entityEffectMap.get(entity.id).get("color");
+            const entityEffect = entityEffectMap.get(entity.id);
+            if (!entityEffect) {
+                return;
+            }
 
+            const colorList = entityEffect.get("color");
             //just original color => nothing to do
             if (colorList.length <= 1) {
                 return;
             }
 
-            var colorEffectIndex = colorList.findIndex(colorEffect => colorEffect.controller == controller.name);
+            const colorEffectIndex = colorList.findIndex(colorEffect => colorEffect.controller == controller.name);
 
             //controller not affected the color
             if (colorEffectIndex === -1) {
@@ -268,7 +272,7 @@ var canvasManipulator = (function () {
             colorList.splice(colorEffectIndex, 1);
 
             if (colorEffectIndex === colorList.length) {
-                let component = document.getElementById(entity.id);
+                const component = document.getElementById(entity.id);
                 if (component === undefined) {
                     events.log.error.publish({ text: "CanvasManipulator - resetColorOfEntities - components for entityIds not found" });
                     return;
