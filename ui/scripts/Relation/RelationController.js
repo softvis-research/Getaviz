@@ -416,7 +416,8 @@ var relationController = function () {
 			return;
 		}
 
-		canvasManipulator.highlightEntities(Array.from(relatedEntitiesSet.values()), controllerConfig.highlightColor, { name: "relationController" });
+		const visibleEntities = Array.from(relatedEntitiesSet.values()).filter(entity => !entity.filtered);
+		canvasManipulator.highlightEntities(visibleEntities, controllerConfig.highlightColor, { name: "relationController" });
 	}
 
 	function unhighlightRelatedEntities() {
@@ -424,14 +425,15 @@ var relationController = function () {
 			return;
 		}
 
-		canvasManipulator.unhighlightEntities(Array.from(relatedEntitiesSet.values()), { name: "relationController" });
+		const visibleEntities = Array.from(relatedEntitiesSet.values()).filter(entity => !entity.filtered);
+		canvasManipulator.unhighlightEntities(visibleEntities, { name: "relationController" });
 	}
 
 
 	function isTargetChildOfSourceParent(target, source) {
 
-		var targetParent = target.belongsTo;
-		var sourceParent = source.belongsTo;
+		let targetParent = target.belongsTo;
+		const sourceParent = source.belongsTo;
 
 		while (targetParent !== undefined) {
 

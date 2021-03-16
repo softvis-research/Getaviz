@@ -117,7 +117,7 @@ var canvasManipulator = (function () {
 
             if (transparencyEffectIndex === transparencyList.length) {
                 let component = document.getElementById(entity.id);
-                if (component == undefined) {
+                if (!component) {
                     events.log.error.publish({ text: "CanvasManipulator - resetTransparencyOfEntities - components for entityIds not found" });
                     return;
                 }
@@ -218,7 +218,7 @@ var canvasManipulator = (function () {
             }
 
             let component = document.getElementById(entity.id);
-            if (component === undefined) {
+            if (!component) {
                 events.log.error.publish({ text: "CanvasManipulator - changeColorOfEntities - components for entityIds not found" });
                 return;
             }
@@ -273,7 +273,7 @@ var canvasManipulator = (function () {
 
             if (colorEffectIndex === colorList.length) {
                 const component = document.getElementById(entity.id);
-                if (component === undefined) {
+                if (!component) {
                     events.log.error.publish({ text: "CanvasManipulator - resetColorOfEntities - components for entityIds not found" });
                     return;
                 }
