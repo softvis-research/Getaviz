@@ -99,10 +99,14 @@ var canvasManipulator = (function () {
     function resetTransparencyOfEntities(entities, controller) {
         entities.forEach(function (entity) {
 
-            var transparencyList = entityEffectMap.get(entity.id).get("transparency");
+            const entityEffect = entityEffectMap.get(entity.id);
+            if (!entityEffect) {
+                return;
+            }
 
+            const transparencyList = entityEffect.get("transparency");
             //just original transparency => nothing to do
-            if (transparencyList.length <= 1) {
+            if (!transparencyList || transparencyList.length <= 1) {
                 return;
             }
 

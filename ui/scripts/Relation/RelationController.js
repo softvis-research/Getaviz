@@ -1,8 +1,10 @@
 var relationController = function () {
 
+	// list of entities whose relations to others are being displayed (not including intermediate steps of recursive relations)
 	var sourceEntities = new Array();
-
+	// for every source entity (and intermediate of recursive relations), the list of entities it is related to
 	var relatedEntitiesMap = new Map();
+	// set of all entities that are related to sourceEntities overall, not including the source entities themselves
 	var relatedEntitiesSet = new Set();
 
 	var connectors = new Array();
@@ -40,8 +42,8 @@ var relationController = function () {
 		application.transferConfigParams(setupConfig, controllerConfig);
 
 		events.selected.on.subscribe(onRelationsChanged);
-
-		events.selected.off.subscribe(reset);
+		events.selected.off.subscribe(onEntityDeselected);
+		events.filtered.on.subscribe(onEntityFiltered);
 	}
 
 	function activate() {
@@ -83,7 +85,94 @@ var relationController = function () {
 		relations = new Array();
 	}
 
+	// operationFunction is not applied to rootEntity
+	function foreachTargetInRelationTree(relationMap, rootEntity, operationFunction) {
+		if (relationMap.has(rootEntity)) {
+			for (const relatedEntity of relationMap.get(rootEntity)) {
+				operationFunction(relatedEntity);
+				foreachTargetInRelationTree(relationMap, relatedEntity, operationFunction);
+			}
+		}
+	}
 
+	function onEntityDeselected(applicationEvent) {
+		const deselectedEntities = new Set(applicationEvent.entities);
+		// all source entities were deselected
+		if (sourceEntities.every(entity => deselectedEntities.has(entity))) {
+			reset();
+			return;
+		}
+		// there is currently no way to deselect only a subset without filtering it
+	}
+
+	function onEntityFiltered(applicationEvent) {
+		const entities = applicationEvent.entities;
+
+		if (entities.every(entity => !relatedEntitiesSet.has(entity) && !sourceEntities.includes(entity))) {
+			return;
+		}
+
+		const filteredEntities = new Set(entities);
+		// all source entities were filtered
+		if (sourceEntities.every(entity => filteredEntities.has(entity))) {
+			reset();
+			return;
+		}
+
+		// we need to remove relations to filtered entities from the map before doing the recursive passes over the tree
+		// otherwise the second pass will invalidate the first pass if a filtered element is the relation target of a source element
+		for (const [source, targets] of relatedEntitiesMap) {
+			if (targets.length) {
+				relatedEntitiesMap.set(source, targets.filter(entity => !filteredEntities.has(entity)));
+			}
+		}
+
+		const relatedEntitiesToRemove = new Set(filteredEntities);
+		for (const entity of filteredEntities) {
+			foreachTargetInRelationTree(relatedEntitiesMap, entity, (entity) => relatedEntitiesToRemove.add(entity));
+		}
+		// there can be multiple relation paths to the same element - keep anything that still has a valid path to it
+		const remainingSourceEntities = sourceEntities.filter(entity => !filteredEntities.has(entity));
+		for (const entity of remainingSourceEntities) {
+			foreachTargetInRelationTree(relatedEntitiesMap, entity, (entity) => relatedEntitiesToRemove.delete(entity));
+		}
+
+		sourceEntities = remainingSourceEntities;
+
+		removeRelationsToAndFrom(relatedEntitiesToRemove);
+	}
+
+	// does not remove these entities from the target lists of relatedEntitiesMap
+	function removeRelationsToAndFrom(entitySet) {
+		for (const relatedEntity of entitySet) {
+			relatedEntitiesSet.delete(relatedEntity);
+			relatedEntitiesMap.delete(relatedEntity);
+		}
+
+		const remainingRelations = [];
+		const connectorsToDelete = new Set();
+		for (const relation of relations) {
+			if (entitySet.has(relation.target) || entitySet.has(relation.source)) {
+				model.removeEntity(relation.id);
+				connectorsToDelete.add(relation.id);
+			} else {
+				remainingRelations.push(relation);
+			}
+		}
+		relations = remainingRelations;
+
+		const remainingConnectors = [];
+		for (const connector of connectors) {
+			if (connectorsToDelete.has(connector.getAttribute("id"))) {
+				canvasManipulator.removeElement(connector);
+			} else {
+				remainingConnectors.push(connector);
+			}
+		}
+		connectors = remainingConnectors;
+
+		canvasManipulator.unhighlightEntities([...entitySet], { name: "relationController" });
+	}
 
 	async function onRelationsChanged(applicationEvent) {
 
@@ -234,7 +323,7 @@ var relationController = function () {
 			var relatedEntity = relation.target;
 
 			//create scene element
-			let connectorElements = createConnector(sourceEntity, relatedEntity);
+			let connectorElements = createConnector(sourceEntity, relatedEntity, relation.id);
 
 			//source or target not rendered -> no connector
 			if (connectorElements === undefined) {
@@ -250,7 +339,7 @@ var relationController = function () {
 		})
 	}
 
-	function createConnector(entity, relatedEntity) {
+	function createConnector(entity, relatedEntity, relationId) {
 
 		//calculate attributes
 		var sourcePosition = canvasManipulator.getCenterOfEntity(entity);
@@ -339,7 +428,7 @@ var relationController = function () {
 		});
 		connector.setAttribute("flat-shading", true);
 		connector.setAttribute("shader", "flat");
-		//                 connector.setAttribute("radius", 5);
+		connector.setAttribute("id", relationId);
 
 		let scene = document.querySelector("a-scene");
 		scene.appendChild(connector);
