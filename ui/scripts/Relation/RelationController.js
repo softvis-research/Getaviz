@@ -86,11 +86,15 @@ var relationController = function () {
 	}
 
 	// operationFunction is not applied to rootEntity
-	function foreachTargetInRelationTree(relationMap, rootEntity, operationFunction) {
+	function foreachTargetInRelationTree(relationMap, rootEntity, operationFunction, alreadyVisitedSet) {
 		if (relationMap.has(rootEntity)) {
 			for (const relatedEntity of relationMap.get(rootEntity)) {
-				operationFunction(relatedEntity);
-				foreachTargetInRelationTree(relationMap, relatedEntity, operationFunction);
+				// guard against cycles (and therefore infinite recursion) in the relation tree
+				if (!alreadyVisitedSet.has(relatedEntity)) {
+					operationFunction(relatedEntity);
+					alreadyVisitedSet.add(relatedEntity);
+					foreachTargetInRelationTree(relationMap, relatedEntity, operationFunction, alreadyVisitedSet);
+				}
 			}
 		}
 	}
@@ -129,12 +133,12 @@ var relationController = function () {
 
 		const relatedEntitiesToRemove = new Set(filteredEntities);
 		for (const entity of filteredEntities) {
-			foreachTargetInRelationTree(relatedEntitiesMap, entity, (entity) => relatedEntitiesToRemove.add(entity));
+			foreachTargetInRelationTree(relatedEntitiesMap, entity,	(entity) => relatedEntitiesToRemove.add(entity), new Set());
 		}
 		// there can be multiple relation paths to the same element - keep anything that still has a valid path to it
 		const remainingSourceEntities = sourceEntities.filter(entity => !filteredEntities.has(entity));
 		for (const entity of remainingSourceEntities) {
-			foreachTargetInRelationTree(relatedEntitiesMap, entity, (entity) => relatedEntitiesToRemove.delete(entity));
+			foreachTargetInRelationTree(relatedEntitiesMap, entity, (entity) => relatedEntitiesToRemove.delete(entity), new Set());
 		}
 
 		sourceEntities = remainingSourceEntities;
