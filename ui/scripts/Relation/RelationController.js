@@ -85,15 +85,14 @@ var relationController = function () {
 		relations = new Array();
 	}
 
-	// operationFunction is not applied to rootEntity
-	function foreachTargetInRelationTree(relationMap, rootEntity, operationFunction, alreadyVisitedSet) {
+	function foreachEntityInRelationTree(relationMap, rootEntity, operationFunction, alreadyVisitedSet) {
+		operationFunction(rootEntity);
 		if (relationMap.has(rootEntity)) {
 			for (const relatedEntity of relationMap.get(rootEntity)) {
 				// guard against cycles (and therefore infinite recursion) in the relation tree
 				if (!alreadyVisitedSet.has(relatedEntity)) {
-					operationFunction(relatedEntity);
 					alreadyVisitedSet.add(relatedEntity);
-					foreachTargetInRelationTree(relationMap, relatedEntity, operationFunction, alreadyVisitedSet);
+					foreachEntityInRelationTree(relationMap, relatedEntity, operationFunction, alreadyVisitedSet);
 				}
 			}
 		}
@@ -131,19 +130,28 @@ var relationController = function () {
 			}
 		}
 
-		const relatedEntitiesToRemove = new Set(filteredEntities);
+		const relatedEntitiesToRemove = new Set();
 		for (const entity of filteredEntities) {
-			foreachTargetInRelationTree(relatedEntitiesMap, entity,	(entity) => relatedEntitiesToRemove.add(entity), new Set());
+			foreachEntityInRelationTree(relatedEntitiesMap, entity,	(entity) => relatedEntitiesToRemove.add(entity), new Set());
 		}
 		// there can be multiple relation paths to the same element - keep anything that still has a valid path to it
 		const remainingSourceEntities = sourceEntities.filter(entity => !filteredEntities.has(entity));
 		for (const entity of remainingSourceEntities) {
-			foreachTargetInRelationTree(relatedEntitiesMap, entity, (entity) => relatedEntitiesToRemove.delete(entity), new Set());
+			foreachEntityInRelationTree(relatedEntitiesMap, entity, (entity) => relatedEntitiesToRemove.delete(entity), new Set());
 		}
 
 		sourceEntities = remainingSourceEntities;
 
 		removeRelationsToAndFrom(relatedEntitiesToRemove);
+
+		// clean up entities that are no longer targeted, but remain sources (and thus couldn't have their outgoing relations removed)
+		const remainingRelationTargets = new Set(relations.map(relation => relation.target));
+		const previouslyRelatedSourceEntities =
+			sourceEntities.filter(entity => relatedEntitiesSet.has(entity) && !remainingRelationTargets.has(entity));
+		for (const entity of previouslyRelatedSourceEntities) {
+			relatedEntitiesSet.delete(entity);
+		}
+		canvasManipulator.unhighlightEntities(previouslyRelatedSourceEntities, { name: "relationController" });
 	}
 
 	// does not remove these entities from the target lists of relatedEntitiesMap
