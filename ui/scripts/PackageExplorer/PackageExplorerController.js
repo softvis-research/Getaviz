@@ -334,9 +334,8 @@ var packageExplorerController = (function () {
 		tree.selectNode(item, false);
 	}
 
-	function unselectNode(entityID) {
-		var item = tree.getNodeByParam("id", entityID, null);
-		tree.cancelSelectedNode(item, false);
+	function unselectNodes() {
+		tree.cancelSelectedNode();
 	}
 
 	function onEntitySelected(applicationEvent) {
@@ -351,13 +350,18 @@ var packageExplorerController = (function () {
 	}
 
 	function onEntityUnselected(applicationEvent) {
-		unselectNode(applicationEvent[0]);
+		const unselectedEntities = new Set(applicationEvent.entities);
+		selectedEntities = selectedEntities.filter(entity => !unselectedEntities.has(entity));
+
+		// only undo the selection in the UI if the root of the selection subtree is getting deselected
+		const shouldRemoveUISelection = applicationEvent.entities.some(entity => !entity.belongsTo || !entity.belongsTo.selected);
+		if (shouldRemoveUISelection) {
+			unselectNodes();
+		}
 
 		if (controllerConfig.showSearchField) {
 			$("#" + domIDs.searchInput).val("");
 		}
-
-		selectedEntities = new Array();
 	}
 
 	return {
