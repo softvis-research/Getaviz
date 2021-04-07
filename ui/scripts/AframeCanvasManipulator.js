@@ -291,9 +291,13 @@ var canvasManipulator = (function () {
         color == colors.darkred ? color = colors.red : color = color;
         let colorValues = color.split(" ");
         if (colorValues.length == 3) {
-            color = "#" + parseInt(colorValues[0]).toString(16).padStart(2, "0") + parseInt(colorValues[1]).toString(16).padStart(2, "0") + parseInt(colorValues[2]).toString(16).padStart(2, "0");
+            color = numbersToHexColor(colorValues);
         }
         object.setAttribute("color", color);
+    }
+
+    function numbersToHexColor(rgbArray) {
+        return "#" + rgbArray.map(value => parseInt(value).toString(16).padStart(2, "0")).join();
     }
 
     function hideEntities(entities, controller) {
@@ -452,6 +456,7 @@ var canvasManipulator = (function () {
 
         changeColorOfEntities: changeColorOfEntities,
         resetColorOfEntities: resetColorOfEntities,
+        numbersToHexColor: numbersToHexColor,
 
         hideEntities: hideEntities,
         showEntities: showEntities,

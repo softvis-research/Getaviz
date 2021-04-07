@@ -400,7 +400,7 @@ var relationController = function () {
 			targetPosition = calculateBorderPosition(sourcePosition, canvasManipulator.getCenterOfEntity(relatedEntity), relatedEntity);
 		}
 
-		var connectorSize = 0.05;
+		const connectorSize = 0.05;
 
 		// This function made no sense and doesn't seem to work on x3dom either
 		/*if(controllerConfig.fixPositionZ) {
@@ -421,20 +421,21 @@ var relationController = function () {
 		let direction = new THREE.Vector3(deltaX, deltaY, deltaZ).normalize();
 
 		//create connector
-		var connector = document.createElement("a-cylinder");
+		const connector = document.createElement("a-cylinder");
+		const connectorColors = [controllerConfig.connectorColor.r, controllerConfig.connectorColor.g, controllerConfig.connectorColor.b];
+		connector.setAttribute("color", canvasManipulator.numbersToHexColor(connectorColors.map(v => v*255)));
 
 		connector.addEventListener("loaded", function () {
-			let threeMesh = this.object3DMap.mesh;
+			const threeMesh = this.object3DMap.mesh;
 
 			threeMesh.scale.set(connectorSize, distance, connectorSize);
-			threeMesh.material.color.setRGB(controllerConfig.connectorColor.r, controllerConfig.connectorColor.g, controllerConfig.connectorColor.b);
 			threeMesh.position.set(sourcePosition.x + deltaX / 2,
 				sourcePosition.y + deltaY / 2,
 				sourcePosition.z + deltaZ / 2);
 
 			connector.setAttribute("radius", 5);
 
-			var quaternion = threeMesh.quaternion;
+			const quaternion = threeMesh.quaternion;
 			quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
 
 		});

@@ -11,7 +11,7 @@ var canvasHoverController = (function () {
 		document.getElementsByTagName("head")[0].appendChild(cssLink);
 	}
 
-	//config parameters	
+	//config parameters
 	var controllerConfig = {
 		hoverColor: "darkred",
 		showQualifiedName: false,
@@ -224,5 +224,5 @@ var canvasHoverController = (function () {
 		reset: reset,
 		handleOnMouseEnter: handleOnMouseEnter,
 		handleOnMouseLeave: handleOnMouseLeave
-    };    
+    };
 })();

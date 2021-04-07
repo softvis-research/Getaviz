@@ -569,6 +569,7 @@ var model = (function () {
 			qualifiedName: qualifiedName,
 			belongsTo: belongsTo,
 			children: [],
+			allParents: [],
 			unloadedRelationships: {}
 		};
 
