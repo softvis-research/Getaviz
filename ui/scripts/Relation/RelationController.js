@@ -1,19 +1,21 @@
 var relationController = function () {
 
 	// list of entities whose relations to others are being displayed (not including intermediate steps of recursive relations)
-	var sourceEntities = new Array();
+	let sourceEntities = new Array();
 	// for every source entity (and intermediate of recursive relations), the list of entities it is related to
-	var relatedEntitiesMap = new Map();
+	let relatedEntitiesMap = new Map();
 	// set of all entities that are related to sourceEntities overall, not including the source entities themselves
-	var relatedEntitiesSet = new Set();
+	let relatedEntitiesSet = new Set();
 
-	var connectors = new Array();
-	var relations = new Array();
+	let connectors = new Array();
+	let relations = new Array();
 
-	var activated = false;
+	let activated = false;
+
+	let relationConnectionHelper;
 
 	//config parameters
-	var controllerConfig = {
+	const controllerConfig = {
 		showConnector: true,
 		showHighlight: true,
 
@@ -40,6 +42,7 @@ var relationController = function () {
 	function initialize(setupConfig) {
 
 		application.transferConfigParams(setupConfig, controllerConfig);
+		relationConnectionHelper = createRelationConnectionHelper(controllerConfig);
 
 		events.selected.on.subscribe(onRelationsChanged);
 		events.selected.off.subscribe(onEntityDeselected);
@@ -331,11 +334,11 @@ var relationController = function () {
 	function createRelatedConnections() {
 
 		relations.forEach(function (relation) {
-			var sourceEntity = relation.source;
-			var relatedEntity = relation.target;
+			const sourceEntity = relation.source;
+			const relatedEntity = relation.target;
 
 			//create scene element
-			let connectorElements = createConnector(sourceEntity, relatedEntity, relation.id);
+			const connectorElements = relationConnectionHelper.createConnector(sourceEntity, relatedEntity, relation.id);
 
 			//source or target not rendered -> no connector
 			if (connectorElements === undefined) {
@@ -349,139 +352,6 @@ var relationController = function () {
 				connectors.push(element);
 			});
 		})
-	}
-
-	function createConnector(entity, relatedEntity, relationId) {
-
-		//calculate attributes
-		var sourcePosition = canvasManipulator.getCenterOfEntity(entity);
-		if (sourcePosition === null) {
-			return;
-		}
-
-		var targetPosition = canvasManipulator.getCenterOfEntity(relatedEntity);
-		if (targetPosition === null) {
-			return;
-		}
-
-		if (controllerConfig.sourceStartAtParentBorder) {
-			let sourceParent = entity.belongsTo;
-			let targetParent = relatedEntity.belongsTo;
-			if (sourceParent != targetParent) {
-				if (controllerConfig.targetEndAtParentBorder) {
-					targetPosition = canvasManipulator.getCenterOfEntity(targetParent);
-				}
-				let intersection = calculateBorderPosition(targetPosition, canvasManipulator.getCenterOfEntity(sourceParent), sourceParent);
-				if (intersection != undefined) {
-					sourcePosition = intersection;
-				} else console.debug("raycasting found no intersection with parent objects surface");
-			}
-		}
-
-		if (controllerConfig.targetEndAtParentBorder) {
-			let targetParent = relatedEntity.belongsTo;
-			if (targetParent != entity.belongsTo) {
-				let intersection = calculateBorderPosition(sourcePosition, canvasManipulator.getCenterOfEntity(targetParent), targetParent);
-				if (intersection != undefined) {
-					targetPostion = intersection;
-				} else console.debug("raycasting found no intersection with parent objects surface");
-			}
-		}
-
-		if (controllerConfig.sourceStartAtBorder) {
-			if (controllerConfig.targetEndAtBorder) {
-				targetPosition = canvasManipulator.getCenterOfEntity(relatedEntity);
-			}
-			// getCenterOfEntity again in-case it got overwritten for sourceStartAtParentBorder
-			sourcePosition = calculateBorderPosition(targetPosition, canvasManipulator.getCenterOfEntity(entity), entity);
-		}
-		if (controllerConfig.targetEndAtBorder) {
-			// getCenterOfEntity again in-case it got overwritten for targetEndAtParentBorder
-			targetPosition = calculateBorderPosition(sourcePosition, canvasManipulator.getCenterOfEntity(relatedEntity), relatedEntity);
-		}
-
-		const connectorSize = 0.05;
-
-		// This function made no sense and doesn't seem to work on x3dom either
-		/*if(controllerConfig.fixPositionZ) {
-			sourcePosition.z = controllerConfig.fixPositionZ;
-			targetPosition.z = controllerConfig.fixPositionZ;
-		}*/
-		// suggestion for city model: draw horizontal cylinders on the lower positions level
-		if (controllerConfig.fixPositionY) {
-			sourcePosition.y = Math.min(sourcePosition.y, targetPosition.y);
-			targetPosition.y = sourcePosition.y;
-		}
-
-		let deltaX = targetPosition.x - sourcePosition.x;
-		let deltaY = targetPosition.y - sourcePosition.y;
-		let deltaZ = targetPosition.z - sourcePosition.z;
-
-		let distance = sourcePosition.distanceTo(targetPosition);
-		let direction = new THREE.Vector3(deltaX, deltaY, deltaZ).normalize();
-
-		//create connector
-		const connector = document.createElement("a-cylinder");
-		const connectorColors = [controllerConfig.connectorColor.r, controllerConfig.connectorColor.g, controllerConfig.connectorColor.b];
-		connector.setAttribute("color", canvasManipulator.numbersToHexColor(connectorColors.map(v => v*255)));
-
-		connector.addEventListener("loaded", function () {
-			const threeMesh = this.object3DMap.mesh;
-
-			threeMesh.scale.set(connectorSize, distance, connectorSize);
-			threeMesh.position.set(sourcePosition.x + deltaX / 2,
-				sourcePosition.y + deltaY / 2,
-				sourcePosition.z + deltaZ / 2);
-
-			connector.setAttribute("radius", 5);
-
-			const quaternion = threeMesh.quaternion;
-			quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
-
-		});
-		connector.setAttribute("flat-shading", true);
-		connector.setAttribute("shader", "flat");
-		connector.setAttribute("id", relationId);
-
-		let scene = document.querySelector("a-scene");
-		scene.appendChild(connector);
-		var connectorElements = [];
-		connectorElements.push(connector);
-
-		// create Endpoints
-		if (controllerConfig.createEndpoints) {
-			var size = connectorSize * 1.5;
-			var length = size * 6;
-			var sourceEndpoint = document.createElement("a-cylinder");
-			sourceEndpoint.addEventListener("loaded", function () {
-				let threeMesh = this.object3DMap.mesh;
-				threeMesh.material.color.setRGB(controllerConfig.endpointColor);
-				threeMesh.scale.set(size, length, size);
-				threeMesh.position.set(sourcePosition.x, sourcePosition.y, sourcePosition.z);
-				var quaternion = threeMesh.quaternion;
-				quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
-			});
-			sourceEndpoint.setAttribute("flat-shading", true);
-			sourceEndpoint.setAttribute("shader", "flat");
-
-			var targetEndpoint = document.createElement("a-cylinder");
-			targetEndpoint.addEventListener("loaded", function () {
-				let threeMesh = this.object3DMap.mesh;
-				threeMesh.material.color.setRGB(controllerConfig.endpointColor);
-				threeMesh.scale.set(size, length, size);
-				threeMesh.position.set(targetPosition.x, targetPosition.y, targetPosition.z);
-				var quaternion = threeMesh.quaternion;
-				quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
-			});
-			targetEndpoint.setAttribute("shader", "flat");
-
-			scene.appendChild(sourceEndpoint);
-			scene.appendChild(targetEndpoint);
-			connectorElements.push(sourceEndpoint);
-			connectorElements.push(targetEndpoint);
-
-		}
-		return connectorElements;
 	}
 
 	function removeAllConnectors() {
@@ -498,14 +368,6 @@ var relationController = function () {
 		});
 
 		connectors = new Array();
-	}
-
-	function calculateBorderPosition(sourceOfRay, targetOfRay, entity) {
-		let object = document.getElementById(entity.id);
-		let raycaster = new THREE.Raycaster();
-		raycaster.set(sourceOfRay, targetOfRay.subVectors(targetOfRay, sourceOfRay).normalize());
-		let intersection = raycaster.intersectObject(object.object3DMap.mesh);
-		return intersection[0].point;
 	}
 
 

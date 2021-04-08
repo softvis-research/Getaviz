@@ -297,7 +297,7 @@ var canvasManipulator = (function () {
     }
 
     function numbersToHexColor(rgbArray) {
-        return "#" + rgbArray.map(value => parseInt(value).toString(16).padStart(2, "0")).join();
+        return "#" + rgbArray.map(value => parseInt(value).toString(16).padStart(2, "0")).join("");
     }
 
     function hideEntities(entities, controller) {
