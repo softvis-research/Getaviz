@@ -130,7 +130,7 @@ var createRelationConnectionHelper = function(controllerConfig) {
 
                 const targetEndpoint = document.createElement("a-cylinder");
                 setConnectorMeshProperties(targetEndpoint, targetPosition, null, direction, size, length);
-                setCommonConnectorHTMLProperties(sourceEndpoint, controllerConfig.endpointColor);
+                setCommonConnectorHTMLProperties(targetEndpoint, controllerConfig.endpointColor);
 
                 scene.appendChild(sourceEndpoint);
                 scene.appendChild(targetEndpoint);
