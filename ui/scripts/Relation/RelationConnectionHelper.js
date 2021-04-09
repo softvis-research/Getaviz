@@ -3,18 +3,12 @@ var createRelationConnectionHelper = function(controllerConfig) {
 
         const connectorSize = 0.05;
 
-        function setConnectorMeshProperties(connectorElement, position, deltaArr, direction, width, length) {
-            if (!deltaArr) {
-                deltaArr = [0, 0, 0];
-            }
-
+        function setConnectorMeshProperties(connectorElement, position, direction, width, length) {
             connectorElement.addEventListener("loaded", function () {
                 const threeMesh = this.object3DMap.mesh;
 
                 threeMesh.scale.set(width, length, width);
-                threeMesh.position.set(position.x + deltaArr[0] / 2,
-                    position.y + deltaArr[1] / 2,
-                    position.z + deltaArr[2] / 2);
+                threeMesh.position.set(position.x, position.y, position.z);
 
                 const quaternion = threeMesh.quaternion;
                 quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
@@ -94,22 +88,28 @@ var createRelationConnectionHelper = function(controllerConfig) {
             return intersection[0].point;
         }
 
+        function combineObjectProperties(leftObj, rightObj, mergeFunction) {
+            const mergedObject = {};
+            for (const key of Object.keys(leftObj)) {
+                mergedObject[key] = mergeFunction(leftObj[key], rightObj[key]);
+            }
+            return mergedObject;
+        }
+
         function createConnector(entity, relatedEntity, relationId) {
             const {sourcePosition, targetPosition} = evaluatePositions(entity, relatedEntity);
             if (!sourcePosition || !targetPosition) {
                 return null;
             }
 
-            const deltaX = targetPosition.x - sourcePosition.x;
-            const deltaY = targetPosition.y - sourcePosition.y;
-            const deltaZ = targetPosition.z - sourcePosition.z;
-
+            const delta = combineObjectProperties(targetPosition, sourcePosition, (left, right) => left - right);
             const distance = sourcePosition.distanceTo(targetPosition);
-            const direction = new THREE.Vector3(deltaX, deltaY, deltaZ).normalize();
+            const direction = new THREE.Vector3(delta.x, delta.y, delta.z).normalize();
 
             // create connector
             const connector = document.createElement("a-cylinder");
-            setConnectorMeshProperties(connector, sourcePosition, [deltaX, deltaY, deltaZ], direction, connectorSize, distance);
+            const halfwayPoint = combineObjectProperties(sourcePosition, delta, (left, right) => left + right / 2);
+            setConnectorMeshProperties(connector, halfwayPoint, direction, connectorSize, distance);
             setCommonConnectorHTMLProperties(connector, controllerConfig.connectorColor);
             connector.setAttribute("radius", 5);
             connector.setAttribute("id", relationId);
@@ -125,11 +125,11 @@ var createRelationConnectionHelper = function(controllerConfig) {
                 const size = connectorSize * 1.5;
                 const length = size * 6;
                 const sourceEndpoint = document.createElement("a-cylinder");
-                setConnectorMeshProperties(sourceEndpoint, sourcePosition, null, direction, size, length);
+                setConnectorMeshProperties(sourceEndpoint, sourcePosition, direction, size, length);
                 setCommonConnectorHTMLProperties(sourceEndpoint, controllerConfig.endpointColor);
 
                 const targetEndpoint = document.createElement("a-cylinder");
-                setConnectorMeshProperties(targetEndpoint, targetPosition, null, direction, size, length);
+                setConnectorMeshProperties(targetEndpoint, targetPosition, direction, size, length);
                 setCommonConnectorHTMLProperties(targetEndpoint, controllerConfig.endpointColor);
 
                 scene.appendChild(sourceEndpoint);

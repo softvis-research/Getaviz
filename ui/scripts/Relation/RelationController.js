@@ -341,7 +341,7 @@ var relationController = function () {
 			const connectorElements = relationConnectionHelper.createConnector(sourceEntity, relatedEntity, relation.id);
 
 			//source or target not rendered -> no connector
-			if (connectorElements === undefined) {
+			if (!connectorElements) {
 				events.log.error.publish({ text: "connector - createRelatedConnections - source or target not rendered" });
 				return;
 			}
