@@ -202,10 +202,10 @@ var relationController = function () {
 
 		events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + applicationEvent.entities[0] });
 
-		await getRelatedEntities(sourceEntities);
+		await loadRelations(sourceEntities);
 
 		if (controllerConfig.showRecursiveRelations) {
-			await getRecursiveRelations(sourceEntities);
+			await loadRecursiveRelations(sourceEntities);
 		}
 
 		events.log.info.publish({ text: "connector - onRelationsChanged - related Entities - " + relatedEntitiesMap.size });
@@ -227,29 +227,32 @@ var relationController = function () {
 	}
 
 	async function getRelatedEntities(sourceEntitiesArray) {
+		const relatedEntities = new Map();
 		for (const sourceEntity of sourceEntitiesArray) {
-			if (relatedEntitiesMap.has(sourceEntity)) {
-				//sourceEntity already analyzed
-				return;
-			}
-
 			const unloadedRelatedEntities = getRelatedEntitiesOfSourceEntity(sourceEntity.unloadedRelationships, sourceEntity.type);
 			if (unloadedRelatedEntities.length) {
 				await neo4jModelLoadController.loadTreesContainingAnyOf(unloadedRelatedEntities);
 			}
-			const allRelatedEntitiesOfSourceEntity = getRelatedEntitiesOfSourceEntity(sourceEntity, sourceEntity.type);
-			const relatedEntitiesOfSourceEntity = [];
+			relatedEntities.set(sourceEntity, getRelatedEntitiesOfSourceEntity(sourceEntity, sourceEntity.type));
+		}
+		return relatedEntities;
+	}
 
-			allRelatedEntitiesOfSourceEntity.forEach(function (relatedEntity) {
-				if (relatedEntitiesOfSourceEntity.includes(relatedEntity)) {
+	async function loadRelations(sourceEntitiesArray) {
+		const newRelatedEntities = await getRelatedEntities(sourceEntitiesArray);
+
+		for (const [sourceEntity, allRelatedEntitiesOfSourceEntity] of newRelatedEntities) {
+			const relatedEntitiesOfSourceEntity = new Set();
+			for (const relatedEntity of allRelatedEntitiesOfSourceEntity) {
+
+				if (relatedEntitiesOfSourceEntity.has(relatedEntity)) {
 					events.log.info.publish({ text: "connector - onRelationsChanged - multiple relation" });
-					return;
+					break;
 				}
-
 				if (!controllerConfig.showInnerRelations) {
 					if (isTargetChildOfSourceParent(relatedEntity, sourceEntity)) {
 						events.log.info.publish({ text: "connector - onRelationsChanged - inner relation" });
-						return;
+						break;
 					}
 				}
 
@@ -266,11 +269,11 @@ var relationController = function () {
 
 				relations.push(relation);
 
-				relatedEntitiesOfSourceEntity.push(relatedEntity);
+				relatedEntitiesOfSourceEntity.add(relatedEntity);
 				relatedEntitiesSet.add(relatedEntity);
-			});
+			}
 
-			relatedEntitiesMap.set(sourceEntity, relatedEntitiesOfSourceEntity);
+			relatedEntitiesMap.set(sourceEntity, Array.from(relatedEntitiesOfSourceEntity));
 		}
 	}
 
@@ -307,9 +310,9 @@ var relationController = function () {
 		return relatedEntitiesOfSourceEntity;
 	}
 
-	async function getRecursiveRelations(oldSourceEntities) {
+	async function loadRecursiveRelations(oldSourceEntities) {
 		for (const oldSourceEntity of oldSourceEntities) {
-			var relatedEntities = relatedEntitiesMap.get(oldSourceEntity);
+			const relatedEntities = relatedEntitiesMap.get(oldSourceEntity);
 
 			if (relatedEntities.length == 0) {
 				return;
@@ -321,8 +324,8 @@ var relationController = function () {
 				return;
 			}
 
-			await getRelatedEntities(newSourceEntities);
-			await getRecursiveRelations(newSourceEntities);
+			await loadRelations(newSourceEntities);
+			await loadRecursiveRelations(newSourceEntities);
 		}
 	}
 
