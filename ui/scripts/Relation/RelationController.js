@@ -380,7 +380,7 @@ var relationController = function () {
 			return;
 		}
 
-		const visibleEntities = Array.from(relatedEntitiesSet.values()).filter(entity => !entity.filtered);
+		const visibleEntities = Array.from(relatedEntitiesSet).filter(entity => !entity.filtered);
 		canvasManipulator.highlightEntities(visibleEntities, controllerConfig.highlightColor, { name: "relationController" });
 	}
 
@@ -389,7 +389,7 @@ var relationController = function () {
 			return;
 		}
 
-		const visibleEntities = Array.from(relatedEntitiesSet.values()).filter(entity => !entity.filtered);
+		const visibleEntities = Array.from(relatedEntitiesSet).filter(entity => !entity.filtered);
 		canvasManipulator.unhighlightEntities(visibleEntities, { name: "relationController" });
 	}
 

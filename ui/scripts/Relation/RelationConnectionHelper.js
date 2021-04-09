@@ -19,7 +19,7 @@ var createRelationConnectionHelper = function(controllerConfig) {
             connectorElement.setAttribute("flat-shading", true);
             connectorElement.setAttribute("shader", "flat");
             const colorArr = [rgbColorObj.r, rgbColorObj.g, rgbColorObj.b];
-            connectorElement.setAttribute("color", canvasManipulator.numbersToHexColor(colorArr.map(v => v*255)));
+            connectorElement.setAttribute("color", canvasManipulator.numbersToHexColor(colorArr.map(v => v * 255)));
         }
 
         function evaluatePositions(entity, relatedEntity) {
@@ -77,7 +77,7 @@ var createRelationConnectionHelper = function(controllerConfig) {
             return {
                 sourcePosition: sourcePosition,
                 targetPosition: targetPosition,
-            }
+            };
         }
 
         function calculateBorderPosition(sourceOfRay, targetOfRay, entity) {
