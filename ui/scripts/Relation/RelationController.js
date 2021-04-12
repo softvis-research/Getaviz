@@ -47,6 +47,7 @@ var relationController = function () {
 		events.selected.on.subscribe(onRelationsChanged);
 		events.selected.off.subscribe(onEntityDeselected);
 		events.filtered.on.subscribe(onEntityFiltered);
+		events.filtered.off.subscribe(onEntityUnfiltered);
 	}
 
 	function activate() {
@@ -157,7 +158,28 @@ var relationController = function () {
 		canvasManipulator.unhighlightEntities(previouslyRelatedSourceEntities, { name: "relationController" });
 	}
 
-	// does not remove these entities from the target lists of relatedEntitiesMap
+	async function onEntityUnfiltered(applicationEvent) {
+		// do not needlessly trigger on unfiltering caused by relations
+		if (sourceEntities.length && applicationEvent.sender !== relationController) {
+			removeAllConnectors();
+			unhighlightRelatedEntities();
+
+			await loadAllRelationsTo(applicationEvent.entities);
+			if (!activated) return;
+
+			await canvasManipulator.waitForRenderOfElement(applicationEvent.entities[0]);
+
+			if (controllerConfig.showConnector) {
+				createRelatedConnections();
+			}
+			if (controllerConfig.showHighlight) {
+				highlightRelatedEntities();
+			}
+		}
+	}
+
+	// remove all relations involving these entities from the internal relation state
+	// this does not remove these entities from the target lists of relatedEntitiesMap, that already happens earlier in onEntityFiltered
 	function removeRelationsToAndFrom(entitySet) {
 		for (const relatedEntity of entitySet) {
 			relatedEntitiesSet.delete(relatedEntity);
@@ -193,7 +215,6 @@ var relationController = function () {
 
 		events.log.info.publish({ text: "connector - onRelationsChanged" });
 
-		//get related entities
 		if (controllerConfig.useMultiSelect) {
 			sourceEntities = applicationEvent.entities;
 		} else {
@@ -202,10 +223,10 @@ var relationController = function () {
 
 		events.log.info.publish({ text: "connector - onRelationsChanged - selected Entity - " + applicationEvent.entities[0] });
 
-		await loadRelations(sourceEntities);
+		await loadAllRelationsOf(sourceEntities);
 
 		if (controllerConfig.showRecursiveRelations) {
-			await loadRecursiveRelations(sourceEntities);
+			await loadAllRecursiveRelationsOf(sourceEntities);
 		}
 
 		events.log.info.publish({ text: "connector - onRelationsChanged - related Entities - " + relatedEntitiesMap.size });
@@ -226,6 +247,7 @@ var relationController = function () {
 		}
 	}
 
+	// given a list of entities, return a map depicting all relations originating from them
 	async function getRelatedEntities(sourceEntitiesArray) {
 		const relatedEntities = new Map();
 		for (const sourceEntity of sourceEntitiesArray) {
@@ -238,13 +260,13 @@ var relationController = function () {
 		return relatedEntities;
 	}
 
-	async function loadRelations(sourceEntitiesArray) {
-		const newRelatedEntities = await getRelatedEntities(sourceEntitiesArray);
+	// add these new relations to the internal relation state - duplicates will be filtered
+	function loadRelations(newRelationMap) {
+		for (const [sourceEntity, allRelatedEntitiesOfSourceEntity] of newRelationMap) {
+			const oldRelatedEntities = relatedEntitiesMap.get(sourceEntity);
+			const relatedEntitiesOfSourceEntity = new Set(oldRelatedEntities);
 
-		for (const [sourceEntity, allRelatedEntitiesOfSourceEntity] of newRelatedEntities) {
-			const relatedEntitiesOfSourceEntity = new Set();
 			for (const relatedEntity of allRelatedEntitiesOfSourceEntity) {
-
 				if (relatedEntitiesOfSourceEntity.has(relatedEntity)) {
 					events.log.info.publish({ text: "connector - onRelationsChanged - multiple relation" });
 					break;
@@ -275,6 +297,22 @@ var relationController = function () {
 
 			relatedEntitiesMap.set(sourceEntity, Array.from(relatedEntitiesOfSourceEntity));
 		}
+	}
+
+	async function loadAllRelationsOf(sourceEntitiesArray) {
+		const newRelatedEntities = await getRelatedEntities(sourceEntitiesArray);
+		loadRelations(newRelatedEntities);
+	}
+
+	async function loadAllRelationsTo(targetEntitiesArray) {
+		// there is no guarantee that all relations have a matching inverse
+		// so we'll have to re-find all relations and filter them down to the ones pointing at the targets
+		const newRelatedEntities = await getRelatedEntities(sourceEntities);
+		const targetEntitiesSet = new Set(targetEntitiesArray);
+		for (const [source, targets] of newRelatedEntities) {
+			newRelatedEntities.set(source, targets.filter(target => targetEntitiesSet.has(target)));
+		}
+		loadRelations(newRelatedEntities);
 	}
 
 	function getRelatedEntitiesOfSourceEntity(sourceEntity, entityType) {
@@ -310,7 +348,7 @@ var relationController = function () {
 		return relatedEntitiesOfSourceEntity;
 	}
 
-	async function loadRecursiveRelations(oldSourceEntities) {
+	async function loadAllRecursiveRelationsOf(oldSourceEntities) {
 		for (const oldSourceEntity of oldSourceEntities) {
 			const relatedEntities = relatedEntitiesMap.get(oldSourceEntity);
 
@@ -324,8 +362,8 @@ var relationController = function () {
 				return;
 			}
 
-			await loadRelations(newSourceEntities);
-			await loadRecursiveRelations(newSourceEntities);
+			await loadAllRelationsOf(newSourceEntities);
+			await loadAllRecursiveRelationsOf(newSourceEntities);
 		}
 	}
 
