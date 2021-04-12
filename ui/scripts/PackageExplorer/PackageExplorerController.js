@@ -315,7 +315,7 @@ var packageExplorerController = (function () {
 
 	function onEntitiesUnfiltered(applicationEvent) {
 		// only catch events from elsewhere - if they come from here, the tree will already be updated
-		if (applicationEvent.sender !== this) {
+		if (applicationEvent.sender !== packageExplorerController) {
 			// put all ids into a set, so we can use its constant-time has() to find the matching ZTree objects more efficiently
 			const entityIdSet = new Set();
 			for (const entity of applicationEvent.entities) {
