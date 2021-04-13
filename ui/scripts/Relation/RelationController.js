@@ -50,18 +50,18 @@ var relationController = function () {
 		events.filtered.off.subscribe(onEntityUnfiltered);
 	}
 
-	function activate() {
+	async function activate() {
 		activated = true;
-		unhideRelatedEntities().then(() => {
-			if (relatedEntitiesMap.size != 0) {
-				if (controllerConfig.showConnector) {
-					createRelatedConnections();
-				}
-				if (controllerConfig.showHighlight) {
-					highlightRelatedEntities();
-				}
+		await unhideRelatedEntities();
+
+		if (relatedEntitiesMap.size != 0) {
+			if (controllerConfig.showConnector) {
+				createRelatedConnections(relations);
 			}
-		});
+			if (controllerConfig.showHighlight) {
+				highlightRelatedEntities(relatedEntitiesSet);
+			}
+		}
 	}
 
 	function deactivate() {
@@ -75,7 +75,7 @@ var relationController = function () {
 			removeAllConnectors();
 		}
 		if (controllerConfig.showHighlight) {
-			unhighlightRelatedEntities();
+			unhighlightAllRelatedEntities();
 		}
 
 		//remove relation entities
@@ -161,19 +161,18 @@ var relationController = function () {
 	async function onEntityUnfiltered(applicationEvent) {
 		// do not needlessly trigger on unfiltering caused by relations
 		if (sourceEntities.length && applicationEvent.sender !== relationController) {
-			removeAllConnectors();
-			unhighlightRelatedEntities();
-
-			await loadAllRelationsTo(applicationEvent.entities);
+			const newRelations = await loadAllRelationsTo(applicationEvent.entities);
 			if (!activated) return;
+
+			if (controllerConfig.showHighlight) {
+				const newRelatedEntities = new Set(newRelations.map(entity => entity.target));
+				highlightRelatedEntities(newRelatedEntities);
+			}
 
 			await canvasManipulator.waitForRenderOfElement(applicationEvent.entities[0]);
 
 			if (controllerConfig.showConnector) {
-				createRelatedConnections();
-			}
-			if (controllerConfig.showHighlight) {
-				highlightRelatedEntities();
+				createRelatedConnections(newRelations);
 			}
 		}
 	}
@@ -236,14 +235,15 @@ var relationController = function () {
 		}
 
 		if (activated) {
-			unhideRelatedEntities().then(() => {
-				if (controllerConfig.showConnector) {
-					createRelatedConnections();
-				}
-				if (controllerConfig.showHighlight) {
-					highlightRelatedEntities();
-				}
-			});
+			if (controllerConfig.showHighlight) {
+				highlightRelatedEntities(relatedEntitiesSet);
+			}
+
+			await unhideRelatedEntities();
+
+			if (controllerConfig.showConnector) {
+				createRelatedConnections(relations);
+			}
 		}
 	}
 
@@ -262,6 +262,7 @@ var relationController = function () {
 
 	// add these new relations to the internal relation state - duplicates will be filtered
 	function loadRelations(newRelationMap) {
+		const newRelations = [];
 		for (const [sourceEntity, allRelatedEntitiesOfSourceEntity] of newRelationMap) {
 			const oldRelatedEntities = relatedEntitiesMap.get(sourceEntity);
 			const relatedEntitiesOfSourceEntity = new Set(oldRelatedEntities);
@@ -290,6 +291,7 @@ var relationController = function () {
 				relation.target = relatedEntity;
 
 				relations.push(relation);
+				newRelations.push(relation);
 
 				relatedEntitiesOfSourceEntity.add(relatedEntity);
 				relatedEntitiesSet.add(relatedEntity);
@@ -297,11 +299,13 @@ var relationController = function () {
 
 			relatedEntitiesMap.set(sourceEntity, Array.from(relatedEntitiesOfSourceEntity));
 		}
+
+		return newRelations;
 	}
 
 	async function loadAllRelationsOf(sourceEntitiesArray) {
 		const newRelatedEntities = await getRelatedEntities(sourceEntitiesArray);
-		loadRelations(newRelatedEntities);
+		return loadRelations(newRelatedEntities);
 	}
 
 	async function loadAllRelationsTo(targetEntitiesArray) {
@@ -312,7 +316,7 @@ var relationController = function () {
 		for (const [source, targets] of newRelatedEntities) {
 			newRelatedEntities.set(source, targets.filter(target => targetEntitiesSet.has(target)));
 		}
-		loadRelations(newRelatedEntities);
+		return loadRelations(newRelatedEntities);
 	}
 
 	function getRelatedEntitiesOfSourceEntity(sourceEntity, entityType) {
@@ -372,9 +376,9 @@ var relationController = function () {
 			Connection
 	*************************/
 
-	function createRelatedConnections() {
+	function createRelatedConnections(newRelations) {
 
-		relations.forEach(function (relation) {
+		newRelations.forEach(function (relation) {
 			const sourceEntity = relation.source;
 			const relatedEntity = relation.target;
 
@@ -416,16 +420,16 @@ var relationController = function () {
 			Highlight
 	************************/
 
-	function highlightRelatedEntities() {
-		if (relatedEntitiesSet.size == 0) {
+	function highlightRelatedEntities(newRelatedEntities) {
+		if (newRelatedEntities.size == 0) {
 			return;
 		}
 
-		const visibleEntities = Array.from(relatedEntitiesSet).filter(entity => !entity.filtered);
+		const visibleEntities = Array.from(newRelatedEntities).filter(entity => !entity.filtered);
 		canvasManipulator.highlightEntities(visibleEntities, controllerConfig.highlightColor, { name: "relationController" });
 	}
 
-	function unhighlightRelatedEntities() {
+	function unhighlightAllRelatedEntities() {
 		if (relatedEntitiesSet.size == 0) {
 			return;
 		}
