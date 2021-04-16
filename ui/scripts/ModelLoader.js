@@ -1,24 +1,65 @@
 let neo4jModelLoadController = (function () {
 
-    //  Default config (Fallback in case it's a new setup without a proper config)
+    // default config (fallback in case it's a new setup without a proper config)
     let controllerConfig = {
         url: 'http://localhost:7474/db/data/transaction/commit',
         loadStartData: 'rootPackages',
         showLoadSpinner: true
     };
 
+    // these counters are specific to a loading process, not an overall count
+    let loadedElements = 0;
+    let totalElements = 0;
+    let loaderElement = null;
+    let loaderDataElement = null;
+    let keepLoaderAlive = false;
+
     function initialize() {
         // Override config with ones from setup
         if (setup.neo4jModelLoadConfig) {
             controllerConfig = {...controllerConfig, ...setup.neo4jModelLoadConfig}
         }
+        if (controllerConfig.showLoadSpinner) {
+            createLoadSpinner();
+        }
     };
 
+    function createLoadSpinner() {
+        const loader = document.createElement('div');
+        loader.id = 'load-spinner-bg';
+        loader.className = 'hidden';
+        loader.innerHTML = '<div class="load-spinner-body"><div class="loader">Loading...</div><div id="load-spinner-data"></div>';
+        document.body.appendChild(loader);
+
+        loaderElement = document.getElementById('load-spinner-bg');
+        loaderDataElement = document.getElementById('load-spinner-data');
+    }
+
+    function updateLoadSpinner(additionalLoadedElements, additionalTotalElements, resetKeepAlive = false) {
+        if (!controllerConfig.showLoadSpinner) return;
+
+        if (resetKeepAlive) keepLoaderAlive = false;
+
+        loadedElements += additionalLoadedElements || 0;
+        totalElements += additionalTotalElements || 0;
+        if (loadedElements === totalElements) {
+            if (!keepLoaderAlive) {
+                loaderElement.classList.add('hidden');
+                loadedElements = 0;
+                totalElements = 0;
+            }
+        } else {
+            loaderDataElement.innerHTML = `Loading elements: ${loadedElements} of ${totalElements}`;
+            loaderElement.classList.remove('hidden');
+        }
+    }
 
     // load all model data and metadata that is necessary at launch
     async function loadInitialData() {
         const data = await queryRootNodes();
+        updateLoadSpinner(0, data[0].data.length);
         const createdEntities = await addNodesAsHidden(data, false);
+        updateLoadSpinner(createdEntities.length, 0);
         events.loaded.on.publish({
             entities: createdEntities,
             hidden: true
@@ -28,6 +69,7 @@ let neo4jModelLoadController = (function () {
     // load all nodes that are (direct or indirect) children of or contained by the given root
     async function loadAllChildrenOf(entityId, loadAsHidden) {
         const nodeData = await queryAllChildrenOf(entityId);
+        updateLoadSpinner(0, nodeData[0].data.length);
         let createdEntities;
         if (loadAsHidden) {
             createdEntities = await addNodesAsHidden(nodeData, true);
@@ -38,7 +80,8 @@ let neo4jModelLoadController = (function () {
         const parentEntity = model.getEntityById(entityId);
         parentEntity.hasUnloadedChildren = false;
 
-        console.log("loaded all " + createdEntities.length + " children of " + entityId);
+        updateLoadSpinner(createdEntities.length, 0);
+        events.log.info.publish({ text: `loaded all ${createdEntities.length} children of entity ${entityId}` });
 
         events.loaded.on.publish({
             entities: createdEntities,
@@ -48,6 +91,8 @@ let neo4jModelLoadController = (function () {
     }
 
     async function loadTreesContainingAnyOf(entityIds) {
+        // ensure the loader element does not get cleaned prematurely
+        keepLoaderAlive = true;
         const rootNodeQueries = entityIds.map(id => queryRelatedRootNodeIdOf(id));
         const rootNodeIdSet = new Set();
         await Promise.all(rootNodeQueries)
@@ -55,7 +100,8 @@ let neo4jModelLoadController = (function () {
             .then(ids => ids.forEach(id => rootNodeIdSet.add(id)));
 
         const childrenQueries = [...rootNodeIdSet.values()].map(id => loadAllChildrenOf(id, true));
-        return Promise.all(childrenQueries);
+        //childrenQueries.push(new Promise((resolve) => setTimeout(resolve, 5000)));
+        return Promise.all(childrenQueries).then(() => updateLoadSpinner(0, 0, true));
     }
 
     async function addNodesAsHidden(nodeData, areChildrenLoaded) {
@@ -130,7 +176,7 @@ let neo4jModelLoadController = (function () {
         const payload = {
             'statements': [
                 // neo4j requires keyword "statement", so leave as is
-                { 'statement': `${cypherQuery}` }
+                { 'statement': cypherQuery }
             ]
         }
 
@@ -146,7 +192,7 @@ let neo4jModelLoadController = (function () {
             let data = await response.json();
             return data.results;
         } catch (error) {
-            events.log.warning.publish({ text: error });
+            events.log.error.publish({ text: "Failed to access database: " + error });
         }
     }
 

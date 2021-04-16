@@ -250,11 +250,15 @@ var relationController = function () {
 	// given a list of entities, return a map depicting all relations originating from them
 	async function getRelatedEntities(sourceEntitiesArray) {
 		const relatedEntities = new Map();
+		let entitiesToLoad = [];
 		for (const sourceEntity of sourceEntitiesArray) {
 			const unloadedRelatedEntities = getRelatedEntitiesOfSourceEntity(sourceEntity.unloadedRelationships, sourceEntity.type);
 			if (unloadedRelatedEntities.length) {
-				await neo4jModelLoadController.loadTreesContainingAnyOf(unloadedRelatedEntities);
+				entitiesToLoad = entitiesToLoad.concat(unloadedRelatedEntities);
 			}
+		}
+		await neo4jModelLoadController.loadTreesContainingAnyOf(entitiesToLoad);
+		for (const sourceEntity of sourceEntitiesArray) {
 			relatedEntities.set(sourceEntity, getRelatedEntitiesOfSourceEntity(sourceEntity, sourceEntity.type));
 		}
 		return relatedEntities;
