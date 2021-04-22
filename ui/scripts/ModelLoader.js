@@ -35,6 +35,14 @@ let neo4jModelLoadController = (function () {
         loaderDataElement = document.getElementById('load-spinner-data');
     }
 
+    function showLoadSpinner() {
+        if (loaderElement) loaderElement.classList.remove('hidden');
+    }
+
+    function hideLoadSpinner() {
+        if (loaderElement) loaderElement.classList.add('hidden');
+    }
+
     function updateLoadSpinner(additionalLoadedElements, additionalTotalElements, resetKeepAlive = false) {
         if (!controllerConfig.showLoadSpinner) return;
 
@@ -44,18 +52,19 @@ let neo4jModelLoadController = (function () {
         totalElements += additionalTotalElements || 0;
         if (loadedElements === totalElements) {
             if (!keepLoaderAlive) {
-                loaderElement.classList.add('hidden');
+                hideLoadSpinner();
                 loadedElements = 0;
                 totalElements = 0;
             }
         } else {
             loaderDataElement.innerHTML = `Loading elements: ${loadedElements} of ${totalElements}`;
-            loaderElement.classList.remove('hidden');
+            showLoadSpinner();
         }
     }
 
     // load all model data and metadata that is necessary at launch
     async function loadInitialData() {
+        showLoadSpinner();
         const data = await queryRootNodes();
         updateLoadSpinner(0, data[0].data.length);
         const createdEntities = await addNodesAsHidden(data, false);
@@ -68,6 +77,7 @@ let neo4jModelLoadController = (function () {
 
     // load all nodes that are (direct or indirect) children of or contained by the given root
     async function loadAllChildrenOf(entityId, loadAsHidden) {
+        showLoadSpinner();
         const nodeData = await queryAllChildrenOf(entityId);
         updateLoadSpinner(0, nodeData[0].data.length);
         let createdEntities;
@@ -93,6 +103,7 @@ let neo4jModelLoadController = (function () {
     async function loadTreesContainingAnyOf(entityIds) {
         // ensure the loader element does not get cleaned prematurely
         keepLoaderAlive = true;
+        showLoadSpinner();
         const rootNodeQueries = entityIds.map(id => queryRelatedRootNodeIdOf(id));
         const rootNodeIdSet = new Set();
         await Promise.all(rootNodeQueries)
