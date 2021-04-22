@@ -1,6 +1,6 @@
 var canvasManipulator = (function () {
 
-    var colors = {
+    const colors = {
         darkred: "darkred",
         red: "red",
         black: "black",
@@ -8,17 +8,17 @@ var canvasManipulator = (function () {
         darkorange: "darkorange"
     };
 
-    var animations = {
+    const animations = {
         expanding: "Expanding",
         flashing: "Flashing",
         rotation: "Rotation"
     }
 
-    var scene = {};
+    let scene = {};
 
-    var entityEffectMap = new Map();
+    let entityEffectMap = new Map();
 
-    var hiddenEntitiesMap = new Map();
+    let hiddenEntitiesMap = new Map();
 
     let notificationCallbackQueue = [];
 
@@ -52,18 +52,18 @@ var canvasManipulator = (function () {
     }
 
     function resizeScene() {
-        document.querySelector('a-scene').resize();
+        scene.resize();
     }
 
     function changeTransparencyOfEntities(entities, transparency, controller) {
         entities.forEach(function (entity2) {
             //  getting the entity again here, because without it the check if originalTransparency is defined fails sometimes
-            let entity = model.getEntityById(entity2.id);
+            const entity = model.getEntityById(entity2.id);
             if (entity === undefined) {
                 return;
             }
 
-            let component = document.getElementById(entity.id);
+            const component = document.getElementById(entity.id);
             if (component === undefined) {
                 events.log.error.publish({ text: "CanvasManipulator - changeTransparencyOfEntities - components for entityIds not found" });
                 return;
@@ -71,10 +71,10 @@ var canvasManipulator = (function () {
 
             updateEntityEffectMap(entity, "transparency");
 
-            var transparencyList = entityEffectMap.get(entity.id).get("transparency");
+            const transparencyList = entityEffectMap.get(entity.id).get("transparency");
 
             if (transparencyList.length === 0) {
-                var opacity = component.getAttribute("material").opacity;
+                let opacity = component.getAttribute("material").opacity;
                 opacity = (opacity === undefined) ? 1 : opacity;
 
                 transparencyList.push(
@@ -110,7 +110,7 @@ var canvasManipulator = (function () {
                 return;
             }
 
-            var transparencyEffectIndex = transparencyList.findIndex(transparencyEffect => transparencyEffect.controller == controller.name);
+            const transparencyEffectIndex = transparencyList.findIndex(transparencyEffect => transparencyEffect.controller == controller.name);
 
             //controller not affected the transparency
             if (transparencyEffectIndex === -1) {
@@ -120,7 +120,7 @@ var canvasManipulator = (function () {
             transparencyList.splice(transparencyEffectIndex, 1);
 
             if (transparencyEffectIndex === transparencyList.length) {
-                let component = document.getElementById(entity.id);
+                const component = document.getElementById(entity.id);
                 if (!component) {
                     events.log.error.publish({ text: "CanvasManipulator - resetTransparencyOfEntities - components for entityIds not found" });
                     return;
@@ -132,17 +132,18 @@ var canvasManipulator = (function () {
 
     function startAnimation({ animation, entities, period, scale, flashingColor } = {}) {
         entities.forEach(function (entity) {
-            if (entity !== undefined) {
-                var component = document.getElementById(entity.id);
+            if (!entity) {
+                return;
             }
-            if (component == undefined) {
+            const component = document.getElementById(entity.id);
+            if (!component) {
                 events.log.error.publish({ text: "CanvasManipulator - startAnimation - component for entityId not found" });
                 return;
             }
 
             switch (animation) {
                 case animations.expanding:
-                    var scaleVector = scale + " " + scale + " " + scale;
+                    const scaleVector = scale + " " + scale + " " + scale;
 
                     component.setAttribute("animation__expanding",
                         "property: scale; from: 1 1 1; to: " + scaleVector + "; dur: " + period + "; loop: true; dir: alternate");
@@ -154,7 +155,7 @@ var canvasManipulator = (function () {
                     break;
 
                 case animations.flashing:
-                    var originalColor = component.getAttribute("color");
+                    const originalColor = component.getAttribute("color");
                     component.setAttribute("color-before-animation", originalColor);
 
                     component.setAttribute("animation__color",
@@ -169,10 +170,11 @@ var canvasManipulator = (function () {
 
     function stopAnimation({ animation, entities } = {}) {
         entities.forEach(function (entity) {
-            if (entity !== undefined) {
-                var component = document.getElementById(entity.id);
+            if (!entity) {
+                return;
             }
-            if (component === undefined) {
+            const component = document.getElementById(entity.id);
+            if (!component) {
                 events.log.error.publish({ text: "CanvasManipulator - stopAnimation - component for entityId not found" });
                 return;
             }
@@ -189,7 +191,7 @@ var canvasManipulator = (function () {
                     break;
 
                 case animations.flashing:
-                    var originalColor = component.getAttribute("color");
+                    const originalColor = component.getAttribute("color");
 
                     if (originalColor !== null) {
                         component.removeAttribute("animation__color");
@@ -217,11 +219,11 @@ var canvasManipulator = (function () {
 
     function changeColorOfEntities(entities, color, controller) {
         entities.forEach(function (entity) {
-            if (entity === undefined) {
+            if (!entity) {
                 return;
             }
 
-            let component = document.getElementById(entity.id);
+            const component = document.getElementById(entity.id);
             if (!component) {
                 events.log.error.publish({ text: "CanvasManipulator - changeColorOfEntities - components for entityIds not found" });
                 return;
@@ -229,7 +231,7 @@ var canvasManipulator = (function () {
 
             updateEntityEffectMap(entity, "color");
 
-            var colorList = entityEffectMap.get(entity.id).get("color");
+            const colorList = entityEffectMap.get(entity.id).get("color");
 
             if (colorList.length === 0) {
                 colorList.push(
@@ -288,8 +290,10 @@ var canvasManipulator = (function () {
     }
 
     function setColor(object, color) {
-        color == colors.darkred ? color = colors.red : color = color;
-        let colorValues = color.split(" ");
+        if (color === colors.darkred) {
+            color = colors.red;
+        }
+        const colorValues = color.split(" ");
         if (colorValues.length == 3) {
             color = numbersToHexColor(colorValues);
         }
@@ -302,7 +306,7 @@ var canvasManipulator = (function () {
 
     function hideEntities(entities, controller) {
         entities.forEach(function (entity) {
-            let component = document.getElementById(entity.id);
+            const component = document.getElementById(entity.id);
             if (component === null) {
                 events.log.error.publish({ text: "CanvasManipulator - hideEntities - components for entityIds not found" });
                 return;
@@ -323,11 +327,11 @@ var canvasManipulator = (function () {
                 return;
             }
 
-            let component = hiddenEntitiesMap.get(entity.id);
+            const component = hiddenEntitiesMap.get(entity.id);
             hiddenEntitiesMap.delete(entity.id);
 
             // removed elements seemingly can't be simply re-inserted, so recreate the element instead
-            let entityEl = document.createElement(component.tagName);
+            const entityEl = document.createElement(component.tagName);
             for (const curAttribute of component.attributes) {
                 entityEl.setAttribute(curAttribute.name, curAttribute.value);
             }
@@ -355,7 +359,7 @@ var canvasManipulator = (function () {
     }
 
     function addElement(element) {
-        var addedElements = document.getElementById("addedElements");
+        const addedElements = document.getElementById("addedElements");
         addedElements.appendChild(element);
     }
 
@@ -371,22 +375,8 @@ var canvasManipulator = (function () {
     }
 
     function getCenterOfEntity(entity) {
-        // old processing
-        //var center = new THREE.Vector3();
-        //var object = document.getElementById(entity.id).object3DMap.mesh;
-        //center.x = object.geometry.boundingSphere.center["x"];
-        //center.y = object.geometry.boundingSphere.center["y"];
-        //center.z = object.geometry.boundingSphere.center["z"];
-
-        //return object.localToWorld(center);
-
-        var center = new THREE.Vector3();
-
-        var object = document.getElementById(entity.id).object3DMap.mesh;
-
-        center.x = object.position.x;
-        center.y = object.position.y;
-        center.z = object.position.z;
+        const object = document.getElementById(entity.id).object3DMap.mesh;
+        const center = new THREE.Vector3(object.position.x, object.position.y, object.position.z);
 
         return object.localToWorld(center);
     }
