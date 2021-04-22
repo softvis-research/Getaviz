@@ -28,7 +28,7 @@ let neo4jModelLoadController = (function () {
         const loader = document.createElement('div');
         loader.id = 'load-spinner-bg';
         loader.className = 'hidden';
-        loader.innerHTML = '<div class="load-spinner-body"><div class="loader">Loading...</div><div id="load-spinner-data"></div>';
+        loader.innerHTML = '<div class="load-spinner-body"><div class="loader">Loading...</div><div id="load-spinner-data">Loading elements...</div>';
         document.body.appendChild(loader);
 
         loaderElement = document.getElementById('load-spinner-bg');
