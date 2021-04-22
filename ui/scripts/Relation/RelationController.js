@@ -164,13 +164,12 @@ var relationController = function () {
 			const newRelations = await loadAllRelationsTo(applicationEvent.entities);
 			if (!activated) return;
 
+			await canvasManipulator.waitForRenderOfElement(applicationEvent.entities[0]);
+
 			if (controllerConfig.showHighlight) {
 				const newRelatedEntities = new Set(newRelations.map(entity => entity.target));
 				highlightRelatedEntities(newRelatedEntities);
 			}
-
-			await canvasManipulator.waitForRenderOfElement(applicationEvent.entities[0]);
-
 			if (controllerConfig.showConnector) {
 				createRelatedConnections(newRelations);
 			}
