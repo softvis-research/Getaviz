@@ -257,7 +257,9 @@ var relationController = function () {
 				entitiesToLoad = entitiesToLoad.concat(unloadedRelatedEntities);
 			}
 		}
-		await neo4jModelLoadController.loadTreesContainingAnyOf(entitiesToLoad);
+		if (entitiesToLoad.length) {
+			await neo4jModelLoadController.loadTreesContainingAnyOf(entitiesToLoad);
+		}
 		for (const sourceEntity of sourceEntitiesArray) {
 			relatedEntities.set(sourceEntity, getRelatedEntitiesOfSourceEntity(sourceEntity, sourceEntity.type));
 		}
