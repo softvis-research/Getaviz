@@ -24,7 +24,7 @@ var featureExplorerController = (function () {
      * Color data
      */
     let featureColorMap = new Map();
-    const clearedColor = "#353559"
+    let coreColor = "#353559"
 
     function initialize(controllerSetup) {
 
@@ -44,6 +44,7 @@ var featureExplorerController = (function () {
         zTreeDiv.appendChild(featureExplorerTreeUl);
         rootDiv.appendChild(zTreeDiv);
 
+        setCoreColor();
         filterTracesFromEntities();
         setMainAffiliationForEachTrace();
         buildTree();
@@ -85,7 +86,7 @@ var featureExplorerController = (function () {
     function addControlEvents() {
         $("#clearColors").on('click', function () {
             featureColorMap.forEach(function (value, key) {
-                featureColorMap.set(key, clearedColor);
+                featureColorMap.set(key, coreColor);
             })
             updateColors();
         })
@@ -449,6 +450,12 @@ var featureExplorerController = (function () {
             }
         })
         return result;
+    }
+
+    function setCoreColor() {
+        const classEntities = model.getEntitiesByType("Class");
+        const idOfCoreClass = classEntities.find(function(el){return el.featureAffiliations.length === 0}).id;
+        coreColor = document.getElementById(idOfCoreClass).getAttribute("color");
     }
 
     /**
