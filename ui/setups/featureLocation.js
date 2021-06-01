@@ -26,6 +26,7 @@ var setup = {
         {
             name: "canvasHoverController",
 
+            hoverColor: "#b0b0b0",
             showFeatureAffiliation: true,
         },
 
@@ -34,7 +35,9 @@ var setup = {
         },
 
         {
-            name: "canvasSelectController"
+            name: "canvasSelectController",
+
+            color: "#b0b0b0",
         },
 
         {
@@ -80,6 +83,7 @@ var setup = {
             showCode: true
         },
 
+        /*
         {
             name: "relationConnectorController",
 
@@ -98,6 +102,7 @@ var setup = {
         {
             name: "relationHighlightController"
         },
+        */
         {
             name: "menuController",
             menuMapping: [
