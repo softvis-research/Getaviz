@@ -75,7 +75,7 @@ var setup = {
         },
         {
             name: "sourceCodeController",
-            url: "https://raw.githubusercontent.com/softvis-research/Bank/master/src/",
+            url: "",
             showCodeWindowButton: true,
             showCode: true
         },
