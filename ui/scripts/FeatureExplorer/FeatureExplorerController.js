@@ -545,7 +545,13 @@ var featureExplorerController = (function () {
 
     function zTreeOnClick(treeEvent, treeId, treeNode) {
         if (treeNode.entityId) {
-            canvasManipulator.flyToEntity(model.getEntityById(treeNode.entityId));
+            entity = model.getEntityById(treeNode.entityId);
+            canvasManipulator.flyToEntity(entity);
+            var applicationEvent = {
+                sender: featureExplorerController,
+                entities: [entity]
+            };
+            events.selected.on.publish(applicationEvent);
         }
     }
 
