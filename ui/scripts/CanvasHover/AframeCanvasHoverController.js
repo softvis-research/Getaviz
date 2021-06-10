@@ -66,6 +66,7 @@ var canvasHoverController = (function () {
 			versionPElement.id = "tooltipVersion";
 			tooltipDivElement.appendChild(versionPElement);
 		}
+    
 		if (controllerConfig.showIssues) {
 			var openIssuesPElement = document.createElement("P");
 			openIssuesPElement.id = "tooltipOpenIssues";
@@ -88,6 +89,7 @@ var canvasHoverController = (function () {
 			featureAffiliationPElement.id = "tooltipFeatureAffiliation";
 			tooltipDivElement.appendChild(featureAffiliationPElement);
 		}
+    
 		canvas.appendChild(tooltipDivElement);
 	}
 
@@ -163,6 +165,7 @@ var canvasHoverController = (function () {
 		if (controllerConfig.showVersion) {
 			$("#tooltipVersion").text("Version: " + entity.version);
 		}
+    
 		if (controllerConfig.showIssues) {
 			let openIssuesSelector = $('#tooltipOpenIssues');
 			let closedIssuesSelector = $('#tooltipClosedIssues');
@@ -213,7 +216,7 @@ var canvasHoverController = (function () {
 				}
 			}
 		}
-
+    
 		var tooltip = $("#tooltip");
 		tooltip.css("top", applicationEvent.posY + 50 + "px");
 		tooltip.css("left", applicationEvent.posX + 50 + "px");

@@ -51,12 +51,19 @@ class AFrameSegmentLayout {
         if (!segments.isEmpty()) {
             int length = segments.size();
             double position = 90.0;
-            sizeSum += sizeSum / 360 * length;
             for (DiskSegment segment : segments) {
-                double angle = (segment.getSize() / sizeSum) * 360;
-                segment.setAngle(angle);
+                double angle = (segment.getSize() / sizeSum) * 360 - 1;
                 segment.setAnglePosition(position);
-                position += angle + 1;
+                if(angle < 0.1) {
+                    angle = 0.1;
+                    position += angle + 0.9;
+                } else {
+                    position += angle + 1;
+                }
+                segment.setAngle(angle);
+                if (position >= 360) {
+                    position -= 360;
+                }
                 segment.setOuterRadius(outer);
                 segment.setInnerRadius(inner);
             }

@@ -193,18 +193,18 @@ var canvasManipulator = (function () {
     
     function changeColorOfEntities(entities, color) {
         entities.forEach(function (entity) {
-                if (!(entity == undefined)) {
+                if (!(entity === undefined)) {
                     var component = document.getElementById(entity.id);
                 }
-                if (component == undefined) {
+                if (component === undefined) {
                     events.log.error.publish({text: "CanvasManipualtor - changeColorOfEntities - components for entityIds not found"});
                     return;
                 }
-                if (entity.originalColor == undefined) {
+                if (entity.originalColor === undefined) {
                     entity.originalColor = component.getAttribute("color");
                 }
                 entity.currentColor = color;
-                setColor(component, color);
+                setColor(component, "red");
             }
         );
     }
@@ -212,7 +212,7 @@ var canvasManipulator = (function () {
     function resetColorOfEntities(entities) {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
-            if (component == undefined) {
+            if (component === undefined) {
                 events.log.error.publish({text: "CanvasManipualtor - resetColorOfEntities - components for entityIds not found"});
                 return;
             }
@@ -224,18 +224,21 @@ var canvasManipulator = (function () {
     }
 
     function setColor(object, color) {
-        color == colors.darkred ? color = colors.red : color = color;
+       // color == colors.darkred ? color = colors.red : color = color;
         let colorValues = color.split(" ");
-        if (colorValues.length == 3) {
+        if (colorValues.length === 3) {
             color = "#" + parseInt(colorValues[0]).toString(16) + "" + parseInt(colorValues[1]).toString(16) + "" + parseInt(colorValues[2]).toString(16);
         }
+        console.log(color);
+        console.log("object")
+        console.log(object);
         object.setAttribute("color", color);
     }
 
     function hideEntities(entities) {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
-            if (component == undefined) {
+            if (component === undefined) {
                 events.log.error.publish({text: "CanvasManipualtor - hideEntities - components for entityIds not found"});
                 return;
             }
@@ -246,7 +249,7 @@ var canvasManipulator = (function () {
     function showEntities(entities) {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
-            if (component == undefined) {
+            if (component === undefined) {
                 events.log.error.publish({text: "CanvasManipualtor - showEntities - components for entityIds not found"});
                 return;
             }
@@ -258,14 +261,19 @@ var canvasManipulator = (function () {
         entities.forEach(function (entity2) {
             //  getting the entity again here, because without it the check if originalTransparency is defined fails sometimes
             let entity = model.getEntityById(entity2.id);
+            console.log("id:" + entity2.id)
             let component = document.getElementById(entity.id);
-            if (component == undefined) {
+            console.log(component);
+            if (component === undefined) {
                 events.log.error.publish({text: "CanvasManipualtor - highlightEntities - components for entityIds not found"});
                 return;
             }
-            if (entity.originalColor == undefined) {
+            if (entity.originalColor === undefined) {
+                console.log("XXX: " + component.getAttribute("color"));
                 entity.originalColor = component.getAttribute("color");
+                console.log(entity.originalColor);
                 entity.currentColor = entity.originalColor;
+                setColor(component, "green");
             }
             if (entity["originalTransparency"] === undefined) {
                 // in case "material".opacity is undefined originalTransparency gets set to 0 which would be the default value anyways
@@ -284,7 +292,7 @@ var canvasManipulator = (function () {
     function unhighlightEntities(entities) {
         entities.forEach(function (entity) {
             let component = document.getElementById(entity.id);
-            if (component == undefined) {
+            if (component === undefined) {
                 events.log.error.publish({text: "CanvasManipualtor - unhighlightEntities - components for entityIds not found"});
                 return;
             }
@@ -309,7 +317,6 @@ var canvasManipulator = (function () {
         element.parentNode.removeChild(element);
     }
 
-
     function setCenterOfRotation(entity) {
         let offset = new THREE.Vector3();
         offset.subVectors(getCenterOfEntity(entity), globalCamera.target).multiplyScalar(globalCamera.data.panSpeed);
@@ -330,7 +337,6 @@ var canvasManipulator = (function () {
             opacity: 1 - value
         });
     }
-
 
     function setVisibility(object, visibility) {
         object.setAttribute("visible", visibility);

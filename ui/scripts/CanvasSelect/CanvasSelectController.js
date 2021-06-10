@@ -18,8 +18,6 @@ var canvasSelectController = (function() {
 	};
 
 	var downActionEventObject;
-
-	
 	
 	function initialize(setupConfig){	
 

@@ -10,11 +10,14 @@ import org.getaviz.generator.rd.SubDisk;
 import java.util.Collections;
 import java.util.List;
 
+import java.util.Collections;
+import java.util.List;
+
 class DiskLayout {
 	//private final Log log = LogFactory.getLog(this.getClass());
 	private final List<MainDisk> rootDisks;
 	private final List<SubDisk> subDisks;
-
+  
 	DiskLayout(List<MainDisk> rootDisks, List<SubDisk> subDisks) {
 		this.rootDisks = rootDisks;
 		this.subDisks = subDisks;
@@ -48,6 +51,7 @@ class DiskLayout {
 			transformPositions(innerDisks);
 		});
 	}
+
 
 	private void transformPositions2(List<SubDisk> disks) {
 		disks.forEach(this::transformPositionOfInnerDisks);
