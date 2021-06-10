@@ -428,6 +428,8 @@ public class SettingsConfiguration {
 		return config.getBoolean("rd.method_type_mode", false);
 	}
 
+	public String getSPLBenchmarkFileLocation() { return config.getString("spl.benchmark_file_location", ""); }
+
 	public enum OutputFormat {
 		X3D, AFrame
 	}

@@ -20,7 +20,6 @@ public class Position {
     static double distance(Disk firstPoint, Disk secondPoint) {
         double a = Math.abs(firstPoint.getPosition().y - secondPoint.getPosition().y);
         double b = Math.abs(firstPoint.getPosition().x - secondPoint.getPosition().x);
-
         return Math.sqrt(a * a + b * b);
     }
 
@@ -29,7 +28,6 @@ public class Position {
         double b = Math.abs(firstPoint.getPosition().x - secondPoint.getPosition().x);
         double c = Math.sqrt(a * a + b * b);
         return Math.abs(Math.toDegrees(Math.asin(b / c)));
-
     }
 
     static double angleBetweenPoints_YasKatethe(Disk firstPoint, Disk secondPoint) {
@@ -37,7 +35,6 @@ public class Position {
         double b = Math.abs(firstPoint.getPosition().x - secondPoint.getPosition().x);
         double c = Math.sqrt(a * a + b * b);
         return Math.abs(Math.toDegrees(Math.asin(a / c)));
-
     }
 
     static boolean intersect(Disk firstPoint, Disk secondPoint) {

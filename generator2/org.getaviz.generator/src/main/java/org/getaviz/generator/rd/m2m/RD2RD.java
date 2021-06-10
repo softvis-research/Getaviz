@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RD2RD implements Step {
-    private DatabaseConnector connector = DatabaseConnector.getInstance();
-    private Log log = LogFactory.getLog(RD2RD.class);
+    private final DatabaseConnector connector = DatabaseConnector.getInstance();
+    private final Log log = LogFactory.getLog(RD2RD.class);
     private List<String> NS_colors;
-    private double dataFactor;
+    private final double dataFactor;
     private ArrayList<SubDisk> subDisks = new ArrayList<>();
     private ArrayList<MainDisk> mainDisks = new ArrayList<>();
     private ArrayList<MainDisk> rootDisks = new ArrayList<>();
@@ -105,7 +105,6 @@ public class RD2RD implements Step {
                         "RETURN d.size AS size, ID(d) as id, ID(n) as parentID ORDER BY method.hash");
         return getDiskSegments(result);
     }
-
 
     private ArrayList<MainDisk> createRootDisksList() {
         StatementResult result = connector.executeRead("MATCH (n:RD:Model)-[:CONTAINS]->(d:MainDisk)-[:VISUALIZES]->(element)" +

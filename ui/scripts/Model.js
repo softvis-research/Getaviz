@@ -133,6 +133,38 @@ var model = (function() {
 							entitiesByVersion.set(entity.version, map);
 						}
 					}
+          
+					if(element.issues !== undefined) {
+                        entity.issues = element.issues.split(",");
+                    } else {
+						entity.issues = [];
+					}
+                  	for(let i = 0; i < entity.issues.length; ++i) {
+                        entity.issues[i] = entity.issues[i].trim();
+                    }
+                    entity.issues.forEach(function(issue) {
+                        if(entitiesByIssue.has(issue)) {
+                            let map = entitiesByIssue.get(issue);
+                        	map.push(entity);
+                            entitiesByIssue.set(issue, map);
+                        } else {
+                            addIssue(issue);
+                            let map = [];
+                            map.push(entity);
+                            entitiesByIssue.set(issue, map);
+                        }
+                    });
+					entity.numberOfOpenIssues = element.numberOfOpenIssues;
+					entity.numberOfClosedIssues = element.numberOfClosedIssues;
+					entity.numberOfClosedSecurityIssues = element.numberOfClosedSecurityIssues;
+					entity.numberOfOpenSecurityIssues = element.numberOfOpenSecurityIssues;
+					if(element.featureAffiliations){
+						entity.featureAffiliations = element.featureAffiliations;
+					} else {
+						entity.featureAffiliations = [];
+					}
+
+          
 					break;
 				case  "ParameterizableClass":
 					entity.superTypes = element.subClassOf.split(",");
@@ -179,6 +211,11 @@ var model = (function() {
 						entity.accesses = element.accesses.split(",");
 					} else {
 						entity.accesses = [];
+					}
+					if(element.featureAffiliations){
+						entity.featureAffiliations = element.featureAffiliations;
+					} else {
+						entity.featureAffiliations = [];
 					}
 					break;
 				case "Function":

@@ -70,6 +70,7 @@ var packageExplorerController = (function() {
 					case "Namespace":
 						item = { id: entity.id, open: false, checked: true, parentId: entity.belongsTo.id, name: entity.name, icon: controllerConfig.packageIcon, iconSkin: "zt"};
 						break;
+                                        case "AnnotationType":
 					case "Class":
                         if(entity.id.endsWith("_2") || entity.id.endsWith("_3")){
                             break;

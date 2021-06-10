@@ -13,10 +13,6 @@ public class MainDisk extends Disk {
         super(visualizedNodeId, parentVisualizedNodeID, ringWidth, height, transparency);
     }
 
-    public double getMinArea() {
-        return 0;
-    }
-
     public MainDisk(long visualizedNodeID, long parentID, long id, double ringWidth, double height) {
         super(visualizedNodeID, ringWidth, height);
         this.parentID = parentID;
@@ -65,5 +61,9 @@ public class MainDisk extends Disk {
             }
             setAreaWithoutBorder(getAreaWithoutBorder() + d.getAreaWithoutBorder());
         }
+    }
+
+    public double getMinArea() {
+        return 0;
     }
 }

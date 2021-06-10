@@ -128,8 +128,7 @@ public class JavaEnhancement implements Step {
  	"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.name = '" + name + "', n.fqn = '" + fqn + "'");
 		}
 		connector.executeWrite(
-	"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.hash = '" + createHash(fqn + signatureForHash) + "'"
-		);
+	"MATCH (n) WHERE ID(n) = " + node.id() + " SET n.hash = '" + createHash(fqn + signatureForHash) + "'");
 	}
 
 	private String getSignature(Node node) {
@@ -139,5 +138,4 @@ public class JavaEnhancement implements Step {
 			return "";
 		}
 	}
-
 }

@@ -7,16 +7,17 @@ import com.vividsolutions.jts.geom.MultiPoint;
 import org.getaviz.generator.rd.Disk;
 import org.getaviz.generator.rd.MainDisk;
 import org.getaviz.generator.rd.SubDisk;
+import java.util.Collections;
+import java.util.List;
 
 import java.util.Collections;
 import java.util.List;
 
 class DiskLayout {
-
-	private List<MainDisk> rootDisks;
-	private List<MainDisk> mainDisks;
-	private List<SubDisk> subDisks;
-
+	//private final Log log = LogFactory.getLog(this.getClass());
+	private final List<MainDisk> rootDisks;
+	private final List<SubDisk> subDisks;
+  
 	DiskLayout(List<MainDisk> rootDisks, List<SubDisk> subDisks) {
 		this.rootDisks = rootDisks;
 		this.subDisks = subDisks;
@@ -25,11 +26,11 @@ class DiskLayout {
 	void run() {
 		layout(rootDisks);
 		transformPositions(rootDisks);
-		transformPositionsSubDisks(subDisks);
+		transformPositions2(subDisks);
 	}
 
 	private <T extends Disk> void layout(List<T> diskList) {
-		diskList.forEach(disk->  {
+		diskList.forEach(disk ->  {
 			if (disk.getInnerDisks().size() > 0) {
 				List<Disk> innerDisks = disk.getInnerDisks();
 				layout(innerDisks);
@@ -51,7 +52,8 @@ class DiskLayout {
 		});
 	}
 
-	private void transformPositionsSubDisks(List<SubDisk> disks) {
+
+	private void transformPositions2(List<SubDisk> disks) {
 		disks.forEach(this::transformPositionOfInnerDisks);
 	}
 
@@ -114,6 +116,7 @@ class DiskLayout {
 		}
 
 		Disk second = disksList.get(1);
+
 		int m = 0;
 		double angleBetweenNAndM = 0;
 		second.setPosition(Position.calculateCentre(first, second, angleBetweenNAndM));
@@ -207,8 +210,6 @@ class DiskLayout {
 
 				// calculate the centre of the new circle
 				n_disk.setPosition(Position.calculateCentre(disksList.get(m + 1), n_disk, angleBetweenNAndM));
-
-				// increase m
 				m++;
 
 				// angle is now the angle between m and n
