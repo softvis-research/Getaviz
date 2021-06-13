@@ -196,7 +196,7 @@ var canvasManipulator = (function () {
                 if (!(entity === undefined)) {
                     var component = document.getElementById(entity.id);
                 }
-                if (component === undefined) {
+                if (component == undefined) {
                     events.log.error.publish({text: "CanvasManipualtor - changeColorOfEntities - components for entityIds not found"});
                     return;
                 }
@@ -204,7 +204,7 @@ var canvasManipulator = (function () {
                     entity.originalColor = component.getAttribute("color");
                 }
                 entity.currentColor = color;
-                setColor(component, "red");
+                setColor(component, color);
             }
         );
     }
