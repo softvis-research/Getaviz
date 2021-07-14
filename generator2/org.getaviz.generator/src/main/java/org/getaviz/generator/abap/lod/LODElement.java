@@ -90,20 +90,6 @@ public class LODElement {
         return new ArrayList(replacedElements);
     }
 
-    public void addReplacedElement(ACityElement replacedElement) {
-        this.replacedElements.add(replacedElement);
-    }
-
-    public void removeReplacedElement(ACityElement replacedElement) {
-        this.replacedElements.remove(replacedElement);
-    }
-
-    public Collection<LODElement> getReplacedLODElements() {
-        return new ArrayList(replacedLODElements);
-    }
-
-    public void addReplacedLODElement(LODElement replacedLODElement) { this.replacedLODElements.add(replacedLODElement); }
-
-    public void removeReplacedLODElement(LODElement replacedLODElement) { this.replacedLODElements.remove(replacedLODElement); }
+    public Collection<LODElement> getReplacedLODElements() { return new ArrayList(replacedLODElements); }
 
 }

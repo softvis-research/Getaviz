@@ -7,20 +7,42 @@ import org.getaviz.generator.database.DatabaseConnector;
 
 import org.neo4j.driver.v1.types.Node;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class LODRepository {
 
     private Log log = LogFactory.getLog(this.getClass());
-
     private DatabaseConnector connector = DatabaseConnector.getInstance();
 
     private Map<String, LODElement> elementsByHash;
+    // Not feasible because updates would be really expensive:
+    // private Map<ACityElement, Map<String, ACityElement> > elementsByReplacedElement;
 
-    private int nodeCounter = 0;
-    private int relCounter = 0;
+    public Collection<LODElement> getAllElements() {
+        return new ArrayList(elementsByHash.values());
+    }
+
+    public LODElement getElementByHash(String hash){
+        return elementsByHash.get(hash);
+    }
+
+    public void addElement(LODElement element) {
+        elementsByHash.put(element.getHash(), element);
+    }
+
+    public void deleteElement(LODElement element) {
+        elementsByHash.remove(element.getHash(), element);
+    }
+
+    private int nodeCounter;
+    private int relCounter;
 
     public void writeRepositoryToNeo4j() {
+        nodeCounter = 0;
+        relCounter = 0;
         log.info("Writing LOD elements to Neo4j");
         elementsByHash.forEach((id, element) -> createLODElementNode(element));
         elementsByHash.forEach((id, element) -> connectLODElementNode(element));
