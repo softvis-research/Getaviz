@@ -7,10 +7,7 @@ import org.getaviz.generator.database.DatabaseConnector;
 
 import org.neo4j.driver.v1.types.Node;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LODRepository {
 
@@ -18,8 +15,12 @@ public class LODRepository {
     private DatabaseConnector connector = DatabaseConnector.getInstance();
 
     private Map<String, LODElement> elementsByHash;
-    // Not feasible because updates would be really expensive:
-    // private Map<ACityElement, Map<String, ACityElement> > elementsByReplacedElement;
+    private Map<ACityElement, LODElement> elementsByReplacedElement;
+
+    public LODRepository() {
+        elementsByHash = new HashMap<>();
+        elementsByReplacedElement = new HashMap<>();
+    }
 
     public Collection<LODElement> getAllElements() {
         return new ArrayList(elementsByHash.values());
@@ -29,8 +30,14 @@ public class LODRepository {
         return elementsByHash.get(hash);
     }
 
+    public LODElement findReplacementOf(ACityElement element) {
+        return elementsByReplacedElement.get(element);
+    }
+
     public void addElement(LODElement element) {
         elementsByHash.put(element.getHash(), element);
+        // Lookup to avoid full traversal
+        element.getReplacedElements().forEach(replaced -> elementsByReplacedElement.put(replaced, element));
     }
 
     public void deleteElement(LODElement element) {

@@ -12,8 +12,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 public class LODCreator {
 
@@ -37,27 +35,41 @@ public class LODCreator {
         // Replace all buildings + sub-elements
         Collection<ACityElement> buildings = cityRepository.getElementsByType(ACityElement.ACityType.Building);
         buildings.forEach(building -> createBuildingReplacement(building));
+        log.info("Created " + lodRepository.getAllElements().size() + " building replacements");
         // Replace districts level by level
-        Collection<ACityElement> remainingDistricts = cityRepository.getElementsByType(ACityElement.ACityType.District);
+        Collection<ACityElement> allDistricts = cityRepository.getElementsByType(ACityElement.ACityType.District);
+        log.info("Total districts: " + allDistricts.size());
         // 1) Districts without contained districts
-        remainingDistricts.forEach(district -> {
+        ArrayList<ACityElement> remainingDistricts = new ArrayList<>();
+        allDistricts.forEach(district -> {
             for (ACityElement subElement : district.getSubElements()) {
-                if (subElement.getType() == ACityElement.ACityType.District) return;
+                // Skip if district has sub-districts
+                if (subElement.getType() == ACityElement.ACityType.District) {
+                    remainingDistricts.add(district);
+                    return;
+                }
             }
             createDistrictReplacement(district);
-            remainingDistricts.remove(district);
         });
+        log.info("Total LOD elements after first step: " + lodRepository.getAllElements().size());
         // n) Districts without unreplaced subelements: Foreach subelement(except refs like seas) if replacement == null return false
         while (remainingDistricts.size() > 0) {
-            remainingDistricts.forEach(district -> {
+            log.info("Remaining: " + remainingDistricts.size());
+            ArrayList<ACityElement> currentDistricts = new ArrayList<>(remainingDistricts);
+            remainingDistricts.clear();
+            currentDistricts.forEach(district -> {
                 for (ACityElement subElement : district.getSubElements()) {
-                    if (subElement.getType() != ACityElement.ACityType.Reference) {
-                        if (findReplacement(subElement) == null) return;
+                    // Skip if district has unreplaced sub-districts
+                    if (subElement.getType() == ACityElement.ACityType.District) {
+                        if (lodRepository.findReplacementOf(subElement) == null) {
+                            remainingDistricts.add(district);
+                            return;
+                        }
                     }
                 }
                 createDistrictReplacement(district);
-                remainingDistricts.remove(district);
             });
+            log.info("Total LOD elements: " + lodRepository.getAllElements().size());
         }
         // TODO Merge both & check for first round explicitly?
 
@@ -70,7 +82,7 @@ public class LODCreator {
     private void createBuildingReplacement(ACityElement building) {
         // Create LOD element
         LODElement lod = new LODElement();
-        lod.getReplacedElements().add(building);
+        lod.addReplacedElement(building);
         // Bounding Box of replaced element
         double minX = building.getXPosition() - building.getWidth() / 2;
         double maxX = building.getXPosition() + building.getWidth() / 2;
@@ -80,7 +92,7 @@ public class LODCreator {
         double maxZ = building.getZPosition() + building.getLength() / 2;
         // Include subElements for other metaphors
         for (ACityElement element : building.getSubElements()) {
-            lod.getReplacedElements().add(element);
+            lod.addReplacedElement(element);
             minX = Math.min(minX, element.getXPosition() - element.getWidth() / 2);
             maxX = Math.max(maxX, element.getXPosition() + element.getWidth() / 2);
             minY = Math.min(minY, element.getYPosition() - element.getHeight() / 2);
@@ -106,33 +118,24 @@ public class LODCreator {
         lodRepository.addElement(lod);
     }
 
-    private LODElement findReplacement(ACityElement element) {
-        // TODO Avoid full traversal - how could a lookup be implemented?
-        for (LODElement lod : lodRepository.getAllElements()) {
-            for (ACityElement replaced : lod.getReplacedElements()) {
-                if (replaced == element) return lod;
-            }
-        }
-        return null;
-    }
-
     private void createDistrictReplacement(ACityElement district) {
         // Create LOD element
         LODElement lod = new LODElement();
-        lod.getReplacedElements().add(district);
+        lod.addReplacedElement(district);
         // Bounding Box
         double minY = district.getYPosition() - district.getHeight() / 2;
         double maxY = district.getYPosition() + district.getHeight() / 2;
         // subElements
         for (ACityElement element : district.getSubElements()) {
-            LODElement replacement = findReplacement(element);
+            // TODO Skip reference objects like clouds?
+            LODElement replacement = lodRepository.findReplacementOf(element);
             // If element was already replaced use that replacement
             if (replacement == null) {
-                lod.getReplacedElements().add(element);
+                lod.addReplacedElement(element);
                 minY = Math.min(minY, element.getYPosition() - element.getHeight() / 2);
                 maxY = Math.max(maxY, element.getYPosition() + element.getHeight() / 2);
             } else {
-                lod.getReplacedLODElements().add(replacement);
+                lod.addReplacedLODElement(replacement);
                 minY = Math.min(minY, replacement.getYPosition() - replacement.getHeight() / 2);
                 maxY = Math.max(maxY, replacement.getYPosition() + replacement.getHeight() / 2);
             }
@@ -149,7 +152,7 @@ public class LODCreator {
     }
 
     private String createAFrameAsJSON(LODElement element) {
-        return "todo";  // TODO Which properties are required?
+        return "todo";  // TODO Which properties are required in UI?
     }
 
     public void createFileAFrame() {

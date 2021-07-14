@@ -33,6 +33,7 @@ public class LODElement {
 
     public LODElement() {
         replacedElements = new ArrayList<>();
+        replacedLODElements = new ArrayList<>();
 
         UUID uuid = UUID.randomUUID();
         hash = "LOD_" + uuid.toString();
@@ -87,9 +88,13 @@ public class LODElement {
     public String getAframeProperty() { return aframeProperty; }
 
     public Collection<ACityElement> getReplacedElements() {
-        return new ArrayList(replacedElements);
+        return new ArrayList<>(replacedElements);
     }
 
-    public Collection<LODElement> getReplacedLODElements() { return new ArrayList(replacedLODElements); }
+    public void addReplacedElement(ACityElement element) { replacedElements.add(element); }
+
+    public Collection<LODElement> getReplacedLODElements() { return new ArrayList<>(replacedLODElements); }
+
+    public void addReplacedLODElement(LODElement element) { replacedLODElements.add(element); }
 
 }
