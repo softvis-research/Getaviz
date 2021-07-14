@@ -14,6 +14,7 @@ public class LODElement {
     private Log log = LogFactory.getLog(this.getClass());
 
     private String hash;
+    private Long nodeID;
 
     private double height;
     private double width;
@@ -34,11 +35,19 @@ public class LODElement {
         replacedElements = new ArrayList<>();
 
         UUID uuid = UUID.randomUUID();
-        hash = "ID_" + uuid.toString();
+        hash = "LOD_" + uuid.toString();
     }
 
     public String getHash() {
         return hash;
+    }
+
+    public Long getNodeID() {
+        return nodeID;
+    }
+
+    public void setNodeID(Long nodeID) {
+        this.nodeID = nodeID;
     }
 
     public double getHeight() { return height; }
