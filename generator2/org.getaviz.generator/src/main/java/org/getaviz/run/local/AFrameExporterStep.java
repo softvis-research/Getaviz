@@ -9,6 +9,7 @@ import org.getaviz.generator.abap.common.steps.MetaDataExporter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
+import org.getaviz.generator.abap.lod.LODCreator;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisDesigner;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisLayouter;
@@ -101,6 +102,11 @@ public class AFrameExporterStep {
         if (aFrameOutput == AFrameOutput.NODEPROP || aFrameOutput == AFrameOutput.BOTH ) {
             aFrameExporter.setAframePropToACityElements();
         }
+
+        LODCreator lodCreator = new LODCreator(aCityRepository, config);
+        lodCreator.createLODElements();
+        lodCreator.createFileAFrame();
+        lodCreator.createFileMetadata();
 
         if (config.getWriteRepToDb()) {
             connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
