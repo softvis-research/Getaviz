@@ -166,6 +166,8 @@ if (isset($_GET["lazy"])) {
 
 <script type="text/javascript" src="scripts/GenerationForm/GenerationFormController.js"></script>
 
+<script type="text/javascript" src="scripts/LOD/LODController.js"></script>
+
 
 <!-- extension to integrate -->
 <script type="text/javascript" src="scripts/MetricAnimation/MetricAnimationController.js"></script>
