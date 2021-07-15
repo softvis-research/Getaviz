@@ -22,7 +22,7 @@ public class LODCreator {
     private ACityRepository cityRepository;
     private LODRepository lodRepository;
 
-    private double padding = 0.2;   // TODO use config
+    private double padding = 0.2;   // TODO Use config
 
     public LODCreator(ACityRepository aCityRepository, SettingsConfiguration config) {
         this.config = config;
@@ -32,14 +32,15 @@ public class LODCreator {
     }
 
     public void createLODElements() {
-        // Replace all buildings + sub-elements
+        // Replace all buildings
         Collection<ACityElement> buildings = cityRepository.getElementsByType(ACityElement.ACityType.Building);
         buildings.forEach(building -> createBuildingReplacement(building));
-        log.info("Created " + lodRepository.getAllElements().size() + " building replacements");
-        // Replace districts level by level
+
+        // Replace all districts
         Collection<ACityElement> allDistricts = cityRepository.getElementsByType(ACityElement.ACityType.District);
-        log.info("Total districts: " + allDistricts.size());
-        // 1) Districts without contained districts
+
+        // TODO Merge both & check for first round explicitly?
+        // Districts without sub-districts
         ArrayList<ACityElement> remainingDistricts = new ArrayList<>();
         allDistricts.forEach(district -> {
             for (ACityElement subElement : district.getSubElements()) {
@@ -51,10 +52,9 @@ public class LODCreator {
             }
             createDistrictReplacement(district);
         });
-        log.info("Total LOD elements after first step: " + lodRepository.getAllElements().size());
-        // n) Districts without unreplaced subelements: Foreach subelement(except refs like seas) if replacement == null return false
+
+        // Districts without unreplaced sub-districts
         while (remainingDistricts.size() > 0) {
-            log.info("Remaining: " + remainingDistricts.size());
             ArrayList<ACityElement> currentDistricts = new ArrayList<>(remainingDistricts);
             remainingDistricts.clear();
             currentDistricts.forEach(district -> {
@@ -69,14 +69,32 @@ public class LODCreator {
                 }
                 createDistrictReplacement(district);
             });
-            log.info("Total LOD elements: " + lodRepository.getAllElements().size());
         }
-        // TODO Merge both & check for first round explicitly?
 
+        // Finalize all LOD elements
         lodRepository.getAllElements().forEach(lod -> {
-            lod.setColor("#FF0000");
-            lod.setAframeProperty(createAFrameAsJSON(lod));
+            lod.setColor("#FF0000");    // TODO Use config
+            lod.setAframeProperty(getAFrameDataAsJSON(lod));
         });
+    }
+
+    public void createFileAFrame() {
+        StringBuilder content = new StringBuilder();
+        lodRepository.getAllElements().forEach(element -> content.append(getAFrameDataAsXML(element)));
+        writeFile("/lodobjects.html", content.toString());
+    }
+
+    public void createFileMetadata() {
+        StringBuilder content = new StringBuilder();
+        content.append("{\"blocks\":[");
+        lodRepository.getAllElements().forEach(element -> content.append(getRelationInfo(element)));
+        content.setCharAt(content.length() - 1, ']');
+        content.append("}");
+        writeFile("/lodinfo.json", content.toString());
+    }
+
+    public void writeToNeo4j() {
+        lodRepository.writeRepositoryToNeo4j();
     }
 
     private void createBuildingReplacement(ACityElement building) {
@@ -90,8 +108,9 @@ public class LODCreator {
         double maxY = building.getYPosition() + building.getHeight() / 2;
         double minZ = building.getZPosition() - building.getLength() / 2;
         double maxZ = building.getZPosition() + building.getLength() / 2;
-        // Include subElements for other metaphors
+        // Include all sub-elements except Reference objects
         for (ACityElement element : building.getSubElements()) {
+            if (element.getType() == ACityElement.ACityType.Reference) continue;
             lod.addReplacedElement(element);
             minX = Math.min(minX, element.getXPosition() - element.getWidth() / 2);
             maxX = Math.max(maxX, element.getXPosition() + element.getWidth() / 2);
@@ -107,7 +126,7 @@ public class LODCreator {
         maxY += padding;
         minZ -= padding;
         maxZ += padding;
-        // Calculate properties
+        // Calculate dimensions
         lod.setWidth(maxX - minX);
         lod.setHeight(maxY - minY);
         lod.setLength(maxZ - minZ);
@@ -125,7 +144,7 @@ public class LODCreator {
         // Bounding Box
         double minY = district.getYPosition() - district.getHeight() / 2;
         double maxY = district.getYPosition() + district.getHeight() / 2;
-        // subElements
+        // Include all sub-elements
         for (ACityElement element : district.getSubElements()) {
             // TODO Skip reference objects like clouds?
             LODElement replacement = lodRepository.findReplacementOf(element);
@@ -140,7 +159,7 @@ public class LODCreator {
                 maxY = Math.max(maxY, replacement.getYPosition() + replacement.getHeight() / 2);
             }
         }
-        // Calculate properties
+        // Calculate dimensions
         lod.setWidth(district.getWidth() + 2*padding);
         lod.setHeight(maxY - minY);
         lod.setLength(district.getWidth() + 2*padding);
@@ -151,26 +170,7 @@ public class LODCreator {
         lodRepository.addElement(lod);
     }
 
-    private String createAFrameAsJSON(LODElement element) {
-        return "todo";  // TODO Which properties are required in UI?
-    }
-
-    public void createFileAFrame() {
-        StringBuilder content = new StringBuilder();
-        lodRepository.getAllElements().forEach(element -> content.append(createAFrameAsXML(element)));
-        writeFile("/lodobjects.html", content.toString());
-    }
-
-    public void createFileMetadata() {
-        StringBuilder content = new StringBuilder();
-        content.append("{\"blocks\":[");
-        lodRepository.getAllElements().forEach(element -> content.append(createRelationInfo(element)));
-        content.setCharAt(content.length() - 1, ']');
-        content.append("}");
-        writeFile("/lodinfo.json", content.toString());
-    }
-
-    private String createAFrameAsXML(LODElement element) {
+    private String getAFrameDataAsXML(LODElement element) {
         String template = "<a-box id=\"%s\" position=\"%f %f %f\" height=\"%f\" width=\"%f\" depth=\"%f\" color=\"%s\" material=\"opacity: 0.5\"></a-box>\n";
         return String.format(template,
                 element.getHash(),
@@ -183,7 +183,11 @@ public class LODCreator {
                 element.getColor());
     }
 
-    private String createRelationInfo(LODElement element) {
+    private String getAFrameDataAsJSON(LODElement element) {
+        return "todo";  // TODO Which properties are required in UI?
+    }
+
+    private String getRelationInfo(LODElement element) {
         StringBuilder info = new StringBuilder();
         info.append("\n{\"id\": \"")
                 .append(element.getHash())

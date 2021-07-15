@@ -103,15 +103,16 @@ public class AFrameExporterStep {
             aFrameExporter.setAframePropToACityElements();
         }
 
-        LODCreator lodCreator = new LODCreator(aCityRepository, config);
-        lodCreator.createLODElements();
-        lodCreator.createFileAFrame();
-        lodCreator.createFileMetadata();
-
         if (config.getWriteRepToDb()) {
             connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
             aCityRepository.writeRepositoryToNeo4j();
         }
+
+        LODCreator lodCreator = new LODCreator(aCityRepository, config);
+        lodCreator.createLODElements();
+        lodCreator.createFileAFrame();
+        lodCreator.createFileMetadata();
+        lodCreator.writeToNeo4j();
 
         System.out.println("\nA-Frame Exporter step was completed\"");
         connector.close();
