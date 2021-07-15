@@ -110,7 +110,6 @@ public class LODCreator {
         double maxZ = building.getZPosition() + building.getLength() / 2;
         // Include all sub-elements except Reference objects
         for (ACityElement element : building.getSubElements()) {
-            if (element.getType() == ACityElement.ACityType.Reference) continue;
             lod.addReplacedElement(element);
             minX = Math.min(minX, element.getXPosition() - element.getWidth() / 2);
             maxX = Math.max(maxX, element.getXPosition() + element.getWidth() / 2);
@@ -146,7 +145,7 @@ public class LODCreator {
         double maxY = district.getYPosition() + district.getHeight() / 2;
         // Include all sub-elements
         for (ACityElement element : district.getSubElements()) {
-            // TODO Skip reference objects like clouds?
+            if (element.getType() == ACityElement.ACityType.Reference) continue;
             LODElement replacement = lodRepository.findReplacementOf(element);
             // If element was already replaced use that replacement
             if (replacement == null) {
@@ -162,7 +161,7 @@ public class LODCreator {
         // Calculate dimensions
         lod.setWidth(district.getWidth() + 2*padding);
         lod.setHeight(maxY - minY);
-        lod.setLength(district.getWidth() + 2*padding);
+        lod.setLength(district.getLength() + 2*padding);
         lod.setXPosition(district.getXPosition());
         lod.setYPosition((minY + maxY) / 2);
         lod.setZPosition(district.getZPosition());

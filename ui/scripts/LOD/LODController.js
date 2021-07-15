@@ -22,6 +22,7 @@ var lodController = (function() {
             // 3) Hide everything except LOD root
             canvasManipulator.hideEntities(model.getAllEntities());
             canvasManipulator.showEntities(rootLODElements);
+            canvasManipulator.showEntities(model.getEntitiesByType("Reference"));
         });
 
         // 4) Subscribe to Hover-Events
