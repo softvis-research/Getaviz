@@ -145,7 +145,7 @@ public class LODCreator {
         double maxY = district.getYPosition() + district.getHeight() / 2;
         // Include all sub-elements
         for (ACityElement element : district.getSubElements()) {
-            if (element.getType() == ACityElement.ACityType.Reference) continue;
+            if (element.getSubType() == ACityElement.ACitySubType.Cloud) continue;
             LODElement replacement = lodRepository.findReplacementOf(element);
             // If element was already replaced use that replacement
             if (replacement == null) {

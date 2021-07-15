@@ -22,7 +22,8 @@ var lodController = (function() {
             // 3) Hide everything except LOD root
             canvasManipulator.hideEntities(model.getAllEntities());
             canvasManipulator.showEntities(rootLODElements);
-            canvasManipulator.showEntities(model.getEntitiesByType("Reference"));
+            // Keep clouds visible
+            canvasManipulator.showEntities(model.getEntitiesByType("Reference").filter(entity => entity.name == "Cloud"));
         });
 
         // 4) Subscribe to Hover-Events
