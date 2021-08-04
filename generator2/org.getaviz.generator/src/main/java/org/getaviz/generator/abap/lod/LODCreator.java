@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 public class LODCreator {
 
@@ -22,10 +23,15 @@ public class LODCreator {
     private ACityRepository cityRepository;
     private LODRepository lodRepository;
 
-    private double padding = 0.2;   // TODO Use config
+    private String lodColor;
+    private double lodPadding;
+    private double lodOpacity;
 
     public LODCreator(ACityRepository aCityRepository, SettingsConfiguration config) {
         this.config = config;
+        this.lodColor = config.getLODColor();
+        this.lodPadding = config.getLODPadding();
+        this.lodOpacity = config.getLODOpacity();
 
         this.cityRepository = aCityRepository;
         this.lodRepository = new LODRepository();
@@ -73,7 +79,7 @@ public class LODCreator {
 
         // Finalize all LOD elements
         lodRepository.getAllElements().forEach(lod -> {
-            lod.setColor("#FF0000");    // TODO Use config
+            lod.setColor(lodColor);
             lod.setAframeProperty(getAFrameDataAsJSON(lod));
         });
     }
@@ -119,12 +125,12 @@ public class LODCreator {
             maxZ = Math.max(maxZ, element.getZPosition() + element.getLength() / 2);
         }
         // Apply padding
-        minX -= padding;
-        maxX += padding;
-        minY -= padding;
-        maxY += padding;
-        minZ -= padding;
-        maxZ += padding;
+        minX -= lodPadding;
+        maxX += lodPadding;
+        minY -= lodPadding;
+        maxY += lodPadding;
+        minZ -= lodPadding;
+        maxZ += lodPadding;
         // Calculate dimensions
         lod.setWidth(maxX - minX);
         lod.setHeight(maxY - minY);
@@ -159,9 +165,9 @@ public class LODCreator {
             }
         }
         // Calculate dimensions
-        lod.setWidth(district.getWidth() + 2*padding);
+        lod.setWidth(district.getWidth() + 2*lodPadding);
         lod.setHeight(maxY - minY);
-        lod.setLength(district.getLength() + 2*padding);
+        lod.setLength(district.getLength() + 2*lodPadding);
         lod.setXPosition(district.getXPosition());
         lod.setYPosition((minY + maxY) / 2);
         lod.setZPosition(district.getZPosition());
@@ -170,8 +176,10 @@ public class LODCreator {
     }
 
     private String getAFrameDataAsXML(LODElement element) {
-        String template = "<a-box id=\"%s\" position=\"%f %f %f\" height=\"%f\" width=\"%f\" depth=\"%f\" color=\"%s\" material=\"opacity: 0.5\"></a-box>\n";
-        return String.format(template,
+        // TODO %f inserts unnecessary trailing zeros
+        String template = "<a-box id=\"%s\" position=\"%f %f %f\" height=\"%f\" width=\"%f\" depth=\"%f\" color=\"%s\" material=\"opacity: %f\"></a-box>\n";
+        return String.format(Locale.ROOT,   // Force decimal point
+                template,
                 element.getHash(),
                 element.getXPosition(),
                 element.getYPosition(),
@@ -179,7 +187,8 @@ public class LODCreator {
                 element.getHeight(),
                 element.getWidth(),
                 element.getLength(),
-                element.getColor());
+                element.getColor(),
+                lodOpacity);
     }
 
     private String getAFrameDataAsJSON(LODElement element) {

@@ -108,11 +108,13 @@ public class AFrameExporterStep {
             aCityRepository.writeRepositoryToNeo4j();
         }
 
-        LODCreator lodCreator = new LODCreator(aCityRepository, config);
-        lodCreator.createLODElements();
-        lodCreator.createFileAFrame();
-        lodCreator.createFileMetadata();
-        lodCreator.writeToNeo4j();
+        if (config.isGeneratingLOD()) {
+            LODCreator lodCreator = new LODCreator(aCityRepository, config);
+            lodCreator.createLODElements();
+            lodCreator.createFileAFrame();
+            lodCreator.createFileMetadata();
+            lodCreator.writeToNeo4j();
+        }
 
         System.out.println("\nA-Frame Exporter step was completed\"");
         connector.close();

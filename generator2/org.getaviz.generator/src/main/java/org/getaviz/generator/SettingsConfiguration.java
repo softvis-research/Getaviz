@@ -1445,4 +1445,9 @@ public class SettingsConfiguration {
 	public double getAbapScoMaxHeight(){return config.getDouble("city.abap.sco.max.height", 30);}
 	public double getACityFactorMaxHeight() {return config.getDouble("city.abap.sco.factor.max.height", 2);}
 	public double getAbapStandardCodeHeight(){return config.getDouble("city.abap.standardCode.height", 4);}
+
+	public boolean isGeneratingLOD(){return config.getBoolean("lod.generation", true);}
+	public String getLODColor(){return config.getString("lod.color", "#A4A4A4");}
+	public double getLODPadding(){return config.getDouble("lod.padding", 0.2);}
+	public double getLODOpacity(){return config.getDouble("lod.opacity", 1);}
 }
