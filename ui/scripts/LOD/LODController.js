@@ -81,6 +81,7 @@ var lodController = (function() {
     function onLeftClick(applicationEvent) {
         let entity = applicationEvent.entity;
         if (entity?.type === "LODObject") {
+            unHover(entity) // Unhover LOD wrapper
             canvasManipulator.hideEntities([entity]);   // Hide LOD wrapper
             canvasManipulator.showEntities(entity.replaces);    // Show replaced contents
             entity.replaces.forEach(e => e.replacedBy = entity);  // Keep track of hidden wrapper
@@ -88,11 +89,21 @@ var lodController = (function() {
     }
     
     function onRightClick(applicationEvent) {
-        let lodParent = applicationEvent.entity?.replacedBy;
+        let entity = applicationEvent.entity;
+        let lodParent = entity?.replacedBy;
         if (lodParent) {
+            unHover(entity);
             canvasManipulator.showEntities([lodParent]);
             hideChildren(lodParent);
         }
+    }
+
+    function unHover(entity) {
+        var applicationEvent = {
+            sender: lodController,
+            entities: [entity]
+        };
+        events.hovered.off.publish(applicationEvent);
     }
 
     function hideChildren(element) {
