@@ -23,7 +23,7 @@ var lodController = (function() {
             canvasManipulator.hideEntities(model.getAllEntities());
             canvasManipulator.showEntities(rootLODElements);
             // Keep clouds visible
-            canvasManipulator.showEntities(model.getEntitiesByType("Reference").filter(entity => entity.name == "Cloud"));
+            canvasManipulator.showEntities(model.getEntitiesByType("Reference").filter(entity => entity.name === "Cloud"));
         });
 
         // 4) Subscribe to Hover-Events
@@ -52,6 +52,10 @@ var lodController = (function() {
                 entity.replacedBy = undefined;
             }
         });
+        // Avoid errors in hide/showEntities()
+        toHide = toHide.filter(entity => document.getElementById(entity.id) !== null);
+        toShow = toShow.filter(entity => document.getElementById(entity.id) === null);
+        
         canvasManipulator.hideEntities(toHide);
         canvasManipulator.showEntities(toShow);
     }
@@ -81,10 +85,13 @@ var lodController = (function() {
     function onLeftClick(applicationEvent) {
         let entity = applicationEvent.entity;
         if (entity?.type === "LODObject") {
-            unHover(entity) // Unhover LOD wrapper
-            canvasManipulator.hideEntities([entity]);   // Hide LOD wrapper
-            canvasManipulator.showEntities(entity.replaces);    // Show replaced contents
-            entity.replaces.forEach(e => e.replacedBy = entity);  // Keep track of hidden wrapper
+            // Hover integration
+            unHover(entity)
+            // Level transition
+            canvasManipulator.hideEntities([entity]);
+            canvasManipulator.showEntities(entity.replaces);
+            // Keep track of now hidden wrapper
+            entity.replaces.forEach(e => e.replacedBy = entity);
         }
     }
     
@@ -92,7 +99,9 @@ var lodController = (function() {
         let entity = applicationEvent.entity;
         let lodParent = entity?.replacedBy;
         if (lodParent) {
+            // Hover integration
             unHover(entity);
+            // Level transition
             canvasManipulator.showEntities([lodParent]);
             hideChildren(lodParent);
         }
@@ -109,7 +118,9 @@ var lodController = (function() {
     function hideChildren(element) {
         let children = element.replaces;
         if (children) {
-            canvasManipulator.hideEntities(children);
+            // Avoid hiding already hidden elements (throws errors)
+            canvasManipulator.hideEntities(children.filter(entity => document.getElementById(entity.id) !== null));
+            // Even if this layer is hidden, the next might not be, so we have to go all the way down
             children.forEach(child => hideChildren(child));
         }
     }
