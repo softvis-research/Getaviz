@@ -39,8 +39,10 @@ public class LODCreator {
 
     public void createLODElements() {
         // Replace all buildings
+        /* Currently unused because buildings in ACity are already atomic
         Collection<ACityElement> buildings = cityRepository.getElementsByType(ACityElement.ACityType.Building);
         buildings.forEach(building -> createBuildingReplacement(building));
+        */
 
         // Replace all districts
         Collection<ACityElement> allDistricts = cityRepository.getElementsByType(ACityElement.ACityType.District);
