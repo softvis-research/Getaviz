@@ -13,6 +13,10 @@ var relationController = function () {
 	let activated = false;
 
 	let relationConnectionHelper;
+	let curvedRelationConnectionHelper;
+	
+	//true for curved Relations, false for straight Relations
+	var curved = new Boolean();
 
 	//config parameters
 	const controllerConfig = {
@@ -43,11 +47,28 @@ var relationController = function () {
 
 		application.transferConfigParams(setupConfig, controllerConfig);
 		relationConnectionHelper = createRelationConnectionHelper(controllerConfig);
+		curvedRelationConnectionHelper = createCurvedRelationConnectionHelper(controllerConfig);
 
 		events.selected.on.subscribe(onRelationsChanged);
 		events.selected.off.subscribe(onEntityDeselected);
 		events.filtered.on.subscribe(onEntityFiltered);
 		events.filtered.off.subscribe(onEntityUnfiltered);
+		
+		//abfrage der gewünschten Relation Einstellung
+		chooseRelation();
+	}
+	
+	//abfrage der gewünschten Relation Einstellung 
+	function chooseRelation() {
+		var txt;
+		if (confirm("Möchten Sie das neue Feature \"Curved Relations\" nutzen?\nBei Cancel/Abbrechen werden die geraden Relations genutzt")) {
+			txt = "Sie haben Curved Relation gewählt";
+			curved = true;
+		} else {
+			txt = "Sie haben Straight Relations gewählt";
+			curved = false;
+		}
+		window.alert(txt)
 	}
 
 	async function activate() {
@@ -241,7 +262,12 @@ var relationController = function () {
 			await unhideRelatedEntities();
 
 			if (controllerConfig.showConnector) {
-				createRelatedConnections(relations);
+				if (curved) {
+					//hier funktion für die curved relations einbinden 
+					createCurvedRelatedConnections(relations);
+				} else {
+					createRelatedConnections(relations);
+				}
 			}
 		}
 	}
@@ -380,13 +406,37 @@ var relationController = function () {
 	/*************************
 			Connection
 	*************************/
-
+	
 	function createRelatedConnections(newRelations) {
 
 		newRelations.forEach(function (relation) {
 			const sourceEntity = relation.source;
 			const relatedEntity = relation.target;
+		
+			//create scene element
+			const connectorElements = relationConnectionHelper.createConnector(sourceEntity, relatedEntity, relation.id);
 
+			//source or target not rendered -> no connector
+			if (!connectorElements) {
+				events.log.error.publish({ text: "connector - createRelatedConnections - source or target not rendered" });
+				return;
+			}
+
+			events.log.info.publish({ text: "connector - createRelatedConnections - create connector" });
+
+			connectorElements.forEach(function (element) {
+				connectors.push(element);
+			});
+		})
+	}
+	
+	//hier Anpassungen für Curved Relations
+	function createCurvedRelatedConnections(newRelations) {
+
+		newRelations.forEach(function (relation) {
+			const sourceEntity = relation.source;
+			const relatedEntity = relation.target;
+		
 			//create scene element
 			const connectorElements = relationConnectionHelper.createConnector(sourceEntity, relatedEntity, relation.id);
 
@@ -492,5 +542,6 @@ var relationController = function () {
 		activate: activate,
 		deactivate: deactivate
 	};
+		
 
 }();

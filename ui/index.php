@@ -123,6 +123,7 @@ if (isset($_GET["lazy"])) {
 
 <script type="text/javascript" src="scripts/Relation/RelationController.js"></script>
 <script type="text/javascript" src="scripts/Relation/RelationConnectionHelper.js"></script>
+<script type="text/javascript" src="scripts/Relation/RelationCurvedConnectionHelper.js"></script>
 
 <script type="text/javascript" src="scripts/Menu/MenuController.js"></script>
 <script type="text/javascript" src="scripts/HelpController/HelpController.js"></script>
