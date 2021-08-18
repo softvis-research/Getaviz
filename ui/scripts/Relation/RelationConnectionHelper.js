@@ -140,59 +140,6 @@ var createRelationConnectionHelper = function(controllerConfig) {
 			
             return connectorElements;
         }
-		
-		/*	function createConnectorRing(entity, relatedEntity, relationId) {
-            const {sourcePosition, targetPosition} = evaluatePositions(entity, relatedEntity);
-            if (!sourcePosition || !targetPosition) {
-                return null;
-            }
-
-            const delta = combineObjectProperties(targetPosition, sourcePosition, (left, right) => left - right);
-            const distance = sourcePosition.distanceTo(targetPosition);
-            const direction = new THREE.Vector3(delta.x, delta.y, delta.z).normalize();
-
-            // create connector
-            const connector = document.createElement("a-cylinder");
-            const halfwayPoint = combineObjectProperties(sourcePosition, delta, (left, right) => left + right / 2);
-            setConnectorMeshProperties(connector, halfwayPoint, direction, connectorSize, distance);
-            setCommonConnectorHTMLProperties(connector, controllerConfig.connectorColor);
-            connector.setAttribute("radius", 10);
-            connector.setAttribute("id", relationId);
-			//connector.setAttribute("side", double);
-			//connector.setAttribute("radiusInner", abstand der Objekte );
-			//connector.setAttribute("radiusOuter", inner + 7); 
-			//connector.setAttribute("thetaStart", 10);
-			//connector.setAttribute("thetaLength", 160);
-			//connector.setAttribute("segmentsTheta", 64);
-
-            const scene = document.querySelector("a-scene");
-            scene.appendChild(connector);
-
-            const connectorElements = [];
-            connectorElements.push(connector);
-
-            // create endpoints
-            if (controllerConfig.createEndpoints) {
-                const size = connectorSize * 1.5;
-                const length = size * 6;
-                const sourceEndpoint = document.createElement("a-cylinder");
-                setConnectorMeshProperties(sourceEndpoint, sourcePosition, direction, size, length);
-                setCommonConnectorHTMLProperties(sourceEndpoint, controllerConfig.endpointColor);
-
-                const targetEndpoint = document.createElement("a-cylinder");
-                setConnectorMeshProperties(targetEndpoint, targetPosition, direction, size, length);
-                setCommonConnectorHTMLProperties(targetEndpoint, controllerConfig.endpointColor);
-
-                scene.appendChild(sourceEndpoint);
-                scene.appendChild(targetEndpoint);
-                connectorElements.push(sourceEndpoint);
-                connectorElements.push(targetEndpoint);
-            }
-            return connectorElements;
-        } 
-		
-		
-		*/
 
         return {
             createConnector: createConnector,
