@@ -35,7 +35,7 @@ var relationController = function () {
 		sourceStartAtBorder: false,
 		targetEndAtBorder: false,
 		createEndpoints: false,
-		connectorColor: { r: 1, g: 0, b: 0 },
+		connectorColor: { r: 0, g: 0, b: 1 },
 		endpointColor: { r: 0, g: 0, b: 0 },
 
 		//highlight configs
@@ -415,7 +415,7 @@ var relationController = function () {
 		
 			//create scene element
 			const connectorElements = relationConnectionHelper.createConnector(sourceEntity, relatedEntity, relation.id);
-
+			
 			//source or target not rendered -> no connector
 			if (!connectorElements) {
 				events.log.error.publish({ text: "connector - createRelatedConnections - source or target not rendered" });
@@ -438,17 +438,17 @@ var relationController = function () {
 			const relatedEntity = relation.target;
 		
 			//create scene element
-			const connectorElements = relationConnectionHelper.createConnector(sourceEntity, relatedEntity, relation.id);
+			const curvedConnectorElements = curvedRelationConnectionHelper.createConnector(sourceEntity, relatedEntity, relation.id);
 
 			//source or target not rendered -> no connector
-			if (!connectorElements) {
+			if (!curvedConnectorElements) {
 				events.log.error.publish({ text: "connector - createRelatedConnections - source or target not rendered" });
 				return;
 			}
 
 			events.log.info.publish({ text: "connector - createRelatedConnections - create connector" });
 
-			connectorElements.forEach(function (element) {
+			curvedConnectorElements.forEach(function (element) {
 				connectors.push(element);
 			});
 		})

@@ -1,17 +1,13 @@
 var createCurvedRelationConnectionHelper = function(controllerConfig) {
     return (function(controllerConfig) {
 		
-		const connectorSize = 0.05;
 
-        function setConnectorMeshProperties(connectorElement, position, direction, width, length) {
+        function setConnectorMeshProperties(connectorElement, direction) {
             connectorElement.addEventListener("loaded", function () {
                 const threeMesh = this.object3DMap.mesh;
 
-                threeMesh.scale.set(width, length, width);
-                threeMesh.position.set(position.x, position.y, position.z);
-
                 const quaternion = threeMesh.quaternion;
-                quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
+                quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), direction);
             });
         }
 
@@ -73,13 +69,18 @@ var createCurvedRelationConnectionHelper = function(controllerConfig) {
                 sourcePosition.y = Math.min(sourcePosition.y, targetPosition.y);
                 targetPosition.y = sourcePosition.y;
             }
-
+			
+			let centralPosition = sourcePosition;
+			centralPosition.x = ((sourcePosition.x + targetPosition.x) / 2);
+			centralPosition.z = ((sourcePosition.z + targetPosition.z) / 2);
+			
             return {
                 sourcePosition: sourcePosition,
                 targetPosition: targetPosition,
+				centralPosition: centralPosition,
             };
         }
-
+		
         function calculateBorderPosition(sourceOfRay, targetOfRay, entity) {
             const object = document.getElementById(entity.id);
             const raycaster = new THREE.Raycaster();
@@ -97,124 +98,49 @@ var createCurvedRelationConnectionHelper = function(controllerConfig) {
         }
 
         function createConnector(entity, relatedEntity, relationId) {
-            const {sourcePosition, targetPosition} = evaluatePositions(entity, relatedEntity);
+            const {sourcePosition, targetPosition, centralPosition} = evaluatePositions(entity, relatedEntity);
             if (!sourcePosition || !targetPosition) {
                 return null;
-            }
-
-            const delta = combineObjectProperties(targetPosition, sourcePosition, (left, right) => left - right);
-            const distance = sourcePosition.distanceTo(targetPosition);
-            const direction = new THREE.Vector3(delta.x, delta.y, delta.z).normalize();
-
+            }			
+            
+			//für inner radius den Abstand berechnen... 
+			const src = sourcePosition;
+			src.setY(1);
+			const dest = targetPosition;
+			dest.setY(1);
+            const distance = src.distanceTo(dest); 
+			const outer = distance + Math.min(0.2*distance, 1.5);
+			
+			const delta = combineObjectProperties(targetPosition, sourcePosition, (left, right) => left - right);
+            const direction = new THREE.Vector3(delta.x, 0, delta.z).normalize();
+			
             // create connector
-            const connector = document.createElement("a-cylinder");
-            const halfwayPoint = combineObjectProperties(sourcePosition, delta, (left, right) => left + right / 2);
-            setConnectorMeshProperties(connector, halfwayPoint, direction, connectorSize, distance);
+            const connector = document.createElement("a-ring");
+            setConnectorMeshProperties(connector, direction);
             setCommonConnectorHTMLProperties(connector, controllerConfig.connectorColor);
-            connector.setAttribute("radius", 10);
+			
+			connector.setAttribute("position", centralPosition);
+            connector.setAttribute("radius-inner", distance);
+			connector.setAttribute("radius-outer", outer);
             connector.setAttribute("id", relationId);
-
+			//connector.setAttribute("color", "navy");
+			connector.setAttribute("side", "double");
+			connector.setAttribute("theta-start", 0);
+			connector.setAttribute("theta-length", 180);
+			//connector.setAttribute("segments-theta", 64);
+			
             const scene = document.querySelector("a-scene");
             scene.appendChild(connector);
 
             const connectorElements = [];
             connectorElements.push(connector);
 
-            // create endpoints
-            if (controllerConfig.createEndpoints) {
-                const size = connectorSize * 1.5;
-                const length = size * 6;
-                const sourceEndpoint = document.createElement("a-cylinder");
-                setConnectorMeshProperties(sourceEndpoint, sourcePosition, direction, size, length);
-                setCommonConnectorHTMLProperties(sourceEndpoint, controllerConfig.endpointColor);
 
-                const targetEndpoint = document.createElement("a-cylinder");
-                setConnectorMeshProperties(targetEndpoint, targetPosition, direction, size, length);
-                setCommonConnectorHTMLProperties(targetEndpoint, controllerConfig.endpointColor);
-
-                scene.appendChild(sourceEndpoint);
-                scene.appendChild(targetEndpoint);
-                connectorElements.push(sourceEndpoint);
-                connectorElements.push(targetEndpoint);
-            }
-			/*experimentell!
-			const test = document.createElement("a-ring");
-			test.setAttribute("side", double);
-			test.setAttribute("color", #880000);
-			test.setAttribute("radiusInner", 50);
-			test.setAttribute("radiusOuter", 100);
-			scene.appendChild(test);
-			*/
             return connectorElements;
         }
-		
-		/*	function createConnectorRing(entity, relatedEntity, relationId) {
-            const {sourcePosition, targetPosition} = evaluatePositions(entity, relatedEntity);
-            if (!sourcePosition || !targetPosition) {
-                return null;
-            }
-
-            const delta = combineObjectProperties(targetPosition, sourcePosition, (left, right) => left - right);
-            const distance = sourcePosition.distanceTo(targetPosition);
-            const direction = new THREE.Vector3(delta.x, delta.y, delta.z).normalize();
-
-            // create connector
-            const connector = document.createElement("a-cylinder");
-            const halfwayPoint = combineObjectProperties(sourcePosition, delta, (left, right) => left + right / 2);
-            setConnectorMeshProperties(connector, halfwayPoint, direction, connectorSize, distance);
-            setCommonConnectorHTMLProperties(connector, controllerConfig.connectorColor);
-            connector.setAttribute("radius", 10);
-            connector.setAttribute("id", relationId);
-			//connector.setAttribute("side", double);
-			//connector.setAttribute("radiusInner", abstand der Objekte );
-			//connector.setAttribute("radiusOuter", inner + 7); 
-			//connector.setAttribute("thetaStart", 10);
-			//connector.setAttribute("thetaLength", 160);
-			//connector.setAttribute("segmentsTheta", 64);
-
-            const scene = document.querySelector("a-scene");
-            scene.appendChild(connector);
-
-            const connectorElements = [];
-            connectorElements.push(connector);
-
-            // create endpoints
-            if (controllerConfig.createEndpoints) {
-                const size = connectorSize * 1.5;
-                const length = size * 6;
-                const sourceEndpoint = document.createElement("a-cylinder");
-                setConnectorMeshProperties(sourceEndpoint, sourcePosition, direction, size, length);
-                setCommonConnectorHTMLProperties(sourceEndpoint, controllerConfig.endpointColor);
-
-                const targetEndpoint = document.createElement("a-cylinder");
-                setConnectorMeshProperties(targetEndpoint, targetPosition, direction, size, length);
-                setCommonConnectorHTMLProperties(targetEndpoint, controllerConfig.endpointColor);
-
-                scene.appendChild(sourceEndpoint);
-                scene.appendChild(targetEndpoint);
-                connectorElements.push(sourceEndpoint);
-                connectorElements.push(targetEndpoint);
-            }
-            return connectorElements;
-        } 
-		
-		
-		*/
 
         return {
             createConnector: createConnector,
         };
     })(controllerConfig);
 };
-
-		
-		/*	test :
-		const scene = document.querySelector("a-scene");
-		const test = document.createElement("a-ring");
-		test.setAttribute("side", "double");
-		test.setAttribute("color", "navy");
-		test.setAttribute("theta-start", 0);
-		test.setAttribute("theta-length", 180);
-		test.setAttribute("radius-inner", 20);
-		test.setAttribute("radius-outer", 22);
-		scene.appendChild(test); */
