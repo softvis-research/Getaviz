@@ -110,7 +110,8 @@ var createCurvedRelationConnectionHelper = function(controllerConfig) {
 			const dest = targetPosition;
 			dest.setY(1);
             const distance = src.distanceTo(dest); 
-			const outer = distance + Math.min(0.2*distance, 1.75);
+			const outer1 = distance + 1;
+			const outer2 = distance + 1.75;
 			
 			const delta = combineObjectProperties(targetPosition, sourcePosition, (left, right) => left - right);
             const direction = new THREE.Vector3(delta.x, 0, delta.z).normalize();
@@ -122,11 +123,10 @@ var createCurvedRelationConnectionHelper = function(controllerConfig) {
 			
 			connector.setAttribute("position", centralPosition);
 			connector.setAttribute("radius-inner", distance);
-			if(distance < 5){
-				let minimal = distance + 1; 
-				connector.setAttribute("radius-outer", minimal);
+			if (distance > 100){
+				connector.setAttribute("radius-outer", outer2);
 			} else {
-				connector.setAttribute("radius-outer", outer);
+				connector.setAttribute("radius-outer", outer1);
 			}
             connector.setAttribute("id", relationId);
 		//	connector.setAttribute("color", "navy");
