@@ -1,7 +1,7 @@
 var createCurvedRelationConnectionHelper = function(controllerConfig) {
     return (function(controllerConfig) {
 		
-
+		//only direction is needed to rotate the rings
         function setConnectorMeshProperties(connectorElement, direction) {
             connectorElement.addEventListener("loaded", function () {
                 const threeMesh = this.object3DMap.mesh;
@@ -70,6 +70,7 @@ var createCurvedRelationConnectionHelper = function(controllerConfig) {
                 targetPosition.y = sourcePosition.y;
             }
 			
+			//new 'centralPosition' ist the center of the Ring elements
 			let centralPosition = sourcePosition;
 			centralPosition.x = ((sourcePosition.x + targetPosition.x) / 2);
 			centralPosition.z = ((sourcePosition.z + targetPosition.z) / 2);
@@ -103,13 +104,13 @@ var createCurvedRelationConnectionHelper = function(controllerConfig) {
                 return null;
             }			
             
-			//für inner radius den Abstand berechnen... 
+			// calculate the distance (= inner radius)
 			const src = sourcePosition;
 			src.setY(1);
 			const dest = targetPosition;
 			dest.setY(1);
             const distance = src.distanceTo(dest); 
-			const outer = distance + Math.min(0.2*distance, 1.5);
+			const outer = distance + Math.min(0.2*distance, 1.75);
 			
 			const delta = combineObjectProperties(targetPosition, sourcePosition, (left, right) => left - right);
             const direction = new THREE.Vector3(delta.x, 0, delta.z).normalize();
@@ -120,21 +121,25 @@ var createCurvedRelationConnectionHelper = function(controllerConfig) {
             setCommonConnectorHTMLProperties(connector, controllerConfig.connectorColor);
 			
 			connector.setAttribute("position", centralPosition);
-            connector.setAttribute("radius-inner", distance);
-			connector.setAttribute("radius-outer", outer);
+			connector.setAttribute("radius-inner", distance);
+			if(distance < 5){
+				let minimal = distance + 1; 
+				connector.setAttribute("radius-outer", minimal);
+			} else {
+				connector.setAttribute("radius-outer", outer);
+			}
             connector.setAttribute("id", relationId);
-			//connector.setAttribute("color", "navy");
+		//	connector.setAttribute("color", "navy");
 			connector.setAttribute("side", "double");
 			connector.setAttribute("theta-start", 0);
 			connector.setAttribute("theta-length", 180);
-			//connector.setAttribute("segments-theta", 64);
+			connector.setAttribute("segments-theta", 64);
 			
             const scene = document.querySelector("a-scene");
             scene.appendChild(connector);
 
             const connectorElements = [];
             connectorElements.push(connector);
-
 
             return connectorElements;
         }

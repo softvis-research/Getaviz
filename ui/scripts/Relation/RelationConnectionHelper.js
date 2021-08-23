@@ -111,7 +111,7 @@ var createRelationConnectionHelper = function(controllerConfig) {
             const halfwayPoint = combineObjectProperties(sourcePosition, delta, (left, right) => left + right / 2);
             setConnectorMeshProperties(connector, halfwayPoint, direction, connectorSize, distance);
             setCommonConnectorHTMLProperties(connector, controllerConfig.connectorColor);
-            connector.setAttribute("radius", 10);
+            connector.setAttribute("radius", 5);
             connector.setAttribute("id", relationId);
 
             const scene = document.querySelector("a-scene");

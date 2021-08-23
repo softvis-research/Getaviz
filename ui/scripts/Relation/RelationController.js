@@ -54,18 +54,18 @@ var relationController = function () {
 		events.filtered.on.subscribe(onEntityFiltered);
 		events.filtered.off.subscribe(onEntityUnfiltered);
 		
-		//abfrage der gewünschten Relation Einstellung
+		//pop-up to choose between the different connectors 
 		chooseRelation();
 	}
 	
-	//abfrage der gewünschten Relation Einstellung 
+	//creates alert-box to choose between the different connectors, displayed text should be changed...
 	function chooseRelation() {
 		var txt;
 		if (confirm("Möchten Sie das neue Feature \"Curved Relations\" nutzen?\nBei Cancel/Abbrechen werden die geraden Relations genutzt")) {
-			txt = "Sie haben Curved Relation gewählt";
+			txt = "Sie haben 'Curved Relation Connectors' gewählt";
 			curved = true;
 		} else {
-			txt = "Sie haben Straight Relations gewählt";
+			txt = "Sie haben die gewohnten Relation Connectors gewählt";
 			curved = false;
 		}
 		window.alert(txt)
@@ -263,9 +263,10 @@ var relationController = function () {
 
 			if (controllerConfig.showConnector) {
 				if (curved) {
-					//hier funktion für die curved relations einbinden 
+					//new curved connectors are displayed 
 					createCurvedRelatedConnections(relations);
 				} else {
+					//normal straight connectors are displayed
 					createRelatedConnections(relations);
 				}
 			}
@@ -430,14 +431,14 @@ var relationController = function () {
 		})
 	}
 	
-	//hier Anpassungen für Curved Relations
+	//new function for Curved Relations, similar to the one above
 	function createCurvedRelatedConnections(newRelations) {
 
 		newRelations.forEach(function (relation) {
 			const sourceEntity = relation.source;
 			const relatedEntity = relation.target;
 		
-			//create scene element
+			//create scene element, new helper class
 			const curvedConnectorElements = curvedRelationConnectionHelper.createConnector(sourceEntity, relatedEntity, relation.id);
 
 			//source or target not rendered -> no connector
