@@ -26,7 +26,7 @@
 	<dependency>
     	<groupId>org.neo4j</groupId>
     	<artifactId>neo4j</artifactId>
-    	<version>3.3.5</version>
+    	<version>3.5.0</version>
 	</dependency>
 	<dependency>
 		<groupId>org.svis.generator</groupId>
