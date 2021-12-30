@@ -835,6 +835,8 @@ public class SettingsConfiguration {
 				return config.getString("city.abap.color.metropolis.reportDistrict", "#C5CEA9");
 			case "functionGroupDistrict":
 				return config.getString("city.abap.color.metropolis.functionGroupDistrict", "#C5CEA9");
+			case "transactionDistrict":
+				return config.getString("city.abap.color.metropolis.transactionDistrict", "#C5CEA9");
 			case "tableDistrict":
 				return config.getString("city.abap.color.metropolis.tableDistrict", "#C5CEA9");
 			case "structureDistrict":
@@ -885,6 +887,8 @@ public class SettingsConfiguration {
 				return config.getString("city.abap.metropolis.color.formRoutineBuilding", "#3ff493");
 			case "functionModuleBuilding":
 				return config.getString("city.abap.metropolis.color.functionModuleBuilding", "#C5CEA9");
+			case "transactionBuilding":
+				return config.getString("city.abap.metropolis.color.transactionBuilding", "#C5CEA9");
 			case "tableBuilding":
 				return config.getString("city.abap.metropolis.color.tableBuilding", "#C5CEA9");
 			case "dataElementBuilding":
@@ -1111,6 +1115,18 @@ public class SettingsConfiguration {
 				}
 			case "functionModuleBuilding":
 				value = config.getString("city.abap.metropolis.shape.functionModuleBuilding", "box");
+				switch (value) {
+					case "box":
+						return ACityElement.ACityShape.Box;
+					case "cone":
+						return ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return ACityElement.ACityShape.Cylinder;
+					default:
+						return ACityElement.ACityShape.Cone;
+				}
+			case "transactionBuilding":
+				value = config.getString("city.abap.metropolis.shape.transactionBuilding", "box");
 				switch (value) {
 					case "box":
 						return ACityElement.ACityShape.Box;

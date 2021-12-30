@@ -85,6 +85,9 @@ public class MetropolisCreator {
 
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Method);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Attribute);
+
+        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Transaction);
+        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Transaction);
     }
 
     private void createReferenceBuildingRelations() {
@@ -168,7 +171,7 @@ public class MetropolisCreator {
 
             Node sourceNode = element.getSourceNode();
 
-            if(element.getSourceNodeType() == SAPNodeTypes.Report) {
+            if(element.getSourceNodeType() == SAPNodeTypes.Report || element.getSourceNodeType() == SAPNodeTypes.Transaction) {
                 if(element.getType() == ACityElement.ACityType.Building){
                     continue;
                 }
@@ -187,6 +190,10 @@ public class MetropolisCreator {
                 }
 
                 if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Report) {
+                    continue;
+                }
+
+                if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Transaction) {
                     continue;
                 }
 

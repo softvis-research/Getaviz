@@ -142,6 +142,8 @@ public class MetropolisDesigner {
                 case FunctionGroup: district.setColor(config.getMetropolisDistrictColorHex("functionGroupDistrict"));
                     //district.setYPosition(district.getYPosition() + 6);
                                     break;
+                case Transaction: district.setColor(config.getMetropolisDistrictColorHex("transactionDistrict"));
+                    break;
                 case Table:
                 case TableType:     district.setColor(config.getMetropolisDistrictColorHex("tableDistrict"));
                                     district.setHeight(config.getACityDistrictHeight()); break;
@@ -228,6 +230,12 @@ public class MetropolisDesigner {
                 case FunctionModule:
                     building.setColor(config.getMetropolisBuildingColorHex("functionModuleBuilding"));
                     building.setShape(config.getMetropolisBuildingShape("functionModuleBuilding"));
+                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    break;
+                case Transaction:
+                    building.setColor(config.getMetropolisBuildingColorHex("transactionBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("transactionBuilding"));
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
                     break;
