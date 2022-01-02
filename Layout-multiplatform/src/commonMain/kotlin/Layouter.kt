@@ -1,0 +1,152 @@
+package org.getaviz.generator.city.kotlin
+
+import kotlin.math.*
+
+class LightMapLayouter(val buildingHorizontalGap: Double) {
+
+    private val trimEpsilon = .001
+
+    fun calculateWithVirtualRoot(nodes: List<Node>): CityRectangle {
+        val virtualRoot = Node("root")
+        virtualRoot.children = nodes
+        val rootRectangle = arrangeChildren(virtualRoot)
+        resolveAbsolutePositions(virtualRoot, 0.0, 0.0)
+
+        return rootRectangle
+    }
+
+    fun calculate(node: Node): CityRectangle {
+        val rootRectangle = arrangeChildren(node)
+        resolveAbsolutePositions(node, 0.0, 0.0)
+
+        return rootRectangle
+    }
+
+    private fun resolveAbsolutePositions(node: Node, absoluteX: Double, absoluteY: Double) {
+        node.x += absoluteX
+        node.y += absoluteY
+        node.children.forEach { child -> resolveAbsolutePositions(child, node.x, node.y) }
+    }
+
+    private fun arrangeChildren(parent: Node): CityRectangle {
+        if (parent.children.isEmpty()) {
+            return CityRectangle(parent,
+                parent.width + buildingHorizontalGap,
+                parent.length + buildingHorizontalGap
+            )
+        }
+
+        val arrangedChildren = parent.children.map { node -> arrangeChildren(node) }.sortedDescending()
+
+        val maxRectangle = calculateMaxArea(arrangedChildren)
+        var covRectangle = Rectangle()
+        val tree = KDTreeNode(maxRectangle)
+
+        for (element in arrangedChildren) {
+            // get all nodes where the element would fit at all
+            val possibleNodes = tree.getFittingNodes(element)
+            // find the node that makes the most efficient use of the existing covrec
+            val (preservers, expanders) = mapElementsToPreserversExpanders(possibleNodes, element, covRectangle)
+            val targetNode = if (preservers.isEmpty()) {
+                expanders.first().first
+            } else {
+                preservers.first().first
+            }
+            // trim node by shaving off unused space into child nodes
+            val fittedNode = trimNode(targetNode, element)
+            fittedNode.occupied = true
+
+            covRectangle = expandCovrecToInclude(fittedNode.rectangle, covRectangle)
+            transferCoordsToNode(fittedNode.rectangle, element.node)
+        }
+
+        val parentRectangle = CityRectangle(parent,
+            covRectangle.width + buildingHorizontalGap,
+            covRectangle.length + buildingHorizontalGap)
+
+        transferCoordsToNode(parentRectangle, parent)
+
+        return parentRectangle
+    }
+
+    private fun expandCovrecToInclude(newElement: Rectangle, oldCovrec: Rectangle): Rectangle {
+        return Rectangle(
+            max(oldCovrec.width, newElement.maxX - oldCovrec.x),
+            max(oldCovrec.length, newElement.maxY - oldCovrec.y),
+            oldCovrec.x,
+            oldCovrec.y
+        )
+    }
+
+    private fun transferCoordsToNode(sourceRectangle: Rectangle, targetNode: Node) {
+        targetNode.x = sourceRectangle.x
+        targetNode.y = sourceRectangle.y
+        targetNode.width = sourceRectangle.width
+        targetNode.length = sourceRectangle.length
+    }
+
+    // naive calculation of max possible area by adding up all widths, lengths and gaps
+    private fun calculateMaxArea(children: List<Rectangle>): Rectangle {
+        var widthSum = 0.0
+        var lengthSum = 0.0
+        for (node in children) {
+            widthSum += node.width
+            lengthSum += node.length
+        }
+
+        val totalPadding = buildingHorizontalGap * children.size
+        widthSum += totalPadding
+        lengthSum += totalPadding
+
+        return Rectangle(widthSum, lengthSum)
+    }
+
+    private fun mapElementsToPreserversExpanders(nodes: List<KDTreeNode>, insertedElement: CityRectangle, covrec: Rectangle)
+            : Pair<List<Pair<KDTreeNode, Double>>,
+            List<Pair<KDTreeNode, Double>>> {
+        // split nodes into preservers (node fits into covrec) and expanders (expansion of covrec needed)
+        val (preserverList, expanderList) = nodes.partition {
+            it.rectangle.x + insertedElement.length <= covrec.maxX
+                    && it.rectangle.y + insertedElement.width <= covrec.maxY
+        }
+        // sort preservers by the area left uncovered
+        val preserverMap = preserverList.map {
+            it to (it.rectangle.area - insertedElement.area)
+        }.sortedBy { it.second }
+        // sort expanders by how close the expanded covrec would be to a square
+        val expanderMap = expanderList.map {
+            it to (max(it.rectangle.x + insertedElement.length, covrec.maxX)
+                    / max(it.rectangle.y + insertedElement.width, covrec.maxY))
+        }.sortedBy { abs(it.second - 1) }
+
+        return Pair(preserverMap, expanderMap)
+    }
+
+    private fun trimNode(node: KDTreeNode, insertedElement: CityRectangle): KDTreeNode {
+        val nodeRec = node.rectangle
+        // if there is a significant difference in length, cut horizontally to split into new node
+        if (abs(nodeRec.length - insertedElement.length) > trimEpsilon) {
+            node.leftChild = KDTreeNode(
+                Rectangle(nodeRec.width, insertedElement.length, nodeRec.x, nodeRec.y))
+            node.rightChild = KDTreeNode(
+                Rectangle(nodeRec.width,nodeRec.length - insertedElement.length, nodeRec.x,nodeRec.y + insertedElement.length)
+            )
+
+            node.occupied = true
+            return trimNode(node.leftChild!!, insertedElement)
+            // otherwise, if there is a significant difference in width, cut vertically
+        } else if(abs(nodeRec.width - insertedElement.width) > trimEpsilon) {
+            node.leftChild = KDTreeNode(
+                Rectangle(insertedElement.width, nodeRec.length, nodeRec.x, nodeRec.y))
+            node.rightChild = KDTreeNode(
+                Rectangle(nodeRec.width - insertedElement.width, nodeRec.length, nodeRec.x + insertedElement.width, nodeRec.y)
+            )
+
+            node.occupied = true
+            return trimNode(node.leftChild!!, insertedElement)
+            // otherwise, the inserted element already fills the node perfectly
+        } else {
+            return node
+        }
+    }
+}
