@@ -147,6 +147,16 @@
 			<version>1.1.1</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.getaviz</groupId>
+			<artifactId>light-map-layouter</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains.kotlin</groupId>
+			<artifactId>kotlin-stdlib</artifactId>
+			<version>1.6.10</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -224,6 +234,28 @@
 					<configuration>
 						<argLine>-Duser.language=en -Duser.region=US</argLine>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.1</version>
+					<configuration>
+						<groupId>org.getaviz</groupId>
+						<artifactId>light-map-layouter</artifactId>
+						<version>1.0</version>
+						<packaging>jar</packaging>
+						<file>${basedir}/lib/layout_multiplatform-jvm-1.0.jar</file>
+						<generatePom>true</generatePom>
+					</configuration>
+					<executions>
+						<execution>
+							<id>install-jar-lib</id>
+							<goals>
+								<goal>install-file</goal>
+							</goals>
+							<phase>validate</phase>
+						</execution>
+					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
