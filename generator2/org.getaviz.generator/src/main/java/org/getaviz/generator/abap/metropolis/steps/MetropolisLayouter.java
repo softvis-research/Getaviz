@@ -79,17 +79,6 @@ public class MetropolisLayouter {
         district.setWidth(config.getMetropolisEmptyDistrictWidth());
     }
 
-    /*
-    private void layoutDistricts(Collection<ACityElement> districtElements) {
-        log.info(districtElements.size() + " districts loaded");
-
-        for (ACityElement districtElement : districtElements) {
-            layoutDistrict(districtElement);
-        }
-
-        layoutVirtualRootDistrict(districtElements);
-    }*/
-
     private void layoutDistricts(Collection<ACityElement> districtElements) {
         log.info(districtElements.size() + " districts loaded");
 
@@ -175,25 +164,6 @@ public class MetropolisLayouter {
             }
         }
     }
- /*
-    private void layoutVirtualRootDistrict(Collection<ACityElement> districts){
-        log.info(districts.size() + " districts for virtual root district loaded");
-
-        ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
-
-        if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.DEFAULT) {
-
-            ADistrictLightMapLayout aDistrictLightMapLayout = new ADistrictLightMapLayout(virtualRootDistrict, districts, config);
-            aDistrictLightMapLayout.calculate();
-
-        } else if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.CIRCULAR) {
-
-            ADistrictCircluarLayout aDistrictLayout = new ADistrictCircluarLayout(virtualRootDistrict, districts, config);
-            aDistrictLayout.calculate();
-        }
-
-    }*/
-
 
     private void layoutBuilding(ACityElement building) {
 
@@ -267,36 +237,6 @@ public class MetropolisLayouter {
                 }
             }
         }
-    }
-
-    private void layoutDistrict(ACityElement district) {
-
-        if(isDistrictEmpty(district)){
-            layoutEmptyDistrict(district);
-
-            log.info("Empty district \"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\" layouted");
-        } else {
-
-            Collection<ACityElement> subElements = district.getSubElements();
-
-            //layout sub districts
-            for(ACityElement subElement : subElements){
-                if (subElement.getType() == ACityElement.ACityType.District) {
-                    layoutDistrict(subElement);
-                }
-            }
-
-            //layout district
-            ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
-            aBAPDistrictLightMapLayout.calculate();
-
-            //stack district sub elements
-            AStackLayout stackLayout = new AStackLayout(district, subElements, config);
-            stackLayout.calculate();
-
-            log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
-        }
-
     }
 
     private void layoutReference(ACityElement referenceElement) {

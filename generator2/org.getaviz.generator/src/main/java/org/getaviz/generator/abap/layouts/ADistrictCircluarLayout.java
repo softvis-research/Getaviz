@@ -55,7 +55,6 @@ public class ADistrictCircluarLayout {
         for (ACityElement element : elements) {
 
             double centerX = element.getXPosition();
-            double centerY = element.getYPosition();
             double centerZ = element.getZPosition();
 
             double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin();
@@ -91,7 +90,7 @@ public class ADistrictCircluarLayout {
         double covrecRadius = covrec.getPerimeterRadius() + config.getBuildingHorizontalGap();
         SettingsConfiguration.NotInOriginLayoutVersion version = config.getAbapNotInOrigin_layout_version();
 
-        if (elements.size() == 0)
+        if (elements.isEmpty())
             return;
         else {
 
@@ -158,10 +157,7 @@ public class ADistrictCircluarLayout {
                     double rotationAngle = 0;
 
                     switch(version) {
-                        case MINIMAL_DISTANCE:
-//							rotationAngle = Math.acos(1 - (Math.pow(previousRadius + currentRadius, 2) / (2 * Math.pow(radius, 2))));
-                            rotationAngle = 2 * Math.asin((previousRadius + currentRadius) / (2 * radius));
-                            break;
+
                         case FULL_CIRCLE:
                             double idealRotationAngle = 2 * Math.PI / elements.size() - cacheRotationAngle;
                             double leastRotationAngle = 2 * Math.asin((previousRadius + currentRadius) / (2 * radius));
@@ -175,8 +171,9 @@ public class ADistrictCircluarLayout {
                             }
 
                             break;
+
+                        case MINIMAL_DISTANCE:
                         default:
-//							rotationAngle = Math.acos(1 - (Math.pow(previousRadius + currentRadius, 2) / (2 * Math.pow(radius, 2))));
                             rotationAngle = 2 * Math.asin((previousRadius + currentRadius) / (2 * radius));
                             break;
                     }
@@ -192,7 +189,6 @@ public class ADistrictCircluarLayout {
                     currentRectangle.setXPosition(newX);
 
 
-
                     double newZ = (previousRectangle.getXPosition() - covrec.getCenterX()) * Math.sin(rotationAngle)
                             + (previousRectangle.getZPosition() - covrec.getCenterY()) * Math.cos(rotationAngle)
                             + covrec.getCenterY();
@@ -205,7 +201,6 @@ public class ADistrictCircluarLayout {
                     if(!subElementsManyDistricts.isEmpty()){
                         adjustPositionsOfSubSubElements(subElementsManyDistricts, xPositionDeltaManyDistricts, zPositionDeltaManyDistricts);
                     }
-
                 }
             }
 
