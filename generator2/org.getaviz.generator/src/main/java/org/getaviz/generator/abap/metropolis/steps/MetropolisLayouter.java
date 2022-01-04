@@ -10,14 +10,16 @@ import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
 import org.getaviz.generator.abap.layouts.ABuildingLayout;
 import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
 import org.getaviz.generator.abap.layouts.AStackLayout;
+import org.getaviz.generator.abap.layouts.kdtree.ACityRectangle;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.neo4j.driver.v1.Value;
-import org.neo4j.driver.v1.types.Node;
+import org.getaviz.generator.city.kotlin.*;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MetropolisLayouter {
 
@@ -36,7 +38,6 @@ public class MetropolisLayouter {
 
         log.info("*****************************************************************************************************************************************");
         log.info("created");
-
     }
 
 
@@ -52,15 +53,12 @@ public class MetropolisLayouter {
         log.info(referenceElements.size() + " reference elements loaded");
         layoutReferenceElements(referenceElements);
 
-
         //layout districts
         Collection<ACityElement> packageDistricts = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, "Namespace");
-        layoutDistrics(packageDistricts);
-
+        layoutDistricts(packageDistricts);
 
         //layout cloud elements
         layoutCloudModel();
-
     }
 
     private void layoutReferenceElements(Collection<ACityElement> referenceElements) {
@@ -75,17 +73,14 @@ public class MetropolisLayouter {
         }
     }
 
-
-
-
-
     private void layoutEmptyDistrict( ACityElement district) {
         district.setHeight(config.getMetropolisEmptyDistrictHeight());
         district.setLength(config.getMetropolisEmptyDistrictLength());
         district.setWidth(config.getMetropolisEmptyDistrictWidth());
     }
 
-    private void layoutDistrics(Collection<ACityElement> districtElements) {
+    /*
+    private void layoutDistricts(Collection<ACityElement> districtElements) {
         log.info(districtElements.size() + " districts loaded");
 
         for (ACityElement districtElement : districtElements) {
@@ -93,8 +88,94 @@ public class MetropolisLayouter {
         }
 
         layoutVirtualRootDistrict(districtElements);
+    }*/
+
+    private void layoutDistricts(Collection<ACityElement> districtElements) {
+        log.info(districtElements.size() + " districts loaded");
+
+        layoutDistrictsVertically(districtElements);
+        layoutDistrictsHorizontally(districtElements);
     }
 
+    private void layoutDistrictsVertically(Collection<ACityElement> districtElements) {
+        for (ACityElement district : districtElements) {
+            setDistrictHeights(district);
+        }
+        // calculate the vertical displacement of elements
+        for (ACityElement district : districtElements) {
+            AStackLayout stackLayout = new AStackLayout(district, district.getSubElements(), config);
+            stackLayout.calculate();
+        }
+    }
+
+    private void setDistrictHeights(ACityElement district) {
+        district.setHeight(config.getACityDistrictHeight());
+        district.setYPosition(district.getHeight() / 2);
+        for (ACityElement child : district.getSubElements()) {
+            if (child.getType() == ACityElement.ACityType.District) {
+                setDistrictHeights(child);
+            }
+        }
+    }
+
+    private void layoutDistrictsHorizontally(Collection<ACityElement> districtElements) {
+        // split root districts into "core" and "peripheral" sets
+        Map<Boolean, List<ACityElement>> mapNamespaceIsInternal = districtElements.stream().collect(
+                Collectors.partitioningBy(
+                        e -> (!e.getSourceNodeProperty(SAPNodeProperties.creator).equals("SAP")
+                                && e.getSourceNodeProperty(SAPNodeProperties.iteration).equals("0"))));
+        List<ACityElement> internalDistricts = mapNamespaceIsInternal.get(true);
+        List<ACityElement> customOrStandardDistricts = mapNamespaceIsInternal.get(false);
+
+        List<Node> coreLayouterNodes = mapToLayouterNodes(internalDistricts);
+        List<Node> peripheralLayouterNodes = mapToLayouterNodes(customOrStandardDistricts);
+
+        // arrange core nodes (and their children) within a virtual root district
+        LightMapLayouter lightMapLayouter = new LightMapLayouter(config.getBuildingHorizontalGap());
+        CityRectangle kotlinCoreCovrec = lightMapLayouter.calculateWithVirtualRoot(coreLayouterNodes);
+        transferPositionData(coreLayouterNodes);
+
+        // arrange the children of each peripheral node
+        for (Node node : peripheralLayouterNodes) {
+            lightMapLayouter.calculate(node);
+        }
+        transferPositionData(peripheralLayouterNodes);
+
+        // arrange the peripheral root nodes along a circular arc
+        ACityRectangle coreCovrec = new ACityRectangle(
+                kotlinCoreCovrec.getX(), kotlinCoreCovrec.getY(),
+                kotlinCoreCovrec.getMaxX(), kotlinCoreCovrec.getMaxY());
+        ACityElement circularRootDistrict = new ACityElement(ACityElement.ACityType.District);
+        ADistrictCircluarLayout circularLayout = new ADistrictCircluarLayout(circularRootDistrict, customOrStandardDistricts, config, coreCovrec);
+        circularLayout.calculate();
+    }
+
+    private List<Node> mapToLayouterNodes(Collection<ACityElement> elements) {
+        return elements.stream().map(element -> new Node(
+                element.getHash(),
+                element.getXPosition(),
+                element.getZPosition(),
+                element.getWidth(),
+                element.getLength(),
+                element.getSubElements().isEmpty() ? new ArrayList<>() : mapToLayouterNodes(element.getSubElements())
+        )).collect(Collectors.toList());
+    }
+
+    private void transferPositionData(Collection<Node> nodes) {
+        for (Node node : nodes) {
+            ACityElement correspondingElement = repository.getElementByHash(node.getId());
+            // Node uses 2D coordinates, ACityElement uses 3D, hence y -> z
+            correspondingElement.setXPosition(node.getCenterX());
+            correspondingElement.setZPosition(node.getCenterY());
+            correspondingElement.setWidth(node.getWidth());
+            correspondingElement.setLength(node.getLength());
+
+            if (!node.getChildren().isEmpty()) {
+                transferPositionData(node.getChildren());
+            }
+        }
+    }
+ /*
     private void layoutVirtualRootDistrict(Collection<ACityElement> districts){
         log.info(districts.size() + " districts for virtual root district loaded");
 
@@ -111,7 +192,7 @@ public class MetropolisLayouter {
             aDistrictLayout.calculate();
         }
 
-    }
+    }*/
 
 
     private void layoutBuilding(ACityElement building) {
@@ -185,10 +266,7 @@ public class MetropolisLayouter {
                     cloudSubElement.setLength(0);
                 }
             }
-            }
-
-
-
+        }
     }
 
     private void layoutDistrict(ACityElement district) {
@@ -248,18 +326,9 @@ public class MetropolisLayouter {
 
 
     private boolean isDistrictEmpty(ACityElement district){
-        Collection<ACityElement> subElements = district.getSubElements();
-
-        boolean isEmpty = true;
-
-        for (ACityElement subElement: subElements) {
-            if(!subElement.getType().equals(ACityElement.ACityType.Reference)){
-                isEmpty = false;
-                break;
-            }
-        }
-
-        return isEmpty;
+        return district.getSubElements().stream().anyMatch(
+                element -> !element.getType().equals(ACityElement.ACityType.Reference)
+        );
     }
 
 }
