@@ -51,13 +51,8 @@ tasks.register<Copy>("jsArtefact") {
 tasks.register<Exec>("installLocalJar") {
     isIgnoreExitValue = true
     workingDir = layout.projectDirectory.dir("../generator2/org.getaviz.generator").asFile
-    println(workingDir)
 
     commandLine("mvn.cmd", "validate")
-
-    doLast {
-        println(errorOutput)
-    }
 }
 
 tasks.named("build") {

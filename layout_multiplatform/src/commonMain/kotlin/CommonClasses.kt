@@ -1,7 +1,6 @@
 package org.getaviz.generator.city.kotlin
 
 // main interface class of the layout process: this is what goes in, this is what comes out
-
 class Node constructor(
     val id: String,
     var x: Double = 0.0,
@@ -10,6 +9,11 @@ class Node constructor(
     var length: Double = 1.0,
     var children: List<Node> = listOf<Node>(),
 ) {
+    val centerX: Double
+        get() = this.x + (this.width / 2)
+    val centerY: Double
+        get() = this.y + (this.length / 2)
+
     override fun toString(): String {
         return "[id $id | x $x | y $y | width $width | length $length | children ${children.map { it.id }}]"
     }
@@ -21,6 +25,7 @@ open class Rectangle(
     val x: Double = 0.0,
     val y: Double = 0.0,
 ): Comparable<Rectangle> {
+    // all properties are immutable, so we don't need to compute these dynamically in a getter
     val area: Double = this.length * this.width
     val maxX: Double = this.x + this.width
     val maxY: Double = this.y + this.length

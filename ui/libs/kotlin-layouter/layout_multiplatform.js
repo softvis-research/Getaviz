@@ -46,6 +46,18 @@
     this.length = length;
     this.children = children;
   }
+  Object.defineProperty(Node.prototype, 'centerX', {
+    configurable: true,
+    get: function () {
+      return this.x + this.width / 2;
+    }
+  });
+  Object.defineProperty(Node.prototype, 'centerY', {
+    configurable: true,
+    get: function () {
+      return this.y + this.length / 2;
+    }
+  });
   Node.prototype.toString = function () {
     var tmp$ = '[id ' + this.id + ' | x ' + this.x + ' | y ' + this.y + ' | width ' + this.width + ' | length ' + this.length + ' | children ';
     var $receiver = this.children;
@@ -206,7 +218,7 @@
       this.transferCoordsToNode_0(fittedNode.rectangle, element.node);
     }
     var parentRectangle = new CityRectangle(parent, covRectangle.width + this.buildingHorizontalGap, covRectangle.length + this.buildingHorizontalGap);
-    this.transferCoordsToNode_0(parentRectangle, parent);
+    this.transferSizeToNode_0(covRectangle, parent);
     return parentRectangle;
   };
   LightMapLayouter.prototype.expandCovrecToInclude_0 = function (newElement, oldCovrec) {
@@ -218,8 +230,10 @@
     return new Rectangle(tmp$, JsMath.max(a_0, b_0), oldCovrec.x, oldCovrec.y);
   };
   LightMapLayouter.prototype.transferCoordsToNode_0 = function (sourceRectangle, targetNode) {
-    targetNode.x = sourceRectangle.x;
-    targetNode.y = sourceRectangle.y;
+    targetNode.x = sourceRectangle.x + this.buildingHorizontalGap / 2;
+    targetNode.y = sourceRectangle.y + this.buildingHorizontalGap / 2;
+  };
+  LightMapLayouter.prototype.transferSizeToNode_0 = function (sourceRectangle, targetNode) {
     targetNode.width = sourceRectangle.width;
     targetNode.length = sourceRectangle.length;
   };

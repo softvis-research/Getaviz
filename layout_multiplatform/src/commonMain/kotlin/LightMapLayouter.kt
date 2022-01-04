@@ -52,7 +52,7 @@ class LightMapLayouter(val buildingHorizontalGap: Double) {
             } else {
                 preservers.first().first
             }
-            // trim node by shaving off unused space into child nodes
+            // trim node by shaving off unused space into empty new child nodes
             val fittedNode = trimNode(targetNode, element)
             fittedNode.occupied = true
 
@@ -60,11 +60,11 @@ class LightMapLayouter(val buildingHorizontalGap: Double) {
             transferCoordsToNode(fittedNode.rectangle, element.node)
         }
 
+        // the parent rectangle includes the surrounding gap - the parent node does not include it
         val parentRectangle = CityRectangle(parent,
             covRectangle.width + buildingHorizontalGap,
             covRectangle.length + buildingHorizontalGap)
-
-        transferCoordsToNode(parentRectangle, parent)
+        transferSizeToNode(covRectangle, parent)
 
         return parentRectangle
     }
@@ -78,9 +78,13 @@ class LightMapLayouter(val buildingHorizontalGap: Double) {
         )
     }
 
+    // the node is centered within the rectangle, so offset by half the margin value
     private fun transferCoordsToNode(sourceRectangle: Rectangle, targetNode: Node) {
-        targetNode.x = sourceRectangle.x
-        targetNode.y = sourceRectangle.y
+        targetNode.x = sourceRectangle.x + (buildingHorizontalGap / 2)
+        targetNode.y = sourceRectangle.y + (buildingHorizontalGap / 2)
+    }
+
+    private fun transferSizeToNode(sourceRectangle: Rectangle, targetNode: Node) {
         targetNode.width = sourceRectangle.width
         targetNode.length = sourceRectangle.length
     }
