@@ -1413,8 +1413,16 @@ public class SettingsConfiguration {
 
 	public double adjustACityDistrictYPosition() {return config.getDouble("city.abap.adjust.district.yPosition", 0.1); }
 
+	public double getACityDistrictHorizontalMargin() { return config.getDouble("city.abap.district.horizontal_margin", 0.0); }
+	public double getACityDistrictVerticalMargin() { return config.getDouble("city.abap.district.vertical_margin", 0.0); }
+	public double getACityDistrictHorizontalGap() { return config.getDouble("city.abap.district.horizontal_gap", 3.0); }
+	public double getACityDistrictVerticalGap() { return config.getDouble("city.abap.district.vertical_gap", 3.0); }
+
 	public double getACityBuildingHorizontalMargin() { return config.getDouble("city.abap.building.horizontal_margin", 0.0); }
 	public double getACityBuildingVerticalMargin() { return config.getDouble("city.abap.building.vertical_margin", 0.0); }
+	public double getACityBuildingHorizontalGap() { return config.getDouble("city.abap.building.horizontal_gap", 3.0); }
+	public double getACityBuildingVerticalGap() { return config.getDouble("city.abap.building.vertical_gap", 3.0); }
+	
 	public double adjustACityBuildingWidth() {return config.getDouble("city.abap.adjust.building.width", 0.1); }
 	public double adjustACityBuildingLength() {return config.getDouble("city.abap.adjust.building.length", 0.1); }
 

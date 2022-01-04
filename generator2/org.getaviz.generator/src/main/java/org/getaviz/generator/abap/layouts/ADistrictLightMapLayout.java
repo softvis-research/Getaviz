@@ -61,7 +61,7 @@ public class ADistrictLightMapLayout {
         double xPositionDelta = xPosition - element.getXPosition();
         element.setXPosition(xPosition);
 
-        double zPosition = fitNode.getACityRectangle().getCenterY();//- config.getBuildingHorizontalGap() / 2;
+        double zPosition = fitNode.getACityRectangle().getCenterY();//- config.getBuildingVerticalGap() / 2;
         double zPositionDelta = zPosition - element.getZPosition();
         element.setZPosition(zPosition);
 
@@ -79,7 +79,7 @@ public class ADistrictLightMapLayout {
             element.setXPosition(newXPosition);
 
             double centerZ = element.getZPosition();
-            double newZPosition = centerZ + parentZ + config.getACityBuildingHorizontalMargin();
+            double newZPosition = centerZ + parentZ + config.getACityBuildingVerticalMargin();
             element.setZPosition(newZPosition);
 
             Collection<ACityElement> subElements = element.getSubElements();
@@ -170,9 +170,19 @@ public class ADistrictLightMapLayout {
                 }}
             double width = element.getWidth();
             double length = element.getLength();
+            
+            ACityRectangle rectangle;
+            
+            if (element.getType().equals(ACityElement.ACityType.District)) {
+            	rectangle = new ACityRectangle(0, 0, width + config.getACityDistrictHorizontalGap(),
+                        length + config.getACityDistrictVerticalGap(), 1);		
+			} else {
+				rectangle = new ACityRectangle(0, 0, width + config.getACityBuildingHorizontalGap(),
+	                    length + config.getACityBuildingVerticalGap(), 1);			
+			}
 
-            ACityRectangle rectangle = new ACityRectangle(0, 0, width + config.getBuildingHorizontalGap(),
-                    length + config.getBuildingHorizontalGap(), 1);
+//            ACityRectangle rectangle = new ACityRectangle(0, 0, width + config.getACityBuildingHorizontalGap(),
+//                    length + config.getACityBuildingVerticalGap(), 1);
             rectangles.add(rectangle);
             rectangleElementsMap.put(rectangle, element);
         }
@@ -184,8 +194,15 @@ public class ADistrictLightMapLayout {
         double sum_width = 0;
         double sum_length = 0;
         for (ACityElement element : elements) {
-            sum_width += element.getWidth() + config.getBuildingHorizontalGap();
-            sum_length += element.getLength() + config.getBuildingHorizontalGap();
+        	
+        	if (element.getType().equals(ACityElement.ACityType.District)) {
+                sum_width += element.getWidth() + config.getACityDistrictHorizontalGap();
+                sum_length += element.getLength() + config.getACityDistrictVerticalGap();				
+			} else {
+	            sum_width += element.getWidth() + config.getACityBuildingHorizontalGap();
+	            sum_length += element.getLength() + config.getACityBuildingVerticalGap();				
+			}
+        	
         }
         return new ACityRectangle(0, 0, sum_width, sum_length, 1);
     }
