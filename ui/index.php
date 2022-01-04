@@ -179,7 +179,7 @@ if (isset($_GET["lazy"])) {
 <script type="text/javascript" src="scripts/ABAP/BannerController.js"></script>
 
 <script type="text/javascript" src="libs/kotlin-layouter/kotlin.js"></script>
-<script type="text/javascript" src="libs/kotlin-layouter/Layout-multiplatform.js"></script>
+<script type="text/javascript" src="libs/kotlin-layouter/layout_multiplatform.js"></script>
 
 
 <!--user interface-->
