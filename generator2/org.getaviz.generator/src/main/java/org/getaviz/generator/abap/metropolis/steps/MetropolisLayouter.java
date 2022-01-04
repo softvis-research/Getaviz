@@ -26,9 +26,12 @@ public class MetropolisLayouter {
     private Log log = LogFactory.getLog(this.getClass());
     private SettingsConfiguration config;
 
-
     private SourceNodeRepository nodeRepository;
     private ACityRepository repository;
+
+    public enum MetropolisSection {
+        Origin, Custom, Standard
+    }
 
     public MetropolisLayouter(ACityRepository aCityRepository, SourceNodeRepository sourceNodeRepository, SettingsConfiguration config) {
         this.config = config;
@@ -108,35 +111,55 @@ public class MetropolisLayouter {
     }
 
     private void layoutDistrictsHorizontally(Collection<ACityElement> districtElements) {
-        // split root districts into "core" and "peripheral" sets
-        Map<Boolean, List<ACityElement>> mapNamespaceIsInternal = districtElements.stream().collect(
-                Collectors.partitioningBy(
-                        e -> (!e.getSourceNodeProperty(SAPNodeProperties.creator).equals("SAP")
-                                && e.getSourceNodeProperty(SAPNodeProperties.iteration).equals("0"))));
-        List<ACityElement> internalDistricts = mapNamespaceIsInternal.get(true);
-        List<ACityElement> customOrStandardDistricts = mapNamespaceIsInternal.get(false);
+        // root districts are split into sections that are laid out incrementally, separately
+        Map<MetropolisSection, List<ACityElement>> sectionMap = districtElements.stream()
+                .collect(Collectors.groupingBy(this::getMetropolisSection));
 
-        List<Node> coreLayouterNodes = mapToLayouterNodes(internalDistricts);
-        List<Node> peripheralLayouterNodes = mapToLayouterNodes(customOrStandardDistricts);
-
-        // arrange core nodes (and their children) within a virtual root district
+        // arrange origin nodes (and their children)
         LightMapLayouter lightMapLayouter = new LightMapLayouter(config.getBuildingHorizontalGap());
-        CityRectangle kotlinCoreCovrec = lightMapLayouter.calculateWithVirtualRoot(coreLayouterNodes);
-        transferPositionData(coreLayouterNodes);
+        ACityRectangle covrec = layoutAllWithLightMap(lightMapLayouter, sectionMap.get(MetropolisSection.Origin));
 
-        // arrange the children of each peripheral node
-        for (Node node : peripheralLayouterNodes) {
-            lightMapLayouter.calculate(node);
-        }
-        transferPositionData(peripheralLayouterNodes);
+        // arrange the sub-elements of the peripheral districts
+        List<ACityElement> customDistricts = sectionMap.get(MetropolisSection.Custom);
+        List<ACityElement> standardDistricts = sectionMap.get(MetropolisSection.Standard);
+        layoutChildrenWithLightMap(lightMapLayouter, customDistricts);
+        layoutChildrenWithLightMap(lightMapLayouter, standardDistricts);
 
-        // arrange the peripheral root nodes along a circular arc
-        ACityRectangle coreCovrec = new ACityRectangle(
-                kotlinCoreCovrec.getX(), kotlinCoreCovrec.getY(),
-                kotlinCoreCovrec.getMaxX(), kotlinCoreCovrec.getMaxY());
-        ACityElement circularRootDistrict = new ACityElement(ACityElement.ACityType.District);
-        ADistrictCircluarLayout circularLayout = new ADistrictCircluarLayout(circularRootDistrict, customOrStandardDistricts, config, coreCovrec);
+        // arrange the custom root nodes in a first arc (will expand covrec)
+        ACityElement customRootDistrict = new ACityElement(ACityElement.ACityType.District);
+        ADistrictCircluarLayout circularLayout = new ADistrictCircluarLayout(customRootDistrict, customDistricts, config, covrec);
         circularLayout.calculate();
+
+        // arrange the standard root nodes in a second arc
+        ACityElement standardRootDistrict = new ACityElement(ACityElement.ACityType.District);
+        circularLayout = new ADistrictCircluarLayout(standardRootDistrict, standardDistricts, config, covrec);
+        circularLayout.calculate();
+    }
+
+    private MetropolisSection getMetropolisSection(ACityElement element) {
+        if (element.getSourceNodeProperty(SAPNodeProperties.creator).equals("SAP")) {
+            return MetropolisSection.Standard;
+        } else if (element.getSourceNodeProperty(SAPNodeProperties.iteration).equals("0")) {
+            return MetropolisSection.Origin;
+        } else {
+            return MetropolisSection.Custom;
+        }
+    }
+
+    private ACityRectangle layoutAllWithLightMap(LightMapLayouter layouter, Collection<ACityElement> elements) {
+        List<Node> layouterNodes = mapToLayouterNodes(elements);
+        CityRectangle covrec = layouter.calculateWithVirtualRoot(layouterNodes);
+        transferPositionData(layouterNodes);
+
+        return new ACityRectangle(covrec.getX(), covrec.getY(), covrec.getMaxX(), covrec.getMaxY());
+    }
+
+    private void layoutChildrenWithLightMap(LightMapLayouter layouter, Collection<ACityElement> elements) {
+        List<Node> layouterNodes = mapToLayouterNodes(elements);
+        for (Node node : layouterNodes) {
+            layouter.calculate(node);
+        }
+        transferPositionData(layouterNodes);
     }
 
     private List<Node> mapToLayouterNodes(Collection<ACityElement> elements) {
