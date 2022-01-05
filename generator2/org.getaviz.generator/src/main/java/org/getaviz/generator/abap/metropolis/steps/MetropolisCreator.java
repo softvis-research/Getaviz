@@ -7,6 +7,7 @@ import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.repository.ACityElement;
+import org.getaviz.generator.abap.repository.ACityElement.ACityType;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.neo4j.driver.v1.types.Node;
@@ -85,6 +86,8 @@ public class MetropolisCreator {
 
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Method);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Attribute);
+        
+        createRoadNetwork();
     }
 
     private void createReferenceBuildingRelations() {
@@ -98,7 +101,7 @@ public class MetropolisCreator {
 
         for (ACityElement packageDistrict: packageDistricts){
 
-            // nur für Hauptpaket (Iteration 0)
+            // nur fuer Hauptpaket (Iteration 0)
             String iterationString = packageDistrict.getSourceNodeProperty(SAPNodeProperties.iteration);
             int iterationInt = Integer.parseInt(iterationString);
 
@@ -262,6 +265,11 @@ public class MetropolisCreator {
 
             }
         }
+    }
+    
+    private void createRoadNetwork() {
+    	ACityElement roadNetwork = new ACityElement(ACityType.RoadNetwork);
+    	repository.addElement(roadNetwork);
     }
 
     private void deleteEmptyDistricts() {
