@@ -7,6 +7,7 @@ import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
+import org.getaviz.generator.abap.layouts.ADistrictRoadNetwork;
 import org.getaviz.generator.abap.layouts.ABuildingLayout;
 import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
 import org.getaviz.generator.abap.layouts.AStackLayout;
@@ -211,6 +212,10 @@ public class MetropolisLayouter {
             //layout district
             ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
             aBAPDistrictLightMapLayout.calculate();
+            
+            // generate streets
+            ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(repository, district, config);
+            roadNetwork.calculate();
 
             //stack district sub elements
             AStackLayout stackLayout = new AStackLayout(district, subElements, config);
