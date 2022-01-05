@@ -89,6 +89,11 @@ public class MetropolisLayouter {
         log.info(districtElements.size() + " districts loaded");
 
         for (ACityElement districtElement : districtElements) {
+
+            if(districtElement.getSourceNode() == null){
+                continue;
+            }
+
             layoutDistrict(districtElement);
         }
 
@@ -196,7 +201,7 @@ public class MetropolisLayouter {
         if(isDistrictEmpty(district)){
             layoutEmptyDistrict(district);
 
-            log.info("Empty district \"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\" layouted");
+            //log.info("Empty district \"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\" layouted");
         } else {
 
             Collection<ACityElement> subElements = district.getSubElements();
@@ -216,7 +221,7 @@ public class MetropolisLayouter {
             AStackLayout stackLayout = new AStackLayout(district, subElements, config);
             stackLayout.calculate();
 
-            log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
+            //log.info("\"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
         }
 
     }

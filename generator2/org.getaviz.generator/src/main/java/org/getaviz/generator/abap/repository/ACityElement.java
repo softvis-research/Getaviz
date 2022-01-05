@@ -45,7 +45,7 @@ public class ACityElement {
         Class, Report, FunctionGroup, Table, DDIC
 
         // additional subTypes for metropolis
-        , Interface, DataElement, Structure
+        , Interface, DataElement, Structure, Transaction
 
         , Sea, Mountain, Cloud
     }

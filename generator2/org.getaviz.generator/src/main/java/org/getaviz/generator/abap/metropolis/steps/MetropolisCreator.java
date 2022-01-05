@@ -9,6 +9,7 @@ import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.neo4j.driver.v1.Transaction;
 import org.neo4j.driver.v1.types.Node;
 
 import java.text.CollationElementIterator;
@@ -42,12 +43,72 @@ public class MetropolisCreator {
         log.info("Create City Relations");
         createAllMetropolisRelations(nodeRepository);
 
+        log.info("Create transactionDistricts");
+        createTransactionRelations(nodeRepository);
+
         log.info("Create ReferenceBuildings");
         createReferenceBuildingRelations();
 
         log.info("Delete empty Districts");
         deleteEmptyDistricts();
 
+    }
+
+    private void createTransactionRelations(SourceNodeRepository nodeRepository) {
+
+        Collection<ACityElement> packageDistricts = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Namespace.toString());
+        log.info(packageDistricts.size() + "  districts loaded");
+
+        for (ACityElement packageDistrict: packageDistricts) {
+
+                Collection<ACityElement> subElements = packageDistrict.getSubElementsOfType(ACityElement.ACityType.Building);
+
+                if (subElements == null){
+                    continue;
+                }
+
+                createTransactionDistricts(packageDistrict, subElements);
+
+                removeBuildingsFromDistrict(packageDistrict, subElements);
+
+        }
+
+    }
+
+    private void createTransactionDistricts(ACityElement parentDistrict, Collection<ACityElement> childElements) {
+        Map<ACityElement.ACitySubType, ACityElement> transactionDistrictMap = new HashMap<>();
+
+        for (ACityElement childElement : childElements) {
+            addChildToTransactionDistrict(parentDistrict, childElement, transactionDistrictMap, ACityElement.ACitySubType.Transaction, SAPNodeTypes.Transaction);
+        }
+    }
+
+    private void addChildToTransactionDistrict(ACityElement parentDistrict, ACityElement childElement, Map<ACityElement.ACitySubType, ACityElement> transactionDistrictMap, ACityElement.ACitySubType districtType, SAPNodeTypes sapNodeTypes) {
+            String typeNameProperty = childElement.getSourceNodeProperty(SAPNodeProperties.type_name);
+
+            if( typeNameProperty.equals(sapNodeTypes.name())){
+
+                if( !transactionDistrictMap.containsKey(districtType)){
+                    createTypeDistrict(parentDistrict, transactionDistrictMap, districtType);
+                }
+                ACityElement transactionDistrict = transactionDistrictMap.get(districtType);
+
+                transactionDistrict.addSubElement(childElement);
+                childElement.setParentElement(transactionDistrict);
+            }
+
+        }
+
+    private void createTypeDistrict(ACityElement parentDistrict, Map<ACityElement.ACitySubType, ACityElement> typeDistrictMap, ACityElement.ACitySubType districtType) {
+
+        ACityElement typeDistrict = new ACityElement(ACityElement.ACityType.District);
+        typeDistrict.setSubType(districtType);
+
+        typeDistrictMap.put(districtType, typeDistrict);
+        repository.addElement(typeDistrict);
+
+        parentDistrict.addSubElement(typeDistrict);
+        typeDistrict.setParentElement(parentDistrict);
     }
 
     private Collection<ACityElement> getUsesElementsBySourceNode(SourceNodeRepository nodeRepository, Node node) {
@@ -86,7 +147,6 @@ public class MetropolisCreator {
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Method);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Attribute);
 
-        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Transaction);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Transaction);
     }
 
@@ -127,6 +187,11 @@ public class MetropolisCreator {
                 for (ACityElement subElement : subElements) { //SubElements = Class/Repo/FuGr-District
 
                     if (subElement.getType().equals(ACityElement.ACityType.District)) {
+
+                        if( subElement.getSourceNodeType() == null){
+                            continue;
+                        }
+
                         String migrationFindingsString = subElement.getSourceNodeProperty(SAPNodeProperties.migration_findings);
                         if (migrationFindingsString.equals("true")) {
                             createRefBuilding(subElement, ACityElement.ACitySubType.Cloud);
@@ -193,9 +258,9 @@ public class MetropolisCreator {
                     continue;
                 }
 
-                if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Transaction) {
-                    continue;
-                }
+                //if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Transaction) {
+                  //  continue;
+                //}
 
                 if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Interface) {
                     continue;
@@ -292,7 +357,7 @@ public class MetropolisCreator {
         }
     }
 
-    private void removeSubElementsFromDistrict(ACityElement district, Collection<ACityElement> subElements) {
+    private void removeBuildingsFromDistrict(ACityElement district, Collection<ACityElement> subElements) {
         for (ACityElement subElement: subElements){
             if(subElement.getType() == ACityElement.ACityType.District){
                 continue;
@@ -354,6 +419,5 @@ public class MetropolisCreator {
 
         return aCityElements;
     }
-
 
 }
