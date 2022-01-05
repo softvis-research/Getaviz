@@ -37,7 +37,7 @@ public class AStackLayout {
             //stack sub elements
             Collection<ACityElement> subElements = element.getSubElements();
             if (!subElements.isEmpty()) {
-                stackSubElements(subElements, parentHeight);
+                stackSubElements(subElements, parentHeight + element.getHeight());
             }
         }
     }
