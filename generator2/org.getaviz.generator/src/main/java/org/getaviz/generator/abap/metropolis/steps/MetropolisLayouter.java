@@ -65,13 +65,13 @@ public class MetropolisLayouter {
     }
 
     private void layoutReferenceElements(Collection<ACityElement> referenceElements) {
-        for (ACityElement referenceElement: referenceElements) {
+        for (ACityElement referenceElement : referenceElements) {
             layoutReference(referenceElement);
         }
     }
 
     private void layoutBuildings(Collection<ACityElement> buildings) {
-        for (ACityElement building: buildings) {
+        for (ACityElement building : buildings) {
            layoutBuilding(building);
         }
     }
@@ -111,7 +111,7 @@ public class MetropolisLayouter {
     }
 
     private void layoutDistrictsHorizontally(Collection<ACityElement> districtElements) {
-        // root districts are split into sections that are laid out incrementally, separately
+        // split root districts into sections that are laid out separately
         Map<MetropolisSection, List<ACityElement>> sectionMap = districtElements.stream()
                 .collect(Collectors.groupingBy(this::getMetropolisSection));
 
@@ -163,7 +163,10 @@ public class MetropolisLayouter {
     }
 
     private List<Node> mapToLayouterNodes(Collection<ACityElement> elements) {
-        return elements.stream().map(element -> new Node(
+        // get rid of all cloud reference objects during the transformation: they are laid out separately and would get in the way
+        return elements.stream()
+            .filter(element -> element.getSubType() != ACityElement.ACitySubType.Cloud)
+            .map(element -> new Node(
                 element.getHash(),
                 element.getXPosition(),
                 element.getZPosition(),
@@ -207,36 +210,8 @@ public class MetropolisLayouter {
     private void layoutCloudModel() {
 
         Collection<ACityElement> districtsWithFindings = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.migration_findings, "true");
-        //Collection<ACityElement> buildingsWithFindings = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.migration_findings, "true");
 
-        /*for (ACityElement buildingsWithFinding: buildingsWithFindings) {
-
-            Collection<ACityElement> cloudSubElements = buildingsWithFinding.getSubElements();
-
-            for (ACityElement cloudSubElement : cloudSubElements) {
-
-                if (cloudSubElement.getType().equals(ACityElement.ACityType.Reference) &&
-                        cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud)) {
-
-                    cloudSubElement.setWidth(0);
-                    cloudSubElement.setLength(0);
-                    cloudSubElement.setYPosition(55);
-
-                    ACityElement parent = cloudSubElement.getParentElement();
-
-                    double parentDistrictXPosition = parent.getParentElement().getXPosition();
-                    double parentDistrictZPosition = parent.getParentElement().getZPosition();
-
-                    cloudSubElement.setXPosition(parentDistrictXPosition);
-                    cloudSubElement.setZPosition(parentDistrictZPosition);
-
-                    cloudSubElement.setWidth(0);
-                    cloudSubElement.setLength(0);
-                }
-            }
-        }*/
-
-        for (ACityElement districtWithFinding: districtsWithFindings) {
+        for (ACityElement districtWithFinding : districtsWithFindings) {
 
             Collection<ACityElement> cloudSubElements = districtWithFinding.getSubElements();
 
@@ -245,14 +220,11 @@ public class MetropolisLayouter {
                 if (cloudSubElement.getType().equals(ACityElement.ACityType.Reference) &&
                         cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud)) {
 
-                    cloudSubElement.setWidth(0);
-                    cloudSubElement.setLength(0);
-                    cloudSubElement.setYPosition(55);
-
                     double parentDistrictXPosition = cloudSubElement.getParentElement().getXPosition();
                     double parentDistrictZPosition = cloudSubElement.getParentElement().getZPosition();
 
                     cloudSubElement.setXPosition(parentDistrictXPosition);
+                    cloudSubElement.setYPosition(55);
                     cloudSubElement.setZPosition(parentDistrictZPosition);
 
                     cloudSubElement.setWidth(0);
