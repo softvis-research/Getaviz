@@ -35,13 +35,10 @@ public class ACityElement {
 
 
     public enum ACityType {
-        District, Building, Floor, Chimney,
+        District, Building, Floor, Chimney, Road,
 
         // additional for Metropolis
-        Reference,
-        
-        // additional for roads
-        RoadNetwork, Road
+        Reference
     }
 
     public enum ACitySubType {

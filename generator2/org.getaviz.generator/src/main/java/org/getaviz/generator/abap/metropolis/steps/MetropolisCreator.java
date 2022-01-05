@@ -86,8 +86,6 @@ public class MetropolisCreator {
 
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Method);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building, SAPNodeProperties.type_name, SAPNodeTypes.Attribute);
-        
-        createRoadNetwork();
     }
 
     private void createReferenceBuildingRelations() {
@@ -265,11 +263,6 @@ public class MetropolisCreator {
 
             }
         }
-    }
-    
-    private void createRoadNetwork() {
-    	ACityElement roadNetwork = new ACityElement(ACityType.RoadNetwork);
-    	repository.addElement(roadNetwork);
     }
 
     private void deleteEmptyDistricts() {
