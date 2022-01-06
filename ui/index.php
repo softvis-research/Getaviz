@@ -180,6 +180,7 @@ if (isset($_GET["lazy"])) {
 
 <script type="text/javascript" src="libs/kotlin-layouter/kotlin.js"></script>
 <script type="text/javascript" src="libs/kotlin-layouter/layout_multiplatform.js"></script>
+<script type="text/javascript" src="scripts/Relayout/RelayoutController.js"></script>
 
 
 <!--user interface-->
