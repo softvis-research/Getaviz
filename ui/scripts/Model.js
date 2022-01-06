@@ -68,15 +68,14 @@ var model = (function () {
 				element.name,
 				element.qualifiedName,
 				element.belongsTo,
-				element.antipattern,
-				element.roles,
-				element.isTransparent,
-				element.version
 			);
 
 			entity.isTransparent = false;
 
 			entity.hasUnloadedChildren = !areChildrenLoaded;
+
+			entity.creator = element.creator ?? "";
+			entity.iteration = element.iteration ?? 0;
 
 			if (element.created) {
 				//format: YYYY-MM-DD
