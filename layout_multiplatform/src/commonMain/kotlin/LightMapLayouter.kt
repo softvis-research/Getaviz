@@ -1,11 +1,17 @@
 package org.getaviz.generator.city.kotlin
 
+import kotlin.js.JsName
 import kotlin.math.*
 
-class LightMapLayouter(val buildingHorizontalGap: Double) {
+class LightMapLayouter(
+    @JsName("_buildingHorizontalGap")
+    val buildingHorizontalGap: Double
+) {
 
+    @JsName("_trimEpsilon")
     private val trimEpsilon = .001
 
+    @JsName("calculateWithVirtualRoot")
     fun calculateWithVirtualRoot(nodes: List<Node>): CityRectangle {
         val virtualRoot = Node("root")
         virtualRoot.children = nodes
@@ -15,6 +21,7 @@ class LightMapLayouter(val buildingHorizontalGap: Double) {
         return rootRectangle
     }
 
+    @JsName("calculate")
     fun calculate(node: Node): CityRectangle {
         val rootRectangle = arrangeChildren(node)
         resolveAbsolutePositions(node, 0.0, 0.0)
@@ -22,12 +29,14 @@ class LightMapLayouter(val buildingHorizontalGap: Double) {
         return rootRectangle
     }
 
+    @JsName("_resolveAbsolutePositions")
     private fun resolveAbsolutePositions(node: Node, absoluteX: Double, absoluteY: Double) {
         node.x += absoluteX
         node.y += absoluteY
         node.children.forEach { child -> resolveAbsolutePositions(child, node.x, node.y) }
     }
 
+    @JsName("_arrangeChildren")
     private fun arrangeChildren(parent: Node): CityRectangle {
         if (parent.children.isEmpty()) {
             return CityRectangle(parent,
@@ -69,6 +78,7 @@ class LightMapLayouter(val buildingHorizontalGap: Double) {
         return parentRectangle
     }
 
+    @JsName("_expandCovrecToInclude")
     private fun expandCovrecToInclude(newElement: Rectangle, oldCovrec: Rectangle): Rectangle {
         return Rectangle(
             max(oldCovrec.width, newElement.maxX - oldCovrec.x),
@@ -79,17 +89,20 @@ class LightMapLayouter(val buildingHorizontalGap: Double) {
     }
 
     // the node is centered within the rectangle, so offset by half the margin value
+    @JsName("_transferCoordsToNode")
     private fun transferCoordsToNode(sourceRectangle: Rectangle, targetNode: Node) {
         targetNode.x = sourceRectangle.x + (buildingHorizontalGap / 2)
         targetNode.y = sourceRectangle.y + (buildingHorizontalGap / 2)
     }
 
+    @JsName("_transferSizeToNode")
     private fun transferSizeToNode(sourceRectangle: Rectangle, targetNode: Node) {
         targetNode.width = sourceRectangle.width
         targetNode.length = sourceRectangle.length
     }
 
     // naive calculation of max possible area by adding up all widths, lengths and gaps
+    @JsName("_calculateMaxArea")
     private fun calculateMaxArea(children: List<Rectangle>): Rectangle {
         var widthSum = 0.0
         var lengthSum = 0.0
@@ -105,6 +118,7 @@ class LightMapLayouter(val buildingHorizontalGap: Double) {
         return Rectangle(widthSum, lengthSum)
     }
 
+    @JsName("_mapElementsToPreserversExpanders")
     private fun mapElementsToPreserversExpanders(nodes: List<KDTreeNode>, insertedElement: CityRectangle, covrec: Rectangle)
             : Pair<List<Pair<KDTreeNode, Double>>,
             List<Pair<KDTreeNode, Double>>> {
@@ -126,6 +140,7 @@ class LightMapLayouter(val buildingHorizontalGap: Double) {
         return Pair(preserverMap, expanderMap)
     }
 
+    @JsName("_trimNode")
     private fun trimNode(node: KDTreeNode, insertedElement: CityRectangle): KDTreeNode {
         val nodeRec = node.rectangle
         // if there is a significant difference in length, cut horizontally to split into new node

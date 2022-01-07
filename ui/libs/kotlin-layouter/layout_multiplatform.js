@@ -158,52 +158,52 @@
     };
   });
   function LightMapLayouter(buildingHorizontalGap) {
-    this.buildingHorizontalGap = buildingHorizontalGap;
-    this.trimEpsilon_0 = 0.001;
+    this._buildingHorizontalGap = buildingHorizontalGap;
+    this._trimEpsilon = 0.001;
   }
-  LightMapLayouter.prototype.calculateWithVirtualRoot_ypgmu0$ = function (nodes) {
+  LightMapLayouter.prototype.calculateWithVirtualRoot = function (nodes) {
     var virtualRoot = new Node('root');
     virtualRoot.children = nodes;
-    var rootRectangle = this.arrangeChildren_0(virtualRoot);
-    this.resolveAbsolutePositions_0(virtualRoot, 0.0, 0.0);
+    var rootRectangle = this._arrangeChildren(virtualRoot);
+    this._resolveAbsolutePositions(virtualRoot, 0.0, 0.0);
     return rootRectangle;
   };
-  LightMapLayouter.prototype.calculate_b9q6al$ = function (node) {
-    var rootRectangle = this.arrangeChildren_0(node);
-    this.resolveAbsolutePositions_0(node, 0.0, 0.0);
+  LightMapLayouter.prototype.calculate = function (node) {
+    var rootRectangle = this._arrangeChildren(node);
+    this._resolveAbsolutePositions(node, 0.0, 0.0);
     return rootRectangle;
   };
-  LightMapLayouter.prototype.resolveAbsolutePositions_0 = function (node, absoluteX, absoluteY) {
+  LightMapLayouter.prototype._resolveAbsolutePositions = function (node, absoluteX, absoluteY) {
     node.x = node.x + absoluteX;
     node.y = node.y + absoluteY;
     var tmp$;
     tmp$ = node.children.iterator();
     while (tmp$.hasNext()) {
       var element = tmp$.next();
-      this.resolveAbsolutePositions_0(element, node.x, node.y);
+      this._resolveAbsolutePositions(element, node.x, node.y);
     }
   };
-  LightMapLayouter.prototype.arrangeChildren_0 = function (parent) {
+  LightMapLayouter.prototype._arrangeChildren = function (parent) {
     var tmp$, tmp$_0;
     if (parent.children.isEmpty()) {
-      return new CityRectangle(parent, parent.width + this.buildingHorizontalGap, parent.length + this.buildingHorizontalGap);
+      return new CityRectangle(parent, parent.width + this._buildingHorizontalGap, parent.length + this._buildingHorizontalGap);
     }var $receiver = parent.children;
     var destination = ArrayList_init(collectionSizeOrDefault($receiver, 10));
     var tmp$_1;
     tmp$_1 = $receiver.iterator();
     while (tmp$_1.hasNext()) {
       var item = tmp$_1.next();
-      destination.add_11rb$(this.arrangeChildren_0(item));
+      destination.add_11rb$(this._arrangeChildren(item));
     }
     var arrangedChildren = sortedDescending(destination);
-    var maxRectangle = this.calculateMaxArea_0(arrangedChildren);
+    var maxRectangle = this._calculateMaxArea(arrangedChildren);
     var covRectangle = new Rectangle();
     var tree = new KDTreeNode(maxRectangle);
     tmp$ = arrangedChildren.iterator();
     while (tmp$.hasNext()) {
       var element = tmp$.next();
       var possibleNodes = tree.getFittingNodes_vm2z6a$(element);
-      var tmp$_2 = this.mapElementsToPreserversExpanders_0(possibleNodes, element, covRectangle);
+      var tmp$_2 = this._mapElementsToPreserversExpanders(possibleNodes, element, covRectangle);
       var preservers = tmp$_2.component1()
       , expanders = tmp$_2.component2();
       if (preservers.isEmpty()) {
@@ -212,16 +212,16 @@
         tmp$_0 = first(preservers).first;
       }
       var targetNode = tmp$_0;
-      var fittedNode = this.trimNode_0(targetNode, element);
+      var fittedNode = this._trimNode(targetNode, element);
       fittedNode.occupied = true;
-      covRectangle = this.expandCovrecToInclude_0(fittedNode.rectangle, covRectangle);
-      this.transferCoordsToNode_0(fittedNode.rectangle, element.node);
+      covRectangle = this._expandCovrecToInclude(fittedNode.rectangle, covRectangle);
+      this._transferCoordsToNode(fittedNode.rectangle, element.node);
     }
-    var parentRectangle = new CityRectangle(parent, covRectangle.width + this.buildingHorizontalGap, covRectangle.length + this.buildingHorizontalGap);
-    this.transferSizeToNode_0(covRectangle, parent);
+    var parentRectangle = new CityRectangle(parent, covRectangle.width + this._buildingHorizontalGap, covRectangle.length + this._buildingHorizontalGap);
+    this._transferSizeToNode(covRectangle, parent);
     return parentRectangle;
   };
-  LightMapLayouter.prototype.expandCovrecToInclude_0 = function (newElement, oldCovrec) {
+  LightMapLayouter.prototype._expandCovrecToInclude = function (newElement, oldCovrec) {
     var a = oldCovrec.width;
     var b = newElement.maxX - oldCovrec.x;
     var tmp$ = JsMath.max(a, b);
@@ -229,15 +229,15 @@
     var b_0 = newElement.maxY - oldCovrec.y;
     return new Rectangle(tmp$, JsMath.max(a_0, b_0), oldCovrec.x, oldCovrec.y);
   };
-  LightMapLayouter.prototype.transferCoordsToNode_0 = function (sourceRectangle, targetNode) {
-    targetNode.x = sourceRectangle.x + this.buildingHorizontalGap / 2;
-    targetNode.y = sourceRectangle.y + this.buildingHorizontalGap / 2;
+  LightMapLayouter.prototype._transferCoordsToNode = function (sourceRectangle, targetNode) {
+    targetNode.x = sourceRectangle.x + this._buildingHorizontalGap / 2;
+    targetNode.y = sourceRectangle.y + this._buildingHorizontalGap / 2;
   };
-  LightMapLayouter.prototype.transferSizeToNode_0 = function (sourceRectangle, targetNode) {
+  LightMapLayouter.prototype._transferSizeToNode = function (sourceRectangle, targetNode) {
     targetNode.width = sourceRectangle.width;
     targetNode.length = sourceRectangle.length;
   };
-  LightMapLayouter.prototype.calculateMaxArea_0 = function (children) {
+  LightMapLayouter.prototype._calculateMaxArea = function (children) {
     var tmp$;
     var widthSum = 0.0;
     var lengthSum = 0.0;
@@ -247,7 +247,7 @@
       widthSum += node.width;
       lengthSum += node.length;
     }
-    var totalPadding = this.buildingHorizontalGap * children.size;
+    var totalPadding = this._buildingHorizontalGap * children.size;
     widthSum += totalPadding;
     lengthSum += totalPadding;
     return new Rectangle(widthSum, lengthSum);
@@ -259,7 +259,7 @@
     var x = it.second - 1;
     return JsMath.abs(x);
   }
-  LightMapLayouter.prototype.mapElementsToPreserversExpanders_0 = function (nodes, insertedElement, covrec) {
+  LightMapLayouter.prototype._mapElementsToPreserversExpanders = function (nodes, insertedElement, covrec) {
     var tmp$;
     var first = ArrayList_init_0();
     var second = ArrayList_init_0();
@@ -299,21 +299,21 @@
     var expanderMap = sortedWith(destination_0, new Comparator(compareBy$lambda(LightMapLayouter$mapElementsToPreserversExpanders$lambda_0)));
     return new Pair(preserverMap, expanderMap);
   };
-  LightMapLayouter.prototype.trimNode_0 = function (node, insertedElement) {
+  LightMapLayouter.prototype._trimNode = function (node, insertedElement) {
     var nodeRec = node.rectangle;
     var x = nodeRec.length - insertedElement.length;
-    if (JsMath.abs(x) > this.trimEpsilon_0) {
+    if (JsMath.abs(x) > this._trimEpsilon) {
       node.leftChild = new KDTreeNode(new Rectangle(nodeRec.width, insertedElement.length, nodeRec.x, nodeRec.y));
       node.rightChild = new KDTreeNode(new Rectangle(nodeRec.width, nodeRec.length - insertedElement.length, nodeRec.x, nodeRec.y + insertedElement.length));
       node.occupied = true;
-      return this.trimNode_0(ensureNotNull(node.leftChild), insertedElement);
+      return this._trimNode(ensureNotNull(node.leftChild), insertedElement);
     } else {
       var x_0 = nodeRec.width - insertedElement.width;
-      if (JsMath.abs(x_0) > this.trimEpsilon_0) {
+      if (JsMath.abs(x_0) > this._trimEpsilon) {
         node.leftChild = new KDTreeNode(new Rectangle(insertedElement.width, nodeRec.length, nodeRec.x, nodeRec.y));
         node.rightChild = new KDTreeNode(new Rectangle(nodeRec.width - insertedElement.width, nodeRec.length, nodeRec.x + insertedElement.width, nodeRec.y));
         node.occupied = true;
-        return this.trimNode_0(ensureNotNull(node.leftChild), insertedElement);
+        return this._trimNode(ensureNotNull(node.leftChild), insertedElement);
       } else {
         return node;
       }
