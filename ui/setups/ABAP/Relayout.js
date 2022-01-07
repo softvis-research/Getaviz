@@ -3,8 +3,8 @@ var setup = {
     controllers: [
         {
             name: "defaultLogger",
-            logActionConsole: true,
-            logEventConsole: true
+            logActionConsole: false,
+            logEventConsole: false
         },
         {
             name: "canvasHoverController"
