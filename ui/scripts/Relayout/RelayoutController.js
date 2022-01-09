@@ -79,12 +79,24 @@ var relayoutController = (function () {
         elements.toArray().forEach(node => {
             const domObject = document.getElementById(node.id);
             if (domObject === null) return;
-            domObject.setAttribute("position", {x: node.centerX, z: node.centerY});
+
+            // manually re-set the y value - leaving it out should preserve the old value, but this only works the first time
+            // if you try to set the *same* position a *second* time, THEN it suddenly gets clobbered to 0 if you leave it out
+            domObject.setAttribute("position", {
+                x: node.centerX,
+                y: domObject.getAttribute("position").y,
+                z: node.centerY
+            });
+
             // don't bother updating dimensions for leaf nodes
             if (node.children.size > 0) {
                 // all cylinders are leaf nodes, so we don't need to worry about them
                 domObject.setAttribute("width", node.width);
                 domObject.setAttribute("depth", node.length);
+
+                // most of the time, updating the HTML attributes updates the AFrame geometry component automatically
+                // except sometimes when it doesn't, so just do it manually to be safe
+                domObject.updateComponent("geometry", {width: node.width, depth: node.length}, false);
 
                 transferAttributes(node.children);
             }
