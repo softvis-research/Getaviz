@@ -898,7 +898,9 @@ public class SettingsConfiguration {
 			case "seaReferenceBuilding":
 				return config.getString("city.abap.metropolis.color.seaReferenceBuilding", "#C5CEA9");
 			case "mountainReferenceBuilding":
-				return config.getString("city.abap.metropolis.color.mountainReferenceBuilding","C5CEA9");
+				return config.getString("city.abap.metropolis.color.mountainReferenceBuilding","#C5CEA9");
+			case "road":
+				return config.getString("city.abap.metropolis.color.road", "#000000");
 			default:
 				return config.getString("#FFFFFF");
 		}
@@ -1353,6 +1355,10 @@ public class SettingsConfiguration {
 	public double getMetropolisRoadWidth() {
 		return config.getDouble("city.abap.metropolis.road.width", 3.0);
 	}
+	
+	public double getMetropolisRoadHeight() {
+		return config.getDouble("city.abap.metropolis.road.height", 0.4);
+	}
 
 	public double getACityBuildingLength(String type) {
 		switch (type) {
@@ -1418,14 +1424,10 @@ public class SettingsConfiguration {
 	public double adjustACityDistrictYPosition() {return config.getDouble("city.abap.adjust.district.yPosition", 0.1); }
 
 	public double getACityDistrictHorizontalMargin() { return config.getDouble("city.abap.district.horizontal_margin", 0.0); }
-	public double getACityDistrictVerticalMargin() { return config.getDouble("city.abap.district.vertical_margin", 0.0); }
 	public double getACityDistrictHorizontalGap() { return config.getDouble("city.abap.district.horizontal_gap", 3.0); }
-	public double getACityDistrictVerticalGap() { return config.getDouble("city.abap.district.vertical_gap", 3.0); }
 
 	public double getACityBuildingHorizontalMargin() { return config.getDouble("city.abap.building.horizontal_margin", 0.0); }
-	public double getACityBuildingVerticalMargin() { return config.getDouble("city.abap.building.vertical_margin", 0.0); }
 	public double getACityBuildingHorizontalGap() { return config.getDouble("city.abap.building.horizontal_gap", 3.0); }
-	public double getACityBuildingVerticalGap() { return config.getDouble("city.abap.building.vertical_gap", 3.0); }
 	
 	public double adjustACityBuildingWidth() {return config.getDouble("city.abap.adjust.building.width", 0.1); }
 	public double adjustACityBuildingLength() {return config.getDouble("city.abap.adjust.building.length", 0.1); }

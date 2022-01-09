@@ -76,10 +76,6 @@ public class MetropolisLayouter {
         }
     }
 
-
-
-
-
     private void layoutEmptyDistrict( ACityElement district) {
         district.setHeight(config.getMetropolisEmptyDistrictHeight());
         district.setLength(config.getMetropolisEmptyDistrictLength());
@@ -214,8 +210,14 @@ public class MetropolisLayouter {
             aBAPDistrictLightMapLayout.calculate();
             
             // generate streets
-            ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(repository, district, config);
-            roadNetwork.calculate();
+            String creator = district.getSourceNodeProperty(SAPNodeProperties.creator);
+            String iterationString = district.getSourceNodeProperty(SAPNodeProperties.iteration);
+            int iteration = Integer.parseInt(iterationString);
+            
+            if (iteration == 0 && (!creator.equals("SAP") && district.getSourceNodeType() == SAPNodeTypes.Namespace)) {
+            	ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(repository, district, config);
+                roadNetwork.calculate();
+            }            
 
             //stack district sub elements
             AStackLayout stackLayout = new AStackLayout(district, subElements, config);

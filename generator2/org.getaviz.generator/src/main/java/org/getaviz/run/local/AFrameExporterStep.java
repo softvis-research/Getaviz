@@ -107,7 +107,7 @@ public class AFrameExporterStep {
             aCityRepository.writeRepositoryToNeo4j();
         }
 
-        System.out.println("\nA-Frame Exporter step was completed\"");
+        System.out.println("\nA-Frame Exporter step was completed");
         connector.close();
     }
 }

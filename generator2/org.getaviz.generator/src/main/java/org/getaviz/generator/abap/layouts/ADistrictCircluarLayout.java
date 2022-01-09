@@ -223,14 +223,14 @@ public class ADistrictCircluarLayout {
 
             double minRadius = maxOuterRadius
                     + covrecRadius
-                    + config.getBuildingHorizontalGap();
+                    + config.getACityBuildingHorizontalGap();
 
             double maxRadius = 0;
 
             // new estimation of the radius
             if (elements.size() > 1)
                 maxRadius = (sumOfPerimeterRadius / elements.size()) / Math.sin(Math.PI / elements.size())
-                        + config.getBuildingHorizontalGap();
+                        + config.getACityBuildingHorizontalGap();
 
             double radius = Math.max(minRadius, maxRadius);
 
@@ -331,8 +331,8 @@ public class ADistrictCircluarLayout {
             double width = element.getWidth();
             double length = element.getLength();
 
-            ACityRectangle rectangle = new ACityRectangle(0, 0, width + config.getBuildingHorizontalGap(),
-                    length + config.getBuildingHorizontalGap(), 1);
+            ACityRectangle rectangle = new ACityRectangle(0, 0, width + config.getACityBuildingHorizontalGap(),
+                    length + config.getACityBuildingHorizontalGap(), 1);
             rectangles.add(rectangle);
             rectangleElementsMap.put(rectangle, element);
         }
@@ -344,8 +344,8 @@ public class ADistrictCircluarLayout {
         double sum_width = 0;
         double sum_length = 0;
         for (ACityElement element : elements) {
-            sum_width += element.getWidth() + config.getBuildingHorizontalGap();
-            sum_length += element.getLength() + config.getBuildingHorizontalGap();
+            sum_width += element.getWidth() + config.getACityBuildingHorizontalGap();
+            sum_length += element.getLength() + config.getACityBuildingHorizontalGap();
         }
         return new ACityRectangle(0, 0, sum_width, sum_length, 1);
     }

@@ -136,6 +136,9 @@ public class AFrameExporter {
 
         Collection<ACityElement> references = repository.getElementsByType(ACityElement.ACityType.Reference);
         builder.append(createElementsExport(references));
+        
+        Collection<ACityElement> roads = repository.getElementsByType(ACityElement.ACityType.Road);
+        builder.append(createElementsExport(roads));
 
         Collection<ACityElement> districts = repository.getElementsByType(ACityElement.ACityType.District);
         builder.append(createElementsExport(districts));

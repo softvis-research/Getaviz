@@ -6,6 +6,7 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.repository.ACityElement;
+import org.getaviz.generator.abap.repository.ACityElement.ACityType;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.neo4j.driver.v1.types.Node;
@@ -42,6 +43,8 @@ public class MetropolisDesigner {
         designMetropolisElementsByType(ACityElement.ACityType.Building);
 
         designMetropolisElementsByType(ACityElement.ACityType.Reference);
+        
+        designMetropolisElementsByType(ACityElement.ACityType.Road);
 
         designMetropolisElementsByType(ACityElement.ACityType.Floor);
 
@@ -78,6 +81,7 @@ public class MetropolisDesigner {
                 case District: designDistrict(aCityElement); break;
                 case Building: designBuilding(aCityElement); break;
                 case Reference: designReference(aCityElement); break;
+                case Road: designRoad(aCityElement); break;
                 case Floor: designFloor(aCityElement); break;
                // case Chimney: designChimney(aCityElement); break;
                 default:
@@ -85,7 +89,7 @@ public class MetropolisDesigner {
                     log.error(aCityType.name() + "is not a valid cityType");
                     break;
             }
-            countACityElementByType(counterMap, aCityElement);
+//            countACityElementByType(counterMap, aCityElement);
         }
 
         counterMap.forEach( (propertyTypeName, counter) -> {
@@ -307,7 +311,13 @@ public class MetropolisDesigner {
             }
         }
     }
-
+    
+    private void designRoad(ACityElement road) {
+    	road.setColor(config.getMetropolisBuildingColorHex("road"));
+    	road.setShape(ACityElement.ACityShape.Box);
+    	
+    }
+    
     private void designChimney(ACityElement chimney) {
         chimney.setColor(config.getACityChimneyColorHex("attributeColor"));
         chimney.setShape(config.getACityChimneyShape("attributeChimney"));
