@@ -89,7 +89,7 @@ public class MetropolisDesigner {
                     log.error(aCityType.name() + "is not a valid cityType");
                     break;
             }
-//            countACityElementByType(counterMap, aCityElement);
+            countACityElementByType(counterMap, aCityElement);
         }
 
         counterMap.forEach( (propertyTypeName, counter) -> {
@@ -111,9 +111,13 @@ public class MetropolisDesigner {
     }
 
     private String getPropertyTypeName(ACityElement aCityElement){
-        if(aCityElement.getSubType() != null){
+        if(aCityElement.getSubType() != null) {
             return aCityElement.getSubType().name() + "-ReferenceBuilding";
         }
+        
+        if (aCityElement.getType().equals(ACityElement.ACityType.Road)) {
+			return "Road";
+		}
         return aCityElement.getSourceNodeProperty(SAPNodeProperties.type_name);
     }
 
