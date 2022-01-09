@@ -209,7 +209,7 @@ public class MetropolisLayouter {
             ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
             aBAPDistrictLightMapLayout.calculate();
             
-            // generate streets
+            // generate streets (only for origin set)
             String creator = district.getSourceNodeProperty(SAPNodeProperties.creator);
             String iterationString = district.getSourceNodeProperty(SAPNodeProperties.iteration);
             int iteration = Integer.parseInt(iterationString);

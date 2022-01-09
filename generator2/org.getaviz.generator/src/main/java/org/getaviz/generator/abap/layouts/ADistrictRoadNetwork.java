@@ -61,14 +61,8 @@ public class ADistrictRoadNetwork {
 		road.setYPosition(this.district.getYPosition() + config.getACityDistrictHeight() / 2.0 + config.getMetropolisRoadHeight() / 2.0);
 		road.setZPosition((start.getY() + end.getY()) / 2.0);
 		
-		if (start.getX() == end.getX()) {
-			road.setWidth(config.getMetropolisRoadWidth());
-			road.setLength(Math.abs(start.getY() - end.getY()));
-		} else {
-			road.setWidth(Math.abs(start.getX() - end.getX()));
-			road.setLength(config.getMetropolisRoadWidth());
-		}
-		
+		road.setWidth(Math.abs(start.getX() - end.getX()) + this.config.getMetropolisRoadWidth());
+		road.setLength(Math.abs(start.getY() - end.getY()) + this.config.getMetropolisRoadWidth());		
 		road.setHeight(config.getMetropolisRoadHeight());
 		
 		return road;

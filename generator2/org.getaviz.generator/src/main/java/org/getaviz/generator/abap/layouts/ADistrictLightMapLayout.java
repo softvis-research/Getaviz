@@ -57,11 +57,11 @@ public class ADistrictLightMapLayout {
     private void setNewPositionFromNode(ACityRectangle rectangle, ACityKDTreeNode fitNode) {
         ACityElement element = rectangleElementsMap.get(rectangle);
 
-        double xPosition = fitNode.getACityRectangle().getCenterX();// - config.getBuildingHorizontalGap() / 2;
+        double xPosition = fitNode.getACityRectangle().getCenterX();// - config.getACityBuildingHorizontalGap() / 2.0;
         double xPositionDelta = xPosition - element.getXPosition();
         element.setXPosition(xPosition);
 
-        double zPosition = fitNode.getACityRectangle().getCenterY();//- config.getBuildingVerticalGap() / 2;
+        double zPosition = fitNode.getACityRectangle().getCenterY();//- config.getACityBuildingHorizontalGap() / 2.0;
         double zPositionDelta = zPosition - element.getZPosition();
         element.setZPosition(zPosition);
 
@@ -164,10 +164,11 @@ public class ADistrictLightMapLayout {
 
         for (ACityElement element : elements) {
 
-            if(element.getSubType() != null){
-                if(element.getSubType().equals(ACityElement.ACitySubType.Cloud)){
+            if(element.getSubType() != null) {
+                if(element.getSubType().equals(ACityElement.ACitySubType.Cloud)) {
                     continue;
-                }}
+                }
+            }
             double width = element.getWidth();
             double length = element.getLength();
             
@@ -178,11 +179,9 @@ public class ADistrictLightMapLayout {
                         length + config.getACityDistrictHorizontalGap(), 1);		
 			} else {
 				rectangle = new ACityRectangle(0, 0, width + config.getACityBuildingHorizontalGap(),
-	                    length + config.getACityDistrictHorizontalGap(), 1);			
+	                    length + config.getACityBuildingHorizontalGap(), 1);			
 			}
-
-//            ACityRectangle rectangle = new ACityRectangle(0, 0, width + config.getACityBuildingHorizontalGap(),
-//                    length + config.getACityBuildingVerticalGap(), 1);
+            
             rectangles.add(rectangle);
             rectangleElementsMap.put(rectangle, element);
         }

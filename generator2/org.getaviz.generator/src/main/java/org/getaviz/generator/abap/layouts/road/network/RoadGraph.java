@@ -214,7 +214,7 @@ public class RoadGraph {
 		List<RoadNode> surroundingNodes = new ArrayList<RoadNode>();
 		
 		// TODO
-		// In ADistrictLightMapLayout Breite der Straßen einbeziehen, dann kann die Breite auch hier berücksichtigt werden
+		// In ADistrictLightMapLayout/ADistrictCircularLayout Breite der Straßen einbeziehen, dann kann die Breite auch hier berücksichtigt werden
 		
 		double rightX = element.getXPosition() + element.getWidth() / 2.0 + config.getACityDistrictHorizontalGap() / 2.0; // + config.getMetropolisRoadWidth() / 2.0;
 		double leftX = element.getXPosition() - element.getWidth() / 2.0 - config.getACityDistrictHorizontalGap() / 2.0; // - config.getMetropolisRoadWidth() / 2.0;
