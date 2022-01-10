@@ -124,8 +124,8 @@ class LightMapLayouter(
             List<Pair<KDTreeNode, Double>>> {
         // split nodes into preservers (node fits into covrec) and expanders (expansion of covrec needed)
         val (preserverList, expanderList) = nodes.partition {
-            it.rectangle.x + insertedElement.length <= covrec.maxX
-                    && it.rectangle.y + insertedElement.width <= covrec.maxY
+            it.rectangle.x + insertedElement.width <= covrec.maxX
+                    && it.rectangle.y + insertedElement.length <= covrec.maxY
         }
         // sort preservers by the area left uncovered
         val preserverMap = preserverList.map {
@@ -133,8 +133,8 @@ class LightMapLayouter(
         }.sortedBy { it.second }
         // sort expanders by how close the expanded covrec would be to a square
         val expanderMap = expanderList.map {
-            it to (max(it.rectangle.x + insertedElement.length, covrec.maxX)
-                    / max(it.rectangle.y + insertedElement.width, covrec.maxY))
+            it to (max(it.rectangle.x + insertedElement.width, covrec.maxX)
+                    / max(it.rectangle.y + insertedElement.length, covrec.maxY))
         }.sortedBy { abs(it.second - 1) }
 
         return Pair(preserverMap, expanderMap)
