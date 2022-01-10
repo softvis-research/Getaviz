@@ -239,7 +239,7 @@ var setup = {
                                         orientation: "horizontal",
                                         name: "leftBottomPanel",
                                         first: {
-                                            size: "30px",
+                                            size: "50px",
                                             collapsible: true,
                                             name: "relayout",
                                             title: "Re-layout model",

@@ -22,13 +22,20 @@ var relayoutController = (function () {
     }
 
     function activate(rootDiv) {
-        const button = document.createElement('button');
-        button.id = "relayout-button";
-        button.innerText = "Re-layout visible entities";
-        button.addEventListener('click', relayoutAllVisibleOriginElements);
-        rootDiv.appendChild(button);
+        rootDiv.innerHTML = `
+            <button id="relayout-button">
+                Re-layout visible entities
+            </button>
+            <br />
+            <input type="checkbox" id="layout-on-unhide" name="layout-on-unhide" disabled>
+            <label for="layout-on-unhide">
+                <strike>Automatically re-layout when unhiding elements</strike>
+            </label>`;
+
+        document.getElementById("relayout-button").addEventListener('click', relayoutAllVisibleOriginElements);
 
         events.loaded.on.subscribe(onEntitiesLoaded);
+        events.filtered.off.subscribe(onEntitiesUnfiltered);
     }
 
     function addOriginElements(newElements) {
@@ -40,7 +47,14 @@ var relayoutController = (function () {
     }
 
     function onEntitiesLoaded(applicationEvent) {
-        addOriginElements(applicationEvent.entitites);
+        addOriginElements(applicationEvent.entities);
+        relayoutAllVisibleOriginElements();
+    }
+
+    function onEntitiesUnfiltered(applicationEvent) {
+        if (document.getElementById("layout-on-unhide").checked) {
+            relayoutAllVisibleOriginElements();
+        }
     }
 
     function relayoutAllVisibleOriginElements() {
