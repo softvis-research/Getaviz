@@ -30,7 +30,7 @@ public class ADistrictLightMapLayout {
         this.district = district;
         this.subElements = subElements;
 
-        rectangleElementsMap = new HashMap<>();
+        this.rectangleElementsMap = new HashMap<>();
     }
 
     public void calculate(){
@@ -43,8 +43,8 @@ public class ADistrictLightMapLayout {
 
 
     private void setSizeOfDistrict(ACityRectangle coveringACityRectangle) {
-        district.setWidth(coveringACityRectangle.getWidth());
-        district.setLength(coveringACityRectangle.getLength());
+        district.setWidth(coveringACityRectangle.getWidth() + 2 * config.getACityDistrictHorizontalMargin());
+        district.setLength(coveringACityRectangle.getLength() + 2 * config.getACityDistrictHorizontalMargin());
         district.setHeight(config.getACityDistrictHeight());
     }
 
@@ -57,11 +57,11 @@ public class ADistrictLightMapLayout {
     private void setNewPositionFromNode(ACityRectangle rectangle, ACityKDTreeNode fitNode) {
         ACityElement element = rectangleElementsMap.get(rectangle);
 
-        double xPosition = fitNode.getACityRectangle().getCenterX();// - config.getACityBuildingHorizontalGap() / 2.0;
+        double xPosition = fitNode.getACityRectangle().getCenterX();
         double xPositionDelta = xPosition - element.getXPosition();
         element.setXPosition(xPosition);
 
-        double zPosition = fitNode.getACityRectangle().getCenterY();//- config.getACityBuildingHorizontalGap() / 2.0;
+        double zPosition = fitNode.getACityRectangle().getCenterY();
         double zPositionDelta = zPosition - element.getZPosition();
         element.setZPosition(zPosition);
 
@@ -75,11 +75,11 @@ public class ADistrictLightMapLayout {
         for (ACityElement element : elements) {
 
             double centerX = element.getXPosition();
-            double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin();
+            double newXPosition = centerX + parentX;
             element.setXPosition(newXPosition);
 
             double centerZ = element.getZPosition();
-            double newZPosition = centerZ + parentZ + config.getACityBuildingHorizontalMargin();
+            double newZPosition = centerZ + parentZ;
             element.setZPosition(newZPosition);
 
             Collection<ACityElement> subElements = element.getSubElements();
@@ -199,7 +199,7 @@ public class ADistrictLightMapLayout {
                 sum_length += element.getLength() + config.getACityDistrictHorizontalGap();				
 			} else {
 	            sum_width += element.getWidth() + config.getACityBuildingHorizontalGap();
-	            sum_length += element.getLength() + config.getACityDistrictHorizontalGap();				
+	            sum_length += element.getLength() + config.getACityBuildingHorizontalGap();				
 			}
         	
         }

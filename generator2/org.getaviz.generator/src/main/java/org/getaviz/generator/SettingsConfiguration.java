@@ -1425,8 +1425,6 @@ public class SettingsConfiguration {
 
 	public double getACityDistrictHorizontalMargin() { return config.getDouble("city.abap.district.horizontal_margin", 0.0); }
 	public double getACityDistrictHorizontalGap() { return config.getDouble("city.abap.district.horizontal_gap", 3.0); }
-
-	public double getACityBuildingHorizontalMargin() { return config.getDouble("city.abap.building.horizontal_margin", 0.0); }
 	public double getACityBuildingHorizontalGap() { return config.getDouble("city.abap.building.horizontal_gap", 3.0); }
 	
 	public double adjustACityBuildingWidth() {return config.getDouble("city.abap.adjust.building.width", 0.1); }
