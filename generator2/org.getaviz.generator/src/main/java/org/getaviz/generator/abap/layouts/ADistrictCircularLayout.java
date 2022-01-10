@@ -11,7 +11,7 @@ import org.getaviz.generator.abap.layouts.kdtree.ACityRectangle;
 
 import java.util.*;
 
-public class ADistrictCircluarLayout {
+public class ADistrictCircularLayout {
     //Old coding -> Refactor, generalize and maybe reimplement
 
     private Log log = LogFactory.getLog(this.getClass());
@@ -22,7 +22,7 @@ public class ADistrictCircluarLayout {
 
     private Map<ACityRectangle, ACityElement> rectangleElementsMap;
 
-    public ADistrictCircluarLayout(ACityElement district, Collection<ACityElement> subElements, SettingsConfiguration config) {
+    public ADistrictCircularLayout(ACityElement district, Collection<ACityElement> subElements, SettingsConfiguration config) {
         this.config = config;
 
         this.district = district;

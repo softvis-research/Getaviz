@@ -9,7 +9,7 @@ import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
 import org.getaviz.generator.abap.layouts.ADistrictRoadNetwork;
 import org.getaviz.generator.abap.layouts.ABuildingLayout;
-import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
+import org.getaviz.generator.abap.layouts.ADistrictCircularLayout;
 import org.getaviz.generator.abap.layouts.AStackLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
@@ -104,7 +104,7 @@ public class MetropolisLayouter {
 
         } else if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.CIRCULAR) {
 
-            ADistrictCircluarLayout aDistrictLayout = new ADistrictCircluarLayout(virtualRootDistrict, districts, config);
+            ADistrictCircularLayout aDistrictLayout = new ADistrictCircularLayout(virtualRootDistrict, districts, config);
             aDistrictLayout.calculate();
         }
 

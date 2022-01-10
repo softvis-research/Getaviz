@@ -7,7 +7,7 @@ import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.layouts.ABuildingLayout;
-import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
+import org.getaviz.generator.abap.layouts.ADistrictCircularLayout;
 import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
