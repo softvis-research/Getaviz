@@ -149,7 +149,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.getaviz</groupId>
-			<artifactId>light-map-layouter</artifactId>
+			<artifactId>layout_multiplatform-jvm</artifactId>
 			<version>1.0</version>
 		</dependency>
 		<dependency>

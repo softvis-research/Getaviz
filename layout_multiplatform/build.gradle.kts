@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform") version "1.5.31"
+    `maven-publish`
 }
 
 group = "org.getaviz"
@@ -7,6 +8,14 @@ version = "1.0"
 
 repositories {
     mavenCentral()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("layoutLib") {
+            from(components["kotlin"])
+        }
+    }
 }
 
 kotlin {
@@ -38,23 +47,12 @@ kotlin {
     }
 }
 
-tasks.register<Copy>("jvmArtefact") {
-    from(layout.buildDirectory.dir("libs/layout_multiplatform-jvm-1.0.jar"))
-    into(layout.projectDirectory.dir("../generator2/org.getaviz.generator/lib"))
-}
-
 tasks.register<Copy>("jsArtefact") {
-    from(layout.buildDirectory.dir("js/packages/Layout_multiplatform/kotlin/layout_multiplatform.js"))
+    from(layout.buildDirectory.dir("js/packages/Layout_multiplatform/kotlin/layout_multiplatform.js"),
+        layout.buildDirectory.dir("js/packages_imported/kotlin/1.5.31/kotlin.js"))
     into(layout.projectDirectory.dir("../ui/libs/kotlin-layouter"))
 }
 
-tasks.register<Exec>("installLocalJar") {
-    isIgnoreExitValue = true
-    workingDir = layout.projectDirectory.dir("../generator2/org.getaviz.generator").asFile
-
-    commandLine("mvn.cmd", "validate")
-}
-
 tasks.named("build") {
-    finalizedBy("jvmArtefact", "jsArtefact", "installLocalJar")
+    finalizedBy("jsArtefact", "publishToMavenLocal")
 }
