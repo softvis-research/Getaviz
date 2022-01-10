@@ -60,8 +60,7 @@ if (isset($_GET["lazy"])) {
 <script type="text/javascript" src="node_modules/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="node_modules/typeahead.js/dist/typeahead.bundle.min.js"></script>
 <script type="text/javascript" src="node_modules/handlebars/dist/handlebars.min.js"></script>
-<!--<script type="text/javascript" src="node_modules/aframe/dist/aframe-v1.0.0.min.js"></script>-->
-<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+<script type="text/javascript" src="libs/aframe/aframe.min.js"></script>
 
 <!--jqwidgets-->
 <script type="text/javascript" src="node_modules/jqwidgets-scripts/jqwidgets/jqxcore.js"></script>
