@@ -1,5 +1,16 @@
 package org.getaviz.generator;
 
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
+import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
+import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
+import org.getaviz.generator.abap.repository.ACityElement;
+
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -12,28 +23,18 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.builder.fluent.Configurations;
-import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
-import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
-import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
-import org.getaviz.generator.abap.repository.ACityElement;
 
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
 	private static SettingsConfiguration instance = null;
 	private static Log log = LogFactory.getLog(SettingsConfiguration.class);
-	private static String defaultBoldAddress = "bolt://localhost:7687";
+	private static String defaultBoldAddress = "bolt://localhost:11020";
 	//private static String defaultBoldAddress = "bolt://localhost:11002";
 
 	public static SettingsConfiguration getInstance() {
 		if (instance == null) {
 			instance = new SettingsConfiguration();
-			loadConfig("settings.properties");
+			loadConfig("generator2/org.getaviz.generator/settings.properties");
 		}
 		return instance;
 	}
@@ -1186,6 +1187,49 @@ public class SettingsConfiguration {
 		}
 	}
 
+	public org.getaviz.generator.java.repository.ACityElement.ACityShape getMetropolisBuildingShapeForJava(String type) {
+		switch (type) {
+			case "attributeBuilding":
+				String value = config.getString("city.abap.metropolis.shape.attributeBuilding", "box");
+				switch (value) {
+					case "box":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Box;
+					case "cone":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cylinder;
+					default:
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cone;
+				}
+			case "interfaceBuilding":
+				value = config.getString("city.abap.metropolis.shape.interfaceBuilding", "box");
+				switch (value) {
+					case "box":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Box;
+					case "cone":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cylinder;
+					default:
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cone;
+				}
+			case "methodBuilding":
+				value = config.getString("city.abap.metropolis.shape.methodBuilding", "box");
+				switch (value) {
+					case "box":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Box;
+					case "cone":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cylinder;
+					default:
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cone;
+				}
+			default:
+				return org.getaviz.generator.java.repository.ACityElement.ACityShape.Box;
+		}
+	}
+
 	public ACityElement.ACityShape getACityFloorShape(String type) {
 		switch (type) {
 			case "methodFloor":
@@ -1265,6 +1309,45 @@ public class SettingsConfiguration {
 		}
 	}
 
+	public org.getaviz.generator.java.repository.ACityElement.ACityShape getACityFloorShapeForJava(String type) {
+		switch (type) {
+			case "methodFloor":
+				String value = config.getString("city.abap.shape.methodFloor", "box");
+				switch (value) {
+					case "box":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Box;
+					case "cone":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cylinder;
+					default:
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cone;
+				}
+
+			default:
+				return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cone;
+		}
+	}
+
+	public org.getaviz.generator.java.repository.ACityElement.ACityShape getACityChimneyShapeForJava(String type) {
+		switch (type) {
+			case "attributeChimney":
+				String value = config.getString("city.abap.shape.attributeChimney", "box");
+				switch (value) {
+					case "box":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Box;
+					case "cone":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cone;
+					case "cylinder":
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cylinder;
+					default:
+						return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cylinder;
+				}
+			default:
+				return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cylinder;
+		}
+	}
+
 	public ACityElement.ACityShape getACityChimneyShape(String type) {
 		switch (type) {
 			case "attributeChimney":
@@ -1295,6 +1378,20 @@ public class SettingsConfiguration {
 				return ACityElement.ACityShape.Cylinder;
 			default:
 				return ACityElement.ACityShape.Cylinder;
+		}
+	}
+
+	public org.getaviz.generator.java.repository.ACityElement.ACityShape getACityDistrictShapeForJava() {
+		String value = config.getString("city.abap.shape.district", "box");
+		switch (value) {
+			case "box":
+				return org.getaviz.generator.java.repository.ACityElement.ACityShape.Box;
+			case "cone":
+				return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cone;
+			case "cylinder":
+				return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cylinder;
+			default:
+				return org.getaviz.generator.java.repository.ACityElement.ACityShape.Cylinder;
 		}
 	}
 
