@@ -3,13 +3,21 @@ package org.getaviz.generator.city.kotlin
 import kotlin.js.JsName
 import kotlin.math.*
 
-class LightMapLayouter(
-    @JsName("_buildingHorizontalGap")
-    val buildingHorizontalGap: Double
+data class LightMapLayouterConfig(
+    @JsName("buildingHorizontalGap")
+    val buildingHorizontalGap: Double,
+    @JsName("trimEpsilon")
+    val trimEpsilon: Double,
+    @JsName("emptyDistrictSize")
+    val emptyDistrictSize: Double
 ) {
+    constructor() : this(3.0, 0.001, 5.0)
+}
 
-    @JsName("_trimEpsilon")
-    private val trimEpsilon = .001
+class LightMapLayouter(
+    @JsName("config")
+    val config: LightMapLayouterConfig
+) {
 
     @JsName("calculateWithVirtualRoot")
     fun calculateWithVirtualRoot(nodes: List<Node>): CityRectangle {
@@ -40,8 +48,8 @@ class LightMapLayouter(
     private fun arrangeChildren(parent: Node): CityRectangle {
         if (parent.children.isEmpty()) {
             return CityRectangle(parent,
-                parent.width + buildingHorizontalGap,
-                parent.length + buildingHorizontalGap
+                parent.width + config.buildingHorizontalGap,
+                parent.length + config.buildingHorizontalGap
             )
         }
 
@@ -71,8 +79,8 @@ class LightMapLayouter(
 
         // the parent rectangle includes the surrounding gap - the parent node does not include it
         val parentRectangle = CityRectangle(parent,
-            covRectangle.width + buildingHorizontalGap,
-            covRectangle.length + buildingHorizontalGap)
+            covRectangle.width + config.buildingHorizontalGap,
+            covRectangle.length + config.buildingHorizontalGap)
         transferSizeToNode(covRectangle, parent)
 
         return parentRectangle
@@ -91,8 +99,8 @@ class LightMapLayouter(
     // the node is centered within the rectangle, so offset by half the margin value
     @JsName("_transferCoordsToNode")
     private fun transferCoordsToNode(sourceRectangle: Rectangle, targetNode: Node) {
-        targetNode.x = sourceRectangle.x + (buildingHorizontalGap / 2)
-        targetNode.y = sourceRectangle.y + (buildingHorizontalGap / 2)
+        targetNode.x = sourceRectangle.x + (config.buildingHorizontalGap / 2)
+        targetNode.y = sourceRectangle.y + (config.buildingHorizontalGap / 2)
     }
 
     @JsName("_transferSizeToNode")
@@ -111,7 +119,7 @@ class LightMapLayouter(
             lengthSum += node.length
         }
 
-        val totalPadding = buildingHorizontalGap * children.size
+        val totalPadding = config.buildingHorizontalGap * children.size
         widthSum += totalPadding
         lengthSum += totalPadding
 
@@ -144,7 +152,7 @@ class LightMapLayouter(
     private fun trimNode(node: KDTreeNode, insertedElement: CityRectangle): KDTreeNode {
         val nodeRec = node.rectangle
         // if there is a significant difference in length, cut horizontally to split into new node
-        if (abs(nodeRec.length - insertedElement.length) > trimEpsilon) {
+        if (abs(nodeRec.length - insertedElement.length) > config.trimEpsilon) {
             node.leftChild = KDTreeNode(
                 Rectangle(nodeRec.width, insertedElement.length, nodeRec.x, nodeRec.y))
             node.rightChild = KDTreeNode(
@@ -154,7 +162,7 @@ class LightMapLayouter(
             node.occupied = true
             return trimNode(node.leftChild!!, insertedElement)
             // otherwise, if there is a significant difference in width, cut vertically
-        } else if(abs(nodeRec.width - insertedElement.width) > trimEpsilon) {
+        } else if(abs(nodeRec.width - insertedElement.width) > config.trimEpsilon) {
             node.leftChild = KDTreeNode(
                 Rectangle(insertedElement.width, nodeRec.length, nodeRec.x, nodeRec.y))
             node.rightChild = KDTreeNode(
