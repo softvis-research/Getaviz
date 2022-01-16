@@ -13,7 +13,7 @@ class LightMapLayouter(
 
     @JsName("calculateWithVirtualRoot")
     fun calculateWithVirtualRoot(nodes: List<Node>): CityRectangle {
-        val virtualRoot = Node("root")
+        val virtualRoot = Node(id = "root", name = "root")
         virtualRoot.children = nodes
         val rootRectangle = arrangeChildren(virtualRoot)
         resolveAbsolutePositions(virtualRoot, 0.0, 0.0)
