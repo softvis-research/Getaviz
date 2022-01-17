@@ -5,11 +5,11 @@ import kotlin.math.*
 
 data class LightMapLayouterConfig(
     @JsName("buildingHorizontalGap")
-    val buildingHorizontalGap: Double,
+    var buildingHorizontalGap: Double,
     @JsName("trimEpsilon")
-    val trimEpsilon: Double,
+    var trimEpsilon: Double,
     @JsName("emptyDistrictSize")
-    val emptyDistrictSize: Double
+    var emptyDistrictSize: Double
 ) {
     constructor() : this(3.0, 0.001, 5.0)
 }
@@ -21,7 +21,7 @@ class LightMapLayouter(
 
     @JsName("calculateWithVirtualRoot")
     fun calculateWithVirtualRoot(nodes: List<Node>): CityRectangle {
-        val virtualRoot = Node(id = "root", name = "root")
+        val virtualRoot = Node(id = "root", name = "root", isDistrict = true)
         virtualRoot.children = nodes
         val rootRectangle = arrangeChildren(virtualRoot)
         resolveAbsolutePositions(virtualRoot, 0.0, 0.0)
@@ -47,10 +47,14 @@ class LightMapLayouter(
     @JsName("_arrangeChildren")
     private fun arrangeChildren(parent: Node): CityRectangle {
         if (parent.children.isEmpty()) {
-            return CityRectangle(parent,
-                parent.width + config.buildingHorizontalGap,
-                parent.length + config.buildingHorizontalGap
-            )
+            return if (parent.isDistrict) {
+                CityRectangle(parent, config.emptyDistrictSize, config.emptyDistrictSize)
+            } else {
+                CityRectangle(parent,
+                    parent.width + config.buildingHorizontalGap,
+                    parent.length + config.buildingHorizontalGap
+                )
+            }
         }
 
         val arrangedChildren = parent.children.map { node -> arrangeChildren(node) }.sortedDescending()

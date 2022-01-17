@@ -4,9 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
-import org.getaviz.generator.abap.enums.SAPNodeTypes;
-import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
 import org.getaviz.generator.abap.layouts.ABuildingLayout;
 import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
 import org.getaviz.generator.abap.layouts.AStackLayout;
@@ -14,10 +11,8 @@ import org.getaviz.generator.abap.layouts.kdtree.ACityRectangle;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
-import org.neo4j.driver.v1.Value;
 import org.getaviz.generator.city.kotlin.*;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -76,12 +71,6 @@ public class MetropolisLayouter {
         }
     }
 
-    private void layoutEmptyDistrict( ACityElement district) {
-        district.setHeight(config.getMetropolisEmptyDistrictHeight());
-        district.setLength(config.getMetropolisEmptyDistrictLength());
-        district.setWidth(config.getMetropolisEmptyDistrictWidth());
-    }
-
     private void layoutDistricts(Collection<ACityElement> districtElements) {
         log.info(districtElements.size() + " districts loaded");
 
@@ -115,8 +104,12 @@ public class MetropolisLayouter {
         Map<MetropolisSection, List<ACityElement>> sectionMap = districtElements.stream()
                 .collect(Collectors.groupingBy(this::getMetropolisSection));
 
+        LightMapLayouterConfig layouterConfig = new LightMapLayouterConfig();
+        layouterConfig.setBuildingHorizontalGap(config.getBuildingHorizontalGap());
+        layouterConfig.setEmptyDistrictSize(config.getMetropolisEmptyDistrictWidth());
+
         // arrange origin nodes (and their children)
-        LightMapLayouter lightMapLayouter = new LightMapLayouter(config.getBuildingHorizontalGap());
+        LightMapLayouter lightMapLayouter = new LightMapLayouter(layouterConfig);
         ACityRectangle covrec = layoutAllWithLightMap(lightMapLayouter, sectionMap.get(MetropolisSection.Origin));
 
         // arrange the sub-elements of the peripheral districts
@@ -166,14 +159,22 @@ public class MetropolisLayouter {
         // get rid of all cloud reference objects during the transformation: they are laid out separately and would get in the way
         return elements.stream()
             .filter(element -> element.getSubType() != ACityElement.ACitySubType.Cloud)
-            .map(element -> new Node(
-                element.getHash(),
-                element.getXPosition(),
-                element.getZPosition(),
-                element.getWidth(),
-                element.getLength(),
-                element.getSubElements().isEmpty() ? new ArrayList<>() : mapToLayouterNodes(element.getSubElements())
-        )).collect(Collectors.toList());
+            .map(element -> {
+                // fall back on type name for e.g. reference buildings
+                String nodeName = element.getSourceNode() != null
+                        ? element.getSourceNodeProperty(SAPNodeProperties.object_name) : element.getSubType().name();
+
+                return new Node(
+                        element.getHash(),
+                        nodeName,
+                        element.getXPosition(),
+                        element.getZPosition(),
+                        element.getWidth(),
+                        element.getLength(),
+                        element.getSubElements().isEmpty() ? new ArrayList<>() : mapToLayouterNodes(element.getSubElements()),
+                        element.getType() == ACityElement.ACityType.District
+                );
+            }).collect(Collectors.toList());
     }
 
     private void transferPositionData(Collection<Node> nodes) {
@@ -257,13 +258,6 @@ public class MetropolisLayouter {
                     referenceElement.setLength(config.getMetropolisReferenceBuildingLength("cloudReferenceBuilding"));
                     break;
             }
-    }
-
-
-    private boolean isDistrictEmpty(ACityElement district){
-        return district.getSubElements().stream().anyMatch(
-                element -> !element.getType().equals(ACityElement.ACityType.Reference)
-        );
     }
 
 }

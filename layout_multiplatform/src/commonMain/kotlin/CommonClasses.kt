@@ -9,6 +9,7 @@ class Node constructor(
     var width: Double = 1.0,
     var length: Double = 1.0,
     var children: List<Node> = listOf<Node>(),
+    var isDistrict: Boolean = children.isEmpty()
 ) {
     val centerX: Double
         get() = this.x + (this.width / 2)
@@ -42,8 +43,8 @@ class CityRectangle(val node: Node, width: Double, length: Double, x: Double = 0
     : Rectangle(width, length, x, y), Comparable<CityRectangle> {
 
     override fun compareTo(other: CityRectangle): Int {
-        return this.area.compareTo(other.area).takeIf{ it != 0 }
-            ?: this.width.compareTo(other.width).takeIf{ it != 0}
+        return this.area.compareTo(other.area).takeIf { it != 0 }
+            ?: this.width.compareTo(other.width).takeIf { it != 0 }
             ?: this.node.name.compareTo(other.node.name)
     }
 }
