@@ -69,7 +69,6 @@ public class MetropolisDesigner {
         log.info(aCityElements.size() + " " + aCityType.name() + " loaded");
 
         for (ACityElement aCityElement: aCityElements) {
-
             switch (aCityType) {
                 case District:
                     designDistrict(aCityElement);
@@ -83,9 +82,9 @@ public class MetropolisDesigner {
                 case Floor:
                     designFloor(aCityElement);
                     break;
-//                case Chimney:
-//                    designChimney(aCityElement);
-//                    break;
+                case Chimney:
+                    designChimney(aCityElement);
+                    break;
                 default:
                     designBuilding(aCityElement);
                     log.error(aCityType.name() + "is not a valid cityType");

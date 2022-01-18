@@ -4,15 +4,19 @@ import org.getaviz.generator.java.enums.JavaNodeTypes;
 import org.getaviz.run.local.java.MetropolisStep;
 import org.neo4j.driver.v1.types.Node;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class LoaderStep extends MetropolisStep {
     private Runtime runtime = Runtime.getRuntime();
 //    private String inputFiles = "https://github.com/softvis-research/Bank/releases/download/test/bank-1.0.0-SNAPSHOT.jar";
 //    private String inputFiles = "C:\\Users\\mykha\\Desktop\\Bank\\out\\artifacts\\Bank_jar\\Bank.jar";
-//    private String inputFiles = "C:\\Users\\mykha\\Downloads\\Java-master\\out\\artifacts\\Java_jar\\Java.jar";
     private String inputFiles = "C:\\Users\\mykha\\Desktop\\TestBank\\out\\artifacts\\TestBank_jar\\TestBank.jar";
+//    private String inputFiles = "C:\\Users\\mykha\\Downloads\\Java-master\\out\\artifacts\\Java_jar\\Java.jar";
 //    private String pathJQAssistant = "C:/Users/mykha/jqassistant/bin/jqassistant.cmd";
     private String pathJQAssistant = "C:/Users/mykha/jqassistant-1.11.1/bin/jqassistant.cmd";
 
@@ -26,22 +30,22 @@ public class LoaderStep extends MetropolisStep {
     }
 
     public void init() {
-        // Make sure the graph is empty
-//        connector.executeWrite("MATCH (n) DETACH DELETE n"); // TODO -reset by jQAssistant makes it for me
-
         log.info("jQAssistant scan started.");
         log.info("Scanning from URI(s) " + inputFiles);
 
         try {
-//            String options = "scan -reset -u " + inputFiles + " -storeUri " + config.getDefaultBoldAddress();
-            String options = "scan -reset -f " + inputFiles + " -storeUri " + config.getDefaultBoldAddress();
+            String options = "scan -reset -f " + inputFiles + " -storeUri " + config.getDefaultBoldAddress(); // -u for links
             Process pScan = runtime.exec(pathJQAssistant + " " + options);
-//            pScan.destroy();
-        } catch (IOException e) {
+            InputStream stderr = pScan.getErrorStream();
+            InputStreamReader isr = new InputStreamReader(stderr);
+            BufferedReader br = new BufferedReader(isr);
+            while (br.readLine() != null) {
+                // it makes "pScan.waitFor()" not hang
+            }
+            pScan.waitFor();
+        } catch (IOException | InterruptedException e) {
             log.error(e);
             e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
         }
 
         log.info("jQAssistant scan finished.");
@@ -60,13 +64,6 @@ public class LoaderStep extends MetropolisStep {
                     " SET (nodesNumber[i]).type_name = '" + type.name() + "')"
             );
 
-//            if (type.equals(JavaNodeTypes.Class) || type.equals(JavaNodeTypes.Interface)) {
-//                connector.executeWrite("MATCH(n:" + type + ") " +
-//                        " SET n.subClassOf = ''" +
-//                        " SET n.superClassOf = ''"
-//                );
-//            }
-
             connector.executeRead("MATCH (n:" + type + ") RETURN n")
                 .forEachRemaining((result) -> {
                     elementId.addAndGet(1);
@@ -80,14 +77,31 @@ public class LoaderStep extends MetropolisStep {
     }
 
     private void deleteUnnecessaryNodes() {
+        // DELETE Classes within other classes with all fields and methods
+        ArrayList<Node> nodesToDelete = new ArrayList<>();
+        connector.executeRead("MATCH (:Class)-[:DECLARES]->(n:Class)" +
+                " RETURN n").forEachRemaining((result) -> {
+            nodesToDelete.add(result.get("n").asNode());
+        });
+
+        connector.executeWrite("MATCH (:Class)-[:DECLARES]->(n:Class) DETACH DELETE n");
+        for (Node node: nodesToDelete) {
+            connector.executeWrite("MATCH (f:Field)" +
+                    " WHERE f.declares_id = " + node.get("element_id").toString() +
+                    " DETACH DELETE f");
+            connector.executeWrite("MATCH (m:Method)" +
+                    " WHERE m.declares_id = " + node.get("element_id").toString() +
+                    " DETACH DELETE m");
+        }
+
         // DELETE Method nodes with name = null or empty value
         connector.executeWrite("MATCH (n:Method)" +
-                " WHERE n.name CONTAINS '<init>' OR n.name IS NULL" +
+                " WHERE n.declares_id IS NULL OR n.name IS NULL OR n.name CONTAINS '<init>'" +
                 " DETACH DELETE n");
 
-        // DELETE Field nodes where no declares id
+        // DELETE Field nodes with name = null or where no declares id
         connector.executeWrite("MATCH (n:Field)" +
-                " WHERE n.declares_id IS NULL" +
+                " WHERE n.declares_id IS NULL OR n.name IS NULL" +
                 " DETACH DELETE n");
     }
 

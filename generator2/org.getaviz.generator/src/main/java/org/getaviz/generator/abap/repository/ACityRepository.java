@@ -3,7 +3,7 @@ package org.getaviz.generator.abap.repository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
-import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.loader.database.DatabaseConnector;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 

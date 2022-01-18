@@ -1,14 +1,12 @@
 package org.getaviz.run.local.java.common;
 
 import org.getaviz.generator.java.enums.JavaNodeProperties;
-
 import java.util.*;
 
 public class Maps {
     private static final Map<String, String> metaDataProperties;
     private static final List<String> nodesWithUsesRelationByType;
     private static final List<String> nodesWithExtendsRelationByType;
-//    private static final List<String> nodesWithMigrationRelationByType;
 
     static {
         // Change property names for metaData-output
@@ -28,11 +26,6 @@ public class Maps {
                 "Class",
                 "Interface"
         );
-
-//        nodesWithMigrationRelationByType = Arrays.asList(
-//                "CLAS",
-//                "INTF"
-//        );
     }
 
     public static Map<String, String> getMetaDataProperties() {
@@ -46,10 +39,6 @@ public class Maps {
         }
         return propertyName;
     }
-
-//    public static List<String> getNodesWithMigrationRelationByType() {
-//        return nodesWithMigrationRelationByType;
-//    }
 
     public static List<String> getNodesWithReferencesRelationByType() {
         return nodesWithUsesRelationByType;

@@ -7,16 +7,12 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.repository.*;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
-import org.getaviz.generator.database.DatabaseConnector;
-import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ACityCreator {
 

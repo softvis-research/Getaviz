@@ -1,8 +1,8 @@
-package org.getaviz.run.local;
+package org.getaviz.run.local.abap.steps;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.loader.database.DatabaseConnector;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;

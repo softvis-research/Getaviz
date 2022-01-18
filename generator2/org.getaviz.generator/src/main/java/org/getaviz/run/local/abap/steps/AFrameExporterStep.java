@@ -1,9 +1,8 @@
-package org.getaviz.run.local;
+package org.getaviz.run.local.abap.steps;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.SettingsConfiguration.MetaDataOutput;
 import org.getaviz.generator.SettingsConfiguration.AFrameOutput;
-import org.getaviz.generator.abap.city.steps.*;
 import org.getaviz.generator.abap.common.steps.AFrameExporter;
 import org.getaviz.generator.abap.common.steps.MetaDataExporter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
@@ -14,9 +13,8 @@ import org.getaviz.generator.abap.metropolis.steps.MetropolisDesigner;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisLayouter;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
-import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.loader.database.DatabaseConnector;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class AFrameExporterStep {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();

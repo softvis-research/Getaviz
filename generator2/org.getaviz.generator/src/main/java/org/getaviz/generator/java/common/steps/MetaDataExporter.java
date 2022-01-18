@@ -284,13 +284,6 @@ public class MetaDataExporter {
             builder.append("\"signature\": \"" + "" + "\",\n");
         }
 
-//        // TODO temporary solution
-//        if (nodeType.equals(JavaNodeTypes.Class.name()) || nodeType.equals(JavaNodeTypes.Interface.name())) {
-//            builder.append("\"subClassOf\": \"" + "" + "\",\n");
-//            builder.append("\"superClassOf\": \"" + "" + "\",\n");
-//
-//        }
-
         return builder.toString();
     }
 

@@ -53,7 +53,6 @@ public class MetropolisLayouter {
 
 //        //layout cloud elements
 //        layoutCloudModel();
-
     }
 
     private void layoutReferenceElements(Collection<ACityElement> referenceElements) {
@@ -180,13 +179,10 @@ public class MetropolisLayouter {
 //    }
 
     private void layoutDistrict(ACityElement district) {
-        String districtName = district.getSourceNode().get("name").asString();
-        if (layoutedDistricts.contains(districtName)) {
-            System.out.println("LAYOUT STOP FOR: " + districtName);
+        String districtPath = district.getSourceNode().get("fqn").asString();
+        if (layoutedDistricts.contains(districtPath)) {
             return;
         }
-
-        System.out.println("LAYOUT BEGIN FOR: " + districtName);
 
         if (isDistrictEmpty(district)) {
             layoutEmptyDistrict(district);
@@ -210,7 +206,7 @@ public class MetropolisLayouter {
             AStackLayout stackLayout = new AStackLayout(district, subElements, config);
             stackLayout.calculate();
 
-            layoutedDistricts.add(districtName);
+            layoutedDistricts.add(districtPath);
 
             log.info("\"" + district.getSourceNodeProperty(JavaNodeProperties.name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
         }

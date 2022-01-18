@@ -1,4 +1,4 @@
-package org.getaviz.generator.database;
+package org.getaviz.generator.loader.database;
 
 public enum Labels {
 	Package, Type, Method, Constructor, Getter, Setter, Field, Class, Interface, Enum, Annotation,

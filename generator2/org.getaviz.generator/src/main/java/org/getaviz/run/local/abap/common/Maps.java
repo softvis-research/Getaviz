@@ -1,12 +1,11 @@
-package org.getaviz.run.local.common;
+package org.getaviz.run.local.abap.common;
+
+import org.getaviz.generator.abap.enums.SAPNodeProperties;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-
-import org.getaviz.generator.abap.enums.SAPNodeProperties;
-import org.getaviz.generator.abap.enums.SAPNodeTypes;
 
 public class Maps {
     private static final Map<String, String> metaDataProperties;

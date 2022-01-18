@@ -37,7 +37,6 @@ public class MetropolisCreator {
 
 
     public void createRepositoryFromNodeRepository(){
-
         log.info("Create City Elements");
         createAllMetropolisElements(nodeRepository);
 
@@ -49,7 +48,6 @@ public class MetropolisCreator {
 
         log.info("Delete empty Districts");
         deleteEmptyDistricts();
-
     }
 
     private Collection<ACityElement> getDeclaresElementsBySourceNode(SourceNodeRepository nodeRepository, Node node) {
@@ -181,7 +179,8 @@ public class MetropolisCreator {
             Collection<ACityElement> declaresElements = getDeclaresElementsBySourceNode(nodeRepository, sourceNodeDistrict);
 
             for (ACityElement declaresElement: declaresElements) {
-                if (declaresElement.getSourceNodeType().equals(JavaNodeTypes.Method) || declaresElement.getSourceNodeType().equals(JavaNodeTypes.Field)) {
+                JavaNodeTypes type = declaresElement.getSourceNodeType();
+                if (type.equals(JavaNodeTypes.Method) || type.equals(JavaNodeTypes.Field)) {
                     String elementID = element.getSourceNodeProperty(JavaNodeProperties.element_id);
                     String declaresID = declaresElement.getSourceNodeProperty(JavaNodeProperties.declares_id);
 

@@ -1,21 +1,22 @@
-package org.getaviz.run.local;
+package org.getaviz.run.local.abap.steps;
 
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.SettingsConfiguration.MetaDataOutput;
+import org.getaviz.generator.abap.common.steps.MetaDataExporter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
-import org.getaviz.generator.abap.metropolis.steps.MetropolisDesigner;
-import org.getaviz.generator.abap.metropolis.steps.MetropolisLayouter;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
-import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.loader.database.DatabaseConnector;
 
-public class DesignerStep {
+public class MetaDataExporterStep {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     private static SourceNodeRepository nodeRepository;
     private static ACityRepository aCityRepository;
+    private static MetaDataOutput metaDataOutput;
 
     public static void main(String[] args) {
         SettingsConfiguration.getInstance("src/test/resources/ABAPCityTest.properties");
@@ -26,27 +27,28 @@ public class DesignerStep {
         nodeRepository.loadNodesByRelation(SAPRelationLabels.USES, true);
         nodeRepository.loadNodesByRelation(SAPRelationLabels.INHERIT, true);
         nodeRepository.loadNodesByRelation(SAPRelationLabels.REFERENCES, true);
-
         aCityRepository = new ACityRepository();
 
-        MetropolisCreator creator = new MetropolisCreator(aCityRepository, nodeRepository, config);
-        creator.createRepositoryFromNodeRepository();
+        MetropolisCreator aMetropolisCreator = new MetropolisCreator(aCityRepository, nodeRepository, config);
+        aMetropolisCreator.createRepositoryFromNodeRepository();
 
-        MetropolisLayouter layouter = new MetropolisLayouter(aCityRepository, nodeRepository, config);
-        layouter.layoutRepository();
 
-        MetropolisDesigner designer = new MetropolisDesigner(aCityRepository, nodeRepository, config);
-        designer.designRepository();
+        MetaDataExporter metaDataExporter = new MetaDataExporter(aCityRepository, nodeRepository);
+        metaDataOutput = config.getMetaDataOutput();
 
-        // Delete old ACityRepository Nodes
+        // Depending on setting, create file or write metaData as Node's property, or both actions
+        if (metaDataOutput == MetaDataOutput.FILE || metaDataOutput == MetaDataOutput.BOTH ) {
+            metaDataExporter.exportMetaDataFile();
+        }
+
+        if (metaDataOutput == MetaDataOutput.NODEPROP || metaDataOutput == MetaDataOutput.BOTH ) {
+            metaDataExporter.setMetaDataPropToACityElements();
+        }
+
         connector.executeWrite("MATCH (n:ACityRep) DETACH DELETE n;");
-
-        // Update Neo4j with new nodes
         aCityRepository.writeRepositoryToNeo4j();
 
-       // System.out.println(Thread.currentThread());
-
         connector.close();
-        System.out.println("\nDesigner step was completed\"");
+        System.out.println("\nMetaDataExporter step was completed\"");
     }
 }

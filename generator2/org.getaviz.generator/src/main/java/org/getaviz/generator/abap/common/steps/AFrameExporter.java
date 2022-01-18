@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
-import org.getaviz.generator.database.DatabaseConnector;
+import org.getaviz.generator.loader.database.DatabaseConnector;
 import org.getaviz.generator.output.abap_output.*;
 
 import java.io.File;
