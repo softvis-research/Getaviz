@@ -26,6 +26,7 @@ var setup = {
         {
             name: "relayoutController",
             buildingHorizontalGap: 3,
+            emptyDistrictSize: 5,
         },
 
         {

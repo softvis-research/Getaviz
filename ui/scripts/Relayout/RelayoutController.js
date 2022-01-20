@@ -7,6 +7,7 @@ var relayoutController = (function () {
 
     const layoutConfig = {
         buildingHorizontalGap: 3,
+        emptyDistrictSize: 5,
     }
 
     function initialize(setupConfig) {
@@ -15,7 +16,9 @@ var relayoutController = (function () {
         // pull the layouter library into the controller object so we don't have to type the package name
         Object.assign(relayoutController, layout_multiplatform.org.getaviz.generator.city.kotlin);
 
-        layouter = new relayoutController.LightMapLayouter(layoutConfig.buildingHorizontalGap);
+        // internal config object for the kotlin implementation that mostly mirrors layoutConfig
+        const internalLayoutConfig = Object.assign(relayoutController.LightMapLayouterConfig_init(), layoutConfig);
+        layouter = new relayoutController.LightMapLayouter(internalLayoutConfig);
 
         const allEntities = Array.from(model.getAllEntities().values());
         addOriginElements(allEntities);
@@ -72,7 +75,7 @@ var relayoutController = (function () {
         const jsArray = elements.filter(element => !element.filtered).map(element => {
             // only get size for leaf elements, for all others it will be recalculated anyway
             if (element.children.length > 0) {
-                return new relayoutController.Node(element.id, 0, 0, 0, 0, mapToLayouterNodes(element.children));
+                return new relayoutController.Node(element.id, element.name, 0, 0, 0, 0, mapToLayouterNodes(element.children), element.isDistrict);
             } else {
                 const domObject = document.getElementById(element.id);
                 if (domObject === null) return;
@@ -81,7 +84,7 @@ var relayoutController = (function () {
                 const width = radius ? 2*radius : Number(domObject.getAttribute("width"));
                 const depth = radius ? 2*radius : Number(domObject.getAttribute("depth"));
 
-                return new relayoutController.Node(element.id, 0, 0, width, depth, new ArrayList([]));
+                return new relayoutController.Node(element.id, element.name, 0, 0, width, depth, new ArrayList([]), element.isDistrict);
             }
         });
 
