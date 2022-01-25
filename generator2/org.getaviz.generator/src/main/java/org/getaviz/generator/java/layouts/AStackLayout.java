@@ -28,7 +28,7 @@ public class AStackLayout {
     }
 
     private double calculateStackYPosition(ACityElement element) {
-        double stackedYPosition = element.getHeight() / 2;
+        double stackedYPosition = element.getYPosition();
         String path = element.getSourceNode().get("fqn").asString();
         String[] pathElements = path.split("\\.");
 
@@ -45,16 +45,10 @@ public class AStackLayout {
             double yPosition = stackedYPosition;
 
             if (type == JavaNodeTypes.Method || type == JavaNodeTypes.Field) {
-                yPosition += element.getHeight() / 2 - config.getACityDistrictHeight() / 2;
+                yPosition += element.getYPosition() - config.adjustACityDistrictYPosition();
             }
 
             element.setYPosition(yPosition);
-
-            //stack sub elements
-            Collection<ACityElement> subElements = element.getSubElements();
-            if (!subElements.isEmpty()) {
-                stackSubElements(subElements, calculateStackYPosition(element));
-            }
         }
     }
 }

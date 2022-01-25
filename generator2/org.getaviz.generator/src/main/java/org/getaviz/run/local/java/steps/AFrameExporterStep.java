@@ -16,60 +16,65 @@ public class AFrameExporterStep extends MetropolisStep {
         String input = userInput.nextLine();
         boolean isSilentMode = !input.equals("n");
 
+        System.out.print("\nLoader step to be processed. Press any key to continue...\n");
         if (!isSilentMode) {
-            System.out.print("\nLoader step to be processed. Press any key to continue...");
             userInput.nextLine();
         }
 
         LoaderStep loaderStep = new LoaderStep();
         loaderStep.init();
-        System.out.println("Loader Step finished.");
+        System.out.println("\nLoader Step finished.");
 
         if (!isSilentMode) {
-            System.out.print("\nCreator step to be processed. Press any key to continue...");
+            System.out.println("Press any key to continue...");
             userInput.nextLine();
         }
 
+        System.out.print("\nCreator step to be processed. Press any key to continue...\n");
         CreatorStep creatorStep = new CreatorStep();
         creatorStep.loadNodesAndRelations();
         creatorStep.init();
-        System.out.println("Creator Step finished.");
+        System.out.println("\nCreator Step finished.");
 
         if (!isSilentMode) {
-            System.out.print("\nLayouter step to be processed. Press any key to continue...");
+            System.out.println("Press any key to continue...");
             userInput.nextLine();
         }
 
+        System.out.print("\nLayouter step to be processed. Press any key to continue...\n");
         LayouterStep layouterStep = new LayouterStep();
         layouterStep.init();
-        System.out.println("Layouter Step finished.");
+        System.out.println("\nLayouter Step finished.");
 
         if (!isSilentMode) {
-            System.out.print("\nDesigner step to be processed. Press any key to continue...");
+            System.out.println("Press any key to continue...");
             userInput.nextLine();
         }
 
+        System.out.print("\nDesigner step to be processed. Press any key to continue...\n");
         DesignerStep designerStep = new DesignerStep();
         designerStep.init();
-        System.out.println("Designer Step finished.");
+        System.out.println("\nDesigner Step finished.");
 
         if (!isSilentMode) {
-            System.out.println("\nMetadata Exporter Step to be processed. Press any key to continue...");
+            System.out.println("Press any key to continue...");
             userInput.nextLine();
         }
 
+        System.out.println("\nMetadata Exporter Step to be processed.\n");
         MetaDataExporterStep metaDataExporterStep = new MetaDataExporterStep();
         metaDataExporterStep.init();
-        System.out.println("Metadata Exporter Step finished.");
+        System.out.println("\nMetadata Exporter Step finished.");
 
         if (!isSilentMode) {
-            System.out.println("\nAFrame Exporter Step to be processed. Press any key to continue...");
+            System.out.println("Press any key to continue...");
             userInput.nextLine();
         }
 
+        System.out.println("\nAFrame Exporter Step to be processed.\n");
         AFrameExporterStep aFrameExporterStep = new AFrameExporterStep();
         aFrameExporterStep.init();
-        System.out.println("AFrame Exporter Step finished.");
+        System.out.println("\nAFrame Exporter Step finished.");
         aFrameExporterStep.wrapUp();
     }
 

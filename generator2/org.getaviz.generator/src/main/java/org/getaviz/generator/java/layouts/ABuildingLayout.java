@@ -37,8 +37,7 @@ public class ABuildingLayout {
 
     private void setPositionOfBuilding() {
         building.setXPosition(0.0);
-//        building.setYPosition(building.getHeight() / 2);
-        building.setYPosition(0.0); // TODO for Java
+        building.setYPosition(building.getHeight() / 2);
         building.setZPosition(0.0);
     }
 
@@ -89,10 +88,10 @@ public class ABuildingLayout {
     }
 
     private Double calculateFloorHeightSum() {
-        // no floors & no numberOfStatements => default
+        // no floors & no effectiveLineCount => default
         double floorHeightSum = config.getFloorHeightSum();
 
-        //no floors, but numberOfStatements
+        //no floors, but effectiveLineCount
         if (floors.isEmpty()){
             if(building.getSourceNode() == null){
                 return floorHeightSum;

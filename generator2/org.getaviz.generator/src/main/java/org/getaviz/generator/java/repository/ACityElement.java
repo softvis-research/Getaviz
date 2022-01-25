@@ -69,7 +69,6 @@ public class ACityElement {
     private Long sourceNodeID;
 
     private Node sourceNode;
-//    private JavaNodeTypes sourceNodeType;
 
     private List<ACityElement> subElements;
     private ACityElement parentElement;

@@ -15,8 +15,8 @@ public class LoaderStep extends MetropolisStep {
     private Runtime runtime = Runtime.getRuntime();
 //    private String inputFiles = "https://github.com/softvis-research/Bank/releases/download/test/bank-1.0.0-SNAPSHOT.jar";
 //    private String inputFiles = "C:\\Users\\mykha\\Desktop\\Bank\\out\\artifacts\\Bank_jar\\Bank.jar";
-    private String inputFiles = "C:\\Users\\mykha\\Desktop\\TestBank\\out\\artifacts\\TestBank_jar\\TestBank.jar";
-//    private String inputFiles = "C:\\Users\\mykha\\Downloads\\Java-master\\out\\artifacts\\Java_jar\\Java.jar";
+//    private String inputFiles = "C:\\Users\\mykha\\Desktop\\TestBank\\out\\artifacts\\TestBank_jar\\TestBank.jar";
+    private String inputFiles = "C:\\Users\\mykha\\Downloads\\Java-master\\out\\artifacts\\Java_jar\\Java.jar";
 //    private String pathJQAssistant = "C:/Users/mykha/jqassistant/bin/jqassistant.cmd";
     private String pathJQAssistant = "C:/Users/mykha/jqassistant-1.11.1/bin/jqassistant.cmd";
 
@@ -51,6 +51,7 @@ public class LoaderStep extends MetropolisStep {
         log.info("jQAssistant scan finished.");
 
         addAdditionalAttributes();
+        deleteUnnecessaryNodes();
     }
 
     private void addAdditionalAttributes() {
@@ -96,12 +97,14 @@ public class LoaderStep extends MetropolisStep {
 
         // DELETE Method nodes with name = null or empty value
         connector.executeWrite("MATCH (n:Method)" +
-                " WHERE n.declares_id IS NULL OR n.name IS NULL OR n.name CONTAINS '<init>'" +
+                " WHERE n.declares_id IS NULL" +
+                " OR n.name IS NULL" +
+                " OR (n.name STARTS WITH '<' AND n.name ENDS WITH '>')" +
                 " DETACH DELETE n");
 
-        // DELETE Field nodes with name = null or where no declares id
+        // DELETE Field nodes with name = null or where no declares id, or they are synthetic
         connector.executeWrite("MATCH (n:Field)" +
-                " WHERE n.declares_id IS NULL OR n.name IS NULL" +
+                " WHERE n.declares_id IS NULL OR n.name IS NULL OR n.synthetic = true" +
                 " DETACH DELETE n");
     }
 

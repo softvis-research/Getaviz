@@ -288,22 +288,34 @@ public class MetaDataExporter {
     }
 
     private String getQualifiedName(ACityElement element) {
+        StringBuilder qualifiedNameBuilder = new StringBuilder();
         Node node = element.getSourceNode();
-        List<String> qualifiedNameAsList = getQualifiedNameAsList(node);
-        return String.join(".", qualifiedNameAsList); //returns "name1.name2.name3"
-    }
-
-    private List<String> getQualifiedNameAsList(Node node) {
-        List<String> qualifiedNameAsList = new ArrayList<>();
-        Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, JavaRelationLabels.CONTAINS, false);
-        if (!parentNodes.isEmpty()) {
-            qualifiedNameAsList.addAll(getQualifiedNameAsList(parentNodes.iterator().next()));
+        JavaNodeTypes type = element.getSourceNodeType();
+        if (type.equals(JavaNodeTypes.Package)) {
+            qualifiedNameBuilder.append(node.get("fileName").asString());
+        } else if (type.equals(JavaNodeTypes.Class) || type.equals(JavaNodeTypes.Interface)) {
+            qualifiedNameBuilder.append(node.get("fileName").asString().split("\\.")[0]);
+        } else if (type.equals(JavaNodeTypes.Method) || type.equals(JavaNodeTypes.Field)){
+            Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, JavaRelationLabels.DECLARES, false);
+            qualifiedNameBuilder.append(parentNodes.iterator().next().get("fileName").asString().split("\\.")[0]);
+            qualifiedNameBuilder.append(".");
+            qualifiedNameBuilder.append(node.get("name").asString());
         }
 
-        String nodeName = node.get(JavaNodeProperties.name.name()).asString();
-        qualifiedNameAsList.add(nodeName);
-        return qualifiedNameAsList;
+        return qualifiedNameBuilder.toString();
     }
+
+//    private List<String> getQualifiedNameAsList(Node node) {
+//        List<String> qualifiedNameAsList = new ArrayList<>();
+//        Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, JavaRelationLabels.CONTAINS, false);
+//        if (!parentNodes.isEmpty()) {
+//            qualifiedNameAsList.addAll(getQualifiedNameAsList(parentNodes.iterator().next()));
+//        }
+//
+//        String nodeName = node.get(JavaNodeProperties.name.name()).asString();
+//        qualifiedNameAsList.add(nodeName);
+//        return qualifiedNameAsList;
+//    }
 
     private String getContainerHash(Node node) {
         Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, JavaRelationLabels.CONTAINS, false);
