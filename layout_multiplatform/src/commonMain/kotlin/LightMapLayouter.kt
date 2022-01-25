@@ -47,10 +47,13 @@ class LightMapLayouter(
     @JsName("_arrangeChildren")
     private fun arrangeChildren(parent: Node): CityRectangle {
         if (parent.children.isEmpty()) {
-            return if (parent.isDistrict) {
-                CityRectangle(parent, config.emptyDistrictSize, config.emptyDistrictSize)
+            if (parent.isDistrict) {
+                // don't use transferSizeToNode() because emptyDistrictSize does not include buildingHorizontalGap
+                parent.width = config.emptyDistrictSize
+                parent.length = config.emptyDistrictSize
+                return CityRectangle(parent, config.emptyDistrictSize, config.emptyDistrictSize)
             } else {
-                CityRectangle(parent,
+                return CityRectangle(parent,
                     parent.width + config.buildingHorizontalGap,
                     parent.length + config.buildingHorizontalGap
                 )
