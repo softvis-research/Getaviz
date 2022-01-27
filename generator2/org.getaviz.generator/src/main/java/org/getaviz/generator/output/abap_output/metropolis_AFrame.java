@@ -51,7 +51,7 @@ public class metropolis_AFrame implements ABAP_OutputFormat {
                 "\n" +
                 "\t\t\t <a-sky src=\"#sky\" radius=\"7000\"></a-sky>" +
                 "\n" +
-                "\t\t\t <a-plane src=\"#ground\" height=\"1000\" width=\"1000\" rotation=\"-90 0 0\" position=\"0 0 0\" repeat=\"30 30\"></a-plane>" +
+                "\t\t\t <a-plane src=\"#ground\" height=\"1000\" width=\"1000\" rotation=\"-90 0 0\" position=\"0 0 0\" repeat=\"100 100\"></a-plane>" +
                 "\n";
 
     }
