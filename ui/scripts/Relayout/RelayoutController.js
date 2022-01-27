@@ -28,12 +28,7 @@ var relayoutController = (function () {
         rootDiv.innerHTML = `
             <button id="relayout-button">
                 Re-layout visible entities
-            </button>
-            <br />
-            <input type="checkbox" id="layout-on-unhide" name="layout-on-unhide" disabled>
-            <label for="layout-on-unhide">
-                <strike>Automatically re-layout when unhiding elements</strike>
-            </label>`;
+            </button>`;
 
         document.getElementById("relayout-button").addEventListener('click', relayoutAllVisibleOriginElements);
 
