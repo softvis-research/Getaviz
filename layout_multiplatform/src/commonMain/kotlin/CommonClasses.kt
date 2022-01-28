@@ -15,10 +15,6 @@ class Node constructor(
         get() = this.x + (this.width / 2)
     val centerY: Double
         get() = this.y + (this.length / 2)
-
-    override fun toString(): String {
-        return "[id $id | name $name | x $x | y $y | width $width | length $length | children ${children.map { it.id }}]"
-    }
 }
 
 open class Rectangle(
@@ -33,10 +29,6 @@ open class Rectangle(
     val maxY: Double = this.y + this.length
     val centerX: Double = this.x + (this.width / 2)
     val centerY: Double = this.y + (this.length / 2)
-
-    override fun toString(): String {
-        return "[x $x | y $y | width $width | length $length]"
-    }
 }
 
 class CityRectangle(val node: Node, width: Double, length: Double, x: Double = 0.0, y: Double = 0.0)

@@ -14,21 +14,21 @@
   var Comparable = Kotlin.kotlin.Comparable;
   var Unit = Kotlin.kotlin.Unit;
   var emptyList = Kotlin.kotlin.collections.emptyList_287e2$;
-  var collectionSizeOrDefault = Kotlin.kotlin.collections.collectionSizeOrDefault_ba2ldo$;
-  var ArrayList_init = Kotlin.kotlin.collections.ArrayList_init_ww73n8$;
-  var ArrayList_init_0 = Kotlin.kotlin.collections.ArrayList_init_287e2$;
+  var ArrayList_init = Kotlin.kotlin.collections.ArrayList_init_287e2$;
   var sortedDescending = Kotlin.kotlin.collections.sortedDescending_exjks8$;
   var first = Kotlin.kotlin.collections.first_2p1efm$;
   var to = Kotlin.kotlin.to_ujzrz7$;
   var Pair = Kotlin.kotlin.Pair;
   var ensureNotNull = Kotlin.ensureNotNull;
+  var collectionSizeOrDefault = Kotlin.kotlin.collections.collectionSizeOrDefault_ba2ldo$;
+  var ArrayList_init_0 = Kotlin.kotlin.collections.ArrayList_init_ww73n8$;
   var JsMath = Math;
   var sortedWith = Kotlin.kotlin.collections.sortedWith_eknfly$;
   var wrapFunction = Kotlin.wrapFunction;
   var Comparator = Kotlin.kotlin.Comparator;
   CityRectangle.prototype = Object.create(Rectangle.prototype);
   CityRectangle.prototype.constructor = CityRectangle;
-  function Node(id, x, y, width, length, children) {
+  function Node(id, name, x, y, width, length, children, isDistrict) {
     if (x === void 0)
       x = 0.0;
     if (y === void 0)
@@ -39,12 +39,16 @@
       length = 1.0;
     if (children === void 0) {
       children = emptyList();
-    }this.id = id;
+    }if (isDistrict === void 0)
+      isDistrict = children.isEmpty();
+    this.id = id;
+    this.name = name;
     this.x = x;
     this.y = y;
     this.width = width;
     this.length = length;
     this.children = children;
+    this.isDistrict = isDistrict;
   }
   Object.defineProperty(Node.prototype, 'centerX', {
     configurable: true,
@@ -58,18 +62,6 @@
       return this.y + this.length / 2;
     }
   });
-  Node.prototype.toString = function () {
-    var tmp$ = '[id ' + this.id + ' | x ' + this.x + ' | y ' + this.y + ' | width ' + this.width + ' | length ' + this.length + ' | children ';
-    var $receiver = this.children;
-    var destination = ArrayList_init(collectionSizeOrDefault($receiver, 10));
-    var tmp$_0;
-    tmp$_0 = $receiver.iterator();
-    while (tmp$_0.hasNext()) {
-      var item = tmp$_0.next();
-      destination.add_11rb$(item.id);
-    }
-    return tmp$ + destination + ']';
-  };
   Node.$metadata$ = {
     kind: Kind_CLASS,
     simpleName: 'Node',
@@ -94,23 +86,10 @@
     this.centerX = this.x + this.width / 2;
     this.centerY = this.y + this.length / 2;
   }
-  Rectangle.prototype.compareTo_11rb$ = function (other) {
-    var tmp$;
-    var areaComparison = Kotlin.compareTo(this.area, other.area);
-    if (areaComparison === 0) {
-      tmp$ = Kotlin.compareTo(this.width, other.width);
-    } else {
-      tmp$ = areaComparison;
-    }
-    return tmp$;
-  };
-  Rectangle.prototype.toString = function () {
-    return '[x ' + this.x + ' | y ' + this.y + ' | width ' + this.width + ' | length ' + this.length + ']';
-  };
   Rectangle.$metadata$ = {
     kind: Kind_CLASS,
     simpleName: 'Rectangle',
-    interfaces: [Comparable]
+    interfaces: []
   };
   function CityRectangle(node, width, length, x, y) {
     if (x === void 0)
@@ -120,10 +99,22 @@
     Rectangle.call(this, width, length, x, y);
     this.node = node;
   }
+  CityRectangle.prototype.compareTo_11rb$ = function (other) {
+    var tmp$, tmp$_0;
+    var tmp$_1;
+    var $receiver = Kotlin.compareTo(this.area, other.area);
+    if ((tmp$ = $receiver !== 0 ? $receiver : null) != null)
+      tmp$_1 = tmp$;
+    else {
+      var $receiver_0 = Kotlin.compareTo(this.width, other.width);
+      tmp$_1 = $receiver_0 !== 0 ? $receiver_0 : null;
+    }
+    return (tmp$_0 = tmp$_1) != null ? tmp$_0 : Kotlin.compareTo(this.node.name, other.node.name);
+  };
   CityRectangle.$metadata$ = {
     kind: Kind_CLASS,
     simpleName: 'CityRectangle',
-    interfaces: [Rectangle]
+    interfaces: [Comparable, Rectangle]
   };
   function KDTreeNode(rectangle) {
     this.rectangle = rectangle;
@@ -132,7 +123,7 @@
     this.occupied = false;
   }
   KDTreeNode.prototype.getFittingNodes_vm2z6a$ = function (element) {
-    var list = ArrayList_init_0();
+    var list = ArrayList_init();
     this.getFittingsNodesMutable_0(element, list);
     return list;
   };
@@ -157,12 +148,51 @@
       };
     };
   });
-  function LightMapLayouter(buildingHorizontalGap) {
-    this._buildingHorizontalGap = buildingHorizontalGap;
-    this._trimEpsilon = 0.001;
+  function LightMapLayouterConfig(buildingHorizontalGap, trimEpsilon, emptyDistrictSize) {
+    this.buildingHorizontalGap = buildingHorizontalGap;
+    this.trimEpsilon = trimEpsilon;
+    this.emptyDistrictSize = emptyDistrictSize;
+  }
+  LightMapLayouterConfig.$metadata$ = {
+    kind: Kind_CLASS,
+    simpleName: 'LightMapLayouterConfig',
+    interfaces: []
+  };
+  function LightMapLayouterConfig_init($this) {
+    $this = $this || Object.create(LightMapLayouterConfig.prototype);
+    LightMapLayouterConfig.call($this, 3.0, 0.001, 5.0);
+    return $this;
+  }
+  LightMapLayouterConfig.prototype.component1 = function () {
+    return this.buildingHorizontalGap;
+  };
+  LightMapLayouterConfig.prototype.component2 = function () {
+    return this.trimEpsilon;
+  };
+  LightMapLayouterConfig.prototype.component3 = function () {
+    return this.emptyDistrictSize;
+  };
+  LightMapLayouterConfig.prototype.copy_yvo9jy$ = function (buildingHorizontalGap, trimEpsilon, emptyDistrictSize) {
+    return new LightMapLayouterConfig(buildingHorizontalGap === void 0 ? this.buildingHorizontalGap : buildingHorizontalGap, trimEpsilon === void 0 ? this.trimEpsilon : trimEpsilon, emptyDistrictSize === void 0 ? this.emptyDistrictSize : emptyDistrictSize);
+  };
+  LightMapLayouterConfig.prototype.toString = function () {
+    return 'LightMapLayouterConfig(buildingHorizontalGap=' + Kotlin.toString(this.buildingHorizontalGap) + (', trimEpsilon=' + Kotlin.toString(this.trimEpsilon)) + (', emptyDistrictSize=' + Kotlin.toString(this.emptyDistrictSize)) + ')';
+  };
+  LightMapLayouterConfig.prototype.hashCode = function () {
+    var result = 0;
+    result = result * 31 + Kotlin.hashCode(this.buildingHorizontalGap) | 0;
+    result = result * 31 + Kotlin.hashCode(this.trimEpsilon) | 0;
+    result = result * 31 + Kotlin.hashCode(this.emptyDistrictSize) | 0;
+    return result;
+  };
+  LightMapLayouterConfig.prototype.equals = function (other) {
+    return this === other || (other !== null && (typeof other === 'object' && (Object.getPrototypeOf(this) === Object.getPrototypeOf(other) && (Kotlin.equals(this.buildingHorizontalGap, other.buildingHorizontalGap) && Kotlin.equals(this.trimEpsilon, other.trimEpsilon) && Kotlin.equals(this.emptyDistrictSize, other.emptyDistrictSize)))));
+  };
+  function LightMapLayouter(config) {
+    this.config = config;
   }
   LightMapLayouter.prototype.calculateWithVirtualRoot = function (nodes) {
-    var virtualRoot = new Node('root');
+    var virtualRoot = new Node('root', 'root', void 0, void 0, void 0, void 0, void 0, true);
     virtualRoot.children = nodes;
     var rootRectangle = this._arrangeChildren(virtualRoot);
     this._resolveAbsolutePositions(virtualRoot, 0.0, 0.0);
@@ -186,9 +216,15 @@
   LightMapLayouter.prototype._arrangeChildren = function (parent) {
     var tmp$, tmp$_0;
     if (parent.children.isEmpty()) {
-      return new CityRectangle(parent, parent.width + this._buildingHorizontalGap, parent.length + this._buildingHorizontalGap);
+      if (parent.isDistrict) {
+        parent.width = this.config.emptyDistrictSize;
+        parent.length = this.config.emptyDistrictSize;
+        return new CityRectangle(parent, this.config.emptyDistrictSize, this.config.emptyDistrictSize);
+      } else {
+        return new CityRectangle(parent, parent.width + this.config.buildingHorizontalGap, parent.length + this.config.buildingHorizontalGap);
+      }
     }var $receiver = parent.children;
-    var destination = ArrayList_init(collectionSizeOrDefault($receiver, 10));
+    var destination = ArrayList_init_0(collectionSizeOrDefault($receiver, 10));
     var tmp$_1;
     tmp$_1 = $receiver.iterator();
     while (tmp$_1.hasNext()) {
@@ -217,7 +253,7 @@
       covRectangle = this._expandCovrecToInclude(fittedNode.rectangle, covRectangle);
       this._transferCoordsToNode(fittedNode.rectangle, element.node);
     }
-    var parentRectangle = new CityRectangle(parent, covRectangle.width + this._buildingHorizontalGap, covRectangle.length + this._buildingHorizontalGap);
+    var parentRectangle = new CityRectangle(parent, covRectangle.width + this.config.buildingHorizontalGap, covRectangle.length + this.config.buildingHorizontalGap);
     this._transferSizeToNode(covRectangle, parent);
     return parentRectangle;
   };
@@ -230,8 +266,8 @@
     return new Rectangle(tmp$, JsMath.max(a_0, b_0), oldCovrec.x, oldCovrec.y);
   };
   LightMapLayouter.prototype._transferCoordsToNode = function (sourceRectangle, targetNode) {
-    targetNode.x = sourceRectangle.x + this._buildingHorizontalGap / 2;
-    targetNode.y = sourceRectangle.y + this._buildingHorizontalGap / 2;
+    targetNode.x = sourceRectangle.x + this.config.buildingHorizontalGap / 2;
+    targetNode.y = sourceRectangle.y + this.config.buildingHorizontalGap / 2;
   };
   LightMapLayouter.prototype._transferSizeToNode = function (sourceRectangle, targetNode) {
     targetNode.width = sourceRectangle.width;
@@ -247,7 +283,7 @@
       widthSum += node.width;
       lengthSum += node.length;
     }
-    var totalPadding = this._buildingHorizontalGap * children.size;
+    var totalPadding = this.config.buildingHorizontalGap * children.size;
     widthSum += totalPadding;
     lengthSum += totalPadding;
     return new Rectangle(widthSum, lengthSum);
@@ -261,12 +297,12 @@
   }
   LightMapLayouter.prototype._mapElementsToPreserversExpanders = function (nodes, insertedElement, covrec) {
     var tmp$;
-    var first = ArrayList_init_0();
-    var second = ArrayList_init_0();
+    var first = ArrayList_init();
+    var second = ArrayList_init();
     tmp$ = nodes.iterator();
     while (tmp$.hasNext()) {
       var element = tmp$.next();
-      if (element.rectangle.x + insertedElement.length <= covrec.maxX && element.rectangle.y + insertedElement.width <= covrec.maxY) {
+      if (element.rectangle.x + insertedElement.width <= covrec.maxX && element.rectangle.y + insertedElement.length <= covrec.maxY) {
         first.add_11rb$(element);
       } else {
         second.add_11rb$(element);
@@ -275,7 +311,7 @@
     var tmp$_0 = new Pair(first, second);
     var preserverList = tmp$_0.component1()
     , expanderList = tmp$_0.component2();
-    var destination = ArrayList_init(collectionSizeOrDefault(preserverList, 10));
+    var destination = ArrayList_init_0(collectionSizeOrDefault(preserverList, 10));
     var tmp$_1;
     tmp$_1 = preserverList.iterator();
     while (tmp$_1.hasNext()) {
@@ -283,16 +319,16 @@
       destination.add_11rb$(to(item, item.rectangle.area - insertedElement.area));
     }
     var preserverMap = sortedWith(destination, new Comparator(compareBy$lambda(LightMapLayouter$mapElementsToPreserversExpanders$lambda)));
-    var destination_0 = ArrayList_init(collectionSizeOrDefault(expanderList, 10));
+    var destination_0 = ArrayList_init_0(collectionSizeOrDefault(expanderList, 10));
     var tmp$_2;
     tmp$_2 = expanderList.iterator();
     while (tmp$_2.hasNext()) {
       var item_0 = tmp$_2.next();
       var tmp$_3 = destination_0.add_11rb$;
-      var a = item_0.rectangle.x + insertedElement.length;
+      var a = item_0.rectangle.x + insertedElement.width;
       var b = covrec.maxX;
       var tmp$_4 = JsMath.max(a, b);
-      var a_0 = item_0.rectangle.y + insertedElement.width;
+      var a_0 = item_0.rectangle.y + insertedElement.length;
       var b_0 = covrec.maxY;
       tmp$_3.call(destination_0, to(item_0, tmp$_4 / JsMath.max(a_0, b_0)));
     }
@@ -302,14 +338,14 @@
   LightMapLayouter.prototype._trimNode = function (node, insertedElement) {
     var nodeRec = node.rectangle;
     var x = nodeRec.length - insertedElement.length;
-    if (JsMath.abs(x) > this._trimEpsilon) {
+    if (JsMath.abs(x) > this.config.trimEpsilon) {
       node.leftChild = new KDTreeNode(new Rectangle(nodeRec.width, insertedElement.length, nodeRec.x, nodeRec.y));
       node.rightChild = new KDTreeNode(new Rectangle(nodeRec.width, nodeRec.length - insertedElement.length, nodeRec.x, nodeRec.y + insertedElement.length));
       node.occupied = true;
       return this._trimNode(ensureNotNull(node.leftChild), insertedElement);
     } else {
       var x_0 = nodeRec.width - insertedElement.width;
-      if (JsMath.abs(x_0) > this._trimEpsilon) {
+      if (JsMath.abs(x_0) > this.config.trimEpsilon) {
         node.leftChild = new KDTreeNode(new Rectangle(insertedElement.width, nodeRec.length, nodeRec.x, nodeRec.y));
         node.rightChild = new KDTreeNode(new Rectangle(nodeRec.width - insertedElement.width, nodeRec.length, nodeRec.x + insertedElement.width, nodeRec.y));
         node.occupied = true;
@@ -333,6 +369,8 @@
   package$kotlin.Rectangle = Rectangle;
   package$kotlin.CityRectangle = CityRectangle;
   package$kotlin.KDTreeNode = KDTreeNode;
+  package$kotlin.LightMapLayouterConfig_init = LightMapLayouterConfig_init;
+  package$kotlin.LightMapLayouterConfig = LightMapLayouterConfig;
   package$kotlin.LightMapLayouter = LightMapLayouter;
   Kotlin.defineModule('layout_multiplatform', _);
   return _;
