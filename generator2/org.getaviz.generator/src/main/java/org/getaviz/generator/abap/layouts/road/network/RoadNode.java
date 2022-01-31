@@ -5,17 +5,9 @@ public class RoadNode {
 	private double x;
 	private double y;
 	
-	public String label;
-	
 	public RoadNode(double x, double y) {
 		this.setX(x);
 		this.setY(y);
-	}
-	
-	public RoadNode(double x, double y, String label) {
-		this.setX(x);
-		this.setY(y);
-		this.label = label;
 	}
 
 	public double getX() {
@@ -50,19 +42,19 @@ public class RoadNode {
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int hashCode = 1;
 		
-		long lX = Double.doubleToLongBits(this.x);
-		int hashX = (int)(lX ^ (lX >>> 32));
+		long xAsBits = Double.doubleToLongBits(this.x);
+		int hashOfX = (int)(xAsBits ^ (xAsBits >>> 32));
 				
-		result = prime * result + hashX;
+		hashCode = prime * hashCode + hashOfX;
 		
-		long lY = Double.doubleToLongBits(this.y);
-		int hashY = (int)(lY ^ (lY >>> 32));
+		long yAsBits = Double.doubleToLongBits(this.y);
+		int hashOfY = (int)(yAsBits ^ (yAsBits >>> 32));
 				
-		result = prime * result + hashY;
+		hashCode = prime * hashCode + hashOfY;
 		
-		return result;
+		return hashCode;
 	}
 
 }
