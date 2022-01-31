@@ -32,10 +32,10 @@ public class AFrameExporterStep {
 
         Scanner userInput = new Scanner(System.in);
         System.out.print("Silent mode? (y/n): "); // Silent mode to run with default values
-        String input = userInput.nextLine();
-        if (input.equals("n")) {
-            isSilentMode = false;
-        }
+//        String input = userInput.nextLine();
+//        if (input.equals("n")) {
+//            isSilentMode = false;
+//        }
 
         nodeRepository = new SourceNodeRepository();
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
@@ -109,5 +109,6 @@ public class AFrameExporterStep {
 
         System.out.println("\nA-Frame Exporter step was completed");
         connector.close();
+        userInput.close();
     }
 }

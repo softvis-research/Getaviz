@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Stack;
+import java.util.TreeMap;
+import java.util.stream.Stream;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.repository.ACityElement;
@@ -30,11 +34,11 @@ public class RoadGraph {
 		
 		for (ACityElement districtElement : districtElements) {
 			
-			// TODO
-			// Überlegen, ob nur Distrikte von Straßen umrundet werden sollen, oder auch die Referenzgebäude
-			
 			for (RoadNode surroundingNode : this.getSurroundingNodes(districtElement)) {
-				this.adjacencyList.put(surroundingNode, new LinkedList<RoadNode>());				
+				
+				if (!this.adjacencyList.containsKey(surroundingNode)) {
+					this.adjacencyList.put(surroundingNode, new LinkedList<RoadNode>());						
+				}			
 				
 				if (nodesPerRow.containsKey(surroundingNode.getY())) {
 					nodesPerRow.get(surroundingNode.getY()).add(surroundingNode);
@@ -85,18 +89,7 @@ public class RoadGraph {
 			RoadNode nextRightNode = new RoadNode(Double.POSITIVE_INFINITY, node.getY());
 						
 			for (RoadNode nodeInSameRow : nodesInSameRow) {
-				if (nodeInSameRow.getX() < node.getX() && nextLeftNode.getX() < nodeInSameRow.getX()) {
-//					boolean isDistrictBetween = false;
-//					for (ACityElement district : elementsInSameRow) {
-//						if (nodeInSameRow.getX() < district.getXPosition() && district.getXPosition() < node.getX()) {
-//							isDistrictBetween = true;
-//						}
-//					}
-//					
-//					if (!isDistrictBetween) {
-//						nextLeftNode = nodeInSameRow;
-//					}
-				
+				if (nodeInSameRow.getX() < node.getX() && nextLeftNode.getX() < nodeInSameRow.getX()) {				
 					if (elementsInSameRow == null) {
 						nextLeftNode = nodeInSameRow;
 					}
@@ -106,17 +99,6 @@ public class RoadGraph {
 				}
 				
 				if (nodeInSameRow.getX() > node.getX() && nextRightNode.getX() > nodeInSameRow.getX()) {
-//					boolean isDistrictBetween = false;
-//					for (ACityElement district : elementsInSameRow) {
-//						if (nodeInSameRow.getX() > district.getXPosition() && district.getXPosition() > node.getX()) {
-//							isDistrictBetween = true;
-//						}
-//					}
-//					
-//					if (!isDistrictBetween) {
-//						nextRightNode = nodeInSameRow;
-//					}
-					
 					if (elementsInSameRow == null) {
 						nextRightNode = nodeInSameRow;
 					}
@@ -134,17 +116,6 @@ public class RoadGraph {
 			
 			for (RoadNode nodeInSameColumn : nodesInSameColumn) {
 				if (nodeInSameColumn.getY() < node.getY() && nextLowerNode.getY() < nodeInSameColumn.getY()) {
-//					boolean isDistrictBetween = false;
-//					for (ACityElement district : elementsInSameRow) {
-//						if (nodeInSameColumn.getY() < district.getZPosition() && district.getZPosition() < node.getY()) {
-//							isDistrictBetween = true;
-//						}
-//					}
-//					
-//					if (!isDistrictBetween) {
-//						nextLowerNode = nodeInSameColumn;
-//					}
-					
 					if (elementsInSameColumn == null) {
 						nextLowerNode = nodeInSameColumn;
 					}
@@ -154,17 +125,6 @@ public class RoadGraph {
 				}
 				
 				if (nodeInSameColumn.getY() > node.getY() && nextUpperNode.getY() > nodeInSameColumn.getY()) {
-//					boolean isDistrictBetween = false;
-//					for (ACityElement district : elementsInSameRow) {
-//						if (nodeInSameColumn.getY() > district.getZPosition() && district.getZPosition() > node.getY()) {
-//							isDistrictBetween = true;
-//						}
-//					}
-//					
-//					if (!isDistrictBetween) {
-//						nextUpperNode = nodeInSameColumn;
-//					}
-					
 					if (elementsInSameColumn == null) {
 						nextUpperNode = nodeInSameColumn;
 					}
@@ -193,8 +153,8 @@ public class RoadGraph {
 		
 	}
 	
-	public void createEdges() {
-		
+	public boolean hasRoadNode(RoadNode node) {
+		return this.adjacencyList.containsKey(node);
 	}
 	
 	public void insertEdge(RoadNode sourceNode, RoadNode targetNode) {
@@ -203,18 +163,167 @@ public class RoadGraph {
 	}
 	
 	public void deleteEdge(RoadNode sourceNode, RoadNode targetNode) {
+		this.adjacencyList.get(sourceNode).remove(targetNode);
+		this.adjacencyList.get(targetNode).remove(sourceNode);
+	}
+	
+	public double calculatePathLength(List<RoadNode> path) {
+		double pathLength = 0.0;
 		
+		for (int i = 0; i < path.size() - 1; i++) {
+			pathLength += this.distance(path.get(i), path.get(i + 1));
+		}
+		
+		return pathLength;
 	}
 	
 	public Map<RoadNode, LinkedList<RoadNode>> getGraph() {
 		return this.adjacencyList;
 	}
 	
+//	private List<RoadNode> dijkstra(RoadNode start, RoadNode destination) {
+//		Map<RoadNode, Double> distanceMap = new HashMap<RoadNode, Double>();
+//		Map<RoadNode, List<RoadNode>> shortestPaths = new HashMap<RoadNode, List<RoadNode>>();
+//		List<RoadNode> path = new ArrayList<RoadNode>();
+//
+//		for (RoadNode node : this.adjacencyList.keySet()) {
+//			if (node != start) {
+//				distanceMap.put(node, Double.MAX_VALUE);
+//			} else {
+//				distanceMap.put(node, 0.0);
+//			}
+//		}
+//		
+//		shortestPaths.put(start, new ArrayList<RoadNode>());
+//
+//		while (!distanceMap.isEmpty()) {
+//			RoadNode nearestNode = getNearestNode(distanceMap);
+//			path.add(nearestNode);
+//			shortestPaths.get(nearestNode).add(nearestNode);
+//
+//			if (nearestNode == destination) {
+//				return shortestPaths.get(destination);
+//			}
+//
+//			for (RoadNode neighbourNode : this.adjacencyList.get(nearestNode)) {
+//				if (path.contains(neighbourNode)) {
+//					continue;
+//				}
+//				if (distanceMap.get(nearestNode) + distance(nearestNode, neighbourNode) < distanceMap.get(neighbourNode)) {
+//					distanceMap.put(neighbourNode, distanceMap.get(nearestNode) + distance(nearestNode, neighbourNode));
+//					shortestPaths.put(neighbourNode, new ArrayList<RoadNode>(shortestPaths.get(nearestNode)));
+//				}
+//			}
+//			distanceMap.remove(nearestNode);
+//		}
+//		return shortestPaths.get(destination);
+//	}
+	
+	public List<List<RoadNode>> dijkstra(RoadNode start, RoadNode destination) {
+		Map<RoadNode, Double> distanceMap = new HashMap<RoadNode, Double>();
+		Map<RoadNode, List<List<RoadNode>>> shortestPaths = new HashMap<RoadNode, List<List<RoadNode>>>();
+		List<RoadNode> path = new ArrayList<RoadNode>();
+
+		for (RoadNode node : this.adjacencyList.keySet()) {
+			if (node != start) {
+				distanceMap.put(node, Double.MAX_VALUE);
+			} else {
+				distanceMap.put(node, 0.0);
+			}
+		}
+		
+		List<List<RoadNode>> dummy2 = new ArrayList<List<RoadNode>>();
+		dummy2.add(new ArrayList<RoadNode>());
+		
+		shortestPaths.put(start, dummy2);
+
+		while (!distanceMap.isEmpty()) {
+			RoadNode nearestNode = getNearestNode(distanceMap);
+			path.add(nearestNode);
+			
+			if (nearestNode == null || shortestPaths.get(nearestNode) == null) {
+				System.out.println("Hilfe");
+			}
+			
+			for (List<RoadNode> shortestPath : shortestPaths.get(nearestNode)) {
+				shortestPath.add(nearestNode);
+			}
+
+			if (nearestNode == destination) {
+				return shortestPaths.get(destination);
+			}
+			
+			double currentDistance = distanceMap.remove(nearestNode);
+
+			for (RoadNode neighbourNode : this.adjacencyList.get(nearestNode)) {
+				
+				if (path.contains(neighbourNode)) {
+					continue;
+				}
+				
+				double newDistance = currentDistance + distance(nearestNode, neighbourNode);
+				
+				double oldDistance = distanceMap.get(neighbourNode);
+				
+				if (newDistance < oldDistance) {
+					distanceMap.put(neighbourNode, newDistance);
+					shortestPaths.put(neighbourNode, new ArrayList<List<RoadNode>>());
+					for (List<RoadNode> shortestPath : shortestPaths.get(nearestNode)) {
+						shortestPaths.get(neighbourNode).add(new ArrayList<RoadNode>(shortestPath));
+					}
+				} else if (newDistance == oldDistance) {
+					for (List<RoadNode> shortestPath : shortestPaths.get(nearestNode)) {
+						shortestPaths.get(neighbourNode).add(new ArrayList<RoadNode>(shortestPath));
+					}
+				}
+				
+								
+//				if (distanceMap.get(nearestNode) + distance(nearestNode, neighbourNode) < distanceMap.get(neighbourNode)) {
+//					distanceMap.put(neighbourNode, distanceMap.get(nearestNode) + distance(nearestNode, neighbourNode));
+//					shortestPaths.put(neighbourNode, new ArrayList<List<RoadNode>>());
+//					for (List<RoadNode> shortestPath : shortestPaths.get(nearestNode)) {
+//						shortestPaths.get(neighbourNode).add(new ArrayList<RoadNode>(shortestPath));
+//					}
+//				} else if (distanceMap.get(nearestNode) + distance(nearestNode, neighbourNode) == distanceMap.get(neighbourNode)) {
+//					for (List<RoadNode> shortestPath : shortestPaths.get(nearestNode)) {
+//						shortestPaths.get(neighbourNode).add(new ArrayList<RoadNode>(shortestPath));
+//					}
+//				}
+			}
+//			distanceMap.remove(nearestNode);
+			if (getNearestNode(distanceMap) == null) {
+				System.out.println("debug");
+			}
+		}
+		return shortestPaths.get(destination);
+	}
+
+	private RoadNode getNearestNode(Map<RoadNode, Double> distanceMap) {
+		Double minDistance = Double.MAX_VALUE;
+		RoadNode nearestNode = null;
+
+		for (Entry<RoadNode, Double> nodeDistance : distanceMap.entrySet()) {
+			if (nodeDistance.getValue() < minDistance) {
+				nearestNode = nodeDistance.getKey();
+				minDistance = nodeDistance.getValue();
+			}
+		}
+
+		return nearestNode;
+	}
+
+	private double distance(RoadNode start, RoadNode destination) {
+		
+		// use Manhattan metric instead of Euclid metric due to performance		
+		return Math.abs(destination.getX() - start.getX() + destination.getY() - start.getY());
+	}
+
 	private List<RoadNode> getSurroundingNodes(ACityElement element) {
 		List<RoadNode> surroundingNodes = new ArrayList<RoadNode>();
 		
 		// TODO
 		// In ADistrictLightMapLayout/ADistrictCircularLayout Breite der Straßen einbeziehen, dann kann die Breite auch hier berücksichtigt werden
+		// Ist das perspektivisch sinnvoll?
 		
 		double rightX = element.getXPosition() + element.getWidth() / 2.0 + config.getACityDistrictHorizontalGap() / 2.0; // + config.getMetropolisRoadWidth() / 2.0;
 		double leftX = element.getXPosition() - element.getWidth() / 2.0 - config.getACityDistrictHorizontalGap() / 2.0; // - config.getMetropolisRoadWidth() / 2.0;

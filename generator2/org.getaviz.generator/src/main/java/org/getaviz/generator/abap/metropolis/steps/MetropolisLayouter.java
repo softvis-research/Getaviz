@@ -215,7 +215,7 @@ public class MetropolisLayouter {
             int iteration = Integer.parseInt(iterationString);
             
             if (iteration == 0 && (!creator.equals("SAP") && district.getSourceNodeType() == SAPNodeTypes.Namespace)) {
-            	ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(repository, district, config);
+            	ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(nodeRepository, repository, district, config);
                 roadNetwork.calculate();
             }            
 

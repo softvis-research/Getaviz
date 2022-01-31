@@ -241,6 +241,18 @@ public class ACityElement {
         }
         return subElementsOfType;
     }
+    
+    public Collection<ACityElement> getSubElementsOfSourceNodeType(SAPNodeTypes sourceNodeType) {
+    	List<ACityElement> subElements = new ArrayList<ACityElement>();
+    	
+    	for (ACityElement subElement : this.getSubElements()) {
+			if (subElement.getSourceNodeType() == sourceNodeType) {
+				subElements.add(subElement);
+			}
+		}
+    	
+    	return subElements;
+    }
 
     public String getSourceNodeProperty(SAPNodeProperties sapNodeProperties) {
 
