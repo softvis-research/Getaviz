@@ -208,16 +208,6 @@ public class MetropolisLayouter {
             //layout district
             ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
             aBAPDistrictLightMapLayout.calculate();
-            
-            // generate streets (only for origin set)
-            String creator = district.getSourceNodeProperty(SAPNodeProperties.creator);
-            String iterationString = district.getSourceNodeProperty(SAPNodeProperties.iteration);
-            int iteration = Integer.parseInt(iterationString);
-            
-            if (iteration == 0 && (!creator.equals("SAP") && district.getSourceNodeType() == SAPNodeTypes.Namespace)) {
-            	ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(nodeRepository, repository, district, config);
-                roadNetwork.calculate();
-            }            
 
             //stack district sub elements
             AStackLayout stackLayout = new AStackLayout(district, subElements, config);
