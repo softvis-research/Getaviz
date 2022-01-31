@@ -3,6 +3,8 @@ package org.getaviz.generator.abap.repository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
+import org.getaviz.generator.abap.enums.SAPNodeTypes;
+import org.getaviz.generator.abap.repository.ACityElement.ACityType;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
@@ -148,6 +150,25 @@ public class ACityRepository {
         }
 
         return elementsBySourceProperty;
+    }
+    
+    public Collection<ACityElement> getNamespaceDistrictsOfOriginSet() {
+    	List<ACityElement> namespaceDistrictsOfOriginSet = new ArrayList<ACityElement>();    	
+    	Collection<ACityElement> namespaceDistricts = this.getElementsByTypeAndSourceProperty(ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Namespace.toString());
+    	
+    	for (ACityElement namespaceDistrict : namespaceDistricts) {
+            String creator = namespaceDistrict.getSourceNodeProperty(SAPNodeProperties.creator);
+            int iteration = Integer.parseInt(namespaceDistrict.getSourceNodeProperty(SAPNodeProperties.iteration));
+            
+            // iteration == 0 && creator <> SAP => origin set (to be analyzed custom code)
+            // iteration > 0 					=> further referenced custom code
+            // creator == SAP 					=> coding of SAP standard
+            if (iteration == 0 && !creator.equals("SAP")) {
+            	namespaceDistrictsOfOriginSet.add(namespaceDistrict);
+            }           
+		}
+    	
+    	return namespaceDistrictsOfOriginSet;
     }
 
 
