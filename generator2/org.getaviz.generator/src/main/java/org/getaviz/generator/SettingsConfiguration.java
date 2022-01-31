@@ -1351,14 +1351,6 @@ public class SettingsConfiguration {
 				return 0.1;
 		}
 	}
-	
-	public double getMetropolisRoadWidth() {
-		return config.getDouble("city.abap.metropolis.road.width", 3.0);
-	}
-	
-	public double getMetropolisRoadHeight() {
-		return config.getDouble("city.abap.metropolis.road.height", 0.4);
-	}
 
 	public double getACityBuildingLength(String type) {
 		switch (type) {
@@ -1404,6 +1396,19 @@ public class SettingsConfiguration {
 				return config.getString("");
 		}
 	}
+	
+	public boolean showRoads() { 
+		return config.getBoolean("city.abap.metropolis.showRoads", false);
+	}
+	
+	public double getMetropolisRoadWidth() {
+		return config.getDouble("city.abap.metropolis.road.width", 3.0);
+	}
+	
+	public double getMetropolisRoadHeight() {
+		return config.getDouble("city.abap.metropolis.road.height", 0.4);
+	}	
+	
 
 	public boolean showSeaReferenceBuilding() {return config.getBoolean("city.abap.metropolis.showSeaReferenceBuilding", false);}
 	public boolean showMountainReferenceBuilding() {return config.getBoolean("city.abap.metropolis.showMountainReferenceBuilding", false);}
