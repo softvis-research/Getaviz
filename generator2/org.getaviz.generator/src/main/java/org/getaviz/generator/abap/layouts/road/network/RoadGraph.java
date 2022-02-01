@@ -225,10 +225,10 @@ public class RoadGraph {
 		List<RoadNode> path = new ArrayList<RoadNode>();
 
 		for (RoadNode node : this.adjacencyList.keySet()) {
-			if (node != start) {
-				distanceMap.put(node, Double.MAX_VALUE);
-			} else {
+			if (node.equals(start)) {
 				distanceMap.put(node, 0.0);
+			} else {
+				distanceMap.put(node, Double.MAX_VALUE);
 			}
 		}
 		
@@ -249,7 +249,7 @@ public class RoadGraph {
 				shortestPath.add(nearestNode);
 			}
 
-			if (nearestNode == destination) {
+			if (nearestNode.equals(destination)) {
 				return shortestPaths.get(destination);
 			}
 			

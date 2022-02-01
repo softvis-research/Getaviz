@@ -272,25 +272,20 @@ public class ADistrictRoadNetwork {
 		RoadNode lowerNode = new RoadNode(element.getXPosition(), lowerY);
 		RoadNode leftNode = new RoadNode(leftX, element.getZPosition());
 		
-		var test = this.roadGraph.getGraph().keySet();
+		if (this.roadGraph.getGraph().containsKey(upperNode)) {
+			slipRoadNodes[0] = upperNode;
+		}
 		
-		for (RoadNode roadNode : test) {
-			if (roadNode.equals(upperNode)) {
-				slipRoadNodes[0] = roadNode;
-				continue;
-			}
-			if (roadNode.equals(rightNode)) {
-				slipRoadNodes[1] = roadNode;
-				continue;
-			}
-			if (roadNode.equals(lowerNode)) {
-				slipRoadNodes[2] = roadNode;
-				continue;
-			}
-			if (roadNode.equals(leftNode)) {
-				slipRoadNodes[3] = roadNode;
-				continue;
-			}
+		if (this.roadGraph.getGraph().containsKey(rightNode)) {
+			slipRoadNodes[1] = rightNode;
+		}
+		
+		if (this.roadGraph.getGraph().containsKey(lowerNode)) {
+			slipRoadNodes[2] = lowerNode;
+		}
+		
+		if (this.roadGraph.getGraph().containsKey(leftNode)) {
+			slipRoadNodes[3] = leftNode;
 		}
 		
 		return slipRoadNodes;
