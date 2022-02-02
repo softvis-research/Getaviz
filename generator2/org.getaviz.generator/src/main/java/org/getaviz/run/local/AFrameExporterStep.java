@@ -12,7 +12,7 @@ import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisDesigner;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisLayouter;
-import org.getaviz.generator.abap.metropolis.steps.MetropolisRoadNetworkLayouter;
+import org.getaviz.generator.abap.metropolis.steps.MetropolisRoadNetworkBuilder;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
@@ -68,7 +68,7 @@ public class AFrameExporterStep {
 	            System.out.print("RoadNetworkLayouter step to be processed. Press any key to continue...");
 	            userInput.nextLine();
 			}
-	        MetropolisRoadNetworkLayouter roadNetworkLayouter = new MetropolisRoadNetworkLayouter(aCityRepository, nodeRepository, config);
+	        MetropolisRoadNetworkBuilder roadNetworkLayouter = new MetropolisRoadNetworkBuilder(aCityRepository, nodeRepository, config);
 	        roadNetworkLayouter.createRoadNetworks();
 		}
         
