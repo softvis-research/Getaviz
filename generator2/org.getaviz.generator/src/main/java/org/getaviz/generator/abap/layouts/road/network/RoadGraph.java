@@ -167,6 +167,16 @@ public class RoadGraph {
 		this.adjacencyList.get(targetNode).remove(sourceNode);
 	}
 	
+	public List<RoadNode> getShortestPath(RoadNode startNode, RoadNode destinationNode) {
+		RoadGraphDijkstraAlgorithm dijkstra = new RoadGraphDijkstraAlgorithm(this.adjacencyList);
+		return dijkstra.calculateShortestPath(startNode, destinationNode);
+	}
+	
+	public List<List<RoadNode>> getAllShortestPaths(RoadNode startNode, RoadNode destinationNode) {
+		RoadGraphDijkstraAlgorithm dijkstra = new RoadGraphDijkstraAlgorithm(this.adjacencyList);
+		return dijkstra.calculateAllShortestPaths(startNode, destinationNode);
+	}
+	
 	public double calculatePathLength(List<RoadNode> path) {
 		double pathLength = 0.0;
 		
@@ -179,143 +189,6 @@ public class RoadGraph {
 	
 	public Map<RoadNode, LinkedList<RoadNode>> getGraph() {
 		return this.adjacencyList;
-	}
-	
-//	private List<RoadNode> dijkstra(RoadNode start, RoadNode destination) {
-//		Map<RoadNode, Double> distanceMap = new HashMap<RoadNode, Double>();
-//		Map<RoadNode, List<RoadNode>> shortestPaths = new HashMap<RoadNode, List<RoadNode>>();
-//		List<RoadNode> path = new ArrayList<RoadNode>();
-//
-//		for (RoadNode node : this.adjacencyList.keySet()) {
-//			if (node != start) {
-//				distanceMap.put(node, Double.MAX_VALUE);
-//			} else {
-//				distanceMap.put(node, 0.0);
-//			}
-//		}
-//		
-//		shortestPaths.put(start, new ArrayList<RoadNode>());
-//
-//		while (!distanceMap.isEmpty()) {
-//			RoadNode nearestNode = getNearestNode(distanceMap);
-//			path.add(nearestNode);
-//			shortestPaths.get(nearestNode).add(nearestNode);
-//
-//			if (nearestNode == destination) {
-//				return shortestPaths.get(destination);
-//			}
-//
-//			for (RoadNode neighbourNode : this.adjacencyList.get(nearestNode)) {
-//				if (path.contains(neighbourNode)) {
-//					continue;
-//				}
-//				if (distanceMap.get(nearestNode) + distance(nearestNode, neighbourNode) < distanceMap.get(neighbourNode)) {
-//					distanceMap.put(neighbourNode, distanceMap.get(nearestNode) + distance(nearestNode, neighbourNode));
-//					shortestPaths.put(neighbourNode, new ArrayList<RoadNode>(shortestPaths.get(nearestNode)));
-//				}
-//			}
-//			distanceMap.remove(nearestNode);
-//		}
-//		return shortestPaths.get(destination);
-//	}
-	
-	public List<List<RoadNode>> dijkstra(RoadNode start, RoadNode destination) {
-		Map<RoadNode, Double> distanceMap = new HashMap<RoadNode, Double>();
-		Map<RoadNode, List<List<RoadNode>>> shortestPaths = new HashMap<RoadNode, List<List<RoadNode>>>();
-		List<RoadNode> path = new ArrayList<RoadNode>();
-
-		for (RoadNode node : this.adjacencyList.keySet()) {
-			if (node.equals(start)) {
-				distanceMap.put(node, 0.0);
-			} else {
-				distanceMap.put(node, Double.MAX_VALUE);
-			}
-		}
-		
-		List<List<RoadNode>> dummy2 = new ArrayList<List<RoadNode>>();
-		dummy2.add(new ArrayList<RoadNode>());
-		
-		shortestPaths.put(start, dummy2);
-
-		while (!distanceMap.isEmpty()) {
-			RoadNode nearestNode = getNearestNode(distanceMap);
-			path.add(nearestNode);
-			
-			if (nearestNode == null || shortestPaths.get(nearestNode) == null) {
-				System.out.println("Hilfe");
-			}
-			
-			for (List<RoadNode> shortestPath : shortestPaths.get(nearestNode)) {
-				shortestPath.add(nearestNode);
-			}
-
-			if (nearestNode.equals(destination)) {
-				return shortestPaths.get(destination);
-			}
-			
-			double currentDistance = distanceMap.remove(nearestNode);
-
-			for (RoadNode neighbourNode : this.adjacencyList.get(nearestNode)) {
-				
-				if (path.contains(neighbourNode)) {
-					continue;
-				}
-				
-				double newDistance = currentDistance + distance(nearestNode, neighbourNode);
-				
-				double oldDistance = distanceMap.get(neighbourNode);
-				
-				if (newDistance < oldDistance) {
-					distanceMap.put(neighbourNode, newDistance);
-					shortestPaths.put(neighbourNode, new ArrayList<List<RoadNode>>());
-					for (List<RoadNode> shortestPath : shortestPaths.get(nearestNode)) {
-						shortestPaths.get(neighbourNode).add(new ArrayList<RoadNode>(shortestPath));
-					}
-				} else if (newDistance == oldDistance) {
-					for (List<RoadNode> shortestPath : shortestPaths.get(nearestNode)) {
-						shortestPaths.get(neighbourNode).add(new ArrayList<RoadNode>(shortestPath));
-					}
-				}
-				
-								
-//				if (distanceMap.get(nearestNode) + distance(nearestNode, neighbourNode) < distanceMap.get(neighbourNode)) {
-//					distanceMap.put(neighbourNode, distanceMap.get(nearestNode) + distance(nearestNode, neighbourNode));
-//					shortestPaths.put(neighbourNode, new ArrayList<List<RoadNode>>());
-//					for (List<RoadNode> shortestPath : shortestPaths.get(nearestNode)) {
-//						shortestPaths.get(neighbourNode).add(new ArrayList<RoadNode>(shortestPath));
-//					}
-//				} else if (distanceMap.get(nearestNode) + distance(nearestNode, neighbourNode) == distanceMap.get(neighbourNode)) {
-//					for (List<RoadNode> shortestPath : shortestPaths.get(nearestNode)) {
-//						shortestPaths.get(neighbourNode).add(new ArrayList<RoadNode>(shortestPath));
-//					}
-//				}
-			}
-//			distanceMap.remove(nearestNode);
-			if (getNearestNode(distanceMap) == null) {
-				System.out.println("debug");
-			}
-		}
-		return shortestPaths.get(destination);
-	}
-
-	private RoadNode getNearestNode(Map<RoadNode, Double> distanceMap) {
-		Double minDistance = Double.MAX_VALUE;
-		RoadNode nearestNode = null;
-
-		for (Entry<RoadNode, Double> nodeDistance : distanceMap.entrySet()) {
-			if (nodeDistance.getValue() < minDistance) {
-				nearestNode = nodeDistance.getKey();
-				minDistance = nodeDistance.getValue();
-			}
-		}
-
-		return nearestNode;
-	}
-
-	private double distance(RoadNode start, RoadNode destination) {
-		
-		// use Manhattan metric instead of Euclid metric due to performance		
-		return Math.abs(destination.getX() - start.getX() + destination.getY() - start.getY());
 	}
 
 	private List<RoadNode> getSurroundingNodes(ACityElement element) {
@@ -352,6 +225,12 @@ public class RoadGraph {
 		surroundingNodes.add(lowerRightNode);	
 		
 		return surroundingNodes;
+	}
+
+	private double distance(RoadNode start, RoadNode destination) {
+
+		// use Manhattan metric instead of Euclid metric due to performance
+		return Math.abs(destination.getX() - start.getX() + destination.getY() - start.getY());
 	}
 
 }

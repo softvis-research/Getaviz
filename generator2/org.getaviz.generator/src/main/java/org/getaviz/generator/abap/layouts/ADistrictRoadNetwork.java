@@ -77,7 +77,7 @@ public class ADistrictRoadNetwork {
 				// Aufruf von dijkstra
 				for (RoadNode slipRoadNodeSource : slipRoadNodesSource) {
 					for (RoadNode slipRoadNodeTarget : slipRoadNodesTarget) {
-						List<List<RoadNode>> shortestPath = this.roadGraph.dijkstra(slipRoadNodeSource, slipRoadNodeTarget);
+						List<List<RoadNode>> shortestPath = this.roadGraph.getAllShortestPaths(slipRoadNodeSource, slipRoadNodeTarget);
 						double pathLength = this.roadGraph.calculatePathLength(shortestPath.get(0));
 						if (pathLength < shortestPathLength) {
 							shortestPathAbsolut = shortestPath.get(0);
