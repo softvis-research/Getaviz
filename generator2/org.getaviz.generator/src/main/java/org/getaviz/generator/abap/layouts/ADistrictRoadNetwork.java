@@ -41,7 +41,7 @@ public class ADistrictRoadNetwork {
 		this.config = config;
 	}
 	
-	public void calculate() {
+	public List<ACityElement> calculate() {
 		
 		this.roadGraph.initializeGraph(this.district.getSubElements());
 		
@@ -96,13 +96,8 @@ public class ADistrictRoadNetwork {
 			
 		}
 		
-//		List<ACityElement> roads = this.extractRoads(this.roadGraph.getGraph());
-		List<ACityElement> roads = this.extractRoads(paths);
-		
-		for (ACityElement road : roads) {
-			this.district.addSubElement(road);
-			this.repository.addElement(road);
-		}
+//		return this.extractRoads(this.roadGraph.getGraph());
+		return this.extractRoads(paths);
 	}
 	
 	private List<ACityElement> extractRoads(Map<RoadNode, LinkedList<RoadNode>> adjacencyList) {

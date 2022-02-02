@@ -1,5 +1,7 @@
 package org.getaviz.generator.abap.metropolis.steps;
 
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
@@ -28,7 +30,15 @@ public class MetropolisRoadNetworkBuilder {
 	public void createRoadNetworks() {
 		for (ACityElement namespaceDistrict : this.repository.getNamespaceDistrictsOfOriginSet()) {
 			ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(this.nodeRepository, this.repository, namespaceDistrict, this.config);
-			roadNetwork.calculate();
+			List<ACityElement> roads = roadNetwork.calculate();
+			this.saveRoads(roads, namespaceDistrict);
+		}
+	}
+	
+	public void saveRoads(List<ACityElement> roads, ACityElement containingDistrict) {
+		for (ACityElement road : roads) {
+			containingDistrict.addSubElement(road);
+			this.repository.addElement(road);
 		}
 	}
 
