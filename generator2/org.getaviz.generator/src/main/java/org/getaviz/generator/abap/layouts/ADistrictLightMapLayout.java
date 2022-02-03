@@ -107,7 +107,25 @@ public class ADistrictLightMapLayout {
         ACityRectangle covrec = new ACityRectangle();
 
         List<ACityRectangle> elements = createACityRectanglesOfElements(subElements);
-        Collections.sort(elements);
+//        Collections.sort(elements);
+        Collections.sort(elements, (e1, e2) -> {
+        	if (e1.compareTo(e2) == 0) {
+        		ACityElement elem1 = rectangleElementsMap.get(e1);
+        		ACityElement elem2 = rectangleElementsMap.get(e2);
+        		
+        		if (elem1.getSourceNodeProperty(SAPNodeProperties.element_id) == null) {
+					return -1;
+				}
+        		
+        		if (elem1.getSourceNodeProperty(SAPNodeProperties.element_id) == null) {
+					return 1;
+				}
+        		
+				return Integer.compare(Integer.parseInt(elem1.getSourceNodeProperty(SAPNodeProperties.element_id)), Integer.parseInt(elem2.getSourceNodeProperty(SAPNodeProperties.element_id)));
+			} else {
+				return e1.compareTo(e2);
+			}
+        });
         Collections.reverse(elements);
 
         // algorithm
