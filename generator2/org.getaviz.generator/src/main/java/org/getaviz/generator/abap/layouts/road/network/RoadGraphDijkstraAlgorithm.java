@@ -9,9 +9,9 @@ import java.util.Map.Entry;
 
 public class RoadGraphDijkstraAlgorithm {
 
-	private Map<RoadNode, LinkedList<RoadNode>> adjacencyList;
+	private Map<RoadNode, ArrayList<RoadNode>> adjacencyList;
 
-	public RoadGraphDijkstraAlgorithm(Map<RoadNode, LinkedList<RoadNode>> adjacencyList) {
+	public RoadGraphDijkstraAlgorithm(Map<RoadNode, ArrayList<RoadNode>> adjacencyList) {
 		this.adjacencyList = adjacencyList;
 	}
 
