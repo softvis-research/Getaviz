@@ -100,17 +100,19 @@ var relayoutController = (function () {
                 z: node.centerY
             });
 
-            // don't bother updating dimensions for leaf nodes
-            if (node.children.size > 0) {
-                // all cylinders are leaf nodes, so we don't need to worry about them
+            // non-district elements won't be resized
+            if (node.isDistrict) {
+                // Usually, updating the HTML attributes updates the AFrame geometry component automatically -
+                // except sometimes it doesn't, so update it manually as well.
+                // But we still need to set the HTML attributes because that's what we'll be reading from down the line
                 domObject.setAttribute("width", node.width);
                 domObject.setAttribute("depth", node.length);
 
-                // most of the time, updating the HTML attributes updates the AFrame geometry component automatically
-                // except sometimes when it doesn't, so just do it manually to be safe
                 domObject.updateComponent("geometry", {width: node.width, depth: node.length}, false);
 
-                transferAttributes(node.children);
+                if (node.children.size > 0) {
+                    transferAttributes(node.children);
+                }
             }
         });
     }
