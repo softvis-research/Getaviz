@@ -1407,7 +1407,11 @@ public class SettingsConfiguration {
 	
 	public double getMetropolisRoadHeight() {
 		return config.getDouble("city.abap.metropolis.road.height", 0.4);
-	}	
+	}
+	
+	public boolean completeRoadNetwork() {
+		return config.getBoolean("city.abap.metropolis.completeRoadNetwork", false);
+	}
 	
 
 	public boolean showSeaReferenceBuilding() {return config.getBoolean("city.abap.metropolis.showSeaReferenceBuilding", false);}

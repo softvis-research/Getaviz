@@ -49,6 +49,10 @@ public class ADistrictRoadNetwork {
 	public List<ACityElement> calculate() {
 		
 		this.initializeRoadGraph();
+		
+		if (config.completeRoadNetwork()) {
+			return this.extractRoads(this.roadGraph.getGraph());
+		}
 
 		Map<ACityElement, Set<ACityElement>> callsMap = this.getCallsRelations(this.district.getSubElements());
 
@@ -102,8 +106,7 @@ public class ADistrictRoadNetwork {
 			}
 
 		}
-
-//		return this.extractRoads(this.roadGraph.getGraph());
+		
 		return this.extractRoads(paths);
 	}
 
