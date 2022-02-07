@@ -118,6 +118,19 @@ public class ADistrictRoadNetwork {
 		Map<Double, ArrayList<ACityElement>> elementsPerRows = new HashMap<Double, ArrayList<ACityElement>>();
 		Map<Double, ArrayList<ACityElement>> elementsPerColumns = new HashMap<Double, ArrayList<ACityElement>>();
 		
+		// create surrounding nodes of main district
+		for (RoadNode node : this.calculateMarginRoadNodes(this.district)) {
+			if (!this.roadGraph.hasNode(node)) {
+				this.roadGraph.insertNode(node);
+				
+				nodesPerColumns.putIfAbsent(node.getX(), new ArrayList<RoadNode>());
+				nodesPerColumns.get(node.getX()).add(node);
+				
+				nodesPerRows.putIfAbsent(node.getY(), new ArrayList<RoadNode>());
+				nodesPerRows.get(node.getY()).add(node);					
+			}
+		}
+		
 		// create nodes per district subelement and group them by column and row
 		for (ACityElement districtSubElement : this.district.getSubElements()) {
 			for (RoadNode node : this.calculateSurroundingRoadNodes(districtSubElement)) {				
@@ -224,6 +237,35 @@ public class ADistrictRoadNetwork {
 				}
 			}			
 		}
+	}
+	
+	private List<RoadNode> calculateMarginRoadNodes(ACityElement district) {
+		List<RoadNode> marginNodes = new ArrayList<RoadNode>();
+		
+		double rightX = district.getXPosition() + district.getWidth() / 2.0
+				- config.getACityDistrictHorizontalMargin();
+		
+		double leftX = district.getXPosition() - district.getWidth() / 2.0 
+				+ config.getACityDistrictHorizontalMargin();
+
+		double upperY = district.getZPosition() + district.getLength() / 2.0
+				- config.getACityDistrictHorizontalMargin();
+		
+		double lowerY = district.getZPosition() - district.getLength() / 2.0
+				+ config.getACityDistrictHorizontalMargin();
+		
+		RoadNode upperLeftNode = new RoadNode(leftX, upperY);
+		RoadNode upperRightNode = new RoadNode(rightX, upperY);
+
+		RoadNode lowerLeftNode = new RoadNode(leftX, lowerY);
+		RoadNode lowerRightNode = new RoadNode(rightX, lowerY);
+
+		marginNodes.add(upperLeftNode);
+		marginNodes.add(upperRightNode);
+		marginNodes.add(lowerLeftNode);
+		marginNodes.add(lowerRightNode);
+
+		return marginNodes;
 	}
 
 	private List<RoadNode> calculateSurroundingRoadNodes(ACityElement element) {
