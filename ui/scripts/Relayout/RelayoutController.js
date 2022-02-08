@@ -2,6 +2,8 @@ var relayoutController = (function () {
 
     // list of root packages in the "origin" category which can be re-layouted
     let originModelElements = [];
+    // we need to maintain this so we know what to deselect on a re-layout
+    let selectedEntities = [];
 
     let layouter;
 
@@ -34,6 +36,7 @@ var relayoutController = (function () {
 
         events.loaded.on.subscribe(onEntitiesLoaded);
         events.filtered.off.subscribe(onEntitiesUnfiltered);
+        events.selected.on.subscribe(onEntitiesSelected);
     }
 
     function addOriginElements(newElements) {
@@ -55,10 +58,26 @@ var relayoutController = (function () {
         }
     }
 
+    function onEntitiesSelected(applicationEvent) {
+        selectedEntities = applicationEvent.entities;
+    }
+
     function relayoutAllVisibleOriginElements() {
         const nodeArrayList = mapToLayouterNodes(originModelElements);
         layouter.calculateWithVirtualRoot(nodeArrayList);
         transferAttributes(nodeArrayList);
+
+        if (selectedEntities.length > 0) {
+            // deselect all elements to hide relations whose position is now outdated
+            // don't re-select because that will unhide all relation targets
+            const applicationEvent = {
+                sender: relayoutController,
+                entities: selectedEntities
+            };
+            events.selected.off.publish(applicationEvent);
+            selectedEntities = [];
+        }
+
         document.querySelector('a-scene').flushToDOM(true);
     }
 
