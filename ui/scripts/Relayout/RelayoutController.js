@@ -65,7 +65,7 @@ var relayoutController = (function () {
     function relayoutAllVisibleOriginElements() {
         const nodeArrayList = mapToLayouterNodes(originModelElements);
         layouter.calculateWithVirtualRoot(nodeArrayList);
-        transferAttributes(nodeArrayList);
+        transferAttributes(nodeArrayList, null);
 
         if (selectedEntities.length > 0) {
             // deselect all elements to hide relations whose position is now outdated
@@ -106,17 +106,19 @@ var relayoutController = (function () {
     }
 
     // takes a Kotlin ArrayList
-    function transferAttributes(elements) {
+    function transferAttributes(elements, parent) {
         elements.toArray().forEach(node => {
             const domObject = document.getElementById(node.id);
             if (domObject === null) return;
 
+            // clouds are laid out separately - they have size 0 so they don't impact the layout algorithm negatively
+            const isCenteredOverParent = (parent != null && node.name === "Cloud");
             // manually re-set the y value - leaving it out should preserve the old value, but this only works the first time
             // if you try to set the *same* position a *second* time, THEN it suddenly gets clobbered to 0 if you leave it out
             domObject.setAttribute("position", {
-                x: node.centerX,
+                x: isCenteredOverParent ? parent.centerX : node.centerX,
                 y: domObject.getAttribute("position").y,
-                z: node.centerY
+                z: isCenteredOverParent ? parent.centerY : node.centerY
             });
 
             // non-district elements won't be resized
@@ -130,7 +132,7 @@ var relayoutController = (function () {
                 domObject.updateComponent("geometry", {width: node.width, depth: node.length}, false);
 
                 if (node.children.size > 0) {
-                    transferAttributes(node.children);
+                    transferAttributes(node.children, node);
                 }
             }
         });
