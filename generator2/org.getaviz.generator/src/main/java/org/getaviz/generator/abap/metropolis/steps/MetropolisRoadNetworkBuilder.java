@@ -29,9 +29,9 @@ public class MetropolisRoadNetworkBuilder {
 	}
 	
 	public void createRoadNetworks() {
-//		ACityElement virtualRootDistrict = this.createVirtualRootDistrict();
-//		ADistrictRoadNetwork rootRoadNetwork = new ADistrictRoadNetwork(this.nodeRepository, this.repository, virtualRootDistrict, this.config);
-//		List<ACityElement> mainRoads = rootRoadNetwork.calculate();
+		ACityElement virtualRootDistrict = this.createVirtualRootDistrict();
+		ADistrictRoadNetwork rootRoadNetwork = new ADistrictRoadNetwork(this.nodeRepository, this.repository, virtualRootDistrict, this.config);
+		List<ACityElement> mainRoads = rootRoadNetwork.calculateRoot();
 		
 		// TODO
 		// An welches Element sollen die Straﬂen gehangen werden?
@@ -47,10 +47,10 @@ public class MetropolisRoadNetworkBuilder {
 			
 			// TODO
 			// Workaround
-//			if (counter == 0) {
-//				this.saveRoads(mainRoads, namespaceDistrict);
-//				counter++;
-//			}
+			if (counter == 0) {
+				this.saveRoads(mainRoads, namespaceDistrict);
+				counter++;
+			}
 			
 		}
 	}
@@ -65,45 +65,48 @@ public class MetropolisRoadNetworkBuilder {
 	private ACityElement createVirtualRootDistrict() {
 		ACityElement virtualRootDistrict = new ACityElement(ACityType.District);
 		
-		virtualRootDistrict.setYPosition(0);
 		
 		for (ACityElement namespaceDistrict : this.repository.getNamespaceDistrictsOfOriginSet()) {
 			virtualRootDistrict.addSubElement(namespaceDistrict);
 		}
 		
-//		double lowerLeftX = Double.POSITIVE_INFINITY, lowerLeftY = Double.POSITIVE_INFINITY,
-//			   lowerRightX = Double.NEGATIVE_INFINITY, lowerRightY = Double.POSITIVE_INFINITY,
-//			   upperRightX = Double.NEGATIVE_INFINITY, upperRightY = Double.NEGATIVE_INFINITY,
-//			   upperLeftX = Double.POSITIVE_INFINITY, upperLeftY = Double.NEGATIVE_INFINITY;
-//		
-//		for (ACityElement namespaceDistrict : this.repository.getNamespaceDistrictsOfOriginSet()) {
-//
-//			double rightX = namespaceDistrict.getXPosition() + namespaceDistrict.getWidth() / 2.0;			
-//			double leftX = namespaceDistrict.getXPosition() - namespaceDistrict.getWidth() / 2.0;
-//			double upperY = namespaceDistrict.getZPosition() + namespaceDistrict.getLength() / 2.0;			
-//			double lowerY = namespaceDistrict.getZPosition() - namespaceDistrict.getLength() / 2.0;
-//			
-//			if (leftX < lowerLeftX && lowerY < lowerLeftY) {
-//				lowerLeftX = leftX;
-//				lowerLeftY = lowerY;
-//			}
-//			
-//			if (lowerRightX < rightX && lowerY < lowerRightY) {
-//				lowerRightX = rightX;
-//				lowerRightY = lowerY;
-//			}
-//			
-//			if (upperRightX < rightX && upperRightY < upperY) {
-//				upperRightX = rightX;
-//				upperRightY = upperY;
-//			}
-//			
-//			if (leftX < upperLeftX && upperLeftY < upperY) {
-//				upperLeftX = leftX;
-//				upperLeftY = upperY;
-//			}
-//			
-//		}
+		double minX = Double.POSITIVE_INFINITY,
+			   maxX = Double.NEGATIVE_INFINITY,
+			   minY = Double.POSITIVE_INFINITY,
+			   maxY = Double.NEGATIVE_INFINITY;
+		
+		for (ACityElement namespaceDistrict : this.repository.getNamespaceDistrictsOfOriginSet()) {
+
+			double rightX = namespaceDistrict.getXPosition() + namespaceDistrict.getWidth() / 2.0;			
+			double leftX = namespaceDistrict.getXPosition() - namespaceDistrict.getWidth() / 2.0;
+			double upperY = namespaceDistrict.getZPosition() + namespaceDistrict.getLength() / 2.0;			
+			double lowerY = namespaceDistrict.getZPosition() - namespaceDistrict.getLength() / 2.0;
+			
+			if (leftX < minX) {
+				minX = leftX;
+			}
+			
+			if (lowerY < minY) {
+				minY = lowerY;
+			}
+			
+			if (maxX < rightX) {
+				maxX = rightX;
+			}
+			
+			if (maxY < upperY) {
+				maxY = upperY;
+			}
+			
+		}
+		
+		virtualRootDistrict.setXPosition((maxX - minX) / 2.0);
+		virtualRootDistrict.setYPosition(0);
+		virtualRootDistrict.setZPosition((maxY - minY) / 2.0);
+		
+		virtualRootDistrict.setWidth(maxX - minX + 2 * config.getACityDistrictHorizontalMargin());
+		virtualRootDistrict.setLength(maxY - minY + 2 * config.getACityDistrictHorizontalMargin());
+		virtualRootDistrict.setHeight(config.getACityDistrictHeight());
 		
 		return virtualRootDistrict;
 	}
