@@ -94,7 +94,9 @@ var packageExplorerController = (function () {
 		model.getAllEntities().forEach(function(entity) {
 			if (entityTypesForSearch.includes(entity.type)) {
 				//ignore local classes and local interfaces
-				if ((entity.type === "Class" || entity.type === "Interface") && entity.belongsTo.type !== "Namespace") {
+				const belongsToType = window["location"]["search"].includes("Java/PackageExplorer") ? "Package" : "Namespace";
+				if ((entity.type === "Class" || entity.type === "Interface") && entity.belongsTo.type !== belongsToType) {
+				// if ((entity.type === "Class" || entity.type === "Interface") && entity.belongsTo.type !== "Namespace") {
 					return;
 				}
 				relevantEntities.push(entity);

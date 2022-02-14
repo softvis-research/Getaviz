@@ -1,15 +1,14 @@
 package org.getaviz.generator.abapMetropolis;
 
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.abap.city.steps.ACityDesigner;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisDesigner;
-import org.getaviz.generator.abap.repository.ACityElement;
-import org.getaviz.generator.abap.repository.ACityRepository;
-import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.getaviz.generator.repository.ACityElement;
+import org.getaviz.generator.repository.ACityRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,7 +28,7 @@ public class MetropolisDesignerTest {
 
     @BeforeAll
     static void setup() {
-        SettingsConfiguration.getInstance("ABAPCityTest.properties");
+        SettingsConfiguration.getInstance("Generator.properties");
         nodeRepository = new SourceNodeRepository();
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);

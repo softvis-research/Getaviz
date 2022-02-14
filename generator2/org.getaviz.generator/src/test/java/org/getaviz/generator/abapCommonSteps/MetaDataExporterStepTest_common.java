@@ -2,12 +2,12 @@ package org.getaviz.generator.abapCommonSteps;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.city.steps.ACityCreator;
-import org.getaviz.generator.abap.common.steps.MetaDataExporter;
+import org.getaviz.generator.abap.metropolis.steps.MetaDataExporter;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.repository.ACityRepository;
-import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.getaviz.generator.repository.ACityRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -40,7 +40,7 @@ public class MetaDataExporterStepTest_common {
 
     @BeforeAll
     static void setup() {
-        SettingsConfiguration.getInstance("ABAPCityTest.properties");
+        SettingsConfiguration.getInstance("Generator.properties");
         nodeRepository = new SourceNodeRepository();
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);

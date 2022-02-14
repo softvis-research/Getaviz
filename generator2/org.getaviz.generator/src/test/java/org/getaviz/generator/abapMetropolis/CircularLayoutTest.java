@@ -6,15 +6,13 @@ import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisLayouter;
-import org.getaviz.generator.abap.repository.ACityElement;
-import org.getaviz.generator.abap.repository.ACityRepository;
-import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.getaviz.generator.repository.ACityElement;
+import org.getaviz.generator.repository.ACityRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.neo4j.driver.v1.Record;
-import org.neo4j.driver.v1.types.Node;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -31,7 +29,7 @@ public class CircularLayoutTest {
     @BeforeAll
     static void setup() {
 
-        SettingsConfiguration.getInstance("ABAPCityTest.properties");
+        SettingsConfiguration.getInstance("Generator.properties");
         nodeRepository = new SourceNodeRepository();
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);

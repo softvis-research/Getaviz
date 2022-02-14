@@ -4,8 +4,8 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.java.enums.JavaNodeTypes;
 import org.getaviz.generator.java.enums.JavaRelationLabels;
 import org.getaviz.generator.java.metropolis.steps.MetropolisCreator;
-import org.getaviz.generator.java.repository.ACityRepository;
-import org.getaviz.generator.java.repository.SourceNodeRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
+import org.getaviz.generator.repository.ACityRepository;
 import org.getaviz.run.local.java.MetropolisStep;
 
 
@@ -25,6 +25,7 @@ public class CreatorStep extends MetropolisStep {
     }
 
     public void init() {
+        aCityRepository = new ACityRepository();
         MetropolisCreator creator = new MetropolisCreator(aCityRepository, nodeRepository, config);
         creator.createRepositoryFromNodeRepository();
     }
@@ -36,12 +37,9 @@ public class CreatorStep extends MetropolisStep {
             nodeRepository.loadNodesByType(type);
         }
 
-        nodeRepository.loadNodesByRelation(JavaRelationLabels.CONTAINS, JavaNodeTypes.Package, false);
-        nodeRepository.loadNodesByRelation(JavaRelationLabels.DECLARES, JavaNodeTypes.Class, false);
-        nodeRepository.loadNodesByRelation(JavaRelationLabels.DECLARES, JavaNodeTypes.Interface, false);
-        nodeRepository.loadNodesByRelation(JavaRelationLabels.EXTENDS, JavaNodeTypes.Class, false);
-        nodeRepository.loadNodesByRelation(JavaRelationLabels.INVOKES, JavaNodeTypes.Method, false);
-
-        aCityRepository = new ACityRepository();
+        nodeRepository.loadNodesByRelation(JavaRelationLabels.CONTAINS, false);
+        nodeRepository.loadNodesByRelation(JavaRelationLabels.DECLARES, false);
+        nodeRepository.loadNodesByRelation(JavaRelationLabels.EXTENDS, false);
+        nodeRepository.loadNodesByRelation(JavaRelationLabels.INVOKES, false);
     }
 }

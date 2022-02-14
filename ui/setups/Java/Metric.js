@@ -65,9 +65,6 @@ var setup = {
                         name: "Mountain",
                         icon: "scripts/Legend/images/mountain.png",
                     }, {
-                        name: "Cloud",
-                        icon: "scripts/Legend/images/cloud_black.png",
-                    }, {
                         name: "Lake",
                         icon: "scripts/Legend/images/lake.png",
                     }]

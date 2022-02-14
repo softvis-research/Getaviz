@@ -6,9 +6,9 @@ import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisCreator;
 import org.getaviz.generator.abap.metropolis.steps.MetropolisLayouter;
-import org.getaviz.generator.abap.repository.ACityRepository;
-import org.getaviz.generator.abap.repository.SourceNodeRepository;
-import org.getaviz.generator.loader.database.DatabaseConnector;
+import org.getaviz.generator.repository.ACityRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
+import org.getaviz.generator.database.DatabaseConnector;
 
 public class LayouterStep {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
@@ -17,7 +17,7 @@ public class LayouterStep {
     private static ACityRepository aCityRepository;
 
     public static void main(String[] args) {
-        SettingsConfiguration.getInstance("src/test/resources/ABAPCityTest.properties");
+        SettingsConfiguration.getInstance("generator2/org.getaviz.generator/src/test/resources/ABAPCityTest.properties");
         nodeRepository = new SourceNodeRepository();
         nodeRepository.loadNodesByPropertyValue(SAPNodeProperties.type_name, SAPNodeTypes.Namespace.name());
         nodeRepository.loadNodesByRelation(SAPRelationLabels.CONTAINS, true);

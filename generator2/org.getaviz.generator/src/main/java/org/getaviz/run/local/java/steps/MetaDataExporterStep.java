@@ -2,7 +2,7 @@ package org.getaviz.run.local.java.steps;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.SettingsConfiguration.MetaDataOutput;
-import org.getaviz.generator.java.common.steps.MetaDataExporter;
+import org.getaviz.generator.java.metropolis.steps.MetaDataExporter;
 import org.getaviz.run.local.java.MetropolisStep;
 
 public class MetaDataExporterStep extends MetropolisStep {

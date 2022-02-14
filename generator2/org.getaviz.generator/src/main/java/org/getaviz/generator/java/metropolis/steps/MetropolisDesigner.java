@@ -5,9 +5,9 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.java.enums.JavaNodeProperties;
 import org.getaviz.generator.java.enums.JavaNodeTypes;
-import org.getaviz.generator.java.repository.ACityElement;
-import org.getaviz.generator.java.repository.ACityRepository;
-import org.getaviz.generator.java.repository.SourceNodeRepository;
+import org.getaviz.generator.repository.ACityElement;
+import org.getaviz.generator.repository.ACityRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MetropolisDesigner {
-
     private Log log = LogFactory.getLog(this.getClass());
     private SettingsConfiguration config;
 
@@ -35,30 +34,10 @@ public class MetropolisDesigner {
 
     public void designRepository(){
         designMetropolisElementsByType(ACityElement.ACityType.District);
-
         designMetropolisElementsByType(ACityElement.ACityType.Building);
-
         designMetropolisElementsByType(ACityElement.ACityType.Reference);
-
         designMetropolisElementsByType(ACityElement.ACityType.Floor);
     }
-
-//    private void designMetropolisElementsByMigrationFindings() {
-//
-//       Collection<ACityElement> migrationElements = repository.getElementsBySourceProperty(SAPNodeProperties.migration_findings, "true");
-//
-//        for ( ACityElement migrationElement: migrationElements) {
-//
-//            if (!migrationElement.getSourceNodeType().equals(SAPNodeTypes.Namespace)) {
-//                    migrationElement.setColor("#FF8C00");
-//
-//                    SAPNodeTypes typeParent = migrationElement.getParentElement().getSourceNodeType();
-//                    if(typeParent.equals(SAPNodeTypes.Report)){
-//                        migrationElement.getParentElement().setColor("#FF8C00");
-//                }
-//            }
-//        }
-//    }
 
     private void designMetropolisElementsByType(ACityElement.ACityType aCityType){
         log.info("Design " + aCityType.name());
@@ -79,12 +58,12 @@ public class MetropolisDesigner {
                 case Reference:
                     designReference(aCityElement);
                     break;
-                case Floor:
-                    designFloor(aCityElement);
-                    break;
-                case Chimney:
-                    designChimney(aCityElement);
-                    break;
+//                case Floor:
+//                    designFloor(aCityElement);
+//                    break;
+//                case Chimney:
+//                    designChimney(aCityElement);
+//                    break;
                 default:
                     designBuilding(aCityElement);
                     log.error(aCityType.name() + "is not a valid cityType");
@@ -99,7 +78,6 @@ public class MetropolisDesigner {
     }
 
     private void countACityElementByType(Map<String, AtomicInteger> counterMap, ACityElement aCityElement){
-
         String propertyTypeName = getPropertyTypeName(aCityElement);
 
         if(!counterMap.containsKey(propertyTypeName)){
@@ -117,8 +95,8 @@ public class MetropolisDesigner {
     }
 
     private void designDistrict(ACityElement district) {
-        district.setShape(config.getACityDistrictShapeForJava());
-        String propertyTypeName = district.getSourceNodePropertyForDesigner(JavaNodeProperties.type_name);
+        district.setShape(config.getACityDistrictShape());
+        String propertyTypeName = district.getSourceNodeProperty(JavaNodeProperties.type_name);
         switch (JavaNodeTypes.valueOf(propertyTypeName)) {
             case Package:
                 district.setColor(config.getMetropolisDistrictColorHex("packageDistrict"));
@@ -138,8 +116,6 @@ public class MetropolisDesigner {
     }
 
     private void designBuilding(ACityElement building) {
-        //building.setYPosition(building.getYPosition() + 10);
-
         ACityElement.ACitySubType refBuildingType = building.getSubType();
 
         if (building.getSourceNode() == null && refBuildingType == null) {
@@ -153,7 +129,6 @@ public class MetropolisDesigner {
                     building.setRotation(config.getMetropolisBuildingRotation());
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                    //building.setYPosition(building.getYPosition() + 1);
                     break;
                 case Mountain:
                     building.setColor(config.getMetropolisBuildingColorHex("mountainReferenceBuilding"));
@@ -171,29 +146,27 @@ public class MetropolisDesigner {
                     break;
             }
         } else {
-            String propertyTypeName = building.getSourceNodePropertyForDesigner(JavaNodeProperties.type_name);
+            String propertyTypeName = building.getSourceNodeProperty(JavaNodeProperties.type_name);
             switch (JavaNodeTypes.valueOf(propertyTypeName)) {
                 case Interface:
                     building.setColor(config.getMetropolisBuildingColorHex("interfaceBuilding"));
-                    building.setShape(config.getMetropolisBuildingShapeForJava("interfaceBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("interfaceBuilding"));
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
                     break;
                 case Method:
                     building.setColor(config.getMetropolisBuildingColorHex("methodBuilding"));
-                    building.setShape(config.getMetropolisBuildingShapeForJava("methodBuilding"));
+                    building.setShape(config.getMetropolisBuildingShape("methodBuilding"));
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
                     break;
                 case Field:
                     building.setColor(config.getMetropolisBuildingColorHex("attributeBuilding"));
-                    building.setShape(config.getMetropolisBuildingShapeForJava("attributeBuilding"));
-//                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-//                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    building.setShape(config.getMetropolisBuildingShape("attributeBuilding"));
                     break;
                 default:
                     building.setColor(config.getMetropolisDistrictColorHex("defaultValue"));
-                    building.setShape(config.getMetropolisBuildingShapeForJava("defaultValue"));
+                    building.setShape(config.getMetropolisBuildingShape("defaultValue"));
                     building.setWidth(config.getACityBuildingWidth("defaultValue"));
                     building.setLength(config.getACityBuildingLength("defaultValue"));
                     log.error(propertyTypeName + " is not a valid type for \"building\"");
@@ -203,7 +176,6 @@ public class MetropolisDesigner {
     }
 
     private void designReference(ACityElement building) {
-
         ACityElement.ACitySubType refBuildingType = building.getSubType();
 
         if (building.getSourceNode() == null && refBuildingType == null) {
@@ -217,7 +189,6 @@ public class MetropolisDesigner {
                     building.setRotation(config.getMetropolisBuildingRotation());
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
-                    //building.setYPosition(building.getYPosition() + 1);
                     break;
                 case Mountain:
                     building.setColor(config.getMetropolisBuildingColorHex("mountainReferenceBuilding"));
@@ -228,23 +199,16 @@ public class MetropolisDesigner {
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
                     building.setYPosition(building.getYPosition() + config.adjustReferenceYPosition());
                     break;
-                case Cloud:
-                    building.setShape(ACityElement.ACityShape.Entity);
-                    building.setModel("#cloud_black");
-                    building.setModelScale("0.3 0.3 0.3");
-                    building.setYPosition(55);
-                    break;
             }
         }
     }
 
     private void designChimney(ACityElement chimney) {
         chimney.setColor(config.getACityChimneyColorHex("attributeColor"));
-        chimney.setShape(config.getACityChimneyShapeForJava("attributeChimney"));
+        chimney.setShape(config.getACityChimneyShape("attributeChimney"));
     }
 
     private void designFloor(ACityElement floor) {
-
         String propertyTypeName = floor.getSourceNodeProperty(JavaNodeProperties.type_name);
 
         switch (JavaNodeTypes.valueOf(propertyTypeName)) {
@@ -256,7 +220,7 @@ public class MetropolisDesigner {
              */
             default:
                 floor.setColor(config.getACityFloorColorHex("dataElementFloor"));
-                floor.setShape(config.getACityFloorShapeForJava("dataElementFloor"));
+                floor.setShape(config.getACityFloorShape("dataElementFloor"));
                 floor.setYPosition(floor.getYPosition() - config.adjustACityFloorYPosition());
                 floor.setWidth(floor.getWidth() - config.adjustACityFloorWidth());
                 floor.setLength(floor.getLength() - config.adjustACityFloorLength());

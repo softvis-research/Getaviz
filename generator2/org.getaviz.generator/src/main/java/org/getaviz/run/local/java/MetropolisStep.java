@@ -3,9 +3,9 @@ package org.getaviz.run.local.java;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
-import org.getaviz.generator.java.repository.ACityRepository;
-import org.getaviz.generator.java.repository.SourceNodeRepository;
-import org.getaviz.generator.loader.database.DatabaseConnector;
+import org.getaviz.generator.repository.ACityRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
+import org.getaviz.generator.database.DatabaseConnector;
 
 public class MetropolisStep implements IMetropolisStep {
     protected Log log = LogFactory.getLog(this.getClass());

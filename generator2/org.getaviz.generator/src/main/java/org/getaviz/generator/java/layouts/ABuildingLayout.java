@@ -5,7 +5,8 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.java.enums.JavaNodeProperties;
 import org.getaviz.generator.java.enums.JavaNodeTypes;
-import org.getaviz.generator.java.repository.ACityElement;
+import org.getaviz.generator.layouts.ABuildingSegmentLayout;
+import org.getaviz.generator.repository.ACityElement;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -98,15 +99,16 @@ public class ABuildingLayout {
             }
             String effectiveLineCount = building.getSourceNodeProperty(JavaNodeProperties.effectiveLineCount);
 
-            if(!Objects.equals(effectiveLineCount, "NULL")) {
+            if(!Objects.equals(effectiveLineCount, "null")) {
                 Double elc = Double.valueOf(effectiveLineCount);
 
-                //numberOfStatements = 0 --> concerns SAP Standard objects
                 if (elc == 0){
-                    String type_name = building.getSourceNodeProperty(JavaNodeProperties.type_name);
-
-                    if (!type_name.equals(JavaNodeTypes.Field)) {
-                        floorHeightSum = config.getAbapStandardCodeHeight();
+                    int iteration = Integer.parseInt(building.getSourceNodeProperty(JavaNodeProperties.iteration));
+                    String typeName = building.getSourceNodeProperty(JavaNodeProperties.type_name);
+                    if (iteration >= 0) {
+                        if (!typeName.equals(JavaNodeTypes.Field.name())) {
+                            floorHeightSum = config.getAbapStandardCodeHeight();
+                        }
                     }
                 } else {
                     floorHeightSum = getScaledHeightNew(elc);

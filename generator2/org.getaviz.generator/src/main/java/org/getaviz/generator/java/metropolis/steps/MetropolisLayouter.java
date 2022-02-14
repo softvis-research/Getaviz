@@ -4,16 +4,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.java.enums.JavaNodeProperties;
-import org.getaviz.generator.java.enums.JavaNodeTypes;
 import org.getaviz.generator.java.layouts.ABuildingLayout;
-import org.getaviz.generator.java.layouts.ADistrictCircluarLayout;
-import org.getaviz.generator.java.layouts.ADistrictLightMapLayout;
-import org.getaviz.generator.java.layouts.AStackLayout;
-import org.getaviz.generator.java.repository.ACityElement;
-import org.getaviz.generator.java.repository.ACityRepository;
-import org.getaviz.generator.java.repository.SourceNodeRepository;
+import org.getaviz.generator.layouts.ADistrictCircluarLayout;
+import org.getaviz.generator.layouts.ADistrictLightMapLayout;
+import org.getaviz.generator.layouts.AStackLayout;
+import org.getaviz.generator.repository.ACityElement;
+import org.getaviz.generator.repository.ACityRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class MetropolisLayouter {
@@ -22,8 +20,6 @@ public class MetropolisLayouter {
 
     private SourceNodeRepository nodeRepository;
     private ACityRepository repository;
-
-    private ArrayList<String> layoutedDistricts = new ArrayList<>();
 
     public MetropolisLayouter(ACityRepository aCityRepository, SourceNodeRepository sourceNodeRepository, SettingsConfiguration config) {
         this.config = config;
@@ -48,11 +44,8 @@ public class MetropolisLayouter {
         layoutReferenceElements(referenceElements);
 
         //layout districts
-        Collection<ACityElement> packageDistricts = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, JavaNodeTypes.Package.name());
+        Collection<ACityElement> packageDistricts = repository.getRootDistricts(JavaNodeProperties.iteration);
         layoutDistrics(packageDistricts);
-
-//        //layout cloud elements
-//        layoutCloudModel();
     }
 
     private void layoutReferenceElements(Collection<ACityElement> referenceElements) {
@@ -102,7 +95,6 @@ public class MetropolisLayouter {
     }
 
     private void layoutBuilding(ACityElement building) {
-
         Collection<ACityElement> floors = building.getSubElementsOfType(ACityElement.ACityType.Floor);
         Collection<ACityElement> chimneys = building.getSubElementsOfType(ACityElement.ACityType.Chimney);
 
@@ -117,73 +109,7 @@ public class MetropolisLayouter {
         }
     }
 
-//    private void layoutCloudModel() {
-//
-//        Collection<ACityElement> districtsWithFindings = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.District, SAPNodeProperties.migration_findings, "true");
-//        //Collection<ACityElement> buildingsWithFindings = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.migration_findings, "true");
-//
-//        /*for (ACityElement buildingsWithFinding: buildingsWithFindings) {
-//
-//            Collection<ACityElement> cloudSubElements = buildingsWithFinding.getSubElements();
-//
-//            for (ACityElement cloudSubElement : cloudSubElements) {
-//
-//                if (cloudSubElement.getType().equals(ACityElement.ACityType.Reference) &&
-//                        cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud)) {
-//
-//                    cloudSubElement.setWidth(0);
-//                    cloudSubElement.setLength(0);
-//                    cloudSubElement.setYPosition(55);
-//
-//                    ACityElement parent = cloudSubElement.getParentElement();
-//
-//                    double parentDistrictXPosition = parent.getParentElement().getXPosition();
-//                    double parentDistrictZPosition = parent.getParentElement().getZPosition();
-//
-//                    cloudSubElement.setXPosition(parentDistrictXPosition);
-//                    cloudSubElement.setZPosition(parentDistrictZPosition);
-//
-//                    cloudSubElement.setWidth(0);
-//                    cloudSubElement.setLength(0);
-//                }
-//            }
-//        }*/
-//
-//        for (ACityElement districtWithFinding: districtsWithFindings) {
-//
-//            Collection<ACityElement> cloudSubElements = districtWithFinding.getSubElements();
-//
-//            for (ACityElement cloudSubElement : cloudSubElements) {
-//
-//                if (cloudSubElement.getType().equals(ACityElement.ACityType.Reference) &&
-//                        cloudSubElement.getSubType().equals(ACityElement.ACitySubType.Cloud)) {
-//
-//                    cloudSubElement.setWidth(0);
-//                    cloudSubElement.setLength(0);
-//                    cloudSubElement.setYPosition(55);
-//
-//                    double parentDistrictXPosition = cloudSubElement.getParentElement().getXPosition();
-//                    double parentDistrictZPosition = cloudSubElement.getParentElement().getZPosition();
-//
-//                    cloudSubElement.setXPosition(parentDistrictXPosition);
-//                    cloudSubElement.setZPosition(parentDistrictZPosition);
-//
-//                    cloudSubElement.setWidth(0);
-//                    cloudSubElement.setLength(0);
-//                }
-//            }
-//            }
-//
-//
-//
-//    }
-
     private void layoutDistrict(ACityElement district) {
-        String districtPath = district.getSourceNode().get("fqn").asString();
-        if (layoutedDistricts.contains(districtPath)) {
-            return;
-        }
-
         if (isDistrictEmpty(district)) {
             layoutEmptyDistrict(district);
 
@@ -192,7 +118,7 @@ public class MetropolisLayouter {
             Collection<ACityElement> subElements = district.getSubElements();
 
             //layout sub-districts
-            for(ACityElement subElement : subElements){
+            for (ACityElement subElement : subElements) {
                 if (subElement.getType() == ACityElement.ACityType.District) {
                     layoutDistrict(subElement);
                 }
@@ -206,11 +132,8 @@ public class MetropolisLayouter {
             AStackLayout stackLayout = new AStackLayout(district, subElements, config);
             stackLayout.calculate();
 
-            layoutedDistricts.add(districtPath);
-
             log.info("\"" + district.getSourceNodeProperty(JavaNodeProperties.name) + "\"" + "-District with " + subElements.size() + " subElements layouted");
         }
-
     }
 
     private void layoutReference(ACityElement referenceElement) {

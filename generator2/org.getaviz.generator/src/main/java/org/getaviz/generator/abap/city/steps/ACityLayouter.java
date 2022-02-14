@@ -7,11 +7,10 @@ import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.layouts.ABuildingLayout;
-import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
-import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
-import org.getaviz.generator.abap.repository.ACityElement;
-import org.getaviz.generator.abap.repository.ACityRepository;
-import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.getaviz.generator.layouts.ADistrictLightMapLayout;
+import org.getaviz.generator.repository.ACityElement;
+import org.getaviz.generator.repository.ACityRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
 import org.neo4j.driver.v1.Value;
 import org.neo4j.driver.v1.types.Node;
 
@@ -45,9 +44,9 @@ public class ACityLayouter {
 
         for (ACityElement building: buildings) {
 
-            SAPNodeTypes sourceNodeType = building.getSourceNodeType();
+            String sourceNodeType = building.getSourceNodeType();
 
-            if(sourceNodeType == SAPNodeTypes.TableType) {
+            if(sourceNodeType.equals(SAPNodeTypes.TableType.name())) {
                 SAPNodeTypes buildingSourceType = getTableTypeTypeOfType(building);
 
                 if(buildingSourceType != null){

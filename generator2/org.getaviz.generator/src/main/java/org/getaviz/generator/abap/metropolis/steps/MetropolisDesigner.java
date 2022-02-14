@@ -5,10 +5,9 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
-import org.getaviz.generator.abap.repository.ACityElement;
-import org.getaviz.generator.abap.repository.ACityRepository;
-import org.getaviz.generator.abap.repository.SourceNodeRepository;
-import org.neo4j.driver.v1.types.Node;
+import org.getaviz.generator.repository.ACityElement;
+import org.getaviz.generator.repository.ACityRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,11 +52,11 @@ public class MetropolisDesigner {
 
         for ( ACityElement migrationElement: migrationElements) {
 
-            if (!migrationElement.getSourceNodeType().equals(SAPNodeTypes.Namespace)) {
+            if (!migrationElement.getSourceNodeType().equals(SAPNodeTypes.Namespace.name())) {
                     migrationElement.setColor("#FF8C00");
 
-                    SAPNodeTypes typeParent = migrationElement.getParentElement().getSourceNodeType();
-                    if(typeParent.equals(SAPNodeTypes.Report)){
+                    String typeParent = migrationElement.getParentElement().getSourceNodeType();
+                    if(typeParent.equals(SAPNodeTypes.Report.name())){
                         migrationElement.getParentElement().setColor("#FF8C00");
                 }
             }

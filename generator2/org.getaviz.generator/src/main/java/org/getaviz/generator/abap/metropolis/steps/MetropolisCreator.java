@@ -6,12 +6,11 @@ import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.repository.ACityElement;
-import org.getaviz.generator.abap.repository.ACityRepository;
-import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.getaviz.generator.repository.ACityElement;
+import org.getaviz.generator.repository.ACityRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
 import org.neo4j.driver.v1.types.Node;
 
-import java.text.CollationElementIterator;
 import java.util.*;
 
 public class MetropolisCreator {
@@ -168,7 +167,7 @@ public class MetropolisCreator {
 
             Node sourceNode = element.getSourceNode();
 
-            if(element.getSourceNodeType() == SAPNodeTypes.Report) {
+            if(element.getSourceNodeType().equals(SAPNodeTypes.Report.name())) {
                 if(element.getType() == ACityElement.ACityType.Building){
                     continue;
                 }
@@ -182,15 +181,15 @@ public class MetropolisCreator {
             for (ACityElement childElement: childElements) {
 
                 //No nesting of packages
-                if (childElement.getType() == ACityElement.ACityType.District && childElement.getSourceNodeType() == SAPNodeTypes.Namespace ) {
+                if (childElement.getType() == ACityElement.ACityType.District && childElement.getSourceNodeType().equals(SAPNodeTypes.Namespace.name())) {
                     continue;
                 }
 
-                if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Report) {
+                if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType().equals(SAPNodeTypes.Report.name())) {
                     continue;
                 }
 
-                if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Interface) {
+                if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType().equals(SAPNodeTypes.Interface.name())) {
                     continue;
                 }
 
@@ -216,12 +215,12 @@ public class MetropolisCreator {
                         usesElement.setParentElement(element);
                         relationCounterUsesRelation++;
                     }
-                } else if (usesElement.getSourceNodeType() == SAPNodeTypes.Attribute){
+                } else if (usesElement.getSourceNodeType().equals(SAPNodeTypes.Attribute.name())){
 
                     String elementID = element.getSourceNodeProperty(SAPNodeProperties.element_id);
                     String usesID = usesElement.getSourceNodeProperty(SAPNodeProperties.uses_id);
 
-                    if(element.getSourceNodeType() == SAPNodeTypes.Report){
+                    if(element.getSourceNodeType().equals(SAPNodeTypes.Report.name())){
 
                         if (elementID.equals(usesID)) {
                             element.addSubElement(usesElement);
@@ -247,7 +246,7 @@ public class MetropolisCreator {
         element.setParentElement(buildingParentElements);
         buildingParentElements.addSubElement(element);
 
-        String buildingElementTypeName = element.getSourceNodeType().name();
+        String buildingElementTypeName = element.getSourceNodeType();
 
         Collection<ACityElement> BuildingElements = repository.getElementsByTypeAndSourceProperty(ACityElement.ACityType.Building, SAPNodeProperties.type_name, buildingElementTypeName);
         for (ACityElement buildingElement: BuildingElements) {

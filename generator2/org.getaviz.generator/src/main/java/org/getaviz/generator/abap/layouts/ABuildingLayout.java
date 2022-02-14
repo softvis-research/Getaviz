@@ -5,9 +5,9 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
-import org.getaviz.generator.abap.repository.ACityElement;
+import org.getaviz.generator.layouts.ABuildingSegmentLayout;
+import org.getaviz.generator.repository.ACityElement;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 
 public class ABuildingLayout {

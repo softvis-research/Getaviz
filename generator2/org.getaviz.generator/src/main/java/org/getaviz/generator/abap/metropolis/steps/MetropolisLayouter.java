@@ -4,19 +4,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
-import org.getaviz.generator.abap.enums.SAPNodeTypes;
-import org.getaviz.generator.abap.enums.SAPRelationLabels;
-import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
+import org.getaviz.generator.layouts.ADistrictLightMapLayout;
 import org.getaviz.generator.abap.layouts.ABuildingLayout;
-import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
-import org.getaviz.generator.abap.layouts.AStackLayout;
-import org.getaviz.generator.abap.repository.ACityElement;
-import org.getaviz.generator.abap.repository.ACityRepository;
-import org.getaviz.generator.abap.repository.SourceNodeRepository;
-import org.neo4j.driver.v1.Value;
-import org.neo4j.driver.v1.types.Node;
+import org.getaviz.generator.layouts.ADistrictCircluarLayout;
+import org.getaviz.generator.layouts.AStackLayout;
+import org.getaviz.generator.repository.ACityElement;
+import org.getaviz.generator.repository.ACityRepository;
+import org.getaviz.generator.repository.SourceNodeRepository;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 public class MetropolisLayouter {

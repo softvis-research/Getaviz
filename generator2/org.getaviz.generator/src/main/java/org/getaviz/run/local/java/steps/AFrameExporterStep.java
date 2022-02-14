@@ -2,7 +2,7 @@ package org.getaviz.run.local.java.steps;
 
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.SettingsConfiguration.AFrameOutput;
-import org.getaviz.generator.java.common.steps.AFrameExporter;
+import org.getaviz.generator.common.steps.AFrameExporter;
 import org.getaviz.run.local.java.MetropolisStep;
 
 import java.util.Scanner;
@@ -16,8 +16,9 @@ public class AFrameExporterStep extends MetropolisStep {
         String input = userInput.nextLine();
         boolean isSilentMode = !input.equals("n");
 
-        System.out.print("\nLoader step to be processed. Press any key to continue...\n");
+        System.out.print("\nLoader step to be processed.\n");
         if (!isSilentMode) {
+            System.out.println("Press any key to continue...");
             userInput.nextLine();
         }
 
@@ -30,7 +31,7 @@ public class AFrameExporterStep extends MetropolisStep {
             userInput.nextLine();
         }
 
-        System.out.print("\nCreator step to be processed. Press any key to continue...\n");
+        System.out.print("\nCreator step to be processed.\n");
         CreatorStep creatorStep = new CreatorStep();
         creatorStep.loadNodesAndRelations();
         creatorStep.init();
@@ -41,7 +42,7 @@ public class AFrameExporterStep extends MetropolisStep {
             userInput.nextLine();
         }
 
-        System.out.print("\nLayouter step to be processed. Press any key to continue...\n");
+        System.out.print("\nLayouter step to be processed.\n");
         LayouterStep layouterStep = new LayouterStep();
         layouterStep.init();
         System.out.println("\nLayouter Step finished.");
@@ -51,7 +52,7 @@ public class AFrameExporterStep extends MetropolisStep {
             userInput.nextLine();
         }
 
-        System.out.print("\nDesigner step to be processed. Press any key to continue...\n");
+        System.out.print("\nDesigner step to be processed.\n");
         DesignerStep designerStep = new DesignerStep();
         designerStep.init();
         System.out.println("\nDesigner Step finished.");
@@ -61,7 +62,7 @@ public class AFrameExporterStep extends MetropolisStep {
             userInput.nextLine();
         }
 
-        System.out.println("\nMetadata Exporter Step to be processed.\n");
+        System.out.println("\nMetadata Exporter Step to be processed.");
         MetaDataExporterStep metaDataExporterStep = new MetaDataExporterStep();
         metaDataExporterStep.init();
         System.out.println("\nMetadata Exporter Step finished.");
@@ -71,7 +72,7 @@ public class AFrameExporterStep extends MetropolisStep {
             userInput.nextLine();
         }
 
-        System.out.println("\nAFrame Exporter Step to be processed.\n");
+        System.out.println("\nAFrame Exporter Step to be processed.");
         AFrameExporterStep aFrameExporterStep = new AFrameExporterStep();
         aFrameExporterStep.init();
         System.out.println("\nAFrame Exporter Step finished.");

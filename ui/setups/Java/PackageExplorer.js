@@ -101,9 +101,6 @@ var setup = {
                             name: "Mountain - Building Height",
                             icon: "scripts/Legend/images/mountain.png",
                         },{
-                            name: "Cloud - Migration Findings",
-                            icon: "scripts/Legend/images/cloud_black.png",
-                        },{
                             name: "Lake - District Area",
                             icon: "scripts/Legend/images/lake.png",
                     }]

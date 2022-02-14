@@ -14,9 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class LoaderStep extends MetropolisStep {
     private Runtime runtime = Runtime.getRuntime();
 //    private String inputFiles = "https://github.com/softvis-research/Bank/releases/download/test/bank-1.0.0-SNAPSHOT.jar";
-//    private String inputFiles = "C:\\Users\\mykha\\Desktop\\Bank\\out\\artifacts\\Bank_jar\\Bank.jar";
-//    private String inputFiles = "C:\\Users\\mykha\\Desktop\\TestBank\\out\\artifacts\\TestBank_jar\\TestBank.jar";
-    private String inputFiles = "C:\\Users\\mykha\\Downloads\\Java-master\\out\\artifacts\\Java_jar\\Java.jar";
+    private String inputFiles = "C:\\Users\\mykha\\Desktop\\TestBank\\out\\artifacts\\TestBank_jar\\TestBank.jar";
+//    private String inputFiles = "C:\\Users\\mykha\\Downloads\\Java-master\\out\\artifacts\\Java_jar\\Java.jar";
 //    private String pathJQAssistant = "C:/Users/mykha/jqassistant/bin/jqassistant.cmd";
     private String pathJQAssistant = "C:/Users/mykha/jqassistant-1.11.1/bin/jqassistant.cmd";
 
@@ -39,8 +38,10 @@ public class LoaderStep extends MetropolisStep {
             InputStream stderr = pScan.getErrorStream();
             InputStreamReader isr = new InputStreamReader(stderr);
             BufferedReader br = new BufferedReader(isr);
-            while (br.readLine() != null) {
+            String line;
+            while ((line = br.readLine()) != null) {
                 // it makes "pScan.waitFor()" not hang
+                System.out.println(line);
             }
             pScan.waitFor();
         } catch (IOException | InterruptedException e) {
@@ -60,8 +61,8 @@ public class LoaderStep extends MetropolisStep {
             connector.executeWrite("MATCH (n:" + type + ")" +
                     " WITH COLLECT(n) as nodesNumber" +
                     " FOREACH(i IN RANGE(0, SIZE(nodesNumber) - 1) |" +
-                    " SET (nodesNumber[i]).element_id = " + elementId + " + i" +
-                    " SET (nodesNumber[i]).iteration = 1" +
+                    " SET (nodesNumber[i]).element_id = '" + elementId + "' + i" +
+                    " SET (nodesNumber[i]).iteration = '1'" +
                     " SET (nodesNumber[i]).type_name = '" + type.name() + "')"
             );
 
@@ -74,6 +75,10 @@ public class LoaderStep extends MetropolisStep {
         setRootPackageIteration();
         setDeclarationId(JavaNodeTypes.Class);
         setDeclarationId(JavaNodeTypes.Interface);
+
+        // convert effectiveLineCount to string
+        connector.executeWrite("MATCH (n:Method) SET n.effectiveLineCount = toString(n.effectiveLineCount)");
+
         deleteUnnecessaryNodes();
     }
 
@@ -95,7 +100,7 @@ public class LoaderStep extends MetropolisStep {
                     " DETACH DELETE m");
         }
 
-        // DELETE Method nodes with name = null or empty value
+        // DELETE Method nodes with name = null or empty value, or where no declares id
         connector.executeWrite("MATCH (n:Method)" +
                 " WHERE n.declares_id IS NULL" +
                 " OR n.name IS NULL" +
@@ -114,11 +119,11 @@ public class LoaderStep extends MetropolisStep {
                 Node sourceNode = result.get("p").asNode();
                 String fqn = sourceNode.get("fqn").asString();
                 if (!fqn.contains(".")) {
-                    int packageRootElementId = sourceNode.get("element_id").asInt();
+                    String packageRootElementId = sourceNode.get("element_id").toString();
                     connector.executeWrite("" +
                             " MATCH(p:Package)" +
                             " WHERE p.element_id = " + packageRootElementId +
-                            " SET p.iteration = 0"
+                            " SET p.iteration = '0'"
                     );
                 }
             });
