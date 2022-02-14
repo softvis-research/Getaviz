@@ -11,7 +11,7 @@ public class LoaderStep {
     private static SettingsConfiguration config = SettingsConfiguration.getInstance();
     private static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     public static void main(String[] args) {
-        SettingsConfiguration.getInstance("generator2/org.getaviz.generator/src/test/resources/ABAPCityTest.properties");
+        SettingsConfiguration.getInstance("generator2/org.getaviz.generator/src/test/resources/Generator.properties");
         boolean isSilentMode = true;
         String pathToNodesCsv = "";
         String pathToReferenceCsv = "";

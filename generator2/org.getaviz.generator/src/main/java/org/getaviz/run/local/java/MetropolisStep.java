@@ -13,7 +13,7 @@ public class MetropolisStep implements IMetropolisStep {
     protected static DatabaseConnector connector = DatabaseConnector.getInstance(config.getDefaultBoldAddress());
     public static SourceNodeRepository nodeRepository;
     public static ACityRepository aCityRepository;
-    public static String metropolisProperties = "generator2/org.getaviz.generator/src/test/resources/ABAPCityTest.properties";
+    public static String metropolisProperties = "generator2/org.getaviz.generator/src/test/resources/Generator.properties";
 
     @Override
     public void init() {}
