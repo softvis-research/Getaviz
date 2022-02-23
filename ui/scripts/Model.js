@@ -15,8 +15,6 @@ var model = (function () {
 		loaded: { name: "loaded" },
 	};
 
-	const districtTypes = new Set(['Namespace', 'FunctionGroup', 'Class', 'Interface', 'Report']);
-
 	let entitiesById = new Map();
 	let eventEntityMap = new Map();
 	let entitiesByVersion = new Map();
@@ -72,7 +70,6 @@ var model = (function () {
 				element.belongsTo,
 			);
 
-			entity.isDistrict = districtTypes.has(element.type);
 			entity.isTransparent = false;
 			entity.hasUnloadedChildren = !areChildrenLoaded;
 
@@ -545,9 +542,9 @@ var model = (function () {
 			}
 		});
 
-		//set all parents attribute
 		entitiesById.forEach(function (entity) {
 			entity.allParents = getAllParentsOfEntity(entity);
+			entity.isDistrict = entity.children.length > 0;
 		});
 	}
 
