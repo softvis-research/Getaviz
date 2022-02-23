@@ -23,16 +23,6 @@ public class metropolis_AFrame_UI implements OutputFormat {
                 "\n" +
                 "\t    <meta name=\"description\" content=\"Getaviz\">" +
                 "\n" +
-                "\t <style>" +
-                "\n" +
-                "\t\t.a-modal {" +
-                "\n" +
-                "\t\t\tdisplay: none;" +
-                "\n" +
-                "\t\t}" +
-                "\n" +
-                "\t</style>" +
-                "\n" +
                 "\t </head>" +
                 "\n" +
                 "\t <body>" +
