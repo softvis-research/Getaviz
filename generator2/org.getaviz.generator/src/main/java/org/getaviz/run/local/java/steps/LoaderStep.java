@@ -78,8 +78,6 @@ public class LoaderStep extends MetropolisStep {
 
         // convert effectiveLineCount to string
         connector.executeWrite("MATCH (n:Method) SET n.effectiveLineCount = toString(n.effectiveLineCount)");
-
-        deleteUnnecessaryNodes();
     }
 
     private void deleteUnnecessaryNodes() {
