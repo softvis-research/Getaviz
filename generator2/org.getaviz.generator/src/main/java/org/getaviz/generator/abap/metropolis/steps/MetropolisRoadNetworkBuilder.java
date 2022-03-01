@@ -79,7 +79,9 @@ public class MetropolisRoadNetworkBuilder {
 			   minY = Double.POSITIVE_INFINITY,
 			   maxY = Double.NEGATIVE_INFINITY;
 		
-		for (ACityElement namespaceDistrict : this.repository.getNamespaceDistrictsOfOriginSet()) {
+		var districts = this.repository.getNamespaceDistrictsOfOriginSet();
+		
+		for (ACityElement namespaceDistrict : districts) {
 
 			double rightX = namespaceDistrict.getXPosition() + namespaceDistrict.getWidth() / 2.0;			
 			double leftX = namespaceDistrict.getXPosition() - namespaceDistrict.getWidth() / 2.0;
@@ -104,12 +106,12 @@ public class MetropolisRoadNetworkBuilder {
 			
 		}
 		
-		virtualRootDistrict.setXPosition((maxX - minX) / 2.0);
+		virtualRootDistrict.setXPosition((maxX + minX) / 2.0);
 		virtualRootDistrict.setYPosition(0);
-		virtualRootDistrict.setZPosition((maxY - minY) / 2.0);
+		virtualRootDistrict.setZPosition((maxY + minY) / 2.0);
 		
-		virtualRootDistrict.setWidth(maxX - minX + 2 * config.getACityDistrictHorizontalMargin());
-		virtualRootDistrict.setLength(maxY - minY + 2 * config.getACityDistrictHorizontalMargin());
+		virtualRootDistrict.setWidth(maxX + minX + config.getACityDistrictHorizontalGap() + 2 * config.getACityDistrictHorizontalMargin());
+		virtualRootDistrict.setLength(maxY + minY + config.getACityDistrictHorizontalGap() + 2 * config.getACityDistrictHorizontalMargin());
 		virtualRootDistrict.setHeight(0.0);
 		
 		return virtualRootDistrict;
