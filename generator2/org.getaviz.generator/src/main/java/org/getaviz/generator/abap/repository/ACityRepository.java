@@ -26,7 +26,7 @@ public class ACityRepository {
 
     public ACityRepository(){
         elementsBySourceID = new TreeMap<>();
-        elementsByHash = new TreeMap<>();
+        elementsByHash = new HashMap<>();
         elementsByType = new TreeMap<>();
 
         log.info("created");

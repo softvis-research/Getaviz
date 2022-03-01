@@ -117,7 +117,7 @@ public class ADistrictLightMapLayout {
 					return -1;
 				}
         		
-        		if (elem1.getSourceNodeProperty(SAPNodeProperties.element_id) == null) {
+        		if (elem2.getSourceNodeProperty(SAPNodeProperties.element_id) == null) {
 					return 1;
 				}
         		

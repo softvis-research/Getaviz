@@ -1,10 +1,14 @@
 package org.getaviz.generator.abap.metropolis.steps;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.abap.enums.SAPNodeProperties;
+import org.getaviz.generator.abap.layouts.ADistrictRoadNetwork;
 import org.getaviz.generator.abap.layouts.ADistrictRoadNetwork;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
@@ -30,8 +34,8 @@ public class MetropolisRoadNetworkBuilder {
 	
 	public void createRoadNetworks() {
 		ACityElement virtualRootDistrict = this.createVirtualRootDistrict();
-		ADistrictRoadNetwork rootRoadNetwork = new ADistrictRoadNetwork(this.nodeRepository, this.repository, virtualRootDistrict, this.config);
-		List<ACityElement> mainRoads = rootRoadNetwork.calculateRoot();
+		ADistrictRoadNetwork rootRoadNetwork = new ADistrictRoadNetwork(this.nodeRepository, this.repository, virtualRootDistrict, new HashMap<>(), this.config);
+		List<ACityElement> mainRoads = rootRoadNetwork.calculate();
 		
 		// TODO
 		// An welches Element sollen die Straﬂen gehangen werden?
@@ -41,7 +45,7 @@ public class MetropolisRoadNetworkBuilder {
 		int counter = 0;
 		
 		for (ACityElement namespaceDistrict : this.repository.getNamespaceDistrictsOfOriginSet()) {
-			ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(this.nodeRepository, this.repository, namespaceDistrict, this.config);
+			ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(this.nodeRepository, this.repository, namespaceDistrict, rootRoadNetwork.getSubElementConnectors(namespaceDistrict), this.config);
 			List<ACityElement> roads = roadNetwork.calculate();
 			this.saveRoads(roads, namespaceDistrict);
 			
@@ -106,7 +110,7 @@ public class MetropolisRoadNetworkBuilder {
 		
 		virtualRootDistrict.setWidth(maxX - minX + 2 * config.getACityDistrictHorizontalMargin());
 		virtualRootDistrict.setLength(maxY - minY + 2 * config.getACityDistrictHorizontalMargin());
-		virtualRootDistrict.setHeight(config.getACityDistrictHeight());
+		virtualRootDistrict.setHeight(0.0);
 		
 		return virtualRootDistrict;
 	}
