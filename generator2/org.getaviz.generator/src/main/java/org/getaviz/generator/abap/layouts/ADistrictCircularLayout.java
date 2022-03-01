@@ -348,9 +348,17 @@ public class ADistrictCircularLayout {
         for (ACityElement element : elements) {
             double width = element.getWidth();
             double length = element.getLength();
-
-            ACityRectangle rectangle = new ACityRectangle(0, 0, width + config.getACityBuildingHorizontalGap(),
-                    length + config.getACityBuildingHorizontalGap(), 1);
+            
+            ACityRectangle rectangle;
+            
+            if (element.getType().equals(ACityElement.ACityType.District) || element.getType().equals(ACityElement.ACityType.Reference)) {
+            	rectangle = new ACityRectangle(0, 0, width + config.getACityDistrictHorizontalGap(),
+                        length + config.getACityDistrictHorizontalGap(), 1);		
+			} else {
+				rectangle = new ACityRectangle(0, 0, width + config.getACityBuildingHorizontalGap(),
+	                    length + config.getACityBuildingHorizontalGap(), 1);			
+			}
+            
             rectangles.add(rectangle);
             rectangleElementsMap.put(rectangle, element);
         }
@@ -362,8 +370,15 @@ public class ADistrictCircularLayout {
         double sum_width = 0;
         double sum_length = 0;
         for (ACityElement element : elements) {
-            sum_width += element.getWidth() + config.getACityBuildingHorizontalGap();
-            sum_length += element.getLength() + config.getACityBuildingHorizontalGap();
+        	
+        	if (element.getType().equals(ACityElement.ACityType.District) || element.getType().equals(ACityElement.ACityType.Reference)) {
+                sum_width += element.getWidth() + config.getACityDistrictHorizontalGap();
+                sum_length += element.getLength() + config.getACityDistrictHorizontalGap();				
+			} else {
+	            sum_width += element.getWidth() + config.getACityBuildingHorizontalGap();
+	            sum_length += element.getLength() + config.getACityBuildingHorizontalGap();				
+			}
+        	
         }
         return new ACityRectangle(0, 0, sum_width, sum_length, 1);
     }
