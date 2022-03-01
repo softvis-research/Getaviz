@@ -17,6 +17,7 @@ import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.layouts.road.network.RoadGraph;
 import org.getaviz.generator.abap.layouts.road.network.RoadGraphDijkstraAlgorithm;
 import org.getaviz.generator.abap.layouts.road.network.RoadNode;
+import org.getaviz.generator.abap.layouts.road.network.RoadNodeBuilder;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
@@ -73,6 +74,8 @@ public class ADistrictRoadNetwork {
 
 		Map<ACityElement, Set<ACityElement>> callsMap = this.getCallsRelations(this.district.getSubElements());		
 		Map<ACityElement, Set<ACityElement>> calledMap = this.getCalledRelations(this.district.getSubElements());
+		
+		RoadNodeBuilder nodeBuilder = new RoadNodeBuilder(config);
 
 		// TODO
 		// erstmal nur Workaround
@@ -86,7 +89,7 @@ public class ADistrictRoadNetwork {
 				continue;
 			}
 			
-			List<RoadNode> slipRoadNodesSource = this.calculateSlipRoadNodes(containingSourceDistrict);		
+			List<RoadNode> slipRoadNodesSource = nodeBuilder.calculateSlipRoadNodes(containingSourceDistrict);		
 
 			for (ACityElement target : callsRelations.getValue()) {
 				// Top-Level-Quellcode-Distrikte für ACityElemente bestimmen
@@ -101,7 +104,7 @@ public class ADistrictRoadNetwork {
 				
 				if (this.subElements.contains(containingTargetDistrict)) {
 					// von den Distrikten die Auffahrtspunkte bestimmen
-					slipRoadNodesTarget = this.calculateSlipRoadNodes(containingTargetDistrict);
+					slipRoadNodesTarget = nodeBuilder.calculateSlipRoadNodes(containingTargetDistrict);
 				} else {
 					slipRoadNodesTarget = new ArrayList<RoadNode>();
 					// TODO Passenden Knoten bilden
@@ -132,15 +135,16 @@ public class ADistrictRoadNetwork {
 				if (shortestPathAbsolut != null) {
 					
 					// Auffahrt auf containingSourceDistrict
-					shortestPathAbsolut.add(0, this.calculateDistrictRoadNode(containingSourceDistrict, shortestPathAbsolut.get(0)));
+					shortestPathAbsolut.add(0, nodeBuilder.calculateDistrictSlipRoadNode(containingSourceDistrict, shortestPathAbsolut.get(0)));
 					
 					if (this.subElements.contains(containingTargetDistrict)) {
 						// Auffahrt auf containingTargetDistrict
-						shortestPathAbsolut.add(this.calculateDistrictRoadNode(containingTargetDistrict, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
-						this.subElementConnectors.get(containingSourceDistrict).put(containingTargetDistrict, this.calculateDistrictMarginNode(containingSourceDistrict, shortestPathAbsolut.get(0)));
-						this.subElementConnectors.get(containingTargetDistrict).put(containingSourceDistrict, this.calculateDistrictMarginNode(containingTargetDistrict, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
+						shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(containingTargetDistrict, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
+						
+						this.subElementConnectors.get(containingSourceDistrict).put(containingTargetDistrict, nodeBuilder.calculateDistrictMarginRoadNode(containingSourceDistrict, shortestPathAbsolut.get(0)));
+						this.subElementConnectors.get(containingTargetDistrict).put(containingSourceDistrict, nodeBuilder.calculateDistrictMarginRoadNode(containingTargetDistrict, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 					} else {
-						shortestPathAbsolut.add(this.calculateDistrictRoadNode(this.district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
+						shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(this.district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 					}
 					paths.add(shortestPathAbsolut);
 				}
@@ -157,64 +161,7 @@ public class ADistrictRoadNetwork {
 				continue;
 			}
 			
-			List<RoadNode> slipRoadNodesTarget = this.calculateSlipRoadNodes(containingTargetDistrict);			
-
-//			for (ACityElement source : calledRelation.getValue()) {
-//				// Top-Level-Quellcode-Distrikte für ACityElemente bestimmen
-//				ACityElement containingSourceDistrict = this.getContainingDistrict(source);
-//
-//				// Aufrufbeziehungen auf dem gleichen Distrikt sind (erstmal) irrelevant
-//				if (containingSourceDistrict == null || containingTargetDistrict == containingSourceDistrict) {
-//					continue;
-//				}
-//				
-//				List<RoadNode> slipRoadNodesSource;
-//				
-//				if (this.subElements.contains(containingSourceDistrict)) {
-//					// von den Distrikten die Auffahrtspunkte bestimmen
-//					slipRoadNodesSource = this.calculateSlipRoadNodes(containingSourceDistrict);
-//				} else {
-//					slipRoadNodesSource = new ArrayList<RoadNode>();
-//					// TODO Passenden Knoten bilden
-//					slipRoadNodesSource.add(this.mainElementConnectors.get(containingSourceDistrict));
-//				}
-//
-//				// TODO
-//				// erstmal nur Workaround
-//				double shortestPathLength = Double.MAX_VALUE;
-//				List<RoadNode> shortestPathAbsolut = null;
-//
-//				// kürzesten Pfad aller (4 * 4 =) 16 Kombinationen berechnen
-//				// Aufruf von dijkstra
-//				for (RoadNode slipRoadNodeTarget : slipRoadNodesTarget) {
-//					for (RoadNode slipRoadNodeSource : slipRoadNodesSource) {
-//						List<List<RoadNode>> shortestPath = this.getAllShortestPaths(slipRoadNodeTarget, slipRoadNodeSource);
-//						double pathLength = this.roadGraph.calculatePathLength(shortestPath.get(0));
-//						if (pathLength < shortestPathLength) {
-//							shortestPathAbsolut = shortestPath.get(0);
-//							shortestPathLength = pathLength;
-//						}
-//					}
-//				}
-//
-//				// passenden Pfad bestimmen und merken
-//				// erstmal: kürzesten Pfad wählen
-//				if (shortestPathAbsolut != null) {
-//			
-//					// Auffahrt auf containingTargetDistrict
-//					shortestPathAbsolut.add(0, this.calculateDistrictRoadNode(containingTargetDistrict, shortestPathAbsolut.get(0)));
-			
-//					if (this.subElements.contains(containingSourceDistrict)) {			
-//						// Auffahrt auf containingSourceDistrict
-//						shortestPathAbsolut.add(this.calculateDistrictRoadNode(containingSourceDistrict, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
-//						this.subElementConnectors.get(containingTargetDistrict).put(containingSourceDistrict, shortestPathAbsolut.get(0));
-//						this.subElementConnectors.get(containingSourceDistrict).put(containingTargetDistrict, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1));
-//					}			
-//					
-//					paths.add(shortestPathAbsolut);
-//				}
-//
-//			}
+			List<RoadNode> slipRoadNodesTarget = nodeBuilder.calculateSlipRoadNodes(containingTargetDistrict);
 			
 			// Wir müssen jetzt nur Beziehungen berücksichtigen, die von "draußen" kommen
 			// Die anderen haben wir ja schon behandelt
@@ -247,8 +194,8 @@ public class ADistrictRoadNetwork {
 				// erstmal: kürzesten Pfad wählen
 				if (shortestPathAbsolut != null) {					
 					// Auffahrt auf containingTargetDistrict
-					shortestPathAbsolut.add(0, this.calculateDistrictRoadNode(containingTargetDistrict, shortestPathAbsolut.get(0)));
-					shortestPathAbsolut.add(this.calculateDistrictRoadNode(this.district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
+					shortestPathAbsolut.add(0, nodeBuilder.calculateDistrictSlipRoadNode(containingTargetDistrict, shortestPathAbsolut.get(0)));
+					shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(this.district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 					paths.add(shortestPathAbsolut);
 				}
 
@@ -267,8 +214,10 @@ public class ADistrictRoadNetwork {
 		Map<Double, ArrayList<ACityElement>> elementsPerRows = new HashMap<Double, ArrayList<ACityElement>>();
 		Map<Double, ArrayList<ACityElement>> elementsPerColumns = new HashMap<Double, ArrayList<ACityElement>>();
 		
+		RoadNodeBuilder nodeBuilder = new RoadNodeBuilder(config);
+		
 		// create surrounding nodes of main district
-		for (RoadNode node : this.calculateMarginRoadNodes(this.district)) {
+		for (RoadNode node : nodeBuilder.calculateMarginRoadNodes(this.district)) {
 			if (!this.roadGraph.hasNode(node)) {
 				this.roadGraph.insertNode(node);
 				
@@ -282,7 +231,7 @@ public class ADistrictRoadNetwork {
 		
 		// create nodes per district subelement and group them by column and row
 		for (ACityElement districtSubElement : this.district.getSubElements()) {
-			for (RoadNode node : this.calculateSurroundingRoadNodes(districtSubElement)) {				
+			for (RoadNode node : nodeBuilder.calculateSurroundingRoadNodes(districtSubElement)) {				
 				if (!this.roadGraph.hasNode(node)) {
 					this.roadGraph.insertNode(node);
 					
@@ -386,153 +335,6 @@ public class ADistrictRoadNetwork {
 				}
 			}			
 		}
-	}
-	
-	private List<RoadNode> calculateMarginRoadNodes(ACityElement district) {
-		List<RoadNode> marginNodes = new ArrayList<RoadNode>();
-		
-		double rightX = district.getXPosition() + district.getWidth() / 2.0
-				- config.getACityDistrictHorizontalMargin();
-		
-		double leftX = district.getXPosition() - district.getWidth() / 2.0 
-				+ config.getACityDistrictHorizontalMargin();
-
-		double upperY = district.getZPosition() + district.getLength() / 2.0
-				- config.getACityDistrictHorizontalMargin();
-		
-		double lowerY = district.getZPosition() - district.getLength() / 2.0
-				+ config.getACityDistrictHorizontalMargin();
-		
-		RoadNode upperNode = new RoadNode(district.getXPosition(), upperY);
-		RoadNode rightNode = new RoadNode(rightX, district.getZPosition());
-		RoadNode lowerNode = new RoadNode(district.getXPosition(), lowerY);
-		RoadNode leftNode = new RoadNode(leftX, district.getZPosition());
-		
-		RoadNode upperLeftNode = new RoadNode(leftX, upperY);
-		RoadNode upperRightNode = new RoadNode(rightX, upperY);
-
-		RoadNode lowerLeftNode = new RoadNode(leftX, lowerY);
-		RoadNode lowerRightNode = new RoadNode(rightX, lowerY);
-		
-		marginNodes.add(upperNode);
-		marginNodes.add(rightNode);
-		marginNodes.add(lowerNode);
-		marginNodes.add(leftNode);
-
-		marginNodes.add(upperLeftNode);
-		marginNodes.add(upperRightNode);
-		marginNodes.add(lowerLeftNode);
-		marginNodes.add(lowerRightNode);
-
-		return marginNodes;
-	}
-
-	private List<RoadNode> calculateSurroundingRoadNodes(ACityElement element) {
-		List<RoadNode> surroundingNodes = new ArrayList<RoadNode>();
-
-		surroundingNodes.addAll(this.calculateSlipRoadNodes(element));
-		surroundingNodes.addAll(this.calculateCornerRoadNodes(element));
-
-		return surroundingNodes;
-	}
-
-	private List<RoadNode> calculateSlipRoadNodes(ACityElement element) {
-
-		// 4 nodes, each per direction
-		List<RoadNode> slipNodes = new ArrayList<RoadNode>(4);
-
-		// TODO
-		// In ADistrictLightMapLayout/ADistrictCircularLayout Breite der Straßen
-		// einbeziehen, dann kann die Breite auch hier berücksichtigt werden
-		// Ist das perspektivisch sinnvoll?
-
-		double rightX = element.getXPosition() + element.getWidth() / 2.0
-				+ config.getACityDistrictHorizontalGap() / 2.0; // + config.getMetropolisRoadWidth() / 2.0;
-		
-		double leftX = element.getXPosition() - element.getWidth() / 2.0 
-				- config.getACityDistrictHorizontalGap() / 2.0; // - config.getMetropolisRoadWidth() / 2.0;
-
-		double upperY = element.getZPosition() + element.getLength() / 2.0
-				+ config.getACityDistrictHorizontalGap() / 2.0; // + config.getMetropolisRoadWidth() / 2.0;
-		
-		double lowerY = element.getZPosition() - element.getLength() / 2.0
-				- config.getACityDistrictHorizontalGap() / 2.0; // - config.getMetropolisRoadWidth() / 2.0;
-
-		RoadNode upperNode = new RoadNode(element.getXPosition(), upperY);
-		RoadNode rightNode = new RoadNode(rightX, element.getZPosition());
-		RoadNode lowerNode = new RoadNode(element.getXPosition(), lowerY);
-		RoadNode leftNode = new RoadNode(leftX, element.getZPosition());
-
-		slipNodes.add(upperNode);
-		slipNodes.add(rightNode);
-		slipNodes.add(lowerNode);
-		slipNodes.add(leftNode);
-
-		return slipNodes;
-	}
-
-	private List<RoadNode> calculateCornerRoadNodes(ACityElement element) {
-
-		// 4 nodes, each per corner of area
-		List<RoadNode> cornerNodes = new ArrayList<RoadNode>(4);
-
-		// TODO
-		// In ADistrictLightMapLayout/ADistrictCircularLayout Breite der Straßen
-		// einbeziehen, dann kann die Breite auch hier berücksichtigt werden
-		// Ist das perspektivisch sinnvoll?
-
-		double rightX = element.getXPosition() + element.getWidth() / 2.0
-				+ config.getACityDistrictHorizontalGap() / 2.0; // + config.getMetropolisRoadWidth() / 2.0;
-		
-		double leftX = element.getXPosition() - element.getWidth() / 2.0 
-				- config.getACityDistrictHorizontalGap() / 2.0; // - config.getMetropolisRoadWidth() / 2.0;
-
-		double upperY = element.getZPosition() + element.getLength() / 2.0
-				+ config.getACityDistrictHorizontalGap() / 2.0; // + config.getMetropolisRoadWidth() / 2.0;
-		
-		double lowerY = element.getZPosition() - element.getLength() / 2.0
-				- config.getACityDistrictHorizontalGap() / 2.0; // - config.getMetropolisRoadWidth() / 2.0;
-
-		RoadNode upperLeftNode = new RoadNode(leftX, upperY);
-		RoadNode upperRightNode = new RoadNode(rightX, upperY);
-
-		RoadNode lowerLeftNode = new RoadNode(leftX, lowerY);
-		RoadNode lowerRightNode = new RoadNode(rightX, lowerY);
-
-		cornerNodes.add(upperLeftNode);
-		cornerNodes.add(upperRightNode);
-		cornerNodes.add(lowerLeftNode);
-		cornerNodes.add(lowerRightNode);
-
-		return cornerNodes;
-	}
-	
-	private RoadNode calculateDistrictRoadNode(ACityElement district, RoadNode slipNode) {
-		double x, y;		
-		
-		if (district.getXPosition() == slipNode.getX()) {
-			x = district.getXPosition();
-			y = district.getZPosition() + Math.signum(slipNode.getY() - district.getZPosition()) * (district.getLength() / 2.0 + config.getMetropolisRoadWidth() / 2.0);
-		} else {
-			x = district.getXPosition() + Math.signum(slipNode.getX() - district.getXPosition()) * (district.getWidth() / 2.0 + config.getMetropolisRoadWidth() / 2.0);
-			y = district.getZPosition();
-		}
-		
-		return new RoadNode(x, y);
-	}
-	
-	private RoadNode calculateDistrictMarginNode(ACityElement district, RoadNode slipNode) {
-		double x, y;		
-		
-		if (district.getXPosition() == slipNode.getX()) {
-			x = district.getXPosition();
-			y = district.getZPosition() + Math.signum(slipNode.getY() - district.getZPosition()) * (district.getLength() / 2.0 - config.getACityDistrictHorizontalMargin());
-		} else {
-			x = district.getXPosition() + Math.signum(slipNode.getX() - district.getXPosition()) * (district.getWidth() / 2.0 - config.getACityDistrictHorizontalMargin());
-			y = district.getZPosition();
-		}
-		
-		return new RoadNode(x, y);
 	}
 
 	private List<ACityElement> extractRoads(Map<RoadNode, ArrayList<RoadNode>> adjacencyList) {
@@ -681,11 +483,6 @@ public class ADistrictRoadNetwork {
 			if (sourceNode == null) {
 				continue;
 			}
-			
-//			if (element.getSourceNodeType() == SAPNodeTypes.Namespace) {
-//				calledMap.putAll(getCalledRelations(element.getSubElements()));				
-//				continue;
-//			}
 
 			Set<ACityElement> referencedElements = new HashSet<ACityElement>();
 			calledMap.put(element, referencedElements);
