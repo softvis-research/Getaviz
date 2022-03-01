@@ -192,7 +192,7 @@ public class ADistrictLightMapLayout {
             
             ACityRectangle rectangle;
             
-            if (element.getType().equals(ACityElement.ACityType.District)) {
+            if (element.getType().equals(ACityElement.ACityType.District) || element.getType().equals(ACityElement.ACityType.Reference)) {
             	rectangle = new ACityRectangle(0, 0, width + config.getACityDistrictHorizontalGap(),
                         length + config.getACityDistrictHorizontalGap(), 1);		
 			} else {
@@ -212,7 +212,7 @@ public class ADistrictLightMapLayout {
         double sum_length = 0;
         for (ACityElement element : elements) {
         	
-        	if (element.getType().equals(ACityElement.ACityType.District)) {
+        	if (element.getType().equals(ACityElement.ACityType.District) || element.getType().equals(ACityElement.ACityType.Reference)) {
                 sum_width += element.getWidth() + config.getACityDistrictHorizontalGap();
                 sum_length += element.getLength() + config.getACityDistrictHorizontalGap();				
 			} else {
