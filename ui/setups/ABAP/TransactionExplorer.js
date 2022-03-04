@@ -20,6 +20,10 @@ var setup = {
         },
 
         {
+            name: "tabController"
+        },
+
+        {
             name: "relationController",
             sourceStartAtBorder: false,
             targetEndAtBorder: false,
@@ -71,6 +75,56 @@ var setup = {
 
             //abap: true,
             elementsSelectable: true 
+        },
+
+        {
+            name: "transactionExplorerController",
+            elements: [
+                /*{ type: "Namespace",
+                  icon: "scripts/PackageExplorer/images/abap/namespace.png",
+                  sortOrder: 1000
+                },*/ 
+                { type: "Transaction",
+                  icon: "scripts/TransactionExplorer/images/abap/transaction.png",
+                  sortOrder: 1000
+                }, 
+                { type: "Class",
+                  icon: "scripts/TransactionExplorer/images/abap/class.png",
+                  sortOrder: 1200
+                }, 
+                { type: "Interface",
+                  icon: "scripts/TransactionExplorer/images/abap/interface.png",
+                  sortOrder: 1300
+                },
+                { type: "Method",
+                  icon: "scripts/TransactionExplorer/images/abap/form_fumo_method.png",
+                  sortOrder: 1410
+                }, 
+                { type: "Attribute",
+                  icon: "scripts/TransactionExplorer/images/abap/attribute.png",
+                  sortOrder: 1430
+                }, 
+                { type: "FunctionGroup",
+                  icon: "scripts/TransactionExplorer/images/abap/fugr.png", 
+                  sortOrder: 1400
+                },  
+                { type: "FunctionModule",
+                  icon: "scripts/TransactionExplorer/images/abap/form_fumo_method.png", 
+                  sortOrder: 1410
+                },  
+                { type: "FormRoutine",
+                  icon: "scripts/TransactionExplorer/images/abap/form_fumo_method.png",
+                  sortOrder: 1420
+                }, 
+                { type: "Report",
+                  icon: "scripts/TransactionExplorer/images/abap/report_district.png", 
+                  sortOrder: 1100
+                }, 
+            ],
+
+            //abap: true,
+            elementsSelectable: true 
+            
         },
         {
             name: "canvasFilterController"
@@ -232,28 +286,47 @@ var setup = {
                                 orientation: "horizontal",
                                 name: "left",
                                 first: {
-                                    size: "55%",
-                                    expanders: [
-                                        {
-                                            name: "packageExplorer",
-                                            title: "Package Explorer",
-                                            controllers: [
-                                                { name: "packageExplorerController" }
+                                    size: "70%",
+                                    area: {
+                                        orientation: "horizontal",
+                                        name: "explorer",
+                                        first: {
+                                            size: "45%",
+                                            expanders: [
+                                                {
+                                                    name: "transactionExplorer",
+                                                    title: "Transaction Explorer",
+                                                    controllers: [
+                                                        { name: "transactionExplorerController" }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        second: {
+                                            size: "45%",
+                                            expanders: [
+                                                {
+                                                    name: "packageExplorer",
+                                                    title: "Package Explorer",
+                                                    controllers: [
+                                                        { name: "packageExplorerController" }
+                                                    ]
+                                                }
                                             ]
                                         }
-                                    ]
+                                    }
                                 },
-                            second: {
-                                size: "45%",
-                                expanders: [
-                                    {
-                                        name: "legend",
-                                        title: "Legend",
-                                        controllers: [
-                                            { name: "legendController" }
-                                        ],
-                                    }    
-                                ],
+                                second: {
+                                    size: "45%",
+                                    expanders: [
+                                        {
+                                            name: "legend",
+                                            title: "Legend",
+                                            controllers: [
+                                                { name: "legendController" }
+                                            ],
+                                        }    
+                                    ],
                                 },
                             },
                         },

@@ -68,6 +68,7 @@ var model = (function () {
 				element.name,
 				element.qualifiedName,
 				element.belongsTo,
+				element.calledBy,
 				element.antipattern,
 				element.roles,
 				element.isTransparent,
@@ -156,6 +157,18 @@ var model = (function () {
 							map.push(entity);
 							entitiesByVersion.set(entity.version, map);
 						}
+					}
+					break;
+				case "Transaction":
+					if (element.calls) {
+						entity.calls = element.calls.split(",");
+					} else {
+						entity.calls = [];
+					}
+					if (element.calledBy) {
+						entity.calledBy = element.calledBy.split(",");
+					} else {
+						entity.calledBy = [];
 					}
 					break;
                 case "Reference":
@@ -490,6 +503,10 @@ var model = (function () {
 					if (entity.dependsOn !== undefined && entity.dependsOn !== "") {
 						retrieveAllUsedMacros(entity.dependsOn, entity.id);
 					}
+					break;
+                case "Transaction":
+					replaceIdsWithReferences(entity, 'calls');
+					replaceIdsWithReferences(entity, 'calledBy');
 					break;
 
 				case "Report":

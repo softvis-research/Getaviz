@@ -133,6 +133,8 @@ if (isset($_GET["lazy"])) {
 
 
 <script type="text/javascript" src="scripts/PackageExplorer/PackageExplorerController.js"></script>
+<script type="text/javascript" src="scripts/TransactionExplorer/TransactionExplorerController.js"></script>
+<script type="text/javascript" src="scripts/TabController/TabController.js"></script>
 <script type="text/javascript" src="scripts/Search/SearchController.js"></script>
 <script type="text/javascript" src="scripts/Experiment/ExperimentController.js"></script>
 <script type="text/javascript" src="scripts/SourceCode/SourceCodeController.js"></script>
