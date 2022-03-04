@@ -94,7 +94,7 @@ public class MetropolisCreator {
                 ACityElement transactionDistrict = transactionDistrictMap.get(districtType);
 
                 transactionDistrict.addSubElement(childElement);
-                childElement.setParentElement(transactionDistrict);
+                childElement.setParentElement(parentDistrict);
             }
 
         }
