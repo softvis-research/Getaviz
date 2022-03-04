@@ -37,13 +37,14 @@ public class Maps {
         metaDataProperties.put(SAPNodeProperties.local_class.name(), "local_class");
 
 
-        // Elements, for which we want to show USES relation
+        // Elements, for which we want to show USES and REFERENCE relation
         nodesWithUsesRelationByType = Arrays.asList(
                 "METH",
                 "FUMO",
                 "REPS",
                 "FORM",
-                "FUGR"
+                "FUGR",
+                "TRNS"
         );
 
         // Elements, for which we want to show INHERIT relation
