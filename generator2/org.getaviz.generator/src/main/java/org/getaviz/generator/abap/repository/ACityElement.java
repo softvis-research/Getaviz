@@ -48,6 +48,8 @@ public class ACityElement {
         , Interface, DataElement, Structure
 
         , Sea, Mountain, Cloud
+        
+        , Freeway, Street, Lane
     }
 
 

@@ -22,6 +22,8 @@ import org.getaviz.generator.SettingsConfiguration.Bricks.Layout;
 import org.getaviz.generator.SettingsConfiguration.Original.BuildingMetric;
 import org.getaviz.generator.SettingsConfiguration.Panels.SeparatorModes;
 import org.getaviz.generator.abap.repository.ACityElement;
+import org.getaviz.generator.abap.repository.ACityElement.ACitySubType;
+import org.getaviz.generator.abap.repository.ACityElement.ACityType;
 
 public class SettingsConfiguration {
 	private static PropertiesConfiguration config;
@@ -1403,6 +1405,19 @@ public class SettingsConfiguration {
 	
 	public double getMetropolisRoadWidth() {
 		return config.getDouble("city.abap.metropolis.road.width", 3.0);
+	}
+	
+	public double getMetropolisRoadWidth(ACitySubType roadType) {		
+		switch (roadType) {
+			case Freeway:
+				return config.getDouble("city.abap.metropolis.road.width.freeway", 3.0);			
+			case Street:
+				return config.getDouble("city.abap.metropolis.road.width.street", 1.5);
+			case Lane:
+				return config.getDouble("city.abap.metropolis.road.width.lane", 1.5);
+			default:
+				return config.getDouble("city.abap.metropolis.road.width.lane", 1.5);
+		}
 	}
 	
 	public double getMetropolisRoadHeight() {

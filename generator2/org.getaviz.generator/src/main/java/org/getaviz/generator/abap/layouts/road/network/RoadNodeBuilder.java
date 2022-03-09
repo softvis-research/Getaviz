@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.repository.ACityElement;
+import org.getaviz.generator.abap.repository.ACityElement.ACitySubType;
 
 public class RoadNodeBuilder {
 	
@@ -134,13 +136,21 @@ public class RoadNodeBuilder {
 	}
 	
 	public RoadNode calculateDistrictSlipRoadNode(ACityElement district, RoadNode slipNode) {
-		double x, y;		
+		double x, y;
+		ACitySubType roadType;
+		
+		if (district.getSourceNodeType() == SAPNodeTypes.Namespace) {
+			roadType = ACitySubType.Freeway;
+		} else {
+			roadType = ACitySubType.Street;
+		}
+		
 		
 		if (district.getXPosition() == slipNode.getX()) {
 			x = district.getXPosition();
-			y = district.getZPosition() + Math.signum(slipNode.getY() - district.getZPosition()) * (district.getLength() / 2.0 + config.getMetropolisRoadWidth() / 2.0);
+			y = district.getZPosition() + Math.signum(slipNode.getY() - district.getZPosition()) * (district.getLength() / 2.0 + config.getMetropolisRoadWidth(roadType) / 2.0);
 		} else {
-			x = district.getXPosition() + Math.signum(slipNode.getX() - district.getXPosition()) * (district.getWidth() / 2.0 + config.getMetropolisRoadWidth() / 2.0);
+			x = district.getXPosition() + Math.signum(slipNode.getX() - district.getXPosition()) * (district.getWidth() / 2.0 + config.getMetropolisRoadWidth(roadType) / 2.0);
 			y = district.getZPosition();
 		}
 		

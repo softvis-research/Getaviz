@@ -21,6 +21,7 @@ import org.getaviz.generator.abap.layouts.road.network.RoadNodeBuilder;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.getaviz.generator.abap.repository.ACityElement.ACitySubType;
 import org.getaviz.generator.abap.repository.ACityElement.ACityType;
 import org.neo4j.driver.v1.types.Node;
 
@@ -382,8 +383,8 @@ public class ADistrictRoadNetwork {
 				+ config.getMetropolisRoadHeight() / 2.0);
 		road.setZPosition((start.getY() + end.getY()) / 2.0);
 
-		road.setWidth(Math.abs(start.getX() - end.getX()) + this.config.getMetropolisRoadWidth());
-		road.setLength(Math.abs(start.getY() - end.getY()) + this.config.getMetropolisRoadWidth());
+		road.setWidth(Math.abs(start.getX() - end.getX()) + this.config.getMetropolisRoadWidth(ACitySubType.Street));
+		road.setLength(Math.abs(start.getY() - end.getY()) + this.config.getMetropolisRoadWidth(ACitySubType.Street));
 		road.setHeight(config.getMetropolisRoadHeight());
 
 		return road;
