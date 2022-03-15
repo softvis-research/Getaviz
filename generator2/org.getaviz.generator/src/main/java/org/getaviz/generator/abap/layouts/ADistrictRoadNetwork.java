@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
-import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.layouts.road.network.RoadGraph;
 import org.getaviz.generator.abap.layouts.road.network.RoadGraphDijkstraAlgorithm;
 import org.getaviz.generator.abap.layouts.road.network.RoadNode;
@@ -23,7 +22,7 @@ import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.abap.repository.ACityElement.ACitySubType;
 import org.getaviz.generator.abap.repository.ACityElement.ACityType;
-import org.neo4j.driver.v1.types.Node;
+import org.getaviz.generator.abap.repository.ACityReferenceMapper;
 
 public class ADistrictRoadNetwork {
 
@@ -72,44 +71,40 @@ public class ADistrictRoadNetwork {
 		if (config.completeRoadNetwork()) {
 			return this.extractRoads(this.roadGraph.getGraph());
 		}
-
-		Map<ACityElement, Set<ACityElement>> callsMap = this.getCallsRelations(this.district.getSubElements());		
-		Map<ACityElement, Set<ACityElement>> calledMap = this.getCalledRelations(this.district.getSubElements());
 		
 		RoadNodeBuilder nodeBuilder = new RoadNodeBuilder(config);
+		ACityReferenceMapper referenceMapper = new ACityReferenceMapper(nodeRepository, repository);
 
 		// TODO
 		// erstmal nur Workaround
 		List<List<RoadNode>> paths = new ArrayList<List<RoadNode>>();
-
-		for (Entry<ACityElement, Set<ACityElement>> callsRelations : callsMap.entrySet()) {
+		
+		for (ACityElement subelement : this.subElements) {
 			
-			ACityElement containingSourceDistrict = this.getContainingDistrict(callsRelations.getKey());
-			
-			if (containingSourceDistrict == null) {
+			if (subelement.getType() != ACityType.District) {
 				continue;
 			}
 			
-			List<RoadNode> slipRoadNodesSource = nodeBuilder.calculateSlipRoadNodes(containingSourceDistrict);		
-
-			for (ACityElement target : callsRelations.getValue()) {
-				// Top-Level-Quellcode-Distrikte für ACityElemente bestimmen
-				ACityElement containingTargetDistrict = this.getContainingDistrict(target);
-
-				// Aufrufbeziehungen auf dem gleichen Distrikt sind (erstmal) irrelevant
-				if (containingTargetDistrict == null || containingSourceDistrict == containingTargetDistrict) {
+			List<RoadNode> slipRoadNodesSource = nodeBuilder.calculateSlipRoadNodes(subelement);
+			Collection<ACityElement> referencedElements = referenceMapper.getAggregatedRelatedACityElements(subelement, referenceMapper.mapToAggregationLevel(subelement), false); 
+			
+			for (ACityElement referencedElement : referencedElements) {
+				if (referencedElement == null || subelement == referencedElement) {
+					continue;
+				}
+				
+				if (!this.checkIfElementBelongsToOriginSet(referencedElement)) {
 					continue;
 				}
 				
 				List<RoadNode> slipRoadNodesTarget;
 				
-				if (this.subElements.contains(containingTargetDistrict)) {
+				if (this.subElements.contains(referencedElement)) {
 					// von den Distrikten die Auffahrtspunkte bestimmen
-					slipRoadNodesTarget = nodeBuilder.calculateSlipRoadNodes(containingTargetDistrict);
+					slipRoadNodesTarget = nodeBuilder.calculateSlipRoadNodes(referencedElement);
 				} else {
 					slipRoadNodesTarget = new ArrayList<RoadNode>();
-					// TODO Passenden Knoten bilden
-					slipRoadNodesTarget.add(this.mainElementConnectors.get(containingTargetDistrict));
+					slipRoadNodesTarget.add(this.mainElementConnectors.get(referencedElement.getParentElement()));
 				}
 
 				// TODO
@@ -136,42 +131,31 @@ public class ADistrictRoadNetwork {
 				if (shortestPathAbsolut != null) {
 					
 					// Auffahrt auf containingSourceDistrict
-					shortestPathAbsolut.add(0, nodeBuilder.calculateDistrictSlipRoadNode(containingSourceDistrict, shortestPathAbsolut.get(0)));
+					shortestPathAbsolut.add(0, nodeBuilder.calculateDistrictSlipRoadNode(subelement, shortestPathAbsolut.get(0)));
 					
-					if (this.subElements.contains(containingTargetDistrict)) {
+					if (this.subElements.contains(referencedElement)) {
 						// Auffahrt auf containingTargetDistrict
-						shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(containingTargetDistrict, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
+						shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(referencedElement, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 						
-						this.subElementConnectors.get(containingSourceDistrict).put(containingTargetDistrict, nodeBuilder.calculateDistrictMarginRoadNode(containingSourceDistrict, shortestPathAbsolut.get(0)));
-						this.subElementConnectors.get(containingTargetDistrict).put(containingSourceDistrict, nodeBuilder.calculateDistrictMarginRoadNode(containingTargetDistrict, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
+						this.subElementConnectors.get(subelement).put(referencedElement, nodeBuilder.calculateDistrictMarginRoadNode(subelement, shortestPathAbsolut.get(0)));
+						this.subElementConnectors.get(referencedElement).put(subelement, nodeBuilder.calculateDistrictMarginRoadNode(referencedElement, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 					} else {
 						shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(this.district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 					}
 					paths.add(shortestPathAbsolut);
 				}
-
-			}
-
-		}
-		
-		for (Entry<ACityElement, Set<ACityElement>> calledRelation : calledMap.entrySet()) {
-			
-			ACityElement containingTargetDistrict = this.getContainingDistrict(calledRelation.getKey());
-			
-			if (containingTargetDistrict == null) {
-				continue;
 			}
 			
-			List<RoadNode> slipRoadNodesTarget = nodeBuilder.calculateSlipRoadNodes(containingTargetDistrict);
-			
+			Collection<ACityElement> reverseReferencedElements = referenceMapper.getAggregatedRelatedACityElements(subelement, referenceMapper.mapToAggregationLevel(subelement), true); 
+					
 			// Wir müssen jetzt nur Beziehungen berücksichtigen, die von "draußen" kommen
 			// Die anderen haben wir ja schon behandelt
-			for (ACityElement source : calledRelation.getValue()) {
-				// Top-Level-Quellcode-Distrikte für ACityElemente bestimmen
-				ACityElement containingSourceDistrict = this.getContainingDistrict(source);
-
-				// Aufrufbeziehungen auf dem gleichen Distrikt sind (erstmal) irrelevant
-				if (containingSourceDistrict == null || containingTargetDistrict == containingSourceDistrict || this.subElements.contains(containingSourceDistrict)) {
+			for (ACityElement referencedElement : reverseReferencedElements) {
+				if (referencedElement == null || subelement == referencedElement || this.subElements.contains(referencedElement)) {
+					continue;
+				}
+				
+				if (!this.checkIfElementBelongsToOriginSet(referencedElement)) {
 					continue;
 				}
 
@@ -182,8 +166,9 @@ public class ADistrictRoadNetwork {
 
 				// kürzesten Pfad aller (4 * 4 =) 16 Kombinationen berechnen
 				// Aufruf von dijkstra
-				for (RoadNode slipRoadNodeTarget : slipRoadNodesTarget) {
-					List<List<RoadNode>> shortestPath = this.getAllShortestPaths(slipRoadNodeTarget, this.mainElementConnectors.get(containingSourceDistrict));
+				for (RoadNode slipRoadNodeSource : slipRoadNodesSource) {
+					List<List<RoadNode>> shortestPath = this.getAllShortestPaths(slipRoadNodeSource, this.mainElementConnectors.get(referencedElement.getParentElement()));
+					
 					double pathLength = this.roadGraph.calculatePathLength(shortestPath.get(0));
 					if (pathLength < shortestPathLength) {
 						shortestPathAbsolut = shortestPath.get(0);
@@ -193,15 +178,15 @@ public class ADistrictRoadNetwork {
 
 				// passenden Pfad bestimmen und merken
 				// erstmal: kürzesten Pfad wählen
-				if (shortestPathAbsolut != null) {					
-					// Auffahrt auf containingTargetDistrict
-					shortestPathAbsolut.add(0, nodeBuilder.calculateDistrictSlipRoadNode(containingTargetDistrict, shortestPathAbsolut.get(0)));
+				if (shortestPathAbsolut != null) {
+					
+					// Auffahrt auf containingSourceDistrict
+					shortestPathAbsolut.add(0, nodeBuilder.calculateDistrictSlipRoadNode(subelement, shortestPathAbsolut.get(0)));
 					shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(this.district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 					paths.add(shortestPathAbsolut);
 				}
-
 			}
-
+			
 		}
 		
 		return this.extractRoads(paths);
@@ -390,174 +375,8 @@ public class ADistrictRoadNetwork {
 		return road;
 	}
 
-	private Map<ACityElement, Set<ACityElement>> getCallsRelations(Collection<ACityElement> elements) {
-		Map<ACityElement, Set<ACityElement>> callsMap = new HashMap<ACityElement, Set<ACityElement>>();
-
-		// TODO
-		// Prüfen, ob bereits hier ggf. auf enthaltende Source-Distrikte gemappt werden soll
-
-		for (ACityElement element : elements) {
-			Node sourceNode = element.getSourceNode();
-			if (sourceNode == null) {
-				continue;
-			}
-			
-			if (element.getSourceNodeType() == SAPNodeTypes.Namespace) {
-				callsMap.putAll(getCallsRelations(element.getSubElements()));				
-				continue;
-			}
-
-			Set<ACityElement> referencedElements = new HashSet<ACityElement>();
-			callsMap.put(element, referencedElements);
-
-			switch (element.getSourceNodeType()) {
-			case Report:
-				Collection<Node> referencedNodes = this.nodeRepository.getRelatedNodes(sourceNode,
-						SAPRelationLabels.REFERENCES, true);
-				for (Node referencedNode : referencedNodes) {
-					ACityElement correspondingElement = repository.getElementBySourceID(referencedNode.id());
-					if (!this.checkIfElementBelongsToOriginSet(correspondingElement)) {
-						continue;
-					}
-					referencedElements.add(correspondingElement);
-				}
-
-			case FunctionGroup:
-			case Class:
-
-				Map<ACityElement, Set<ACityElement>> localClassesCallsMap = this
-						.getCallsRelations(element.getSubElementsOfSourceNodeType(SAPNodeTypes.Class));
-				callsMap.putAll(localClassesCallsMap);
-
-				switch (element.getSourceNodeType()) {
-				case Class:
-					Map<ACityElement, Set<ACityElement>> methodsCallsMap = this
-							.getCallsRelations(element.getSubElementsOfSourceNodeType(SAPNodeTypes.Method));
-					callsMap.putAll(methodsCallsMap);
-					break;
-				case FunctionGroup:
-					Map<ACityElement, Set<ACityElement>> functionModulesCallsMap = this
-							.getCallsRelations(element.getSubElementsOfSourceNodeType(SAPNodeTypes.FunctionModule));
-					callsMap.putAll(functionModulesCallsMap);
-				case Report:
-					Map<ACityElement, Set<ACityElement>> formroutinesCallsMap = this
-							.getCallsRelations(element.getSubElementsOfSourceNodeType(SAPNodeTypes.FormRoutine));
-					callsMap.putAll(formroutinesCallsMap);
-					break;
-				default:
-				}
-				break;
-
-			case Method:
-			case FunctionModule:
-			case FormRoutine:
-
-				referencedNodes = this.nodeRepository.getRelatedNodes(sourceNode, SAPRelationLabels.REFERENCES, true);
-				for (Node referencedNode : referencedNodes) {
-					ACityElement correspondingElement = repository.getElementBySourceID(referencedNode.id());
-					if (!this.checkIfElementBelongsToOriginSet(correspondingElement)) {
-						continue;
-					}
-					referencedElements.add(correspondingElement);
-				}
-
-				break;
-
-			default:
-				continue;
-			}
-			
-			if (referencedElements.size() == 0) {
-				callsMap.remove(element);
-			}
-
-		}
-		
-		return callsMap;
-	}
-	
-	private Map<ACityElement, Set<ACityElement>> getCalledRelations(Collection<ACityElement> elements) {
-		Map<ACityElement, Set<ACityElement>> calledMap = new HashMap<ACityElement, Set<ACityElement>>();
-		
-		for (ACityElement element : elements) {
-			Node sourceNode = element.getSourceNode();
-			if (sourceNode == null) {
-				continue;
-			}
-
-			Set<ACityElement> referencedElements = new HashSet<ACityElement>();
-			calledMap.put(element, referencedElements);
-
-			switch (element.getSourceNodeType()) {
-			case Report:
-				Collection<Node> referencedNodes = this.nodeRepository.getRelatedNodes(sourceNode,
-						SAPRelationLabels.REFERENCES, false);
-				for (Node referencedNode : referencedNodes) {
-					ACityElement correspondingElement = repository.getElementBySourceID(referencedNode.id());
-					if (!this.checkIfElementBelongsToOriginSet(correspondingElement)) {
-						continue;
-					}
-					referencedElements.add(correspondingElement);
-				}
-
-			case FunctionGroup:
-			case Class:
-			case Interface:
-
-				Map<ACityElement, Set<ACityElement>> localClassesCalledMap = this
-						.getCalledRelations(element.getSubElementsOfSourceNodeType(SAPNodeTypes.Class));
-				calledMap.putAll(localClassesCalledMap);
-
-				switch (element.getSourceNodeType()) {
-				case Class:
-				case Interface:
-					Map<ACityElement, Set<ACityElement>> methodsCalledMap = this
-							.getCalledRelations(element.getSubElementsOfSourceNodeType(SAPNodeTypes.Method));
-					calledMap.putAll(methodsCalledMap);
-					break;
-				case FunctionGroup:
-					Map<ACityElement, Set<ACityElement>> functionModulesCalledMap = this
-							.getCalledRelations(element.getSubElementsOfSourceNodeType(SAPNodeTypes.FunctionModule));
-					calledMap.putAll(functionModulesCalledMap);
-				case Report:
-					Map<ACityElement, Set<ACityElement>> formroutinesCalledMap = this
-							.getCalledRelations(element.getSubElementsOfSourceNodeType(SAPNodeTypes.FormRoutine));
-					calledMap.putAll(formroutinesCalledMap);
-					break;
-				default:
-				}
-				break;
-
-			case Method:
-			case FunctionModule:
-			case FormRoutine:
-
-				referencedNodes = this.nodeRepository.getRelatedNodes(sourceNode, SAPRelationLabels.REFERENCES, false);
-				for (Node referencedNode : referencedNodes) {
-					ACityElement correspondingElement = repository.getElementBySourceID(referencedNode.id());
-					if (!this.checkIfElementBelongsToOriginSet(correspondingElement)) {
-						continue;
-					}
-					referencedElements.add(correspondingElement);
-				}
-
-				break;
-
-			default:
-				continue;
-			}
-			
-			if (referencedElements.size() == 0) {
-				calledMap.remove(element);
-			}
-
-		}
-		
-		return calledMap;
-	}
-
 	private boolean checkIfElementBelongsToOriginSet(ACityElement element) {
-		ACityElement parentElement = element.getParentElement();
+		ACityElement parentElement = element;
 		
 		while (true) {
 			if (parentElement.getSourceNodeType() == SAPNodeTypes.Namespace) {
@@ -575,22 +394,6 @@ public class ADistrictRoadNetwork {
 			}
 			parentElement = parentElement.getParentElement();
 		}
-	}
-
-	private ACityElement getContainingDistrict(ACityElement element) {
-		if (this.subElements.contains(element)) {
-			return element;
-		}
-		
-		if (this.mainElementConnectors.containsKey(element)) {
-			return element;
-		}
-		
-		if (element.getParentElement() == null) {
-			return null;
-		}
-
-		return getContainingDistrict(element.getParentElement());
 	}
 	
 	private List<RoadNode> getShortestPath(RoadNode startNode, RoadNode destinationNode) {
