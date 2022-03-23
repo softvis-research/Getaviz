@@ -16,6 +16,12 @@ public class MetaDataExporterStep extends MetropolisStep {
         creatorStep.loadNodesAndRelations();
         creatorStep.init();
 
+        LayouterStep layouterStep = new LayouterStep();
+        layouterStep.init();
+
+        DesignerStep designerStep = new DesignerStep();
+        designerStep.init();
+
         MetaDataExporterStep metaDataExporterStep = new MetaDataExporterStep();
         metaDataExporterStep.init();
         metaDataExporterStep.wrapUp();

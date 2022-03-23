@@ -200,15 +200,6 @@ public class MetropolisCreator {
         }
     }
 
-//    private void removeSubElementsFromDistrict(ACityElement district, Collection<ACityElement> subElements) {
-//        for (ACityElement subElement: subElements){
-//            if(subElement.getType() == ACityElement.ACityType.District){
-//                continue;
-//            }
-//            district.removeSubElement(subElement);
-//        }
-//    }
-
     private Collection<ACityElement> getChildElementsBySourceNode(SourceNodeRepository nodeRepository, Node node) {
 
         Collection<Node> childNodes = nodeRepository.getRelatedNodes(node, JavaRelationLabels.CONTAINS, true);
@@ -228,19 +219,6 @@ public class MetropolisCreator {
 
         return childElements;
     }
-
-//    private ACityElement getParentElementBySourceNode(SourceNodeRepository nodeRepository, Node node) {
-//        Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, SAPRelationLabels.CONTAINS, false);
-//        if(parentNodes.isEmpty()) {
-//            return null;
-//        }
-//
-//        Node parentNode = parentNodes.iterator().next();
-//        Long parentNodeId = parentNode.id();
-//
-//        ACityElement parentElement = repository.getElementBySourceID(parentNodeId);
-//        return parentElement;
-//    }
 
     private void createACityElementsFromSourceNodes(SourceNodeRepository nodeRepository, ACityElement.ACityType aCityType, JavaNodeProperties property, JavaNodeTypes nodeType) {
         Collection<Node> sourceNodes = nodeRepository.getNodesByProperty(property, nodeType.name());

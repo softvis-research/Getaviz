@@ -54,7 +54,6 @@ public class MetaDataExporter {
     public void setMetaDataPropToACityElements() {
         Collection<ACityElement> aCityElements = aCityRepository.getAllElements();
         for (final ACityElement element : aCityElements) {
-
             //skip reference buildings (only Metropolis)
             if (element.getSourceNode() == null) {
                 if (element.getType() == ACityElement.ACityType.Reference) {
@@ -74,9 +73,6 @@ public class MetaDataExporter {
         StringBuilder metaDataFile = new StringBuilder();
         boolean hasElements = false;
         for (final ACityElement element: elements) {
-
-
-
             if (element.getSourceNode() == null) {
                 if (element.getType() == ACityElement.ACityType.Reference) {
                     if (!hasElements) {
@@ -90,10 +86,7 @@ public class MetaDataExporter {
                 } else {
                     continue;
                 }
-
             } else {
-
-
                 if (!hasElements) {
                     hasElements = true;
                     metaDataFile.append("[{");
@@ -150,11 +143,6 @@ public class MetaDataExporter {
         // Add Type
         builder.append("\"name\": \"" + element.getSubType() + "\",\n");
 
-        // Add additional meta for clouds
-//        if(element.getSubType() == ACityElement.ACitySubType.Cloud) {
-//            builder.append(getMigrationRelation(element));
-//        }
-
         // Make sure we have the right syntax -> no commas at the end
         char lastChar = builder.charAt(builder.length() - 1);
         if (Character.compare(lastChar, '\n') == 0) {
@@ -168,51 +156,6 @@ public class MetaDataExporter {
 
         return builder.toString();
     }
-
-//    private String getMigrationRelation(ACityElement element) {
-//
-//        StringBuilder builder = new StringBuilder();
-//
-//        //new hash list for all migrationRelations
-//        List<String> migrationHashes = new ArrayList<>();
-//
-//        // Parent for specific cloud
-//        ACityElement district = element.getParentElement();
-//
-//        // get subElements of this parentDistrict with migrationFindings and fill hash value into list migrationHashes
-//        getBuildingsWithMigrationFindingsHash(district, migrationHashes);
-//
-//        builder.append("\"rcData\": \"" + String.join(", ", migrationHashes) + "\",\n");
-//
-//        return builder.toString();
-//    }
-
-//    private Object getBuildingsWithMigrationFindingsHash(ACityElement district, List<String> migrationHashes) {
-//
-//        Collection<ACityElement> buildingsWithMigrationFindings = district.getSubElements();
-//
-//        for (ACityElement buildingsWithMigrationFinding: buildingsWithMigrationFindings) {
-//            if (buildingsWithMigrationFinding.getType() == ACityElement.ACityType.Reference) {
-//                continue;
-//            }
-//
-//            // only subElements with the flag "migrationFindings" matters
-//            String migrationFindingsString = buildingsWithMigrationFinding.getSourceNodeProperty(SAPNodeProperties.migration_findings);
-//            if (!migrationFindingsString.equals("true")) {
-//                continue;
-//            } else {
-//                //fill list
-//                migrationHashes.add(buildingsWithMigrationFinding.getHash());
-//            }
-//        }
-//
-//        // If there is no subElement, then the relationship connector is drawn from the cloud to the district
-//        if (migrationHashes.size() == 0){
-//            migrationHashes.add(district.getHash());
-//        }
-//
-//        return migrationHashes;
-//    }
 
     private String getNodeMetaInfo(ACityElement element) {
         StringBuilder builder = new StringBuilder();
@@ -233,8 +176,6 @@ public class MetaDataExporter {
 
             // Remove extra "" (written by Neo4j)
             String propValue = node.get(prop.toString()).toString().replaceAll("\"", "");
-
-
 
             // Write strings with quotation marks and numbers without
             if (NumberUtils.isCreatable(propValue)) {
@@ -305,18 +246,6 @@ public class MetaDataExporter {
         return qualifiedNameBuilder.toString();
     }
 
-//    private List<String> getQualifiedNameAsList(Node node) {
-//        List<String> qualifiedNameAsList = new ArrayList<>();
-//        Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, JavaRelationLabels.CONTAINS, false);
-//        if (!parentNodes.isEmpty()) {
-//            qualifiedNameAsList.addAll(getQualifiedNameAsList(parentNodes.iterator().next()));
-//        }
-//
-//        String nodeName = node.get(JavaNodeProperties.name.name()).asString();
-//        qualifiedNameAsList.add(nodeName);
-//        return qualifiedNameAsList;
-//    }
-
     private String getContainerHash(Node node) {
         Collection<Node> parentNodes = nodeRepository.getRelatedNodes(node, JavaRelationLabels.CONTAINS, false);
         if (parentNodes.isEmpty()) {
@@ -358,5 +287,4 @@ public class MetaDataExporter {
         }
         return nodesHashes;
     }
-
 }

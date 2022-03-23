@@ -36,7 +36,6 @@ public class MetropolisDesigner {
         designMetropolisElementsByType(ACityElement.ACityType.District);
         designMetropolisElementsByType(ACityElement.ACityType.Building);
         designMetropolisElementsByType(ACityElement.ACityType.Reference);
-        designMetropolisElementsByType(ACityElement.ACityType.Floor);
     }
 
     private void designMetropolisElementsByType(ACityElement.ACityType aCityType){
@@ -58,12 +57,6 @@ public class MetropolisDesigner {
                 case Reference:
                     designReference(aCityElement);
                     break;
-//                case Floor:
-//                    designFloor(aCityElement);
-//                    break;
-//                case Chimney:
-//                    designChimney(aCityElement);
-//                    break;
                 default:
                     designBuilding(aCityElement);
                     log.error(aCityType.name() + "is not a valid cityType");
@@ -138,12 +131,6 @@ public class MetropolisDesigner {
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
                     break;
-                case Cloud:
-                    building.setShape(ACityElement.ACityShape.Entity);
-                    building.setModel("#cloud_black");
-                    building.setModelScale("0.3 0.3 0.3");
-                    building.setYPosition(55);
-                    break;
             }
         } else {
             String propertyTypeName = building.getSourceNodeProperty(JavaNodeProperties.type_name);
@@ -200,32 +187,6 @@ public class MetropolisDesigner {
                     building.setYPosition(building.getYPosition() + config.adjustReferenceYPosition());
                     break;
             }
-        }
-    }
-
-    private void designChimney(ACityElement chimney) {
-        chimney.setColor(config.getACityChimneyColorHex("attributeColor"));
-        chimney.setShape(config.getACityChimneyShape("attributeChimney"));
-    }
-
-    private void designFloor(ACityElement floor) {
-        String propertyTypeName = floor.getSourceNodeProperty(JavaNodeProperties.type_name);
-
-        switch (JavaNodeTypes.valueOf(propertyTypeName)) {
-            /*case Method:
-                floor.setColor(config.getACityFloorColorHex("methodFloor"));
-                floor.setShape(config.getACityFloorShape("methodFloor"));
-                floor.setYPosition(floor.getYPosition() - config.adjustACityFloorYPosition());
-                break;
-             */
-            default:
-                floor.setColor(config.getACityFloorColorHex("dataElementFloor"));
-                floor.setShape(config.getACityFloorShape("dataElementFloor"));
-                floor.setYPosition(floor.getYPosition() - config.adjustACityFloorYPosition());
-                floor.setWidth(floor.getWidth() - config.adjustACityFloorWidth());
-                floor.setLength(floor.getLength() - config.adjustACityFloorLength());
-                log.error(propertyTypeName + " is not a valid type for \"floor\"");
-                break;
         }
     }
 }

@@ -151,12 +151,6 @@ public class MetropolisLayouter {
                     referenceElement.setWidth(config.getMetropolisReferenceBuildingWidth("mountainReferenceBuilding"));
                     referenceElement.setLength(config.getMetropolisReferenceBuildingLength("mountainReferenceBuilding"));
                     break;
-
-                case Cloud:
-                    referenceElement.setHeight(config.getMetropolisReferenceBuildingHeigth("cloudReferenceBuilding"));
-                    referenceElement.setWidth(config.getMetropolisReferenceBuildingWidth("cloudReferenceBuilding"));
-                    referenceElement.setLength(config.getMetropolisReferenceBuildingLength("cloudReferenceBuilding"));
-                    break;
             }
     }
 
