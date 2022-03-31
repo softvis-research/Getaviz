@@ -32,7 +32,7 @@ public class MetropolisRoadNetworkBuilder {
 	public void createRoadNetworks() {
 		ACityElement virtualRootDistrict = this.createVirtualRootDistrict();
 		ADistrictRoadNetwork rootRoadNetwork = new ADistrictRoadNetwork(this.nodeRepository, this.repository, virtualRootDistrict, new HashMap<>(), this.config);
-		List<ACityElement> mainRoads = rootRoadNetwork.calculate();
+		List<ACityElement> mainRoads = rootRoadNetwork.calculate2();
 		
 		for (ACityElement mainRoad : mainRoads) {
 			this.repository.addElement(mainRoad);
@@ -41,7 +41,7 @@ public class MetropolisRoadNetworkBuilder {
 		
 		for (ACityElement namespaceDistrict : this.repository.getNamespaceDistrictsOfOriginSet()) {
 			ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(this.nodeRepository, this.repository, namespaceDistrict, rootRoadNetwork.getSubElementConnectors(namespaceDistrict), this.config);
-			List<ACityElement> roads = roadNetwork.calculate();
+			List<ACityElement> roads = roadNetwork.calculate2();
 			
 			for (ACityElement road : roads) {
 				this.repository.addElement(road);
