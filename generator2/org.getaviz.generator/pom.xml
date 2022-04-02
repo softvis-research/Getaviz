@@ -15,7 +15,8 @@
 		</site>
 	</distributionManagement>
 	<properties>
-		<neo4j-driver.version>1.7.2</neo4j-driver.version>
+		<!--<neo4j-driver.version>1.7.2</neo4j-driver.version>-->
+		<neo4j-driver.version>4.4.3</neo4j-driver.version>
 		<junit.jupiter.version>5.3.1</junit.jupiter.version>
 		<dependency.locations.enabled>false</dependency.locations.enabled>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -228,18 +229,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>3.1.12.2</version>
-				<configuration>
-					<xmlOutput>true</xmlOutput>
-					<!-- Optional directory to put findbugs xdoc xml report -->
-					<xmlOutputDirectory>target/site</xmlOutputDirectory>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 </project>

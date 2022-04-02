@@ -1,12 +1,7 @@
 package org.getaviz.generator.database;
 
-import org.neo4j.driver.v1.AccessMode;
-import org.neo4j.driver.v1.Driver;
-import org.neo4j.driver.v1.GraphDatabase;
-import org.neo4j.driver.v1.Session;
-import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.Transaction;
-import org.neo4j.driver.v1.types.Node;
+import org.neo4j.driver.*;
+import org.neo4j.driver.types.Node;
 
 public class DatabaseConnector implements AutoCloseable {
 	private static String URL = "bolt://neo4j:7687";
@@ -41,7 +36,7 @@ public class DatabaseConnector implements AutoCloseable {
 	}
 
 	public void executeWrite(String... statements) {
-		try (Session session = driver.session(AccessMode.WRITE)) {
+		try (Session session = driver.session()) {
 			session.writeTransaction((Transaction tx) -> {
 				for (String statement : statements) {
 					tx.run(statement);
@@ -55,15 +50,14 @@ public class DatabaseConnector implements AutoCloseable {
 		Node result;
 		try (Session session = driver.session()) {
             try (Transaction tx = session.beginTransaction()) {
-                result = tx.run(statement + " RETURN " + parameterName).next().get(parameterName).asNode();
-                tx.success();  // Mark this write as successful.
+				result = tx.run(statement + " RETURN " + parameterName).next().get(parameterName).asNode();
             }
         }
 		return result;
 	}
 	
-	public StatementResult executeRead(String statement) {
-		try (Session session = driver.session(AccessMode.READ)) {
+	public Result executeRead(String statement) {
+		try (Session session = driver.session()) {
 			return session.run(statement);
 		}
 	}

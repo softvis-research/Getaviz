@@ -4,9 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPNodeTypes;
-import org.neo4j.driver.v1.Value;
-import org.neo4j.driver.v1.types.Node;
-
+import org.neo4j.driver.Value;
+import org.neo4j.driver.types.Node;
 import java.util.*;
 
 public class ACityElement {

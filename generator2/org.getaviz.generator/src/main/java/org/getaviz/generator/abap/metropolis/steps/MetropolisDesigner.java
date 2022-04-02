@@ -8,7 +8,6 @@ import org.getaviz.generator.abap.enums.SAPNodeTypes;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
-import org.neo4j.driver.v1.types.Node;
 
 import java.util.Collection;
 import java.util.HashMap;

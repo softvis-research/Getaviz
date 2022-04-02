@@ -48,7 +48,6 @@ public class LoaderStep {
             System.exit(0);
         }
 
-
         // Make sure the graph is empty
         connector.executeWrite("MATCH (n) DETACH DELETE n;");
 

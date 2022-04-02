@@ -9,7 +9,7 @@ import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.database.DatabaseConnector;
 import org.getaviz.run.local.common.Maps;
-import org.neo4j.driver.v1.types.Node;
+import org.neo4j.driver.types.Node;
 
 import java.io.File;
 import java.io.FileWriter;

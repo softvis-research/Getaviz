@@ -7,9 +7,10 @@ import org.getaviz.generator.abap.enums.SAPNodeLabels;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.database.DatabaseConnector;
-import org.neo4j.driver.v1.StatementResult;
-import org.neo4j.driver.v1.Value;
-import org.neo4j.driver.v1.types.Node;
+import org.neo4j.driver.Result;
+import org.neo4j.driver.Value;
+import org.neo4j.driver.types.Node;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -211,7 +212,7 @@ public class SourceNodeRepository {
 
         Collection<Node> nodesByLabelAndProperty = new ArrayList<>();
 
-        StatementResult results = connector.executeRead("MATCH (n:Elements {" + property + ": '" + value + "'}) RETURN n");
+        Result results = connector.executeRead("MATCH (n:Elements {" + property + ": '" + value + "'}) RETURN n");
         results.forEachRemaining((result) -> {
             Node propertyValue = result.get("n").asNode();
 

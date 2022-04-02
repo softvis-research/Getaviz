@@ -1,6 +1,7 @@
 package org.getaviz.generator.abap.layouts.kdtree;
 
-import org.neo4j.driver.v1.types.Node;
+
+import org.neo4j.driver.types.Node;
 
 import java.util.Arrays;
 

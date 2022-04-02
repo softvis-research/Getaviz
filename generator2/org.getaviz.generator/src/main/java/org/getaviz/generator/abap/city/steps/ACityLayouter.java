@@ -12,8 +12,8 @@ import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
-import org.neo4j.driver.v1.Value;
-import org.neo4j.driver.v1.types.Node;
+import org.neo4j.driver.Value;
+import org.neo4j.driver.types.Node;
 
 import java.util.*;
 

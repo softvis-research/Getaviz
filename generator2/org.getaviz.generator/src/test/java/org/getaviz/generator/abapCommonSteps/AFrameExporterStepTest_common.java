@@ -15,7 +15,7 @@ import org.json.simple.parser.JSONParser;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.neo4j.driver.v1.Record;
+import org.neo4j.driver.Record;
 
 import java.io.File;
 import java.io.IOException;

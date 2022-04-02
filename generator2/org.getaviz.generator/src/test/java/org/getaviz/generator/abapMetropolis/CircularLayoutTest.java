@@ -13,8 +13,6 @@ import org.getaviz.generator.database.DatabaseConnector;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.neo4j.driver.v1.Record;
-import org.neo4j.driver.v1.types.Node;
 
 import java.math.BigDecimal;
 import java.util.Collection;

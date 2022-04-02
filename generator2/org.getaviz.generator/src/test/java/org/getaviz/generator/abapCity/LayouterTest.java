@@ -14,8 +14,8 @@ import org.getaviz.generator.mockups.ABAPmock;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.neo4j.driver.v1.Value;
-import org.neo4j.driver.v1.types.Node;
+import org.neo4j.driver.Value;
+import org.neo4j.driver.types.Node;
 
 import java.util.Collection;
 
