@@ -83,33 +83,25 @@ public class MetropolisCreator {
 
         long mountainCounter = 0;
         long seaCounter = 0;
-        long cloudCounter = 0;
 
         for (ACityElement packageDistrict: packageDistricts){
-            // only for root folder (iteration = 0)
-            String iterationString = packageDistrict.getSourceNodeProperty(JavaNodeProperties.iteration);
-            int iterationInt = Integer.parseInt(iterationString);
             Collection<ACityElement> subElements = packageDistrict.getSubElements();
 
-            if(iterationInt == 0) {
-                if (!subElements.isEmpty()) {
+            if (!subElements.isEmpty()) {
+                if (config.showMountainReferenceBuilding()) {
+                    createRefBuilding(packageDistrict, ACityElement.ACitySubType.Mountain);
+                    mountainCounter++;
+                }
 
-                    if (config.showMountainReferenceBuilding()) {
-                        createRefBuilding(packageDistrict, ACityElement.ACitySubType.Mountain);
-                        mountainCounter++;
-                    }
-
-                    if (config.showSeaReferenceBuilding()) {
-                        createRefBuilding(packageDistrict, ACityElement.ACitySubType.Sea);
-                        seaCounter++;
-                    }
+                if (config.showSeaReferenceBuilding()) {
+                    createRefBuilding(packageDistrict, ACityElement.ACitySubType.Sea);
+                    seaCounter++;
                 }
             }
         }
 
         log.info(mountainCounter + " refBuildings of type mountain created");
         log.info(seaCounter + " refBuildings of type sea created");
-        log.info(cloudCounter + " refBuildings of type cloud created");
     }
 
     private ACityElement createRefBuilding(ACityElement packageDistrict, ACityElement.ACitySubType refBuildingType) {
