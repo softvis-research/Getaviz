@@ -114,7 +114,7 @@ public class MetaDataExporterStepTest_common {
     void checkNeo4jMetaDataProperty() {
         Record record = connector
                 .executeRead("MATCH (n:ACityRep) RETURN n.metaData AS metaData LIMIT 1")
-                .single();
+                .get(0);
         String metaData = record.get("metaData").asString();
 
         JSONParser parser = new JSONParser();

@@ -7,6 +7,7 @@ import org.getaviz.generator.abap.enums.SAPNodeLabels;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.database.DatabaseConnector;
+import org.neo4j.driver.Record;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Value;
 import org.neo4j.driver.types.Node;
@@ -47,15 +48,15 @@ public class SourceNodeRepository {
 
         AtomicInteger counter = new AtomicInteger(0);
 
-        connector.executeRead("MATCH (n:Elements {" + property + ": '" + value + "'}) RETURN n")
-                .forEachRemaining((result) -> {
-                    Node sourceNode = result.get("n").asNode();
+        List<Record> records = connector.executeRead("MATCH (n:Elements {" + property + ": '" + value + "'}) RETURN n");
+        for(Record result : records){
+            Node sourceNode = result.get("n").asNode();
 
-                    addNodeByID(sourceNode);
-                    addNodesByProperty(sourceNode);
+            addNodeByID(sourceNode);
+            addNodesByProperty(sourceNode);
 
-                    counter.addAndGet(1);
-                });
+            counter.addAndGet(1);
+        };
 
         log.info(counter.get() + " Nodes added with property \"" + property + "\" and value \"" + value + "\"");
     }
@@ -93,7 +94,10 @@ public class SourceNodeRepository {
         Set<Long> newNodeIds = new TreeSet<>();
 
         int nodesBefore = nodeById.size();
-        connector.executeRead(relatedNodesStatement).forEachRemaining((result) -> {
+
+
+        List<Record> records = connector.executeRead(relatedNodesStatement);
+        for(Record result : records){
             Node nNode = result.get("n").asNode();
 
             if(!nodeExist(nNode)){
@@ -109,7 +113,8 @@ public class SourceNodeRepository {
 
             addNodesByRelation(mNode, nNode, relationType.name());
             relationCounter.addAndGet(1);
-        });
+        };
+
         int nodesAfter = nodeById.size();
 
         log.info(nodeCounter.get() + " nodes added with relation \"" + relationType + "\" loaded");
@@ -140,9 +145,8 @@ public class SourceNodeRepository {
 
     public void loadNodesWithRelation(SAPRelationLabels relationLabel){
 
-        connector.executeRead(
-                " MATCH (m)-[:" + relationLabel.name() + "]->(n) RETURN m, n"
-        ).forEachRemaining((result) -> {
+        List<Record> records = connector.executeRead(" MATCH (m)-[:" + relationLabel.name() + "]->(n) RETURN m, n");
+        for(Record result : records){
             Node mNode = result.get("m").asNode();
             Node nNode = result.get("n").asNode();
 
@@ -153,9 +157,7 @@ public class SourceNodeRepository {
             addNodesByProperty(nNode);
 
             addNodesByRelation(mNode, nNode, relationLabel.name());
-
-        });
-
+        }
     }
 
 
@@ -212,13 +214,12 @@ public class SourceNodeRepository {
 
         Collection<Node> nodesByLabelAndProperty = new ArrayList<>();
 
-        Result results = connector.executeRead("MATCH (n:Elements {" + property + ": '" + value + "'}) RETURN n");
-        results.forEachRemaining((result) -> {
-            Node propertyValue = result.get("n").asNode();
-
+        List<Record> records = connector.executeRead("MATCH (n:Elements {" + property + ": '" + value + "'}) RETURN n");
+        for(Record r : records){
+            Node propertyValue = r.get("n").asNode();
             nodesByLabelAndProperty.add(propertyValue);
+        }
 
-        });
 
         return nodesByLabelAndProperty;
     }
@@ -288,20 +289,6 @@ public class SourceNodeRepository {
         });
     }
 
-
-   /* private void addNodeByProperty(Node node){
-        node.values().forEach( (nodeType)->{
-            if( !nodeById.containsKey(nodeType)){
-                Map<Long, Node> nodeIDMap = new HashMap<>();
-                nodeById.put(nodeType, nodeIDMap);
-            }
-            Map<Long, Node> nodeIDMap = nodeById.get(nodeType);
-            Long nodeID = node.id();
-            if( !nodeIDMap.containsValue(nodeID)){
-                nodeIDMap.put(nodeID, node);
-            }
-        });
-    }*/
 
     private void addNodesByRelation(Node mNode, Node nNode, String relationName) {
 

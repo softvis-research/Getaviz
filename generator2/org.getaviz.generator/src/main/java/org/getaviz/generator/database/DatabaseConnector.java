@@ -3,6 +3,12 @@ package org.getaviz.generator.database;
 import org.neo4j.driver.*;
 import org.neo4j.driver.types.Node;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import static org.neo4j.driver.AccessMode.*;
+
 public class DatabaseConnector implements AutoCloseable {
 	private static String URL = "bolt://neo4j:7687";
 	private final Driver driver;
@@ -55,19 +61,19 @@ public class DatabaseConnector implements AutoCloseable {
         }
 		return result;
 	}
-	
-	public Result executeRead(String statement) {
-		try (Session session = driver.session()) {
-			return session.run(statement);
+
+	public List<Record> executeRead(String statement) {
+		try (Session session = driver.session(SessionConfig.builder().withDefaultAccessMode(AccessMode.READ).build())) {
+			return session.run(statement).list();
 		}
 	}
 	
 	public Node getVisualizedEntity(Long id) {
-		return executeRead("MATCH (n)-[:VISUALIZES]->(e) WHERE ID(n) = " + id + " RETURN e").single().get("e").asNode();
+		return executeRead("MATCH (n)-[:VISUALIZES]->(e) WHERE ID(n) = " + id + " RETURN e").get(0).get("e").asNode();
 	}
 	
 	public Node getPosition(Long id) {
-		return executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + id + " RETURN p").single().get("p").asNode();
+		return executeRead("MATCH (n)-[:HAS]->(p:Position) WHERE ID(n) = " + id + " RETURN p").get(0).get("p").asNode();
 	}
 
 	@Override

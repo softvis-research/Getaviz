@@ -109,7 +109,7 @@ public class AFrameExporterStepTest_common {
                 .executeRead("MATCH (n:ACityRep) WHERE EXISTS (n.aframeProperty)\n" +
                         "RETURN n.aframeProperty AS aframeProperty \n" +
                         "LIMIT 1")
-                .single();
+                .get(0);
         String aframeProperty = record.get("aframeProperty").asString();
         assertNotSame("null", aframeProperty);
 

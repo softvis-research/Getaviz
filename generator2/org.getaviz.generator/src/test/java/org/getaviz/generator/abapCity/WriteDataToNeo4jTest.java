@@ -70,7 +70,7 @@ public class WriteDataToNeo4jTest {
 
         Record districtResult = connector
                 .executeRead("MATCH (n:Elements {cityType : '" + ACityElement.ACityType.District + "' }) RETURN count(n) AS result")
-                .single();
+                .get(0);
         int numberOfVisualizedPackages = districtResult.get("result").asInt();
         assertEquals(42, numberOfVisualizedPackages);
     }
@@ -80,7 +80,7 @@ public class WriteDataToNeo4jTest {
 
         Record results = connector
                 .executeRead("MATCH (n:Elements {cityType : '" + ACityElement.ACityType.Building + "' }) RETURN count(n) AS result")
-                .single();
+                .get(0);
         int numberOfVisualized = results.get("result").asInt();
         assertEquals(117, numberOfVisualized);
     }
@@ -91,7 +91,7 @@ public class WriteDataToNeo4jTest {
 
         Record result = connector
                 .executeRead("MATCH (n:Elements {cityType : '" + ACityElement.ACityType.Chimney + "' }) RETURN count(n) AS result")
-                .single();
+                .get(0);
         int numberOfVisualizedPackages = result.get("result").asInt();
         assertEquals(61, numberOfVisualizedPackages);
     }
@@ -103,7 +103,7 @@ public class WriteDataToNeo4jTest {
 
         Record floorResult = connector
                 .executeRead("MATCH (n:Elements {cityType : '" + ACityElement.ACityType.Floor + "' }) RETURN count(n) AS result")
-                .single();
+                .get(0);
         int numberOfVisualizedPackages = floorResult.get("result").asInt();
         assertEquals(99, numberOfVisualizedPackages);
     }
@@ -112,7 +112,7 @@ public class WriteDataToNeo4jTest {
     void checkPropertiesFromAddedElementsToNeo4j() {
 
         Record colorResult = connector
-                .executeRead("MATCH (n:Elements {cityType : '" + ACityElement.ACityType.Chimney + "' }) RETURN n.color AS result").next();
+                .executeRead("MATCH (n:Elements {cityType : '" + ACityElement.ACityType.Chimney + "' }) RETURN n.color AS result").get(0);
         String color = colorResult.get("result").asString();
         assertEquals("#FFFF00", color);
     }
@@ -122,7 +122,7 @@ public class WriteDataToNeo4jTest {
     void checkBuildingLayout(){
 
         Record heightResult = connector
-                .executeRead("MATCH (n:Elements {cityType : '" + ACityElement.ACityType.Chimney + "' }) RETURN n.height AS result").next();
+                .executeRead("MATCH (n:Elements {cityType : '" + ACityElement.ACityType.Chimney + "' }) RETURN n.height AS result").get(0);
         double height = heightResult.get("result").asDouble();
         assertEquals(0.5, height);
     }
@@ -130,7 +130,7 @@ public class WriteDataToNeo4jTest {
     @Test
     void loadedNodesNew(){
 
-        Record allNodesNew = connector.executeRead("MATCH (n) RETURN count(n) AS result").single();
+        Record allNodesNew = connector.executeRead("MATCH (n) RETURN count(n) AS result").get(0);
         int numberOfAllNodes = allNodesNew.get("result").asInt();
         assertEquals(659, numberOfAllNodes); //340 Elelemente vorher + 99Floors + 61 chimneys + 42 Distrikte + 117 Buildings = 319
     }
@@ -138,7 +138,7 @@ public class WriteDataToNeo4jTest {
     @Test
     void NodesWithContainsRelation() {
 
-        Record containNodes = connector.executeRead("MATCH p=()-[r:CONTAINS]->() RETURN count(p) AS result").single();
+        Record containNodes = connector.executeRead("MATCH p=()-[r:CONTAINS]->() RETURN count(p) AS result").get(0);
         int numberOfContainsNodes = containNodes.get("result").asInt();
         assertEquals(296, numberOfContainsNodes); //40 uses -  4 fehlende contains -> 340 - 44 = 296!
     }
@@ -146,7 +146,7 @@ public class WriteDataToNeo4jTest {
     @Test
     void NodesWithSourceRelation() {
 
-        Record sourceResult = (Record) connector.executeRead("MATCH p=()<-[r:SOURCE]-() RETURN count(p) AS result").single();
+        Record sourceResult = (Record) connector.executeRead("MATCH p=()<-[r:SOURCE]-() RETURN count(p) AS result").get(0);
         int sourceResults = sourceResult.get("result").asInt();
 
         assertEquals(294, sourceResults); // 296 (contains) - typeDistricts (25) = 271
@@ -155,7 +155,7 @@ public class WriteDataToNeo4jTest {
     @Test
     void NodesWithChildRelation() {
 
-        Record sourceResult = connector.executeRead("MATCH p=()-[r:CHILD]->() RETURN count(p) AS result").single();
+        Record sourceResult = connector.executeRead("MATCH p=()-[r:CHILD]->() RETURN count(p) AS result").get(0);
         int sourceResults = sourceResult.get("result").asInt();
 
         assertEquals(302, sourceResults);// 117 Buildings + 99 Floors + 61 Chimneys + 25 Districts*
