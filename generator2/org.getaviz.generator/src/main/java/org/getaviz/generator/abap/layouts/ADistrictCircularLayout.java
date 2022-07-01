@@ -3,13 +3,21 @@ package org.getaviz.generator.abap.layouts;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.SettingsConfiguration.ClusteredLayoutVariant;
+import org.getaviz.generator.SettingsConfiguration.LayoutSortCriterion;
+import org.getaviz.generator.SettingsConfiguration.MetropolisDistrictLayout;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.repository.ACityElement;
+import org.getaviz.generator.abap.repository.ACityElement.ACityType;
+import org.getaviz.generator.abap.repository.ACityReferenceMapper;
+import org.getaviz.generator.abap.repository.ACityRepository;
+import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.abap.layouts.kdtree.ACityKDTree;
 import org.getaviz.generator.abap.layouts.kdtree.ACityKDTreeNode;
 import org.getaviz.generator.abap.layouts.kdtree.ACityRectangle;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class ADistrictCircularLayout {
     //Old coding -> Refactor, generalize and maybe reimplement
@@ -21,6 +29,9 @@ public class ADistrictCircularLayout {
     private Collection<ACityElement> subElements;
 
     private Map<ACityRectangle, ACityElement> rectangleElementsMap;
+    
+    private SourceNodeRepository nodeRepository;
+    private ACityRepository repository;
 
     public ADistrictCircularLayout(ACityElement district, Collection<ACityElement> subElements, SettingsConfiguration config) {
         this.config = config;
@@ -31,12 +42,10 @@ public class ADistrictCircularLayout {
         this.rectangleElementsMap = new HashMap<>();
     }
 
-    public void calculate(){
-
+    public void calculate(){    	
         ACityRectangle coveringACityRectangle = arrangeSubElements(subElements);
         setSizeOfDistrict(coveringACityRectangle);
         setPositionOfDistrict(coveringACityRectangle);
-
     }
 
 
@@ -89,6 +98,63 @@ public class ADistrictCircularLayout {
             }
         }
     }
+    
+    private List<ACityRectangle> sortDistrictsBySize(Collection<ACityRectangle> districtRectangles) {
+    	List<ACityRectangle> sortedDistrictRectangles = new ArrayList<ACityRectangle>(districtRectangles);
+    	
+    	Collections.sort(sortedDistrictRectangles, (e1, e2) -> {
+        	if (e1.compareTo(e2) == 0) {
+        		ACityElement elem1 = rectangleElementsMap.get(e1);
+        		ACityElement elem2 = rectangleElementsMap.get(e2);
+        		
+				return Integer.compare(Integer.parseInt(elem1.getSourceNodeProperty(SAPNodeProperties.element_id)), Integer.parseInt(elem2.getSourceNodeProperty(SAPNodeProperties.element_id)));
+			} else {
+				return e1.compareTo(e2);
+			}
+        });
+    	
+        Collections.reverse(sortedDistrictRectangles);
+        
+    	return sortedDistrictRectangles;
+    }
+    
+    public void setRepositories(SourceNodeRepository nodeRepository, ACityRepository repository) {
+    	this.nodeRepository = nodeRepository;
+    	this.repository = repository;
+    }
+    
+    private List<ACityRectangle> sortDistrictsByReferences(ArrayList<ACityRectangle> districtRectangles) {
+    	
+    	ACityReferenceMapper referenceMapper = new ACityReferenceMapper(nodeRepository, repository);
+    	Map<ACityElement, Integer> districtToAmountOfRelations = new HashMap<>();
+    	
+    	for (ACityRectangle rectangle : districtRectangles) {
+    		
+    		ACityElement packageDistrict = rectangleElementsMap.get(rectangle);
+    		
+			districtToAmountOfRelations.putIfAbsent(packageDistrict, 0);
+			
+			for (ACityRectangle otherRectangle : districtRectangles) {
+				
+				ACityElement otherPackageDistrict = rectangleElementsMap.get(otherRectangle);
+				
+				if (packageDistrict == otherPackageDistrict) {
+					continue;
+				}
+				districtToAmountOfRelations.put(packageDistrict, districtToAmountOfRelations.get(packageDistrict) 
+																	+ referenceMapper.getAmountOfRelationsToACityElement(packageDistrict, otherPackageDistrict, false)
+																	+ referenceMapper.getAmountOfRelationsToACityElement(packageDistrict, otherPackageDistrict, true));
+			}
+		}
+    	
+    	Collections.sort(districtRectangles, (e1, e2) -> {        		
+				return Integer.compare(districtToAmountOfRelations.get(rectangleElementsMap.get(e1)), districtToAmountOfRelations.get(rectangleElementsMap.get(e2)));
+        });
+    	
+        Collections.reverse(districtRectangles);
+        
+    	return districtRectangles;
+    }
 
 
     /*
@@ -101,28 +167,8 @@ public class ADistrictCircularLayout {
         ACityKDTree ptree = new ACityKDTree(docACityRectangle);
 
         ACityRectangle covrec = new ACityRectangle();
-
-        List<ACityRectangle> elements = createACityRectanglesOfElements(subElements);
-//        Collections.sort(elements);
-        Collections.sort(elements, (e1, e2) -> {
-        	if (e1.compareTo(e2) == 0) {
-        		ACityElement elem1 = rectangleElementsMap.get(e1);
-        		ACityElement elem2 = rectangleElementsMap.get(e2);
-        		
-        		if (elem1.getSourceNodeProperty(SAPNodeProperties.element_id) == null) {
-					return -1;
-				}
-        		
-        		if (elem1.getSourceNodeProperty(SAPNodeProperties.element_id) == null) {
-					return 1;
-				}
-        		
-				return Integer.compare(Integer.parseInt(elem1.getSourceNodeProperty(SAPNodeProperties.element_id)), Integer.parseInt(elem2.getSourceNodeProperty(SAPNodeProperties.element_id)));
-			} else {
-				return e1.compareTo(e2);
-			}
-        });
-        Collections.reverse(elements);
+        
+        List<ACityRectangle> elements = sortDistrictsBySize(createACityRectanglesOfElements(subElements));
 
         List<ACityRectangle> originSet = new ArrayList<>();
         List<ACityRectangle> customCode = new ArrayList<>();
@@ -162,6 +208,65 @@ public class ADistrictCircularLayout {
                 }
             }
         }
+
+        ACityRectangle previousClusterRectangle = null;
+        
+        if (config.getMetropolisDistrictLayout() == MetropolisDistrictLayout.DEFAULT) {
+        	
+        	if (config.getLayoutSortCriterion() == LayoutSortCriterion.SIZE) {
+				// nothing to do, origin set is already sorted by size
+			} else if (config.getLayoutSortCriterion() == LayoutSortCriterion.REFERENCE) {
+				originSet = this.sortDistrictsByReferences(new ArrayList<ACityRectangle>(originSet));
+			}
+			
+		} else if (config.getMetropolisDistrictLayout() == MetropolisDistrictLayout.CLUSTERED) {
+        	
+        	// Grundmenge in cluster aufteilen    	
+            List<ACityElement> cluster = divideOriginSetIntoCluster(originSet);
+            
+            // für jedes Cluster die Rechtecke erstellen
+            List<ACityRectangle> clusterRectangles = createACityRectanglesOfElements(cluster);
+                
+                
+        	// für jedes Cluster die spezielle arrangeSubElements-Methode ausführen
+            for (ACityRectangle clusterRectangle : clusterRectangles) {
+            	
+            	ACityRectangle coveringClusterRectangle = null;
+            	
+            	if (config.getClusteredLayoutVariant() == ClusteredLayoutVariant.COMBINED) {
+            		coveringClusterRectangle = arrangeCluster(rectangleElementsMap.get(clusterRectangle).getSubElements(), previousClusterRectangle);
+            		
+        		} else if (config.getClusteredLayoutVariant() == ClusteredLayoutVariant.DISTINCT) {
+        			coveringClusterRectangle = arrangeCluster(rectangleElementsMap.get(clusterRectangle).getSubElements(), null);
+				}
+    			
+    			clusterRectangle.changeRectangle(coveringClusterRectangle.getCenterX(), coveringClusterRectangle.getCenterY(),
+    												coveringClusterRectangle.getWidth(), coveringClusterRectangle.getLength(), 0);
+    			
+    			rectangleElementsMap.get(clusterRectangle).setXPosition(clusterRectangle.getCenterX());
+    			rectangleElementsMap.get(clusterRectangle).setZPosition(clusterRectangle.getCenterY());
+    			rectangleElementsMap.get(clusterRectangle).setWidth(clusterRectangle.getWidth());
+    			rectangleElementsMap.get(clusterRectangle).setLength(clusterRectangle.getLength());
+    			
+    			if (config.getClusteredLayoutVariant() == ClusteredLayoutVariant.COMBINED) {
+                	previousClusterRectangle = clusterRectangle;		
+        		}
+            }
+            
+            if (config.getClusteredLayoutVariant() == ClusteredLayoutVariant.COMBINED) {
+            	
+            	// previousClusterRectangle contains already the whole origin set
+            	// so there's no further arrangement of the origin set necessary
+                arrangeDistrictsCircular(customCode, previousClusterRectangle);
+                arrangeDistrictsCircular(standardCode, previousClusterRectangle);
+                
+                return covrec;
+        		
+    		} else if (config.getClusteredLayoutVariant() == ClusteredLayoutVariant.DISTINCT) {
+                originSet = new ArrayList<ACityRectangle>(clusterRectangles);    			
+			}
+            
+		}
 
         // Light Map algorithm for the origin set
         for (ACityRectangle el : originSet) {
@@ -208,11 +313,140 @@ public class ADistrictCircularLayout {
             }
         }
 
-
         arrangeDistrictsCircular(customCode, covrec);
         arrangeDistrictsCircular(standardCode, covrec);
-
+        
         return covrec; // used to adjust viewpoint in x3d
+    }
+    
+    private List<ACityElement> divideOriginSetIntoCluster(Collection<ACityRectangle> districts) {
+    	List<ACityElement> cluster = new ArrayList<>();
+    	
+    	// Variante 1 => 3 Cluster erzeugen; eingeteilt nach Anzahl der Aufrufbeziehungen
+    	List<ACityRectangle> sortedDistricts = sortDistrictsByReferences(new ArrayList<ACityRectangle>(districts));
+    	
+    	ACityElement cluster1 = new ACityElement(ACityType.District);
+    	for (int i = 0; i < Math.ceil(sortedDistricts.size() / 3.0); i++) {
+			cluster1.addSubElement(rectangleElementsMap.get(sortedDistricts.get(i)));
+		}
+    	cluster.add(cluster1);
+    	
+    	ACityElement cluster2 = new ACityElement(ACityType.District);
+    	for (int i = (int) Math.ceil(sortedDistricts.size() / 3.0); i < Math.ceil(2 * sortedDistricts.size() / 3.0); i++) {
+			cluster2.addSubElement(rectangleElementsMap.get(sortedDistricts.get(i)));
+		}
+    	cluster.add(cluster2);
+    	
+    	ACityElement cluster3 = new ACityElement(ACityType.District);
+    	for (int i = (int) Math.ceil(2 * sortedDistricts.size() / 3.0); i < sortedDistricts.size(); i++) {
+			cluster3.addSubElement(rectangleElementsMap.get(sortedDistricts.get(i)));
+		}
+    	cluster.add(cluster3);
+    	
+    	
+    	// Variante 2 => beliebig viele Cluster mit Paketen bilden, die möglichst viele Aufrufbeziehungen untereinander haben
+//    	int threshold = 3;
+//    	ACityReferenceMapper refMapper = new ACityReferenceMapper(nodeRepository, repository);
+//    	Map<ACityElement, SortedSet<Entry<ACityElement, Integer>>> referenceMatrix = new HashMap<ACityElement, SortedSet<Entry<ACityElement,Integer>>>();
+//    	
+//    	// Initialisierung der Distanzmatrix
+//    	for (ACityElement district : districts) {
+//			referenceMatrix.putIfAbsent(district, new TreeSet<Map.Entry<ACityElement,Integer>>((Entry<ACityElement,Integer> e1, Entry<ACityElement,Integer> e2) -> {
+//				return e1.getValue().compareTo(e2.getValue());
+//			}));
+//			
+//			for (ACityElement otherDistrict : districts) {
+//				if (district == otherDistrict) {
+//					continue;
+//				}
+//				
+//				if (referenceMatrix.containsKey(otherDistrict)) {
+//					for (Entry<ACityElement, Integer> entry : referenceMatrix.get(otherDistrict)) {
+//						if (entry.getKey() == district) {
+//							referenceMatrix.get(district).add(new AbstractMap.SimpleEntry<ACityElement, Integer>(otherDistrict, entry.getValue()));
+//							break;
+//						}
+//					}
+//				} else {
+//					int referencesBetweenDistricts = refMapper.getAmountOfRelationsToACityElement(district, otherDistrict, false)
+//														+ refMapper.getAmountOfRelationsToACityElement(district, otherDistrict, true);
+//					
+//					referenceMatrix.get(district).add(new AbstractMap.SimpleEntry<ACityElement, Integer>(otherDistrict, referencesBetweenDistricts));
+//				}
+//			}
+//		}
+    	
+    	return cluster;
+    }
+    
+    private ACityRectangle arrangeCluster(Collection<ACityElement> subElements, ACityRectangle previousCluster) {
+        // get maxArea (worst case) for root of KDTree
+        ACityRectangle docACityRectangle = calculateMaxAreaRoot(subElements);
+        ACityKDTree ptree = new ACityKDTree(docACityRectangle);
+
+        ACityRectangle covrec = new ACityRectangle();
+        
+        List<ACityRectangle> elements = new ArrayList<ACityRectangle>();
+        
+        // ACityRectangles zu den Objekten suchen 
+        for (Entry<ACityRectangle, ACityElement> entry : rectangleElementsMap.entrySet()) {
+			if (subElements.contains(entry.getValue())) {
+				elements.add(entry.getKey());
+			}
+		}
+            
+        if (previousCluster != null) {
+			elements.add(previousCluster);
+		}
+        
+        elements = sortDistrictsBySize(elements);
+
+        // Light Map algorithm for the origin set
+        for (ACityRectangle el : elements) {
+            Map<ACityKDTreeNode, Double> preservers = new LinkedHashMap<>();
+            Map<ACityKDTreeNode, Double> expanders = new LinkedHashMap<>();
+            ACityKDTreeNode targetNode = new ACityKDTreeNode();
+            ACityKDTreeNode fitNode = new ACityKDTreeNode();
+
+            List<ACityKDTreeNode> pnodes = ptree.getFittingNodes(el);
+
+            // check all empty leaves: either they extend COVREC (->expanders) or it doesn't
+            // change (->preservers)
+            for (ACityKDTreeNode pnode : pnodes) {
+                sortEmptyLeaf(pnode, el, covrec, preservers, expanders);
+            }
+
+            // choose best-fitting pnode
+            if (!preservers.isEmpty()) {
+                targetNode = bestFitIsPreserver(preservers.entrySet());
+            } else {
+                targetNode = bestFitIsExpander(expanders.entrySet());
+            }
+
+            // modify targetNode if necessary
+            if (targetNode.getACityRectangle().getWidth() == el.getWidth()
+                    && targetNode.getACityRectangle().getLength() == el.getLength()) { // this if could probably be skipped,
+                // trimmingNode() always returns
+                // fittingNode
+                fitNode = targetNode;
+            } else {
+                fitNode = trimmingNode(targetNode, el);
+            }
+
+            // set fitNode as occupied
+            fitNode.setOccupied();
+
+            // give Entity it's Position
+            setNewPositionFromNode(el, fitNode);
+
+            // if fitNode expands covrec, update covrec
+            if (fitNode.getACityRectangle().getBottomRightX() > covrec.getBottomRightX()
+                    || fitNode.getACityRectangle().getBottomRightY() > covrec.getBottomRightY()) {
+                updateCovrec(fitNode, covrec);
+            }
+        }
+
+        return covrec;
     }
 
     private void arrangeDistrictsCircular(List<ACityRectangle> elements, ACityRectangle covrec) {
@@ -342,8 +576,8 @@ public class ADistrictCircularLayout {
         }
     }
 
-    private List<ACityRectangle> createACityRectanglesOfElements(Collection<ACityElement> elements) {
-        List<ACityRectangle> rectangles = new ArrayList<>();
+    private ArrayList<ACityRectangle> createACityRectanglesOfElements(Collection<ACityElement> elements) {
+        ArrayList<ACityRectangle> rectangles = new ArrayList<>();
 
         for (ACityElement element : elements) {
             double width = element.getWidth();

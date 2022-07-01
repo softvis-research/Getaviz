@@ -105,6 +105,7 @@ public class MetropolisLayouter {
         } else if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.CIRCULAR) {
 
             ADistrictCircularLayout aDistrictLayout = new ADistrictCircularLayout(virtualRootDistrict, districts, config);
+            aDistrictLayout.setRepositories(nodeRepository, repository);
             aDistrictLayout.calculate();
         }
 
