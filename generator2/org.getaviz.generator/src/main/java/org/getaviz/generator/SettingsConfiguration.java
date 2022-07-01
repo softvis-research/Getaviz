@@ -194,6 +194,54 @@ public class SettingsConfiguration {
 				return NotInOriginLayoutVersion.MINIMAL_DISTANCE;
 		}
 	}
+	
+	public enum MetropolisDistrictLayout {
+		DEFAULT, CLUSTERED
+	}
+	
+	public MetropolisDistrictLayout getMetropolisDistrictLayout() {
+		String value = config.getString("city.abap.metropolis.layout", "default");
+		switch (value) {
+		case "default":
+			return MetropolisDistrictLayout.DEFAULT;
+		case "clustered":
+			return MetropolisDistrictLayout.CLUSTERED;
+		default:
+			return MetropolisDistrictLayout.DEFAULT;
+		}
+	}
+	
+	public enum ClusteredLayoutVariant {
+		COMBINED, DISTINCT
+	}
+	
+	public ClusteredLayoutVariant getClusteredLayoutVariant() {
+		String value = config.getString("city.abap.metropolis.layout.clustered", "combined");
+		switch (value) {
+		case "combined":
+			return ClusteredLayoutVariant.COMBINED;
+		case "distinct":
+			return ClusteredLayoutVariant.DISTINCT;
+		default:
+			return ClusteredLayoutVariant.COMBINED;
+		}
+	}
+	
+	public enum LayoutSortCriterion {
+		SIZE, REFERENCE
+	}
+	
+	public LayoutSortCriterion getLayoutSortCriterion() {
+		String value = config.getString("city.abap.metropolis.layout.sort_criterion", "size");
+		switch (value) {
+		case "size":
+			return LayoutSortCriterion.SIZE;
+		case "reference":
+			return LayoutSortCriterion.REFERENCE;
+		default:
+			return LayoutSortCriterion.SIZE;
+		}
+	}
 
 	public boolean clusterSubPackages() {
 		return config.getBoolean("city.abap.clusterSubPackages", true);
