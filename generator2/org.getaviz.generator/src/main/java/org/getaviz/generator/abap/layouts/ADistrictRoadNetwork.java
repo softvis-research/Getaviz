@@ -413,10 +413,8 @@ public class ADistrictRoadNetwork {
 					// no elements in this columns -> create edge
 					this.roadGraph.insertEdge(lowerNode, upperNode);
 					
-				} else if (elementsInSameColumn.stream().filter( 
-								element -> ( lowerNode.getY() < element.getZPosition() && element.getZPosition() < upperNode.getY())
-							).count() == 0) {
-					
+				} else if (elementsInSameColumn.stream().noneMatch( 
+								element -> (lowerNode.getY() < element.getZPosition() && element.getZPosition() < upperNode.getY()))) {					
 					// no elements between nearby nodes -> create edge 
 					this.roadGraph.insertEdge(lowerNode, upperNode);
 				}
@@ -444,10 +442,8 @@ public class ADistrictRoadNetwork {
 					// no elements in this row -> create edge
 					this.roadGraph.insertEdge(leftNode, rightNode);
 					
-				} else if (elementsInSameRow.stream().filter( 
-								element -> ( leftNode.getX() < element.getXPosition() && element.getXPosition() < rightNode.getX())
-							).count() == 0) {
-					
+				} else if (elementsInSameRow.stream().noneMatch( 
+								element -> (leftNode.getX() < element.getXPosition() && element.getXPosition() < rightNode.getX()))) {
 					// no elements between nearby nodes -> create edge 
 					this.roadGraph.insertEdge(leftNode, rightNode);
 				}
