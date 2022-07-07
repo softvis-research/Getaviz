@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.layouts.ADistrictRoadNetwork;
 import org.getaviz.generator.abap.repository.ACityElement;
+import org.getaviz.generator.abap.repository.ACityReferenceMapper;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
 import org.getaviz.generator.abap.repository.ACityElement.ACityType;
@@ -30,21 +31,23 @@ public class MetropolisRoadNetworkBuilder {
 	}
 	
 	public void createRoadNetworks() {
-		ACityElement virtualRootDistrict = this.createVirtualRootDistrict();
-		ADistrictRoadNetwork rootRoadNetwork = new ADistrictRoadNetwork(this.nodeRepository, this.repository, virtualRootDistrict, new HashMap<>(), this.config);
+		ACityReferenceMapper referenceMapper = new ACityReferenceMapper(nodeRepository, repository);
+		
+		ACityElement virtualRootDistrict = createVirtualRootDistrict();
+		ADistrictRoadNetwork rootRoadNetwork = new ADistrictRoadNetwork(virtualRootDistrict, new HashMap<>(), referenceMapper, config);
 		List<ACityElement> mainRoads = rootRoadNetwork.calculate2();
 		
 		for (ACityElement mainRoad : mainRoads) {
-			this.repository.addElement(mainRoad);
+			repository.addElement(mainRoad);
 		}
 		
 		
-		for (ACityElement namespaceDistrict : this.repository.getNamespaceDistrictsOfOriginSet()) {
-			ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(this.nodeRepository, this.repository, namespaceDistrict, rootRoadNetwork.getSubElementConnectors(namespaceDistrict), this.config);
+		for (ACityElement namespaceDistrict : repository.getNamespaceDistrictsOfOriginSet()) {
+			ADistrictRoadNetwork roadNetwork = new ADistrictRoadNetwork(namespaceDistrict, rootRoadNetwork.getSubElementConnectors(namespaceDistrict), referenceMapper, config);
 			List<ACityElement> roads = roadNetwork.calculate2();
 			
 			for (ACityElement road : roads) {
-				this.repository.addElement(road);
+				repository.addElement(road);
 			}			
 		}
 	}
@@ -53,7 +56,7 @@ public class MetropolisRoadNetworkBuilder {
 		// virtual root district comprises all namespace districts of the origin set
 		ACityElement virtualRootDistrict = new ACityElement(ACityType.District);		
 		
-		for (ACityElement namespaceDistrict : this.repository.getNamespaceDistrictsOfOriginSet()) {
+		for (ACityElement namespaceDistrict : repository.getNamespaceDistrictsOfOriginSet()) {
 			virtualRootDistrict.addSubElement(namespaceDistrict);
 		}
 		
@@ -62,7 +65,7 @@ public class MetropolisRoadNetworkBuilder {
 			   minY = Double.POSITIVE_INFINITY,
 			   maxY = Double.NEGATIVE_INFINITY;
 		
-		var districts = this.repository.getNamespaceDistrictsOfOriginSet();		
+		var districts = repository.getNamespaceDistrictsOfOriginSet();		
 		
 		// determine corner points of virtual root district
 		for (ACityElement namespaceDistrict : districts) {

@@ -19,19 +19,13 @@ import org.getaviz.generator.abap.layouts.road.network.RoadGraphDijkstraAlgorith
 import org.getaviz.generator.abap.layouts.road.network.RoadNode;
 import org.getaviz.generator.abap.layouts.road.network.RoadNodeBuilder;
 import org.getaviz.generator.abap.repository.ACityElement;
-import org.getaviz.generator.abap.repository.ACityRepository;
-import org.getaviz.generator.abap.repository.IACityRelationMapper;
-import org.getaviz.generator.abap.repository.SourceNodeRepository;
+import org.getaviz.generator.abap.repository.ACityReferenceMapper;
 import org.getaviz.generator.abap.repository.ACityElement.ACitySubType;
 import org.getaviz.generator.abap.repository.ACityElement.ACityType;
-import org.getaviz.generator.abap.repository.ACityReferenceMapper;
 
 public class ADistrictRoadNetwork {
 
 	private RoadGraph roadGraph;
-
-	private SourceNodeRepository nodeRepository;
-	private ACityRepository repository;
 	
 	private ACityElement district;
 	private Map<ACityElement, RoadNode> mainElementConnectors;
@@ -39,15 +33,13 @@ public class ADistrictRoadNetwork {
 	private Set<ACityElement> subElements;
 	private Map<ACityElement, HashMap<ACityElement, RoadNode>> subElementConnectors;
 	
+	private ACityReferenceMapper referenceMapper;
+	
 	private SettingsConfiguration config;
 
-	public ADistrictRoadNetwork(SourceNodeRepository nodeRepository, ACityRepository repository, ACityElement mainElement, HashMap<ACityElement,
-			 RoadNode> mainElementConnectors, SettingsConfiguration config) {
+	public ADistrictRoadNetwork(ACityElement mainElement, HashMap<ACityElement, RoadNode> mainElementConnectors, ACityReferenceMapper referenceMapper, SettingsConfiguration config) {
 		
 		this.roadGraph = new RoadGraph();
-		
-		this.nodeRepository = nodeRepository;
-		this.repository = repository;
 		
 		this.district = mainElement;
 		this.mainElementConnectors = mainElementConnectors;
@@ -59,29 +51,30 @@ public class ADistrictRoadNetwork {
 			this.subElementConnectors.put(subElement, new HashMap<ACityElement, RoadNode>());			
 		}
 		
+		this.referenceMapper = referenceMapper;
+		
 		this.config = config;
 	}
 	
 	public HashMap<ACityElement, RoadNode> getSubElementConnectors(ACityElement subElement) {
-		return this.subElementConnectors.get(subElement);
+		return subElementConnectors.get(subElement);
 	}
 
 	public List<ACityElement> calculate() {
 		
-		this.initializeRoadGraph();
+		initializeRoadGraph();
 		
 		if (config.completeRoadNetwork()) {
-			return this.extractRoads(this.roadGraph.getGraph());
+			return extractRoads(roadGraph.getGraph());
 		}
 		
 		RoadNodeBuilder nodeBuilder = new RoadNodeBuilder(config);
-		ACityReferenceMapper referenceMapper = new ACityReferenceMapper(nodeRepository, repository);
 
 		// TODO
 		// erstmal nur Workaround
 		List<List<RoadNode>> paths = new ArrayList<List<RoadNode>>();
 		
-		for (ACityElement subelement : this.subElements) {
+		for (ACityElement subelement : subElements) {
 			
 			if (subelement.getType() != ACityType.District) {
 				continue;
@@ -95,18 +88,18 @@ public class ADistrictRoadNetwork {
 					continue;
 				}
 				
-				if (!this.checkIfElementBelongsToOriginSet(referencedElement)) {
+				if (!checkIfElementBelongsToOriginSet(referencedElement)) {
 					continue;
 				}
 				
 				List<RoadNode> slipRoadNodesTarget;
 				
-				if (this.subElements.contains(referencedElement)) {
+				if (subElements.contains(referencedElement)) {
 					// von den Distrikten die Auffahrtspunkte bestimmen
 					slipRoadNodesTarget = nodeBuilder.calculateSlipRoadNodes(referencedElement);
 				} else {
 					slipRoadNodesTarget = new ArrayList<RoadNode>();
-					slipRoadNodesTarget.add(this.mainElementConnectors.get(referencedElement.getParentElement()));
+					slipRoadNodesTarget.add(mainElementConnectors.get(referencedElement.getParentElement()));
 				}
 
 				// TODO
@@ -118,9 +111,9 @@ public class ADistrictRoadNetwork {
 				// Aufruf von dijkstra
 				for (RoadNode slipRoadNodeSource : slipRoadNodesSource) {
 					for (RoadNode slipRoadNodeTarget : slipRoadNodesTarget) {
-						List<List<RoadNode>> shortestPath = this.getAllShortestPaths(slipRoadNodeSource, slipRoadNodeTarget);
+						List<List<RoadNode>> shortestPath = getAllShortestPaths(slipRoadNodeSource, slipRoadNodeTarget);
 						
-						double pathLength = this.roadGraph.calculatePathLength(shortestPath.get(0));
+						double pathLength = roadGraph.calculatePathLength(shortestPath.get(0));
 						if (pathLength < shortestPathLength) {
 							shortestPathAbsolut = shortestPath.get(0);
 							shortestPathLength = pathLength;
@@ -135,14 +128,14 @@ public class ADistrictRoadNetwork {
 					// Auffahrt auf containingSourceDistrict
 					shortestPathAbsolut.add(0, nodeBuilder.calculateDistrictSlipRoadNode(subelement, shortestPathAbsolut.get(0)));
 					
-					if (this.subElements.contains(referencedElement)) {
+					if (subElements.contains(referencedElement)) {
 						// Auffahrt auf containingTargetDistrict
 						shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(referencedElement, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 						
-						this.subElementConnectors.get(subelement).put(referencedElement, nodeBuilder.calculateDistrictMarginRoadNode(subelement, shortestPathAbsolut.get(0)));
-						this.subElementConnectors.get(referencedElement).put(subelement, nodeBuilder.calculateDistrictMarginRoadNode(referencedElement, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
+						subElementConnectors.get(subelement).put(referencedElement, nodeBuilder.calculateDistrictMarginRoadNode(subelement, shortestPathAbsolut.get(0)));
+						subElementConnectors.get(referencedElement).put(subelement, nodeBuilder.calculateDistrictMarginRoadNode(referencedElement, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 					} else {
-						shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(this.district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
+						shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 					}
 					paths.add(shortestPathAbsolut);
 				}
@@ -153,11 +146,11 @@ public class ADistrictRoadNetwork {
 			// Wir müssen jetzt nur Beziehungen berücksichtigen, die von "draußen" kommen
 			// Die anderen haben wir ja schon behandelt
 			for (ACityElement referencedElement : reverseReferencedElements) {
-				if (referencedElement == null || subelement == referencedElement || this.subElements.contains(referencedElement)) {
+				if (referencedElement == null || subelement == referencedElement || subElements.contains(referencedElement)) {
 					continue;
 				}
 				
-				if (!this.checkIfElementBelongsToOriginSet(referencedElement)) {
+				if (!checkIfElementBelongsToOriginSet(referencedElement)) {
 					continue;
 				}
 
@@ -169,9 +162,9 @@ public class ADistrictRoadNetwork {
 				// kürzesten Pfad aller (4 * 4 =) 16 Kombinationen berechnen
 				// Aufruf von dijkstra
 				for (RoadNode slipRoadNodeSource : slipRoadNodesSource) {
-					List<List<RoadNode>> shortestPath = this.getAllShortestPaths(slipRoadNodeSource, this.mainElementConnectors.get(referencedElement.getParentElement()));
+					List<List<RoadNode>> shortestPath = getAllShortestPaths(slipRoadNodeSource, mainElementConnectors.get(referencedElement.getParentElement()));
 					
-					double pathLength = this.roadGraph.calculatePathLength(shortestPath.get(0));
+					double pathLength = roadGraph.calculatePathLength(shortestPath.get(0));
 					if (pathLength < shortestPathLength) {
 						shortestPathAbsolut = shortestPath.get(0);
 						shortestPathLength = pathLength;
@@ -184,7 +177,7 @@ public class ADistrictRoadNetwork {
 					
 					// Auffahrt auf containingSourceDistrict
 					shortestPathAbsolut.add(0, nodeBuilder.calculateDistrictSlipRoadNode(subelement, shortestPathAbsolut.get(0)));
-					shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(this.district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
+					shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 					paths.add(shortestPathAbsolut);
 				}
 			}
@@ -200,17 +193,16 @@ public class ADistrictRoadNetwork {
 		this.initializeRoadGraph();
 		
 		if (config.completeRoadNetwork()) {
-			return this.extractRoads(this.roadGraph.getGraph());
+			return extractRoads(roadGraph.getGraph());
 		}
 		
 		RoadNodeBuilder nodeBuilder = new RoadNodeBuilder(config);
-		ACityReferenceMapper referenceMapper = new ACityReferenceMapper(nodeRepository, repository);
 
 		// TODO
 		// erstmal nur Workaround
 		List<Road> roads = new ArrayList<Road>();
 		
-		for (ACityElement subelement : this.subElements) {
+		for (ACityElement subelement : subElements) {
 			
 			if (subelement.getType() != ACityType.District) {
 				continue;
@@ -224,18 +216,18 @@ public class ADistrictRoadNetwork {
 					continue;
 				}
 				
-				if (!this.checkIfElementBelongsToOriginSet(referencedElement)) {
+				if (!checkIfElementBelongsToOriginSet(referencedElement)) {
 					continue;
 				}
 				
 				List<RoadNode> slipRoadNodesTarget;
 				
-				if (this.subElements.contains(referencedElement)) {
+				if (subElements.contains(referencedElement)) {
 					// von den Distrikten die Auffahrtspunkte bestimmen
 					slipRoadNodesTarget = nodeBuilder.calculateSlipRoadNodes(referencedElement);
 				} else {
 					slipRoadNodesTarget = new ArrayList<RoadNode>();
-					slipRoadNodesTarget.add(this.mainElementConnectors.get(referencedElement.getParentElement()));
+					slipRoadNodesTarget.add(mainElementConnectors.get(referencedElement.getParentElement()));
 				}
 
 				// TODO
@@ -247,9 +239,9 @@ public class ADistrictRoadNetwork {
 				// Aufruf von dijkstra
 				for (RoadNode slipRoadNodeSource : slipRoadNodesSource) {
 					for (RoadNode slipRoadNodeTarget : slipRoadNodesTarget) {
-						List<List<RoadNode>> shortestPath = this.getAllShortestPaths(slipRoadNodeSource, slipRoadNodeTarget);
+						List<List<RoadNode>> shortestPath = getAllShortestPaths(slipRoadNodeSource, slipRoadNodeTarget);
 						
-						double pathLength = this.roadGraph.calculatePathLength(shortestPath.get(0));
+						double pathLength = roadGraph.calculatePathLength(shortestPath.get(0));
 						if (pathLength < shortestPathLength) {
 							shortestPathAbsolut = shortestPath.get(0);
 							shortestPathLength = pathLength;
@@ -264,12 +256,12 @@ public class ADistrictRoadNetwork {
 					// Auffahrt auf containingSourceDistrict
 					shortestPathAbsolut.add(0, nodeBuilder.calculateDistrictSlipRoadNode(subelement, shortestPathAbsolut.get(0)));
 					
-					if (this.subElements.contains(referencedElement)) {
+					if (subElements.contains(referencedElement)) {
 						// Auffahrt auf containingTargetDistrict
 						shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(referencedElement, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 						
-						this.subElementConnectors.get(subelement).put(referencedElement, nodeBuilder.calculateDistrictMarginRoadNode(subelement, shortestPathAbsolut.get(0)));
-						this.subElementConnectors.get(referencedElement).put(subelement, nodeBuilder.calculateDistrictMarginRoadNode(referencedElement, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
+						subElementConnectors.get(subelement).put(referencedElement, nodeBuilder.calculateDistrictMarginRoadNode(subelement, shortestPathAbsolut.get(0)));
+						subElementConnectors.get(referencedElement).put(subelement, nodeBuilder.calculateDistrictMarginRoadNode(referencedElement, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 					} else {
 						shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(this.district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 					}
@@ -282,11 +274,11 @@ public class ADistrictRoadNetwork {
 			// Wir müssen jetzt nur Beziehungen berücksichtigen, die von "draußen" kommen
 			// Die anderen haben wir ja schon behandelt
 			for (ACityElement referencedElement : reverseReferencedElements) {
-				if (referencedElement == null || subelement == referencedElement || this.subElements.contains(referencedElement)) {
+				if (referencedElement == null || subelement == referencedElement || subElements.contains(referencedElement)) {
 					continue;
 				}
 				
-				if (!this.checkIfElementBelongsToOriginSet(referencedElement)) {
+				if (!checkIfElementBelongsToOriginSet(referencedElement)) {
 					continue;
 				}
 
@@ -298,9 +290,9 @@ public class ADistrictRoadNetwork {
 				// kürzesten Pfad aller (4 * 4 =) 16 Kombinationen berechnen
 				// Aufruf von dijkstra
 				for (RoadNode slipRoadNodeSource : slipRoadNodesSource) {
-					List<List<RoadNode>> shortestPath = this.getAllShortestPaths(slipRoadNodeSource, this.mainElementConnectors.get(referencedElement.getParentElement()));
+					List<List<RoadNode>> shortestPath = getAllShortestPaths(slipRoadNodeSource, mainElementConnectors.get(referencedElement.getParentElement()));
 					
-					double pathLength = this.roadGraph.calculatePathLength(shortestPath.get(0));
+					double pathLength = roadGraph.calculatePathLength(shortestPath.get(0));
 					if (pathLength < shortestPathLength) {
 						shortestPathAbsolut = shortestPath.get(0);
 						shortestPathLength = pathLength;
@@ -313,7 +305,7 @@ public class ADistrictRoadNetwork {
 					
 					// Auffahrt auf containingSourceDistrict
 					shortestPathAbsolut.add(0, nodeBuilder.calculateDistrictSlipRoadNode(subelement, shortestPathAbsolut.get(0)));
-					shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(this.district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
+					shortestPathAbsolut.add(nodeBuilder.calculateDistrictSlipRoadNode(district, shortestPathAbsolut.get(shortestPathAbsolut.size() - 1)));
 
 					roads.add(new Road(referencedElement.getParentElement(), subelement, shortestPathAbsolut));
 				}
@@ -335,9 +327,9 @@ public class ADistrictRoadNetwork {
 		RoadNodeBuilder nodeBuilder = new RoadNodeBuilder(config);
 		
 		// create surrounding nodes of main district
-		for (RoadNode node : nodeBuilder.calculateMarginRoadNodes(this.district)) {
-			if (!this.roadGraph.hasNode(node)) {
-				this.roadGraph.insertNode(node);
+		for (RoadNode node : nodeBuilder.calculateMarginRoadNodes(district)) {
+			if (!roadGraph.hasNode(node)) {
+				roadGraph.insertNode(node);
 				
 				nodesPerColumns.putIfAbsent(node.getX(), new ArrayList<RoadNode>());
 				nodesPerColumns.get(node.getX()).add(node);
@@ -348,10 +340,10 @@ public class ADistrictRoadNetwork {
 		}
 		
 		// create nodes per district subelement and group them by column and row
-		for (ACityElement districtSubElement : this.district.getSubElements()) {
+		for (ACityElement districtSubElement : district.getSubElements()) {
 			for (RoadNode node : nodeBuilder.calculateSurroundingRoadNodes(districtSubElement)) {				
-				if (!this.roadGraph.hasNode(node)) {
-					this.roadGraph.insertNode(node);
+				if (!roadGraph.hasNode(node)) {
+					roadGraph.insertNode(node);
 					
 					nodesPerColumns.putIfAbsent(node.getX(), new ArrayList<RoadNode>());
 					nodesPerColumns.get(node.getX()).add(node);
@@ -364,7 +356,7 @@ public class ADistrictRoadNetwork {
 		
 		// group elements by column and row 
 		// to check if an element is between two nodes
-		for (ACityElement districtElement : this.district.getSubElements()) {
+		for (ACityElement districtElement : district.getSubElements()) {
 			double rightBound = districtElement.getXPosition() + districtElement.getWidth() / 2.0
 					+ config.getACityDistrictHorizontalGap() / 2.0; // + config.getMetropolisRoadWidth() / 2.0;
 			
@@ -411,12 +403,12 @@ public class ADistrictRoadNetwork {
 				
 				if (elementsInSameColumn == null) {					
 					// no elements in this columns -> create edge
-					this.roadGraph.insertEdge(lowerNode, upperNode);
+					roadGraph.insertEdge(lowerNode, upperNode);
 					
 				} else if (elementsInSameColumn.stream().noneMatch( 
 								element -> (lowerNode.getY() < element.getZPosition() && element.getZPosition() < upperNode.getY()))) {					
 					// no elements between nearby nodes -> create edge 
-					this.roadGraph.insertEdge(lowerNode, upperNode);
+					roadGraph.insertEdge(lowerNode, upperNode);
 				}
 			}			
 		}
@@ -440,12 +432,12 @@ public class ADistrictRoadNetwork {
 				
 				if (elementsInSameRow == null) {					
 					// no elements in this row -> create edge
-					this.roadGraph.insertEdge(leftNode, rightNode);
+					roadGraph.insertEdge(leftNode, rightNode);
 					
 				} else if (elementsInSameRow.stream().noneMatch( 
 								element -> (leftNode.getX() < element.getXPosition() && element.getXPosition() < rightNode.getX()))) {
 					// no elements between nearby nodes -> create edge 
-					this.roadGraph.insertEdge(leftNode, rightNode);
+					roadGraph.insertEdge(leftNode, rightNode);
 				}
 			}			
 		}
@@ -492,12 +484,10 @@ public class ADistrictRoadNetwork {
 		List<ACityElement> roadElementsUnfiltered = new ArrayList<ACityElement>();
 		List<ACityElement> roadElements = new ArrayList<ACityElement>();
 		
-		IACityRelationMapper relationMapper = new ACityReferenceMapper(this.nodeRepository, this.repository);
-		
 		for (Road road : roads) {
-			int amountOfRelations = relationMapper.getAmountOfRelationsToACityElement(road.getStartElement(), road.getDestinationElement(), false);
+			int amountOfRelations = referenceMapper.getAmountOfRelationsToACityElement(road.getStartElement(), road.getDestinationElement(), false);
 			for (int i = 0; i < road.getPath().size() - 1; i++) {
-				roadElementsUnfiltered.add(this.createRoadACityElement(road.getPath().get(i), road.getPath().get(i + 1), amountOfRelations));
+				roadElementsUnfiltered.add(createRoadACityElement(road.getPath().get(i), road.getPath().get(i + 1), amountOfRelations));
 			}
 		}
 		
@@ -535,12 +525,12 @@ public class ADistrictRoadNetwork {
 		ACityElement road = new ACityElement(ACityType.Road);
 
 		road.setXPosition((start.getX() + end.getX()) / 2.0);
-		road.setYPosition(this.district.getYPosition() + config.getACityDistrictHeight() / 2.0
+		road.setYPosition(district.getYPosition() + config.getACityDistrictHeight() / 2.0
 				+ config.getMetropolisRoadHeight() / 2.0);
 		road.setZPosition((start.getY() + end.getY()) / 2.0);
 
-		road.setWidth(Math.abs(start.getX() - end.getX()) + this.config.getMetropolisRoadWidth(ACitySubType.Street));
-		road.setLength(Math.abs(start.getY() - end.getY()) + this.config.getMetropolisRoadWidth(ACitySubType.Street));
+		road.setWidth(Math.abs(start.getX() - end.getX()) + config.getMetropolisRoadWidth(ACitySubType.Street));
+		road.setLength(Math.abs(start.getY() - end.getY()) + config.getMetropolisRoadWidth(ACitySubType.Street));
 		road.setHeight(config.getMetropolisRoadHeight());
 
 		return road;
@@ -558,12 +548,12 @@ public class ADistrictRoadNetwork {
 		}
 
 		road.setXPosition((start.getX() + end.getX()) / 2.0);
-		road.setYPosition(this.district.getYPosition() + config.getACityDistrictHeight() / 2.0
+		road.setYPosition(district.getYPosition() + config.getACityDistrictHeight() / 2.0
 				+ config.getMetropolisRoadHeight() / 2.0);
 		road.setZPosition((start.getY() + end.getY()) / 2.0);
 
-		road.setWidth(Math.abs(start.getX() - end.getX()) + this.config.getMetropolisRoadWidth(road.getSubType()));
-		road.setLength(Math.abs(start.getY() - end.getY()) + this.config.getMetropolisRoadWidth(road.getSubType()));
+		road.setWidth(Math.abs(start.getX() - end.getX()) + config.getMetropolisRoadWidth(road.getSubType()));
+		road.setLength(Math.abs(start.getY() - end.getY()) + config.getMetropolisRoadWidth(road.getSubType()));
 		road.setHeight(config.getMetropolisRoadHeight());
 
 		return road;
