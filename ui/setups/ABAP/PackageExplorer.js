@@ -16,6 +16,11 @@ var setup = {
         },
 
         {
+            name: "canvasMarkController",
+            markingColor: "orange",
+        },
+
+        {
             name: "bannerController"
         },
 
@@ -258,6 +263,7 @@ var setup = {
                                 { name: "defaultLogger" },
                                 { name: "canvasHoverController" },
                                 { name: "canvasSelectController" },
+                                { name: "canvasMarkController" },
                                 { name: "canvasFilterController" },
                                 { name: "relationController" }
                             ],

@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --allow-file-access-from-files file:///C:\Users\G530358\Desktop\Anwendungen\IntelliJ\Projects\Getaviz\ui\index.html

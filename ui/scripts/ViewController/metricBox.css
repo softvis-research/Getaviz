@@ -1,0 +1,105 @@
+#viewControllerHeader {
+    float: left;
+    font-size: 12px;
+    line-height: 20px;
+    background-color: #1faeff;
+    width: 100%;
+    padding: 2px;
+}
+
+.metricDiv {
+    clear: left;
+    float: left;
+    width: 48%;
+    height: 33%;
+    border: 1px solid lightgray;
+}
+
+.mappingDiv {
+    overflow: hidden;
+    height: 33%;
+    border: 1px solid lightgray;
+}
+
+#downloadViewConfigButton {
+    float: right;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+#executeButton {
+    float: right;
+    font-size: 12px;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+#resetButton {
+    float: right;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+#addLayerButton {
+    float: right;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+#headerTextNode {
+    float: left;
+    font-size: 12px;
+    color: white;
+    padding: 3px 0;
+    margin-left: 5px;
+}
+
+.deleteButton {
+    float: right;
+    border: 1px solid lightgray;
+}
+
+.viewDropDown {
+    float: right;
+    font-size: 12px;
+}
+
+.metricTextNode {
+    float: left;
+} 
+
+.metricDropDown {
+    float: left;
+    font-size: 12px;
+}
+
+.metricParameter {
+    float: left;
+    display: none;
+    font-size: 12px;
+    text-align: right;
+}
+
+.mappingTextNode {
+    float: left;
+}
+
+.mappingDropDown {
+    float: left;
+    font-size: 12px;
+}
+
+.mappingParameter {
+    float: left;
+    display: none;
+    font-size: 12px;
+    text-align: right;
+}
+
+.textLabel {
+    font-size: 12px;
+    margin: 1px;
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 4px 0;
+}

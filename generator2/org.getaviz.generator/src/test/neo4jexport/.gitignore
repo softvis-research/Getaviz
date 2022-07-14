@@ -1,0 +1,5 @@
+# ignore all other files in this directory, but not subfolders and files in subfolders
+*
+!*/
+!*/*
+!.gitignore

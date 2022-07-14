@@ -7,12 +7,10 @@ var canvasMarkController = (function () {
 		DURATION: "DURATION"
 	}
 
-	var markingColor = "0 1 0";
-
 	//config parameters	
 	var controllerConfig = {
 		setCenterOfRotation: false,
-		//markingColor: "green",
+		markingColor: "green",
 		selectionMouseKey: 2,
 		selectionMode: SELECTION_MODES.UP,
 		selectionDurationSeconds: 0.5,

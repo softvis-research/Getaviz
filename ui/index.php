@@ -147,11 +147,19 @@ if (isset($_GET["lazy"])) {
 <script type="text/javascript" src="scripts/IssueExplorer/IssueExplorerController.js"></script>
 <script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script>
 
+<!--
 <script type="text/javascript" src="scripts/Metric/Constants.js"></script>
 <script type="text/javascript" src="scripts/Metric/ColorGradient.js"></script>
 <script type="text/javascript" src="scripts/Metric/MetricLayer.js"></script>
 <script type="text/javascript" src="scripts/Metric/DomHelper.js"></script>
 <script type="text/javascript" src="scripts/Metric/MetricController.js"></script>
+-->
+
+<script type="text/javascript" src="scripts/ViewController/Constants.js"></script>
+<script type="text/javascript" src="scripts/ViewController/ColorGradient.js"></script>
+<script type="text/javascript" src="scripts/ViewController/MetricLayer.js"></script>
+<script type="text/javascript" src="scripts/ViewController/DomHelper.js"></script>
+<script type="text/javascript" src="scripts/ViewController/MetricController.js"></script>
 
 <!-- filter -->
 <script type="text/javascript" src="scripts/Filter/Helpers/Constants.js"></script>
