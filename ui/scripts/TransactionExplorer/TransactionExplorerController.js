@@ -224,7 +224,7 @@ var transactionExplorerController = (function () {
 
 		var calledElements = entity.calls;
 
-		if(calledElements.length < 1){
+		if(!calledElements || calledElements.length < 1){
 			return calledByItems;
 		}
 

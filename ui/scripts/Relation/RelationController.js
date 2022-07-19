@@ -345,6 +345,7 @@ var relationController = function () {
 				relatedEntitiesOfSourceEntity = sourceEntity.accesses || [];
 			case "FunctionModule":
 			case "Report":
+			case "Transaction":	
 			case "FormRoutine":
 				relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.calls || []);
 				//relatedEntitiesOfSourceEntity = relatedEntitiesOfSourceEntity.concat(sourceEntity.calledBy);

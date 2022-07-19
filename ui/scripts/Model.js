@@ -158,6 +158,18 @@ var model = (function () {
 						}
 					}
 					break;
+					case "Transaction":
+						if (element.calls) {
+							entity.calls = element.calls.split(",");
+						} else {
+							entity.calls = [];
+						}
+						if (element.calledBy) {
+							entity.calledBy = element.calledBy.split(",");
+						} else {
+							entity.calledBy = [];
+						}
+						break;
                 case "Reference":
 					if (element.rcData) {
 						entity.rcData = element.rcData.split(",");
@@ -490,6 +502,10 @@ var model = (function () {
 					if (entity.dependsOn !== undefined && entity.dependsOn !== "") {
 						retrieveAllUsedMacros(entity.dependsOn, entity.id);
 					}
+					break;
+				case "Transaction":
+					replaceIdsWithReferences(entity, 'calls');
+					replaceIdsWithReferences(entity, 'calledBy');
 					break;
 
 				case "Report":
