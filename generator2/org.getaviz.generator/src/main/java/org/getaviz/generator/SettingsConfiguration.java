@@ -212,19 +212,41 @@ public class SettingsConfiguration {
 	}
 	
 	public enum ClusteredLayoutVariant {
-		COMBINED, DISTINCT
+		SPHERICAL, DISTINCT, COMBINED
 	}
 	
 	public ClusteredLayoutVariant getClusteredLayoutVariant() {
 		String value = config.getString("city.abap.metropolis.layout.clustered", "combined");
 		switch (value) {
-		case "combined":
-			return ClusteredLayoutVariant.COMBINED;
+		case "spherical":
+			return ClusteredLayoutVariant.SPHERICAL;
 		case "distinct":
 			return ClusteredLayoutVariant.DISTINCT;
-		default:
+		case "combined":
 			return ClusteredLayoutVariant.COMBINED;
+		default:
+			return ClusteredLayoutVariant.SPHERICAL;
 		}
+	}
+	
+	public enum ClusterCreationVariant {
+		STATIC, DYNAMIC
+	}
+	
+	public ClusterCreationVariant getClusterCreationVariant() {
+		String value = config.getString("city.abap.metropolis.layout.cluster_creation", "static");
+		switch (value) {
+		case "static":
+			return ClusterCreationVariant.STATIC;
+		case "dynamic":
+			return ClusterCreationVariant.DYNAMIC;
+		default:
+			return ClusterCreationVariant.STATIC;
+		}
+	}
+	
+	public int getAmountOfClusters() {
+		return config.getInt("city.abap.metropolis.layout.amount_of_clusters", 3);
 	}
 	
 	public enum LayoutSortCriterion {
@@ -241,6 +263,10 @@ public class SettingsConfiguration {
 		default:
 			return LayoutSortCriterion.SIZE;
 		}
+	}
+	
+	public int getReferenceThreshold() {
+		return config.getInt("city.abap.metropolis.layout.reference_threshold", 3);
 	}
 
 	public boolean clusterSubPackages() {
