@@ -37,7 +37,7 @@ public class DistrictLayoutTest {
         district.addSubElement(building);
 
 
-        ADistrictCircularLayout districtLayout = new ADistrictCircularLayout(district, district.getSubElements(), config);
+        ADistrictCircularLayout districtLayout = new ADistrictCircularLayout(district, district.getSubElements(), config, null);
         districtLayout.calculate();
     }
 

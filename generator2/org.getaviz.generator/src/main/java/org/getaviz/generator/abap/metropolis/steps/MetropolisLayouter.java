@@ -4,20 +4,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
-import org.getaviz.generator.abap.enums.SAPNodeTypes;
-import org.getaviz.generator.abap.enums.SAPRelationLabels;
 import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
-import org.getaviz.generator.abap.layouts.ADistrictRoadNetwork;
 import org.getaviz.generator.abap.layouts.ABuildingLayout;
 import org.getaviz.generator.abap.layouts.ADistrictCircularLayout;
 import org.getaviz.generator.abap.layouts.AStackLayout;
 import org.getaviz.generator.abap.repository.ACityElement;
+import org.getaviz.generator.abap.repository.ACityReferenceMapper;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
-import org.neo4j.driver.v1.Value;
-import org.neo4j.driver.v1.types.Node;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 public class MetropolisLayouter {
@@ -104,8 +99,10 @@ public class MetropolisLayouter {
 
         } else if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.CIRCULAR) {
 
-            ADistrictCircularLayout aDistrictLayout = new ADistrictCircularLayout(virtualRootDistrict, districts, config);
-            aDistrictLayout.setRepositories(nodeRepository, repository);
+        	// necessary to resolve references between the acity elements
+        	ACityReferenceMapper refMapper = new ACityReferenceMapper(nodeRepository, repository);
+        	
+            ADistrictCircularLayout aDistrictLayout = new ADistrictCircularLayout(virtualRootDistrict, districts, config, refMapper);
             aDistrictLayout.calculate();
         }
 
