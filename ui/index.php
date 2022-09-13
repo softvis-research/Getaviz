@@ -147,6 +147,9 @@ if (isset($_GET["lazy"])) {
 <script type="text/javascript" src="scripts/IssueExplorer/IssueExplorerController.js"></script>
 <script type="text/javascript" src="scripts/MacroExplorer/MacroExplorerController.js"></script>
 
+
+<script type="text/javascript" src="scripts/TransactionExplorer/TransactionExplorerController.js"></script>
+
 <!--
 <script type="text/javascript" src="scripts/Metric/Constants.js"></script>
 <script type="text/javascript" src="scripts/Metric/ColorGradient.js"></script>

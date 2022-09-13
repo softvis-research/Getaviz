@@ -16,14 +16,11 @@ var setup = {
         },
 
         {
-            name: "canvasMarkController",
-            markingColor: "orange",
-            selectionMode: "DURATION",
-            showProgressBar: true
+            name: "bannerController"
         },
 
         {
-            name: "bannerController"
+            name: "metricController"
         },
 
         {
@@ -79,6 +76,56 @@ var setup = {
             //abap: true,
             elementsSelectable: true 
         },
+
+        
+        {
+            name: "transactionExplorerController",
+            elements: [                
+                { type: "Transaction",
+                  icon: "scripts/TransactionExplorer/images/abap/transaction.png",
+                  sortOrder: 1000
+                }, 
+                { type: "Class",
+                  icon: "scripts/TransactionExplorer/images/abap/class.png",
+                  sortOrder: 1200
+                }, 
+                { type: "Interface",
+                  icon: "scripts/TransactionExplorer/images/abap/interface.png",
+                  sortOrder: 1300
+                },
+                { type: "Method",
+                  icon: "scripts/TransactionExplorer/images/abap/form_fumo_method.png",
+                  sortOrder: 1410
+                }, 
+                { type: "Attribute",
+                  icon: "scripts/TransactionExplorer/images/abap/attribute.png",
+                  sortOrder: 1430
+                }, 
+                { type: "FunctionGroup",
+                  icon: "scripts/TransactionExplorer/images/abap/fugr.png", 
+                  sortOrder: 1400
+                },  
+                { type: "FunctionModule",
+                  icon: "scripts/TransactionExplorer/images/abap/form_fumo_method.png", 
+                  sortOrder: 1410
+                },  
+                { type: "FormRoutine",
+                  icon: "scripts/TransactionExplorer/images/abap/form_fumo_method.png",
+                  sortOrder: 1420
+                }, 
+                { type: "Report",
+                  icon: "scripts/TransactionExplorer/images/abap/report_district.png", 
+                  sortOrder: 1100
+                }, 
+            ],
+
+            //abap: true,
+            elementsSelectable: true 
+            
+        },
+        
+
+
         {
             name: "canvasFilterController"
         },
@@ -168,6 +215,14 @@ var setup = {
                         icon: "scripts/Legend/images/circle_red_light.png",
                     }]
                 },{
+                    name: "Transactions",
+                    open: false,
+                    icon: "scripts/Legend/images/circle_green_light.png",
+                    entries:[{
+                            name: "Transaction Building",
+                            icon: "scripts/Legend/images/cuboid_gray.png",
+                    }]
+                },{
                     name: "ReferenceBuildings",
                     open: true,
                     icon: "scripts/Legend/images/circle_width.png",
@@ -231,44 +286,77 @@ var setup = {
                                 orientation: "horizontal",
                                 name: "left",
                                 first: {
-                                    size: "55%",
-                                    expanders: [
-                                        {
-                                            name: "packageExplorer",
-                                            title: "Package Explorer",
-                                            controllers: [
-                                                { name: "packageExplorerController" }
+                                    size: "70%",
+                                    area: {
+                                        orientation: "horizontal",
+                                        name: "explorer",
+                                        first: {
+                                            size: "45%",
+                                            expanders: [
+                                                {
+                                                    name: "transactionExplorer",
+                                                    title: "Transaction Explorer",
+                                                    
+                                                    controllers: [
+                                                        { name: "transactionExplorerController" }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        second: {
+                                            size: "45%",
+                                            expanders: [
+                                                {
+                                                    name: "packageExplorer",
+                                                    title: "Package Explorer",
+                                                    controllers: [
+                                                        { name: "packageExplorerController" }
+                                                    ]
+                                                }
                                             ]
                                         }
-                                    ]
+                                    }
                                 },
-                            second: {
-                                size: "45%",
-                                expanders: [
-                                    {
-                                        name: "legend",
-                                        title: "Legend",
-                                        controllers: [
-                                            { name: "legendController" }
-                                        ],
-                                    }    
-                                ],
+                                second: {
+                                    size: "45%",
+                                    expanders: [
+                                        {
+                                            name: "legend",
+                                            title: "Legend",
+                                            controllers: [
+                                                { name: "legendController" }
+                                            ],
+                                        }    
+                                    ],
                                 },
                             },
                         },
                         second: {
                             size: "80%",
-                            collapsible: false,
-                            name: "canvas",
-                            canvas: {},
-                            controllers: [
-                                { name: "defaultLogger" },
-                                { name: "canvasHoverController" },
-                                { name: "canvasSelectController" },
-                                { name: "canvasMarkController" },
-                                { name: "canvasFilterController" },
-                                { name: "relationController" }
-                            ],
+                            area: {
+                                orientation: "horizontal",
+                                name: "rightPanel",
+                                first: {
+                                    size: "80%",
+                                    collapsible: false,
+                                    name: "canvas",
+                                    canvas: {},
+                                    controllers: [
+                                        { name: "defaultLogger" },
+                                        { name: "canvasHoverController" },
+                                        { name: "canvasSelectController" },
+                                        { name: "canvasFilterController" },
+                                        { name: "relationController" }
+                                    ]
+                                },
+                                second: {
+                                    size: "20%",
+                                    name: "metric",
+                                    controllers: [
+                                        { name: "metricController" }
+                                    ]
+                                }
+                            }
                         }
                     }
                 }

@@ -1,390 +1,494 @@
 var transactionExplorerController = (function () {
 
-    let transactionExplorerTreeID = "transactionExplorerTree";
-	let jQTransactionExplorerTree = "#transactionExplorerTree";
+  let transactionExplorerTreeID = "transactionExplorerTree";
+let jQTransactionExplorerTree = "#transactionExplorerTree";
+
+let tree;
 
-	let tree;
+  var elementsMap = new Map();
+var ztreeIdMap = new Map();
 
-	//var entityTypesForSearch = ["Namespace", "Class", "Interface", "Report", "FunctionGroup"];
+const domIDs = {
+  zTreeDiv: "zTreeDiv",
+}
 
-    var elementsMap = new Map();
+let controllerConfig = {
 
-	const domIDs = {
-		zTreeDiv: "zTreeDiv",
-		//searchDiv: "searchDiv",
-		//searchInput: "searchField"
-	}
+      elements: [],
+  elementsSelectable: true,
+  useMultiselect: true,
+
+};
 
-	let controllerConfig = {
+  var selectedEntities = [];
 
-        elements: [],
-		elementsSelectable: true,
+function initialize(setupConfig) {
 
-		//showSearchField: true,
-		//entityTypesForSearch: entityTypesForSearch,
+      application.transferConfigParams(setupConfig, controllerConfig);
 
-		useMultiselect: true,
+      controllerConfig.elements.forEach(function (element) {
+    elementsMap.set(element.type, element);
+  });
 
-	};
+}
 
-    var selectedEntities = [];
+function activate(rootDiv) {
 
-	function initialize(setupConfig) {
+      //create zTree div-container
+  let zTreeDiv = document.createElement("DIV");
+  zTreeDiv.id = domIDs.zTreeDiv;
 
-        application.transferConfigParams(setupConfig, controllerConfig);
+  let transactionExplorerTreeUL = document.createElement("UL");
+  transactionExplorerTreeUL.id = transactionExplorerTreeID;
+  transactionExplorerTreeUL.setAttribute("class", "ztree");
 
-        controllerConfig.elements.forEach(function (element) {
-			elementsMap.set(element.type, element);
-		});
+  zTreeDiv.appendChild(transactionExplorerTreeUL);
+  rootDiv.appendChild(zTreeDiv);
 
-	}
+  //create zTree
+  prepareTreeView();
 
-	function activate(rootDiv) {
+      events.selected.on.subscribe(onEntitySelected);
+  events.selected.off.subscribe(onEntityUnselected);
+  events.loaded.on.subscribe(onEntitiesLoaded);
+  events.filtered.off.subscribe(onEntitiesUnfiltered);
+      
+}
 
-        //create zTree div-container
-		let zTreeDiv = document.createElement("DIV");
-		zTreeDiv.id = domIDs.zTreeDiv;
+  function reset() {
+  prepareTreeView();
+}
 
-		let transactionExplorerTreeUL = document.createElement("UL");
-		transactionExplorerTreeUL.id = transactionExplorerTreeID;
-		transactionExplorerTreeUL.setAttribute("class", "ztree");
+  function prepareTreeView() {
 
-		zTreeDiv.appendChild(transactionExplorerTreeUL);
-		rootDiv.appendChild(zTreeDiv);
+  const entities = model.getCodeEntities();
+  const items = createZTreeElements(entities);
 
-		//create zTree
-		prepareTreeView();
+    var settings = {
+        data: {
+          simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "parentId",
+            rootPId: ""
+          }
+        },
+        callback: {
+          onClick: publishSelectEvent,
+          onExpand: zTreeOnExpand,
+        },
+        view: {
+          showLine: false,
+          showIcon: true,
+          selectMulti: false
+        }
+  
+      };
 
-        events.selected.on.subscribe(onEntitySelected);
-		events.selected.off.subscribe(onEntityUnselected);
-		events.loaded.on.subscribe(onEntitiesLoaded);
-		events.filtered.off.subscribe(onEntitiesUnfiltered);
-        
-	}
+  //create zTree
+  tree = $.fn.zTree.init($(jQTransactionExplorerTree), settings, items);
+}
 
-    function reset() {
-		prepareTreeView();
-	}
+function searchTransactionsForZTree(entities) {
+  const transactionElements = [];
+   
+    entities.forEach(function (entity) {
 
-    function prepareTreeView() {
+    if( entity.type == 'Transaction'){
 
-		const entities = model.getCodeEntities();
-		const items = createZTreeElements(entities);
+      transactionElements.push(entity)
+    
+    }
+  });	
+  
+  return transactionElements;
+}
 
-		//zTree settings
-		var settings = {
-			check: {
-				enable: controllerConfig.elementsSelectable,
-				chkboxType: { "Y": "ps", "N": "s" }
-			},
-			data: {
-				simpleData: {
-					enable: true,
-					idKey: "id",
-					pIdKey: "parentId",
-					rootPId: ""
-				}
-			},
-			callback: {
-				onCheck: zTreeOnCheck,
-				onClick: publishSelectEvent,
-				onExpand: zTreeOnExpand,
-			},
-			view: {
-				showLine: false,
-				showIcon: true,
-				selectMulti: false
-			}
+function findCalledByElements(entity) {
+  const calledByElements = [];
 
-		};
+  var calledElements = entity.calls;
 
-		//create zTree
-		tree = $.fn.zTree.init($(jQTransactionExplorerTree), settings, items);
-	}
+  if (!calledElements || calledElements.length < 1){
+    return calledByElements;
+  }
 
-	function searchTransactionsForZTree(entities) {
-		const transactionElements = [];
-     
-        entities.forEach(function (entity) {
+  calledElements.forEach(function (calledElement) {
+    
+    calledByElements.push(calledElement)
+  });
 
-		  if( entity.type == 'Transaction'){
+  return calledByElements;
 
-				transactionElements.push(entity)
-			
-		  }
-	  });	
-	  
-	  return transactionElements;
-	}
+}
 
-	function findCalledByElements(entity) {
-		const calledByElements = [];
+function createItemsForTransactions(entity, parentId){
 
-		var calledElements = entity.calls;
+  var transactionItems = [];
 
-		if (!calledElements || calledElements.length < 1){
-			return calledByElements;
-		}
+      var icon = elementsMap.get(entity.type).icon;
 
-		calledElements.forEach(function (calledElement) {
-			
-			calledByElements.push(calledElement)
-		});
+  var calledByEntities = findCalledByElements(entity);
 
-		return calledByElements;
+  var allChildren = getAllCalledByElements(entity).length;
 
-	}
+  if (entity.type == "Transaction"){
+    //var allChildren = getAllCalledByElements(entity).length;
 
-	function createItemsForTransactions(entity, parentId){
+    if (allChildren == 0) { allChildren = "0"; }
 
-		var transactionItems = [];
+    var newName = entity.name + " (" + allChildren + ")";
+  }
 
-        var icon = elementsMap.get(entity.type).icon;
+  // Eindeutige ID für den ZTree erzeugen
+  var ztreeID = generateUniqueID();
+  ztreeIdMap.set(ztreeID, entity);
 
-		var item = createItem(entity, icon, parentId);
-		transactionItems.push(item);
+  var item = createItem(entity, ztreeID, icon, parentId, newName);
+  transactionItems.push(item);
 
-		var calledByEntities = findCalledByElements(entity);
+  if(calledByEntities.length < 1){
+    return transactionItems;
+  }
 
-		if(calledByEntities.length < 1){
-			return transactionItems;
-		}
+  calledByEntities.forEach(function(calledElement){
 
-		calledByEntities.forEach(function(calledElement){
+          var calledItems = createItemsForTransactions(calledElement, item.id); //item.id statt entity.id nutzen
+          transactionItems.push(...calledItems);
 
-            var calledItems = createItemsForTransactions(calledElement, entity.id);
-            transactionItems.push(...calledItems);
-		});	
+  });	
 
-		return transactionItems;
-	}
+  return transactionItems;
+}
 
+function generateUniqueID(){
 
-	function createItem(entity, icon, parentId){
+  function chr4(){
+    return Math.random().toString(16).slice(-4);
+    }
+    return chr4() + chr4() +
+    '-' + chr4() +
+    '-' + chr4() +
+    '-' + chr4() +
+    '-' + chr4() + chr4() + chr4();
+}
 
-		var item = {
-			id: entity.id,
-			open: false,
-			checked: !entity.filtered,
-			parentId: parentId,
-			name: entity.name,
-			type: entity.type,
-			icon: icon,
-			iconSkin: "zt"
-		};
 
-		return item;
+function createItem(entity, ztreeID, icon, parentId, newName = entity.name){
 
-	}
+  var item = {
+    id: ztreeID, 
+    open: false,
+    parentId: parentId,
+    name: newName,
+    type: entity.type,
+    icon: icon,
+    iconSkin: "zt",
+  };
 
-	function createZTreeElements(entities) {
+  return item;
 
-		var items = [];
-		var transactionEntities = searchTransactionsForZTree(entities);
+}
 
-		if(transactionEntities.length < 1){
-			return items;
-		}
 
-		transactionEntities.forEach(function (transactionEntity){
 
-			if(elementsMap.has(transactionEntity.type)){
-				
-				var transactionItems = createItemsForTransactions(transactionEntity, "");
-				items.push(...transactionItems);
+function createItemForCodeTransactions(){
 
-			}
-		});
+  var itemForCodeTransactions = { id: "dummyCodeID", open: false,	/*checked: true,*/ name: "Code Transaktionen" };
 
-		// sort by type, then alphanumerically
-		items.sort(function (a, b) {
+  return itemForCodeTransactions;
 
-			var aSortOrder = elementsMap.get(a.type).sortOrder;
-			var sortStringA = aSortOrder + a.name.toUpperCase();
+}
 
-			var bSortOrder = elementsMap.get(b.type).sortOrder;
-			var sortStringB = bSortOrder + b.name.toUpperCase();
+function createItemForOtherTransaction(){
 
-			if (sortStringA < sortStringB) {
-				return -1;
-			}
-			if (sortStringA > sortStringB) {
-				return 1;
-			}
+  var itemForOtherTransactions = { id: "dummyOtherID", open: false, /*checked: true,*/ name: "Customizing Transaktionen" };
 
-			return 0;
-		}); 
+  return itemForOtherTransactions;
 
-		return items;
-	}
+}
 
-	function getAllCalledByElements(entity){
+function createItemForSAPTransaction(){
 
-        var calledByItems = [];
+  var itemForSAPTransactions = { id: "dummySAPID", open: false, /*checked: true,*/ name: "SAP Transaktionen" };
 
-		var calledElements = entity.calls;
+  return itemForSAPTransactions;
 
-		if(!calledElements || calledElements.length < 1){
-			return calledByItems;
-		}
+}
 
-		calledElements.forEach(function (calledElement) {
-			calledByItems.push(calledElement);
+function createZTreeElements(entities) {
 
-			const grandChildren = getAllCalledByElements(calledElement);
-	        calledByItems = calledByItems.concat(grandChildren);
-		});
+  var items = [];
+  var transactionEntities = searchTransactionsForZTree(entities);
 
-		return calledByItems;
+  itemForCodeTransactions = createItemForCodeTransactions();	
+  ztreeIdMap.set(itemForCodeTransactions.id, "dummyElementCodeID");
 
-	}
+  itemForOtherTransactions = createItemForOtherTransaction();
+  ztreeIdMap.set(itemForOtherTransactions.id, "dummyElementOthersID");
 
-    function zTreeOnCheck(event, treeId, treeNode) {
+  itemForSAPTransactions = createItemForSAPTransaction();
+  ztreeIdMap.set(itemForSAPTransactions.id, "dummyElementSAPID");
 
-		//node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes
+  items.push(itemForOtherTransactions);
+  items.push(itemForCodeTransactions);
+  items.push(itemForSAPTransactions);
 
-		const entity = model.getEntityById(treeNode.id);
-		//const children = model.getAllChildrenOfEntity(entity);
-		var children = getAllCalledByElements(entity);
-		const entities = [entity, ...children];
 
-		const applicationEvent = {
-			sender: transactionExplorerController,
-			entities: entities
-		};
+  if(transactionEntities.length < 1){
+    return items;
+  }
 
-		if (!treeNode.checked) {
-			applicationEvent.entities = applicationEvent.entities.filter(entity => !entity.filtered);
-			events.filtered.on.publish(applicationEvent);
-		} else {
-			// ensure that the parents of visible entities are also visible themselves
-			const parents = entity.allParents;
-			applicationEvent.entities = [...entities, ...parents].filter(entity => entity.filtered);
+  transactionEntities.forEach(function (transactionEntity){
 
-			events.filtered.off.publish(applicationEvent);
+    if(elementsMap.has(transactionEntity.type)){
 
-			if (entity.hasUnloadedChildren) {
-				neo4jModelLoadController.loadAllChildrenOf(entity.id, false);
-			}
-		}
-	}
+      if(transactionEntity.name.substring(0, 1) != 'Z' && transactionEntity.name.substring(0, 1) != '/'){
+        var parentIdForTransactionCluster = itemForSAPTransactions.id;
+      } else {        
+        if (transactionEntity.calls != 0){
+          parentIdForTransactionCluster = itemForCodeTransactions.id;
+        } else {
+          parentIdForTransactionCluster = itemForOtherTransactions.id;
+        }
+      }
 
-    function publishSelectEvent(treeEvent, treeId, treeNode, eventObject) {
+      var transactionItems = createItemsForTransactions(transactionEntity, parentIdForTransactionCluster);
+      items.push(...transactionItems);
 
-		const clickedEntity = model.getEntityById(treeNode.id);
-		// do nothing when selecting an invisible entity
-		if (clickedEntity.filtered) return;
+    }
+  });
 
-		const alreadySelected = clickedEntity === selectedEntities[0];
+  // sort by type, then alphanumerically
+  items.sort(function (a, b) {
 
-		//always deselect the previously selected entities
-		if (selectedEntities.size != 0) {
-			const unselectEvent = {
-				sender: transactionExplorerController,
-				entities: selectedEntities
-			}
+    /*if(elementsMap.get(a.type) === undefined){
+      var aSortOrder = 1000;
+      var sortStringA = aSortOrder + a.name.toUpperCase();
+    } else {
+        var aSortOrder = elementsMap.get(a.type).sortOrder;
+      var sortStringA = aSortOrder + a.name.toUpperCase();
+    }
 
-			events.selected.off.publish(unselectEvent);
-		};
+    if(elementsMap.get(b.type) === undefined){
+      var bSortOrder = 1000;
+      var sortStringB = bSortOrder + b.name.toUpperCase();				
+    } else {
+      var bSortOrder = elementsMap.get(b.type).sortOrder;
+        var sortStringB = bSortOrder + b.name.toUpperCase();
+    }*/
 
-		//select the clicked entities only if the clicked entities are not already selected
-		//otherwise the clicked entities should only be deselected
-		if (!alreadySelected) {
-			let newSelectedEntities = [clickedEntity];
+    if(elementsMap.get(a.type) === undefined){
+      var aSortOrder = 1000;
+      var sortStringA = aSortOrder + a.name.toUpperCase();
+    } else {
+              if (a.type == 'Transaction'){
+                var aSortOrder = setNewSortOrderForTransactions(a);
+          var sortStringA = aSortOrder;
+              } else {
+        var aSortOrder = elementsMap.get(a.type).sortOrder;
+        var sortStringA = aSortOrder + a.name.toUpperCase();
+      }
+    }
 
-			if (controllerConfig.useMultiselect) {
-				//const visibleChildren = model.getAllChildrenOfEntity(clickedEntity).filter(entity => !entity.filtered);
-				var visibleChildren = getAllCalledByElements(clickedEntity).filter(entity => !entity.filtered);
-			
-				newSelectedEntities = newSelectedEntities.concat(visibleChildren);
-			}
+    if(elementsMap.get(b.type) === undefined){
+      var bSortOrder = 1000;
+      var sortStringB = bSortOrder + b.name.toUpperCase();				
+    } else {
+      if (b.type == 'Transaction'){
+                var bSortOrder = setNewSortOrderForTransactions(b);
+          var sortStringB = bSortOrder;
+              } else {
+        var bSortOrder = elementsMap.get(b.type).sortOrder;
+            var sortStringB = bSortOrder + b.name.toUpperCase();
+      }
+    }
 
-			const selectEvent = {
-				sender: transactionExplorerController,
-				entities: newSelectedEntities
-			};
-			events.selected.on.publish(selectEvent);
-		}
-	}
+    
+      if (aSortOrder < bSortOrder) {
+        return 1;
+      }
+      if (aSortOrder > bSortOrder) {
+        return -1;
+      }
+    
 
-	function zTreeOnExpand(event, treeId, treeNode) {
-		const entity = model.getEntityById(treeNode.id);
-		if (!entity.hasUnloadedChildren) return;
+    
 
-		neo4jModelLoadController.loadAllChildrenOf(entity.id, true);
-	}
+    /*if (sortStringA < sortStringB) {
+      return -1;
+    }
+    if (sortStringA > sortStringB) {
+      return 1;
+    }*/
 
-	function onEntitiesLoaded(applicationEvent) {
-		if (applicationEvent.parentId) {
-			// we were loading child elements
-			const parentTreeElem = tree.getNodeByParam('id', applicationEvent.parentId);
-			// store the placeholder first and remove it only afterwards, so the tree doesn't collapse due to lack of children
-			const placeholderToRemove = parentTreeElem.children[0];
-			const newChildTreeElements = createZTreeElements(applicationEvent.entities);
-			tree.addNodes(parentTreeElem, 0, newChildTreeElements, true);
-			if (placeholderToRemove) {
-				tree.removeNode(placeholderToRemove);
-			}
-		} else {
-			// root elements are currently only loaded on startup, which is fixed and doesn't go through the event system
-		}
-	}
+    return 0;
+  }); 
 
-	function onEntitiesUnfiltered(applicationEvent) {
-		// only catch events from elsewhere - if they come from here, the tree will already be updated
-		if (applicationEvent.sender !== transactionExplorerController) {
-			// put all ids into a set, so we can use its constant-time has() to find the matching ZTree objects more efficiently
-			const entityIdSet = new Set();
-			for (const entity of applicationEvent.entities) {
-				entityIdSet.add(entity.id);
-			}
-			const zTreeNodesToCheck = tree.getNodesByFilter((node) => entityIdSet.has(node.id));
-			for (const node of zTreeNodesToCheck) {
-				// since we're updating the tree from the model, don't trigger onCheck
-				tree.checkNode(node, true, false, false);
-			}
-		}
-	}
+  return items;
+}
 
-	function selectNode(entityID) {
-		var item = tree.getNodeByParam("id", entityID, null);
-		tree.selectNode(item, false);
-	}
+function setNewSortOrderForTransactions(item) {
 
-	function unselectNodes() {
-		tree.cancelSelectedNode();
-	}
+var entityID = ztreeIdMap.get(item.id).id;
 
-	function onEntitySelected(applicationEvent) {
-		var selectedEntity = applicationEvent.entities[0];
-		selectedEntities = applicationEvent.entities;
+var entity = model.getEntityById(entityID);
 
-		selectNode(selectedEntity.id);
+var sortOrder = getAllCalledByElements(entity).length;
 
-		if (controllerConfig.showSearchField) {
-			$("#" + domIDs.searchInput).val(selectedEntity.name);
-		}
-	}
+   return sortOrder;
 
-	function onEntityUnselected(applicationEvent) {
-		const unselectedEntities = new Set(applicationEvent.entities);
-		selectedEntities = selectedEntities.filter(entity => !unselectedEntities.has(entity));
+}
 
-		// only undo the selection in the UI if the root of the selection subtree is getting deselected
-		const shouldRemoveUISelection = applicationEvent.entities.some(entity => !entity.belongsTo || !entity.belongsTo.selected);
-		if (shouldRemoveUISelection) {
-			unselectNodes();
-		}
+function getAllCalledByElements(entity){
 
-		if (controllerConfig.showSearchField) {
-			$("#" + domIDs.searchInput).val("");
-		}
-	}
+      var calledByItems = [];
 
+  var calledElements = entity.calls;
 
-	return {
-		initialize: initialize,
-		activate: activate,
-		reset: reset
-	};
+  if(!calledElements || calledElements.length < 1){
+    return calledByItems;
+  }
+
+  calledElements.forEach(function (calledElement) {
+    calledByItems.push(calledElement);
+
+    const grandChildren = getAllCalledByElements(calledElement);
+        calledByItems = calledByItems.concat(grandChildren);
+  });
+
+  return calledByItems;
+
+}
+
+  function publishSelectEvent(treeEvent, treeId, treeNode, eventObject) {
+
+  //const clickedEntity = model.getEntityById(treeNode.id);
+  const clickedEntity = model.getEntityById(ztreeIdMap.get(treeNode.id).id);
+  // do nothing when selecting an invisible entity
+  if (clickedEntity.filtered) return;
+
+  const alreadySelected = clickedEntity === selectedEntities[0];
+
+  //always deselect the previously selected entities
+  if (selectedEntities.size != 0) {
+    const unselectEvent = {
+      sender: transactionExplorerController,
+      entities: selectedEntities
+    }
+
+    events.selected.off.publish(unselectEvent);
+  };
+
+  //select the clicked entities only if the clicked entities are not already selected
+  //otherwise the clicked entities should only be deselected
+  if (!alreadySelected) {
+    let newSelectedEntities = [clickedEntity];
+
+    if (controllerConfig.useMultiselect) {
+      //const visibleChildren = model.getAllChildrenOfEntity(clickedEntity).filter(entity => !entity.filtered);
+      var visibleChildren = getAllCalledByElements(clickedEntity).filter(entity => !entity.filtered);
+    
+      newSelectedEntities = newSelectedEntities.concat(visibleChildren);
+    }
+
+    const selectEvent = {
+      sender: transactionExplorerController,
+      entities: newSelectedEntities
+    };
+    events.selected.on.publish(selectEvent);
+  }
+}
+
+function zTreeOnExpand(event, treeId, treeNode) {
+
+  const entity = model.getEntityById(treeNode.id);
+
+      if (entity === undefined) {
+        const treeNodeEntity = treeNode.children;
+
+        if (treeNodeEntity.length >= 1){
+          neo4jModelLoadController.loadAllChildrenOf(treeNode.id, true);
+          return;
+        }
+      } else {
+      if (!entity.hasUnloadedChildren) return;
+    } 
+
+  neo4jModelLoadController.loadAllChildrenOf(entity.id, true);
+}
+
+function onEntitiesLoaded(applicationEvent) {
+  if (applicationEvent.parentId) {
+    // we were loading child elements
+    const parentTreeElem = tree.getNodeByParam('id', applicationEvent.parentId);
+    // store the placeholder first and remove it only afterwards, so the tree doesn't collapse due to lack of children
+    const placeholderToRemove = parentTreeElem.children[0];
+    const newChildTreeElements = createZTreeElements(applicationEvent.entities);
+    tree.addNodes(parentTreeElem, 0, newChildTreeElements, true);
+    if (placeholderToRemove) {
+      tree.removeNode(placeholderToRemove);
+    }
+  } else {
+    // root elements are currently only loaded on startup, which is fixed and doesn't go through the event system
+  }
+}
+
+function onEntitiesUnfiltered(applicationEvent) {
+  // only catch events from elsewhere - if they come from here, the tree will already be updated
+  if (applicationEvent.sender !== transactionExplorerController) {
+    // put all ids into a set, so we can use its constant-time has() to find the matching ZTree objects more efficiently
+    const entityIdSet = new Set();
+    for (const entity of applicationEvent.entities) {
+      entityIdSet.add(entity.id);
+    }
+    const zTreeNodesToCheck = tree.getNodesByFilter((node) => entityIdSet.has(node.id));
+    for (const node of zTreeNodesToCheck) {
+      // since we're updating the tree from the model, don't trigger onCheck
+      tree.checkNode(node, true, false, false);
+    }
+  }
+}
+
+function selectNode(entityID) {
+  var item = tree.getNodeByParam("id", entityID, null);
+  tree.selectNode(item, false);
+}
+
+function unselectNodes() {
+  tree.cancelSelectedNode();
+}
+
+function onEntitySelected(applicationEvent) {
+  var selectedEntity = applicationEvent.entities[0];
+  selectedEntities = applicationEvent.entities;
+
+  selectNode(selectedEntity.id);
+
+  /*if (controllerConfig.showSearchField) {
+    $("#" + domIDs.searchInput).val(selectedEntity.name);
+  }*/
+}
+
+function onEntityUnselected(applicationEvent) {
+  const unselectedEntities = new Set(applicationEvent.entities);
+  selectedEntities = selectedEntities.filter(entity => !unselectedEntities.has(entity));
+
+  // only undo the selection in the UI if the root of the selection subtree is getting deselected
+  const shouldRemoveUISelection = applicationEvent.entities.some(entity => !entity.belongsTo || !entity.belongsTo.selected);
+  if (shouldRemoveUISelection) {
+    unselectNodes();
+  }
+
+  /*if (controllerConfig.showSearchField) {
+    $("#" + domIDs.searchInput).val("");
+  }*/
+}
+
+
+return {
+  initialize: initialize,
+  activate: activate,
+  reset: reset
+};
 })();
