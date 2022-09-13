@@ -35,15 +35,15 @@ public class LoaderStep {
                 pathToReferenceCsv = p.toString();
             } else if (p.toString().endsWith("_Inheritance.csv")) {
                 pathToInheritanceCsv = p.toString();
-            //} else if (p.toString().endsWith("_export.csv")) {
-              //  pathToMigrationFindingsCsv = p.toString();
-            } else if (p.toString().endsWith("_rc3.0.csv")) {
-            pathToMigrationFindingsNewCsv = p.toString();
+           // } else if (p.toString().endsWith("_export.csv")) {
+           //     pathToMigrationFindingsCsv = p.toString();
+           // } else if (p.toString().endsWith("_rc3.0.csv")) {
+            //pathToMigrationFindingsNewCsv = p.toString();
         }
         }
 
         if (pathToNodesCsv.isEmpty() || pathToInheritanceCsv.isEmpty() || pathToReferenceCsv.isEmpty()
-                || (config.addMigrationFindings() && pathToMigrationFindingsNewCsv.isEmpty())) {
+                /*|| (config.addMigrationFindings() && pathToMigrationFindingsNewCsv.isEmpty())*/ ) {
             System.out.println("Some input file wasn't found");
             System.exit(0);
         }
@@ -117,7 +117,7 @@ public class LoaderStep {
         );
 
         // 6. Upload Migration Findings NEW - for districts and buildings
-        if(config.addMigrationFindings()) {
+        /*if(config.addMigrationFindings()) {
             System.out.println("Path to Migration Findings CSV : " + pathToMigrationFindingsNewCsv);
             if (!isSilentMode) {
                 System.out.print("ADDING 'MIGRATION_FINDINGS' to Element-Nodes. Press any key to continue...");
@@ -137,7 +137,7 @@ public class LoaderStep {
                             "SET a.migration_findings = \"true\"\n"
 
             );
-        }
+        } */
 
         /*// 6. Upload Migration Findings - only for districts
         if(config.addMigrationFindings()) {

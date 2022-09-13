@@ -44,7 +44,7 @@ public class Maps {
                 "REPS",
                 "FORM",
                 "FUGR",
-                "TRNS"
+                "TRAN"
         );
 
         // Elements, for which we want to show INHERIT relation

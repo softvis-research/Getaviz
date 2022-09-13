@@ -19,9 +19,9 @@ var setup = {
             name: "bannerController"
         },
 
-        {
+        /*{
             name: "tabController"
-        },
+        },*/
 
         {
             name: "relationController",
@@ -79,49 +79,49 @@ var setup = {
 
         {
             name: "transactionExplorerController",
-            elements: [
+                elements: [
                 /*{ type: "Namespace",
                   icon: "scripts/PackageExplorer/images/abap/namespace.png",
                   sortOrder: 1000
                 },*/ 
                 { type: "Transaction",
                   icon: "scripts/TransactionExplorer/images/abap/transaction.png",
-                  sortOrder: 1000
+                  sortOrder: 1100
                 }, 
                 { type: "Class",
                   icon: "scripts/TransactionExplorer/images/abap/class.png",
-                  sortOrder: 1200
+                  sortOrder: 1300
                 }, 
                 { type: "Interface",
                   icon: "scripts/TransactionExplorer/images/abap/interface.png",
-                  sortOrder: 1300
+                  sortOrder: 1400
                 },
                 { type: "Method",
                   icon: "scripts/TransactionExplorer/images/abap/form_fumo_method.png",
-                  sortOrder: 1410
+                  sortOrder: 1510
                 }, 
                 { type: "Attribute",
                   icon: "scripts/TransactionExplorer/images/abap/attribute.png",
-                  sortOrder: 1430
+                  sortOrder: 1530
                 }, 
                 { type: "FunctionGroup",
                   icon: "scripts/TransactionExplorer/images/abap/fugr.png", 
-                  sortOrder: 1400
+                  sortOrder: 1500
                 },  
                 { type: "FunctionModule",
                   icon: "scripts/TransactionExplorer/images/abap/form_fumo_method.png", 
-                  sortOrder: 1410
+                  sortOrder: 1510
                 },  
                 { type: "FormRoutine",
                   icon: "scripts/TransactionExplorer/images/abap/form_fumo_method.png",
-                  sortOrder: 1420
+                  sortOrder: 1520
                 }, 
                 { type: "Report",
                   icon: "scripts/TransactionExplorer/images/abap/report_district.png", 
-                  sortOrder: 1100
+                  sortOrder: 1200
                 }, 
             ],
-
+            
             //abap: true,
             elementsSelectable: true 
             

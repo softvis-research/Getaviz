@@ -259,8 +259,8 @@ public class MetropolisDesigner {
                 case Transaction:
                     building.setColor(config.getMetropolisBuildingColorHex("transactionBuilding"));
                     building.setShape(config.getMetropolisBuildingShape("transactionBuilding"));
-                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    building.setWidth((3) - config.adjustACityBuildingWidth());
+                    building.setLength((3) - config.adjustACityBuildingLength());
                     break;
                 case Table:
                     building.setColor(config.getMetropolisBuildingColorHex("tableBuilding"));

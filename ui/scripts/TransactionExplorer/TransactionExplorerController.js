@@ -5,24 +5,17 @@ var transactionExplorerController = (function () {
 
 	let tree;
 
-	//var entityTypesForSearch = ["Namespace", "Class", "Interface", "Report", "FunctionGroup"];
-
     var elementsMap = new Map();
+	var ztreeIdMap = new Map();
 
 	const domIDs = {
 		zTreeDiv: "zTreeDiv",
-		//searchDiv: "searchDiv",
-		//searchInput: "searchField"
 	}
 
 	let controllerConfig = {
 
         elements: [],
 		elementsSelectable: true,
-
-		//showSearchField: true,
-		//entityTypesForSearch: entityTypesForSearch,
-
 		useMultiselect: true,
 
 	};
@@ -71,33 +64,27 @@ var transactionExplorerController = (function () {
 		const entities = model.getCodeEntities();
 		const items = createZTreeElements(entities);
 
-		//zTree settings
-		var settings = {
-			check: {
-				enable: controllerConfig.elementsSelectable,
-				chkboxType: { "Y": "ps", "N": "s" }
-			},
-			data: {
-				simpleData: {
-					enable: true,
-					idKey: "id",
-					pIdKey: "parentId",
-					rootPId: ""
-				}
-			},
-			callback: {
-				onCheck: zTreeOnCheck,
-				onClick: publishSelectEvent,
-				onExpand: zTreeOnExpand,
-			},
-			view: {
-				showLine: false,
-				showIcon: true,
-				selectMulti: false
-			}
-
-		};
-
+			var settings = {
+					data: {
+						simpleData: {
+							enable: true,
+							idKey: "id",
+							pIdKey: "parentId",
+							rootPId: ""
+						}
+					},
+					callback: {
+						onClick: publishSelectEvent,
+						onExpand: zTreeOnExpand,
+					},
+					view: {
+						showLine: false,
+						showIcon: true,
+						selectMulti: false
+					}
+		
+				};
+	
 		//create zTree
 		tree = $.fn.zTree.init($(jQTransactionExplorerTree), settings, items);
 	}
@@ -122,6 +109,10 @@ var transactionExplorerController = (function () {
 
 		var calledElements = entity.calls;
 
+		if (!calledElements || calledElements.length < 1){
+			return calledByElements;
+		}
+
 		calledElements.forEach(function (calledElement) {
 			
 			calledByElements.push(calledElement)
@@ -137,35 +128,83 @@ var transactionExplorerController = (function () {
 
         var icon = elementsMap.get(entity.type).icon;
 
-		var item = createItem(entity, icon, parentId);
+		var calledByEntities = findCalledByElements(entity);
+
+		var allChildren = getAllCalledByElements(entity).length;
+
+		if (entity.type == "Transaction"){
+			//var allChildren = getAllCalledByElements(entity).length;
+
+			if (allChildren == 0) { allChildren = "0"; }
+
+			var newName = entity.name + " (" + allChildren + ")";
+		}
+
+		// Eindeutige ID für den ZTree erzeugen
+		var ztreeID = generateUniqueID();
+		ztreeIdMap.set(ztreeID, entity);
+
+		var item = createItem(entity, ztreeID, icon, parentId, newName);
 		transactionItems.push(item);
 
-		var calledByEntities = findCalledByElements(entity);
+		if(calledByEntities.length < 1){
+			return transactionItems;
+		}
 
 		calledByEntities.forEach(function(calledElement){
 
-            var calledItems = createItemsForTransactions(calledElement, entity.id);
+            var calledItems = createItemsForTransactions(calledElement, item.id); //item.id statt entity.id nutzen
             transactionItems.push(...calledItems);
+
 		});	
 
 		return transactionItems;
 	}
 
+	function generateUniqueID(){
 
-	function createItem(entity, icon, parentId){
+		function chr4(){
+			return Math.random().toString(16).slice(-4);
+		  }
+		  return chr4() + chr4() +
+			'-' + chr4() +
+			'-' + chr4() +
+			'-' + chr4() +
+			'-' + chr4() + chr4() + chr4();
+	}
+
+
+	function createItem(entity, ztreeID, icon, parentId, newName = entity.name){
 
 		var item = {
-			id: entity.id,
+			id: ztreeID, 
 			open: false,
-			checked: !entity.filtered,
 			parentId: parentId,
-			name: entity.name,
+			name: newName,
 			type: entity.type,
 			icon: icon,
-			iconSkin: "zt"
+			iconSkin: "zt",
 		};
 
 		return item;
+
+	}
+
+	
+
+	function createItemForCodeTransactions(){
+
+		var itemForCodeTransactions = { id: "dummyCodeID", open: false,	/*checked: true,*/ name: "Code Transaktionen" };
+
+		return itemForCodeTransactions;
+
+	}
+
+	function createItemForOtherTransaction(){
+
+		var itemForOtherTransactions = { id: "dummyOtherID", open: false, /*checked: true,*/ name: "Customizing Transaktionen" };
+
+		return itemForOtherTransactions;
 
 	}
 
@@ -174,11 +213,30 @@ var transactionExplorerController = (function () {
 		var items = [];
 		var transactionEntities = searchTransactionsForZTree(entities);
 
+		itemForCodeTransactions = createItemForCodeTransactions();	
+		ztreeIdMap.set(itemForCodeTransactions.id, "dummyElementCodeID");
+
+		itemForOtherTransactions = createItemForOtherTransaction();
+		ztreeIdMap.set(itemForOtherTransactions.id, "dummyElementOthersID");
+
+		items.push(itemForOtherTransactions);
+        items.push(itemForCodeTransactions);
+
+		if(transactionEntities.length < 1){
+			return items;
+		}
+
 		transactionEntities.forEach(function (transactionEntity){
 
 			if(elementsMap.has(transactionEntity.type)){
-				
-				var transactionItems = createItemsForTransactions(transactionEntity, "");
+
+				if(transactionEntity.calls != 0){
+                   var parentIdForTransactionCluster = itemForCodeTransactions.id;
+				} else {
+					parentIdForTransactionCluster = itemForOtherTransactions.id;
+				}
+
+				var transactionItems = createItemsForTransactions(transactionEntity, parentIdForTransactionCluster);
 				items.push(...transactionItems);
 
 			}
@@ -187,18 +245,65 @@ var transactionExplorerController = (function () {
 		// sort by type, then alphanumerically
 		items.sort(function (a, b) {
 
-			var aSortOrder = elementsMap.get(a.type).sortOrder;
-			var sortStringA = aSortOrder + a.name.toUpperCase();
+			/*if(elementsMap.get(a.type) === undefined){
+				var aSortOrder = 1000;
+				var sortStringA = aSortOrder + a.name.toUpperCase();
+			} else {
+			    var aSortOrder = elementsMap.get(a.type).sortOrder;
+				var sortStringA = aSortOrder + a.name.toUpperCase();
+			}
 
-			var bSortOrder = elementsMap.get(b.type).sortOrder;
-			var sortStringB = bSortOrder + b.name.toUpperCase();
+			if(elementsMap.get(b.type) === undefined){
+				var bSortOrder = 1000;
+				var sortStringB = bSortOrder + b.name.toUpperCase();				
+			} else {
+				var bSortOrder = elementsMap.get(b.type).sortOrder;
+			    var sortStringB = bSortOrder + b.name.toUpperCase();
+			}*/
 
-			if (sortStringA < sortStringB) {
+			if(elementsMap.get(a.type) === undefined){
+				var aSortOrder = 1000;
+				var sortStringA = aSortOrder + a.name.toUpperCase();
+			} else {
+                if (a.type == 'Transaction'){
+	                var aSortOrder = setNewSortOrderForTransactions(a);
+				    var sortStringA = aSortOrder;
+                } else {
+					var aSortOrder = elementsMap.get(a.type).sortOrder;
+					var sortStringA = aSortOrder + a.name.toUpperCase();
+				}
+			}
+
+			if(elementsMap.get(b.type) === undefined){
+				var bSortOrder = 1000;
+				var sortStringB = bSortOrder + b.name.toUpperCase();				
+			} else {
+				if (b.type == 'Transaction'){
+	                var bSortOrder = setNewSortOrderForTransactions(b);
+				    var sortStringB = bSortOrder;
+                } else {
+					var bSortOrder = elementsMap.get(b.type).sortOrder;
+			        var sortStringB = bSortOrder + b.name.toUpperCase();
+				}
+			}
+
+			
+				if (aSortOrder < bSortOrder) {
+					return 1;
+				}
+				if (aSortOrder > bSortOrder) {
+					return -1;
+				}
+			
+
+			
+
+			/*if (sortStringA < sortStringB) {
 				return -1;
 			}
 			if (sortStringA > sortStringB) {
 				return 1;
-			}
+			}*/
 
 			return 0;
 		}); 
@@ -206,11 +311,27 @@ var transactionExplorerController = (function () {
 		return items;
 	}
 
+	function setNewSortOrderForTransactions(item) {
+
+	var entityID = ztreeIdMap.get(item.id).id;
+
+	var entity = model.getEntityById(entityID);
+
+	var sortOrder = getAllCalledByElements(entity).length;
+
+	   return sortOrder;
+
+	}
+
 	function getAllCalledByElements(entity){
 
         var calledByItems = [];
 
 		var calledElements = entity.calls;
+
+		if(!calledElements || calledElements.length < 1){
+			return calledByItems;
+		}
 
 		calledElements.forEach(function (calledElement) {
 			calledByItems.push(calledElement);
@@ -223,39 +344,10 @@ var transactionExplorerController = (function () {
 
 	}
 
-    function zTreeOnCheck(event, treeId, treeNode) {
-
-		//node.checkedOld = node.checked; //fix zTree bug on getChangeCheckedNodes
-
-		const entity = model.getEntityById(treeNode.id);
-		//const children = model.getAllChildrenOfEntity(entity);
-		var children = getAllCalledByElements(entity);
-		const entities = [entity, ...children];
-
-		const applicationEvent = {
-			sender: transactionExplorerController,
-			entities: entities
-		};
-
-		if (!treeNode.checked) {
-			applicationEvent.entities = applicationEvent.entities.filter(entity => !entity.filtered);
-			events.filtered.on.publish(applicationEvent);
-		} else {
-			// ensure that the parents of visible entities are also visible themselves
-			const parents = entity.allParents;
-			applicationEvent.entities = [...entities, ...parents].filter(entity => entity.filtered);
-
-			events.filtered.off.publish(applicationEvent);
-
-			if (entity.hasUnloadedChildren) {
-				neo4jModelLoadController.loadAllChildrenOf(entity.id, false);
-			}
-		}
-	}
-
     function publishSelectEvent(treeEvent, treeId, treeNode, eventObject) {
 
-		const clickedEntity = model.getEntityById(treeNode.id);
+		//const clickedEntity = model.getEntityById(treeNode.id);
+		const clickedEntity = model.getEntityById(ztreeIdMap.get(treeNode.id).id);
 		// do nothing when selecting an invisible entity
 		if (clickedEntity.filtered) return;
 
@@ -292,8 +384,19 @@ var transactionExplorerController = (function () {
 	}
 
 	function zTreeOnExpand(event, treeId, treeNode) {
+
 		const entity = model.getEntityById(treeNode.id);
-		if (!entity.hasUnloadedChildren) return;
+
+        if (entity === undefined) {
+	        const treeNodeEntity = treeNode.children;
+	
+	        if (treeNodeEntity.length >= 1){
+		        neo4jModelLoadController.loadAllChildrenOf(treeNode.id, true);
+		        return;
+	        }
+        } else {
+		    if (!entity.hasUnloadedChildren) return;
+	    } 
 
 		neo4jModelLoadController.loadAllChildrenOf(entity.id, true);
 	}
@@ -345,9 +448,9 @@ var transactionExplorerController = (function () {
 
 		selectNode(selectedEntity.id);
 
-		if (controllerConfig.showSearchField) {
+		/*if (controllerConfig.showSearchField) {
 			$("#" + domIDs.searchInput).val(selectedEntity.name);
-		}
+		}*/
 	}
 
 	function onEntityUnselected(applicationEvent) {
@@ -360,9 +463,9 @@ var transactionExplorerController = (function () {
 			unselectNodes();
 		}
 
-		if (controllerConfig.showSearchField) {
+		/*if (controllerConfig.showSearchField) {
 			$("#" + domIDs.searchInput).val("");
-		}
+		}*/
 	}
 
 
