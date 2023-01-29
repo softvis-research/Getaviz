@@ -264,6 +264,11 @@ public class MetaDataExporter {
         if (Maps.getNodesWithReferencesRelationByType().contains(nodeType)) {
             builder.append("\"calls\": \"" + getRelations(node, SAPRelationLabels.REFERENCES, true) + "\",\n");
             builder.append("\"calledBy\": \"" + getRelations(node, SAPRelationLabels.REFERENCES, false) + "\",\n");
+            if(nodeType.equals("ATTR")){
+                builder.append("\"accesses\": \"" + getRelations(node, SAPRelationLabels.REFERENCES, true) + "\",\n");
+                builder.append("\"accessedBy\": \"" + getRelations(node, SAPRelationLabels.REFERENCES, false) + "\",\n");
+
+            }
         }
         if (Maps.getNodesWithInheritRelationByType().contains(nodeType)) {
             builder.append("\"subClassOf\": \"" + getRelations(node, SAPRelationLabels.INHERIT, true) + "\",\n");

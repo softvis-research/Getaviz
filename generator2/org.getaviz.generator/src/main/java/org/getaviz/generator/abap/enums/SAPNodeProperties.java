@@ -10,5 +10,8 @@ public enum SAPNodeProperties {
     local_class, container_id, uses_id,
 
     //
-    migration_findings
+    migration_findings,
+
+    //Debugger
+    position, param_type
 }

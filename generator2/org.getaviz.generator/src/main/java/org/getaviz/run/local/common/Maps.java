@@ -35,6 +35,10 @@ public class Maps {
         metaDataProperties.put(SAPNodeProperties.modifiers.name(), "modifiers");
         metaDataProperties.put(SAPNodeProperties.number_of_statements.name(), "number_of_statements");
         metaDataProperties.put(SAPNodeProperties.local_class.name(), "local_class");
+        //DEBUGGER
+        metaDataProperties.put(SAPNodeProperties.iteration.name(), "iteration");
+        metaDataProperties.put(SAPNodeProperties.position.name(), "position");
+        metaDataProperties.put(SAPNodeProperties.param_type.name()), "param_type");
 
 
         // Elements, for which we want to show USES relation
@@ -43,7 +47,10 @@ public class Maps {
                 "FUMO",
                 "REPS",
                 "FORM",
-                "FUGR"
+                "FUGR",
+                "CLAS",
+                "FUNC",
+                "ATTR"
         );
 
         // Elements, for which we want to show INHERIT relation

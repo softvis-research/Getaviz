@@ -135,12 +135,25 @@ public class MetropolisDesigner {
                         district.setColor(config.getMetropolisDistrictColorHex("localInterfaceDistrict")); break;
                     } else
                         district.setColor(config.getMetropolisDistrictColorHex("interfaceDistrict")); break;
-                case Report:        district.setColor(config.getMetropolisDistrictColorHex("reportDistrict"));
+                case Report:
+                    district.setColor(config.getMetropolisDistrictColorHex("reportDistrict"));
                     //district.setYPosition(district.getYPosition() + 6);
                     break;
                 case FunctionGroup: district.setColor(config.getMetropolisDistrictColorHex("functionGroupDistrict"));
                     //district.setYPosition(district.getYPosition() + 6);
                                     break;
+                case FunctionModule:
+                    district.setColor(config.getMetropolisDistrictColorHex("functionModuleDistrict"));
+                    /*district.setShape(config.getMetropolisBuildingShape("functionModuleBuilding"));
+                    district.setWidth(district.getWidth() - config.adjustACityBuildingWidth());
+                    district.setLength(district.getLength() - config.adjustACityBuildingLength());*/
+                    break;
+                case Method:
+                    district.setColor(config.getMetropolisDistrictColorHex("methodDistrict"));
+                   /* district.setShape(config.getMetropolisBuildingShape("methodBuilding"));
+                    district.setWidth(district.getWidth() - config.adjustACityBuildingWidth());
+                    district.setLength(district.getLength() - config.adjustACityBuildingLength());*/
+                    break;
                 case Table:
                 case TableType:     district.setColor(config.getMetropolisDistrictColorHex("tableDistrict"));
                                     district.setHeight(config.getACityDistrictHeight()); break;
@@ -213,7 +226,7 @@ public class MetropolisDesigner {
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
                     break;
                 case FormRoutine:
-                    building.setColor(config.getMetropolisBuildingColorHex("formRoutineBuilding"));
+                   building.setColor(config.getMetropolisBuildingColorHex("formRoutineBuilding"));
                     building.setShape(config.getMetropolisBuildingShape("formRoutineBuilding"));
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
@@ -225,7 +238,7 @@ public class MetropolisDesigner {
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
                     break;
                 case FunctionModule:
-                    building.setColor(config.getMetropolisBuildingColorHex("functionModuleBuilding"));
+                   building.setColor(config.getMetropolisBuildingColorHex("functionModuleBuilding"));
                     building.setShape(config.getMetropolisBuildingShape("functionModuleBuilding"));
                     building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
                     building.setLength(building.getLength() - config.adjustACityBuildingLength());
@@ -318,7 +331,7 @@ public class MetropolisDesigner {
         String propertyTypeName = floor.getSourceNodeProperty(SAPNodeProperties.type_name);
 
         switch (SAPNodeTypes.valueOf(propertyTypeName)) {
-            /*case Method:
+            case Method:
                 floor.setColor(config.getACityFloorColorHex("methodFloor"));
                 floor.setShape(config.getACityFloorShape("methodFloor"));
                 floor.setYPosition(floor.getYPosition() - config.adjustACityFloorYPosition());
@@ -333,7 +346,7 @@ public class MetropolisDesigner {
                 floor.setShape(config.getACityFloorShape("functionModuleFloor"));
                 floor.setYPosition(floor.getYPosition() - config.adjustACityFloorYPosition());
                 break;
-             */
+
             case TableElement:
                 floor.setColor(config.getACityFloorColorHex("tableElementFloor"));
                 floor.setShape(config.getACityFloorShape("tableElementFloor"));

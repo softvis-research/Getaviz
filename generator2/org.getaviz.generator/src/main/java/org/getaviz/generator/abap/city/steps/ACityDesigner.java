@@ -118,6 +118,13 @@ public class ACityDesigner {
                     case DDIC:
                         district.setColor(config.getACityDistrictColorHex("dataDictionaryDistrict"));
                         break;
+                    //Debugger
+                    case FunctionModule:
+                        district.setColor(config.getACityDistrictColorHex("datafunctionDistrict"));
+                        break;
+                    case Method:
+                        district.setColor(config.getACityDistrictColorHex("reportDistrict"));
+                        break;
                     default:
                         district.setColor(config.getACityDistrictColorHex("defaultValue"));
                         log.error(district.getSubType().name() + " is not a valid type for \"district\"");

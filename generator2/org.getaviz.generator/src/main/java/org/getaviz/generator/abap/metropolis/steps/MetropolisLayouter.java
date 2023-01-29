@@ -4,10 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
 import org.getaviz.generator.abap.enums.SAPNodeProperties;
-import org.getaviz.generator.abap.layouts.ADistrictLightMapLayout;
-import org.getaviz.generator.abap.layouts.ABuildingLayout;
-import org.getaviz.generator.abap.layouts.ADistrictCircluarLayout;
-import org.getaviz.generator.abap.layouts.AStackLayout;
+import org.getaviz.generator.abap.layouts.*;
 import org.getaviz.generator.abap.repository.ACityElement;
 import org.getaviz.generator.abap.repository.ACityRepository;
 import org.getaviz.generator.abap.repository.SourceNodeRepository;
@@ -78,6 +75,24 @@ public class MetropolisLayouter {
         district.setHeight(config.getMetropolisEmptyDistrictHeight());
         district.setLength(config.getMetropolisEmptyDistrictLength());
         district.setWidth(config.getMetropolisEmptyDistrictWidth());
+        district.setWidth( 25 ); //coveringACityRectangle.getWidth());
+        district.setLength(25 ); //coveringACityRectangle.getLength());
+        district.setHeight( 2 );//config.getACityDistrictHeight());
+       // district.setXPosition( 0 );//coveringACityRectangle.getCenterX()); // Iteration
+        district.setYPosition( 0 ); //district.getHeight() / 2); //Does not change?
+        //district.setZPosition(coveringACityRectangle.getCenterY()); //Position
+        //district.setZPosition( district.getSourceNodeProperty(SAPNodeProperties.position) * 10 ); //Position
+        try {
+            String positionStr = district.getSourceNodeProperty(SAPNodeProperties.position);
+            int positionInt = Integer.parseInt(positionStr);
+            district.setZPosition(positionInt * (district.getWidth() + 10));
+
+            String iterationStr = district.getSourceNodeProperty(SAPNodeProperties.iteration);
+            int iterationInt = Integer.parseInt(iterationStr) +1;
+            district.setXPosition( iterationInt * (district.getLength() + 10));
+
+        } catch (Exception e) {
+        }
     }
 
     private void layoutDistrics(Collection<ACityElement> districtElements) {
@@ -96,14 +111,17 @@ public class MetropolisLayouter {
         ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
 
         if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.DEFAULT) {
+                ADistrictDebuggerLayout AbapDistrictDebuggerLayout = new ADistrictDebuggerLayout(virtualRootDistrict, districts, config, repository  );
+                AbapDistrictDebuggerLayout.calculate();
 
-            ADistrictLightMapLayout aDistrictLightMapLayout = new ADistrictLightMapLayout(virtualRootDistrict, districts, config);
-            aDistrictLightMapLayout.calculate();
+          //  ADistrictLightMapLayout aDistrictLightMapLayout = new ADistrictLightMapLayout(virtualRootDistrict, districts, config);
+          //  aDistrictLightMapLayout.calculate();
 
         } else if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.CIRCULAR) {
-
-            ADistrictCircluarLayout aDistrictLayout = new ADistrictCircluarLayout(virtualRootDistrict, districts, config);
-            aDistrictLayout.calculate();
+            ADistrictDebuggerLayout AbapDistrictDebuggerLayout = new ADistrictDebuggerLayout(virtualRootDistrict, districts, config, repository );
+            AbapDistrictDebuggerLayout.calculate();
+            //ADistrictCircluarLayout aDistrictLayout = new ADistrictCircluarLayout(virtualRootDistrict, districts, config);
+           // aDistrictLayout.calculate();
         }
 
     }
@@ -190,8 +208,7 @@ public class MetropolisLayouter {
 
         if(isDistrictEmpty(district)){
             layoutEmptyDistrict(district);
-
-            log.info("Empty district \"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\" layouted");
+           // log.info("Empty district \"" + district.getSourceNodeProperty(SAPNodeProperties.object_name) + "\" layouted");
         } else {
 
             Collection<ACityElement> subElements = district.getSubElements();
@@ -204,8 +221,10 @@ public class MetropolisLayouter {
             }
 
             //layout district
-            ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
-            aBAPDistrictLightMapLayout.calculate();
+            //ADistrictLightMapLayout aBAPDistrictLightMapLayout = new ADistrictLightMapLayout(district, subElements, config);
+            //aBAPDistrictLightMapLayout.calculate();
+            ADistrictDebuggerLayout AbapDistrictDebuggerLayout = new ADistrictDebuggerLayout(district, subElements, config, repository);
+            AbapDistrictDebuggerLayout.calculate();
 
             //stack district sub elements
             AStackLayout stackLayout = new AStackLayout(district, subElements, config);

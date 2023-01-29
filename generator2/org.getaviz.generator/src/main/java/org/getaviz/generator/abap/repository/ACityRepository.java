@@ -22,7 +22,13 @@ public class ACityRepository {
 
     private Map<ACityElement.ACityType, Map<String, ACityElement> > elementsByType;
 
+    //Debugger
+    private int highestPosition ;
+    private int highestIteration;
+
     public ACityRepository(){
+        highestPosition = 1;
+        highestIteration= 1;
         elementsBySourceID = new TreeMap<>();
         elementsByHash = new TreeMap<>();
         elementsByType = new TreeMap<>();
@@ -290,6 +296,17 @@ public class ACityRepository {
     public void addElements(List<ACityElement> elements) {
         for( ACityElement element : elements ){
             addElement(element);
+            //Debugger
+            String elementPosition = element.getSourceNodeProperty(SAPNodeProperties.position);
+            String elementIteration = element.getSourceNodeProperty(SAPNodeProperties.iteration);
+            if (Integer.parseInt(elementPosition) > highestPosition){
+                highestPosition = Integer.parseInt(elementPosition);
+
+            }
+            if (Integer.parseInt(elementIteration) > highestIteration){
+                highestIteration = Integer.parseInt(elementIteration);
+
+            }
         }
     }
 
@@ -316,5 +333,13 @@ public class ACityRepository {
         for( ACityElement element : elements ){
             deleteElement(element);
         }
+    }
+
+    public int getHighestIteration() {
+        return highestIteration;
+    }
+
+    public int getHighestPosition() {
+        return highestPosition;
     }
 }

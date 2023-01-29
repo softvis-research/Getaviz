@@ -237,6 +237,11 @@ var model = (function () {
 					} else {
 						entity.accessedBy = [];
 					}
+					if (element.accesses) {
+						entity.accesses = element.accesses.split(",");
+					} else {
+						entity.accesses = [];
+					}
 					break;
 				case "Method":
 					entity.signature = element.signature;
@@ -260,7 +265,7 @@ var model = (function () {
 					if (entity.qualifiedName.slice(-1) == "." ) {
 						entity.qualifiedName = element.qualifiedName;
 					}
-
+					/*
 					if (element.calls) {
 						entity.calls = element.calls.split(",");
 					} else {
@@ -268,6 +273,16 @@ var model = (function () {
 					}
 					if (element.calledBy) {
 						entity.calledBy = element.calledBy.split(",");
+					} else {
+						entity.calledBy = [];
+					}*/
+					if (element.calledBy) {
+						entity.calls = element.calledBy.split(",");
+					} else {
+						entity.calls = [];
+					}
+					if (element.calls) {
+						entity.calledBy = element.calls.split(",");
 					} else {
 						entity.calledBy = [];
 					}
@@ -307,13 +322,23 @@ var model = (function () {
 				case "FunctionModule":
 				case "Report":
 				case "FormRoutine":
-					if (element.calls) {
+					/*if (element.calls) {
 						entity.calls = element.calls.split(",");
 					} else {
 						entity.calls = [];
 					}
 					if (element.calledBy) {
 						entity.calledBy = element.calledBy.split(",");
+					} else {
+						entity.calledBy = [];
+					}*/
+					if (element.calledBy) {
+						entity.calls = element.calledBy.split(",");
+					} else {
+						entity.calls = [];
+					}
+					if (element.calls) {
+						entity.calledBy = element.calls.split(",");
 					} else {
 						entity.calledBy = [];
 					}
@@ -469,6 +494,8 @@ var model = (function () {
 					break;
 
 				case "Attribute":
+					//replaceIdsWithReferences(entity, 'calls');
+					//replaceIdsWithReferences(entity, 'calledBy');
 					replaceIdsWithReferences(entity, 'accessedBy');
 					break;
 

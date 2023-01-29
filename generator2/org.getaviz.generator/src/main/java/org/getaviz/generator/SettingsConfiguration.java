@@ -814,6 +814,11 @@ public class SettingsConfiguration {
 				return config.getString("city.abap.color.tableDistrict", "#C5CEA9");
 			case "dataDictionaryDistrict":
 				return config.getString("city.abap.color.dataDictionaryDistrict", "#C5CEA9");
+			//Debugger
+			case "functionModuleDistrict":
+				return config.getString("city.abap.color.functionModuleDistrict", "#C5CEA9");
+			case "methodDistrict":
+				return config.getString("city.abap.color.methodDistrict", "#C5CEA9");
 			default:
 				return config.getString("#FFFFFF");
 		}
@@ -841,6 +846,11 @@ public class SettingsConfiguration {
 				return config.getString("city.abap.color.metropolis.structureDistrict", "#C5CEA9");
 			case "dataElementDistrict":
 				return config.getString("city.abap.color.metropolis.dataElementDistrict", "#C5CEA9");
+			// Debugger
+			case "functionModuleDistrict":
+				return config.getString("city.abap.color.metropolis.functionModuleDistrict", "#C5CEA9");
+			case "methodDistrict":
+				return config.getString("city.abap.color.metropolis.methodDistrict", "#C5CEA9");
 			default:
 				return config.getString("#FFFFFF");
 		}
@@ -866,6 +876,8 @@ public class SettingsConfiguration {
 				return config.getString("city.abap.color.structureBuilding", "#C5CEA9");
 			case "tableTypeBuilding":
 				return config.getString("city.abap.color.tableTypeBuilding", "#C5CEA9");
+			case "attributeBuilding":
+				return config.getString("city.abap.color.attributeBuilding", "#C5CEA9");
 			default:
 				return config.getString("#FFFFFF");
 		}

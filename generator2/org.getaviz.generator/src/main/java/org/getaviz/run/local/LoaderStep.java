@@ -15,9 +15,10 @@ public class LoaderStep {
         boolean isSilentMode = true;
         String pathToNodesCsv = "";
         String pathToReferenceCsv = "";
-        String pathToInheritanceCsv = "";
-        String pathToMigrationFindingsCsv = "";
-        String pathToMigrationFindingsNewCsv = "";
+        String pathToReferenceDataFlowCsv = "";
+       // String pathToInheritanceCsv = "";
+       // String pathToMigrationFindingsCsv = "";
+        //String pathToMigrationFindingsNewCsv = "";
 
         Scanner userInput = new Scanner(System.in);
         System.out.print("Silent mode? (y/n): "); // Silent mode to run with default values
@@ -29,21 +30,24 @@ public class LoaderStep {
         // Get files for nodes and relations
         List<Path> files = config.getInputCSVFiles();
         for(Path p : files) {
-            if (p.toString().endsWith("_Test.csv")) {
+            //if (p.toString().endsWith("_Test.csv")) {
+            if (p.toString().endsWith("_main.csv")) {
                 pathToNodesCsv = p.toString();
-            } else if (p.toString().endsWith("_Reference.csv")) {
+            //} else if (p.toString().endsWith("_ReferenceD.csv")) {
+            } else if (p.toString().endsWith("_StackTrace.csv")) {
                 pathToReferenceCsv = p.toString();
-            } else if (p.toString().endsWith("_Inheritance.csv")) {
-                pathToInheritanceCsv = p.toString();
+            } else if (p.toString().endsWith("_DataFlow.csv")) {
+                pathToReferenceDataFlowCsv = p.toString();
+            //} else if (p.toString().endsWith("_Inheritance.csv")) {
+             //   pathToInheritanceCsv = p.toString();
             //} else if (p.toString().endsWith("_export.csv")) {
               //  pathToMigrationFindingsCsv = p.toString();
-            } else if (p.toString().endsWith("_rc3.0.csv")) {
-            pathToMigrationFindingsNewCsv = p.toString();
+            //} else if (p.toString().endsWith("_rc3.0.csv")) {öl
+          //  pathToMigrationFindingsNewCsv = p.toString();
         }
         }
 
-        if (pathToNodesCsv.isEmpty() || pathToInheritanceCsv.isEmpty() || pathToReferenceCsv.isEmpty()
-                || (config.addMigrationFindings() && pathToMigrationFindingsNewCsv.isEmpty())) {
+        if (pathToNodesCsv.isEmpty() || pathToReferenceCsv.isEmpty()  || pathToReferenceDataFlowCsv.isEmpty()) {
             System.out.println("Some input file wasn't found");
             System.exit(0);
         }
@@ -96,12 +100,27 @@ public class LoaderStep {
         connector.executeWrite(
                 "LOAD CSV WITH HEADERS FROM \"file:///" + pathToReferenceCsv + "\"\n" +
                         "AS row FIELDTERMINATOR ';'\n" +
-                        "MATCH (a:Elements {element_id: row.source_id}), (b:Elements {element_id: row.target_id})\n" +
+                        //"MATCH (a:Elements {element_id: row.source_id}), (b:Elements {element_id: row.target_id})\n" +
+                        "MATCH (a:Elements {element_id: row.obj_id_caller}), (b:Elements {element_id: row.obj_id_called})\n" +
                         "CREATE (a)-[r:"+ SAPRelationLabels.REFERENCES +"]->(b)"
 
         );
 
-        // 5. Upload Inheritances
+        System.out.println("Path to Reference CSV: " + pathToReferenceDataFlowCsv);
+        if (!isSilentMode) {
+            System.out.print("Creating 'REFERENCE' relationships. Press any key to continue...");
+            userInput.nextLine();
+        }
+        pathToReferenceDataFlowCsv = pathToReferenceDataFlowCsv.replace("\\", "/");
+        connector.executeWrite(
+                "LOAD CSV WITH HEADERS FROM \"file:///" + pathToReferenceDataFlowCsv + "\"\n" +
+                        "AS row FIELDTERMINATOR ';'\n" +
+                        "MATCH (a:Elements {element_id: row.obj_id_from}), (b:Elements {element_id: row.obj_id_to})\n" +
+                        "CREATE (a)-[r:"+ SAPRelationLabels.REFERENCES +"]->(b)"
+
+        );
+
+        /*// 5. Upload Inheritances
         System.out.println("Path to Inheritances CSV: " + pathToInheritanceCsv);
         if (!isSilentMode) {
             System.out.print("Creating 'INHERIT' relationships. Press any key to continue...");
@@ -136,7 +155,7 @@ public class LoaderStep {
                             "SET a.migration_findings = \"true\"\n"
 
             );
-        }
+        }*/
 
         /*// 6. Upload Migration Findings - only for districts
         if(config.addMigrationFindings()) {

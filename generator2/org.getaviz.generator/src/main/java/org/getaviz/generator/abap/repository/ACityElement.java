@@ -45,7 +45,8 @@ public class ACityElement {
 
         // additional subTypes for metropolis
         , Interface, DataElement, Structure
-
+        //Debugger
+        ,Method , FunctionModule, Attribute
         , Sea, Mountain, Cloud
     }
 

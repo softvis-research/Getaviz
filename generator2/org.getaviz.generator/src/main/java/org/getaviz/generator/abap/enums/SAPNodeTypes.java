@@ -9,5 +9,7 @@ public enum SAPNodeTypes {
 
     Structure, Domain, DataElement, TableType,
 
-    TableElement, StructureElement
+    TableElement, StructureElement;
+
+
 }
