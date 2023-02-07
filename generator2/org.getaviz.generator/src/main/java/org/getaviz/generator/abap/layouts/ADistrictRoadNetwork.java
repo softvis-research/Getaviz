@@ -363,10 +363,10 @@ public class ADistrictRoadNetwork {
 			double leftBound = districtElement.getXPosition() - districtElement.getWidth() / 2.0
 					- config.getACityDistrictHorizontalGap() / 2.0; // - config.getMetropolisRoadWidth() / 2.0;
 			
-			double upperBound = districtElement.getZPosition() + districtElement.getWidth() / 2.0
+			double upperBound = districtElement.getZPosition() + districtElement.getLength() / 2.0
 					+ config.getACityDistrictHorizontalGap() / 2.0; // + config.getMetropolisRoadWidth() / 2.0;
 			
-			double lowerBound = districtElement.getZPosition() - districtElement.getWidth() / 2.0
+			double lowerBound = districtElement.getZPosition() - districtElement.getLength() / 2.0
 					- config.getACityDistrictHorizontalGap() / 2.0; // - config.getMetropolisRoadWidth() / 2.0;
 
 			for (Double column : nodesPerColumns.keySet()) {
