@@ -55,7 +55,7 @@ public class ADistrictDebuggerLayout {
         if (type.equals("Namespace"))
         {
             district.setWidth( 25 + 10 ); //coveringACityRectangle.getWidth());
-            district.setLength( repository.getHighestPosition() * 35 +50);//200 ); //coveringACityRectangle.getLength());
+            district.setLength( repository.getHighestPosition() * 35 );//200 ); //coveringACityRectangle.getLength());
             district.setHeight( config.getACityDistrictHeight());
         }
         else{
@@ -78,16 +78,16 @@ public class ADistrictDebuggerLayout {
             if (!type.equals("Namespace")) {
                 String positionStr = district.getSourceNodeProperty(SAPNodeProperties.position);
                 int positionInt = Integer.parseInt(positionStr);
-                district.setZPosition(positionInt * (district.getWidth() + 10));
+                district.setZPosition((district.getWidth() ));
 
                 String iterationStr = district.getSourceNodeProperty(SAPNodeProperties.iteration);
-                int iterationInt = Integer.parseInt(iterationStr) +1;
-                district.setXPosition( iterationInt * (district.getLength() + 10));
+                int iterationInt = Integer.parseInt(iterationStr) + 1;
+                district.setXPosition( iterationInt * district.getLength() );
 
                 adjustPositionsOfSubSubElements( district.getSubElements(), district.getXPosition(),district.getZPosition() );
 
             }else{
-                district.setZPosition( 25 * repository.getHighestPosition());//district.getLength());
+                district.setZPosition( 25 * repository.getHighestPosition() - 27 );//district.getLength());
                 district.setXPosition( 35 );//coveringACityRectangle.getCenterX()); // Iteration
             }
         } catch (Exception e) {
@@ -117,7 +117,7 @@ public class ADistrictDebuggerLayout {
         for (ACityElement element : elements) {
 
             double centerX = 1; //element.getXPosition();
-            double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin()+ oldXPosition - 5;
+            double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin() + oldXPosition - 5;
             element.setXPosition(newXPosition);
             oldXPosition += 2;
 

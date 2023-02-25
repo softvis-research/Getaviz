@@ -304,9 +304,11 @@ public class ACityRepository {
             if (Integer.parseInt(elementPosition) == 1 ) {
                 setFirstElement(element);
             }
-            if (Integer.parseInt(elementPosition) > highestPosition){
+            if (Integer.parseInt(elementPosition) >= highestPosition){
                 highestPosition = Integer.parseInt(elementPosition);
-                setLastElement( element );
+                if (Integer.parseInt(elementIteration) == 0 ) {
+                    setLastElement(element);
+                }
             }
             if (Integer.parseInt(elementIteration) > highestIteration){
                 highestIteration = Integer.parseInt(elementIteration);

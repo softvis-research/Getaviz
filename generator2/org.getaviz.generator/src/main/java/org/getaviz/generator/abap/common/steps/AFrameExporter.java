@@ -292,11 +292,11 @@ public class AFrameExporter {
             builder.append("\n");
             builder.append("\t height=\"" + (element.getHeight() / 2 )  + "\"");
             builder.append("\n");
-            builder.append("\t width=\"" + (element.getWidth() + 3 ) + "\"");
+            builder.append("\t width=\"" + (element.getWidth() + 5 ) + "\"");
             builder.append("\n");
-            builder.append("\t depth=\"" + (element.getLength() + 3 ) + "\"");
+            builder.append("\t depth=\"" + (element.getLength() + 5 ) + "\"");
             builder.append("\n");
-            builder.append("\t color=\"" + "#00FF00" + "\"");
+            builder.append("\t color=\"" + "#39FF14" + "\""); //#00FF00
             builder.append("\n");
             builder.append("\t shadow");
             builder.append(">");
@@ -311,11 +311,11 @@ public class AFrameExporter {
             builder.append("\n");
             builder.append("\t height=\"" + (element.getHeight() / 2 )  + "\"");
             builder.append("\n");
-            builder.append("\t width=\"" + (element.getWidth() + 2 ) + "\"");
+            builder.append("\t width=\"" + (element.getWidth() + 5 ) + "\"");
             builder.append("\n");
-            builder.append("\t depth=\"" + (element.getLength() + 2 ) + "\"");
+            builder.append("\t depth=\"" + (element.getLength() + 5 ) + "\"");
             builder.append("\n");
-            builder.append("\t color=\"" + "#A3270B" + "\"");
+            builder.append("\t color=\"" + "#FF8800" + "\""); //#FF8800
             builder.append("\n");
             builder.append("\t shadow");
             builder.append(">");

@@ -3,6 +3,7 @@ package org.getaviz.generator.abap.layouts;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.getaviz.generator.SettingsConfiguration;
+import org.getaviz.generator.abap.enums.SAPNodeProperties;
 import org.getaviz.generator.abap.repository.ACityElement;
 
 import java.util.Collection;
@@ -24,7 +25,13 @@ public class AStackLayout {
     }
 
     public void calculate(){
-        stackSubElements(stackElements, rootElement.getHeight());
+        String type = rootElement.getSourceNodeProperty(SAPNodeProperties.type_name).toString();
+        if (type.equals("Report")){
+            stackSubElements(stackElements, ( rootElement.getHeight() /2 ));
+        }
+        else {
+            stackSubElements(stackElements, rootElement.getHeight());
+        }
     }
 
     private void stackSubElements(Collection<ACityElement> elements, double parentHeight){
