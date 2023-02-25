@@ -51,7 +51,7 @@ public class MetropolisLayouter {
 
 
         //layout cloud elements
-        layoutCloudModel();
+        //layoutCloudModel();
 
     }
 

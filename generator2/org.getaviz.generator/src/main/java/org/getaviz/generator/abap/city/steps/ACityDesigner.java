@@ -120,10 +120,10 @@ public class ACityDesigner {
                         break;
                     //Debugger
                     case FunctionModule:
-                        district.setColor(config.getACityDistrictColorHex("datafunctionDistrict"));
+                        district.setColor(config.getACityDistrictColorHex("functionModuleDistrict"));
                         break;
                     case Method:
-                        district.setColor(config.getACityDistrictColorHex("reportDistrict"));
+                        district.setColor(config.getACityDistrictColorHex("methodDistrict"));
                         break;
                     default:
                         district.setColor(config.getACityDistrictColorHex("defaultValue"));
@@ -220,6 +220,7 @@ public class ACityDesigner {
                 floor.setShape(config.getACityFloorShape("methodFloor"));
                 floor.setYPosition(floor.getYPosition() - config.adjustACityFloorYPosition());
                 break;
+            case Report:
             case FormRoutine:
                 floor.setColor(config.getACityFloorColorHex("formroutineFloor"));
                 floor.setShape(config.getACityFloorShape("formroutineFloor"));

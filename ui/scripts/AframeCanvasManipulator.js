@@ -342,7 +342,7 @@ var canvasManipulator = (function () {
     }
 
     function highlightEntities(entities, color, controller) {
-        changeColorOfEntities(entities, color, controller);
+        //changeColorOfEntities(entities, color, controller);
         changeTransparencyOfEntities(entities, 0, controller);
     }
 

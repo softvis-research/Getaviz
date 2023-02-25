@@ -188,9 +188,9 @@ public class MetropolisCreator {
                     continue;
                 }
 //DEbugger
-                /*if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Report) {
+                if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Report) {
                     continue;
-                }*/
+                }
 
                 if (childElement.getType() == ACityElement.ACityType.Building && childElement.getSourceNodeType() == SAPNodeTypes.Interface) {
                     continue;

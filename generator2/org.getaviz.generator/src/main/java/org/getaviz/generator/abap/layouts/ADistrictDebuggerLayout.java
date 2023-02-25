@@ -116,19 +116,40 @@ public class ADistrictDebuggerLayout {
         double oldZPosition = 1; //Import Export /Change /Return
         for (ACityElement element : elements) {
 
-            double centerX = element.getXPosition();
-            double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin()+ oldXPosition;
+            double centerX = 1; //element.getXPosition();
+            double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin()+ oldXPosition - 5;
             element.setXPosition(newXPosition);
-            oldXPosition += 4;
-            //element.getSourceNodeProperty()
-            double centerZ = element.getZPosition();
-            double newZPosition = centerZ + parentZ + config.getACityBuildingHorizontalMargin();// + oldZPosition;
+            oldXPosition += 2;
+
+            double centerZ;
+            String paramTypeString = element.getSourceNodeProperty(SAPNodeProperties.param_type);
+            switch (paramTypeString){
+                default:
+                case "LOCAL":
+                    centerZ = parentZ; //element.getZPosition();
+                    break;
+                case "IMPORT":
+                    centerZ = parentZ -10 ;//element.getZPosition() + 10;
+                    break;
+                case "EXPORT":
+                    centerZ = parentZ + 10 ;//element.getZPosition() - 10;
+                    break;
+                case "RETURN":
+                    centerZ = parentZ + 10;//element.getZPosition() - 10;
+                    break;
+                case "CHANGING":
+                    centerZ = parentZ ;//element.getZPosition();
+                    break;
+
+            }
+
+            double newZPosition = centerZ; // + parentZ ; //+ config.getACityBuildingHorizontalMargin();// + oldZPosition;
             element.setZPosition(newZPosition);
             //oldZPosition += 4;
 
             Collection<ACityElement> subElements = element.getSubElements();
             if(!subElements.isEmpty()){
-                adjustPositionsOfSubSubElements(subElements, parentX,  parentZ);
+                //adjustPositionsOfSubSubElements(subElements, parentX,  parentZ);
             }
         }
     }

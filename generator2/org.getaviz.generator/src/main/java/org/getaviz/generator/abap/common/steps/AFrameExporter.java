@@ -194,6 +194,47 @@ public class AFrameExporter {
         builder.append("\"shadow\": true");
         builder.append("\n");
         builder.append("}");
+
+        //Debugger
+        if (repository.getFirstElement() == element){
+            builder.append("\"shape\": " + "\"" + getShapeExport(element.getShape()) + "\",");
+            builder.append("\n");
+            builder.append("\"id\": " + "\"" +  "\",");
+            builder.append("\n");
+            builder.append("\"position\": " + "\"" + element.getXPosition() + " " + element.getYPosition() + " " + element.getZPosition() + "\",");
+            builder.append("\n");
+            builder.append("\"height\": " + "\"" + ( element.getHeight() / 2 ) + "\",");
+            builder.append("\n");
+            builder.append("\"width\": " + "\"" + ( element.getWidth() + 2 ) + "\",");
+            builder.append("\n");
+            builder.append("\"depth\": " + "\"" + ( element.getLength() + 2 ) + "\",");
+            builder.append("\n");
+            builder.append("\"color\": " + "\"" + "#00FF00" + "\",");
+            builder.append("\n");
+            builder.append("\"shadow\": true");
+            builder.append("\n");
+            builder.append("}");
+        }
+
+        if (repository.getLastElement() == element){
+            builder.append("\"shape\": " + "\"" + getShapeExport(element.getShape()) + "\",");
+            builder.append("\n");
+            builder.append("\"id\": " + "\"" +  "\",");
+            builder.append("\n");
+            builder.append("\"position\": " + "\"" + element.getXPosition() + " " + element.getYPosition() + " " + element.getZPosition() + "\",");
+            builder.append("\n");
+            builder.append("\"height\": " + "\"" + ( element.getHeight() / 2 ) + "\",");
+            builder.append("\n");
+            builder.append("\"width\": " + "\"" + ( element.getWidth() + 2 ) + "\",");
+            builder.append("\n");
+            builder.append("\"depth\": " + "\"" + ( element.getLength() + 2 ) + "\",");
+            builder.append("\n");
+            builder.append("\"color\": " + "\"" + "#A3270B" + "\",");
+            builder.append("\n");
+            builder.append("\"shadow\": true");
+            builder.append("\n");
+            builder.append("}");
+        }
         return builder.toString();
     }
 
@@ -243,19 +284,58 @@ public class AFrameExporter {
 
         builder.append("</" + getShapeExport(element.getShape()) + ">");
         builder.append("\n");
+        //Debugger
+        if (repository.getFirstElement() == element){
+            builder.append("<" + getShapeExport(element.getShape()) + " id=\"" + "\"");
+            builder.append("\n");
+            builder.append("\t position=\"" + element.getXPosition() + " " + ( element.getYPosition()/ 2) + " " + element.getZPosition() + "\"");
+            builder.append("\n");
+            builder.append("\t height=\"" + (element.getHeight() / 2 )  + "\"");
+            builder.append("\n");
+            builder.append("\t width=\"" + (element.getWidth() + 3 ) + "\"");
+            builder.append("\n");
+            builder.append("\t depth=\"" + (element.getLength() + 3 ) + "\"");
+            builder.append("\n");
+            builder.append("\t color=\"" + "#00FF00" + "\"");
+            builder.append("\n");
+            builder.append("\t shadow");
+            builder.append(">");
+            builder.append("\n");
+            builder.append("</" + getShapeExport(element.getShape()) + ">");
+            builder.append("\n");
+        }
+        if (repository.getLastElement() == element){
+            builder.append("<" + getShapeExport(element.getShape()) + " id=\"" + "\"");
+            builder.append("\n");
+            builder.append("\t position=\"" + element.getXPosition() + " " + (element.getYPosition() / 2) + " " + element.getZPosition()  + "\"");
+            builder.append("\n");
+            builder.append("\t height=\"" + (element.getHeight() / 2 )  + "\"");
+            builder.append("\n");
+            builder.append("\t width=\"" + (element.getWidth() + 2 ) + "\"");
+            builder.append("\n");
+            builder.append("\t depth=\"" + (element.getLength() + 2 ) + "\"");
+            builder.append("\n");
+            builder.append("\t color=\"" + "#A3270B" + "\"");
+            builder.append("\n");
+            builder.append("\t shadow");
+            builder.append(">");
+            builder.append("\n");
+            builder.append("</" + getShapeExport(element.getShape()) + ">");
+            builder.append("\n");
+        }
         return builder.toString();
     }
 
     private String getShapeExport(ACityElement.ACityShape shape) {
         switch (shape){
-            case Box: return "a-box";
+            case Box:      return "a-box";
             case Cylinder: return "a-cylinder";
-            case Cone: return "a-cone";
-            case Ring: return "a-ring";
-            case Plane: return "a-plane";
-            case Circle: return "a-circle";
-            case Sphere: return "a-sphere";
-            case Entity: return "a-entity";
+            case Cone:     return "a-cone";
+            case Ring:     return "a-ring";
+            case Plane:    return "a-plane";
+            case Circle:   return "a-circle";
+            case Sphere:   return "a-sphere";
+            case Entity:   return "a-entity";
         }
         return "a-sphere";
     }

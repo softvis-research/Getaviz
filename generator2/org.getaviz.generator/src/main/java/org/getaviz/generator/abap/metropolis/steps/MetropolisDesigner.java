@@ -234,8 +234,8 @@ public class MetropolisDesigner {
                 case Attribute:
                     building.setColor(config.getMetropolisBuildingColorHex("attributeBuilding"));
                     building.setShape(config.getMetropolisBuildingShape("attributeBuilding"));
-                    building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
-                    building.setLength(building.getLength() - config.adjustACityBuildingLength());
+                    //building.setWidth(building.getWidth() - config.adjustACityBuildingWidth());
+                    //building.setLength(building.getLength() - config.adjustACityBuildingLength());
                     break;
                 case FunctionModule:
                    building.setColor(config.getMetropolisBuildingColorHex("functionModuleBuilding"));
@@ -337,6 +337,7 @@ public class MetropolisDesigner {
                 floor.setYPosition(floor.getYPosition() - config.adjustACityFloorYPosition());
                 break;
             case FormRoutine:
+            case Report:
                 floor.setColor(config.getACityFloorColorHex("formroutineFloor"));
                 floor.setShape(config.getACityFloorShape("formroutineFloor"));
                 floor.setYPosition(floor.getYPosition() - config.adjustACityFloorYPosition());

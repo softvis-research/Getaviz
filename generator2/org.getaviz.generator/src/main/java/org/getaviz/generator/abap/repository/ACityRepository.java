@@ -25,6 +25,8 @@ public class ACityRepository {
     //Debugger
     private int highestPosition ;
     private int highestIteration;
+    private ACityElement firstElement;
+    private ACityElement lastElement;
 
     public ACityRepository(){
         highestPosition = 1;
@@ -299,14 +301,23 @@ public class ACityRepository {
             //Debugger
             String elementPosition = element.getSourceNodeProperty(SAPNodeProperties.position);
             String elementIteration = element.getSourceNodeProperty(SAPNodeProperties.iteration);
+            if (Integer.parseInt(elementPosition) == 1 ) {
+                setFirstElement(element);
+            }
             if (Integer.parseInt(elementPosition) > highestPosition){
                 highestPosition = Integer.parseInt(elementPosition);
-
+                setLastElement( element );
             }
             if (Integer.parseInt(elementIteration) > highestIteration){
                 highestIteration = Integer.parseInt(elementIteration);
 
             }
+        }
+        if (firstElement != null) {
+            firstElement.setFirstElement(true);
+        }
+        if (lastElement != null) {
+            lastElement.setLastElement(true);
         }
     }
 
@@ -335,11 +346,17 @@ public class ACityRepository {
         }
     }
 
-    public int getHighestIteration() {
-        return highestIteration;
-    }
+    public int getHighestIteration() { return highestIteration; }
+    public int getHighestPosition() { return highestPosition; }
 
-    public int getHighestPosition() {
-        return highestPosition;
-    }
+    public ACityElement getFirstElement() { return firstElement; }
+    public ACityElement getLastElement() { return lastElement; }
+
+    public void setLastElement(ACityElement lastElement) {
+        //lastElement.setLastElement( true );
+        this.lastElement = lastElement; }
+
+    public void setFirstElement(ACityElement firstElement) {
+        //firstElement.setFirstElement( true );
+        this.firstElement = firstElement; }
 }

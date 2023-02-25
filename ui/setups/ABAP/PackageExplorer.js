@@ -39,14 +39,22 @@ var setup = {
                   icon: "scripts/PackageExplorer/images/abap/class.png",
                   sortOrder: 1200
                 }, 
+                {   type: "Method",
+                    icon: "scripts/PackageExplorer/images/abap/method.png",
+                    sortOrder: 1200
+                }, 
+                { type: "Class",
+                  icon: "scripts/PackageExplorer/images/abap/class.png",
+                  sortOrder: 1200
+                }, 
                 { type: "Interface",
                   icon: "scripts/PackageExplorer/images/abap/interface.png",
                   sortOrder: 1300
                 },
-                { type: "Method",
+                /*{ type: "Method",
                   icon: "scripts/PackageExplorer/images/abap/form_fumo_method.png",
                   sortOrder: 1410
-                }, 
+                },*/ 
                 { type: "Attribute",
                   icon: "scripts/PackageExplorer/images/abap/attribute.png",
                   sortOrder: 1430
@@ -55,10 +63,15 @@ var setup = {
                   icon: "scripts/PackageExplorer/images/abap/fugr.png", 
                   sortOrder: 1400
                 },  
-                { type: "FunctionModule",
+                {
+                    type: "FunctionModule",
+                    icon: "scripts/PackageExplorer/images/abap/fumo.png",
+                    sortOrder: 1400
+                },
+                /*{ type: "FunctionModule",
                   icon: "scripts/PackageExplorer/images/abap/form_fumo_method.png", 
                   sortOrder: 1410
-                },  
+                },  */
                 { type: "FormRoutine",
                   icon: "scripts/PackageExplorer/images/abap/form_fumo_method.png",
                   sortOrder: 1420
@@ -84,7 +97,28 @@ var setup = {
                     name: "Package",
                     open: false,
                     icon: "scripts/Legend/images/circle_gray.png",
+                },
+                {
+                    name: "Report",
+                    open: false,
+                    icon: "scripts/Legend/images/circle_blue_light.png",
+                    entries: [/*{
+                    name: "Report Building",
+                    icon: "scripts/Legend/images/cuboid_blue.png",
                 },{
+                    name: "Formroutine",
+                    icon: "scripts/Legend/images/cuboid_gray.png",
+                },*/{
+                            name: "Attribute",
+                            icon: "scripts/Legend/images/cylinder_black.png",
+                        }/*,{
+                    name: "LocalClass",
+                    icon: "scripts/Legend/images/circle_yellow_light.png",
+                },{
+                    name: "LocalInterface",
+                    icon: "scripts/Legend/images/circle_red_light.png",
+                }*/]
+                },/*{
                     name: "Class",
                     open: false,
                     icon: "scripts/Legend/images/circle_yellow.png",
@@ -100,8 +134,16 @@ var setup = {
                         },{
                         name: "LocalInterface",
                         icon: "scripts/Legend/images/circle_red_light.png",
-                    }]
-                },{
+                    }*/
+                    {
+                        name: "Method",
+                        open: false,
+                        icon: "scripts/Legend/images/circle_violet.png",
+                        entries: [{
+                                name: "Attribute",
+                                icon: "scripts/Legend/images/cylinder_black.png",
+                            }]
+                },/*{
                     name: "Interface",
                     open: false,
                     icon: "scripts/Legend/images/circle_red.png",
@@ -120,27 +162,7 @@ var setup = {
                         name: "LocalInterface",
                         icon: "scripts/Legend/images/circle_red_light.png",
                     }]
-                },{
-                    name: "Report",
-                    open: false, 
-                    icon: "scripts/Legend/images/circle_blue_light.png",
-                    entries: [{
-                        name: "Report Building",
-                        icon: "scripts/Legend/images/cuboid_blue.png",
-                    },{
-                        name: "Formroutine",
-                        icon: "scripts/Legend/images/cuboid_gray.png",
-                    },{
-                        name: "Attribute",
-                        icon: "scripts/Legend/images/cylinder_black.png",
-                    },{
-                        name: "LocalClass",
-                        icon: "scripts/Legend/images/circle_yellow_light.png",
-                    },{
-                        name: "LocalInterface",
-                        icon: "scripts/Legend/images/circle_red_light.png",
-                    }]
-                },{
+                },*//*{
                     name: "Function Group",
                     open: false, 
                     icon: "scripts/Legend/images/circle_violet.png",
@@ -160,7 +182,29 @@ var setup = {
                         name: "LocalInterface",
                         icon: "scripts/Legend/images/circle_red_light.png",
                     }]
-                },{
+                },*/
+                    {
+                        name: "Function Module",
+                        open: false,
+                        icon: "scripts/Legend/images/circle_yellow.png",
+                        entries: [/*{
+                            name: "Function Module",
+                            icon: "scripts/Legend/images/cuboid_gray.png",
+                        }, {
+                            name: "Formroutine",
+                            icon: "scripts/Legend/images/cuboid_gray.png",
+                        }, */{
+                            name: "Attribute",
+                            icon: "scripts/Legend/images/cylinder_black.png",
+                        }, /*{
+                            name: "LocalClass",
+                            icon: "scripts/Legend/images/circle_yellow_light.png",
+                        }, {
+                            name: "LocalInterface",
+                            icon: "scripts/Legend/images/circle_red_light.png",
+                        }*/]
+                    }/*,
+                    {
                     name: "ReferenceBuildings",
                     open: true,
                     icon: "scripts/Legend/images/circle_width.png",
@@ -174,7 +218,7 @@ var setup = {
                             name: "Lake - District Area",
                             icon: "scripts/Legend/images/lake.png",
                     }]
-                }]
+                }*/]
                 },{
                 name: "Navigation",
                 open: true,

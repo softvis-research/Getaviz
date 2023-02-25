@@ -46,7 +46,7 @@ public class ACityElement {
         // additional subTypes for metropolis
         , Interface, DataElement, Structure
         //Debugger
-        ,Method , FunctionModule, Attribute
+        ,Method , FunctionModule, Attribute, SubForm
         , Sea, Mountain, Cloud
     }
 
@@ -92,6 +92,10 @@ public class ACityElement {
 
     private String metaData;
     private String aframeProperty;
+
+    //Debugger
+    private Boolean isFirstElement;
+    private Boolean isLastElement;
 
     public ACityElement(ACityType type) {
         this.type = type;
@@ -303,4 +307,15 @@ public class ACityElement {
 
     public String getAframeProperty() { return aframeProperty; }
 
+    public Boolean getIsFirstElement() { return isFirstElement; }
+
+    public Boolean getIsLastElement() {return isLastElement; }
+
+    public void setFirstElement(Boolean firstElement) {
+        isFirstElement = firstElement;
+    }
+
+    public void setLastElement(Boolean lastElement) {
+        isLastElement = lastElement;
+    }
 }

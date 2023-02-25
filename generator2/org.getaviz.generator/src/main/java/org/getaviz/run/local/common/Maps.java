@@ -38,7 +38,7 @@ public class Maps {
         //DEBUGGER
         metaDataProperties.put(SAPNodeProperties.iteration.name(), "iteration");
         metaDataProperties.put(SAPNodeProperties.position.name(), "position");
-        metaDataProperties.put(SAPNodeProperties.param_type.name()), "param_type");
+        metaDataProperties.put(SAPNodeProperties.param_type.name(), "param_type");
 
 
         // Elements, for which we want to show USES relation
