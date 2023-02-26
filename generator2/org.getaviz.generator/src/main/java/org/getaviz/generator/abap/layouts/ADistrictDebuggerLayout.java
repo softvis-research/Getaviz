@@ -42,7 +42,6 @@ public class ADistrictDebuggerLayout {
         //ACityRectangle coveringACityRectangle  = arrangeSubElements(subElements);
 
         setSizeOfDistrict(coveringACityRectangle);
-
         setPositionOfDistrict(coveringACityRectangle);
 
 
@@ -78,14 +77,13 @@ public class ADistrictDebuggerLayout {
             if (!type.equals("Namespace")) {
                 String positionStr = district.getSourceNodeProperty(SAPNodeProperties.position);
                 int positionInt = Integer.parseInt(positionStr);
-                district.setZPosition((district.getWidth() ));
+                district.setZPosition(positionInt * (district.getWidth() + 10));
 
                 String iterationStr = district.getSourceNodeProperty(SAPNodeProperties.iteration);
                 int iterationInt = Integer.parseInt(iterationStr) + 1;
-                district.setXPosition( iterationInt * district.getLength() );
+                district.setXPosition( iterationInt * (district.getLength() + 10) );
 
-                adjustPositionsOfSubSubElements( district.getSubElements(), district.getXPosition(),district.getZPosition() );
-
+                adjustPositionsOfSubSubElements(district.getSubElements(), district.getXPosition(), district.getZPosition());
             }else{
                 district.setZPosition( 25 * repository.getHighestPosition() - 27 );//district.getLength());
                 district.setXPosition( 35 );//coveringACityRectangle.getCenterX()); // Iteration
@@ -113,84 +111,47 @@ public class ADistrictDebuggerLayout {
 
     private void adjustPositionsOfSubSubElements(Collection<ACityElement> elements, double parentX, double parentZ) {
         double oldXPosition = 1;
+        double size = ( elements.size() - 1 ) * 3;
         double oldZPosition = 1; //Import Export /Change /Return
         for (ACityElement element : elements) {
+                double centerX = 1; //element.getXPosition();
+                double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin() + oldXPosition  - size;//- 10;
+                element.setXPosition(newXPosition);
+                oldXPosition += 4;
 
-            double centerX = 1; //element.getXPosition();
-            double newXPosition = centerX + parentX + config.getACityBuildingHorizontalMargin() + oldXPosition - 5;
-            element.setXPosition(newXPosition);
-            oldXPosition += 2;
+                double centerZ = 1;
+                String paramTypeString = element.getSourceNodeProperty(SAPNodeProperties.param_type);
+                switch (paramTypeString) {
+                    case "LOCAL":
+                        centerZ = parentZ; //element.getZPosition();
+                        break;
+                    case "IMPORT":
+                        centerZ = parentZ - 10;//element.getZPosition() + 10;
+                        break;
+                    case "EXPORT":
+                        centerZ = parentZ + 10;//element.getZPosition() - 10;
+                        break;
+                    case "RETURN":
+                        centerZ = parentZ + 10;//element.getZPosition() - 10;
+                        break;
+                    case "CHANGING":
+                        centerZ = parentZ;//element.getZPosition();
+                        break;
+                    default:
+                        break;
 
-            double centerZ;
-            String paramTypeString = element.getSourceNodeProperty(SAPNodeProperties.param_type);
-            switch (paramTypeString){
-                default:
-                case "LOCAL":
-                    centerZ = parentZ; //element.getZPosition();
-                    break;
-                case "IMPORT":
-                    centerZ = parentZ -10 ;//element.getZPosition() + 10;
-                    break;
-                case "EXPORT":
-                    centerZ = parentZ + 10 ;//element.getZPosition() - 10;
-                    break;
-                case "RETURN":
-                    centerZ = parentZ + 10;//element.getZPosition() - 10;
-                    break;
-                case "CHANGING":
-                    centerZ = parentZ ;//element.getZPosition();
-                    break;
+                }
 
-            }
+                double newZPosition = centerZ; // + parentZ ; //+ config.getACityBuildingHorizontalMargin();// + oldZPosition;
+                element.setZPosition(newZPosition);
+                //oldZPosition += 4;
 
-            double newZPosition = centerZ; // + parentZ ; //+ config.getACityBuildingHorizontalMargin();// + oldZPosition;
-            element.setZPosition(newZPosition);
-            //oldZPosition += 4;
-
-            Collection<ACityElement> subElements = element.getSubElements();
-            if(!subElements.isEmpty()){
-                //adjustPositionsOfSubSubElements(subElements, parentX,  parentZ);
-            }
+                Collection<ACityElement> subElements = element.getSubElements();
+                if (!subElements.isEmpty()) {
+                    adjustPositionsOfSubSubElements(subElements, parentX,  parentZ);
+                }
         }
     }
-
-
-
-   /* public ACityRectangle arrangeSubElements(Collection<ACityElement> subElements){
-        int minX = Integer.MAX_VALUE;
-        int minY = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE;
-        int maxY = Integer.MIN_VALUE;
-        ACityRectangle docACityRectangle = calculateMaxAreaRoot(subElements);
-        ACityKDTree ptree = new ACityKDTree(docACityRectangle);
-
-        ACityRectangle covrec = new ACityRectangle();
-
-        List<ACityRectangle> elements = createACityRectanglesOfElements(subElements);
-        Collections.sort(elements);
-        Collections.reverse(elements);
-
-        // algorithm
-        for (ACityRectangle el : elements) {
-        //for (CityRectangle subElement : subElements) {
-            int x = subElement.getX();
-            int y = subElement.getY();
-            int width = subElement.getWidth();
-            int height = subElement.getHeight();
-
-            minX = Math.min(minX, x);
-            minY = Math.min(minY, y);
-            maxX = Math.max(maxX, x + width);
-            maxY = Math.max(maxY, y + height);
-        }
-
-        ACityRectangle coveringACityRectangle = new ACityRectangle(minX, minY, maxX - minX, maxY - minY);
-        return coveringACityRectangle;
-    }*/
-
-
-
-
 
 
     /*

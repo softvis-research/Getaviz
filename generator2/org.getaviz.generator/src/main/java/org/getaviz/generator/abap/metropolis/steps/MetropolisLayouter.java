@@ -109,8 +109,10 @@ public class MetropolisLayouter {
         log.info(districts.size() + " districts for virtual root district loaded");
 
         ACityElement virtualRootDistrict = new ACityElement(ACityElement.ACityType.District);
+        ADistrictDebuggerLayout AbapDistrictDebuggerLayout = new ADistrictDebuggerLayout(virtualRootDistrict, districts, config, repository  );
+        //AbapDistrictDebuggerLayout.calculate();
 
-        if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.DEFAULT) {
+        /*if (config.getAbapNotInOrigin_layout() == SettingsConfiguration.NotInOriginLayout.DEFAULT) {
                 ADistrictDebuggerLayout AbapDistrictDebuggerLayout = new ADistrictDebuggerLayout(virtualRootDistrict, districts, config, repository  );
                 AbapDistrictDebuggerLayout.calculate();
 
@@ -122,7 +124,8 @@ public class MetropolisLayouter {
             AbapDistrictDebuggerLayout.calculate();
             //ADistrictCircluarLayout aDistrictLayout = new ADistrictCircluarLayout(virtualRootDistrict, districts, config);
            // aDistrictLayout.calculate();
-        }
+        }*/
+
 
     }
 

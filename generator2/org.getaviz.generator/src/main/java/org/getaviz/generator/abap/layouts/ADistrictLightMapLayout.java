@@ -37,7 +37,6 @@ public class ADistrictLightMapLayout {
         ACityRectangle coveringACityRectangle = arrangeSubElements(subElements);
 
         setSizeOfDistrict(coveringACityRectangle);
-
         setPositionOfDistrict(coveringACityRectangle);
     }
 

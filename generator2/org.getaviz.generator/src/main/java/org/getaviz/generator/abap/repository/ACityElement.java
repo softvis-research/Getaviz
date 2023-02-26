@@ -94,8 +94,8 @@ public class ACityElement {
     private String aframeProperty;
 
     //Debugger
-    private Boolean isFirstElement;
-    private Boolean isLastElement;
+    private Boolean isFirstElement = false;
+    private Boolean isLastElement = false;
 
     public ACityElement(ACityType type) {
         this.type = type;

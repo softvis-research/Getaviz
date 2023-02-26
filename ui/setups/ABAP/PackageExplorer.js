@@ -94,11 +94,21 @@ var setup = {
                 open: true,
                 icon: "scripts/Legend/images/category.png",
                 entries: [{
-                    name: "Package",
+                    name: "Start Element",
                     open: false,
-                    icon: "scripts/Legend/images/circle_gray.png",
+                    icon: "scripts/Legend/images/circle_green.png",
                 },
                 {
+                    name: "Dumping Element",
+                    open: false,
+                    icon: "scripts/Legend/images/circle_orange.png",
+                },   
+                {
+                        name: "Stacktrace",
+                        open: false,
+                        icon: "scripts/Legend/images/circle_gray.png",
+                    },
+                    {
                     name: "Report",
                     open: false,
                     icon: "scripts/Legend/images/circle_blue_light.png",
