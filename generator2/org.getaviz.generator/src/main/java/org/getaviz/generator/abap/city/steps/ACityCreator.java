@@ -83,7 +83,7 @@ public class ACityCreator {
     private void createAllACityElements(SourceNodeRepository nodeRepository) {
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District, SAPNodeProperties.type_name, SAPNodeTypes.Namespace);
 
-        createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building,SAPNodeProperties.type_name, SAPNodeTypes.Report);
+        //createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Building,SAPNodeProperties.type_name, SAPNodeTypes.Report);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.District,SAPNodeProperties.type_name, SAPNodeTypes.Report);
         createACityElementsFromSourceNodes(nodeRepository, ACityElement.ACityType.Floor,SAPNodeProperties.type_name, SAPNodeTypes.FormRoutine);
 
