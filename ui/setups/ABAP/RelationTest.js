@@ -25,7 +25,7 @@ var setup = {
             targetEndAtBorder: true,
             showInnerRelations: true,
 
-            connectorColor: { r: 0, g: 0, b: 1 },
+            connectorColor: { r: 0, g: 0 , b: 1 },
         },
 
         {

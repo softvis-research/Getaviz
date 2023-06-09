@@ -137,6 +137,7 @@ var createRelationConnectionHelper = function(controllerConfig) {
                 connectorElements.push(sourceEndpoint);
                 connectorElements.push(targetEndpoint);
             }
+			
             return connectorElements;
         }
 
